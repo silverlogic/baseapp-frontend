@@ -107,8 +107,8 @@ export function useLogin({validationSchema = loginValidationSchema, initialValue
   })
 
   const formik = useFormik({
-    initialValues: initialValues,
-    validationSchema: validationSchema,
+    initialValues,
+    validationSchema,
     onSubmit: (values: any) => mutation.mutate(values),
   })
 
