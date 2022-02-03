@@ -2,7 +2,7 @@ import React from 'react'
 import type { FormikProps } from 'formik'
 
 export interface IButtonWithLoadingProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  formik: FormikProps<any>,
+  formik?: FormikProps<any>,
   isLoading?: boolean,
   children: JSX.Element[] | JSX.Element | string,
   loadingText?: string | React.FC<any>,
