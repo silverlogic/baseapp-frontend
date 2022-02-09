@@ -6,52 +6,16 @@ import Cookies from 'js-cookie'
 import { axios, useMutation, useQuery, useQueryClient } from '../api'
 import type { UseMutationResult } from 'react-query'
 import type { FormikProps } from 'formik'
-
-const COOKIE_NAME = 'Authorization'
-
-export interface IUser {
-  email: string,
-}
-
-export interface IUserResult {
-  user: IUser | null
-  isLoading: boolean
-  isSuccess: boolean
-  isIdle: boolean
-  status: string
-}
-
-export interface ILogin {
-  formik: FormikProps<any>
-  mutation: UseMutationResult<unknown, unknown, void, unknown>
-}
+import { COOKIE_NAME } from './constants'
+import { useUserContext } from './context'
+import type { IUser, IUserContext, ILogin } from './types'
 
 export function useUser({
   redirectTo = '',
   redirectIfFound = false,
-} = {}): IUserResult {
+} = {}): IUserContext {
   const router = useRouter()
-  const [user, setUser] = useState<IUser | null>(null)
-  const token = Cookies.get(COOKIE_NAME)
-
-  const { isLoading, isSuccess, isIdle, status } = useQuery({
-    queryKey: '/users/me',
-    staleTime: Infinity, // makes cache never expire automatically
-    enabled: !!token,
-    useErrorBoundary: false,
-    onSuccess: (response: any) => {
-      setUser(response?.data)
-    },
-    onError: (error: any) => {
-      if (error?.response?.status === 401) {
-        // since response is 401 Unauthorized it also prabably has the body:
-        // {"detail":"Invalid token."}
-        // better remove the cookie
-        Cookies.remove(COOKIE_NAME)
-      }
-      setUser(null)
-    },
-  })
+  const { user, isLoading, isSuccess, isIdle, status, setUser } = useUserContext()
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
@@ -68,7 +32,7 @@ export function useUser({
     }
   }, [user, redirectIfFound, redirectTo])
 
-  return { user, isLoading, isSuccess, isIdle, status }
+  return { user, isLoading, isSuccess, isIdle, status, setUser }
 }
 
 export const loginValidationSchema = Yup.object().shape({
@@ -117,11 +81,13 @@ export function useLogin({validationSchema = loginValidationSchema, initialValue
 
 export function useLogout() {
   const queryClient = useQueryClient()
+  const { setUser } = useUserContext()
 
   return () => {
     Cookies.remove(COOKIE_NAME)
 
     // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
     queryClient.invalidateQueries(['users', 'me'])
+    setUser(null)
   }
 }

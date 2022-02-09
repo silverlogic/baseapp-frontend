@@ -6,6 +6,7 @@ import { buildQueryString } from './queryString'
 export { useMutation, useQuery, useQueryClient } from 'react-query'
 import type { QueryFunction } from 'react-query'
 import Cookies from 'js-cookie'
+import { UserProvider } from './auth/context'
 
 function createAxiosInstance(file = false) {
   const instance = _axios.create({
@@ -87,11 +88,13 @@ export const buildQueryClient = (defaultOptions?: any) => {
   })
 }
 
-export const BaseAppProvider = ({pageProps, children}: {pageProps: any, children: React.ReactNode}) => {
-  const [queryClient] = useState(() => buildQueryClient())
-  return <QueryClientProvider client={queryClient}>
+export const BaseAppProvider = ({pageProps, children, queryClientOptions}: {pageProps?: any, children: React.ReactNode, queryClientOptions?: any}) => {
+  const [queryClient] = useState(() => buildQueryClient(queryClientOptions))
+  return <QueryClientProvider client={queryClient} contextSharing={true}>
     <Hydrate state={pageProps?.dehydratedState}>
-      {children}
+      <UserProvider>
+        {children}
+      </UserProvider>
     </Hydrate>
   </QueryClientProvider>
 }

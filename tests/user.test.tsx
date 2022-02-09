@@ -16,10 +16,17 @@ describe("useUser", () => {
     (Cookies.get as CookiesGetByNameFn) = jest.fn(() => "fake token")
 
     axiosMock.onGet('/users/me').reply(200, {
-      email: "ap@tsl.io"
+      email: "ap@tsl.io",
+      id: 1,
+      firstName: "Alisson",
+      lastName: "Patricio",
+      isEmailVerified: true,
+      isNewEmailConfirmed: false,
+      newEmail: "",
+      referralCode: "1234",
     });
 
-    const { result, waitFor } = renderHook(() => useUser(), { wrapper: createWrapper() })
+    const { result, waitFor, waitForNextUpdate } = renderHook(() => useUser(), { wrapper: createWrapper() })
     expect(result.current.isLoading).toBe(true)
 
     await waitFor(() => result.current.isSuccess);
