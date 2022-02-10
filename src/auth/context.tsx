@@ -6,11 +6,12 @@ import type { IUser, IUserContext } from './types'
 
 export const UserContext = createContext({
   user: null,
-  isLoading: false,
+  isLoading: true,
   isSuccess: false,
   isIdle: false,
   status: '',
-  setUser: (state: any) => state
+  setUser: (state: any) => state,
+  refetchUser: () => {}
 } as IUserContext)
 
 export const useUserContext = () => useContext(UserContext)
@@ -19,7 +20,7 @@ export const UserProvider = ({children}: {children: ReactNode}) => {
   const [user, setUser] = useState<IUser | null>(null)
   const token = Cookies.get(COOKIE_NAME)
 
-  const { isLoading, isSuccess, isIdle, status } = useQuery({
+  const { isLoading, isSuccess, isIdle, status, refetch: refetchUser } = useQuery({
     queryKey: '/users/me',
     staleTime: Infinity, // makes cache never expire automatically
     enabled: !!token,
@@ -39,7 +40,7 @@ export const UserProvider = ({children}: {children: ReactNode}) => {
   })
 
   return <UserContext.Provider value={{
-    user, isLoading, isSuccess, isIdle, status, setUser
+    user, isLoading, isSuccess, isIdle, status, setUser, refetchUser
   }}>{children}</UserContext.Provider>
 }
 

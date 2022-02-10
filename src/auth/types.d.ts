@@ -1,3 +1,6 @@
+import type { UseQueryResult } from 'react-query'
+import type { GetServerSidePropsResult, GetServerSidePropsContext, ParsedUrlQuery, PreviewData } from 'next'
+
 export interface IUser {
   id: number,
   email: string,
@@ -28,5 +31,19 @@ export interface IUserContext {
   isSuccess: boolean
   isIdle: boolean
   status: string
-  setUser: Function
+  setUser: Function,
+  refetchUser: ((options?: { throwOnError?: boolean, cancelRefetch?: boolean }) => Promise<UseQueryResult>) | Function
 }
+
+export interface LoginRequiredOptions {
+  redirectTo: string
+}
+
+export type LoginRequiredServerSideProps<
+  P extends { [key: string]: any } = { [key: string]: any },
+  Q extends ParsedUrlQuery = ParsedUrlQuery,
+  D extends PreviewData = PreviewData
+> = (
+  context: GetServerSidePropsContext<Q, D>,
+  options: LoginRequiredOptions
+) => Promise<GetServerSidePropsResult<P>>

@@ -1,26 +1,25 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useRouter }  from 'next/router'
+import type { GetServerSidePropsResult } from 'next'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import Cookies from 'js-cookie'
-import { axios, useMutation, useQuery, useQueryClient } from '../api'
-import type { UseMutationResult } from 'react-query'
-import type { FormikProps } from 'formik'
+import { axios, useMutation, useQueryClient } from '../api'
 import { COOKIE_NAME } from './constants'
 import { useUserContext } from './context'
-import type { IUser, IUserContext, ILogin } from './types'
+import type { IUserContext, ILogin, LoginRequiredServerSideProps } from './types'
 
 export function useUser({
   redirectTo = '',
   redirectIfFound = false,
 } = {}): IUserContext {
   const router = useRouter()
-  const { user, isLoading, isSuccess, isIdle, status, setUser } = useUserContext()
+  const { user, isLoading, isSuccess, isIdle, status, setUser, refetchUser } = useUserContext()
 
   useEffect(() => {
     // if no redirect needed, just return (example: already on /dashboard)
     // if user data not yet there (fetch in progress, logged in or not) then don't do anything yet
-    if (!redirectTo || !user) return
+    if (!redirectTo || isLoading) return
 
     if (
       // If redirectTo is set, redirect if the user was not found.
@@ -30,9 +29,22 @@ export function useUser({
     ) {
       router.push(redirectTo)
     }
-  }, [user, redirectIfFound, redirectTo])
+  }, [user, redirectIfFound, redirectTo, isLoading])
 
-  return { user, isLoading, isSuccess, isIdle, status, setUser }
+  return { user, isLoading, isSuccess, isIdle, status, setUser, refetchUser }
+}
+
+export const loginRequiredServerSideProps: LoginRequiredServerSideProps = async (ctx, {redirectTo}) => {
+  const token = ctx.req.cookies[COOKIE_NAME]
+  if (!token) {
+    return {
+      redirect: {
+        destination: redirectTo,
+        statusCode: 307
+      }
+    } as GetServerSidePropsResult<any>
+  }
+  return {} as GetServerSidePropsResult<any>
 }
 
 export const loginValidationSchema = Yup.object().shape({
@@ -49,6 +61,7 @@ const defaultInitialValues = {
 
 export function useLogin({validationSchema = loginValidationSchema, initialValues = defaultInitialValues, onError, onSuccess}: {validationSchema?: any, initialValues?: any, onError?: Function, onSuccess?: Function}): ILogin {
   const queryClient = useQueryClient()
+  const { refetchUser } = useUserContext()
 
   const mutation = useMutation(data => {
     return axios.post('/login', data)
@@ -57,11 +70,14 @@ export function useLogin({validationSchema = loginValidationSchema, initialValue
       if (typeof onError === 'function') onError(err, variables, context)
       formik.setErrors(err?.response?.data)
     },
-    onSuccess: (response, variables, context) => {
+    onSuccess: async (response, variables, context) => {
       Cookies.set(COOKIE_NAME, response.data.token, { secure: process.env.NODE_ENV === "production" })
 
       // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
       queryClient.invalidateQueries(['users', 'me'])
+
+      // force refetch user from the api
+      await refetchUser();
 
       if (typeof onSuccess === 'function') onSuccess(response, variables, context)
     },
