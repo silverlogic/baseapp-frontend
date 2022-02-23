@@ -1,0 +1,44 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: node:16
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Install browser for tests
+          command: |
+            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
+            echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
+            apt-get update
+            apt-get install -y google-chrome-stable
+      - checkout
+      - run:
+          name: Install yarn
+          command: |
+            apt-get update
+            apt-get -y install apt-transport-https
+            curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+            echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+            apt-get update
+            apt-get -y install yarn
+      - restore_cache:
+          keys:
+            - v3-node-dependencies-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install node dependencies
+          command: |
+            yarn install --dev
+      - save_cache:
+          key: v3-node-dependencies-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build
+          command: |
+            yarn build
+      - run:
+          name: Run Tests
+          command: |
+            export CHROME_BIN="$(which google-chrome-stable)"
+            yarn test
