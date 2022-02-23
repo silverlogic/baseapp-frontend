@@ -34,7 +34,7 @@ export function useUser({
   return { user, isLoading, isSuccess, isIdle, status, setUser, refetchUser }
 }
 
-export const loginRequiredServerSideProps: LoginRequiredServerSideProps = async (ctx, {redirectTo}) => {
+export const loginRequiredServerSideProps: LoginRequiredServerSideProps = async (ctx, {redirectTo = "/auth/login"}) => {
   const token = ctx.req.cookies[COOKIE_NAME]
   if (!token) {
     return {
@@ -44,7 +44,7 @@ export const loginRequiredServerSideProps: LoginRequiredServerSideProps = async 
       }
     } as GetServerSidePropsResult<any>
   }
-  return {} as GetServerSidePropsResult<any>
+  return {props: {}} as GetServerSidePropsResult<any>
 }
 
 export const loginValidationSchema = Yup.object().shape({
