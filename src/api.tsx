@@ -46,7 +46,7 @@ function createAxiosInstance(file = false) {
 
 export const axios = createAxiosInstance()
 axios.interceptors.response.use(response => {
-  if (response.data) {
+  if (response.data && response.headers["content-type"] === "application/json") {
     response.data = humps.camelizeKeys(response.data)
   }
   return response
@@ -54,7 +54,7 @@ axios.interceptors.response.use(response => {
 
 const axiosForFiles = createAxiosInstance(true)
 axiosForFiles.interceptors.response.use(response => {
-  if (response.data) {
+  if (response.data && response.headers["content-type"] === "application/json") {
     response.data = humps.camelizeKeys(response.data)
   }
   return response
