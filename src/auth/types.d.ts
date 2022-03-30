@@ -35,6 +35,11 @@ export interface IRecoverPassword {
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
+export interface IResetPassword {
+  formik: FormikProps<any>
+  mutation: UseMutationResult<unknown, unknown, void, unknown>
+}
+
 export interface IUserContext {
   user: IUser | null
   isLoading: boolean
