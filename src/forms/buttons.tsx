@@ -5,7 +5,7 @@ export interface IButtonWithLoadingProps extends React.ButtonHTMLAttributes<HTML
   formik?: FormikProps<any>,
   isLoading?: boolean,
   children: JSX.Element[] | JSX.Element | string,
-  loadingText?: string | React.FC<any>,
+  loadingText?: string,
 }
 
 export function ButtonWithLoading({formik, isLoading = false, children, loadingText = "Loading...", ...props}: IButtonWithLoadingProps) {

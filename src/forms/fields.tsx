@@ -27,8 +27,10 @@ export interface IInputProps extends IInputBaseComponentProps {
 export function LabeledFormField({label, input, showError, errorMessage, helperText} : ILabelFormFieldProps) {
   return <p>
     <label>
-      {label}<br />
-      {input}
+      <>
+        {label}<br />
+        {input}
+      </>
     </label>
     {showError && <span>{errorMessage}</span>}
     {helperText && <strong>{helperText}</strong>}
@@ -37,7 +39,7 @@ export function LabeledFormField({label, input, showError, errorMessage, helperT
 
 export function LabeledCheckboxField({label, input, showError, errorMessage, helperText} : ILabelFormFieldProps) {
   return <p>
-    <label>{input} {label}</label>
+    <label><>{input} {label}</></label>
     {showError && <span>{errorMessage}</span>}
     {helperText && <strong>{helperText}</strong>}
   </p>
