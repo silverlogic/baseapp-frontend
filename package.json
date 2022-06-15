@@ -29,7 +29,8 @@
     ".": "./src",
     "./forms": "./src/forms",
     "./api": "./src/api",
-    "./auth": "./src/auth"
+    "./auth": "./src/auth",
+    "./permissions": "./src/permissions"
   },
   "main": "./src/index.tsx",
   "devDependencies": {
