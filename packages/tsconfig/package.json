@@ -1,0 +1,11 @@
+{
+  "name": "@baseapp-frontend/tsconfig",
+  "description": "Reusable typescript configs.",
+  "version": "0.0.0",
+  "main": "index.js",
+  "files": [
+    "base.json",
+    "core.json",
+    "nextjs.json"
+  ]
+}
