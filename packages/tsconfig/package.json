@@ -7,5 +7,8 @@
     "base.json",
     "core.json",
     "nextjs.json"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
