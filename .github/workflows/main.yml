@@ -1,0 +1,89 @@
+name: Release Workflow
+
+on:
+  push:
+    branches:
+      - master
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+jobs:
+  setup:
+    name: Setup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Upload app-setup artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-setup
+          path: .
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Download app-setup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-setup
+
+      - name: Lint Applications and Packages
+        run: yarn lint
+
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Download app-setup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-setup
+
+      - name: Build Applications and Packages
+        run: yarn build
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Download app-setup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-setup
+
+      - name: Test Applications and Packages
+        run: yarn test
+
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    needs: setup
+    steps:
+      - name: Download app-setup artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: app-setup
+
+      - name: Create Release Pull Request or Publish to npm
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          publish: yarn release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
