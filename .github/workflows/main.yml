@@ -23,11 +23,6 @@ jobs:
       - name: Install Dependencies
         run: yarn
 
-      - name: Download app-setup artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: app-setup
-
       - name: Lint Applications and Packages
         run: yarn lint
 
