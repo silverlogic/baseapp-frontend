@@ -10,7 +10,7 @@ export interface ISignUp {
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
-export const phoneRegex = /^\+?\d*([\s.-]?\(\d+\))?([\s.-]?\d+)*$/
+export const phoneRegex = /^(\([0-9]{3}\)|[0-9]{3}-|[0-9]{3})\s?[0-9]{3}-?[0-9]{4}$/
 
 export const signUpValidationSchema = Yup.object().shape({
   firstName: Yup.string().required('This field is required'),
