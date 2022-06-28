@@ -207,7 +207,7 @@ This package provides the [react-query](https://react-query.tanstack.com/) basic
 #  Setup on a bare-bones project
 
 ```bash
-yarn add git+https://alisson:CQ5M7thUNtvqSeKcNW62@bitbucket.org/silverlogic/baseapp-nextjs-core.git
+yarn add git+https://username:password@bitbucket.org/silverlogic/baseapp-nextjs-core.git
 ```
 Then mount `BaseAppProvider` in your main app component:
 ```jsx
