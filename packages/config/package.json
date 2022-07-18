@@ -1,0 +1,28 @@
+{
+  "name": "@baseapp-frontend/config",
+  "description": "Reusable configurations for eslint, prettier and jest.",
+  "version": "1.0.0",
+  "main": "index.js",
+  "files": [
+    ".eslintrc.js",
+    "jest.config.js",
+    ".prettierrc.js"
+  ],
+  "devDependencies": {
+    "@emotion/eslint-plugin": "^11.7.0",
+    "@typescript-eslint/eslint-plugin": "^5.13.0",
+    "@typescript-eslint/parser": "^5.29.0"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/mui-material"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
