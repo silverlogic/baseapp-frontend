@@ -16,7 +16,8 @@
     "incremental": true,
     "noImplicitAny": false,
     "declaration": true,
-    "maxNodeModuleJsDepth": 2
+    "maxNodeModuleJsDepth": 2,
+    "baseUrl": "."
   },
   "include": ["next-env.d.ts", "src"],
   "exclude": ["node_modules"]
