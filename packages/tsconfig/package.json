@@ -12,7 +12,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/silverlogic/baseapp-frontend.git",
-    "directory": "packages/mui-material"
+    "directory": "packages/tsconfig"
   },
   "bugs": {
     "url": "https://github.com/silverlogic/baseapp-frontend/issues"
