@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/tsconfig",
   "description": "Reusable typescript configs.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
   "files": [
     "base.json",
