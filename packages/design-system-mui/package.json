@@ -1,0 +1,28 @@
+{
+  "name": "@baseapp-frontend/design-system-mui",
+  "description": "Design System components and configurations.",
+  "version": "0.0.0",
+  "main": "./dist/index.ts",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "sideEffects": false,
+  "private": true,
+  "scripts": {
+    "build": "tsc --outDir dist",
+    "dev": "tsc --watch --outDir dist",
+    "lint": "eslint",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@baseapp-frontend/config": "*",
+    "@baseapp-frontend/tsconfig": "*",
+    "typescript": "^4.7.4"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.10.0",
+    "@emotion/styled": "^11.10.0",
+    "@mui/material": "^5.10.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
