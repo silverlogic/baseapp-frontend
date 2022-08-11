@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system-mui",
   "description": "Design System components and configurations.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -30,7 +30,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/silverlogic/baseapp-frontend.git",
-    "directory": "packages/core"
+    "directory": "packages/design-system-mui"
   },
   "bugs": {
     "url": "https://github.com/silverlogic/baseapp-frontend/issues"
