@@ -1,5 +1,19 @@
-import { Button } from './styled'
+import { Button } from '@mui/material'
+import { CircularProgress } from './styled'
 
-const ButtonWithLoading = ({ children }) => <Button>{children} With Loading</Button>
+function ButtonWithLoading({
+  loading = false,
+  children,
+  loadingChildren = <CircularProgress size="20px" />,
+  loadingColor = 'primary',
+  ...props
+}) {
+  return (
+    <Button disabled={loading} {...props}>
+      {children}
+      {loading && loadingChildren}
+    </Button>
+  )
+}
 
 export default ButtonWithLoading
