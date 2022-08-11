@@ -41,12 +41,12 @@ const ImageLabel = styled(Typography)(({ theme }) => ({
 })) as unknown as typeof Typography
 
 const DeleteButton = styled(MuiButton)(({ theme }) => ({
-  color: theme.palette.warning[500],
+  color: theme.palette.warning.main,
   textDecoration: 'underline',
   textTransform: 'capitalize',
   fontSize: fontSize(14),
   '&:hover': {
-    color: theme.palette.warning[200],
+    color: theme.palette.warning.light,
   },
 })) as unknown as typeof MuiButton
 

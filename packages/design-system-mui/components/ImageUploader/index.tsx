@@ -1,7 +1,8 @@
 import { FormControl, FormHelperText } from '@mui/material'
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined'
-import type { IImageUploadInput } from './types'
+import type { IImageUploadInput, ImageFile } from './types'
 import { ImageGroup, Image, UploaderButton, LabelGroup, ImageLabel, DeleteButton } from './styled'
+import { ReactChild, ReactFragment, ReactPortal, Key } from 'react'
 
 function ImageUploader({
   images,
@@ -58,7 +59,7 @@ function ImageUploader({
         {...props}
       />
       {error && <FormHelperText>{helperText}</FormHelperText>}
-      {images.map((img, index) => (
+      {images.map((img: ImageFile, index: number) => (
         <ImageGroup key={index}>
           <Image src={img.imagePreviewUrl as string} alt="preview" {...ImageProps} />
           <LabelGroup>

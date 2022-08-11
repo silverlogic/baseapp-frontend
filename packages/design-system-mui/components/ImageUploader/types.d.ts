@@ -16,6 +16,7 @@ interface IImageUploadInput extends IInputProps {
   ImageProps?: IImageProps
   ImageLabelProps?: IImageLabelProps
   DeleteButtonProps?: IImageDeleteButtonProps
+  image?: ImageFile[]
 }
 
 interface ImageFile {
