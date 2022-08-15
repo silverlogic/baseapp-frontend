@@ -6,12 +6,14 @@ function ButtonWithLoading({
   loading = false,
   children,
   loadingChildren = <CircularProgress size="20px" />,
+  formik,
   ...props
 }: IButtonWitthLoadingProps) {
+  const _isLoading = formik ? formik.isSubmitting : loading
   return (
     <Button disabled={loading} {...props}>
       {children}
-      {loading && loadingChildren}
+      {_isLoading && loadingChildren}
     </Button>
   )
 }

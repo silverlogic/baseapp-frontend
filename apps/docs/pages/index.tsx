@@ -29,11 +29,11 @@ export default function Docs() {
 
       <div style={{ width: theme.spacing(48) }}>
         <h2>{`<PasswordField />`}</h2>
-        <PasswordField />
+        <PasswordField name="password" />
 
-        <PasswordField helperText="Type your password." />
+        <PasswordField name="password" helperText="Type your password." />
 
-        <PasswordField error helperText="Incorrect entry." />
+        <PasswordField name="password" error helperText="Incorrect entry." />
       </div>
 
       <Divider style={{ margin: theme.spacing(2, 0) }} />
