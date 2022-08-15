@@ -1,25 +1,18 @@
-export interface IInputBaseComponentProps
-  extends React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
-  // Accommodate arbitrary additional props coming from the `IInputProps` prop
-  [arbitrary: string]: any
-}
-
-export interface IInputProps extends IInputBaseComponentProps {
-  component?: React.ElementType<IInputBaseComponentProps> | React.FC<any>
-  templateComponent?: React.FC<any>
-  name: string
-  label?: string
-  helperText?: string
-}
-
-interface IImageUploadInput extends IInputProps {
+export interface IImageUploadInput extends IInputProps {
   ImageProps?: IImageProps
   ImageLabelProps?: IImageLabelProps
   DeleteButtonProps?: IImageDeleteButtonProps
-  image?: ImageFile[]
+  images: ImageFile[]
+  setImages: Dispatch<SetStateAction<never[]>>
+  buttonLabel?: string
+  buttonRemoveLabel?: string
+  name?: string
+  UploaderButtonProps?: IImageUploaderButtonProps
+  error?: boolean
+  helperText?: string
 }
 
-interface ImageFile {
+export interface ImageFile {
   file: File
   imagePreviewUrl: string | ArrayBuffer | null
 }

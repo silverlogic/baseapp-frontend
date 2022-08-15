@@ -3,25 +3,27 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { TextField } from './styled'
+import { StyledPasswordTextField } from './styled'
 import { useTheme } from '@mui/material'
-import { IPasswordFieldProps } from './types'
+import { ITextField } from '../TextField/types'
 
 function PasswordField({
   name = 'password',
   visibilityIconColor,
   InputLabelProps,
   InputProps,
+  formik,
   ...props
-}: IPasswordFieldProps): ReactElement {
+}: ITextField): ReactElement {
   const [viewPassword, setViewPassword] = useState(false)
   const theme = useTheme()
   return (
-    <TextField
+    <StyledPasswordTextField
       label="Password"
       placeholder="Password"
       type={viewPassword ? 'text' : 'password'}
       name={name}
+      formik={formik}
       InputLabelProps={{ ...InputLabelProps }}
       InputProps={{
         endAdornment: (

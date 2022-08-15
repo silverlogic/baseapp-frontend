@@ -7,8 +7,8 @@ import { ReactChild, ReactFragment, ReactPortal, Key } from 'react'
 function ImageUploader({
   images,
   setImages,
-  buttonLabel,
-  buttonRemoveLabel,
+  buttonLabel = 'Upload Image',
+  buttonRemoveLabel = 'Remove Image',
   name,
   error,
   helperText,
@@ -18,6 +18,8 @@ function ImageUploader({
   UploaderButtonProps,
   ...props
 }: IImageUploadInput) {
+  // @TODO: Add support for multiple images
+  // @TODO Add formik or other form context to support form validation
   const deleteImage = (index: number) => {
     const newImages = [...images]
     newImages.splice(index, 1)
@@ -47,7 +49,7 @@ function ImageUploader({
         {...UploaderButtonProps}
       >
         <UploadFileOutlinedIcon sx={{ marginRight: 1 }} />
-        {buttonLabel || 'Upload Photo'}
+        {buttonLabel}
       </UploaderButton>
       <input
         name={name}
@@ -59,7 +61,7 @@ function ImageUploader({
         {...props}
       />
       {error && <FormHelperText>{helperText}</FormHelperText>}
-      {images.map((img: ImageFile, index: number) => (
+      {images?.map((img: ImageFile, index: number) => (
         <ImageGroup key={index}>
           <Image src={img.imagePreviewUrl as string} alt="preview" {...ImageProps} />
           <LabelGroup>
@@ -72,7 +74,7 @@ function ImageUploader({
               color="primary"
               {...DeleteButtonProps}
             >
-              {buttonRemoveLabel || 'Remove Photo'}
+              {buttonRemoveLabel}
             </DeleteButton>
           </LabelGroup>
         </ImageGroup>
