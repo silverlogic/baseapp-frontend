@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.1.0
+
+### Minor Changes
+
+- Added TextField
+- Added support to Formik (These will be changed in the future, just added to the sake of keep current baseapp-nextjs-mui-template working)
+
 ## 1.0.1
 
 ### Patch Changes
