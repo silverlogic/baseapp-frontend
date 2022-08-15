@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.2.0
+
+### Minor Changes
+
+- Added CheckboxField
+
 ## 1.1.0
 
 ### Minor Changes
