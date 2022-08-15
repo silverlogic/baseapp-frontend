@@ -2,6 +2,7 @@ import {
   ButtonWithLoading,
   PasswordField,
   ImageUploader,
+  CheckboxField,
 } from '@baseapp-frontend/design-system-mui'
 import { Divider, useTheme } from '@mui/material'
 import { useState } from 'react'
@@ -49,6 +50,10 @@ export default function Docs() {
           buttonRemoveLabel="Remove"
         />
       </div>
+
+      <Divider style={{ margin: theme.spacing(2, 0) }} />
+
+      <CheckboxField name="checkbox" label="Checkbox" />
     </div>
   )
 }

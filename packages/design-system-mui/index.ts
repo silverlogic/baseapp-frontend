@@ -24,3 +24,6 @@ export type {
   IInputBaseComponentProps,
   IInputProps,
 } from './components/TextField/types'
+
+export { default as CheckboxField } from './components/CheckboxField'
+export type { ICheckboxFieldProps } from './components/CheckboxField/types'
