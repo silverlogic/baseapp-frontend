@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.2.1
+
+### Patch Changes
+
+- Removed services as a default palette
+- Fix issue on ImageUploader types
+
 ## 1.2.0
 
 ### Minor Changes

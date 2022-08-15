@@ -17,7 +17,7 @@ const ImageGroup = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   marginTop: theme.spacing(2),
-})) as unknown as FC
+}))
 
 const Image = styled('img')(({ theme }) => ({
   width: '87px',
@@ -32,7 +32,7 @@ const LabelGroup = styled('div')(({ theme }) => ({
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
   marginLeft: theme.spacing(1),
-})) as unknown as FC
+}))
 
 const ImageLabel = styled(Typography)(({ theme }) => ({
   color: theme.palette.grey[500],
