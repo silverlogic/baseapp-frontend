@@ -4,7 +4,7 @@ This package holds all common logic and helpers that are used across different a
 
 Dependencies:
 https://react-query.tanstack.com/
-https://formik.org/
+https://react-hook-form.com/
 
 # Authentication
 
@@ -13,7 +13,7 @@ https://formik.org/
 handle login form and execute the login
 
 ```js
-const { formik, mutation } = useLogin({onError, onSuccess})
+const { form, mutation } = useLogin({onError, onSuccess})
 ```
 
 ### Options
@@ -29,25 +29,25 @@ Both options are just an shortcut for [react-query's mutation's options](https:/
 
 ### Returns
 
-- `formik` [formik's instance](https://formik.org/docs/api/useFormik) this is important to build the form's inputs and already handles the onSubmit behavior
+- `form` [react-hook-form's instance](https://react-hook-form.com/api/useform) this is important to build the form's inputs and already handles the onSubmit behavior
 - `mutation` [react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation) that can be used to execute the login at any time.
 
-`formik` usage example:
+`form` usage example:
 ```jsx
-const { formik } = useLogin()
-return <form onSubmit={formik.handleSubmit}>
+const { form } = useLogin()
+return <form onSubmit={form.handleSubmit}>
   <InputField
     label="Email Address"
     name="email"
     type="email"
     placeholder="Email"
-    formik={formik}
+    form={form}
   />
 
   <PasswordField
     label="Password"
     name="password"
-    formik={formik}
+    form={form}
   />
 	
   <button type="submit">Login</button>
@@ -108,16 +108,15 @@ const mutation = useMutation(data => {
   return axios.post('/do-something', data)
 }, {
   onError: (err: any, variables, context) => {
-    formik.setErrors(err?.response?.data)
+    form.setError('fieldName', {type: 'custom', message: err?.response?.data})
   },
   onSettled: (data, error, variables, context) => {
-    formik.setSubmitting(false)
+    form.reset()
   }
 })
 
-const formik = useFormik({
-  onSubmit: (values: any) => mutation.mutate(values),
-})
+const form = useForm()
+const handleSubmit = form.handleSubmit((values: any) => mutation.mutate(values))
 
 ```
 

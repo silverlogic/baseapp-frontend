@@ -1,14 +1,9 @@
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { axios, useMutation } from '../api'
-import { useLogin } from './login'
-import type { UseMutationResult } from 'react-query'
-import type { FormikProps } from 'formik'
-
-export interface ISignUp {
-  formik: FormikProps<any>
-  mutation: UseMutationResult<unknown, unknown, void, unknown>
-}
+import { ISignUp } from './types'
+import { setFormApiErrors } from './utils'
 
 export const phoneRegex = /^(\([0-9]{3}\)|[0-9]{3}-|[0-9]{3})\s?[0-9]{3}-?[0-9]{4}$/
 
@@ -33,12 +28,12 @@ const defaultInitialValues = {
 }
 export function useSignUp({
   validationSchema = signUpValidationSchema,
-  initialValues = defaultInitialValues,
+  defaultValues = defaultInitialValues,
   onError,
   onSuccess,
 }: {
   validationSchema?: any
-  initialValues?: any
+  defaultValues?: any
   // eslint-disable-next-line @typescript-eslint/ban-types
   onError?: Function
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -51,22 +46,24 @@ export function useSignUp({
     {
       onError: (err: any, variables, context) => {
         if (typeof onError === 'function') onError(err, variables, context)
-        formik.setErrors(err?.response?.data) // this is important to show backend errors on each specific field
+        setFormApiErrors(form, err) // this is important to show backend errors on each specific field
       },
       onSuccess: (response: any, variables, context) => {
         if (typeof onSuccess === 'function') onSuccess(response, variables, context)
       },
-      onSettled: (data, error, variables, context) => {
-        formik.setSubmitting(false)
-      },
     },
   )
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => mutation.mutate(values),
+  const form = useForm({
+    defaultValues,
+    resolver: yupResolver(validationSchema),
   })
 
-  return { formik, mutation }
+  return {
+    form: {
+      ...form,
+      handleSubmit: form.handleSubmit((values: any) => mutation.mutate(values)),
+    },
+    mutation,
+  }
 }

@@ -9,7 +9,7 @@ describe('useSignUp', () => {
     const { result, waitFor } = renderHook(
       () =>
         useSignUp({
-          initialValues: {
+          defaultValues: {
             firstName: 'A',
             lastName: 'P',
             email: 'ap@tsl.io',
@@ -29,7 +29,7 @@ describe('useSignUp', () => {
     })
 
     await act(async () => {
-      await result.current.formik.submitForm()
+      await result.current.form.handleSubmit()
     })
 
     await waitFor(() => hasOnSuccessRan)

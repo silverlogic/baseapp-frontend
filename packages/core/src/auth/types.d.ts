@@ -26,17 +26,22 @@ export interface IUserResult {
 }
 
 export interface ILogin {
-  formik: FormikProps<any>
+  form: UseFormReturn<any>
+  mutation: UseMutationResult<unknown, unknown, void, unknown>
+}
+
+export interface ISignUp {
+  form: UseFormReturn<any>
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
 export interface IRecoverPassword {
-  formik: FormikProps<any>
+  form: UseFormReturn<any>
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
 export interface IResetPassword {
-  formik: FormikProps<any>
+  form: UseFormReturn<any>
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
