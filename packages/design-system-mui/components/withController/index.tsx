@@ -1,5 +1,5 @@
 import { Controller } from 'react-hook-form'
-import { ControlledComponentProps } from './types'
+import { IControlledComponentProps } from './types'
 
 function withController(Component: any) {
   return function ({
@@ -9,7 +9,7 @@ function withController(Component: any) {
     helperText,
     handleChange,
     ...props
-  }: ControlledComponentProps) {
+  }: IControlledComponentProps) {
     if (form) {
       return (
         <Controller

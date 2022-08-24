@@ -1,13 +1,15 @@
-import { ICheckboxFieldProps } from './types'
+import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
 import withController from '../withController'
 
-const ControlledCheckBox = withController(({ checked, value, helperText, ...props }) => (
-  <Checkbox checked={checked || value} {...props} />
-))
+const ControlledCheckBox = withController(
+  ({ checked = false, value, ...props }: IControlledCheckBoxProps) => (
+    <Checkbox checked={checked || value} {...props} />
+  ),
+)
 
 export default function CheckboxField({
   label,

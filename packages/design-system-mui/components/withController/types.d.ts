@@ -1,18 +1,18 @@
 import { Controller, UseFormReturn } from 'react-hook-form'
 
-interface ControllerProps {
+interface IControllerProps {
   name: string
   helperText?: string
   [x: string]: any
 }
 
-interface BasicControllerProps extends ControllerProps {
+interface IBasicControllerProps extends IControllerProps {
   value: any
-  handleChange: (event?: any) => void
+  handleChange: any
 }
 
-interface FormControllerProps extends ControllerProps {
+interface IFormControllerProps extends IControllerProps {
   form: UseFormReturn
 }
 
-export type ControlledComponentProps = FormControllerProps | BasicControllerProps
+export type IControlledComponentProps = IFormControllerProps | IBasicControllerProps

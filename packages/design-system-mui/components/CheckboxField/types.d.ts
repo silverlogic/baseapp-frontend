@@ -1,4 +1,5 @@
-import { UseFormReturn } from 'react-hook-form'
+import { UseFormReturn, ControllerRenderProps } from 'react-hook-form'
+
 export interface ICheckboxFieldProps {
   label?: string
   showError: boolean
@@ -12,4 +13,9 @@ export interface ICheckboxFieldProps {
   handleChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   CheckboxProps?: CheckboxProps
   FormControlProps?: FormControlProps
+}
+
+interface IControlledCheckBoxProps extends ControllerRenderProps {
+  checked?: boolean
+  [x: string]: any
 }

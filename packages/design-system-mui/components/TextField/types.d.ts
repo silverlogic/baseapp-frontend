@@ -1,5 +1,6 @@
 import type { TextFieldProps } from '@mui/material'
 import { UseFormReturn } from 'react-hook-form'
+import { IControlledComponentProps } from '../withController/types'
 
 export interface IInputBaseComponentProps
   extends React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
@@ -20,4 +21,4 @@ export interface IInputProps extends IInputBaseComponentProps {
   ) => void
 }
 
-export type ITextField = TextFieldProps & IInputProps
+export type ITextField = (TextFieldProps & IInputProps) | IControlledComponentProps
