@@ -117,6 +117,7 @@ const mutation = useMutation(data => {
 
 const form = useForm()
 const handleSubmit = form.handleSubmit((values: any) => mutation.mutate(values))
+const handleAsyncSubmit = form.handleSubmit(async (values: any) => mutation.mutateAsync(values))
 
 ```
 

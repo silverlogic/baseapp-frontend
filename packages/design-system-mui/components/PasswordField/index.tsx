@@ -12,7 +12,7 @@ function PasswordField({
   visibilityIconColor,
   InputLabelProps,
   InputProps,
-  formik,
+  form,
   ...props
 }: ITextField): ReactElement {
   const [viewPassword, setViewPassword] = useState(false)
@@ -23,7 +23,7 @@ function PasswordField({
       placeholder="Password"
       type={viewPassword ? 'text' : 'password'}
       name={name}
-      formik={formik}
+      form={form}
       InputLabelProps={{ ...InputLabelProps }}
       InputProps={{
         endAdornment: (

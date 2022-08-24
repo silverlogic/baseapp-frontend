@@ -51,7 +51,13 @@ export function useRecoverPassword({
   return {
     form: {
       ...form,
-      handleSubmit: form.handleSubmit((values: any) => mutation.mutate(values)),
+      handleSubmit: form.handleSubmit(async (values: any) => {
+        try {
+          await mutation.mutateAsync(values)
+        } catch (error) {
+          // mutateAsync will raise an error if there's an API error
+        }
+      }),
     },
     mutation,
   }
