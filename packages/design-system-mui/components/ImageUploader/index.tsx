@@ -1,8 +1,8 @@
 import { FormControl, FormHelperText } from '@mui/material'
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined'
+
 import type { IImageUploadInput, ImageFile } from './types'
 import { ImageGroup, Image, UploaderButton, LabelGroup, ImageLabel, DeleteButton } from './styled'
-import { ReactChild, ReactFragment, ReactPortal, Key } from 'react'
 
 function ImageUploader({
   images,

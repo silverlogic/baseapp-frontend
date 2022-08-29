@@ -3,8 +3,9 @@ import IconButton from '@mui/material/IconButton'
 import InputAdornment from '@mui/material/InputAdornment'
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
-import { StyledPasswordTextField } from './styled'
 import { useTheme } from '@mui/material'
+
+import { StyledPasswordTextField } from './styled'
 import { ITextField } from '../TextField/types'
 
 function PasswordField({

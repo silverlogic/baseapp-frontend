@@ -1,9 +1,10 @@
 import { IResetPassword } from './types'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { axios, useMutation } from '../api'
 import { useForm } from 'react-hook-form'
+
 import { setFormApiErrors } from './utils'
+import { axios, useMutation } from '../api'
 
 export const resetPasswordValidationSchema = Yup.object().shape({
   newPassword: Yup.string().required('This field is required'),

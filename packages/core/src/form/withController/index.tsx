@@ -1,7 +1,7 @@
 import { Controller } from 'react-hook-form'
 import { IControlledComponentProps } from './types'
 
-function withController(Component: any) {
+export function withController(Component: any) {
   return function ({
     name,
     form,
@@ -41,5 +41,3 @@ function withController(Component: any) {
     )
   }
 }
-
-export default withController

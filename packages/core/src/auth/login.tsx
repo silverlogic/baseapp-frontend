@@ -5,11 +5,12 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import Cookies from 'js-cookie'
-import { axios, useMutation, useQueryClient } from '../api'
+
 import { COOKIE_NAME } from './constants'
 import { useUserContext } from './context'
 import type { IUserContext, ILogin, LoginRequiredServerSideProps } from './types'
 import { setFormApiErrors } from './utils'
+import { axios, useMutation, useQueryClient } from '../api'
 
 export function useUser({ redirectTo = '', redirectIfFound = false } = {}): IUserContext {
   const router = useRouter()

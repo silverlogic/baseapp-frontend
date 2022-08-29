@@ -1,9 +1,10 @@
-import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
-import withController from '../withController'
+import { withController } from '@baseapp-frontend/core'
+
+import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
 
 const ControlledCheckBox = withController(
   ({ checked = false, value, ...props }: IControlledCheckBoxProps) => (

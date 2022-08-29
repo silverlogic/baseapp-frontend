@@ -1,9 +1,10 @@
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+
 import { IRecoverPassword } from './types'
-import { axios, useMutation } from '../api'
 import { setFormApiErrors } from './utils'
+import { axios, useMutation } from '../api'
 
 export const recoverPasswordValidationSchema = Yup.object().shape({
   email: Yup.string()

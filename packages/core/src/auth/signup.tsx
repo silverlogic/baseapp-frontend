@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { axios, useMutation } from '../api'
+
 import { ISignUp } from './types'
 import { setFormApiErrors } from './utils'
+import { axios, useMutation } from '../api'
 
 export const phoneRegex = /^(\([0-9]{3}\)|[0-9]{3}-|[0-9]{3})\s?[0-9]{3}-?[0-9]{4}$/
 

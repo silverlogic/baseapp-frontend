@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles'
 import { Button as MuiButton, Typography } from '@mui/material'
 import { FC } from 'react'
+
 import { fontSize } from '../../styles/utils'
 
 const UploaderButton = styled(MuiButton)(({ theme }) => ({
