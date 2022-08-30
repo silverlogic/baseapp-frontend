@@ -4,7 +4,7 @@
 
 ### Major Changes
 
-- 20d1f55: Replaced formik dependency with react-hook-form
+- Replaced formik dependency with react-hook-form
 
 ## 1.1.0
 

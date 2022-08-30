@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.3.0
+
+### Minor Changes
+
+- Adapted components to use react-hook-form
+
 ## 1.2.1
 
 ### Patch Changes
