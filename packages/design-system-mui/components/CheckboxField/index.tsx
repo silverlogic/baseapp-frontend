@@ -1,13 +1,21 @@
-import { ICheckboxFieldProps } from './types'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormControl from '@mui/material/FormControl'
 import FormHelperText from '@mui/material/FormHelperText'
+import { withController } from '@baseapp-frontend/core'
+
+import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
+
+const ControlledCheckBox = withController(
+  ({ checked = false, value, ...props }: IControlledCheckBoxProps) => (
+    <Checkbox checked={checked || value} {...props} />
+  ),
+)
 
 export default function CheckboxField({
   label,
   name,
-  formik,
+  form,
   checked,
   handleChange,
   showError,
@@ -17,7 +25,8 @@ export default function CheckboxField({
   CheckboxProps,
   FormControlProps,
 }: ICheckboxFieldProps) {
-  const _showError = (formik?.errors?.[name] && formik?.touched?.[name]) as boolean
+  const formErrors = form?.formState?.errors?.[name]
+  const _showError = (formErrors && form?.formState?.touchedFields?.[name]) as boolean
 
   return (
     <FormControl
@@ -28,16 +37,17 @@ export default function CheckboxField({
     >
       <FormControlLabel
         control={
-          <Checkbox
-            checked={formik?.values?.[name] || checked}
-            onChange={formik?.handleChange || handleChange}
+          <ControlledCheckBox
+            form={form}
+            checked={checked}
+            handleChange={handleChange}
             {...CheckboxProps}
-          />
+          ></ControlledCheckBox>
         }
         label={label}
       />
       {((showError && errorMessage) || _showError) && (
-        <FormHelperText>{showError ? formik.errors?.[name] : errorMessage}</FormHelperText>
+        <FormHelperText>{showError ? formErrors : errorMessage}</FormHelperText>
       )}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>

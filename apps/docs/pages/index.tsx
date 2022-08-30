@@ -1,59 +1,22 @@
-import {
-  ButtonWithLoading,
-  PasswordField,
-  ImageUploader,
-  CheckboxField,
-} from '@baseapp-frontend/design-system-mui'
-import { Divider, useTheme } from '@mui/material'
-import { useState } from 'react'
+import Link from 'next/link'
 
 export default function Docs() {
-  const [images, setImages] = useState([])
-  const theme = useTheme()
   return (
     <div>
-      <h1>Components demo</h1>
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
-      <h2>{`<ButtonWithLoading>`}</h2>
-      <div style={{ width: theme.spacing(48), display: 'flex', flexDirection: 'column' }}>
-        <ButtonWithLoading variant="contained" style={{ margin: theme.spacing(2, 0) }}>
-          button
-        </ButtonWithLoading>
-
-        <ButtonWithLoading variant="contained" loading>
-          button
-        </ButtonWithLoading>
-      </div>
-
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
-      <div style={{ width: theme.spacing(48) }}>
-        <h2>{`<PasswordField />`}</h2>
-        <PasswordField name="password" />
-
-        <PasswordField name="password" helperText="Type your password." />
-
-        <PasswordField name="password" error helperText="Incorrect entry." />
-      </div>
-
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
-      <h2>{`<ImageUploader />`}</h2>
-      <div style={{ width: theme.spacing(48) }}>
-        <ImageUploader
-          images={images}
-          setImages={setImages}
-          name="imageUploeader"
-          ImageProps={{ style: { outline: '1px solid blue' } }}
-          buttonLabel="Upload your image here"
-          buttonRemoveLabel="Remove"
-        />
-      </div>
-
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
-      <CheckboxField name="checkbox" label="Checkbox" />
+      <h1>Welcome to the baseapp implementation docs!</h1>
+      <h2>Pages:</h2>
+      <ul>
+        <li>
+          <Link href="/components">
+            <a>Components</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/auth">
+            <a>Auth hooks</a>
+          </Link>
+        </li>
+      </ul>
     </div>
   )
 }

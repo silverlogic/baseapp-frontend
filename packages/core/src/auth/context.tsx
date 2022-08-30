@@ -1,8 +1,9 @@
 import { useState, createContext, useContext, ReactNode } from 'react'
 import Cookies from 'js-cookie'
+
 import { COOKIE_NAME } from './constants'
-import { useQuery } from '../api'
 import type { IUser, IUserContext } from './types'
+import { useQuery } from '../api'
 
 export const UserContext = createContext({
   user: null,

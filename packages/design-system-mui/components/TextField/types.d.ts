@@ -1,4 +1,6 @@
 import type { TextFieldProps } from '@mui/material'
+import { UseFormReturn } from 'react-hook-form'
+import { IControlledComponentProps } from '@baseapp-frontend/core'
 
 export interface IInputBaseComponentProps
   extends React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
@@ -8,7 +10,7 @@ export interface IInputBaseComponentProps
 
 export interface IInputProps extends IInputBaseComponentProps {
   component?: React.ElementType<IInputBaseComponentProps> | React.FC<any>
-  formik?: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  form?: UseFormReturn
   templateComponent?: React.FC<any>
   name: string
   label?: string
@@ -19,4 +21,4 @@ export interface IInputProps extends IInputBaseComponentProps {
   ) => void
 }
 
-export type ITextField = TextFieldProps & IInputProps
+export type ITextField = (TextFieldProps & IInputProps) | IControlledComponentProps

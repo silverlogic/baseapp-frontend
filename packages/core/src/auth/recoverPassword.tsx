@@ -1,6 +1,9 @@
 import * as Yup from 'yup'
-import { useFormik } from 'formik'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+
 import { IRecoverPassword } from './types'
+import { setFormApiErrors } from './utils'
 import { axios, useMutation } from '../api'
 
 export const recoverPasswordValidationSchema = Yup.object().shape({
@@ -15,12 +18,12 @@ const defaultInitialValues = {
 
 export function useRecoverPassword({
   validationSchema = recoverPasswordValidationSchema,
-  initialValues = defaultInitialValues,
+  defaultValues = defaultInitialValues,
   onError,
   onSuccess,
 }: {
   validationSchema?: any
-  initialValues?: any
+  defaultValues?: any
   // eslint-disable-next-line @typescript-eslint/ban-types
   onError?: Function
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -33,22 +36,30 @@ export function useRecoverPassword({
     {
       onError: (err: any, variables, context) => {
         if (typeof onError === 'function') onError(err, variables, context)
-        formik.setErrors(err?.response?.data) // this is important to show backend errors on each specific field
+        setFormApiErrors(form, err) // this is important to show backend errors on each specific field
       },
       onSuccess: (response: any, variables, context) => {
         if (typeof onSuccess === 'function') onSuccess(response, variables, context)
       },
-      onSettled: (data, error, variables, context) => {
-        formik.setSubmitting(false)
-      },
     },
   )
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => mutation.mutate(values),
+  const form = useForm({
+    defaultValues,
+    resolver: yupResolver(validationSchema),
   })
 
-  return { formik, mutation }
+  return {
+    form: {
+      ...form,
+      handleSubmit: form.handleSubmit(async (values: any) => {
+        try {
+          await mutation.mutateAsync(values)
+        } catch (error) {
+          // mutateAsync will raise an error if there's an API error
+        }
+      }),
+    },
+    mutation,
+  }
 }

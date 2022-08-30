@@ -4,6 +4,6 @@ import TextField from '../TextField'
 const StyledPasswordTextField = styled(TextField)(({ theme }) => ({
   width: '100%',
   marginBottom: theme.spacing(2),
-}))
+})) as typeof TextField
 
 export { StyledPasswordTextField }

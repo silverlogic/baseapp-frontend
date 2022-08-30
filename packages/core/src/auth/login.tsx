@@ -1,13 +1,16 @@
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import type { GetServerSidePropsResult } from 'next'
-import { useFormik } from 'formik'
+import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
 import Cookies from 'js-cookie'
-import { axios, useMutation, useQueryClient } from '../api'
+
 import { COOKIE_NAME } from './constants'
 import { useUserContext } from './context'
 import type { IUserContext, ILogin, LoginRequiredServerSideProps } from './types'
+import { setFormApiErrors } from './utils'
+import { axios, useMutation, useQueryClient } from '../api'
 
 export function useUser({ redirectTo = '', redirectIfFound = false } = {}): IUserContext {
   const router = useRouter()
@@ -60,12 +63,12 @@ const defaultInitialValues = {
 }
 export function useLogin({
   validationSchema = loginValidationSchema,
-  initialValues = defaultInitialValues,
+  defaultValues = defaultInitialValues,
   onError,
   onSuccess,
 }: {
   validationSchema?: any
-  initialValues?: any
+  defaultValues?: any
   // eslint-disable-next-line @typescript-eslint/ban-types
   onError?: Function
   // eslint-disable-next-line @typescript-eslint/ban-types
@@ -81,7 +84,7 @@ export function useLogin({
     {
       onError: (err: any, variables, context) => {
         if (typeof onError === 'function') onError(err, variables, context)
-        formik.setErrors(err?.response?.data)
+        setFormApiErrors(form, err)
       },
       onSuccess: async (response, variables, context) => {
         Cookies.set(COOKIE_NAME, response.data.token, {
@@ -96,19 +99,27 @@ export function useLogin({
 
         if (typeof onSuccess === 'function') onSuccess(response, variables, context)
       },
-      onSettled: (data, error, variables, context) => {
-        formik.setSubmitting(false)
-      },
     },
   )
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values: any) => mutation.mutate(values),
+  const form = useForm({
+    defaultValues,
+    resolver: yupResolver(validationSchema),
   })
 
-  return { formik, mutation }
+  return {
+    form: {
+      ...form,
+      handleSubmit: form.handleSubmit(async (values: any) => {
+        try {
+          await mutation.mutateAsync(values)
+        } catch (error) {
+          // mutateAsync will raise an error if there's an API error
+        }
+      }),
+    },
+    mutation,
+  }
 }
 
 export function useLogout() {

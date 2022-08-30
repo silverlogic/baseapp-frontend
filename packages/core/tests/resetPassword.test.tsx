@@ -9,7 +9,7 @@ describe('useResetPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useResetPassword({
-          initialValues: {
+          defaultValues: {
             newPassword: 'ap@tsl.io',
             token: 'any_token',
           },
@@ -26,7 +26,7 @@ describe('useResetPassword', () => {
     })
 
     await act(async () => {
-      await result.current.formik.submitForm()
+      await result.current.form.handleSubmit()
     })
 
     await waitFor(() => hasOnSuccessRan)
@@ -40,7 +40,7 @@ describe('useResetPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useResetPassword({
-          initialValues: {
+          defaultValues: {
             newPassword: 'ap@tsl.io',
             token: 'any_token',
           },
@@ -56,7 +56,7 @@ describe('useResetPassword', () => {
     })
 
     await act(async () => {
-      await result.current.formik.submitForm()
+      await result.current.form.handleSubmit()
     })
 
     await waitFor(() => hasOnErrorRan)

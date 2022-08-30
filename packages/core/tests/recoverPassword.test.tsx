@@ -9,7 +9,7 @@ describe('useRecoverPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useRecoverPassword({
-          initialValues: {
+          defaultValues: {
             email: 'ap@tsl.io',
           },
           onSuccess: (response: any, variables: any) => {
@@ -24,7 +24,7 @@ describe('useRecoverPassword', () => {
     })
 
     await act(async () => {
-      await result.current.formik.submitForm()
+      await result.current.form.handleSubmit()
     })
 
     await waitFor(() => hasOnSuccessRan)
@@ -38,7 +38,7 @@ describe('useRecoverPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useRecoverPassword({
-          initialValues: {
+          defaultValues: {
             email: 'ap@tsl.io',
           },
           onError: (response: any, variables: any) => {
@@ -53,7 +53,7 @@ describe('useRecoverPassword', () => {
     })
 
     await act(async () => {
-      await result.current.formik.submitForm()
+      await result.current.form.handleSubmit()
     })
 
     await waitFor(() => hasOnErrorRan)
