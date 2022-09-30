@@ -2,7 +2,7 @@ import { renderHook, act } from '@testing-library/react-hooks'
 import { useLogin } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
 
-describe('useSignUp', () => {
+describe('useLogin', () => {
   test('should run onSuccess', async () => {
     let hasOnSuccessRan = false
 
