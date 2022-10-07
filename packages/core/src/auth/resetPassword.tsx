@@ -1,9 +1,9 @@
-import { IResetPassword } from './types'
+import { IAuthHookProps, IResetPassword } from './types'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
 
-import { setFormApiErrors } from './utils'
+import { setFormApiErrors } from '../form/utils'
 import { axios, useMutation } from '../api'
 
 export const resetPasswordValidationSchema = Yup.object().shape({
@@ -21,25 +21,18 @@ export function useResetPassword({
   defaultValues = defaultInitialValues,
   onError,
   onSuccess,
-}: {
-  validationSchema?: any
-  defaultValues?: any
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onError?: Function
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onSuccess?: Function
-}): IResetPassword {
+}: IAuthHookProps): IResetPassword {
   const mutation = useMutation(
     (data) => {
       return axios.post('/forgot-password/reset', data)
     },
     {
       onError: (err: any, variables, context) => {
-        if (typeof onError === 'function') onError(err, variables, context)
+        onError?.(err, variables, context)
         setFormApiErrors(form, err) // this is important to show backend errors on each specific field
       },
       onSuccess: (response: any, variables, context) => {
-        if (typeof onSuccess === 'function') onSuccess(response, variables, context)
+        onSuccess?.(response, variables, context)
       },
     },
   )

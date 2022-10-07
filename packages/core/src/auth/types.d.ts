@@ -5,6 +5,7 @@ import type {
   ParsedUrlQuery,
   PreviewData,
 } from 'next'
+import { MfaMethod } from '../mfa'
 
 export interface IUser {
   id: number
@@ -25,9 +26,46 @@ export interface IUserResult {
   status: string
 }
 
+export interface IAuthHookProps {
+  validationSchema?: any
+  defaultValues?: any
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onError?: Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onSuccess?: Function
+}
+
+export interface ILoginHookProps {
+  validationSchema?: any
+  defaultValues?: any
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onError?: Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onSuccess?: Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onMfaError?: Function
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  onMfaSuccess?: Function
+}
+
 export interface ILogin {
   form: UseFormReturn<any>
   mutation: UseMutationResult<unknown, unknown, void, unknown>
+  mfaForm: UseFormReturn<any>
+}
+
+export interface ILoginMfaRequest {
+  ephemeralToken: string
+  token: string
+}
+
+export interface ILoginResponse {
+  token: string
+}
+
+export interface ILoginMfaResponse {
+  ephemeralToken: string
+  method: MfaMethod
 }
 
 export interface ISignUp {

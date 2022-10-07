@@ -2,8 +2,8 @@ import { useForm } from 'react-hook-form'
 import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 
-import { ISignUp } from './types'
-import { setFormApiErrors } from './utils'
+import { IAuthHookProps, ISignUp } from './types'
+import { setFormApiErrors } from '../form/utils'
 import { axios, useMutation } from '../api'
 
 export const phoneRegex = /^(\([0-9]{3}\)|[0-9]{3}-|[0-9]{3})\s?[0-9]{3}-?[0-9]{4}$/
@@ -32,25 +32,18 @@ export function useSignUp({
   defaultValues = defaultInitialValues,
   onError,
   onSuccess,
-}: {
-  validationSchema?: any
-  defaultValues?: any
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onError?: Function
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  onSuccess?: Function
-}): ISignUp {
+}: IAuthHookProps): ISignUp {
   const mutation = useMutation(
     (data) => {
       return axios.post('/register', data)
     },
     {
       onError: (err: any, variables, context) => {
-        if (typeof onError === 'function') onError(err, variables, context)
+        onError?.(err, variables, context)
         setFormApiErrors(form, err) // this is important to show backend errors on each specific field
       },
       onSuccess: (response: any, variables, context) => {
-        if (typeof onSuccess === 'function') onSuccess(response, variables, context)
+        onSuccess?.(response, variables, context)
       },
     },
   )

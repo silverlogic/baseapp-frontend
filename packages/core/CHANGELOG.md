@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.1.0
+
+### Minor Changes
+
+- Multi-factor authentication: add hooks and API methods for MFA REST endpoints
+
 ## 2.0.0
 
 ### Major Changes
