@@ -44,6 +44,6 @@ export default class MfaApi {
   }
 
   static loginStep2(data: ILoginMfaRequest): Promise<AxiosResponse<ILoginResponse>> {
-    return axios.post(`${baseUrl}/login/code/`, data)
+    return axios.post('/login/code', data)
   }
 }
