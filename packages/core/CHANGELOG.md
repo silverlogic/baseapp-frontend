@@ -1,8 +1,14 @@
 # @baseapp-frontend/core
 
-## 2.1.0
+## 2.2.0
 
 ### Minor Changes
+
+- Update the API path for second step of 2FA request (code)
+
+## 2.1.0
+
+### Major Changes
 
 - Multi-factor authentication: add hooks and API methods for MFA REST endpoints
 
