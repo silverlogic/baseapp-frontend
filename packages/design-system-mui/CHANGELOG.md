@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.3.1
+
+### Minor Changes
+
+- Fixing CheckboxField error handling
+
 ## 1.3.0
 
 ### Minor Changes
