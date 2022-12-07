@@ -25,8 +25,8 @@ export default function CheckboxField({
   CheckboxProps,
   FormControlProps,
 }: ICheckboxFieldProps) {
-  const formErrors = form?.formState?.errors?.[name]
-  const _showError = (formErrors && form?.formState?.touchedFields?.[name]) as boolean
+  const formError = form?.formState?.errors?.[name]?.message
+  const _showError = (formError && form?.formState?.touchedFields?.[name]) as boolean
 
   return (
     <FormControl
@@ -47,7 +47,7 @@ export default function CheckboxField({
         label={label}
       />
       {((showError && errorMessage) || _showError) && (
-        <FormHelperText>{showError ? formErrors : errorMessage}</FormHelperText>
+        <FormHelperText>{showError ? (formError as string) : errorMessage}</FormHelperText>
       )}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
