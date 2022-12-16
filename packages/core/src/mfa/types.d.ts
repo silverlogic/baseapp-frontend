@@ -11,6 +11,11 @@ export interface IMfaActiveMethodResponse {
   isPrimary: boolean
 }
 
+export interface IMfaActivateConfirm {
+  form: UseFormReturn<any>
+  mutation: UseMutationResult<unknown, unknown, void, unknown>
+}
+
 export interface IMfaConfigurationResponse {
   methods: string[]
   confirmDisableWithCode: boolean
