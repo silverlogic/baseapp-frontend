@@ -1,4 +1,4 @@
-import { IMfaActiveMethodResponse } from './types'
+import { IMfaActiveMethodResponse, IMfaActivateConfirm } from './types'
 import Api from './api'
 import { useQuery, useMutation, useQueryClient } from '../api'
 import { useEffect, useState } from 'react'
@@ -121,7 +121,7 @@ export function useMfaActivateConfirm({
   onError?: Function
   // eslint-disable-next-line @typescript-eslint/ban-types
   onSuccess?: Function
-}) {
+}): IMfaActivateConfirm {
   const form = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema),
