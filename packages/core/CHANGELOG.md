@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.2.1
+
+### Minor Changes
+
+- Fixing useMfaActivateConfirm hook return type that breaks nextjs baseapp
+
 ## 2.2.0
 
 ### Minor Changes
