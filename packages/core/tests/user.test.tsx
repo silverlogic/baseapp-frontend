@@ -1,8 +1,9 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { renderHook } from '@testing-library/react-hooks'
 import { useUser } from '../src/auth'
 import Cookies from 'js-cookie'
 import { axiosMock, createWrapper } from './utils'
 import type { CookiesGetByNameFn } from './utils'
+import { faker } from '@faker-js/faker'
 
 describe('useUser', () => {
   test('should user be null for anonymous', async () => {
@@ -15,25 +16,27 @@ describe('useUser', () => {
   test('should user be present for authenticated', async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
 
-    axiosMock.onGet('/users/me').reply(200, {
-      email: 'ap@tsl.io',
-      id: 1,
-      firstName: 'Alisson',
-      lastName: 'Patricio',
+    const user = {
+      email: faker.internet.email(),
+      id: faker.datatype.uuid(),
+      firstName: faker.name.firstName(),
+      lastName: faker.name.lastName(),
       isEmailVerified: true,
       isNewEmailConfirmed: false,
       newEmail: '',
       referralCode: '1234',
-    })
+    }
 
-    const { result, waitFor, waitForNextUpdate } = renderHook(() => useUser(), {
+    axiosMock.onGet('/users/me').reply(200, user)
+
+    const { result, waitFor } = renderHook(() => useUser(), {
       wrapper: createWrapper(),
     })
     expect(result.current.isLoading).toBe(true)
-
+    
     await waitFor(() => result.current.isSuccess)
 
-    expect(result.current.user?.email).toBe('ap@tsl.io')
+    expect(result.current.user?.email).toBe(user.email)
   })
 
   test('should remove cookie if 401', async () => {
@@ -44,7 +47,7 @@ describe('useUser', () => {
       detail: 'Invalid token.',
     })
 
-    const { result, waitFor, waitForNextUpdate } = renderHook(() => useUser(), {
+    const { waitForNextUpdate } = renderHook(() => useUser(), {
       wrapper: createWrapper(),
     })
 

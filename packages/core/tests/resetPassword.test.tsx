@@ -1,16 +1,18 @@
 import { useResetPassword } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
 import { renderHook, act } from '@testing-library/react-hooks'
+import { faker } from '@faker-js/faker'
 
 describe('useResetPassword', () => {
   test('should run onSuccess', async () => {
     let hasOnSuccessRan = false
+    const password = faker.internet.password()
 
     const { result, waitFor } = renderHook(
       () =>
         useResetPassword({
           defaultValues: {
-            newPassword: 'ap@tsl.io',
+            newPassword: password,
             token: 'any_token',
           },
           onSuccess: (response: any, variables: any) => {
@@ -21,7 +23,7 @@ describe('useResetPassword', () => {
     )
 
     axiosMock.onPost('/forgot-password/reset').reply(200, {
-      newPassword: 'ap@tsl.io',
+      newPassword: password,
       token: 'any_token',
     })
 
@@ -36,12 +38,13 @@ describe('useResetPassword', () => {
 
   test('should run onError', async () => {
     let hasOnErrorRan = false
+    const password = faker.internet.password()
 
     const { result, waitFor } = renderHook(
       () =>
         useResetPassword({
           defaultValues: {
-            newPassword: 'ap@tsl.io',
+            newPassword: password,
             token: 'any_token',
           },
           onError: (response: any, variables: any) => {
