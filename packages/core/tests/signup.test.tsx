@@ -1,23 +1,16 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import { useSignUp } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
-import { faker } from '@faker-js/faker'
+import { signupUser } from './fixtures'
 
 describe('useSignUp', () => {
   test('should run onSuccess', async () => {
     let hasOnSuccessRan = false
-    const user = {
-      firstName: faker.name.firstName(),
-      lastName: faker.name.lastName(),
-      email: faker.internet.email(),
-      password: faker.internet.password(),
-      acceptConsent: true,
-    }
 
     const { result, waitFor } = renderHook(
       () =>
         useSignUp({
-          defaultValues: user,
+          defaultValues: signupUser,
           onSuccess: (response: any, variables: any) => {
             hasOnSuccessRan = true
           },
@@ -26,7 +19,7 @@ describe('useSignUp', () => {
     )
 
     axiosMock.onPost('/register').reply(200, {
-      email: user.email,
+      email: signupUser.email,
     })
 
     await act(async () => {

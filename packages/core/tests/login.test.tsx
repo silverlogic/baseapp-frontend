@@ -3,7 +3,7 @@ import { useLogin } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
 import { faker } from '@faker-js/faker'
 
-describe('useSignUp', () => {
+describe('useLogin', () => {
   test('should run onSuccess', async () => {
     let hasOnSuccessRan = false
 
