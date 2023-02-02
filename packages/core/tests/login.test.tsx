@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react-hooks'
 import { useLogin } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
+import { faker } from '@faker-js/faker'
 
 describe('useLogin', () => {
   test('should run onSuccess', async () => {
@@ -10,8 +11,8 @@ describe('useLogin', () => {
       () =>
         useLogin({
           defaultValues: {
-            email: 'ap@tsl.io',
-            password: 'secret',
+            email: faker.internet.email(),
+            password: faker.internet.password(),
           },
           onSuccess: (response: any, variables: any) => {
             hasOnSuccessRan = true

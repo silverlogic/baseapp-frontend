@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.3.0
+
+### Minor Changes
+
+- Added @faker-js/faker to mock data in tests and remove hard-coded data
+
 ## 2.2.1
 
 ### Minor Changes
