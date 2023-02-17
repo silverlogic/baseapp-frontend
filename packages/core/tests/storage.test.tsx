@@ -1,10 +1,10 @@
 /**
  * @jest-environment jsdom
  */
-
-import { renderHook, act } from '@testing-library/react-hooks'
-import { useLocalStorage } from '../src/storage'
 import { render } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react-hooks'
+
+import { useLocalStorage } from '../src/storage'
 
 const localStorage = {
   getItem: jest.fn(),
@@ -35,7 +35,7 @@ describe('useLocalStorage', () => {
   test('load state properly', () => {
     localStorage.setItem('test', 'test')
     const { result } = renderHook(() => useLocalStorage('test', 'test'))
-    const [test, setTest] = result.current
+    const [test] = result.current
     expect(test).toBe('test')
   })
 })

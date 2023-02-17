@@ -1,11 +1,12 @@
-import type { UseQueryResult } from 'react-query'
 import type {
-  GetServerSidePropsResult,
   GetServerSidePropsContext,
+  GetServerSidePropsResult,
   ParsedUrlQuery,
   PreviewData,
 } from 'next'
-import { MfaMethod } from '../mfa'
+import type { UseQueryResult } from 'react-query'
+
+import { MfaMethod } from '../mfa/types'
 
 export interface IUser {
   id: number

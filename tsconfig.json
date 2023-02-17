@@ -1,5 +1,5 @@
 {
   "extends": "@baseapp-frontend/tsconfig/core.json",
-  "include": ["next-env.d.ts", "src", "tests"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js"],
   "exclude": ["node_modules"]
 }

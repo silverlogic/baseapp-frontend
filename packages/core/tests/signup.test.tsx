@@ -1,7 +1,8 @@
-import { renderHook, act } from '@testing-library/react-hooks'
+import { act, renderHook } from '@testing-library/react-hooks'
+
 import { useSignUp } from '../src/auth'
-import { axiosMock, createWrapper } from './utils'
 import { signupUser } from './fixtures'
+import { axiosMock, createWrapper } from './utils'
 
 describe('useSignUp', () => {
   test('should run onSuccess', async () => {
@@ -11,7 +12,7 @@ describe('useSignUp', () => {
       () =>
         useSignUp({
           defaultValues: signupUser,
-          onSuccess: (response: any, variables: any) => {
+          onSuccess: (_response, _variables) => {
             hasOnSuccessRan = true
           },
         }),

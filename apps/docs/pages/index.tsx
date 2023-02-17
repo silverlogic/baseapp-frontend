@@ -7,14 +7,10 @@ export default function Docs() {
       <h2>Pages:</h2>
       <ul>
         <li>
-          <Link href="/components">
-            <a>Components</a>
-          </Link>
+          <Link href="/components">Components</Link>
         </li>
         <li>
-          <Link href="/auth">
-            <a>Auth hooks</a>
-          </Link>
+          <Link href="/auth">Auth hooks</Link>
         </li>
       </ul>
     </div>

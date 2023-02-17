@@ -1,9 +1,10 @@
 import { renderHook } from '@testing-library/react-hooks'
-import { useUser } from '../src/auth'
 import Cookies from 'js-cookie'
+
+import { useUser } from '../src/auth'
+import { user } from './fixtures'
 import { axiosMock, createWrapper } from './utils'
 import type { CookiesGetByNameFn } from './utils'
-import { user } from './fixtures'
 
 describe('useUser', () => {
   test('should user be null for anonymous', async () => {
@@ -22,7 +23,7 @@ describe('useUser', () => {
       wrapper: createWrapper(),
     })
     expect(result.current.isLoading).toBe(true)
-    
+
     await waitFor(() => result.current.isSuccess)
 
     expect(result.current.user?.email).toBe(user.email)

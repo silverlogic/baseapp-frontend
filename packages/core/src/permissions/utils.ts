@@ -1,6 +1,7 @@
 import isEmpty from 'lodash/isEmpty'
-import { UserWithPermissions, UserWithRole } from './types'
+
 import { DEFAULT_ROLES } from './constants'
+import { UserWithPermissions, UserWithRole } from './types'
 
 export const isRole = (user: UserWithRole, role: string) => user && user.role === role
 
@@ -19,9 +20,5 @@ export const checkPermissions = (
   user: UserWithPermissions,
   any: string[] = [],
   all: string[] = [],
-) => {
-  return (
-    (!isEmpty(any) && hasAnyPermission(user, any)) ||
-    (!isEmpty(all) && hasAllPermissions(user, all))
-  )
-}
+) =>
+  (!isEmpty(any) && hasAnyPermission(user, any)) || (!isEmpty(all) && hasAllPermissions(user, all))

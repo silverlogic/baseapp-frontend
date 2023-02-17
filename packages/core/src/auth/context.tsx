@@ -1,9 +1,10 @@
-import { useState, createContext, useContext, ReactNode } from 'react'
+import { ReactNode, createContext, useContext, useMemo, useState } from 'react'
+
 import Cookies from 'js-cookie'
+import { useQuery } from 'react-query'
 
 import { COOKIE_NAME } from './constants'
 import type { IUser, IUserContext } from './types'
-import { useQuery } from '../api'
 
 export const UserContext = createContext({
   user: null,
@@ -12,7 +13,6 @@ export const UserContext = createContext({
   isIdle: false,
   status: '',
   setUser: (state: any) => state,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   refetchUser: () => {},
 } as IUserContext)
 
@@ -47,19 +47,18 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     },
   })
 
-  return (
-    <UserContext.Provider
-      value={{
-        user,
-        isLoading,
-        isSuccess,
-        isIdle,
-        status,
-        setUser,
-        refetchUser,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+  const value = useMemo(
+    () => ({
+      user,
+      isLoading,
+      isSuccess,
+      isIdle,
+      status,
+      setUser,
+      refetchUser,
+    }),
+    [user, isLoading, isSuccess, isIdle, status, setUser, refetchUser],
   )
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>
 }

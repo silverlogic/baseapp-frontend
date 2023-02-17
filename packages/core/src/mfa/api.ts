@@ -1,7 +1,8 @@
-import { axios } from '../api'
 import { AxiosResponse } from 'axios'
-import { IPaginatedResponse } from '../types'
+
 import { ILoginMfaRequest, ILoginResponse } from '../auth/types'
+import { axios } from '../axios'
+import { IPaginatedResponse } from '../types'
 import {
   IMfaActivationResponse,
   IMfaActiveMethodResponse,

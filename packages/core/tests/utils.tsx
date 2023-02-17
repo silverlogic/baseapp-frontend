@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React from 'react'
+
 import MockAdapter from 'axios-mock-adapter'
 import Cookies from 'js-cookie'
-import { QueryClientProvider } from 'react-query'
-import { BaseAppProvider, buildQueryClient, axios } from '../src/api'
+
+import { BaseAppProvider } from '../src/auth/provider'
+import { axios } from '../src/axios'
 
 jest.mock('js-cookie')
 
@@ -11,20 +13,18 @@ export type CookiesGetByNameFn = (name: string) => string
 export const cookiesMock = jest.mocked(Cookies, true)
 
 export const createWrapper = () => {
-  const wrapper = ({ children }) => {
-    return (
-      <BaseAppProvider
-        queryClientOptions={{
-          queries: {
-            cacheTime: Infinity,
-            staleTime: 0,
-          },
-        }}
-      >
-        {children}
-      </BaseAppProvider>
-    )
-  }
+  const wrapper = ({ children }) => (
+    <BaseAppProvider
+      queryClientOptions={{
+        queries: {
+          cacheTime: Infinity,
+          staleTime: 0,
+        },
+      }}
+    >
+      {children}
+    </BaseAppProvider>
+  )
 
   return wrapper
 }

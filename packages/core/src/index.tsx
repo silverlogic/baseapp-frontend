@@ -1,4 +1,4 @@
-export * from './api'
+export * from './axios'
 export * from './auth'
 export * from './queryString'
 export * from './storage'

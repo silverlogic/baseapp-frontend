@@ -1,7 +1,8 @@
+import { faker } from '@faker-js/faker'
+import { act, renderHook } from '@testing-library/react-hooks'
+
 import { useRecoverPassword } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
-import { renderHook, act } from '@testing-library/react-hooks'
-import { faker } from '@faker-js/faker'
 
 describe('useRecoverPassword', () => {
   test('should run onSuccess', async () => {
@@ -11,8 +12,8 @@ describe('useRecoverPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useRecoverPassword({
-          defaultValues: {email},
-          onSuccess: (response: any, variables: any) => {
+          defaultValues: { email },
+          onSuccess: (_response, _variables) => {
             hasOnSuccessRan = true
           },
         }),
@@ -37,8 +38,8 @@ describe('useRecoverPassword', () => {
     const { result, waitFor } = renderHook(
       () =>
         useRecoverPassword({
-          defaultValues: {email},
-          onError: (response: any, variables: any) => {
+          defaultValues: { email },
+          onError: (_response, _variables) => {
             hasOnErrorRan = true
           },
         }),
