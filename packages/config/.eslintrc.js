@@ -6,21 +6,43 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 'latest',
     sourceType: 'module',
+    project: 'tsconfig.json',
     ecmaFeatures: {
       jsx: true,
     },
   },
-  extends: ['next/core-web-vitals', 'plugin:@typescript-eslint/recommended', 'prettier'], // make sure prettier is last
-  plugins: ['@emotion'],
+  ignorePatterns: ['.eslintrc.js', 'jest.config.js'],
+  extends: [
+    'plugin:react/recommended',
+    'plugin:react/jsx-runtime',
+    'airbnb',
+    'airbnb-typescript',
+    'prettier',
+    'plugin:@next/next/recommended',
+  ],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', '@emotion'],
   rules: {
     '@emotion/jsx-import': 'error',
     '@emotion/no-vanilla': 'error',
     '@emotion/import-from-emotion': 'error',
     '@emotion/styled-import': 'error',
-    '@typescript-eslint/no-var-requires': 0,
-    'react/display-name': 0,
+    'react/require-default-props': 'warn',
+    '@typescript-eslint/return-await': 'warn',
+    'import/prefer-default-export': 0,
+    'react/react-in-jsx-scope': 0,
+    'react/prop-types': 0,
+    'react/function-component-definition': 0,
+    'react/jsx-props-no-spreading': 0,
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
   },
   settings: {
     react: {

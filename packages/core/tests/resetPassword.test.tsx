@@ -1,7 +1,8 @@
+import { faker } from '@faker-js/faker'
+import { act, renderHook } from '@testing-library/react-hooks'
+
 import { useResetPassword } from '../src/auth'
 import { axiosMock, createWrapper } from './utils'
-import { renderHook, act } from '@testing-library/react-hooks'
-import { faker } from '@faker-js/faker'
 
 describe('useResetPassword', () => {
   test('should run onSuccess', async () => {
@@ -15,7 +16,7 @@ describe('useResetPassword', () => {
             newPassword: password,
             token: 'any_token',
           },
-          onSuccess: (response: any, variables: any) => {
+          onSuccess: (_response: any, _variables: any) => {
             hasOnSuccessRan = true
           },
         }),
@@ -47,7 +48,7 @@ describe('useResetPassword', () => {
             newPassword: password,
             token: 'any_token',
           },
-          onError: (response: any, variables: any) => {
+          onError: (_response: any, _variables: any) => {
             hasOnErrorRan = true
           },
         }),

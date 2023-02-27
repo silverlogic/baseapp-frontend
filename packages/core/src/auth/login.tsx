@@ -1,28 +1,29 @@
 import { useEffect, useState } from 'react'
-import { AxiosResponse } from 'axios'
-import { useRouter } from 'next/router'
-import type { GetServerSidePropsResult } from 'next'
-import { useForm } from 'react-hook-form'
-import * as Yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import Cookies from 'js-cookie'
 
+import { yupResolver } from '@hookform/resolvers/yup'
+import { AxiosResponse } from 'axios'
+import Cookies from 'js-cookie'
+import type { GetServerSidePropsResult } from 'next'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQueryClient } from 'react-query'
+import * as Yup from 'yup'
+
+import { axios } from '../axios'
+import { setFormApiErrors } from '../form/utils'
+import MfaApi from '../mfa/api'
+import { codeValidationInitialValues, codeValidationSchema } from '../mfa/hooks'
 import { COOKIE_NAME } from './constants'
 import { useUserContext } from './context'
 import type {
-  IUserContext,
   ILogin,
-  LoginRequiredServerSideProps,
-  IAuthHookProps,
   ILoginHookProps,
-  ILoginResponse,
-  ILoginMfaResponse,
   ILoginMfaRequest,
+  ILoginMfaResponse,
+  ILoginResponse,
+  IUserContext,
+  LoginRequiredServerSideProps,
 } from './types'
-import { setFormApiErrors } from '../form/utils'
-import { axios, useMutation, useQueryClient } from '../api'
-import { codeValidationSchema, codeValidationInitialValues } from '../mfa/hooks'
-import MfaApi from '../mfa/api'
 
 export function useUser({ redirectTo = '', redirectIfFound = false } = {}): IUserContext {
   const router = useRouter()
@@ -105,33 +106,28 @@ export function useLogin({
     return responseData && responseData.method
   }
 
-  const mutation = useMutation(
-    (data) => {
-      return axios.post('/login', data)
-    },
-    {
-      onError: (err: any, variables, context) => {
-        onError?.(err, variables, context)
-        setFormApiErrors(form, err)
-      },
-      onSuccess: async (
-        response: AxiosResponse<ILoginResponse | ILoginMfaResponse>,
-        variables,
-        context,
-      ) => {
-        if (loginRequiresMfa(response.data)) {
-          setMfaEphemeralToken((response.data as ILoginMfaResponse).ephemeralToken)
-        } else {
-          handleLoginSuccess(response)
-        }
-        onSuccess?.(response, variables, context)
-      },
-    },
-  )
-
   const form = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema),
+  })
+
+  const mutation = useMutation((data) => axios.post('/login', data), {
+    onError: (err: any, variables, context) => {
+      onError?.(err, variables, context)
+      setFormApiErrors(form, err)
+    },
+    onSuccess: async (
+      response: AxiosResponse<ILoginResponse | ILoginMfaResponse>,
+      variables,
+      context,
+    ) => {
+      if (loginRequiresMfa(response.data)) {
+        setMfaEphemeralToken((response.data as ILoginMfaResponse).ephemeralToken)
+      } else {
+        handleLoginSuccess(response)
+      }
+      onSuccess?.(response, variables, context)
+    },
   })
 
   const mfaForm = useForm({
@@ -166,8 +162,8 @@ export function useLogin({
       ...mfaForm,
       handleSubmit: mfaForm.handleSubmit(async (values: any) => {
         try {
-          values.ephemeralToken = mfaEphemeralToken
-          await mfaMutation.mutateAsync(values)
+          const newValues = { ...values, ephemeralToken: mfaEphemeralToken }
+          await mfaMutation.mutateAsync(newValues)
         } catch (error) {
           // mutateAsync will raise an error if there's an API error
         }

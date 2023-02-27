@@ -1,10 +1,11 @@
-import * as Yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+import { useMutation } from 'react-query'
+import * as Yup from 'yup'
 
-import { IAuthHookProps, IRecoverPassword } from './types'
+import { axios } from '../axios'
 import { setFormApiErrors } from '../form/utils'
-import { axios, useMutation } from '../api'
+import { IAuthHookProps, IRecoverPassword } from './types'
 
 export const recoverPasswordValidationSchema = Yup.object().shape({
   email: Yup.string()
@@ -22,24 +23,19 @@ export function useRecoverPassword({
   onError,
   onSuccess,
 }: IAuthHookProps): IRecoverPassword {
-  const mutation = useMutation(
-    (data) => {
-      return axios.post('/forgot-password', data)
-    },
-    {
-      onError: (err: any, variables, context) => {
-        onError?.(err, variables, context)
-        setFormApiErrors(form, err) // this is important to show backend errors on each specific field
-      },
-      onSuccess: (response: any, variables, context) => {
-        onSuccess?.(response, variables, context)
-      },
-    },
-  )
-
   const form = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema),
+  })
+
+  const mutation = useMutation((data) => axios.post('/forgot-password', data), {
+    onError: (err: any, variables, context) => {
+      onError?.(err, variables, context)
+      setFormApiErrors(form, err) // this is important to show backend errors on each specific field
+    },
+    onSuccess: (response: any, variables, context) => {
+      onSuccess?.(response, variables, context)
+    },
   })
 
   return {

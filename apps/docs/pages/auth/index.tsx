@@ -1,8 +1,8 @@
-import { useLogin } from '@baseapp-frontend/core'
+import { axios, useLogin } from '@baseapp-frontend/core'
 import { ButtonWithLoading, PasswordField, TextField } from '@baseapp-frontend/design-system-mui'
+
 import { Divider, useTheme } from '@mui/material'
 import MockAdapter from 'axios-mock-adapter'
-import { axios } from '@baseapp-frontend/core'
 
 const axiosMock = new MockAdapter(axios)
 
@@ -17,8 +17,8 @@ export default function Auth() {
   const mockForSuccessAndLogIn = (e: any) => {
     e.preventDefault()
     axiosMock.onPost('/login').reply(
-      (config) =>
-        new Promise((resolve, reject) => {
+      (_config) =>
+        new Promise((resolve, _reject) => {
           setTimeout(() => {
             resolve([200, {}])
           }, 2000)
@@ -43,13 +43,8 @@ export default function Auth() {
         onSubmit={mockForSuccessAndLogIn}
         style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}
       >
-        <TextField name="email" label="Email" form={form} sx={{ marginBottom: '14px' }}></TextField>
-        <PasswordField
-          name="password"
-          label="Password"
-          form={form}
-          sx={{ marginBottom: '14px' }}
-        ></PasswordField>
+        <TextField name="email" label="Email" form={form} sx={{ marginBottom: '14px' }} />
+        <PasswordField name="password" label="Password" form={form} sx={{ marginBottom: '14px' }} />
         <div style={{ display: 'flex' }}>
           <ButtonWithLoading
             variant="contained"

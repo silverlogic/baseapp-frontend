@@ -1,15 +1,9 @@
 import { Controller } from 'react-hook-form'
+
 import { IControlledComponentProps } from './types'
 
 export function withController(Component: any) {
-  return function ({
-    name,
-    form,
-    value,
-    helperText,
-    handleChange,
-    ...props
-  }: IControlledComponentProps) {
+  return ({ name, form, value, helperText, handleChange, ...props }: IControlledComponentProps) => {
     if (form) {
       return (
         <Controller
@@ -26,7 +20,7 @@ export function withController(Component: any) {
               />
             )
           }}
-        ></Controller>
+        />
       )
     }
 
@@ -37,7 +31,7 @@ export function withController(Component: any) {
         onChange={handleChange}
         helperText={helperText}
         {...props}
-      ></Component>
+      />
     )
   }
 }

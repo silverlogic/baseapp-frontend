@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.4.0
+
+### Minor Changes
+
+- Fix lint after upgrading @baseapp-frontend/config
+
 ## 2.3.0
 
 ### Minor Changes

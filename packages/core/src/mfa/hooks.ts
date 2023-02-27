@@ -1,13 +1,15 @@
-import { IMfaActiveMethodResponse, IMfaActivateConfirm } from './types'
-import Api from './api'
-import { useQuery, useMutation, useQueryClient } from '../api'
 import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { setFormApiErrors } from '../form/utils'
+
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 
-const activeMethodsQueryKey = ['mfa', 'user-active-methods']
+import { setFormApiErrors } from '../form/utils'
+import Api from './api'
+import { IMfaActiveMethodResponse, IMfaActivateConfirm } from './types'
+
+const ACTIVE_METHODS_QUERY_KEY = ['mfa', 'user-active-methods']
 
 export function useMfaActiveMethods({
   enabled = true,
@@ -18,10 +20,9 @@ export function useMfaActiveMethods({
   onError?: Function
 }) {
   const [activeMethods, setActiveMethods] = useState<IMfaActiveMethodResponse[] | null>(null)
-  const activeMethodsQueryKey = ['mfa', 'user-active-methods']
 
   const { isFetching: isLoading, data: response } = useQuery(
-    activeMethodsQueryKey,
+    ACTIVE_METHODS_QUERY_KEY,
     () => Api.getActiveMethods(),
     {
       enabled,
@@ -38,7 +39,7 @@ export function useMfaActiveMethods({
   }, [response])
 
   return {
-    queryKey: activeMethodsQueryKey,
+    queryKey: ACTIVE_METHODS_QUERY_KEY,
     isLoading,
     activeMethods,
   }
@@ -136,7 +137,7 @@ export function useMfaActivateConfirm({
         setFormApiErrors(form, err) // this is important to show backend errors on each specific field
       },
       onSuccess: (response: any, variables, context) => {
-        queryClient.invalidateQueries(activeMethodsQueryKey)
+        queryClient.invalidateQueries(ACTIVE_METHODS_QUERY_KEY)
         onSuccess?.(response, variables, context)
       },
     },
@@ -147,8 +148,8 @@ export function useMfaActivateConfirm({
       ...form,
       handleSubmit: form.handleSubmit(async (values: any) => {
         try {
-          values.method = method
-          await mutation.mutateAsync(values)
+          const newValues = { ...values, method }
+          await mutation.mutateAsync(newValues)
         } catch (error) {
           // mutateAsync will raise an error if there's an API error
         }
@@ -176,7 +177,7 @@ export function useMfaDeactivate({
         onError?.(err, variables, context)
       },
       onSuccess: (response: any, variables, context) => {
-        queryClient.invalidateQueries(activeMethodsQueryKey)
+        queryClient.invalidateQueries(ACTIVE_METHODS_QUERY_KEY)
         onSuccess?.(response, variables, context)
       },
     },
