@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.4.1
+
+### Patch Changes
+
+- Add missing provider import.
+
 ## 2.4.0
 
 ### Minor Changes
