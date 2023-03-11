@@ -1,10 +1,16 @@
 # @baseapp-frontend/core
 
-## 2.5.0
+## 2.5.1
 
 ### Minor Changes
 
 - bde037a: Adding cammelcase on axios error responses and option to send query param to the redirectTo route on useUser
+
+## 2.4.1
+
+### Patch Changes
+
+- Add missing provider import.
 
 ## 2.4.0
 
