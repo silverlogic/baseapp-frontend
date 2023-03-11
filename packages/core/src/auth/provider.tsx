@@ -52,3 +52,8 @@ export const BaseAppProvider = ({
     </QueryClientProvider>
   )
 }
+
+BaseAppProvider.defaultProps = {
+  pageProps: {},
+  queryClientOptions: {},
+}

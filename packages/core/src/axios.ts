@@ -37,12 +37,21 @@ function createAxiosInstance(file = false) {
     return request
   })
 
-  instance.interceptors.response.use((response) => {
-    if (response.data && response.headers?.['content-type'] === 'application/json') {
-      response.data = humps.camelizeKeys(response.data)
-    }
-    return response
-  })
+  instance.interceptors.response.use(
+    (response) => {
+      if (response.data && response.headers?.['content-type'] === 'application/json') {
+        response.data = humps.camelizeKeys(response.data)
+      }
+      return response
+    },
+    (error) => {
+      if (error.response.data && error.response.headers?.['content-type'] === 'application/json') {
+        const newError = { response: { data: {} } }
+        newError.response.data = humps.camelizeKeys(error.response.data)
+      }
+      return Promise.reject(error)
+    },
+  )
 
   return instance
 }

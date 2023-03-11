@@ -83,6 +83,9 @@ const { user, isLoading } = useUser({redirectTo: '/auth/login', redirectIfFound:
 	 - Optional, defaults to `false`
 	 - if `true` will redirect if the users is logged in
 	 - if `false` will redirect if logged out
+ - `query`
+   - Optional
+   - query params you can pass to the redirectTo route 
 
 ### Returns
 
