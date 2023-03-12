@@ -84,12 +84,6 @@ export interface IResetPassword {
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
-export interface IUseUser {
-  redirectTo?: string
-  redirectIfFound?: boolean
-  query?: Record<string, string>
-}
-
 export interface IUserContext {
   user: IUser | null
   isLoading: boolean
