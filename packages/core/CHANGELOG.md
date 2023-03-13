@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.5.3
+
+### Patch Changes
+
+- Add typing to redirectTo
+
 ## 2.5.2
 
 ### Patch Changes

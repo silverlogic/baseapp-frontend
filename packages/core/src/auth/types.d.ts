@@ -5,6 +5,7 @@ import type {
   PreviewData,
 } from 'next'
 import type { UseQueryResult } from 'react-query'
+import { UrlObject } from 'url'
 
 import { MfaMethod } from '../mfa/types'
 
@@ -84,6 +85,11 @@ export interface IResetPassword {
   mutation: UseMutationResult<unknown, unknown, void, unknown>
 }
 
+export interface IUseUser {
+  redirectTo?: UrlObject | string
+  redirectIfFound?: boolean
+}
+
 export interface IUserContext {
   user: IUser | null
   isLoading: boolean
@@ -99,7 +105,7 @@ export interface IUserContext {
 }
 
 export interface LoginRequiredOptions {
-  redirectTo: string
+  redirectTo?: UrlObject | string
 }
 
 export type LoginRequiredServerSideProps<
