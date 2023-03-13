@@ -1,6 +1,6 @@
 {
   "name": "@baseapp-frontend/core",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "description": "Core utilities.",
   "main": "./src/index.tsx",
   "scripts": {
@@ -15,6 +15,7 @@
     "@baseapp-frontend/tsconfig": "*",
     "@faker-js/faker": "^7.6.0",
     "@hookform/resolvers": "^2.9.7",
+    "@types/next": "^9.0.0",
     "axios": "^0.25.0",
     "axios-mock-adapter": "^1.20.0",
     "humps": "^2.0.1",

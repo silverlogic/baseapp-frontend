@@ -21,14 +21,12 @@ import type {
   ILoginMfaRequest,
   ILoginMfaResponse,
   ILoginResponse,
+  IUseUser,
   IUserContext,
   LoginRequiredServerSideProps,
 } from './types'
 
-export function useUser({
-  redirectTo = '',
-  redirectIfFound = false,
-} = {}): IUserContext {
+export function useUser({ redirectTo = '', redirectIfFound = false }: IUseUser = {}): IUserContext {
   const router = useRouter()
   const { user, isLoading, isSuccess, isIdle, status, setUser, refetchUser } = useUserContext()
 
