@@ -21,7 +21,6 @@ import type {
   ILoginMfaRequest,
   ILoginMfaResponse,
   ILoginResponse,
-  IUseUser,
   IUserContext,
   LoginRequiredServerSideProps,
 } from './types'
@@ -29,8 +28,7 @@ import type {
 export function useUser({
   redirectTo = '',
   redirectIfFound = false,
-  query = {},
-}: IUseUser = {}): IUserContext {
+} = {}): IUserContext {
   const router = useRouter()
   const { user, isLoading, isSuccess, isIdle, status, setUser, refetchUser } = useUserContext()
 
@@ -45,10 +43,7 @@ export function useUser({
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && user)
     ) {
-      router.push({
-        pathname: redirectTo,
-        query,
-      })
+      router.push(redirectTo)
     }
   }, [user, redirectIfFound, redirectTo, isLoading])
 
