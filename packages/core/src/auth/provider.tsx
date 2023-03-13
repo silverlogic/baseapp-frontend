@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 
 import { Hydrate, QueryCache, QueryClient, QueryClientProvider } from 'react-query'
 import type { QueryFunction } from 'react-query'
@@ -40,7 +40,7 @@ export const BaseAppProvider = ({
   queryClientOptions,
 }: {
   pageProps?: any
-  children: React.ReactNode
+  children: ReactNode
   queryClientOptions?: any
 }) => {
   const [queryClient] = useState(() => buildQueryClient(queryClientOptions))

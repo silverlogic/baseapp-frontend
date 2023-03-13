@@ -1,23 +1,26 @@
-import type { TextFieldProps } from '@mui/material'
-import { UseFormReturn } from 'react-hook-form'
+import { ChangeEvent, ElementType, FC, HTMLAttributes } from 'react'
+
 import { IControlledComponentProps } from '@baseapp-frontend/core'
 
+import type { TextFieldProps } from '@mui/material'
+import { UseFormReturn } from 'react-hook-form'
+
 export interface IInputBaseComponentProps
-  extends React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
+  extends HTMLAttributes<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> {
   // Accommodate arbitrary additional props coming from the `IInputProps` prop
   [arbitrary: string]: any
 }
 
 export interface IInputProps extends IInputBaseComponentProps {
-  component?: React.ElementType<IInputBaseComponentProps> | React.FC<any>
+  component?: ElementType<IInputBaseComponentProps> | FC<any>
   form?: UseFormReturn
-  templateComponent?: React.FC<any>
+  templateComponent?: FC<any>
   name: string
   label?: string
   helperText?: string
   value?: string
   handleChange?: (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
   ) => void
 }
 

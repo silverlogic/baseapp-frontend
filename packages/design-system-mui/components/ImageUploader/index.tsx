@@ -1,8 +1,8 @@
-import { FormControl, FormHelperText } from '@mui/material'
 import UploadFileOutlinedIcon from '@mui/icons-material/UploadFileOutlined'
+import { FormControl, FormHelperText } from '@mui/material'
 
+import { DeleteButton, Image, ImageGroup, ImageLabel, LabelGroup, UploaderButton } from './styled'
 import type { IImageUploadInput, ImageFile } from './types'
-import { ImageGroup, Image, UploaderButton, LabelGroup, ImageLabel, DeleteButton } from './styled'
 
 function ImageUploader({
   images,
@@ -27,12 +27,11 @@ function ImageUploader({
   }
 
   function onChange(e: any): void {
-    //eslint-disable-line @typescript-eslint/no-explicit-any
-    for (let i = 0; i < e.target?.files?.length; i++) {
+    for (let i = 0; i < e.target?.files?.length; i += 1) {
       const file = e.target?.files[i]
       const fileReader = new FileReader()
       fileReader.onload = () => {
-        setImages([{ file: file, imagePreviewUrl: fileReader.result }])
+        setImages([{ file, imagePreviewUrl: fileReader.result }])
       }
       fileReader.readAsDataURL(file)
     }
@@ -42,7 +41,7 @@ function ImageUploader({
     <FormControl error={error} fullWidth>
       <UploaderButton
         component="label"
-        htmlFor={'imageInput' + name}
+        htmlFor={`imageInput${name}`}
         variant="outlined"
         color="primary"
         sx={{ display: images.length ? 'none' : 'auto' }}
@@ -53,7 +52,7 @@ function ImageUploader({
       </UploaderButton>
       <input
         name={name}
-        id={'imageInput' + name}
+        id={`imageInput${name}`}
         type="file"
         accept="image/*"
         onChange={onChange}
@@ -62,7 +61,7 @@ function ImageUploader({
       />
       {error && <FormHelperText>{helperText}</FormHelperText>}
       {images?.map((img: ImageFile, index: number) => (
-        <ImageGroup key={index}>
+        <ImageGroup key={img.file.name}>
           <Image src={img.imagePreviewUrl as string} alt="preview" {...ImageProps} />
           <LabelGroup>
             <ImageLabel variant="caption" {...ImageLabelProps}>

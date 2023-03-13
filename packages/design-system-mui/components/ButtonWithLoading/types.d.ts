@@ -1,9 +1,10 @@
-import { Button, ButtonProps } from '@mui/material'
+import { PropsWithChildren } from 'react'
+
+import { ButtonProps } from '@mui/material'
 import { UseFormReturn } from 'react-hook-form'
 
-export interface IButtonWitthLoadingProps extends ButtonProps {
-  children?: React.FC<any> | React.Element | string
+export interface IButtonWitthLoadingProps extends ButtonProps, PropsWithChildren {
   loading?: boolean
-  loadingChildren?: React.FC<any> | React.Element
+  loadingChildren?: any
   form?: UseFormReturn
 }

@@ -4,8 +4,6 @@ export * from './styles/shadows'
 
 export * from './styles/typography'
 
-export * from './styles/theme'
-
 export * from './styles/utils'
 
 export { default as theme } from './styles/theme'

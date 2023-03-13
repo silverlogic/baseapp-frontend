@@ -1,7 +1,9 @@
-import { checkPermissions } from './utils'
-import { UserWithPermissions, PermissionOptions, IProps } from './types'
+import { FC } from 'react'
 
-export const withPermissions = (Component: React.FC<any>, options: PermissionOptions = {}) => {
+import { IProps, PermissionOptions, UserWithPermissions } from './types'
+import { checkPermissions } from './utils'
+
+export const withPermissions = (Component: FC<any>, options: PermissionOptions = {}) => {
   const { all, any, PermissionDeniedComponent, hide } = options
 
   return (props: IProps) => {
