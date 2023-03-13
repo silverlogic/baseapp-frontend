@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.6.0
+
+### Minor Changes
+
+- Update Next React vesions
+
 ## 2.5.3
 
 ### Patch Changes

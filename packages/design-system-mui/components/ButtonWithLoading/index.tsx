@@ -10,11 +10,11 @@ function ButtonWithLoading({
   form,
   ...props
 }: IButtonWitthLoadingProps) {
-  const _isLoading = loading || form?.formState.isSubmitting
+  const isLoading = loading || form?.formState.isSubmitting
   return (
-    <Button disabled={_isLoading} {...props}>
+    <Button disabled={isLoading} {...props}>
       {children}
-      {_isLoading && loadingChildren}
+      {isLoading && loadingChildren}
     </Button>
   )
 }

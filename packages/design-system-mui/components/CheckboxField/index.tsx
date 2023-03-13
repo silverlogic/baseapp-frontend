@@ -1,8 +1,9 @@
-import Checkbox from '@mui/material/Checkbox'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormControl from '@mui/material/FormControl'
-import FormHelperText from '@mui/material/FormHelperText'
 import { withController } from '@baseapp-frontend/core'
+
+import Checkbox from '@mui/material/Checkbox'
+import FormControl from '@mui/material/FormControl'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import FormHelperText from '@mui/material/FormHelperText'
 
 import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
 
@@ -26,13 +27,13 @@ export default function CheckboxField({
   FormControlProps,
 }: ICheckboxFieldProps) {
   const formError = form?.formState?.errors?.[name]?.message
-  const _showError = (formError && form?.formState?.touchedFields?.[name]) as boolean
+  const innerShowError = (formError && form?.formState?.touchedFields?.[name]) as boolean
 
   return (
     <FormControl
       component="fieldset"
       variant={variant}
-      error={showError || _showError}
+      error={showError || innerShowError}
       {...FormControlProps}
     >
       <FormControlLabel
@@ -42,11 +43,11 @@ export default function CheckboxField({
             checked={checked}
             handleChange={handleChange}
             {...CheckboxProps}
-          ></ControlledCheckBox>
+          />
         }
         label={label}
       />
-      {((showError && errorMessage) || _showError) && (
+      {((showError && errorMessage) || innerShowError) && (
         <FormHelperText>{showError ? (formError as string) : errorMessage}</FormHelperText>
       )}
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
