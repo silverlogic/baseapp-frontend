@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.3.2
+
+### Patch Changes
+
+- 7ce48f9: Removing Module augmentation from MUI5
+
 ## 1.3.1
 
 ### Minor Changes
