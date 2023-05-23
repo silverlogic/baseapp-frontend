@@ -3,7 +3,7 @@ import { ChangeEvent } from 'react'
 import { ControllerRenderProps, UseFormReturn } from 'react-hook-form'
 
 export interface ICheckboxFieldProps {
-  label?: string
+  label?: string | JSX.Element
   showError: boolean
   errorMessage?: string
   helperText?: string
