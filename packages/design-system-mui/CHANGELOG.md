@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.4.0
+
+### Minor Changes
+
+- 220d806: Add Element as label type for CheckboxProps
+
 ## 1.3.2
 
 ### Patch Changes
