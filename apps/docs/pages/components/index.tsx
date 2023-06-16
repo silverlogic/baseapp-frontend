@@ -1,11 +1,13 @@
+import { useState } from 'react'
+
 import {
   ButtonWithLoading,
-  PasswordField,
-  ImageUploader,
   CheckboxField,
+  ImageUploader,
+  PasswordField,
 } from '@baseapp-frontend/design-system-mui'
+
 import { Divider, useTheme } from '@mui/material'
-import { useState } from 'react'
 
 export default function Docs() {
   const [images, setImages] = useState([])
@@ -21,7 +23,7 @@ export default function Docs() {
           button
         </ButtonWithLoading>
 
-        <ButtonWithLoading variant="contained" loading>
+        <ButtonWithLoading variant="contained" isLoading>
           button
         </ButtonWithLoading>
       </div>

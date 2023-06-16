@@ -14,11 +14,11 @@
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/material": "^5.10.0",
+    "@tanstack/react-query": "^4.29.12",
     "axios-mock-adapter": "^1.20.0",
     "next": "^12.2.4",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-query": "^3.34.8"
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "*",

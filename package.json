@@ -1,5 +1,6 @@
 {
   "name": "baseapp-frontend",
+  "description": "A modularized package system for TSL's frontend baseapp.",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -21,11 +22,10 @@
   "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
-    "@trivago/prettier-plugin-sort-imports": "^4.0.0",
-    "eslint": "^8.29.0",
+    "eslint": "^8.42.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.0.2",
-    "prettier": "latest",
+    "prettier": "^2.8.8",
     "turbo": "latest"
   },
   "engines": {

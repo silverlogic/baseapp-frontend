@@ -40,10 +40,15 @@ export default function Docs() {
 
 ## Apps and Packages
 
-- `docs`: a app to document some packages's features
-- `core`: core of utilities like `auth hooks`, `permisisons system` and `util functions`
-- `config`: reusable configurations for `eslint`, `prettier` and `jest`
-- `tsconfig`: reusable typescript configs
+- `docs`: an app to document some packages's features
+- `authentication`: includes authentication modules such as `login`, `signup`, `reset password`, `multifactor authentication` and more.
+- `core`: core of utilities like `auth hooks`, `permisisons system` and `util functions`.
+- `config`: includes reusable configurations for `eslint`, `prettier` and `jest`.
+- `design-system-mui`: defines our `design system configuration `(e.g. color pallete, typography, spacings, etc). It also shares reusable `components` that make up the design system as a whole.
+- `provider`: includes provider of different kinds that have "use client" directive on top.
+- `test`: extends `React Testing Library` features and export some util functions, mocks and test configurations.
+- `tsconfig`: reusable `typescript configs`.
+- `utils`: includes `constants`, `functions`, `hooks` and `types` that are generic enough to be reused between apps and packages.
 
 ## NVM
 
