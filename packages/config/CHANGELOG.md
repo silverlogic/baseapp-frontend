@@ -1,5 +1,12 @@
 # @baseapp-frontend/config
 
+## 2.1.0
+
+### Minor Changes
+
+- Update ESlint `ignorePatterns`, `extends` and `plugins`.
+- Update plugin`s dependencies.
+
 ## 2.0.0
 
 ### Major Changes

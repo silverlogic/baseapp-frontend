@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/config",
   "description": "Reusable configurations for eslint, prettier and jest.",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "main": "index.js",
   "files": [
     ".eslintrc.js",
@@ -11,16 +11,19 @@
   "devDependencies": {
     "@emotion/eslint-plugin": "^11.7.0",
     "@next/eslint-plugin-next": "^13.1.6",
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@typescript-eslint/eslint-plugin": "^5.13.0",
     "@typescript-eslint/parser": "^5.29.0",
-    "eslint": "^8.29.0",
+    "eslint": "^8.42.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-next": "^13.4.5",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-react": "^7.31.11",
-    "eslint-plugin-react-hooks": "^4.6.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.8.8"
   },
   "license": "MIT",
   "repository": {
