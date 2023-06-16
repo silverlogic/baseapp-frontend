@@ -1,0 +1,38 @@
+{
+  "name": "@baseapp-frontend/provider",
+  "description": "Providers for React Query and Emotion.",
+  "version": "1.0.0",
+  "main": "./dist/index.ts",
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --watch",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "devDependencies": {
+    "@baseapp-frontend/config": "*",
+    "@baseapp-frontend/tsconfig": "*",
+    "@types/react": "^18.2.12",
+    "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^4.29.12",
+    "react": "^18.2.0"
+  },
+  "resolutions": {
+    "@types/react": "^18.2.12"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/provider"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
