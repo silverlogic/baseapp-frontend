@@ -25,3 +25,6 @@ export type {
 
 export { default as CheckboxField } from './components/CheckboxField'
 export type { ICheckboxFieldProps } from './components/CheckboxField/types'
+
+export { default as ThemeProvider } from './provider'
+export type { IThemeProvider } from './provider/types'

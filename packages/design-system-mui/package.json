@@ -1,26 +1,27 @@
 {
   "name": "@baseapp-frontend/design-system-mui",
   "description": "Design System components and configurations.",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
     "build": "tsc --outDir dist",
     "dev": "tsc --watch --outDir dist",
-    "lint": "eslint ./",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "*",
     "@baseapp-frontend/tsconfig": "*",
-    "typescript": "^4.9.5"
+    "typescript": "^5.1.3"
   },
   "dependencies": {
     "@baseapp-frontend/core": "*",
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.12",
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/material": "^5.13.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.34.2"
