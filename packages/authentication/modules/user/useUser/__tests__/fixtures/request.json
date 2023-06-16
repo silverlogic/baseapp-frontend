@@ -1,0 +1,10 @@
+{
+  "email": "janedoe@example.com",
+  "id": 123,
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "isEmailVerified": true,
+  "isNewEmailConfirmed": false,
+  "newEmail": "",
+  "referralCode": "1234"
+}
