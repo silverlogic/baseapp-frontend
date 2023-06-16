@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { AxiosResponse } from 'axios'
 import Cookies from 'js-cookie'
 import type { GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 
 import { axios } from '../axios'

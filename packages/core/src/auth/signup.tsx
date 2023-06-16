@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { useMutation } from 'react-query'
 import * as Yup from 'yup'
 
 import { axios } from '../axios'

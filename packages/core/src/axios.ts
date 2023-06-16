@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 import { buildQueryString } from './queryString'
 
-function createAxiosInstance(file = false) {
+function createAxiosInstance({ file = false } = {}) {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     paramsSerializer(params) {
@@ -12,15 +12,11 @@ function createAxiosInstance(file = false) {
     },
   })
 
-  if (!file) {
-    instance.defaults.headers.post['Content-Type'] = 'application/json'
-    instance.defaults.headers.patch['Content-Type'] = 'application/json'
-    instance.defaults.headers.put['Content-Type'] = 'application/json'
-  } else {
-    instance.defaults.headers.post['Content-Type'] = 'multipart/form-data'
-    instance.defaults.headers.patch['Content-Type'] = 'multipart/form-data'
-    instance.defaults.headers.put['Content-Type'] = 'multipart/form-data'
-  }
+  const contentType = file ? 'multipart/form-data' : 'application/json'
+
+  instance.defaults.headers.post['Content-Type'] = contentType
+  instance.defaults.headers.patch['Content-Type'] = contentType
+  instance.defaults.headers.put['Content-Type'] = contentType
 
   instance.interceptors.request.use((request) => {
     const authToken = Cookies.get('Authorization')
@@ -58,4 +54,4 @@ function createAxiosInstance(file = false) {
 
 export const axios = createAxiosInstance()
 
-export const axiosForFiles = createAxiosInstance(true)
+export const axiosForFiles = createAxiosInstance({ file: true })

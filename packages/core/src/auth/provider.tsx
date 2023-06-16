@@ -1,7 +1,7 @@
 import { ReactNode, useState } from 'react'
 
-import { Hydrate, QueryCache, QueryClient, QueryClientProvider } from 'react-query'
-import type { QueryFunction } from 'react-query'
+import { Hydrate, QueryCache, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import type { QueryFunction } from '@tanstack/react-query'
 
 import { axios } from '../axios'
 import { UserProvider } from './context'
@@ -46,6 +46,7 @@ export const BaseAppProvider = ({
   const [queryClient] = useState(() => buildQueryClient(queryClientOptions))
   return (
     <QueryClientProvider client={queryClient} contextSharing>
+      {/* @ts-ignore TODO: (BA-1081) investigate 'Hydrate' cannot be used as a JSX component error. */}
       <Hydrate state={pageProps?.dehydratedState}>
         <UserProvider>{children}</UserProvider>
       </Hydrate>

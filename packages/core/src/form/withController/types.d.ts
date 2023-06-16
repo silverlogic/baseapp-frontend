@@ -7,8 +7,8 @@ interface IControllerProps {
 }
 
 interface IBasicControllerProps extends IControllerProps {
-  value: any
-  handleChange: any
+  value?: any
+  handleChange?: any
 }
 
 interface IFormControllerProps extends IControllerProps {
