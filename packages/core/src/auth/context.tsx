@@ -1,7 +1,9 @@
+'use client'
+
 import { ReactNode, createContext, useContext, useMemo, useState } from 'react'
 
+import { useQuery } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
-import { useQuery } from 'react-query'
 
 import { COOKIE_NAME } from './constants'
 import type { IUser, IUserContext } from './types'
@@ -25,11 +27,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
   const {
     isLoading,
     isSuccess,
+    // @ts-ignore TODO: fix types
     isIdle,
     status,
     refetch: refetchUser,
   } = useQuery({
-    queryKey: '/users/me',
+    queryKey: ['/users/me'],
     staleTime: Infinity, // makes cache never expire automatically
     enabled: !!token,
     useErrorBoundary: false,

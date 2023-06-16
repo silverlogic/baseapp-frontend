@@ -10,7 +10,7 @@ describe('useUser', () => {
   test('should user be null for anonymous', async () => {
     const { result } = renderHook(() => useUser(), { wrapper: createWrapper() })
 
-    expect(result.current.isLoading).toBe(false)
+    expect(result.current.isLoading).toBe(true)
     expect(result.current.user).toBe(null)
   })
 

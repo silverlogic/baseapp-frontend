@@ -1,10 +1,10 @@
+import type { UseQueryResult } from '@tanstack/react-query'
 import type {
   GetServerSidePropsContext,
   GetServerSidePropsResult,
   ParsedUrlQuery,
   PreviewData,
 } from 'next'
-import type { UseQueryResult } from 'react-query'
 import { UrlObject } from 'url'
 
 import { MfaMethod } from '../mfa/types'

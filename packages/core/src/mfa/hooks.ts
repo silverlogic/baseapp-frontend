@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
 import { yupResolver } from '@hookform/resolvers/yup'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
-import { useMutation, useQuery, useQueryClient } from 'react-query'
 import * as Yup from 'yup'
 
 import { setFormApiErrors } from '../form/utils'
 import Api from './api'
-import { IMfaActiveMethodResponse, IMfaActivateConfirm } from './types'
+import { IMfaActivateConfirm, IMfaActiveMethodResponse } from './types'
 
 const ACTIVE_METHODS_QUERY_KEY = ['mfa', 'user-active-methods']
 

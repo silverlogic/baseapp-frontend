@@ -1,5 +1,18 @@
 # @baseapp-frontend/core
 
+## 2.7.0
+
+### Minor Changes
+
+- The `createAxiosInstance` function got parameter changes and small refactors.
+- The `react-query` package was updated to `@tanstack/react-query` alongside with adaptions required for this update.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/tsconfig@1.1.0
+  - @baseapp-frontend/config@2.1.0
+
 ## 2.6.0
 
 ### Minor Changes
