@@ -4,6 +4,7 @@ import Checkbox from '@mui/material/Checkbox'
 import FormControl from '@mui/material/FormControl'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import FormHelperText from '@mui/material/FormHelperText'
+import { FieldValues } from 'react-hook-form'
 
 import { ICheckboxFieldProps, IControlledCheckBoxProps } from './types'
 
@@ -12,8 +13,7 @@ const ControlledCheckBox = withController(
     <Checkbox checked={checked || value} {...props} />
   ),
 )
-
-export default function CheckboxField({
+const CheckboxField = <TForm extends FieldValues>({
   label,
   name,
   form,
@@ -25,7 +25,7 @@ export default function CheckboxField({
   variant = 'standard',
   CheckboxProps,
   FormControlProps,
-}: ICheckboxFieldProps) {
+}: ICheckboxFieldProps<TForm>) => {
   const formError = form?.formState?.errors?.[name]?.message
   const innerShowError = (formError && form?.formState?.touchedFields?.[name]) as boolean
 
@@ -54,3 +54,5 @@ export default function CheckboxField({
     </FormControl>
   )
 }
+
+export default CheckboxField

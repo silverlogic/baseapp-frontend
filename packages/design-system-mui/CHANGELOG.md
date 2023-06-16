@@ -1,5 +1,18 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.4.0
+
+### Minor Changes
+
+- Changes `ButtonWithLoading` props in order to remove `form`.
+- Adds a generic type to `CheckboxField`.
+- Creates `ThemeProvider` component.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/core@2.7.0
+
 ## 1.3.3
 
 ### Patch Changes

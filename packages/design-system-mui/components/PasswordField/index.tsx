@@ -1,21 +1,22 @@
-import { useState, ReactElement } from 'react'
-import IconButton from '@mui/material/IconButton'
-import InputAdornment from '@mui/material/InputAdornment'
+import { FC, useState } from 'react'
+
 import Visibility from '@mui/icons-material/Visibility'
 import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { useTheme } from '@mui/material'
+import IconButton from '@mui/material/IconButton'
+import InputAdornment from '@mui/material/InputAdornment'
 
-import { StyledPasswordTextField } from './styled'
 import { ITextField } from '../TextField/types'
+import { StyledPasswordTextField } from './styled'
 
-function PasswordField({
+const PasswordField: FC<ITextField> = ({
   name = 'password',
   visibilityIconColor,
   InputLabelProps,
   InputProps,
   form,
   ...props
-}: ITextField): ReactElement {
+}) => {
   const [viewPassword, setViewPassword] = useState(false)
   const theme = useTheme()
   return (
