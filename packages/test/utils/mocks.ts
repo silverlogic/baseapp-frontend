@@ -8,7 +8,7 @@ jest.mock('js-cookie')
 export type CookiesGetByNameFn = (name: string) => string
 
 export const cookiesMock = jest.mocked(Cookies, true)
-// @ts-ignore TODO: investigate AxiosRequestHeaders error
+// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
 export const axiosMock = new MockAdapter(axios)
 
 beforeEach(() => {
