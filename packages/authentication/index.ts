@@ -17,6 +17,7 @@ export type {
   IForgotPasswordRequest,
   IResetPasswordRequest,
   IRegisterRequest,
+  ICookieName,
 } from './types/auth'
 export type {
   IMfaActivationResponse,

@@ -22,16 +22,17 @@ const useLogin = ({
   defaultValues = DEFAULT_INITIAL_VALUES,
   loginOptions = {},
   mfaOptions = {},
+  cookieName = COOKIE_NAME,
 }: IUseLogin) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
-  const { refetch: refetchUser } = useUser()
+  const { refetch: refetchUser } = useUser({ options: { enabled: false } })
 
   /*
    * Handles login success with the auth token in response
    */
   async function handleLoginSuccess(response: ILoginRegularResponse) {
-    Cookies.set(COOKIE_NAME, response.token, {
+    Cookies.set(cookieName, response.token, {
       secure: process.env.NODE_ENV === 'production',
     })
 
@@ -46,8 +47,8 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    ...loginOptions,
     mutationFn: (data: ILoginRequest) => AuthApi.login(data),
+    ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
       setFormApiErrors(form, err)
@@ -69,7 +70,7 @@ const useLogin = ({
   })
 
   const mfaMutation = useMutation((data: ILoginMfaRequest) => MfaApi.loginStep2(data), {
-    ...mfaOptions,
+    ...mfaOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       mfaOptions?.onError?.(err, variables, context)
       setFormApiErrors(form, err) // this is important to show backend errors on each specific field

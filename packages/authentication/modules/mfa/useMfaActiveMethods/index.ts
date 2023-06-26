@@ -7,9 +7,9 @@ const useMfaActiveMethods = ({ options }: IUseMfaActiveMethods = {}) => {
   const { enabled = true, ...restOptions } = options || {}
 
   const { data, ...rest } = useQuery({
-    ...restOptions,
     queryFn: () => MfaApi.getActiveMethods(),
     queryKey: MFA_API_KEY.getActiveMethods(),
+    ...restOptions, // needs to be placed bellow all overridable options
     enabled,
     onError: (...args) => {
       restOptions?.onError?.(...args)

@@ -38,3 +38,7 @@ export interface IRegisterRequest {
   password: string
   acceptConsent?: boolean
 }
+
+export interface ICookieName {
+  cookieName?: string
+}

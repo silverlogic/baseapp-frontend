@@ -20,8 +20,8 @@ const useRecoverPassword = ({
   })
 
   const mutation = useMutation({
-    ...options,
     mutationFn: ({ email }) => AuthApi.recoverPassword({ email }),
+    ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       setFormApiErrors(form, err) // this is important to show backend errors on each specific field

@@ -6,9 +6,9 @@ import { IUseMfaConfiguration } from './types'
 const useMfaConfiguration = ({ options }: IUseMfaConfiguration = {}) => {
   const { enabled = true, ...restOptions } = options || {}
   const { data: configuration, ...rest } = useQuery({
-    ...options,
     queryFn: () => MfaApi.getConfiguration(),
     queryKey: MFA_API_KEY.getConfiguration(),
+    ...options, // needs to be placed bellow all overridable options
     enabled,
     onError: (...args) => {
       restOptions?.onError?.(...args)

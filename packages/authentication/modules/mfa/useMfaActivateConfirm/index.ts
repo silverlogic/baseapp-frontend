@@ -21,8 +21,8 @@ const useMfaActivateConfirm = ({
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    ...options,
     mutationFn: (data) => MfaApi.confirmActivation(data),
+    ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       setFormApiErrors(form, err) // this is important to show backend errors on each specific field

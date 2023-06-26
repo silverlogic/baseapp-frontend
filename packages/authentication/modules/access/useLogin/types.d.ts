@@ -1,8 +1,8 @@
 import { UseMutationOptions } from '@tanstack/react-query'
 
-import { ILoginMfaRequest, ILoginRequest, LoginResponse } from '../../../types/auth'
+import { ICookieName, ILoginMfaRequest, ILoginRequest, LoginResponse } from '../../../types/auth'
 
-export interface IUseLogin {
+export interface IUseLogin extends ICookieName {
   // TODO: refactor types
   validationSchema?: any
   defaultValues?: ILoginRequest

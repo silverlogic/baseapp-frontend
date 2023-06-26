@@ -21,8 +21,8 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
   })
 
   const mutation = useMutation({
-    ...options,
     mutationFn: (values) => AuthApi.register<TRegisterResponse>(values),
+    ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       setFormApiErrors(form, err) // this is important to show backend errors on each specific field
