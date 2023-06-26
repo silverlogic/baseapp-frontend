@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 1.0.1
+
+### Patch Changes
+
+- Allows more hook's options to be overridable.
+- Updated dependencies
+  - @baseapp-frontend/utils@1.0.1
+
 ## 1.0.0
 
 ### Major Changes

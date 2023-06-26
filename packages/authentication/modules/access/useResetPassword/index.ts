@@ -20,8 +20,8 @@ const useResetPassword = ({
   })
 
   const mutation = useMutation({
-    ...options,
     mutationFn: ({ newPassword, token }) => AuthApi.resetPassword({ newPassword, token }),
+    ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       setFormApiErrors(form, err) // this is important to show backend errors on each specific field
