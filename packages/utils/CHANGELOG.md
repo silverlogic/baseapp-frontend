@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.0.2
+
+### Patch Changes
+
+- Fix `getApiErrorMessage` types.
+
 ## 1.0.1
 
 ### Patch Changes
