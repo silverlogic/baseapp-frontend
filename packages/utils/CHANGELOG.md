@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.0.1
+
+### Patch Changes
+
+- Exports `createAxiosInstance` and `getApiErrorMessage` functions.
+
 ## 1.0.0
 
 ### Major Changes

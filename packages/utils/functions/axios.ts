@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 import { buildQueryString } from './queryString'
 
-function createAxiosInstance({ returnData = true, file = false } = {}) {
+export const createAxiosInstance = ({ returnData = true, file = false } = {}) => {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     paramsSerializer(params: Record<string, any>) {
