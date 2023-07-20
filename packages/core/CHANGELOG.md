@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.7.1
+
+### Patch Changes
+
+- Ignore `yupResolver` type error inside `mfaForm`.
+
 ## 2.7.0
 
 ### Minor Changes
