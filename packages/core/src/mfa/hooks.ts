@@ -100,7 +100,7 @@ export function useMfaActivate({
   })
 }
 
-export const codeValidationSchema = Yup.object().shape({
+export const codeValidationSchema: any = Yup.object().shape({
   code: Yup.string().required('This field is required'),
 })
 
