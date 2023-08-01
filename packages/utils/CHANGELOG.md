@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 1.0.3
+
+### Patch Changes
+
+- Update `getApiErrorMessage` function so it accept more error formats.
+- Added first tests into this package.
+
 ## 1.0.2
 
 ### Patch Changes
