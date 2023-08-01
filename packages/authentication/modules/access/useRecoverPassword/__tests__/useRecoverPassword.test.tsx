@@ -1,6 +1,10 @@
-import { ComponentWithProviders, axiosMock, renderHook } from '@baseapp-frontend/test'
+import { ComponentWithProviders, MockAdapter, renderHook } from '@baseapp-frontend/test'
+import { axios } from '@baseapp-frontend/utils'
 
 import useRecoverPassword from '../index'
+
+// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
+export const axiosMock = new MockAdapter(axios)
 
 describe('useResetPassword', () => {
   const email = 'test@tsl.io'

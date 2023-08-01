@@ -1,16 +1,20 @@
 import {
   ComponentWithProviders,
   CookiesGetByNameFn,
-  axiosMock,
+  MockAdapter,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
+import { axios } from '@baseapp-frontend/utils'
 
 import Cookies from 'js-cookie'
 
 import { IUser } from '../../../../types/user'
 import useUser from '../index'
 import request from './fixtures/request.json'
+
+// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
+export const axiosMock = new MockAdapter(axios)
 
 describe('useUser', () => {
   test('should user be present for authenticated', async () => {
