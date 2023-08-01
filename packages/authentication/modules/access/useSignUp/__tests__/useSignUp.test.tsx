@@ -1,8 +1,12 @@
-import { ComponentWithProviders, axiosMock, renderHook, waitFor } from '@baseapp-frontend/test'
+import { ComponentWithProviders, MockAdapter, renderHook, waitFor } from '@baseapp-frontend/test'
+import { axios } from '@baseapp-frontend/utils'
 
 import { IRegisterRequest } from '../../../../types/auth'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
+
+// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
+export const axiosMock = new MockAdapter(axios)
 
 describe('useSignUp', () => {
   test('should run onSuccess', async () => {
