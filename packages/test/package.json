@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/test",
   "description": "Test utils that extends React Testing Library.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "private": true,
@@ -29,7 +29,6 @@
   "dependencies": {
     "@baseapp-frontend/design-system-mui": "*",
     "@baseapp-frontend/provider": "*",
-    "@baseapp-frontend/utils": "*",
     "axios-mock-adapter": "^1.21.5",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0"
