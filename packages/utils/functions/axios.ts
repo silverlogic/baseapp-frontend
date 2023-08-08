@@ -4,7 +4,11 @@ import Cookies from 'js-cookie'
 
 import { buildQueryString } from './queryString'
 
-export const createAxiosInstance = ({ returnData = true, file = false } = {}) => {
+export const createAxiosInstance = ({
+  returnData = true,
+  file = false,
+  cookieName = 'Authorization',
+} = {}) => {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     paramsSerializer(params: Record<string, any>) {
@@ -19,7 +23,7 @@ export const createAxiosInstance = ({ returnData = true, file = false } = {}) =>
   instance.defaults.headers.put['Content-Type'] = contentType
 
   instance.interceptors.request.use((request) => {
-    const authToken = Cookies.get('Authorization')
+    const authToken = Cookies.get(cookieName)
     if (authToken) {
       if (request.headers && !request.headers.Authorization) {
         request.headers.Authorization = `Token ${authToken}`
@@ -38,7 +42,7 @@ export const createAxiosInstance = ({ returnData = true, file = false } = {}) =>
       if (response.data && response.headers?.['content-type'] === 'application/json') {
         response.data = humps.camelizeKeys(response.data)
       }
-      return returnData ? response.data : response
+      return returnData && response.data ? response.data : response
     },
     (error) => {
       if (error.response.data && error.response.headers?.['content-type'] === 'application/json') {

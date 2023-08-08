@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.0.4
+
+### Patch Changes
+
+- Allow custom cookie name for `createAxiosInstance`.
+
 ## 1.0.3
 
 ### Patch Changes
