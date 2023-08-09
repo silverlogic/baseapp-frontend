@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 1.0.2
+
+### Patch Changes
+
+- Reset user cache when `useUser` throws a 401 error.
+  - It was using `invalidateQueries` but this doesn't necessarily clean the user cache response, so changing to `resetQueries` is more effective.
+
 ## 1.0.1
 
 ### Patch Changes
