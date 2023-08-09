@@ -23,11 +23,12 @@ const useUser = <TUser extends Partial<IUser>>({
     ...options, // needs to be placed bellow all overridable options
     onError: (error: any) => {
       if (error?.response?.status === 401) {
-        // since response is 401 Unauthorized it also prabably has the body:
+        // since response is 401 Unauthorized it also probably has the body:
         // {"detail":"Invalid token."}
-        // better remove the cookie
+        // is better to remove the cookie
         Cookies.remove(cookieName)
-        queryClient.invalidateQueries(USER_API_KEY.getUser())
+        // making sure to reset the cache
+        queryClient.resetQueries(USER_API_KEY.getUser())
       }
       options?.onError?.(error)
     },
