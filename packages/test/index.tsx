@@ -3,11 +3,13 @@ import { ReactElement } from 'react'
 
 import { RenderOptions, render } from '@testing-library/react'
 
-import ComponentWithProviders from './providers/ComponentWithProviders'
+import { ComponentWithProviders } from './providers'
 
-const customRender = (ui: ReactElement, options?: Omit<RenderOptions, 'wrapper'>) =>
-  render(ui, { wrapper: ComponentWithProviders, ...options })
+const customRender = (ui: ReactElement, options?: RenderOptions) => {
+  const { wrapper = ComponentWithProviders } = options || {}
 
+  return render(ui, { wrapper, ...options })
+}
 // re-export testing-library
 export * from '@testing-library/react'
 export * from '@testing-library/jest-dom'
@@ -18,6 +20,5 @@ export { default as userEvent } from '@testing-library/user-event'
 export { customRender as render }
 
 // export local files
-export { default as ComponentWithProviders } from './providers/ComponentWithProviders'
-
+export * from './providers'
 export * from './utils/mocks'

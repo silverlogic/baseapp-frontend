@@ -1,5 +1,12 @@
 # @baseapp-frontend/test
 
+## 1.1.0
+
+### Minor Changes
+
+- Add a default `wrapper` to the `render` method, alongside a new `ComponentWithRootLayout` wrapper.
+- Updates on `jest.config` and `tsconfig` files.
+
 ## 1.0.1
 
 ### Patch Changes

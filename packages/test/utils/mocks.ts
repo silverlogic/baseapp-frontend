@@ -5,7 +5,7 @@ jest.mock('js-cookie')
 
 export type CookiesGetByNameFn = (name: string) => string
 
-export const cookiesMock = jest.mocked(Cookies, true)
+export const cookiesMock = jest.mocked(Cookies)
 
 beforeEach(() => {
   jest.clearAllMocks()
