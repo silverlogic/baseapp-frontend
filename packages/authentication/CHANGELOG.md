@@ -1,5 +1,16 @@
 # @baseapp-frontend/authentication
 
+## 1.0.3
+
+### Patch Changes
+
+- Redesigning `useLogout` hook
+  - It now returns an object instead of a function
+  - It now uses `resetQueries` instead of `invalidateQueries` in order to reset the user cache properly.
+
+- Updated dependencies
+  - @baseapp-frontend/utils@1.1.0
+
 ## 1.0.2
 
 ### Patch Changes
