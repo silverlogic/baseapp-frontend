@@ -2,12 +2,15 @@ import _axios from 'axios'
 import humps from 'humps'
 import Cookies from 'js-cookie'
 
-import { buildQueryString } from './queryString'
+import { SERVICES_WITHOUT_TOKEN } from '../../../constants/axios'
+import { COOKIE_NAME } from '../../../constants/cookie'
+import { buildQueryString } from '../../string'
 
 export const createAxiosInstance = ({
   returnData = true,
   file = false,
-  cookieName = 'Authorization',
+  cookieName = COOKIE_NAME,
+  servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
 } = {}) => {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -22,10 +25,14 @@ export const createAxiosInstance = ({
   instance.defaults.headers.patch['Content-Type'] = contentType
   instance.defaults.headers.put['Content-Type'] = contentType
 
-  instance.interceptors.request.use((request) => {
+  const requestInterceptorId = instance.interceptors.request.use((request) => {
     const authToken = Cookies.get(cookieName)
     if (authToken) {
-      if (request.headers && !request.headers.Authorization) {
+      if (
+        request.headers &&
+        !request.headers.Authorization &&
+        !servicesWithoutToken.includes(request.url || '')
+      ) {
         request.headers.Authorization = `Token ${authToken}`
       }
     }
@@ -34,10 +41,14 @@ export const createAxiosInstance = ({
       request.data = JSON.stringify(humps.decamelizeKeys(request.data))
     }
 
+    if (request.params) {
+      request.params = humps.decamelizeKeys(request.params)
+    }
+
     return request
   })
 
-  instance.interceptors.response.use(
+  const responseInterceptorId = instance.interceptors.response.use(
     (response) => {
       if (response.data && response.headers?.['content-type'] === 'application/json') {
         response.data = humps.camelizeKeys(response.data)
@@ -53,9 +64,14 @@ export const createAxiosInstance = ({
     },
   )
 
-  return instance
+  return { axios: instance, requestInterceptorId, responseInterceptorId }
 }
 
-export const axios = createAxiosInstance()
+// we export the interceptors ids so it can easily ejected if needed
+export const { axios, requestInterceptorId, responseInterceptorId } = createAxiosInstance()
 
-export const axiosForFiles = createAxiosInstance({ file: true })
+export const {
+  axios: axiosForFiles,
+  requestInterceptorId: requestInterceptorIdForFiles,
+  responseInterceptorId: responseInterceptorIdForFiles,
+} = createAxiosInstance({ file: true })
