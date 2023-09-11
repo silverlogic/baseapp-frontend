@@ -2,7 +2,7 @@
 
 ## **Overview**
 
-These are base shared `tsconfig.json`s from which all other `tsconfig.json`'s inherit from.
+These are `typescript` configurations that can be extended from.
 
 ## **Installation**
 You can install the package via npm, yarn or pnpm:
