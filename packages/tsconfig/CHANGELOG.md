@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.1
+
+### Patch Changes
+
+- Updates `nextjs.json` configuration and creates `test.json` configuration.
+
 ## 1.1.0
 
 ### Minor Changes
