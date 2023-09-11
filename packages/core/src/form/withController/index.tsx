@@ -6,7 +6,6 @@ export function withController(Component: any) {
   return ({ name, form, value, helperText, handleChange, ...props }: IControlledComponentProps) => {
     if (form) {
       return (
-        // @ts-ignore TODO: (BA-1081) investigate 'Controller' cannot be used as a JSX component error.
         <Controller
           name={name}
           control={form.control}
