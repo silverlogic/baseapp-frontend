@@ -1,6 +1,6 @@
-import { getApiErrorMessage } from '../index'
+import { getApiErrorMessage } from '..'
 
-describe('getApiErrorMessage function', () => {
+describe('getApiErrorMessage', () => {
   it('should return default message when error is undefined', () => {
     const defaultMessage = 'Something went wrong.'
     const result = getApiErrorMessage(undefined, { defaultMessage })
