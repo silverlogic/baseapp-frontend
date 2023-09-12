@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.2
+
+### Patch Changes
+
+- Adds `test.json` file.
+
 ## 1.1.1
 
 ### Patch Changes
