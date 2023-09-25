@@ -1,83 +1,17 @@
-import {
-  ComponentWithProviders,
-  CookiesGetByNameFn,
-  MockAdapter,
-  renderHook,
-  waitFor,
-} from '@baseapp-frontend/test'
-import { axios } from '@baseapp-frontend/utils'
+import { CookiesGetByNameFn, renderHook } from '@baseapp-frontend/test'
 
 import Cookies from 'js-cookie'
 
-import { IUser } from '../../../../types/user'
 import useUser from '../index'
-import request from './fixtures/request.json'
-
-// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-export const axiosMock = new MockAdapter(axios)
+import jwt from './fixtures/jwt.json'
 
 describe('useUser', () => {
-  test('should user be present for authenticated', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
+  test('should return the user from the JWT cookie', () => {
+    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => jwt.token)
+    const { result } = renderHook(() => useUser())
 
-    axiosMock.onGet('/users/me').reply(200, request)
-
-    const { result } = renderHook(() => useUser(), {
-      wrapper: ComponentWithProviders,
-    })
-
-    expect(result.current.isLoading).toBe(true)
-    await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
-
-    expect(result.current.user?.email).toBe(request.email)
-  })
-
-  test('can use a custom type interface', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
-
-    interface ICustomUser extends IUser {
-      customField: number
-    }
-
-    axiosMock.onGet('/users/me').reply(200, { ...request, customField: 123 })
-
-    const { result } = renderHook(() => useUser<ICustomUser>(), {
-      wrapper: ComponentWithProviders,
-    })
-    expect(result.current.isLoading).toBe(true)
-    await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
-
-    expect(result.current.user?.customField).toBe(123)
-  })
-
-  test('should remove cookie if 401', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
-    ;(Cookies.remove as CookiesGetByNameFn) = jest.fn(() => '')
-
-    let hasOnErrorRan = false
-
-    axiosMock.onGet('/users/me').reply(401, {
-      error: 'Invalid token.',
-    })
-
-    const { result } = renderHook(
-      () =>
-        useUser({
-          options: {
-            retry: false,
-            onError: () => {
-              hasOnErrorRan = true
-            },
-          },
-        }),
-      {
-        wrapper: ComponentWithProviders,
-      },
-    )
-
-    await waitFor(() => expect(hasOnErrorRan).toBe(true))
-    await waitFor(() => expect(Cookies.get).toHaveBeenCalled())
-    await waitFor(() => expect(Cookies.remove).toHaveBeenCalled())
-    expect(result.current.user).not.toBeDefined()
+    expect(result.current?.email).toBe('user@company.com')
+    expect(result.current?.firstName).toBe('John')
+    expect(result.current?.lastName).toBe('Doe')
   })
 })

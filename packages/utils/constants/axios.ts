@@ -1,5 +1,6 @@
 export const SERVICES_WITHOUT_TOKEN = [
-  '/login',
+  '/auth',
+  '/auth/login',
   '/register',
   '/forgot-password',
   '/forgot-password/reset',

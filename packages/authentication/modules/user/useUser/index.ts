@@ -1,40 +1,23 @@
-import { COOKIE_NAME } from '@baseapp-frontend/utils'
+import { ACCESS_COOKIE_NAME, decodeJWT } from '@baseapp-frontend/utils'
+import { IJWTContent } from '@baseapp-frontend/utils/types/jwt'
 
-import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import UserApi, { USER_API_KEY } from '../../../services/user'
 import { IUser } from '../../../types/user'
 import { IUseUser } from './types'
 
-const useUser = <TUser extends Partial<IUser>>({
-  options,
-  cookieName = COOKIE_NAME,
-}: IUseUser<TUser> = {}) => {
+const useUser = <TUser extends Partial<IUser> & Partial<IJWTContent>>({
+  cookieName = ACCESS_COOKIE_NAME,
+}: IUseUser = {}): TUser | null => {
   const token = Cookies.get(cookieName)
-  const queryClient = useQueryClient()
-
-  const { data: user, ...rest } = useQuery({
-    queryFn: () => UserApi.getUser<TUser>(),
-    queryKey: USER_API_KEY.getUser(),
-    staleTime: Infinity, // makes cache never expire automatically
-    enabled: !!token,
-    useErrorBoundary: false,
-    ...options, // needs to be placed bellow all overridable options
-    onError: (error: any) => {
-      if (error?.response?.status === 401) {
-        // since response is 401 Unauthorized it also probably has the body:
-        // {"detail":"Invalid token."}
-        // is better to remove the cookie
-        Cookies.remove(cookieName)
-        // making sure to reset the cache
-        queryClient.resetQueries(USER_API_KEY.getUser())
-      }
-      options?.onError?.(error)
-    },
-  })
-
-  return { user, ...rest }
+  if (token) {
+    try {
+      return decodeJWT<TUser>(token) as TUser
+    } catch (error) {
+      return null
+    }
+  }
+  return null
 }
 
 export default useUser

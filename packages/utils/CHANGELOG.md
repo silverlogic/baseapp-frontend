@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.2.0
+
+### Minor Changes
+
+- Added the JWT authentication flow and tools
+
 ## 1.1.0
 
 ### Minor Changes

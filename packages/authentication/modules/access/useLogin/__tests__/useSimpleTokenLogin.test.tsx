@@ -1,22 +1,16 @@
-import {
-  ComponentWithProviders,
-  MockAdapter,
-  cookiesMock,
-  renderHook,
-} from '@baseapp-frontend/test'
-import { axios } from '@baseapp-frontend/utils'
+import { ComponentWithProviders, MockAdapter, renderHook } from '@baseapp-frontend/test'
+import { TokenTypes, axios } from '@baseapp-frontend/utils'
 
 import useLogin from '../index'
 
 // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
 export const axiosMock = new MockAdapter(axios)
 
-describe('useLogin', () => {
+describe('useSimpleTokenLogin', () => {
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/auth').reply(200, {
-      token: 'fake token',
+    axiosMock.onPost('/auth/login').reply(200, {
+      token: 'fake cookie',
     })
-    cookiesMock.set.mockImplementation((cookieName: string) => cookieName)
 
     const email = 'test@tsl.io'
     const password = '123456789'
@@ -35,6 +29,7 @@ describe('useLogin', () => {
               hasOnSuccessRan = true
             },
           },
+          tokenType: TokenTypes.simple,
         }),
       {
         wrapper: ComponentWithProviders,
@@ -44,6 +39,5 @@ describe('useLogin', () => {
     await result.current.form.handleSubmit()
 
     expect(hasOnSuccessRan).toBe(true)
-    expect(cookiesMock.set).toBeCalledTimes(2)
   })
 })
