@@ -1,6 +1,11 @@
 import { useState } from 'react'
 
-import { COOKIE_NAME, setFormApiErrors } from '@baseapp-frontend/utils'
+import {
+  ACCESS_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+  TokenTypes,
+  setFormApiErrors,
+} from '@baseapp-frontend/utils'
 
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -10,35 +15,69 @@ import { FieldValues, useForm } from 'react-hook-form'
 import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
-import { ILoginMfaRequest, ILoginRegularResponse, ILoginRequest } from '../../../types/auth'
+import {
+  ILoginJWTResponse,
+  ILoginMfaRequest,
+  ILoginRequest,
+  ILoginSimpleTokenResponse,
+} from '../../../types/auth'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { useUser } from '../../user'
+import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import { IUseLogin } from './types'
 import { isLoginMfaResponse } from './utils'
+
+const jwtSuccessHandler = (
+  response: ILoginJWTResponse,
+  cookieName: string,
+  refreshCookieName: string,
+) => {
+  Cookies.set(cookieName, response.access, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+  Cookies.set(refreshCookieName, response.refresh, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+}
+
+const simpleTokenSuccessHandler = (
+  response: ILoginSimpleTokenResponse,
+  cookieName: string,
+  onSuccess: () => void,
+) => {
+  Cookies.set(cookieName, response.token, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+
+  onSuccess()
+}
 
 const useLogin = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
   loginOptions = {},
   mfaOptions = {},
-  cookieName = COOKIE_NAME,
+  tokenType = TokenTypes.jwt,
+  cookieName = ACCESS_COOKIE_NAME,
+  refreshCookieName = REFRESH_COOKIE_NAME,
 }: IUseLogin) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
-  const { refetch: refetchUser } = useUser({ options: { enabled: false } })
+  const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
 
   /*
    * Handles login success with the auth token in response
    */
-  async function handleLoginSuccess(response: ILoginRegularResponse) {
-    Cookies.set(cookieName, response.token, {
-      secure: process.env.NODE_ENV === 'production',
-    })
-
-    // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
-    queryClient.invalidateQueries(USER_API_KEY.getUser())
-    refetchUser()
+  async function handleLoginSuccess(response) {
+    if (tokenType === TokenTypes.jwt) {
+      jwtSuccessHandler(response as ILoginJWTResponse, cookieName, refreshCookieName)
+    } else {
+      simpleTokenSuccessHandler(response as ILoginSimpleTokenResponse, cookieName, () => {
+        // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
+        queryClient.invalidateQueries(USER_API_KEY.getUser())
+        refetchUser()
+      })
+    }
   }
 
   const form = useForm({
@@ -47,7 +86,8 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ILoginRequest) => AuthApi.login(data),
+    mutationFn: (data: ILoginRequest) =>
+      tokenType === TokenTypes.jwt ? AuthApi.login(data) : AuthApi.simpleTokenLogin(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)

@@ -1,6 +1,6 @@
 import { IDjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
-import { ILoginMfaRequest, ILoginRegularResponse } from '../types/auth'
+import { ILoginMfaRequest, ILoginSimpleTokenResponse } from '../types/auth'
 import {
   IMfaActivationResponse,
   IMfaActiveMethodResponse,
@@ -41,7 +41,7 @@ export default class MfaApi {
     return axios.post(`${baseUrl}/${method}/codes/regenerate/`, { code })
   }
 
-  static loginStep2(data: ILoginMfaRequest): Promise<ILoginRegularResponse> {
+  static loginStep2(data: ILoginMfaRequest): Promise<ILoginSimpleTokenResponse> {
     return axios.post('/login/code', data)
   }
 }

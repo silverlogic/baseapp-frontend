@@ -1,10 +1,22 @@
 # @baseapp-frontend/authentication
 
+## 1.1.0
+
+### Minor Changes
+
+- Added the JWT authentication flow and tools
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@1.2.0
+
 ## 1.0.3
 
 ### Patch Changes
 
 - Redesigning `useLogout` hook
+
   - It now returns an object instead of a function
   - It now uses `resetQueries` instead of `invalidateQueries` in order to reset the user cache properly.
 

@@ -60,7 +60,7 @@ import { ComponentWithProviders, axiosMock, renderHook } from '@baseapp-frontend
 
 describe('useLogin', () => {
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/login').reply(200, {
+    axiosMock.onPost('/auth/login').reply(200, {
       token: 'fake cookie',
     })
 

@@ -15,11 +15,16 @@ export interface ILoginMfaResponse {
   method: MfaMethod
 }
 
-export interface ILoginRegularResponse {
+export interface ILoginSimpleTokenResponse {
   token: string
 }
 
-export type LoginResponse = ILoginMfaResponse | ILoginRegularResponse
+export interface ILoginJWTResponse {
+  access: string
+  refresh: string
+}
+
+export type LoginResponse = ILoginMfaResponse | ILoginSimpleTokenResponse | ILoginJWTResponse
 
 export interface IForgotPasswordRequest {
   email: string
@@ -41,4 +46,5 @@ export interface IRegisterRequest {
 
 export interface ICookieName {
   cookieName?: string
+  refreshCookieName?: string
 }

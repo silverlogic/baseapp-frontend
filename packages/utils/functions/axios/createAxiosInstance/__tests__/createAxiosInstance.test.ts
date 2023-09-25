@@ -1,4 +1,5 @@
 import { createAxiosInstance } from '..'
+import { TokenTypes } from '../../../../constants/token'
 
 jest.mock('humps')
 jest.mock('axios', () => ({
@@ -38,20 +39,36 @@ describe('createAxiosInstance', () => {
     expect(axios.defaults.headers.put['Content-Type']).toEqual('multipart/form-data')
   })
 
-  it('should add Authorization header if authToken is available', () => {
+  it('should add Authorization header if simple authToken is available', () => {
     const {
       axios: {
         interceptors: {
           request: { use },
         },
       },
-    } = createAxiosInstance()
+    } = createAxiosInstance({ tokenType: TokenTypes.simple })
     const [[interceptorFn]] = (use as jest.Mock).mock.calls
     const request = { headers: { Authorization: undefined }, url: 'someUrl' }
 
     interceptorFn(request)
 
     expect(request.headers.Authorization).toBe('Token someAuthToken')
+  })
+
+  it('should add Authorization header if jwt authToken is available', () => {
+    const {
+      axios: {
+        interceptors: {
+          request: { use },
+        },
+      },
+    } = createAxiosInstance({ tokenType: TokenTypes.jwt })
+    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const request = { headers: { Authorization: undefined }, url: 'someUrl' }
+
+    interceptorFn(request)
+
+    expect(request.headers.Authorization).toBe('Bearer someAuthToken')
   })
 
   it('should not add Authorization header for services without token', () => {

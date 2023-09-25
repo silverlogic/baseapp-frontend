@@ -8,4 +8,5 @@ export interface IUseLogin extends ICookieName {
   defaultValues?: ILoginRequest
   loginOptions?: UseMutationOptions<LoginResponse, unknown, ILoginRequest, any>
   mfaOptions?: UseMutationOptions<LoginResponse, unknown, ILoginMfaRequest, any>
+  tokenType?: TokenTypes
 }
