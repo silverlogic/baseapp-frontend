@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 1.1.1
+
+### Patch Changes
+
+- Add types to `handleLoginSuccess` function.
+
+- Updated dependencies
+  - @baseapp-frontend/utils@1.2.1
+
 ## 1.1.0
 
 ### Minor Changes
