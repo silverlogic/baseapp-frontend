@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.3
+
+### Patch Changes
+
+- Change `noImplicitAny` to `true`, so it's more consistent with the `baseapp-frontent-template`.
+
 ## 1.1.2
 
 ### Patch Changes

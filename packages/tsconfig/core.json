@@ -14,7 +14,7 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "declaration": true,
     "maxNodeModuleJsDepth": 2,
     "baseUrl": "."
