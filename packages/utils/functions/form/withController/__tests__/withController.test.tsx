@@ -4,7 +4,7 @@ import withController from '..'
 
 jest.mock('react-hook-form', () => ({
   ...jest.requireActual('react-hook-form'),
-  Controller: ({ render: r }) => r({ field: {}, fieldState: {} }),
+  Controller: ({ render: r }: { render: any }) => r({ field: {}, fieldState: {} }),
 }))
 
 describe('withController', () => {
