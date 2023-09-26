@@ -25,7 +25,7 @@ import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mf
 import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import { IUseLogin } from './types'
-import { isLoginMfaResponse } from './utils'
+import { isJWTResponse, isLoginMfaResponse } from './utils'
 
 const jwtSuccessHandler = (
   response: ILoginJWTResponse,
@@ -68,11 +68,11 @@ const useLogin = ({
   /*
    * Handles login success with the auth token in response
    */
-  async function handleLoginSuccess(response) {
-    if (tokenType === TokenTypes.jwt) {
-      jwtSuccessHandler(response as ILoginJWTResponse, cookieName, refreshCookieName)
+  async function handleLoginSuccess(response: ILoginJWTResponse | ILoginSimpleTokenResponse) {
+    if (isJWTResponse(tokenType, response)) {
+      jwtSuccessHandler(response, cookieName, refreshCookieName)
     } else {
-      simpleTokenSuccessHandler(response as ILoginSimpleTokenResponse, cookieName, () => {
+      simpleTokenSuccessHandler(response, cookieName, () => {
         // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
         queryClient.invalidateQueries(USER_API_KEY.getUser())
         refetchUser()
