@@ -1,5 +1,13 @@
 # @baseapp-frontend/core
 
+## 2.7.2
+
+### Patch Changes
+
+- Use it's own tsconfig (with `noImplicitAny = false` )
+- Updated dependencies
+  - @baseapp-frontend/tsconfig@1.1.3
+
 ## 2.7.1
 
 ### Patch Changes
