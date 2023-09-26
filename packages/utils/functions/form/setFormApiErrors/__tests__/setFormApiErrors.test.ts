@@ -1,8 +1,8 @@
 import { setFormApiErrors } from '..'
 
 describe('setFormApiErrors', () => {
-  let mockForm
-  let mockError
+  let mockForm: any
+  let mockError: any
 
   beforeEach(() => {
     mockForm = {

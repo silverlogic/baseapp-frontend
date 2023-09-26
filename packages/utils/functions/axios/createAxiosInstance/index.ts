@@ -1,4 +1,4 @@
-import _axios from 'axios'
+import _axios, { AxiosRequestConfig } from 'axios'
 import humps from 'humps'
 import Cookies from 'js-cookie'
 
@@ -108,7 +108,7 @@ export const {
 export const refreshAccessToken = async (
   cookieName: string,
   refreshCookieName: string,
-  originalRequest,
+  originalRequest: AxiosRequestConfig,
 ) => {
   const refreshToken = Cookies.get(refreshCookieName)
 
@@ -125,8 +125,11 @@ export const refreshAccessToken = async (
       secure: process.env.NODE_ENV === 'production',
     })
 
-    // eslint-disable-next-line no-param-reassign
-    originalRequest.headers.Authorization = `Bearer ${response.access}`
+    if (originalRequest.headers) {
+      // eslint-disable-next-line no-param-reassign
+      originalRequest.headers.Authorization = `Bearer ${response.access}`
+    }
+
     return await axios(originalRequest)
   } catch (error) {
     Cookies.remove(cookieName)

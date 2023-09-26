@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 1.2.1
+
+### Patch Changes
+
+- Add types to the `refreshAccessToken` function.
+- Fix test types taht were using implict `any`.
+- Import missing types.
+
 ## 1.2.0
 
 ### Minor Changes

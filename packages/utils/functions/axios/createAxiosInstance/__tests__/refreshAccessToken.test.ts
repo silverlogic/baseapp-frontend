@@ -3,6 +3,7 @@ import { MockAdapter } from '@baseapp-frontend/test'
 import Cookies from 'js-cookie'
 
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../../constants/cookie'
+import { CookieType } from '../../../../types/cookie'
 import { axios } from '../index'
 
 jest.mock('js-cookie')
@@ -16,12 +17,14 @@ describe('refreshAccessToken', () => {
       [ACCESS_COOKIE_NAME]: 'accessToken',
       [REFRESH_COOKIE_NAME]: 'refreshToken',
     }
-    ;(Cookies.set as jest.Mock).mockImplementation((cookieName: string, cookieValue: string) => {
-      cookiesFakeStore[cookieName] = cookieValue
-      return cookieValue
-    })
+    ;(Cookies.set as jest.Mock).mockImplementation(
+      (cookieName: CookieType, cookieValue: string) => {
+        cookiesFakeStore[cookieName] = cookieValue
+        return cookieValue
+      },
+    )
     ;(Cookies.get as jest.Mock).mockImplementation(
-      (cookieName: string) => cookiesFakeStore[cookieName],
+      (cookieName: CookieType) => cookiesFakeStore[cookieName],
     )
 
     let timesCalled = 0
@@ -49,9 +52,9 @@ describe('refreshAccessToken', () => {
       [REFRESH_COOKIE_NAME]: 'refreshToken',
     }
     ;(Cookies.get as jest.Mock).mockImplementation(
-      (cookieName: string) => cookiesFakeStore[cookieName],
+      (cookieName: CookieType) => cookiesFakeStore[cookieName],
     )
-    ;(Cookies.remove as jest.Mock).mockImplementation((cookieName: string) => {
+    ;(Cookies.remove as jest.Mock).mockImplementation((cookieName: CookieType) => {
       delete cookiesFakeStore[cookieName]
     })
 
