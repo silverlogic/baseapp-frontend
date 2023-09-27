@@ -12,6 +12,7 @@ import { IUseRecoverPassword } from './types'
 const useRecoverPassword = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
+  ApiClass = AuthApi,
   options,
 }: IUseRecoverPassword) => {
   const form = useForm({
@@ -20,7 +21,7 @@ const useRecoverPassword = ({
   })
 
   const mutation = useMutation({
-    mutationFn: ({ email }) => AuthApi.recoverPassword({ email }),
+    mutationFn: ({ email }) => ApiClass.recoverPassword({ email }),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)

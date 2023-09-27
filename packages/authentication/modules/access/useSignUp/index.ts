@@ -12,6 +12,7 @@ import { IUseSignUp } from './types'
 const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse = void>({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
+  ApiClass = AuthApi,
   options,
 }: IUseSignUp<TRegisterRequest, TRegisterResponse>) => {
   const form = useForm({
@@ -21,7 +22,7 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
   })
 
   const mutation = useMutation({
-    mutationFn: (values) => AuthApi.register<TRegisterResponse>(values),
+    mutationFn: (values) => ApiClass.register<TRegisterResponse>(values),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
