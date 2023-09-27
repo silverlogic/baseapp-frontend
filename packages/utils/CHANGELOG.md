@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 1.2.2
+
+### Patch Changes
+
+- Cast types instead of using `camelizeKeys` generic.
+- Add missing export for `useDjangoOrderBy` hook.
+
 ## 1.2.1
 
 ### Patch Changes
