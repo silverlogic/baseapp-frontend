@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 1.1.2
+
+### Patch Changes
+
+- Add an `ApiClass` option to all hooks that use some internal api class like `AuthApi` or `UserApi`. The user would be able to use its own api class, as long it has the required methods that each hook needs.
+
 ## 1.1.1
 
 ### Patch Changes

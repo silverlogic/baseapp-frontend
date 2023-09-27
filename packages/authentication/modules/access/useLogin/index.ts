@@ -60,6 +60,7 @@ const useLogin = ({
   tokenType = TokenTypes.jwt,
   cookieName = ACCESS_COOKIE_NAME,
   refreshCookieName = REFRESH_COOKIE_NAME,
+  ApiClass = AuthApi,
 }: IUseLogin) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
@@ -87,7 +88,7 @@ const useLogin = ({
 
   const mutation = useMutation({
     mutationFn: (data: ILoginRequest) =>
-      tokenType === TokenTypes.jwt ? AuthApi.login(data) : AuthApi.simpleTokenLogin(data),
+      tokenType === TokenTypes.jwt ? ApiClass.login(data) : ApiClass.simpleTokenLogin(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)

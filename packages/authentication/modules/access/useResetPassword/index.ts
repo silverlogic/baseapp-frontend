@@ -12,6 +12,7 @@ import { IUseResetPassword } from './types'
 const useResetPassword = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
+  ApiClass = AuthApi,
   options,
 }: IUseResetPassword) => {
   const form = useForm({
@@ -20,7 +21,7 @@ const useResetPassword = ({
   })
 
   const mutation = useMutation({
-    mutationFn: ({ newPassword, token }) => AuthApi.resetPassword({ newPassword, token }),
+    mutationFn: ({ newPassword, token }) => ApiClass.resetPassword({ newPassword, token }),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)

@@ -10,12 +10,13 @@ import { IUseSimpleTokenUser } from './types'
 const useSimpleTokenUser = <TUser extends Partial<IUser>>({
   options,
   cookieName = ACCESS_COOKIE_NAME,
+  ApiClass = UserApi,
 }: IUseSimpleTokenUser<TUser> = {}) => {
   const token = Cookies.get(cookieName)
   const queryClient = useQueryClient()
 
   const { data: user, ...rest } = useQuery({
-    queryFn: () => UserApi.getUser<TUser>(),
+    queryFn: () => ApiClass.getUser<TUser>(),
     queryKey: USER_API_KEY.getUser(),
     staleTime: Infinity, // makes cache never expire automatically
     enabled: !!token,
