@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 1.1.3
+
+### Patch Changes
+
+- update auth endpoint url path to match baseapp-django-v3. The default login path is `/auth/login` for both SimpleToken and JWT auth
+
 ## 1.1.2
 
 ### Patch Changes

@@ -87,8 +87,7 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ILoginRequest) =>
-      tokenType === TokenTypes.jwt ? ApiClass.login(data) : ApiClass.simpleTokenLogin(data),
+    mutationFn: (data: ILoginRequest) => ApiClass.login(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
