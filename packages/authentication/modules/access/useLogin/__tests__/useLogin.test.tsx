@@ -13,7 +13,7 @@ export const axiosMock = new MockAdapter(axios)
 
 describe('useLogin', () => {
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/auth').reply(200, {
+    axiosMock.onPost('/auth/login').reply(200, {
       token: 'fake token',
     })
     cookiesMock.set.mockImplementation((cookieName: string) => cookieName)
