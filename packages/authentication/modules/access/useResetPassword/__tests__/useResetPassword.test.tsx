@@ -21,9 +21,10 @@ describe('useResetPassword', () => {
     const { result } = renderHook(
       () =>
         useResetPassword({
+          token,
           defaultValues: {
             newPassword: password,
-            token,
+            confirmNewPassword: password,
           },
           options: {
             onSuccess: () => {
@@ -51,9 +52,10 @@ describe('useResetPassword', () => {
     const { result } = renderHook(
       () =>
         useResetPassword({
+          token,
           defaultValues: {
             newPassword: password,
-            token,
+            confirmNewPassword: password,
           },
           options: {
             onError: () => {

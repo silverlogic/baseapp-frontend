@@ -14,10 +14,11 @@ const useRecoverPassword = ({
   defaultValues = DEFAULT_INITIAL_VALUES,
   ApiClass = AuthApi,
   options,
-}: IUseRecoverPassword) => {
+}: IUseRecoverPassword = {}) => {
   const form = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema),
+    mode: 'onBlur',
   })
 
   const mutation = useMutation({

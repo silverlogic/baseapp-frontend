@@ -14,7 +14,7 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
   defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
   ApiClass = AuthApi,
   options,
-}: IUseSignUp<TRegisterRequest, TRegisterResponse>) => {
+}: IUseSignUp<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues,
