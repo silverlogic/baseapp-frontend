@@ -23,7 +23,7 @@ describe('withController', () => {
 
   it('should pass down the correct props', () => {
     const { queryByText } = render(
-      <WrappedComponent name="test" someProp="prop" control={{}} enableError />,
+      <WrappedComponent name="test" someProp="prop" control={{}} error />,
     )
     const testComponent = queryByText('Test')
 

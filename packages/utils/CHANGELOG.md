@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.0
+
+### Minor Changes
+
+- Update `withController` so it passes a `helperText` and an `error` prop to the component. So it fits better the MUI's error display dynamic.
+
 ## 1.2.2
 
 ### Patch Changes
