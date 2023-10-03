@@ -61,7 +61,7 @@ const useLogin = ({
   cookieName = ACCESS_COOKIE_NAME,
   refreshCookieName = REFRESH_COOKIE_NAME,
   ApiClass = AuthApi,
-}: IUseLogin) => {
+}: IUseLogin = {}) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
   const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
@@ -84,6 +84,7 @@ const useLogin = ({
   const form = useForm({
     defaultValues,
     resolver: yupResolver(validationSchema),
+    mode: 'onBlur',
   })
 
   const mutation = useMutation({
@@ -107,6 +108,7 @@ const useLogin = ({
     // TODO: refactor types
     defaultValues: CODE_VALIDATION_INITIAL_VALUES as FieldValues,
     resolver: yupResolver(CODE_VALIDATION_SCHEMA as any),
+    mode: 'onBlur',
   })
 
   const mfaMutation = useMutation((data: ILoginMfaRequest) => MfaApi.loginStep2(data), {

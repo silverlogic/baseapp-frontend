@@ -1,10 +1,21 @@
 # @baseapp-frontend/authentication
 
+## 1.1.4
+
+### Patch Changes
+
+- Update `useResetPassword` so it expects to receive a token as a hook parameter.
+- Set `onBlur` mode for most of the hookes that uses `useForm`.
+- Add a `{}` fallback for some hook'`s options.
+
+- Updated dependencies
+  - @baseapp-frontend/utils@1.3.0
+
 ## 1.1.3
 
 ### Patch Changes
 
-- update auth endpoint url path to match baseapp-django-v3. The default login path is `/auth/login` for both SimpleToken and JWT auth
+- Update auth endpoint url path to match baseapp-django-v3. The default login path is `/auth/login` for both Simple Token and JWT auth.
 
 ## 1.1.2
 
