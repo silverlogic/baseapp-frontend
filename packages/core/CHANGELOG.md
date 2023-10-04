@@ -1,5 +1,14 @@
 # @baseapp-frontend/core
 
+## 2.7.4
+
+### Patch Changes
+
+- Add `@types/react` and `@types/react-dom`.
+
+- Updated dependencies
+  - @baseapp-frontend/tsconfig@1.1.4
+
 ## 2.7.3
 
 ### Patch Changes

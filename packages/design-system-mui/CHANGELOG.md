@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.4.1
+
+### Patch Changes
+
+- Add `@types/react` and `@types/react-dom`.
+
+- Updated dependencies
+  - @baseapp-frontend/core@2.7.4
+
 ## 1.4.0
 
 ### Minor Changes

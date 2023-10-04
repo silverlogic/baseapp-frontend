@@ -1,6 +1,6 @@
 {
   "name": "@baseapp-frontend/core",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "description": "Core utilities.",
   "main": "./src/index.tsx",
   "scripts": {

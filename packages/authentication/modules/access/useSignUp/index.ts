@@ -38,7 +38,6 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
       await mutation.mutateAsync(values)
     } catch (error) {
       console.log(error, 'error')
-      // mutateAsync will raise an error if there's an API error
     }
   }
 

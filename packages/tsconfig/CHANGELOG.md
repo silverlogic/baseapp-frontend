@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.4
+
+### Patch Changes
+
+- Add `@types/react` and `@types/react-dom` paths.
+
 ## 1.1.3
 
 ### Patch Changes

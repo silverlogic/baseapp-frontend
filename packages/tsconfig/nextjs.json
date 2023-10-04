@@ -19,7 +19,11 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "react": ["./node_modules/@types/react"],
+      "react-dom": ["./node_modules/@types/react-dom"]
+    }
   },
   "include": [
     "next-env.d.ts",
