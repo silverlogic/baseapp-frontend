@@ -1,4 +1,5 @@
 import { UseMutationOptions } from '@tanstack/react-query'
+import { z } from 'zod'
 
 import AuthApi from '../../../services/auth'
 
@@ -11,8 +12,7 @@ export type ResetPasswordForm = {
 
 export interface IUseResetPassword {
   token: string
-  // TODO: refactor types
-  validationSchema?: any
+  validationSchema?: z.ZodObject<z.ZodRawShape> | z.ZodEffects<z.ZodObject<z.ZodRawShape>>
   defaultValues?: ResetPasswordForm
   options?: UseMutationOptions<void, unknown, ResetPasswordForm, any>
   ApiClass?: ApiClass

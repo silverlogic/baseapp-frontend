@@ -1,6 +1,6 @@
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -18,7 +18,7 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
   })
 
   const mutation = useMutation({
@@ -37,6 +37,7 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
+      console.log(error, 'error')
       // mutateAsync will raise an error if there's an API error
     }
   }

@@ -1,6 +1,8 @@
 import { ComponentWithProviders, MockAdapter, renderHook, waitFor } from '@baseapp-frontend/test'
 import { axios } from '@baseapp-frontend/utils'
 
+import { z } from 'zod'
+
 import { IRegisterRequest } from '../../../../types/auth'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
@@ -89,5 +91,48 @@ describe('useSignUp', () => {
     await result.current.form.handleSubmit()
 
     expect(hasOnErrorRan).toBe(true)
+  })
+
+  test('should allow custom defaultValues and validationSchema', async () => {
+    axiosMock.onPost('/register').reply(200, {})
+
+    const customDefaultValues = {
+      email: 'test@tsl.io',
+      phoneNumber: '12345',
+      password: 'fW7q0jwv',
+    }
+    const customValidationSchema = z.object({
+      password: z.string().nonempty(),
+      phoneNumber: z
+        .string()
+        .nonempty()
+        .regex(/^\d{5}$/),
+      email: z.string().nonempty().email(),
+    })
+
+    let hasOnSuccessRan = false
+
+    interface ICustomRegisterRequest
+      extends Pick<IRegisterRequest, 'email' | 'password' | 'phoneNumber'> {}
+
+    const { result } = renderHook(
+      () =>
+        useSignUp<ICustomRegisterRequest>({
+          defaultValues: customDefaultValues,
+          validationSchema: customValidationSchema,
+          options: {
+            onSuccess: () => {
+              hasOnSuccessRan = true
+            },
+          },
+        }),
+      {
+        wrapper: ComponentWithProviders,
+      },
+    )
+
+    await result.current.form.handleSubmit()
+
+    expect(hasOnSuccessRan).toBe(true)
   })
 })

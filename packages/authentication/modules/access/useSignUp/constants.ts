@@ -1,21 +1,20 @@
-import { PHONE_REGEX, YUP_REQUIRED_FIELD } from '@baseapp-frontend/utils'
+import { PHONE_REGEX, ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
-import * as Yup from 'yup'
+import { z } from 'zod'
 
 import { IRegisterRequest } from '../../../types/auth'
 
-export const DEFAULT_VALIDATION_SCHEMA = Yup.object().shape({
-  firstName: Yup.string().required(YUP_REQUIRED_FIELD),
-  lastName: Yup.string().required(YUP_REQUIRED_FIELD),
-  password: Yup.string().required(YUP_REQUIRED_FIELD),
-  phoneNumber: Yup.string().matches(
-    PHONE_REGEX,
-    'Please provide a properly formatted phone number',
-  ),
-  email: Yup.string()
-    .email('Please provide a properly formatted email address')
-    .required(YUP_REQUIRED_FIELD),
-  acceptConsent: Yup.boolean().oneOf([true], 'Must Accept Terms and Conditions'),
+export const DEFAULT_VALIDATION_SCHEMA = z.object({
+  firstName: z.string().nonempty(ZOD_MESSAGE.required),
+  lastName: z.string().nonempty(ZOD_MESSAGE.required),
+  password: z.string().nonempty(ZOD_MESSAGE.required),
+  phoneNumber: z.string().nonempty(ZOD_MESSAGE.required).regex(PHONE_REGEX, {
+    message: ZOD_MESSAGE.phoneNumber,
+  }),
+  email: z.string().nonempty(ZOD_MESSAGE.required).email(ZOD_MESSAGE.email),
+  acceptConsent: z.boolean().refine((value) => value === true, {
+    message: ZOD_MESSAGE.mustAcceptTerms,
+  }),
 })
 
 export const DEFAULT_INITIAL_VALUES: IRegisterRequest = {

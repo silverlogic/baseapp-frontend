@@ -1,6 +1,7 @@
 import { TokenTypes } from '@baseapp-frontend/utils'
 
 import { UseMutationOptions } from '@tanstack/react-query'
+import { z } from 'zod'
 
 import AuthApi from '../../../services/auth'
 import { ICookieName, ILoginMfaRequest, ILoginRequest, LoginResponse } from '../../../types/auth'
@@ -8,8 +9,7 @@ import { ICookieName, ILoginMfaRequest, ILoginRequest, LoginResponse } from '../
 type ApiClass = Pick<typeof AuthApi, 'login'>
 
 export interface IUseLogin extends ICookieName {
-  // TODO: refactor types
-  validationSchema?: any
+  validationSchema?: z.ZodObject<z.ZodRawShape>
   defaultValues?: ILoginRequest
   loginOptions?: UseMutationOptions<LoginResponse, unknown, ILoginRequest, any>
   mfaOptions?: UseMutationOptions<LoginResponse, unknown, ILoginMfaRequest, any>
