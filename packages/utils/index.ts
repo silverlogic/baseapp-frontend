@@ -4,7 +4,7 @@ export * from './constants/django'
 export * from './constants/events'
 export * from './constants/regex'
 export * from './constants/token'
-export * from './constants/yup'
+export * from './constants/zod'
 
 export * from './functions/api'
 export * from './functions/axios'
