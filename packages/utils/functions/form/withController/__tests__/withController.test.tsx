@@ -17,17 +17,21 @@ describe('withController', () => {
   })
 
   it('should directly render the passed component if control prop is not provided', () => {
-    const { queryByText } = render(<WrappedComponent name="test" />)
-    expect(queryByText('Test')).toBeInTheDocument()
+    const { queryByText } = render(<WrappedComponent name="test" helperText="some helper" />)
+    const testComponent = queryByText('Test')
+
+    expect(testComponent).toHaveAttribute('name', 'test')
+    expect(testComponent).toHaveAttribute('helperText', 'some helper')
   })
 
   it('should pass down the correct props', () => {
     const { queryByText } = render(
-      <WrappedComponent name="test" someProp="prop" control={{}} error />,
+      <WrappedComponent name="test" someProp="prop" control={{}} helperText="some helper" />,
     )
     const testComponent = queryByText('Test')
 
     expect(testComponent).toHaveAttribute('name', 'test')
     expect(testComponent).toHaveAttribute('someProp', 'prop')
+    expect(testComponent).toHaveAttribute('helperText', 'some helper')
   })
 })
