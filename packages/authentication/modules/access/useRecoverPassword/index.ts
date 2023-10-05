@@ -1,6 +1,6 @@
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -12,15 +12,17 @@ import { IUseRecoverPassword } from './types'
 const useRecoverPassword = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
+  ApiClass = AuthApi,
   options,
-}: IUseRecoverPassword) => {
+}: IUseRecoverPassword = {}) => {
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
+    mode: 'onBlur',
   })
 
   const mutation = useMutation({
-    mutationFn: ({ email }) => AuthApi.recoverPassword({ email }),
+    mutationFn: ({ email }) => ApiClass.recoverPassword({ email }),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)

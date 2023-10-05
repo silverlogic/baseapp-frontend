@@ -1,53 +1,94 @@
 import { useState } from 'react'
 
-import { COOKIE_NAME, setFormApiErrors } from '@baseapp-frontend/utils'
+import {
+  ACCESS_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+  TokenTypes,
+  setFormApiErrors,
+} from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
-import { ILoginMfaRequest, ILoginRegularResponse, ILoginRequest } from '../../../types/auth'
+import {
+  ILoginJWTResponse,
+  ILoginMfaRequest,
+  ILoginRequest,
+  ILoginSimpleTokenResponse,
+} from '../../../types/auth'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { useUser } from '../../user'
+import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import { IUseLogin } from './types'
-import { isLoginMfaResponse } from './utils'
+import { isJWTResponse, isLoginMfaResponse } from './utils'
+
+const jwtSuccessHandler = (
+  response: ILoginJWTResponse,
+  cookieName: string,
+  refreshCookieName: string,
+) => {
+  Cookies.set(cookieName, response.access, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+  Cookies.set(refreshCookieName, response.refresh, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+}
+
+const simpleTokenSuccessHandler = (
+  response: ILoginSimpleTokenResponse,
+  cookieName: string,
+  onSuccess: () => void,
+) => {
+  Cookies.set(cookieName, response.token, {
+    secure: process.env.NODE_ENV === 'production',
+  })
+
+  onSuccess()
+}
 
 const useLogin = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
   loginOptions = {},
   mfaOptions = {},
-  cookieName = COOKIE_NAME,
-}: IUseLogin) => {
+  tokenType = TokenTypes.jwt,
+  cookieName = ACCESS_COOKIE_NAME,
+  refreshCookieName = REFRESH_COOKIE_NAME,
+  ApiClass = AuthApi,
+}: IUseLogin = {}) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
-  const { refetch: refetchUser } = useUser({ options: { enabled: false } })
+  const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
 
   /*
    * Handles login success with the auth token in response
    */
-  async function handleLoginSuccess(response: ILoginRegularResponse) {
-    Cookies.set(cookieName, response.token, {
-      secure: process.env.NODE_ENV === 'production',
-    })
-
-    // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
-    queryClient.invalidateQueries(USER_API_KEY.getUser())
-    refetchUser()
+  async function handleLoginSuccess(response: ILoginJWTResponse | ILoginSimpleTokenResponse) {
+    if (isJWTResponse(tokenType, response)) {
+      jwtSuccessHandler(response, cookieName, refreshCookieName)
+    } else {
+      simpleTokenSuccessHandler(response, cookieName, () => {
+        // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
+        queryClient.invalidateQueries(USER_API_KEY.getUser())
+        refetchUser()
+      })
+    }
   }
 
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
+    mode: 'onBlur',
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ILoginRequest) => AuthApi.login(data),
+    mutationFn: (data: ILoginRequest) => ApiClass.login(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
@@ -64,9 +105,9 @@ const useLogin = ({
   })
 
   const mfaForm = useForm({
-    // TODO: refactor types
-    defaultValues: CODE_VALIDATION_INITIAL_VALUES as FieldValues,
-    resolver: yupResolver(CODE_VALIDATION_SCHEMA as any),
+    defaultValues: CODE_VALIDATION_INITIAL_VALUES,
+    resolver: zodResolver(CODE_VALIDATION_SCHEMA),
+    mode: 'onBlur',
   })
 
   const mfaMutation = useMutation((data: ILoginMfaRequest) => MfaApi.loginStep2(data), {

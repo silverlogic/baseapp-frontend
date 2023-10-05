@@ -1,0 +1,32 @@
+{
+  "name": "storybook-app",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@baseapp-frontend/core": "*",
+    "@baseapp-frontend/design-system-mui": "*",
+    "@mui/material": "^5.10.0",
+    "next": "^12.2.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "^7.0.12",
+    "@storybook/addon-interactions": "^7.0.12",
+    "@storybook/addon-links": "^7.0.12",
+    "@storybook/blocks": "^7.0.12",
+    "@storybook/nextjs": "^7.0.12",
+    "@storybook/react": "^7.0.12",
+    "@storybook/testing-library": "^0.0.14-next.2",
+    "storybook": "^7.0.12",
+    "@baseapp-frontend/config": "*",
+    "@baseapp-frontend/tsconfig": "*"
+  },
+  "scripts": {
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build",
+    "lint": "next lint"
+  }
+}

@@ -10,7 +10,7 @@ import {
 
 export default class AuthApi {
   static login({ email, password }: ILoginRequest): Promise<LoginResponse> {
-    return axios.post(`/login`, { email, password })
+    return axios.post(`/auth/login`, { email, password })
   }
 
   static recoverPassword({ email }: IForgotPasswordRequest): Promise<void> {

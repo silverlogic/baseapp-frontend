@@ -1,6 +1,6 @@
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
@@ -12,16 +12,17 @@ const useMfaActivateConfirm = ({
   method,
   validationSchema = CODE_VALIDATION_SCHEMA,
   defaultValues = CODE_VALIDATION_INITIAL_VALUES,
+  ApiClass = MfaApi,
   options = {},
 }: IUseMfaActivateConfirm) => {
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
   })
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: (data) => MfaApi.confirmActivation(data),
+    mutationFn: (data) => ApiClass.confirmActivation(data),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)

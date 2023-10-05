@@ -1,26 +1,28 @@
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { IResetPasswordRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { IUseResetPassword } from './types'
+import { IUseResetPassword, ResetPasswordForm } from './types'
 
 const useResetPassword = ({
+  token,
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
+  ApiClass = AuthApi,
   options,
 }: IUseResetPassword) => {
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
+    mode: 'onChange',
   })
 
   const mutation = useMutation({
-    mutationFn: ({ newPassword, token }) => AuthApi.resetPassword({ newPassword, token }),
+    mutationFn: ({ newPassword }) => ApiClass.resetPassword({ newPassword, token }),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
@@ -31,7 +33,7 @@ const useResetPassword = ({
     },
   })
 
-  const handleSubmit: SubmitHandler<IResetPasswordRequest> = async (values) => {
+  const handleSubmit: SubmitHandler<ResetPasswordForm> = async (values) => {
     try {
       await mutation.mutateAsync(values)
     } catch (error) {

@@ -1,15 +1,15 @@
-import { YUP_REQUIRED_FIELD } from '@baseapp-frontend/utils'
+import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
-import * as Yup from 'yup'
+import { z } from 'zod'
 
-export const DEFAULT_VALIDATION_SCHEMA = Yup.object().shape({
-  email: Yup.string()
-    .email('Please provide a properly formatted email address.')
-    .required(YUP_REQUIRED_FIELD),
-  password: Yup.string().required(YUP_REQUIRED_FIELD),
+import { ILoginRequest } from '../../../types/auth'
+
+export const DEFAULT_VALIDATION_SCHEMA = z.object({
+  email: z.string().nonempty(ZOD_MESSAGE.required).email(ZOD_MESSAGE.email),
+  password: z.string().nonempty(ZOD_MESSAGE.required),
 })
 
-export const DEFAULT_INITIAL_VALUES = {
+export const DEFAULT_INITIAL_VALUES: ILoginRequest = {
   email: '',
   password: '',
 }

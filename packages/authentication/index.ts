@@ -11,7 +11,7 @@ export * from './services/user'
 export type {
   ILoginMfaRequest,
   ILoginMfaResponse,
-  ILoginRegularResponse,
+  ILoginSimpleTokenResponse,
   ILoginRequest,
   LoginResponse,
   IForgotPasswordRequest,

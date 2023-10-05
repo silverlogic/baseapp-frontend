@@ -1,5 +1,34 @@
 # @baseapp-frontend/core
 
+## 2.7.4
+
+### Patch Changes
+
+- Add `@types/react` and `@types/react-dom`.
+
+- Updated dependencies
+  - @baseapp-frontend/tsconfig@1.1.4
+
+## 2.7.3
+
+### Patch Changes
+
+- update auth endpoint url path to match baseapp-django-v3. The default login path is `/auth/login` for both SimpleToken and JWT auth
+
+## 2.7.2
+
+### Patch Changes
+
+- Use it's own tsconfig (with `noImplicitAny = false` )
+- Updated dependencies
+  - @baseapp-frontend/tsconfig@1.1.3
+
+## 2.7.1
+
+### Patch Changes
+
+- Ignore `yupResolver` type error inside `mfaForm`.
+
 ## 2.7.0
 
 ### Minor Changes
