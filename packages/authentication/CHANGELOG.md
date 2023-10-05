@@ -1,5 +1,17 @@
 # @baseapp-frontend/authentication
 
+## 1.2.0
+
+### Minor Changes
+
+- Replaces `yup` for `zod` as schema validation utility.
+- Add tests to `defaultValues` and `validationSchema` props to ensure that customization works.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@1.3.1
+
 ## 1.1.4
 
 ### Patch Changes

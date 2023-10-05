@@ -1,15 +1,20 @@
-import { YUP_REQUIRED_FIELD } from '@baseapp-frontend/utils'
+import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
-import * as Yup from 'yup'
+import { z } from 'zod'
 
-export const DEFAULT_VALIDATION_SCHEMA = Yup.object().shape({
-  newPassword: Yup.string().required(YUP_REQUIRED_FIELD),
-  confirmNewPassword: Yup.string()
-    .required(YUP_REQUIRED_FIELD)
-    .oneOf([Yup.ref('newPassword')], 'Passwords must match.'),
-})
+import { ResetPasswordForm } from './types'
 
-export const DEFAULT_INITIAL_VALUES = {
+export const DEFAULT_VALIDATION_SCHEMA = z
+  .object({
+    newPassword: z.string().nonempty(ZOD_MESSAGE.required),
+    confirmNewPassword: z.string().nonempty(ZOD_MESSAGE.required),
+  })
+  .refine(({ confirmNewPassword, newPassword }) => newPassword === confirmNewPassword, {
+    message: ZOD_MESSAGE.passwordDoNotMatch,
+    path: ['confirmNewPassword'],
+  })
+
+export const DEFAULT_INITIAL_VALUES: ResetPasswordForm = {
   newPassword: '',
   confirmNewPassword: '',
 }

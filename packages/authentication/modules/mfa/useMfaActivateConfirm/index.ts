@@ -1,6 +1,6 @@
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
@@ -17,7 +17,7 @@ const useMfaActivateConfirm = ({
 }: IUseMfaActivateConfirm) => {
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
   })
   const queryClient = useQueryClient()
 

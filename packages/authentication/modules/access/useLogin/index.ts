@@ -7,10 +7,10 @@ import {
   setFormApiErrors,
 } from '@baseapp-frontend/utils'
 
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
-import { FieldValues, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
@@ -83,7 +83,7 @@ const useLogin = ({
 
   const form = useForm({
     defaultValues,
-    resolver: yupResolver(validationSchema),
+    resolver: zodResolver(validationSchema),
     mode: 'onBlur',
   })
 
@@ -105,9 +105,8 @@ const useLogin = ({
   })
 
   const mfaForm = useForm({
-    // TODO: refactor types
-    defaultValues: CODE_VALIDATION_INITIAL_VALUES as FieldValues,
-    resolver: yupResolver(CODE_VALIDATION_SCHEMA as any),
+    defaultValues: CODE_VALIDATION_INITIAL_VALUES,
+    resolver: zodResolver(CODE_VALIDATION_SCHEMA),
     mode: 'onBlur',
   })
 

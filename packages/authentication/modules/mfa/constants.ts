@@ -1,9 +1,9 @@
-import { YUP_REQUIRED_FIELD } from '@baseapp-frontend/utils'
+import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
-import * as Yup from 'yup'
+import { z } from 'zod'
 
-export const CODE_VALIDATION_SCHEMA = Yup.object().shape({
-  code: Yup.string().required(YUP_REQUIRED_FIELD),
+export const CODE_VALIDATION_SCHEMA = z.object({
+  code: z.string().nonempty(ZOD_MESSAGE.required),
 })
 
 export const CODE_VALIDATION_INITIAL_VALUES = {

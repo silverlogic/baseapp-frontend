@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.1
+
+### Patch Changes
+
+- Add `ZOD_MESSAGE` constant with reusable validation messages.
+
 ## 1.3.0
 
 ### Minor Changes
