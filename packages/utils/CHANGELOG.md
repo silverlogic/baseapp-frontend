@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.2
+
+### Patch Changes
+
+- Update `withController` so it passes a `helperText` props even if there is no `control` props used.
+
 ## 1.3.1
 
 ### Patch Changes

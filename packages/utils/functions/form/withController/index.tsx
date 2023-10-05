@@ -24,7 +24,7 @@ function withController<T>(Component: FC<T>) {
       )
     }
 
-    return <Component name={name} {...(props as T)} />
+    return <Component name={name} helperText={helperText} {...(props as T)} />
   }
 }
 
