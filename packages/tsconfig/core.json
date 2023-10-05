@@ -14,10 +14,14 @@
     "isolatedModules": true,
     "jsx": "react-jsx",
     "incremental": true,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "declaration": true,
     "maxNodeModuleJsDepth": 2,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "react": ["./node_modules/@types/react"],
+      "react-dom": ["./node_modules/@types/react-dom"]
+    }
   },
   "include": ["next-env.d.ts", "src"],
   "exclude": ["node_modules"]

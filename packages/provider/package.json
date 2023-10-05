@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -13,7 +13,8 @@
   "devDependencies": {
     "@baseapp-frontend/config": "*",
     "@baseapp-frontend/tsconfig": "*",
-    "@types/react": "^18.2.12",
+    "@types/react": "^18.2.24",
+    "@types/react-dom": "^18.2.10",
     "typescript": "^5.1.3"
   },
   "dependencies": {

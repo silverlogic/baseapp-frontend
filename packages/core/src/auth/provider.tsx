@@ -46,7 +46,6 @@ export const BaseAppProvider = ({
   const [queryClient] = useState(() => buildQueryClient(queryClientOptions))
   return (
     <QueryClientProvider client={queryClient} contextSharing>
-      {/* @ts-ignore TODO: (BA-1081) investigate 'Hydrate' cannot be used as a JSX component error. */}
       <Hydrate state={pageProps?.dehydratedState}>
         <UserProvider>{children}</UserProvider>
       </Hydrate>

@@ -16,7 +16,7 @@ export default function Auth() {
 
   const mockForSuccessAndLogIn = (e: any) => {
     e.preventDefault()
-    axiosMock.onPost('/login').reply(
+    axiosMock.onPost('/auth/login').reply(
       (_config) =>
         new Promise((resolve, _reject) => {
           setTimeout(() => {
@@ -29,7 +29,7 @@ export default function Auth() {
 
   const mockForErrorAndLogIn = () => {
     axiosMock
-      .onPost('/login')
+      .onPost('/auth/login')
       .reply(400, { email: ['Testing Api Error'], password: ['Wrong Password'] })
     form.handleSubmit()
   }

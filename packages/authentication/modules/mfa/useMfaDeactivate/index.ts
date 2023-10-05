@@ -3,11 +3,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
 import { IUseMfaDeactivate } from './types'
 
-const useMfaDeactivate = ({ options }: IUseMfaDeactivate = {}) => {
+const useMfaDeactivate = ({ options, ApiClass = MfaApi }: IUseMfaDeactivate = {}) => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ method, code }) => MfaApi.deactivate({ method, code }),
+    mutationFn: ({ method, code }) => ApiClass.deactivate({ method, code }),
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)

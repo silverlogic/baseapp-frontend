@@ -1,12 +1,13 @@
 {
   "name": "@baseapp-frontend/tsconfig",
   "description": "Reusable typescript configs.",
-  "version": "1.1.0",
+  "version": "1.1.4",
   "main": "index.js",
   "files": [
     "base.json",
     "core.json",
-    "nextjs.json"
+    "nextjs.json",
+    "test.json"
   ],
   "license": "MIT",
   "repository": {

@@ -1,5 +1,29 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.4
+
+### Patch Changes
+
+- Add `@types/react` and `@types/react-dom` paths.
+
+## 1.1.3
+
+### Patch Changes
+
+- Change `noImplicitAny` to `true`, so it's more consistent with the `baseapp-frontent-template`.
+
+## 1.1.2
+
+### Patch Changes
+
+- Adds `test.json` file.
+
+## 1.1.1
+
+### Patch Changes
+
+- Updates `nextjs.json` configuration and creates `test.json` configuration.
+
 ## 1.1.0
 
 ### Minor Changes

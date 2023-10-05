@@ -41,15 +41,12 @@ In order to use this package you will need to:
     module.exports = require('@baseapp-frontend/test/jest.config.ts')
     ```
 
-In order to test other `@baseapp-frontend`'s packages like `authentication`, you may need to also install these additional dependencies (they're also present in the `@baseapp-frontend/test` dependencies, so make sure to install the same versions):
-- babel-jest
-- jest
-- jest-environment-jsdom
-- ts-jest
-- ts-node
-- babel
+In order to test other `@baseapp-frontend`'s packages like `authentication` or if you are using `@baseapp-frontend/test` outside this monorepo, you may need to also install these additional dependencies (they're also present in the `@baseapp-frontend/test` dependencies, so make sure to install the same versions):
 
-If you are using `@baseapp-frontend/test` outside this monorepo, you might be fine with only installing `@baseapp-frontend/test` package.
+- install dependecies
+```bash
+    yarn add -D babel-jest@^29.4.0 jest@^29.4.0 jest-environment-jsdom@^29.4.0 ts-jest@^29.0.5 ts-node@^10.9.1 @types/jest@^29.5.4 @testing-library/jest-dom@^5.16.5 @testing-library/react@^13.4.0 @testing-library/user-event@^14.4.3
+```
 
 ## **What is in here?**
 - All exported features from '@testing-library/react', '@testing-library/jest-dom' and '@testing-library/user-event'
@@ -63,7 +60,7 @@ import { ComponentWithProviders, axiosMock, renderHook } from '@baseapp-frontend
 
 describe('useLogin', () => {
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/login').reply(200, {
+    axiosMock.onPost('/auth/login').reply(200, {
       token: 'fake cookie',
     })
 
