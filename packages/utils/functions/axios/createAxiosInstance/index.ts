@@ -79,7 +79,6 @@ export const createAxiosInstance = ({
         } catch (refreshError) {
           if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
             eventEmitter.emit(LOGOUT_EVENT)
-            return Promise.resolve()
           }
         }
       }

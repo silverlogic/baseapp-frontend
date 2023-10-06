@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.3
+
+### Patch Changes
+
+- Remove `Promise.resolve()` when the request throws a `401` after the refresh token attempt.
+
 ## 1.3.2
 
 ### Patch Changes
