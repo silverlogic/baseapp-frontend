@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.5.0
+
+### Minor Changes
+
+- Update `@mui/material` and `@mui/icons-material` versions.
+
 ## 1.4.1
 
 ### Patch Changes
