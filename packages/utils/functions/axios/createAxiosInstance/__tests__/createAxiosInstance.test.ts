@@ -78,12 +78,19 @@ describe('createAxiosInstance', () => {
           request: { use },
         },
       },
-    } = createAxiosInstance({ servicesWithoutToken: ['/someUrl'] })
+    } = createAxiosInstance({
+      servicesWithoutToken: [/\/someUrl$/, /\/someUrl\/\d+\/withSomethingInTheMiddle$/],
+    })
     const [[interceptorFn]] = (use as jest.Mock).mock.calls
-    const request = { headers: { Authorization: undefined }, url: '/someUrl' }
-
+    let request = { headers: { Authorization: undefined }, url: '/someUrl' }
     interceptorFn(request)
+    expect(request.headers.Authorization).toBeUndefined()
 
+    request = {
+      headers: { Authorization: undefined },
+      url: '/someUrl/123/withSomethingInTheMiddle',
+    }
+    interceptorFn(request)
     expect(request.headers.Authorization).toBeUndefined()
   })
 

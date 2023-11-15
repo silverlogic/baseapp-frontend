@@ -41,7 +41,7 @@ export const createAxiosInstance = ({
       if (
         request.headers &&
         !request.headers.Authorization &&
-        !servicesWithoutToken.includes(request.url || '')
+        !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
       ) {
         request.headers.Authorization =
           tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
