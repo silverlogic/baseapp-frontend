@@ -47,7 +47,7 @@
     "babel-jest": "^27.4.7",
     "jest": "^27.4.7",
     "jest-environment-jsdom": "^27.4.7",
-    "next": "12.3.4",
+    "next": "13.5.0",
     "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
