@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.4
+
+### Patch Changes
+
+- `servicesWithoutToken` should now be a list of Regex Expressions to match the request url more precisely.
+
 ## 1.3.3
 
 ### Patch Changes
