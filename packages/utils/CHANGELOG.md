@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.5
+
+### Patch Changes
+
+- Add password regex validation and message constants
+
 ## 1.3.4
 
 ### Patch Changes

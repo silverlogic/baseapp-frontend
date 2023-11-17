@@ -98,22 +98,16 @@ describe('useSignUp', () => {
 
     const customDefaultValues = {
       email: 'test@tsl.io',
-      phoneNumber: '12345',
       password: 'fW7q0jwv',
     }
     const customValidationSchema = z.object({
       password: z.string().nonempty(),
-      phoneNumber: z
-        .string()
-        .nonempty()
-        .regex(/^\d{5}$/),
       email: z.string().nonempty().email(),
     })
 
     let hasOnSuccessRan = false
 
-    interface ICustomRegisterRequest
-      extends Pick<IRegisterRequest, 'email' | 'password' | 'phoneNumber'> {}
+    interface ICustomRegisterRequest extends Pick<IRegisterRequest, 'email' | 'password'> {}
 
     const { result } = renderHook(
       () =>
