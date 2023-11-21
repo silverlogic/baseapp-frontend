@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 1.2.1
+
+### Patch Changes
+
+- Remove `acceptConsent` and `phoneNumber` from signup form validations
+- Add password validations for `useSignup`
+- Updated dependencies
+  - @baseapp-frontend/utils@1.3.5
+
 ## 1.2.0
 
 ### Minor Changes

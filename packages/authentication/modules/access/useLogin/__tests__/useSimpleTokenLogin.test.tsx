@@ -48,15 +48,10 @@ describe('useSimpleTokenLogin', () => {
 
     const customDefaultValues = {
       email: 'test@tsl.io',
-      phoneNumber: '12345',
       password: 'fW7q0jwv',
     }
     const customValidationSchema = z.object({
       password: z.string().nonempty(),
-      phoneNumber: z
-        .string()
-        .nonempty()
-        .regex(/^\d{5}$/),
       email: z.string().nonempty().email(),
     })
 

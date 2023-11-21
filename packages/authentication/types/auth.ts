@@ -38,10 +38,8 @@ export interface IResetPasswordRequest {
 export interface IRegisterRequest {
   firstName?: string
   lastName?: string
-  phoneNumber?: string
   email: string
   password: string
-  acceptConsent?: boolean
 }
 
 export interface ICookieName {

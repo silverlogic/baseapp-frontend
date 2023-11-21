@@ -2,6 +2,6 @@ export const ZOD_MESSAGE = {
   required: 'This field is required.',
   email: 'Please provide a properly formatted email address.',
   passwordDoNotMatch: 'Passwords do not match.',
-  phoneNumber: 'Please provide a properly formatted phone number.',
-  mustAcceptTerms: 'Must Accept Terms and Conditions.',
+  password:
+    'Password must be at least 10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
 }
