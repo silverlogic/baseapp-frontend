@@ -5,7 +5,7 @@ import {
   ILoginMfaResponse,
   ILoginSimpleTokenResponse,
   LoginResponse,
-} from '../../../types/auth'
+} from '../types/auth'
 
 export const isLoginMfaResponse = (data: LoginResponse): data is ILoginMfaResponse => {
   const mfaKey: keyof ILoginMfaResponse = 'method'

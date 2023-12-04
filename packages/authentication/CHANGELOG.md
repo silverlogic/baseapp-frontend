@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 1.2.2
+
+### Patch Changes
+
+- Pre Authenticated URL handling
+- Short URL handling
+
 ## 1.2.1
 
 ### Patch Changes

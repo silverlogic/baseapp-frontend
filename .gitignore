@@ -37,3 +37,11 @@ yarn-error.log*
 
 # typescript
 tsconfig.tsbuildinfo
+
+# workspace files are user-specific
+*.sublime-workspace
+**/sitemap*.xml
+**/*.code-workspace
+**/.vscode
+**/routes.json
+.idea/
