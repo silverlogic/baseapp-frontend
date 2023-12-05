@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.6
+
+### Patch Changes
+
+- Allow custom `onChange` and `onBlur` functions to be passed along with a controlled component, without overriding the built-in Controller's functions.
+
 ## 1.3.5
 
 ### Patch Changes
