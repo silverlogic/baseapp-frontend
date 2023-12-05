@@ -1,3 +1,8 @@
 import { FormControl } from '../../../types/form'
 
-export type WithControllerProps<T> = FormControl & T
+type OptionalActions = {
+  onChange?: (value: any) => void
+  onBlur?: () => void
+}
+
+export type WithControllerProps<T> = FormControl & T & OptionalActions
