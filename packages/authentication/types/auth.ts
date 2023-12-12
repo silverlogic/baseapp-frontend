@@ -46,3 +46,9 @@ export interface ICookieName {
   cookieName?: string
   refreshCookieName?: string
 }
+
+export interface IPreAuthRequest {
+  token: string
+}
+
+export type PreAuthResponse = ILoginSimpleTokenResponse | ILoginJWTResponse

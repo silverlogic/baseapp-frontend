@@ -21,11 +21,11 @@ import {
   ILoginRequest,
   ILoginSimpleTokenResponse,
 } from '../../../types/auth'
+import { isJWTResponse, isLoginMfaResponse } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import { IUseLogin } from './types'
-import { isJWTResponse, isLoginMfaResponse } from './utils'
 
 const jwtSuccessHandler = (
   response: ILoginJWTResponse,
