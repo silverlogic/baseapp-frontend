@@ -22,6 +22,7 @@ module.exports = {
     'next.config.js',
     'postcss.config.js',
     'tailwind.config.js',
+    'relay.config.js',
   ],
   extends: [
     'next',

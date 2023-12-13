@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 1.2.3
+
+### Patch Changes
+
+- Add `enableFormApiErrors` option to all the hooks that were using `setFormApiErrors`. It now conditionally sets form errors based on the API response.
+- Add the `mode` option to the `useSignUp` hook.
+- Updated dependencies
+  - @baseapp-frontend/utils@1.3.7
+
 ## 1.2.2
 
 ### Patch Changes

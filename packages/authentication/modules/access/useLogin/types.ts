@@ -15,4 +15,5 @@ export interface IUseLogin extends ICookieName {
   mfaOptions?: UseMutationOptions<LoginResponse, unknown, ILoginMfaRequest, any>
   tokenType?: TokenTypes
   ApiClass?: ApiClass
+  enableFormApiErrors?: boolean
 }

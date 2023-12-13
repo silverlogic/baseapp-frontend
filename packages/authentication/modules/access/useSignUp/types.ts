@@ -11,4 +11,5 @@ export interface IUseSignUp<TRegisterRequest = IRegisterRequest, TRegisterRespon
   defaultValues?: TRegisterRequest
   ApiClass?: ApiClass
   options?: UseMutationOptions<TRegisterResponse, unknown, TRegisterRequest, any>
+  enableFormApiErrors?: boolean
 }

@@ -13,12 +13,14 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
   ApiClass = AuthApi,
-  options,
+  enableFormApiErrors = true,
+  options = {},
 }: IUseSignUp<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues,
     resolver: zodResolver(validationSchema),
+    mode: 'onBlur',
   })
 
   const mutation = useMutation({
@@ -26,7 +28,9 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
-      setFormApiErrors(form, err) // this is important to show backend errors on each specific field
+      if (enableFormApiErrors) {
+        setFormApiErrors(form, err)
+      }
     },
     onSuccess: (response, variables, context) => {
       options?.onSuccess?.(response, variables, context)

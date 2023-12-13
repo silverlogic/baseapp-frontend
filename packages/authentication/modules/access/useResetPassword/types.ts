@@ -16,4 +16,5 @@ export interface IUseResetPassword {
   defaultValues?: ResetPasswordForm
   options?: UseMutationOptions<void, unknown, ResetPasswordForm, any>
   ApiClass?: ApiClass
+  enableFormApiErrors?: boolean
 }

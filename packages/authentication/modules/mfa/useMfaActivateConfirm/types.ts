@@ -12,4 +12,5 @@ export interface IUseMfaActivateConfirm {
   options?: UseMutationOptions<IMfaConfirmationResponse, unknown, IMfaRequest, any>
   ApiClass?: ApiClass
   method: MfaMethod
+  enableFormApiErrors?: boolean
 }

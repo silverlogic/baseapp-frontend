@@ -61,13 +61,14 @@ const useLogin = ({
   cookieName = ACCESS_COOKIE_NAME,
   refreshCookieName = REFRESH_COOKIE_NAME,
   ApiClass = AuthApi,
+  enableFormApiErrors = true,
 }: IUseLogin = {}) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
   const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
 
   /*
-   * Handles login success with the auth token in response
+   * Handles login success  with the auth token in response
    */
   async function handleLoginSuccess(response: ILoginJWTResponse | ILoginSimpleTokenResponse) {
     if (isJWTResponse(tokenType, response)) {
@@ -92,7 +93,9 @@ const useLogin = ({
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
-      setFormApiErrors(form, err)
+      if (enableFormApiErrors) {
+        setFormApiErrors(form, err)
+      }
     },
     onSuccess: async (response, variables, context) => {
       if (isLoginMfaResponse(response)) {
@@ -114,7 +117,9 @@ const useLogin = ({
     ...mfaOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       mfaOptions?.onError?.(err, variables, context)
-      setFormApiErrors(form, err) // this is important to show backend errors on each specific field
+      if (enableFormApiErrors) {
+        setFormApiErrors(form, err)
+      }
     },
     onSuccess: (response, variables, context) => {
       handleLoginSuccess(response)

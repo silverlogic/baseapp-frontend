@@ -13,6 +13,7 @@ const useMfaActivateConfirm = ({
   validationSchema = CODE_VALIDATION_SCHEMA,
   defaultValues = CODE_VALIDATION_INITIAL_VALUES,
   ApiClass = MfaApi,
+  enableFormApiErrors = true,
   options = {},
 }: IUseMfaActivateConfirm) => {
   const form = useForm({
@@ -26,7 +27,9 @@ const useMfaActivateConfirm = ({
     ...options, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
-      setFormApiErrors(form, err) // this is important to show backend errors on each specific field
+      if (enableFormApiErrors) {
+        setFormApiErrors(form, err)
+      }
     },
     onSuccess: (response, variables, context) => {
       options?.onSuccess?.(response, variables, context)

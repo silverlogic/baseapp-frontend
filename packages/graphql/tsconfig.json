@@ -1,0 +1,5 @@
+{
+  "extends": "@baseapp-frontend/tsconfig/core.json",
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx"],
+  "exclude": ["node_modules", "./relay.config.js"]
+}
