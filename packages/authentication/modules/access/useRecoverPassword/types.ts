@@ -11,4 +11,5 @@ export interface IUseRecoverPassword {
   defaultValues?: IForgotPasswordRequest
   options?: UseMutationOptions<void, unknown, IForgotPasswordRequest, any>
   ApiClass?: ApiClass
+  enableFormApiErrors?: boolean
 }

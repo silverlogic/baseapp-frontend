@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.3.7
+
+### Patch Changes
+
+- Refactor `setFormApiErrors` so it only sets the form's errors if the API response is appropriate and if the field matches the form key. 
+
 ## 1.3.6
 
 ### Patch Changes
