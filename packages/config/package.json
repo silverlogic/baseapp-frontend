@@ -1,12 +1,13 @@
 {
   "name": "@baseapp-frontend/config",
-  "description": "Reusable configurations for eslint, prettier and jest.",
-  "version": "2.1.1",
+  "description": "Reusable configurations for eslint, prettier, jest and relay",
+  "version": "2.1.2",
   "main": "index.js",
   "files": [
     ".eslintrc.js",
     "jest.config.js",
-    ".prettierrc.js"
+    ".prettierrc.js",
+    "relay.config.ts"
   ],
   "devDependencies": {
     "@emotion/eslint-plugin": "^11.7.0",
@@ -36,5 +37,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/config/README.md"
 }

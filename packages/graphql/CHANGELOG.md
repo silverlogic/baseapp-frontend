@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.0.1
+
+### Patch Changes
+
+- No longer exports the `relay.config.ts` file.
+
 ## 1.0.0
 
 ### Major Changes
