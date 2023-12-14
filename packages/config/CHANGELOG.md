@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.2
+
+### Patch Changes
+
+- Exports the `relay.config.ts` file.
+
 ## 2.1.1
 
 ### Patch Changes

@@ -1,12 +1,9 @@
 {
   "name": "@baseapp-frontend/graphql",
   "description": "GraphQL configurations and utilities",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
-  "files": [
-    "relay.config.ts"
-  ],
   "scripts": {
     "build": "tsc --build",
     "dev": "tsc --watch",
@@ -49,5 +46,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/graphql/README.md"
 }

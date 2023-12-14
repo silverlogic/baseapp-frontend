@@ -6,17 +6,17 @@ So, everything inside `packages` are meant to be part of the `@baseapp-frontend`
 
 ```
 - /packages
-     -/core
+     -/authentication
      -/tsconfig
 ```
 
-In that case, both `core` and `tsconfig` are unique packages, but they all belong to the `@baseapp-frontend` organization.
+In that case, both `authentication` and `tsconfig` are unique packages, but they all belong to the `@baseapp-frontend` organization.
 
 If one of the apps want to consume any package feature, we could simply add that package as a dependency like that:
 
 ```
   "dependencies": {
-    "@baseapp-frontend/core": "*",
+    "@baseapp-frontend/authentication": "*",
     ...
   },
 ```
@@ -24,7 +24,7 @@ If one of the apps want to consume any package feature, we could simply add that
 And then just import the feature needed:
 
 ```jsx
-import { useUser } from '@baseapp-frontend/core'
+import { useUser } from '@baseapp-frontend/authentication'
 
 export default function Docs() {
   const {user} = useUser()
@@ -40,11 +40,12 @@ export default function Docs() {
 
 ## Apps and Packages
 
-- `docs`: an app to document some packages's features
 - `authentication`: includes authentication modules such as `login`, `signup`, `reset password`, `multifactor authentication` and more.
-- `core`: core of utilities like `auth hooks`, `permisisons system` and `util functions`.
 - `config`: includes reusable configurations for `eslint`, `prettier` and `jest`.
+- `core`: core of utilities like `auth hooks`, `permisisons system` and `util functions`. `[DEPRECATED]`
 - `design-system-mui`: defines our `design system configuration `(e.g. color pallete, typography, spacings, etc). It also shares reusable `components` that make up the design system as a whole.
+- `docs`: an app to document some packages's features.
+- `graphql`: includes `GraphQL`'s configurations and utilities.
 - `provider`: includes provider of different kinds that have "use client" directive on top.
 - `test`: extends `React Testing Library` features and export some util functions, mocks and test configurations.
 - `tsconfig`: reusable `typescript configs`.
@@ -114,47 +115,3 @@ yarn version-packages
 After running that, you might notice version bumps on the package's `version` and an update on the package's `CHANGELOG.md`.
 
 3. By now, we just need to commit & push those files and, after merging the PR, the `packages updates` will be automatically published :)
-
-## Storybook
-
-How to run:
-
-```bash
-yarn storybook
-```
-
-### Paths for stories files
-
-Path for stories file:
-
-```bash
-...components/MyComponentFolder/stories.@(js|jsx|ts|tsx)
-```
-
-### Basic skeleton for a Storybook stories file
-
-```bash
-import type { Meta, StoryObj } from '@storybook/react'
-import { MY_COMPONENT } from 'MY_COMPONENT_PATH'
-
-const meta: Meta<typeof MY_COMPONENT> = {
-  title: 'TITLE_OF_THE_FOLDER_SHOWN_ON_STORYBOOK',
-  component: MY_COMPONENT,
-}
-
-export default meta
-type Story = StoryObj<typeof MY_COMPONENT>
-
-export const NAME_OF_COMPONENT_TO_BE_SHOWN_ON_STORYBOOK: Story = {
-  args: {
-    DEFAULT_PROPS_FOR_COMPONENT for example:
-    label: 'My Default Label'
-  },
-}
-```
-
-## Demo
-
-Example on how it's being used on this app:
-
-https://www.loom.com/share/5ab78c9cae6b4361a1381bf974e0eb67
