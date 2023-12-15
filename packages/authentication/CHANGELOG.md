@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 1.2.4
+
+### Patch Changes
+
+- Creates a `getUser` function that allows to get the user token on the server side and can be used by both Client and Server Components.
+- Deprecates the `useUser` hook.
+- Updated dependencies
+  - @baseapp-frontend/utils@1.4.0
+
 ## 1.2.3
 
 ### Patch Changes

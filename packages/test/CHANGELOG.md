@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 1.1.2
+
+### Patch Changes
+
+- Alters the `CookiesGetByNameFn` type.
+
 ## 1.1.1
 
 ### Patch Changes

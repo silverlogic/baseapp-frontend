@@ -6,6 +6,10 @@ import Cookies from 'js-cookie'
 import { IUser } from '../../../types/user'
 import { IUseUser } from './types'
 
+/**
+ * @deprecated
+ * Prefer using the `getUser` function instead.
+ */
 const useUser = <TUser extends Partial<IUser> & Partial<IJWTContent>>({
   cookieName = ACCESS_COOKIE_NAME,
 }: IUseUser = {}): TUser | null => {

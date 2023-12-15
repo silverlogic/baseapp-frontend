@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
-  "version": "1.3.7",
+  "version": "1.4.0",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -17,6 +17,7 @@
     "js-cookie": "^3.0.5",
     "jwt-decode": "^3.1.2",
     "lodash": "^4.17.21",
+    "next": "^14.0.4",
     "qs": "^6.11.2",
     "react": "^18.2.0",
     "react-hook-form": "^7.34.2"
@@ -49,5 +50,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/utils/README.md"
 }
