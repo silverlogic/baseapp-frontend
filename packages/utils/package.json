@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -20,7 +20,8 @@
     "next": "^14.0.4",
     "qs": "^6.11.2",
     "react": "^18.2.0",
-    "react-hook-form": "^7.34.2"
+    "react-hook-form": "^7.34.2",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "*",

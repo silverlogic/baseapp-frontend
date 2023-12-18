@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.4.1
+
+### Patch Changes
+
+- Creates the `isUserTokenValid` function.
+
 ## 1.4.0
 
 ### Minor Changes
