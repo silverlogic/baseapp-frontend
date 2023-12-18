@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
+import { getToken } from '@baseapp-frontend/utils/functions/token'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
@@ -30,20 +30,12 @@ type RequestVariables = {
   }
 }
 
-const getToken = async () => {
-  if (typeof window === typeof undefined) {
-    const { cookies: serverCookies } = await import('next/headers')
-    return serverCookies().get(ACCESS_COOKIE_NAME)?.value
-  }
-  return Cookies.get(ACCESS_COOKIE_NAME)
-}
-
-const getFetchOptions = async (
+const getFetchOptions = (
   request: RequestParameters,
   variables: Variables,
   uploadables?: UploadableMap | null,
 ) => {
-  const authToken = await getToken()
+  const authToken = getToken()
   const requestVariables: RequestVariables = {
     method: 'POST',
     headers: {
@@ -83,7 +75,7 @@ export async function httpFetch(
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
-  const fetchOptions = await getFetchOptions(request, variables, uploadables)
+  const fetchOptions = getFetchOptions(request, variables, uploadables)
 
   const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT as string, fetchOptions)
 
