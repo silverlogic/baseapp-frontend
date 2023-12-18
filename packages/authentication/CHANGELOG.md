@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 1.2.5
+
+### Patch Changes
+
+- Add `emitLogoutEvent` option to the `useLogout` hook. By default, it will emit the `LOGOUT_EVENT`. That's useful when you have subscribed to that event and want to execute some action after the event is triggered.
+- Updated dependencies
+  - @baseapp-frontend/utils@1.4.2
+
 ## 1.2.4
 
 ### Patch Changes

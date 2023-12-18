@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 1.4.2
+
+### Patch Changes
+
+- Add `'./functions/events'` barrel file.
+
 ## 1.4.1
 
 ### Patch Changes

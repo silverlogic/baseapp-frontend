@@ -8,6 +8,7 @@ export * from './constants/zod'
 
 export * from './functions/api'
 export * from './functions/axios'
+export * from './functions/events'
 export * from './functions/form'
 export * from './functions/string'
 export * from './functions/token'

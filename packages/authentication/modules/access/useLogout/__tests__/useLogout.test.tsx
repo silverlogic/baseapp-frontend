@@ -1,4 +1,5 @@
 import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
+import { LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
 
 import Cookies from 'js-cookie'
 
@@ -39,5 +40,16 @@ describe('useLogout hook', () => {
     result.current.logout()
 
     expect(mockOnLogout).toHaveBeenCalled()
+  })
+
+  it('should emit the logout event if the flag emitLogoutEvent is set to true', () => {
+    const emitSpy = jest.spyOn(eventEmitter, 'emit')
+    const { result } = renderHook(() => useLogout({ emitLogoutEvent: true }), {
+      wrapper: ComponentWithProviders,
+    })
+
+    result.current.logout()
+
+    expect(emitSpy).toHaveBeenCalledWith(LOGOUT_EVENT)
   })
 })
