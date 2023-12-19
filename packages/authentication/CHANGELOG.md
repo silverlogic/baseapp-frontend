@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 1.2.6
+
+### Patch Changes
+
+- Remove the import from barrel files inside the `getUser` function.
+- This has become necessary because we are not eliminating not used code that comes with the barrel file, and functions like `getUser` can be executed in environments that do not support some features that are being exported in the same barrel file, like `useDebounce`.
+
 ## 1.2.5
 
 ### Patch Changes

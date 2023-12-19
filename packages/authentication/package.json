@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/authentication",
   "description": "Authentication modules.",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
