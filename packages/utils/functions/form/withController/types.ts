@@ -3,8 +3,8 @@ import { ChangeEventHandler, FocusEventHandler } from 'react'
 import { FormControl } from '../../../types/form'
 
 type OptionalActions = {
-  onChange?: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
-  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  onChange?: (value: any) => void | ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  onBlur?: (value?: any) => void | FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
 }
 
 export type WithControllerProps<T> = FormControl & T & OptionalActions
