@@ -1,4 +1,4 @@
-import { ChangeEvent, FC } from 'react'
+import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 
 import { Controller } from 'react-hook-form'
 
@@ -13,13 +13,17 @@ function withController<T>(Component: FC<T>) {
           name={name}
           control={control}
           render={({ field, fieldState }) => {
-            const handleOnChange = (event: ChangeEvent) => {
+            const handleOnChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
+              event,
+            ) => {
               field.onChange(event)
               onChange?.(event)
             }
-            const handleOnBlur = () => {
+            const handleOnBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
+              event,
+            ) => {
               field.onBlur()
-              onBlur?.()
+              onBlur?.(event)
             }
 
             return (
