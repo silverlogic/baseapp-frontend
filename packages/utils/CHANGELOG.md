@@ -1,10 +1,17 @@
 # @baseapp-frontend/utils
 
+## 1.4.4
+
+### Patch Changes
+
+- Make `OptionalActions` types inside `withController` more flexible.
+
+
 ## 1.4.3
 
 ### Patch Changes
 
-- Improve `OptionalActions` types inside `withController`
+- Improve `OptionalActions` types inside `withController`.
 
 ## 1.4.2
 
