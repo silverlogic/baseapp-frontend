@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.0.3
+
+### Patch Changes
+
+- Add Invalidate Relay Store hook
+
 ## 1.0.2
 
 ### Patch Changes
