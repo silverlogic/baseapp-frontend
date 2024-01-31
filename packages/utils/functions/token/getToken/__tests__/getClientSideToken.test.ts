@@ -20,10 +20,10 @@ describe('getToken function on the client', () => {
     jest.clearAllMocks()
   })
 
-  it('retrieves a client-side cookie', () => {
+  it('retrieves a client-side cookie', async () => {
     ;(ClientCookies.get as CookiesGetByNameFn) = jest.fn(() => clientCookieValue)
 
-    expect(getToken(cookieName)).toBe(clientCookieValue)
+    expect(await getToken(cookieName)).toBe(clientCookieValue)
     expect(ClientCookies.get).toHaveBeenCalledWith(cookieName)
   })
 })

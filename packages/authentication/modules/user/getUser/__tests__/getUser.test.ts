@@ -6,18 +6,18 @@ import getUser from '../index'
 import jwt from './fixtures/jwt.json'
 
 describe('getUser', () => {
-  it('should return the user from the JWT cookie', () => {
+  it('should return the user from the JWT cookie', async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => jwt.token)
-    const user = getUser()
+    const user = await getUser()
 
     expect(user?.email).toBe('user@company.com')
     expect(user?.firstName).toBe('John')
     expect(user?.lastName).toBe('Doe')
   })
 
-  it('should return null if the JWT cookie is not set', () => {
+  it('should return null if the JWT cookie is not set', async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => undefined)
-    const user = getUser()
+    const user = await getUser()
 
     expect(user).toBeNull()
   })

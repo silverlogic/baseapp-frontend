@@ -1,5 +1,17 @@
 # @baseapp-frontend/authentication
 
+## 2.0.0
+
+### Major Changes
+
+- The getUser function is async now, handle accordingly.
+- Some types were added to make testing easier.
+
+### Patch Changes
+
+- Updated dependencies [2300f2d]
+  - @baseapp-frontend/utils@2.0.0
+
 ## 1.2.6
 
 ### Patch Changes
