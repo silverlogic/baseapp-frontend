@@ -1,11 +1,19 @@
 # @baseapp-frontend/utils
 
+## 2.0.0
+
+### Major Changes
+
+- The axios instance will try to refresh the access token on the request interceptor if the JWT token flow is used, enabling the flow to be used with file uploads.
+- The getToken function is async now, handle accordingly.
+- The refreshAccessToken function was moved to its own file and it won't try to make the request again on a 401 error.
+- Some 'use client' directives were added to allow imports on server-side components.
+
 ## 1.4.4
 
 ### Patch Changes
 
 - Make `OptionalActions` types inside `withController` more flexible.
-
 
 ## 1.4.3
 

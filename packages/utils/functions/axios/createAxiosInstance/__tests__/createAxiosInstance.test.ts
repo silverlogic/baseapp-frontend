@@ -17,6 +17,12 @@ jest.mock('js-cookie', () => ({
   ...jest.requireActual('js-cookie'),
   get: () => 'someAuthToken',
 }))
+jest.mock('../../../token/decodeJWT', () => ({
+  decodeJWT: () => ({ exp: 1234567890 }),
+}))
+jest.mock('../../../token/isUserTokenValid', () => ({
+  isUserTokenValid: () => true,
+}))
 
 describe('createAxiosInstance', () => {
   afterEach(() => {

@@ -4,15 +4,21 @@ import Cookies from 'js-cookie'
 
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../../constants/cookie'
 import { CookieType } from '../../../../types/cookie'
+import { simpleAxios as refreshTokenAxios } from '../../../token'
+import { isUserTokenValid } from '../../../token/isUserTokenValid'
 import { axios } from '../index'
 
 jest.mock('js-cookie')
+jest.mock('../../../token/decodeJWT')
+jest.mock('../../../token/isUserTokenValid')
 
 describe('refreshAccessToken', () => {
   // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
   const axiosMock = new MockAdapter(axios)
+  // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
+  const refreshTokenAxiosMock = new MockAdapter(refreshTokenAxios)
 
-  it('should refresh the token if token type is jwt and endpoint returns 401 error ', async () => {
+  it('should refresh the token if token type is jwt and the token is expired ', async () => {
     const cookiesFakeStore = {
       [ACCESS_COOKIE_NAME]: 'accessToken',
       [REFRESH_COOKIE_NAME]: 'refreshToken',
@@ -26,27 +32,25 @@ describe('refreshAccessToken', () => {
     ;(Cookies.get as jest.Mock).mockImplementation(
       (cookieName: CookieType) => cookiesFakeStore[cookieName],
     )
+    ;(isUserTokenValid as jest.Mock).mockImplementation(() => false)
 
-    let timesCalled = 0
-    axiosMock.onPost('/test-endpoint').reply(() => {
-      timesCalled += 1
-      if (timesCalled === 1) {
-        return [401, {}]
-      }
-      return [200, {}]
-    })
-    axiosMock
+    axiosMock.onPost('/test-endpoint').reply(200, {})
+    refreshTokenAxiosMock
       .onPost('/auth/refresh')
       .reply(200, { access: 'newAccessToken', refresh: 'newRefreshToken' })
 
     await axios.post('/test-endpoint')
 
-    expect(timesCalled).toBe(2)
+    expect(axiosMock.history.post.length).toBe(1)
+    expect(refreshTokenAxiosMock.history.post.length).toBe(1)
     expect(Cookies.set).toBeCalledTimes(1)
     expect(cookiesFakeStore[ACCESS_COOKIE_NAME]).toBe('newAccessToken')
   })
 
   it('should remove the token cookies if the refresh endpoint fails', async () => {
+    axiosMock.resetHistory()
+    refreshTokenAxiosMock.resetHistory()
+
     const cookiesFakeStore = {
       [ACCESS_COOKIE_NAME]: 'accessToken',
       [REFRESH_COOKIE_NAME]: 'refreshToken',
@@ -59,10 +63,11 @@ describe('refreshAccessToken', () => {
     })
 
     axiosMock.onPost('/test-endpoint').reply(401, {})
-    axiosMock.onPost('/auth/refresh').reply(401, {})
+    refreshTokenAxiosMock.onPost('/auth/refresh').reply(401, {})
 
     await expect(axios.post('/test-endpoint')).rejects.toThrow()
 
+    expect(refreshTokenAxiosMock.history.post.length).toBe(1)
     expect(Cookies.remove).toBeCalledTimes(2)
     expect(cookiesFakeStore[ACCESS_COOKIE_NAME]).toBeUndefined()
     expect(cookiesFakeStore[REFRESH_COOKIE_NAME]).toBeUndefined()

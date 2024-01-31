@@ -1,3 +1,5 @@
+'use client'
+
 import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 
 import { Controller } from 'react-hook-form'
