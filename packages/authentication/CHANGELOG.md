@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 2.0.1
+
+### Patch Changes
+
+- Creates `withUser` HOC and `ComponentWithUser` type. `withUser`'s JSDoc contains a more detailed information about its usage.
+
 ## 2.0.0
 
 ### Major Changes
