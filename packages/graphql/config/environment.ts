@@ -30,12 +30,12 @@ type RequestVariables = {
   }
 }
 
-const getFetchOptions = (
+const getFetchOptions = async (
   request: RequestParameters,
   variables: Variables,
   uploadables?: UploadableMap | null,
 ) => {
-  const authToken = getToken()
+  const authToken = await getToken()
   const requestVariables: RequestVariables = {
     method: 'POST',
     headers: {
@@ -75,7 +75,7 @@ export async function httpFetch(
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
-  const fetchOptions = getFetchOptions(request, variables, uploadables)
+  const fetchOptions = await getFetchOptions(request, variables, uploadables)
 
   const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT as string, fetchOptions)
 
