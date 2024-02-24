@@ -4,7 +4,6 @@ import { getToken } from '@baseapp-frontend/utils/functions/token'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
-import Cookies from 'js-cookie'
 import {
   CacheConfig,
   Environment,
@@ -98,7 +97,7 @@ export async function httpFetch(
 const wsClient = createClient({
   url: process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
   connectionParams: async () => {
-    const Authorization = Cookies.get('Authorization')
+    const Authorization = await getToken()
     if (!Authorization) return {}
     return { Authorization }
   },
