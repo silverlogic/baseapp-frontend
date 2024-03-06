@@ -1,3 +1,3 @@
-* `<package_name>` package update - `v<package_version>`
-  - <changelog_info>
-  - <changelog_info>
+* `__package_name__` package update - `v __package_version__`
+  - __changelog_info__
+  - __changelog_info__
