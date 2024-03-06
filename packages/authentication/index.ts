@@ -8,26 +8,6 @@ export * from './services/mfa'
 export { default as UserApi } from './services/user'
 export * from './services/user'
 
-export type {
-  ILoginMfaRequest,
-  ILoginMfaResponse,
-  ILoginSimpleTokenResponse,
-  ILoginRequest,
-  LoginResponse,
-  IForgotPasswordRequest,
-  IResetPasswordRequest,
-  IRegisterRequest,
-  ICookieName,
-} from './types/auth'
-export type {
-  IMfaActivationResponse,
-  IMfaActiveMethodResponse,
-  IMfaConfigurationResponse,
-  IMfaConfirmationResponse,
-  IMfaDeactivateRequest,
-  IMfaRequest,
-  MfaActivationEmailRequest,
-  MfaActivationPhoneRequest,
-  MfaMethod,
-} from './types/mfa'
-export type { IUser } from './types/user'
+export type * from './types/auth'
+export type * from './types/mfa'
+export type * from './types/user'

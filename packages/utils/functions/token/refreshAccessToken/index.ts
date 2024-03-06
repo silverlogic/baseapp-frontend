@@ -1,6 +1,7 @@
 import _axios from 'axios'
 import Cookies from 'js-cookie'
 
+import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
 import { IJWTResponse } from '../../../types/jwt'
 
 const REFRESH_TOKEN_URL = '/auth/refresh'
@@ -10,7 +11,10 @@ export const simpleAxios = _axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
 })
 
-export const refreshAccessToken = async (cookieName: string, refreshCookieName: string) => {
+export const refreshAccessToken = async (
+  cookieName = ACCESS_COOKIE_NAME,
+  refreshCookieName = REFRESH_COOKIE_NAME,
+) => {
   const refreshToken = Cookies.get(refreshCookieName)
 
   if (!refreshToken) {

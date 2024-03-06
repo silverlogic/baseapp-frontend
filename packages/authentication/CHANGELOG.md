@@ -1,5 +1,18 @@
 # @baseapp-frontend/authentication
 
+## 2.1.0
+
+### Minor Changes
+
+- Create `useJWTUser` and `useUpdateUser` for user management in the client side using JWT.
+- Rename the constant `PRE_AUTH_API_KEY` to `AUTH_API_KEY`.
+- Add `phoneNumber` field to the `IUser` interface.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@2.1.0
+
 ## 2.0.1
 
 ### Patch Changes

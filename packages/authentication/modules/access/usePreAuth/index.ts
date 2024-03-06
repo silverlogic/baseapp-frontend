@@ -3,7 +3,7 @@ import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME, TokenTypes } from '@baseapp-fr
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import AuthApi, { PRE_AUTH_API_KEY } from '../../../services/auth'
+import AuthApi, { AUTH_API_KEY } from '../../../services/auth'
 import { USER_API_KEY } from '../../../services/user'
 import { isJWTResponse } from '../../../utils/login'
 import { useSimpleTokenUser } from '../../user'
@@ -25,7 +25,7 @@ const usePreAuth = ({
     useErrorBoundary: false,
     retry: false,
     ...queryOptions, // needs to be placed bellow all overridable options
-    queryKey: PRE_AUTH_API_KEY.preAuth(token, tokenType),
+    queryKey: AUTH_API_KEY.preAuth(token, tokenType),
     queryFn: () => ApiClass.preAuth({ token }, tokenType),
     onSuccess: (response) => {
       if (isJWTResponse(tokenType, response)) {
