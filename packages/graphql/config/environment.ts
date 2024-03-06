@@ -4,7 +4,6 @@ import { getToken } from '@baseapp-frontend/utils/functions/token'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
-import Cookies from 'js-cookie'
 import {
   CacheConfig,
   Environment,
@@ -30,12 +29,12 @@ type RequestVariables = {
   }
 }
 
-const getFetchOptions = (
+const getFetchOptions = async (
   request: RequestParameters,
   variables: Variables,
   uploadables?: UploadableMap | null,
 ) => {
-  const authToken = getToken()
+  const authToken = await getToken()
   const requestVariables: RequestVariables = {
     method: 'POST',
     headers: {
@@ -75,7 +74,7 @@ export async function httpFetch(
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
-  const fetchOptions = getFetchOptions(request, variables, uploadables)
+  const fetchOptions = await getFetchOptions(request, variables, uploadables)
 
   const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT as string, fetchOptions)
 
@@ -98,7 +97,7 @@ export async function httpFetch(
 const wsClient = createClient({
   url: process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
   connectionParams: async () => {
-    const Authorization = Cookies.get('Authorization')
+    const Authorization = await getToken()
     if (!Authorization) return {}
     return { Authorization }
   },

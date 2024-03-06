@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.0.4
+
+### Patch Changes
+
+- 4ee7df9: fix graphql token is async
+
 ## 1.0.3
 
 ### Patch Changes
