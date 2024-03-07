@@ -1,4 +1,4 @@
-import { axios, axiosForFiles } from '@baseapp-frontend/utils'
+import { axios } from '@baseapp-frontend/utils'
 
 import { IUser, UserUpdateParams } from '../types/user'
 
@@ -11,7 +11,7 @@ export default class UserApi {
     userId,
     data,
   }: UserUpdateParams<TUser>): Promise<TUser> {
-    return axiosForFiles.patch(`/users/${userId}`, data)
+    return axios.patch(`/users/${userId}`, data)
   }
 }
 
