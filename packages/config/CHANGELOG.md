@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.3
+
+### Patch Changes
+
+- Exclude `./app-templates` folder from the relay compiler.
+
 ## 2.1.2
 
 ### Patch Changes
