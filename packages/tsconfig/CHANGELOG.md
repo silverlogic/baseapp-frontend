@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 1.1.5
+
+### Patch Changes
+
+- Upgrade to ES6
+
 ## 1.1.4
 
 ### Patch Changes
