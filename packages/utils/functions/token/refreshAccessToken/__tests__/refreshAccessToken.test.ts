@@ -2,11 +2,11 @@ import { MockAdapter } from '@baseapp-frontend/test'
 
 import Cookies from 'js-cookie'
 
+import { simpleAxios as refreshTokenAxios } from '..'
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../../constants/cookie'
 import { CookieType } from '../../../../types/cookie'
-import { simpleAxios as refreshTokenAxios } from '../../../token'
-import { isUserTokenValid } from '../../../token/isUserTokenValid'
-import { axios } from '../index'
+import { axios } from '../../../axios'
+import { isUserTokenValid } from '../../isUserTokenValid'
 
 jest.mock('js-cookie')
 jest.mock('../../../token/decodeJWT')

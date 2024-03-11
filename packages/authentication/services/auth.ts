@@ -40,8 +40,8 @@ export default class AuthApi {
   }
 }
 
-export const PRE_AUTH_API_KEY = {
+export const AUTH_API_KEY = {
   default: ['auth'],
   preAuth: (token: string, tokenType: TokenTypes) =>
-    [...PRE_AUTH_API_KEY.default, 'preAuth', token, tokenType] as const,
+    [...AUTH_API_KEY.default, 'preAuth', token, tokenType] as const,
 }

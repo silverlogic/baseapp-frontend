@@ -11,4 +11,12 @@ export interface IUser {
   }
   firstName: string
   lastName: string
+  phoneNumber: string
+}
+
+export interface UserUpdateParams<TUser extends Partial<IUser>> {
+  userId: TUser['id']
+  data: Partial<Omit<TUser, 'avatar' | 'id'>> & {
+    avatar?: File | string
+  }
 }

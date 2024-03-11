@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 2.1.0
+
+### Minor Changes
+
+- Append data in a `FormData` instance when using an axios instance created by `createAxiosInstance` setting `file` and `useFormData` options to `true`. This will be the default behavior when using `axiosForFiles`.
+- Create `filterDirtyValues`, `getInitialValues` and `toBase64` util functions.
+- Add default parameters to the `refreshAccessToken` function.
+
 ## 2.0.0
 
 ### Major Changes

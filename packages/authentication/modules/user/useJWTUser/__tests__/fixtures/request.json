@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "email": "aa@tsl.io",
+  "is_email_verified": false,
+  "new_email": "",
+  "is_new_email_confirmed": false,
+  "referral_code": "",
+  "avatar": {
+    "full_size": "/media/user-avatars/5/6/1/544ca406ae11bac5c49759a2407fdcbe.png",
+    "small": "/media/user-avatars/5/6/1/544ca406ae11bac5c49759a2407fdcbe.png"
+  },
+  "first_name": "aa",
+  "last_name": "Test",
+  "phone_number": "+14073535656",
+  "exp": 1601546400
+}

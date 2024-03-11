@@ -113,4 +113,52 @@ describe('createAxiosInstance', () => {
     eject(requestInterceptorId)
     expect(eject).toBeCalledWith(requestInterceptorId)
   })
+
+  it('should transform request.data to FormData when file is true and useFormData is true', () => {
+    const has = jest
+      .fn()
+      .mockImplementation(
+        (key) => key === 'some_file' || key === 'some_object' || key === 'simple_key',
+      )
+
+    // @ts-ignore
+    global.FormData = class CustomFormData {
+      entries = jest.fn()
+
+      append = jest.fn()
+
+      has = has
+    }
+
+    const testFile = new File(['test'], 'test.txt', { type: 'text/plain' })
+    const requestData = {
+      someFile: testFile,
+      someObject: { nestedKey: 'nestedValue' },
+      simpleKey: 'simpleValue',
+    }
+    const mockRequest = {
+      data: requestData,
+      headers: {},
+    }
+
+    const {
+      axios: {
+        interceptors: {
+          request: { use },
+        },
+      },
+    } = createAxiosInstance({ file: true, useFormData: true })
+    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const request = mockRequest
+
+    interceptorFn(request)
+
+    expect(request.data instanceof FormData).toBeTruthy()
+    // @ts-ignore
+    expect(request.data.has('some_file')).toBeTruthy()
+    // @ts-ignore
+    expect(request.data.has('some_object')).toBeTruthy()
+    // @ts-ignore
+    expect(request.data.has('simple_key')).toBeTruthy()
+  })
 })

@@ -18,6 +18,7 @@ export const createAxiosInstance = ({
   refreshCookieName = REFRESH_COOKIE_NAME,
   servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
   tokenType: instanceTokenType = TokenTypes.jwt,
+  useFormData = true,
 } = {}) => {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -63,6 +64,21 @@ export const createAxiosInstance = ({
     if (request.data && !file) {
       request.data = JSON.stringify(humps.decamelizeKeys(request.data))
     }
+    if (request.data && file && useFormData) {
+      const formData = new FormData()
+      Object.entries(request.data).forEach(([key, value]) => {
+        const decamelizedKey = humps.decamelize(key)
+        if (!value) return
+        if (value instanceof File) {
+          formData.append(decamelizedKey, value)
+        } else if (typeof value === 'object') {
+          formData.append(decamelizedKey, JSON.stringify(value))
+        } else {
+          formData.append(decamelizedKey, value?.toString())
+        }
+      })
+      request.data = formData
+    }
 
     if (request.params) {
       request.params = humps.decamelizeKeys(request.params)
@@ -79,7 +95,10 @@ export const createAxiosInstance = ({
       return returnData && response.data ? response.data : response
     },
     async (error) => {
-      if (error.response.data && error.response.headers?.['content-type'] === 'application/json') {
+      if (
+        error.response?.data &&
+        error.response?.headers?.['content-type'] === 'application/json'
+      ) {
         const newError = { response: { data: {} } }
         newError.response.data = humps.camelizeKeys(error.response.data)
       }
