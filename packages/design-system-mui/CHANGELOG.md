@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 1.5.1
+
+### Patch Changes
+
+- Ignore TS errors, probably caused by the `compilerOptions` update made by the `tsconfig v1.1.5` update.
+
 ## 1.5.0
 
 ### Minor Changes

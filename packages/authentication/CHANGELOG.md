@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 2.1.1
+
+### Patch Changes
+
+- Export variables from `services/auth`
+
 ## 2.1.0
 
 ### Minor Changes

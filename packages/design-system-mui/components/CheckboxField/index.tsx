@@ -27,6 +27,7 @@ const CheckboxField = <TForm extends FieldValues>({
   FormControlProps,
 }: ICheckboxFieldProps<TForm>) => {
   const formError = form?.formState?.errors?.[name]?.message
+  // @ts-ignore TODO: (BA-1081) investigate react-hook-form types
   const innerShowError = (formError && form?.formState?.touchedFields?.[name]) as boolean
 
   return (
