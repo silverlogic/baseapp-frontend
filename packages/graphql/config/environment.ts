@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
-import { getToken } from '@baseapp-frontend/utils/functions/token'
+import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
+import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
@@ -20,26 +21,17 @@ import {
 
 const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
 
-type RequestVariables = {
-  method: string
-  headers: {
-    Accept: string
-    'Content-Type'?: string
-    Authorization: string
-  }
+type GetFetchOptions = {
+  request: RequestParameters
+  variables: Variables
+  uploadables?: UploadableMap | null
 }
 
-const getFetchOptions = async (
-  request: RequestParameters,
-  variables: Variables,
-  uploadables?: UploadableMap | null,
-) => {
-  const authToken = await getToken()
-  const requestVariables: RequestVariables = {
+const getFetchOptions = ({ request, variables, uploadables }: GetFetchOptions) => {
+  const requestVariables = {
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      Authorization: authToken ? `Token ${authToken}` : '',
     },
   }
 
@@ -56,15 +48,14 @@ const getFetchOptions = async (
     }
   }
 
-  requestVariables.headers['Content-Type'] = 'application/json'
   return {
     ...requestVariables,
-    body: JSON.stringify({
+    body: {
       query: request.text,
       operationName: request.name,
       operationKind: request.operationKind,
       variables,
-    }),
+    },
   }
 }
 
@@ -74,24 +65,29 @@ export async function httpFetch(
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
-  const fetchOptions = await getFetchOptions(request, variables, uploadables)
-
-  const response = await fetch(process.env.NEXT_PUBLIC_RELAY_ENDPOINT as string, fetchOptions)
-
-  const json = await response.json()
+  const fetchOptions = getFetchOptions({ request, variables, uploadables })
+  const response = await baseAppFetch('', {
+    baseUrl: process.env.NEXT_PUBLIC_RELAY_ENDPOINT,
+    decamelizeRequestBodyKeys: false,
+    decamelizeRequestParamsKeys: false,
+    camelizeResponseDataKeys: false,
+    stringifyBody: !uploadables,
+    setContentType: !uploadables,
+    ...fetchOptions,
+  })
 
   // GraphQL returns exceptions (for example, a missing required variable) in the "errors"
   // property of the response. If any exceptions occurred when processing the request,
   // throw an error to indicate to the developer what went wrong.
-  if (Array.isArray(json.errors)) {
+  if (Array.isArray(response.errors)) {
     throw new Error(
       `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
         variables,
-      )}': ${JSON.stringify(json.errors)}`,
+      )}': ${JSON.stringify(response.errors)}`,
     )
   }
 
-  return json
+  return response
 }
 
 const wsClient = createClient({

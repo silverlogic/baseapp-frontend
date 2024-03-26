@@ -1,5 +1,16 @@
 # @baseapp-frontend/graphql
 
+## 1.1.0
+
+### Minor Changes
+
+- `httpFetch` function now uses the `baseAppFetch` as its fetch function.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@2.2.0
+
 ## 1.0.4
 
 ### Patch Changes

@@ -1,6 +1,5 @@
 {
   "extends": "@baseapp-frontend/tsconfig/core.json",
-
   "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.js", "*.jsx", "index.d.ts"],
   "exclude": ["node_modules"]
 }
