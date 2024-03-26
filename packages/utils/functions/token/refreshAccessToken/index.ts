@@ -1,38 +1,23 @@
-import _axios from 'axios'
 import Cookies from 'js-cookie'
 
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
-import { IJWTResponse } from '../../../types/jwt'
-
-const REFRESH_TOKEN_URL = '/auth/refresh'
-
-// We create an isolated axios instance to skip the interceptors
-export const simpleAxios = _axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-})
+import { getAccessToken } from '../getAccessToken'
+import { getToken } from '../getToken'
 
 export const refreshAccessToken = async (
   cookieName = ACCESS_COOKIE_NAME,
   refreshCookieName = REFRESH_COOKIE_NAME,
 ) => {
-  const refreshToken = Cookies.get(refreshCookieName)
-
-  if (!refreshToken) {
-    return Promise.reject(new Error('No refresh token'))
-  }
-
   try {
-    const responseData = (
-      await simpleAxios.post(REFRESH_TOKEN_URL, {
-        refresh: refreshToken,
-      })
-    ).data as IJWTResponse
+    const refreshToken = (await getToken(refreshCookieName)) || ''
 
-    Cookies.set(cookieName, responseData.access, {
+    const accessToken = await getAccessToken(refreshToken)
+
+    Cookies.set(cookieName, accessToken, {
       secure: process.env.NODE_ENV === 'production',
     })
 
-    return responseData.access
+    return accessToken
   } catch (error) {
     Cookies.remove(cookieName)
     Cookies.remove(refreshCookieName)

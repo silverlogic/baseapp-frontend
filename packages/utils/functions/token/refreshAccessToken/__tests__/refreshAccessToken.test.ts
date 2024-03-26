@@ -1,75 +1,64 @@
-import { MockAdapter } from '@baseapp-frontend/test'
-
 import Cookies from 'js-cookie'
 
-import { simpleAxios as refreshTokenAxios } from '..'
+import { refreshAccessToken } from '..'
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../../constants/cookie'
-import { CookieType } from '../../../../types/cookie'
-import { axios } from '../../../axios'
-import { isUserTokenValid } from '../../isUserTokenValid'
+import { getAccessToken } from '../../getAccessToken'
+import { getToken } from '../../getToken'
 
-jest.mock('js-cookie')
-jest.mock('../../../token/decodeJWT')
-jest.mock('../../../token/isUserTokenValid')
+jest.mock('../../getAccessToken')
+jest.mock('../../getToken')
+jest.mock('js-cookie', () => ({
+  set: jest.fn(),
+  remove: jest.fn(),
+}))
 
 describe('refreshAccessToken', () => {
-  // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-  const axiosMock = new MockAdapter(axios)
-  // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-  const refreshTokenAxiosMock = new MockAdapter(refreshTokenAxios)
-
-  it('should refresh the token if token type is jwt and the token is expired ', async () => {
-    const cookiesFakeStore = {
-      [ACCESS_COOKIE_NAME]: 'accessToken',
-      [REFRESH_COOKIE_NAME]: 'refreshToken',
-    }
-    ;(Cookies.set as jest.Mock).mockImplementation(
-      (cookieName: CookieType, cookieValue: string) => {
-        cookiesFakeStore[cookieName] = cookieValue
-        return cookieValue
-      },
-    )
-    ;(Cookies.get as jest.Mock).mockImplementation(
-      (cookieName: CookieType) => cookiesFakeStore[cookieName],
-    )
-    ;(isUserTokenValid as jest.Mock).mockImplementation(() => false)
-
-    axiosMock.onPost('/test-endpoint').reply(200, {})
-    refreshTokenAxiosMock
-      .onPost('/auth/refresh')
-      .reply(200, { access: 'newAccessToken', refresh: 'newRefreshToken' })
-
-    await axios.post('/test-endpoint')
-
-    expect(axiosMock.history.post.length).toBe(1)
-    expect(refreshTokenAxiosMock.history.post.length).toBe(1)
-    expect(Cookies.set).toBeCalledTimes(1)
-    expect(cookiesFakeStore[ACCESS_COOKIE_NAME]).toBe('newAccessToken')
+  beforeEach(() => {
+    jest.clearAllMocks()
   })
 
-  it('should remove the token cookies if the refresh endpoint fails', async () => {
-    axiosMock.resetHistory()
-    refreshTokenAxiosMock.resetHistory()
+  it('should refresh the access token and set it in cookies', async () => {
+    const refreshToken = 'valid-refresh-token'
+    const getTokenMock = getToken as jest.Mock
+    getTokenMock.mockResolvedValue(refreshToken)
 
-    const cookiesFakeStore = {
-      [ACCESS_COOKIE_NAME]: 'accessToken',
-      [REFRESH_COOKIE_NAME]: 'refreshToken',
-    }
-    ;(Cookies.get as jest.Mock).mockImplementation(
-      (cookieName: CookieType) => cookiesFakeStore[cookieName],
-    )
-    ;(Cookies.remove as jest.Mock).mockImplementation((cookieName: CookieType) => {
-      delete cookiesFakeStore[cookieName]
+    const newAccessToken = 'new-access-token'
+    const getAccessTokenMock = getAccessToken as jest.Mock
+    getAccessTokenMock.mockResolvedValue(newAccessToken)
+
+    const result = await refreshAccessToken()
+
+    // Verify
+    expect(getToken).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
+    expect(getAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(Cookies.set).toHaveBeenCalledWith(ACCESS_COOKIE_NAME, newAccessToken, {
+      secure: false,
     })
+    expect(result).toBe(newAccessToken)
+  })
 
-    axiosMock.onPost('/test-endpoint').reply(401, {})
-    refreshTokenAxiosMock.onPost('/auth/refresh').reply(401, {})
+  it('should remove cookies if refreshing the access token fails', async () => {
+    const refreshToken = 'valid-refresh-token'
+    const getTokenMock = getToken as jest.Mock
+    getTokenMock.mockResolvedValue(refreshToken)
 
-    await expect(axios.post('/test-endpoint')).rejects.toThrow()
+    const getAccessTokenMock = getAccessToken as jest.Mock
+    getAccessTokenMock.mockRejectedValue(new Error('Failed to refresh token'))
 
-    expect(refreshTokenAxiosMock.history.post.length).toBe(1)
-    expect(Cookies.remove).toBeCalledTimes(2)
-    expect(cookiesFakeStore[ACCESS_COOKIE_NAME]).toBeUndefined()
-    expect(cookiesFakeStore[REFRESH_COOKIE_NAME]).toBeUndefined()
+    await expect(refreshAccessToken()).rejects.toThrow('Failed to refresh token')
+    expect(getToken).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
+    expect(getAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(Cookies.remove).toHaveBeenCalledWith(ACCESS_COOKIE_NAME)
+    expect(Cookies.remove).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
+  })
+
+  it('should remove cookies if no refresh token is available', async () => {
+    const getTokenMock = getToken as jest.Mock
+    getTokenMock.mockResolvedValue('')
+
+    await expect(refreshAccessToken()).rejects.toThrow()
+    expect(getToken).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
+    expect(Cookies.remove).toHaveBeenCalledWith(ACCESS_COOKIE_NAME)
+    expect(Cookies.remove).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
   })
 })

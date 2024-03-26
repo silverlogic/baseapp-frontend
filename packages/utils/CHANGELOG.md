@@ -1,5 +1,14 @@
 # @baseapp-frontend/utils
 
+## 2.2.0
+
+### Minor Changes
+
+- Implement the `baseAppFetch` fetch function.
+- Minor changes on `createAxiosInstance` to ensure it won't try to refresh the token for api routes included in `servicesWithoutToken`.
+- Implement the `getAccessToken` to abstract only the access token refresh fetch, without setting cookies.
+- Minor changes on `refreshAccessToken` to reuse the `getAccessToken` function.
+
 ## 2.1.0
 
 ### Minor Changes
