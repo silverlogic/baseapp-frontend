@@ -35,11 +35,11 @@ export const createAxiosInstance = ({
   instance.defaults.headers.put['Content-Type'] = contentType
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
+    const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
     let authToken = Cookies.get(cookieName)
 
-    if (authToken) {
-      const isTokenValid =
-        tokenType === TokenTypes.jwt ? isUserTokenValid(decodeJWT(authToken)) : true
+    if (authToken && isAuthTokenRequired && tokenType === TokenTypes.jwt) {
+      const isTokenValid = isUserTokenValid(decodeJWT(authToken))
       if (!isTokenValid) {
         try {
           authToken = await refreshAccessToken(cookieName, refreshCookieName)
@@ -50,15 +50,11 @@ export const createAxiosInstance = ({
           return Promise.reject(error)
         }
       }
+    }
 
-      if (
-        request.headers &&
-        !request.headers.Authorization &&
-        !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
-      ) {
-        request.headers.Authorization =
-          tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
-      }
+    if (request.headers && !request.headers.Authorization && authToken && isAuthTokenRequired) {
+      request.headers.Authorization =
+        tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
     }
 
     if (request.data && !file) {
@@ -101,6 +97,8 @@ export const createAxiosInstance = ({
       ) {
         const newError = { response: { data: {} } }
         newError.response.data = humps.camelizeKeys(error.response.data)
+
+        return Promise.reject(newError)
       }
       return Promise.reject(error)
     },
