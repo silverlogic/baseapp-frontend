@@ -36,4 +36,4 @@ export interface RequestOptions extends Omit<RequestInit, 'body' | 'headers'> {
   headers?: RequestInit['headers'] & ExtraHeaders
 }
 
-export interface BaseAppFetchOptions extends RequestOptions, NextFetchOptions, Config {}
+export type BaseAppFetchOptions = RequestOptions & NextFetchOptions & Config
