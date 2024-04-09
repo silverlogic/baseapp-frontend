@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 2.2.1
+
+### Patch Changes
+
+- Fix type issue on `BaseAppFetchOptions`.
+
 ## 2.2.0
 
 ### Minor Changes
