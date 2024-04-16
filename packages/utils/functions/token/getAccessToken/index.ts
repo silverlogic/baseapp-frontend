@@ -16,6 +16,11 @@ export const getAccessToken = async (refreshToken: string) => {
         'Content-Type': 'application/json',
       },
     })
+
+    if (response instanceof Response && !response.ok) {
+      throw new Error('Failed to get access token.')
+    }
+
     const { access: accessToken } = (await response.json()) as IJWTResponse
 
     return accessToken

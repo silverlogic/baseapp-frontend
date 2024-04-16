@@ -1,3 +1,5 @@
+export { default as preAuthenticateJWT } from './preAuthenticateJWT'
+
 export { default as useLogin } from './useLogin'
 export * from '../../utils/login'
 export type * from './useLogin/types'

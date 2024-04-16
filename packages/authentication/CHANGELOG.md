@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 2.1.2
+
+### Patch Changes
+
+- Add `preAuthenticateJWT` function to be used on the server side.
+- Deprecates the `usePreAuth` hook.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.2.2
+
 ## 2.1.1
 
 ### Patch Changes

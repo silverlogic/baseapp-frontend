@@ -37,3 +37,8 @@ export interface RequestOptions extends Omit<RequestInit, 'body' | 'headers'> {
 }
 
 export type BaseAppFetchOptions = RequestOptions & NextFetchOptions & Config
+
+export type BaseAppFetch = <TOutput = any>(
+  path: `/${string}` | '',
+  options: BaseAppFetchOptions,
+) => Promise<TOutput>

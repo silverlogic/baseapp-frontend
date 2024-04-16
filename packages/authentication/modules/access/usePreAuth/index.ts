@@ -9,6 +9,10 @@ import { isJWTResponse } from '../../../utils/login'
 import { useSimpleTokenUser } from '../../user'
 import { IUsePreAuth } from './types'
 
+/**
+ * @deprecated
+ * Prefer using the `preAuthenticate` function on the server side.
+ */
 const usePreAuth = ({
   token,
   queryOptions = {},
