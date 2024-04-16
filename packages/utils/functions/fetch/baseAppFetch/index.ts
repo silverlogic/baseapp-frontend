@@ -1,5 +1,4 @@
 import humps from 'humps'
-import includes from 'lodash/includes'
 
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
@@ -126,7 +125,7 @@ export const baseAppFetch: BaseAppFetch = async (
 
   // set content-type header
   const methodsToSetContentType = ['POST', 'PUT', 'PATCH']
-  if (setContentType && includes(methodsToSetContentType, fetchOptions.method)) {
+  if (setContentType && methodsToSetContentType.includes(fetchOptions.method || '')) {
     fetchOptions.headers!['Content-Type'] = 'application/json'
   }
 

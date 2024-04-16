@@ -1,4 +1,5 @@
-import { IJWTResponse, baseAppFetch } from '@baseapp-frontend/utils'
+import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
+import type { IJWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 const preAuthenticateJWT = async (token?: string) => {
   try {
