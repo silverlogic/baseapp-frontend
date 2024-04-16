@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 2.2.3
+
+### Patch Changes
+
+- Use native include instead of `lodash`.
+
 ## 2.2.2
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 2.1.3
+
+### Patch Changes
+
+- Remove barrel file imports since such functions are meant to be used in a `middleware`.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.2.3
+
 ## 2.1.2
 
 ### Patch Changes
