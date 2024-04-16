@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 1.1.3
+
+### Patch Changes
+
+- Mock fetch Response on `Jest` tests.
+
 ## 1.1.2
 
 ### Patch Changes

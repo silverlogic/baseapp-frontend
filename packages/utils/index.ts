@@ -1,4 +1,4 @@
-export * from './constants/axios'
+export * from './constants/fetch'
 export * from './constants/cookie'
 export * from './constants/django'
 export * from './constants/events'

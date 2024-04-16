@@ -1,14 +1,14 @@
 import humps from 'humps'
 import includes from 'lodash/includes'
 
-import { SERVICES_WITHOUT_TOKEN } from '../../../constants/axios'
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
+import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { TokenTypes } from '../../../constants/token'
 import { eventEmitter } from '../../events'
 import { buildQueryString } from '../../string'
 import { decodeJWT, getToken, isUserTokenValid, refreshAccessToken } from '../../token'
-import { BaseAppFetchOptions, RequestOptions } from './types'
+import { BaseAppFetch, RequestOptions } from './types'
 
 /**
  *
@@ -64,7 +64,7 @@ import { BaseAppFetchOptions, RequestOptions } from './types'
  *          })
  * ```
  */
-export const baseAppFetch = async (
+export const baseAppFetch: BaseAppFetch = async (
   path: `/${string}` | '',
   {
     accessCookieName = ACCESS_COOKIE_NAME,
@@ -78,7 +78,7 @@ export const baseAppFetch = async (
     stringifyBody = true,
     setContentType = true,
     ...options
-  }: BaseAppFetchOptions,
+  } = {},
 ) => {
   const url = `${baseUrl}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))

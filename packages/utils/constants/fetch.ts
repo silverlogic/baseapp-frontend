@@ -4,5 +4,6 @@ export const SERVICES_WITHOUT_TOKEN = [
   /\/register$/,
   /\/forgot-password$/,
   /\/forgot-password\/reset$/,
-  /\/users\/\d+\/pre-auth$/,
+  /\/auth\/pre-auth\/jwt$/,
+  /\/auth\/pre-auth\/auth-token$/,
 ]

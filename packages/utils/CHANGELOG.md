@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 2.2.2
+
+### Patch Changes
+
+- Add generic response types to `baseAppFetch`.
+- Handle `!response.ok` on `getAccessToken`.
+- Add pre-auth endpoints to `SERVICES_WITHOUT_TOKEN`.
+
 ## 2.2.1
 
 ### Patch Changes
