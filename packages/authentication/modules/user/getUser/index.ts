@@ -5,10 +5,11 @@ import { IJWTContent } from '@baseapp-frontend/utils/types/jwt'
 import { IUser } from '../../../types/user'
 import { GetUserOptions } from './types'
 
-const getUser = async <TUser extends Partial<IUser> & IJWTContent>({
+const getUser = <TUser extends Partial<IUser> & IJWTContent>({
   cookieName = ACCESS_COOKIE_NAME,
+  noSSR = false,
 }: GetUserOptions = {}) => {
-  const token = await getToken(cookieName)
+  const token = getToken(cookieName, { noSSR })
   if (token) {
     try {
       const user = decodeJWT<TUser>(token)

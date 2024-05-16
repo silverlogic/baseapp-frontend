@@ -102,7 +102,7 @@ describe('baseAppFetch', () => {
   it('should skip token refresh if token type is not jwt', async () => {
     process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('simple-token')
+    getTokenMock.mockReturnValue('simple-token')
 
     await baseAppFetch('/test', {})
 
@@ -111,7 +111,7 @@ describe('baseAppFetch', () => {
 
   it('should refresh token if it is invalid and auth is required', async () => {
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('old-token')
+    getTokenMock.mockReturnValue('old-token')
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(false)
     const refreshAccessTokenMock = refreshAccessToken as jest.Mock
@@ -132,7 +132,7 @@ describe('baseAppFetch', () => {
 
   it('should not attempt to refresh token if it is valid', async () => {
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('valid-token')
+    getTokenMock.mockReturnValue('valid-token')
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
 
@@ -143,7 +143,7 @@ describe('baseAppFetch', () => {
 
   it('should not require auth for paths marked as not requiring a token', async () => {
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('any-token')
+    getTokenMock.mockReturnValue('any-token')
     const path = '/no-auth-required'
 
     await baseAppFetch(path, { servicesWithoutToken: [/no-auth-required/] })
@@ -161,7 +161,7 @@ describe('baseAppFetch', () => {
 
   it('should handle refreshAccessToken failure by emitting logout event', async () => {
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('old-token')
+    getTokenMock.mockReturnValue('old-token')
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(false)
     const refreshAccessTokenMock = refreshAccessToken as jest.Mock
@@ -174,7 +174,7 @@ describe('baseAppFetch', () => {
   it('should set Authorization header correctly when using jwt token', async () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue(token)
+    getTokenMock.mockReturnValue(token)
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
 
@@ -193,7 +193,7 @@ describe('baseAppFetch', () => {
   it('should set Authorization header correctly when using simple token', async () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue(token)
+    getTokenMock.mockReturnValue(token)
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
     process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple

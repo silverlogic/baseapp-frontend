@@ -34,6 +34,7 @@ module.exports = {
   ],
   plugins: ['react', 'react-hooks', '@typescript-eslint', '@emotion'],
   rules: {
+    'global-require': 0,
     '@emotion/jsx-import': 'error',
     '@emotion/no-vanilla': 'error',
     '@emotion/import-from-emotion': 'error',

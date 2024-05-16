@@ -1,5 +1,14 @@
 # @baseapp-frontend/utils
 
+## 2.3.0
+
+### Minor Changes
+
+- Add cookie management functions like `getCookie`. It can optionally enable cookies retrieval on the server side. By doing so, it will force the Next.js page to be dynamically rendered.
+- The `getToken` function now uses `getCookie` function and it no longer returns a promise nor needs to be waited/resolved.
+- The `baseAppFetch` function can now optionally `throw` api errors if `throwError` option is set to `true`. It is enabled by default.
+
+
 ## 2.2.3
 
 ### Patch Changes

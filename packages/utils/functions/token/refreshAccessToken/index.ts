@@ -9,7 +9,7 @@ export const refreshAccessToken = async (
   refreshCookieName = REFRESH_COOKIE_NAME,
 ) => {
   try {
-    const refreshToken = (await getToken(refreshCookieName)) || ''
+    const refreshToken = getToken(refreshCookieName) ?? ''
 
     const accessToken = await getAccessToken(refreshToken)
 

@@ -76,6 +76,7 @@ export const baseAppFetch: BaseAppFetch = async (
     camelizeResponseDataKeys = true,
     stringifyBody = true,
     setContentType = true,
+    throwError = true,
     ...options
   } = {},
 ) => {
@@ -101,7 +102,7 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // token refresh logic
-  let authToken = await getToken()
+  let authToken = getToken(accessCookieName, { noSSR: false })
 
   if (authToken && isAuthTokenRequired && tokenType === TokenTypes.jwt) {
     const isTokenValid = isUserTokenValid(decodeJWT(authToken))
@@ -143,7 +144,14 @@ export const baseAppFetch: BaseAppFetch = async (
     // had to override the fetchOptions type because of the GraphQLBody type
     const response = await fetch(fetchUrl, fetchOptions as RequestInit)
 
-    if (response.headers.get('content-type')?.includes('application/json')) {
+    const isJsonResponse = response.headers.get('content-type')?.includes('application/json')
+
+    if (!response.ok && throwError) {
+      const errorMessage = isJsonResponse ? await response.json() : response.statusText
+      throw new Error(errorMessage)
+    }
+
+    if (isJsonResponse) {
       const data = await response.json()
 
       // camelize response data
