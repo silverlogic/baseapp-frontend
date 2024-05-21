@@ -21,20 +21,20 @@ describe('withUser HOC', () => {
 
   it('passes the user object to the wrapped component', async () => {
     const userMock = { firstName: 'John', lastName: 'Doe' }
-    getUserMock.mockResolvedValue(userMock)
+    getUserMock.mockReturnValue(userMock)
 
     const WithUserComponent = withUser<User>(MockComponent)
-    const { findByText } = render(await WithUserComponent({}))
+    const { findByText } = render(WithUserComponent({}))
 
     const userElement = await findByText(`Hello, ${userMock.firstName}`)
     expect(userElement).toBeInTheDocument()
   })
 
   it('handles the case when there is no user', async () => {
-    getUserMock.mockResolvedValue(null)
+    getUserMock.mockReturnValue(null)
 
     const WithUserComponent = withUser<User>(MockComponent)
-    const { findByText } = render(await WithUserComponent({}))
+    const { findByText } = render(WithUserComponent({}))
 
     const userElement = await findByText('No user')
     expect(userElement).toBeInTheDocument()

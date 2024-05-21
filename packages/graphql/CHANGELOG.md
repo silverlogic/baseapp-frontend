@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.1.1
+
+### Patch Changes
+
+- `connectionParams` function on the `wsClient` is now sync and don't wait for the `getToken` response.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.3.0
+
 ## 1.1.0
 
 ### Minor Changes

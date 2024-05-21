@@ -92,8 +92,8 @@ export async function httpFetch(
 
 const wsClient = createClient({
   url: process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
-  connectionParams: async () => {
-    const Authorization = await getToken()
+  connectionParams: () => {
+    const Authorization = getToken()
     if (!Authorization) return {}
     return { Authorization }
   },

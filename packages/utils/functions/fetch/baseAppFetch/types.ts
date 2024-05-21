@@ -16,6 +16,7 @@ type Config = {
   camelizeResponseDataKeys?: boolean
   stringifyBody?: boolean
   setContentType?: boolean
+  throwError?: boolean
 }
 
 type GraphQLBody = {
@@ -40,5 +41,5 @@ export type BaseAppFetchOptions = RequestOptions & NextFetchOptions & Config
 
 export type BaseAppFetch = <TOutput = any>(
   path: `/${string}` | '',
-  options: BaseAppFetchOptions,
+  options?: BaseAppFetchOptions,
 ) => Promise<TOutput>

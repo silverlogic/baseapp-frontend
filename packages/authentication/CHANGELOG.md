@@ -1,5 +1,18 @@
 # @baseapp-frontend/authentication
 
+## 2.2.0
+
+### Minor Changes
+
+- The `useJWTUser` hook now uses `getUser` function to retrieve the user's data. The `noSSR` option is set to `false` by default, which allows cookies to be retrieved right away on the server, but also forces the Next.js page to be dynamically rendered.
+- The `getUser` is no longer an async function or returns awaits for the `getToken` return.
+- The `withUser` is no longer an async function or returns awaits for the `getUser` return.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@2.3.0
+
 ## 2.1.3
 
 ### Patch Changes

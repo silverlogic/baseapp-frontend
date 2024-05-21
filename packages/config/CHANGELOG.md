@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.4
+
+### Patch Changes
+
+- Ignore `global-require` rule.
+
 ## 2.1.3
 
 ### Patch Changes

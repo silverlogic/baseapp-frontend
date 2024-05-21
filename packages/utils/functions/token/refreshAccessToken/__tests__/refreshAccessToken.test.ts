@@ -20,7 +20,7 @@ describe('refreshAccessToken', () => {
   it('should refresh the access token and set it in cookies', async () => {
     const refreshToken = 'valid-refresh-token'
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue(refreshToken)
+    getTokenMock.mockReturnValue(refreshToken)
 
     const newAccessToken = 'new-access-token'
     const getAccessTokenMock = getAccessToken as jest.Mock
@@ -40,7 +40,7 @@ describe('refreshAccessToken', () => {
   it('should remove cookies if refreshing the access token fails', async () => {
     const refreshToken = 'valid-refresh-token'
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue(refreshToken)
+    getTokenMock.mockReturnValue(refreshToken)
 
     const getAccessTokenMock = getAccessToken as jest.Mock
     getAccessTokenMock.mockRejectedValue(new Error('Failed to refresh token'))
@@ -54,7 +54,7 @@ describe('refreshAccessToken', () => {
 
   it('should remove cookies if no refresh token is available', async () => {
     const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockResolvedValue('')
+    getTokenMock.mockReturnValue('')
 
     await expect(refreshAccessToken()).rejects.toThrow()
     expect(getToken).toHaveBeenCalledWith(REFRESH_COOKIE_NAME)
