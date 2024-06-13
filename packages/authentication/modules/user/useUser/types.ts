@@ -1,3 +1,3 @@
-import { ICookieName } from '../../../types/auth'
+import { CustomCookieNames } from '../../../types/auth'
 
-export interface IUseUser extends ICookieName {}
+export interface UseUserOptions extends CustomCookieNames {}

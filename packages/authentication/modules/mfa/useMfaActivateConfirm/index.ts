@@ -1,3 +1,5 @@
+'use client'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,7 +8,7 @@ import { useForm } from 'react-hook-form'
 
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../constants'
-import { IUseMfaActivateConfirm } from './types'
+import { UseMfaActivateConfirmOptions } from './types'
 
 const useMfaActivateConfirm = ({
   method,
@@ -15,7 +17,7 @@ const useMfaActivateConfirm = ({
   ApiClass = MfaApi,
   enableFormApiErrors = true,
   options = {},
-}: IUseMfaActivateConfirm) => {
+}: UseMfaActivateConfirmOptions) => {
   const form = useForm({
     defaultValues,
     resolver: zodResolver(validationSchema),
@@ -33,7 +35,7 @@ const useMfaActivateConfirm = ({
     },
     onSuccess: (response, variables, context) => {
       options?.onSuccess?.(response, variables, context)
-      queryClient.invalidateQueries(MFA_API_KEY.getActiveMethods())
+      queryClient.invalidateQueries({ queryKey: MFA_API_KEY.getActiveMethods() })
     },
   })
 

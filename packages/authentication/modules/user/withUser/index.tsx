@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { IJWTContent } from '@baseapp-frontend/utils'
+import { JWTContent } from '@baseapp-frontend/utils'
 
 import getUser from '../getUser'
 import { ComponentWithUser } from './types'
@@ -13,7 +13,7 @@ import { ComponentWithUser } from './types'
  * ```
  */
 const withUser =
-  <TUser extends IJWTContent, Props extends object = {}>(
+  <TUser extends JWTContent, Props extends object = {}>(
     Component: FC<Props & ComponentWithUser<TUser>>,
   ) =>
   (props: Props) => {

@@ -1,11 +1,6 @@
 import { useState } from 'react'
 
-import {
-  ButtonWithLoading,
-  CheckboxField,
-  ImageUploader,
-  PasswordField,
-} from '@baseapp-frontend/design-system-mui'
+import { ButtonWithLoading, ImageUploader } from '@baseapp-frontend/design-system-mui'
 
 import { Divider, useTheme } from '@mui/material'
 
@@ -30,17 +25,6 @@ export default function Docs() {
 
       <Divider style={{ margin: theme.spacing(2, 0) }} />
 
-      <div style={{ width: theme.spacing(48) }}>
-        <h2>{`<PasswordField />`}</h2>
-        <PasswordField name="password" />
-
-        <PasswordField name="password" helperText="Type your password." />
-
-        <PasswordField name="password" error helperText="Incorrect entry." />
-      </div>
-
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
       <h2>{`<ImageUploader />`}</h2>
       <div style={{ width: theme.spacing(48) }}>
         <ImageUploader
@@ -52,10 +36,6 @@ export default function Docs() {
           buttonRemoveLabel="Remove"
         />
       </div>
-
-      <Divider style={{ margin: theme.spacing(2, 0) }} />
-
-      <CheckboxField name="checkbox" label="Checkbox" />
     </div>
   )
 }

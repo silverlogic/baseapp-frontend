@@ -1,5 +1,5 @@
 import { axios, useLogin } from '@baseapp-frontend/core'
-import { ButtonWithLoading, PasswordField, TextField } from '@baseapp-frontend/design-system-mui'
+import { ButtonWithLoading } from '@baseapp-frontend/design-system-mui'
 
 import { Divider, useTheme } from '@mui/material'
 import MockAdapter from 'axios-mock-adapter'
@@ -43,8 +43,6 @@ export default function Auth() {
         onSubmit={mockForSuccessAndLogIn}
         style={{ display: 'flex', flexDirection: 'column', maxWidth: '300px' }}
       >
-        <TextField name="email" label="Email" form={form} sx={{ marginBottom: '14px' }} />
-        <PasswordField name="password" label="Password" form={form} sx={{ marginBottom: '14px' }} />
         <div style={{ display: 'flex' }}>
           <ButtonWithLoading
             variant="contained"

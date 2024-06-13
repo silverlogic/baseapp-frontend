@@ -1,13 +1,14 @@
 import { ServerSideRenderingOption } from '@baseapp-frontend/utils'
 
-import { UseQueryOptions } from '@tanstack/react-query'
-
 import UserApi from '../../../services/user'
-import { ICookieName } from '../../../types/auth'
+import { CustomCookieNames } from '../../../types/auth'
+import { CustomUseQueryOptions } from '../../../types/react-query'
 
 type ApiClass = Pick<typeof UserApi, 'getUser'>
 
-export interface IUseJWTUser<IUser> extends ICookieName, ServerSideRenderingOption {
-  options?: UseQueryOptions<IUser, unknown, IUser, any>
+export interface UseJWTUserOptions<TUser>
+  extends CustomCookieNames,
+    ServerSideRenderingOption,
+    CustomUseQueryOptions<TUser, unknown, TUser> {
   ApiClass?: ApiClass
 }

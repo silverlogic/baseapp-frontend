@@ -1,5 +1,12 @@
 # @baseapp-frontend/graphql
 
+## 1.1.2
+
+### Patch Changes
+
+- Update a couple of dependencies.
+- Move `react` and `@baseapp-frontend/utils` to `peerDependencies` for better compatibility between the packages and the consumer app.
+
 ## 1.1.1
 
 ### Patch Changes

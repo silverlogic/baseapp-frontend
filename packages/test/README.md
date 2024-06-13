@@ -45,7 +45,7 @@ In order to test other `@baseapp-frontend`'s packages like `authentication` or i
 
 - install dependecies
 ```bash
-    yarn add -D babel-jest@^29.4.0 jest@^29.4.0 jest-environment-jsdom@^29.4.0 ts-jest@^29.0.5 ts-node@^10.9.1 @types/jest@^29.5.4 @testing-library/jest-dom@^5.16.5 @testing-library/react@^13.4.0 @testing-library/user-event@^14.4.3
+  yarn add -D babel-jest@^29.7.0 jest@^29.7.0 jest-environment-jsdom@^29.7.0 ts-jest@^29.1.4 ts-node@^10.9.2 @types/jest@^29.5.12 @testing-library/jest-dom@^6.4.6 @testing-library/react@^16.0.0 @testing-library/user-event@^14.5.2
 ```
 
 ## **What is in here?**

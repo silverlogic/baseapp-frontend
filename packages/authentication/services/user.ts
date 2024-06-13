@@ -1,13 +1,13 @@
 import { axios } from '@baseapp-frontend/utils'
 
-import { IUser, UserUpdateParams } from '../types/user'
+import { User, UserUpdateParams } from '../types/user'
 
 export default class UserApi {
-  static getUser<TUser extends Partial<IUser>>(): Promise<TUser> {
+  static getUser<TUser extends Partial<User>>(): Promise<TUser> {
     return axios.get(`/users/me`)
   }
 
-  static updateUser<TUser extends Partial<IUser>>({
+  static updateUser<TUser extends Partial<User>>({
     userId,
     data,
   }: UserUpdateParams<TUser>): Promise<TUser> {

@@ -1,3 +1,5 @@
+'use client'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -6,7 +8,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { IUseResetPassword, ResetPasswordForm } from './types'
+import { ResetPasswordForm, UseResetPasswordOptions } from './types'
 
 const useResetPassword = ({
   token,
@@ -15,7 +17,7 @@ const useResetPassword = ({
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: IUseResetPassword) => {
+}: UseResetPasswordOptions) => {
   const form = useForm({
     defaultValues,
     resolver: zodResolver(validationSchema),

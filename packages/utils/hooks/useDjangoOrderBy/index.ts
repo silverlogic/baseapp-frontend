@@ -9,12 +9,12 @@ import map from 'lodash/map'
 import { DESCENDING_ORDER_PREFIX } from '../../constants/django'
 import { joinWithSeparator } from '../../functions/string/joinWithSeparator'
 import { OrderingDirection } from '../../types/django'
-import { IDjangoOrderByOptions } from './types'
+import { DjangoOrderByOptions } from './types'
 
 const useDjangoOrderBy = <OrderPair extends Record<string, OrderingDirection>>({
   defaultPairs,
   descendingOrderPrefix = DESCENDING_ORDER_PREFIX,
-}: IDjangoOrderByOptions<OrderPair>) => {
+}: DjangoOrderByOptions<OrderPair>) => {
   const [orderingPairs, setOrderingPairs] = useState(defaultPairs)
 
   const togglePairOrder = (order: OrderingDirection) => (order === 'asc' ? 'desc' : 'asc')

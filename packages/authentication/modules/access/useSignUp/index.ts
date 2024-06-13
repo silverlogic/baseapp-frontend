@@ -1,3 +1,5 @@
+'use client'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,17 +7,17 @@ import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { IRegisterRequest } from '../../../types/auth'
+import { RegisterRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { IUseSignUp } from './types'
+import { UseSignUpOptions } from './types'
 
-const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse = void>({
+const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse = void>({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: IUseSignUp<TRegisterRequest, TRegisterResponse> = {}) => {
+}: UseSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues,
@@ -41,7 +43,7 @@ const useSignUp = <TRegisterRequest extends IRegisterRequest, TRegisterResponse 
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
-      console.log(error, 'error')
+      console.error(error)
     }
   }
 

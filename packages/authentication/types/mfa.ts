@@ -4,33 +4,33 @@ import { MFA_METHOD } from '../modules/mfa/constants'
 
 export type MfaMethod = ValueOf<typeof MFA_METHOD>
 
-export interface IMfaActiveMethodResponse {
+export interface MfaActiveMethodResponse {
   name: MfaMethod
   isPrimary: boolean
 }
 
-export interface IMfaConfigurationResponse {
+export interface MfaConfigurationResponse {
   methods: MfaMethod[]
   confirmDisableWithCode: boolean
   confirmRegenerationWithCode: boolean
   allowBackupCodesRegeneration: boolean
 }
 
-export interface IMfaRequest {
+export interface MfaRequest {
   method: MfaMethod
   code: string
 }
 
-export interface IMfaDeactivateRequest {
-  method: IMfaRequest['method']
-  code?: IMfaRequest['code']
+export interface MfaDeactivateRequest {
+  method: MfaRequest['method']
+  code?: MfaRequest['code']
 }
 
-export interface IMfaConfirmationResponse {
+export interface MfaConfirmationResponse {
   backupCodes: string[]
 }
 
-export interface IMfaActivationResponse {
+export interface MfaActivationResponse {
   details: string
 }
 

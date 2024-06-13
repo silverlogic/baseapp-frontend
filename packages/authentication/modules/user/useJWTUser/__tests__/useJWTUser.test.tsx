@@ -10,19 +10,21 @@ import { TokenTypes, axios } from '@baseapp-frontend/utils'
 import { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { IUser } from '../../../../types/user'
-import { IUseJWTUser } from '../types'
+import { User } from '../../../../types/user'
+import { UseJWTUserOptions } from '../types'
 import request from './fixtures/request.json'
 
-interface IIUseJWTUser<IUser> extends Omit<UseQueryResult<IUser, unknown>, 'data'> {
-  user?: IUser
+interface UseJWTUserOptionsReturn<TUser> extends Omit<UseQueryResult<TUser, unknown>, 'data'> {
+  user?: TUser
 }
 
 describe('useJWTUser', () => {
   // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
   const axiosMock = new MockAdapter(axios)
 
-  let useJWTUser: <TUser extends Partial<IUser>>(props?: IUseJWTUser<TUser>) => IIUseJWTUser<TUser>
+  let useJWTUser: <TUser extends Partial<User>>(
+    props?: UseJWTUserOptions<TUser>,
+  ) => UseJWTUserOptionsReturn<TUser>
 
   const decodeJWTMock = jest.fn()
 
@@ -37,6 +39,10 @@ describe('useJWTUser', () => {
     useJWTUser = (await import('../index')).default as any
     // freeze time to
     jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
+  })
+
+  beforeEach(() => {
+    axiosMock.reset()
   })
 
   const token =
@@ -63,29 +69,21 @@ describe('useJWTUser', () => {
     const resetQueriesMock = jest.fn()
     useQueryClientMock.mockImplementation(() => ({ resetQueries: resetQueriesMock }))
 
-    let hasOnErrorRan = false
-
-    axiosMock.onGet('/users/me').reply(401, {
-      error: 'Invalid token.',
-    })
+    axiosMock.onGet('/users/me').reply(401)
     const { result } = renderHook(
       () =>
         useJWTUser({
           options: {
-            initialData: undefined,
+            placeholderData: undefined,
             retry: false,
-            onError: () => {
-              hasOnErrorRan = true
-            },
           },
         }),
       {
         wrapper: ComponentWithProviders,
       },
     )
-
+    await waitFor(() => expect(result.current.isPending).toBe(false))
     await waitFor(() => expect(result.current.isLoading).toBe(false))
-    await waitFor(() => expect(hasOnErrorRan).toBe(true))
     await waitFor(() => expect(resetQueriesMock).toHaveBeenCalled())
   })
 })

@@ -2,33 +2,33 @@ import { axios } from '@baseapp-frontend/utils'
 import { TokenTypes } from '@baseapp-frontend/utils/constants/token'
 
 import {
-  IForgotPasswordRequest,
-  ILoginRequest,
-  IPreAuthRequest,
-  IRegisterRequest,
-  IResetPasswordRequest,
+  ForgotPasswordRequest,
+  LoginRequest,
   LoginResponse,
+  PreAuthRequest,
   PreAuthResponse,
+  RegisterRequest,
+  ResetPasswordRequest,
 } from '../types/auth'
 
 export default class AuthApi {
-  static login({ email, password }: ILoginRequest): Promise<LoginResponse> {
+  static login({ email, password }: LoginRequest): Promise<LoginResponse> {
     return axios.post(`/auth/login`, { email, password })
   }
 
-  static recoverPassword({ email }: IForgotPasswordRequest): Promise<void> {
+  static recoverPassword({ email }: ForgotPasswordRequest): Promise<void> {
     return axios.post(`/forgot-password`, { email })
   }
 
-  static resetPassword({ newPassword, token }: IResetPasswordRequest): Promise<void> {
+  static resetPassword({ newPassword, token }: ResetPasswordRequest): Promise<void> {
     return axios.post(`/forgot-password/reset`, { newPassword, token })
   }
 
-  static register<TResponse = void>(request: IRegisterRequest): Promise<TResponse> {
+  static register<TResponse = void>(request: RegisterRequest): Promise<TResponse> {
     return axios.post(`/register`, request)
   }
 
-  static preAuth(request: IPreAuthRequest, tokenType: TokenTypes): Promise<PreAuthResponse> {
+  static preAuth(request: PreAuthRequest, tokenType: TokenTypes): Promise<PreAuthResponse> {
     switch (tokenType) {
       case TokenTypes.jwt:
         return axios.post(`/auth/pre-auth/jwt`, request)

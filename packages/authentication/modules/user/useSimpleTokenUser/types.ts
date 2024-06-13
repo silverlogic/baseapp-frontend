@@ -1,11 +1,11 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
 import UserApi from '../../../services/user'
-import { ICookieName } from '../../../types/auth'
+import { CustomCookieNames } from '../../../types/auth'
+import { CustomUseQueryOptions } from '../../../types/react-query'
 
 type ApiClass = Pick<typeof UserApi, 'getUser'>
 
-export interface IUseSimpleTokenUser<IUser> extends ICookieName {
-  options?: UseQueryOptions<IUser, unknown, IUser, any>
+export interface UseSimpleTokenUserOptions<TUser>
+  extends CustomCookieNames,
+    CustomUseQueryOptions<TUser, unknown, TUser> {
   ApiClass?: ApiClass
 }

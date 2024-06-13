@@ -9,18 +9,19 @@ import {
 import { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { IUser } from '../../../../types/user'
-import { IUseSimpleTokenUser } from '../types'
+import { User } from '../../../../types/user'
+import { UseSimpleTokenUserOptions } from '../types'
 import request from './fixtures/request.json'
 
-interface IUseSimpleTokenUserResult<IUser> extends Omit<UseQueryResult<IUser, unknown>, 'data'> {
-  user?: IUser
+interface UseSimpleTokenUserOptionsResult<TUser>
+  extends Omit<UseQueryResult<TUser, unknown>, 'data'> {
+  user?: TUser
 }
 
 describe('useSimpleTokenUser', () => {
-  let useSimpleTokenUser: <TUser extends Partial<IUser>>(
-    props?: IUseSimpleTokenUser<TUser>,
-  ) => IUseSimpleTokenUserResult<TUser>
+  let useSimpleTokenUser: <TUser extends Partial<User>>(
+    props?: UseSimpleTokenUserOptions<TUser>,
+  ) => UseSimpleTokenUserOptionsResult<TUser>
   let defaultTokenType: string | undefined
   let axios: any
   let axiosMock: MockAdapter
@@ -55,13 +56,13 @@ describe('useSimpleTokenUser', () => {
   test('can use a custom type interface', async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
 
-    interface ICustomUser extends IUser {
+    interface CustomUser extends User {
       customField: number
     }
 
     axiosMock.onGet('/users/me').reply(200, { ...request, customField: 123 })
 
-    const { result } = renderHook(() => useSimpleTokenUser<ICustomUser>(), {
+    const { result } = renderHook(() => useSimpleTokenUser<CustomUser>(), {
       wrapper: ComponentWithProviders,
     })
     expect(result.current.isLoading).toBe(true)
@@ -74,8 +75,6 @@ describe('useSimpleTokenUser', () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
     ;(Cookies.remove as CookiesGetByNameFn) = jest.fn(() => '')
 
-    let hasOnErrorRan = false
-
     axiosMock.onGet('/users/me').reply(401, {
       error: 'Invalid token.',
     })
@@ -85,9 +84,6 @@ describe('useSimpleTokenUser', () => {
         useSimpleTokenUser({
           options: {
             retry: false,
-            onError: () => {
-              hasOnErrorRan = true
-            },
           },
         }),
       {
@@ -95,7 +91,6 @@ describe('useSimpleTokenUser', () => {
       },
     )
 
-    await waitFor(() => expect(hasOnErrorRan).toBe(true))
     await waitFor(() => expect(Cookies.get).toHaveBeenCalled())
     await waitFor(() => expect(Cookies.remove).toHaveBeenCalled())
     expect(result.current.user).not.toBeDefined()

@@ -1,3 +1,5 @@
+'use client'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -5,9 +7,9 @@ import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { IForgotPasswordRequest } from '../../../types/auth'
+import { ForgotPasswordRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { IUseRecoverPassword } from './types'
+import { UseRecoverPasswordOptions } from './types'
 
 const useRecoverPassword = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
@@ -15,7 +17,7 @@ const useRecoverPassword = ({
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: IUseRecoverPassword = {}) => {
+}: UseRecoverPasswordOptions = {}) => {
   const form = useForm({
     defaultValues,
     resolver: zodResolver(validationSchema),
@@ -36,7 +38,7 @@ const useRecoverPassword = ({
     },
   })
 
-  const handleSubmit: SubmitHandler<IForgotPasswordRequest> = async (values) => {
+  const handleSubmit: SubmitHandler<ForgotPasswordRequest> = async (values) => {
     try {
       await mutation.mutateAsync(values)
     } catch (error) {

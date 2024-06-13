@@ -1,5 +1,21 @@
 # @baseapp-frontend/authentication
 
+## 3.0.0
+
+### Major Changes
+
+- Migrate to React Query v5. This includes adapting the code due to breaking changes of the library.
+- Update several dependencies.
+- Remove deprecated `usePreAuth` hook. We should now pre authenticate on the server side using the `preAuthenticate` function.
+- Renamed a couple of type interfaces, mainly removing the `I` prefix from it.
+- Move `react`, `@baseapp-frontend/provider` and `@baseapp-frontend/utils` to `peerDependencies` for better compatibility between the packages and the consumer app.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/provider@2.0.0
+  - @baseapp-frontend/utils@2.4.0
+
 ## 2.2.0
 
 ### Minor Changes
