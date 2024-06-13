@@ -9,6 +9,7 @@ import {
   PreAuthResponse,
   RegisterRequest,
   ResetPasswordRequest,
+  ChangeExpiredPasswordRequest
 } from '../types/auth'
 
 export default class AuthApi {
@@ -37,6 +38,14 @@ export default class AuthApi {
       default:
         return Promise.reject(new Error(`Unknown token type: ${tokenType}`))
     }
+  }
+
+  static changeExpiredPassword({
+    currentPassword,
+    newPassword,
+    token,
+  }: ChangeExpiredPasswordRequest): Promise<void> {
+    return axios.post(`/change-expired-password`, { currentPassword, newPassword, token })
   }
 }
 

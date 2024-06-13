@@ -22,8 +22,13 @@ import {
   LoginMfaRequest,
   LoginRequest,
   LoginSimpleTokenResponse,
+  LoginChangeExpiredPasswordRedirectResponse
 } from '../../../types/auth'
-import { isJWTResponse, isLoginMfaResponse } from '../../../utils/login'
+import {
+  isJWTResponse,
+  isLoginChangeExpiredPasswordRedirectResponse,
+  isLoginMfaResponse,
+} from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
@@ -72,7 +77,15 @@ const useLogin = ({
   /*
    * Handles login success  with the auth token in response
    */
-  async function handleLoginSuccess(response: LoginJWTResponse | LoginSimpleTokenResponse) {
+  async function handleLoginSuccess(
+    response:
+      | LoginJWTResponse
+      | LoginSimpleTokenResponse
+      | LoginChangeExpiredPasswordRedirectResponse,
+  ) {
+    if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
+      return
+    }
     if (isJWTResponse(tokenType, response)) {
       jwtSuccessHandler(response, cookieName, refreshCookieName)
     } else {

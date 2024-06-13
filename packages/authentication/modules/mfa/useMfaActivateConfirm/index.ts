@@ -26,7 +26,7 @@ const useMfaActivateConfirm = ({
 
   const mutation = useMutation({
     mutationFn: (data) => ApiClass.confirmActivation(data),
-    ...options, // needs to be placed bellow all overridable options
+    ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       if (enableFormApiErrors) {

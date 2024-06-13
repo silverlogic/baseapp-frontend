@@ -9,7 +9,7 @@ const useMfaActiveMethods = ({ options, ApiClass = MfaApi }: UseMfaActiveMethods
   const { data, ...rest } = useQuery({
     queryFn: () => ApiClass.getActiveMethods(),
     queryKey: MFA_API_KEY.getActiveMethods(),
-    ...restOptions, // needs to be placed bellow all overridable options
+    ...restOptions, // needs to be placed below all overridable options
     enabled,
   })
 

@@ -15,3 +15,6 @@ export type * from './useResetPassword/types'
 
 export { default as useSignUp } from './useSignUp'
 export type * from './useSignUp/types'
+
+export { default as useChangeExpiredPassword } from './useChangeExpiredPassword'
+export type * from './useChangeExpiredPassword/types'

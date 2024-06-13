@@ -8,7 +8,7 @@ const useMfaConfiguration = ({ options, ApiClass = MfaApi }: UseMfaConfiguration
   const { data: configuration, ...rest } = useQuery({
     queryFn: () => ApiClass.getConfiguration(),
     queryKey: MFA_API_KEY.getConfiguration(),
-    ...options, // needs to be placed bellow all overridable options
+    ...options, // needs to be placed below all overridable options
     enabled,
   })
 
