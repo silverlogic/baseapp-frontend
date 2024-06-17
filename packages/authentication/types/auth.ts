@@ -24,15 +24,15 @@ export interface LoginJWTResponse {
   refresh: string
 }
 
-export interface ILoginChangeExpiredPasswordRedirectResponse {
+export interface LoginChangeExpiredPasswordRedirectResponse {
   redirectUrl: string
 }
 
 export type LoginResponse =
-  | LoginMfaResponse 
-  | LoginSimpleTokenResponse 
+  | LoginMfaResponse
+  | LoginSimpleTokenResponse
   | LoginJWTResponse
-  | ILoginChangeExpiredPasswordRedirectResponse
+  | LoginChangeExpiredPasswordRedirectResponse
 
 export interface ForgotPasswordRequest {
   email: string
