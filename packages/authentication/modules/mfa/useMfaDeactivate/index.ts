@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
-import { IUseMfaDeactivate } from './types'
+import { UseMfaDeactivateOptions } from './types'
 
-const useMfaDeactivate = ({ options, ApiClass = MfaApi }: IUseMfaDeactivate = {}) => {
+const useMfaDeactivate = ({ options, ApiClass = MfaApi }: UseMfaDeactivateOptions = {}) => {
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -13,7 +13,7 @@ const useMfaDeactivate = ({ options, ApiClass = MfaApi }: IUseMfaDeactivate = {}
       options?.onError?.(err, variables, context)
     },
     onSuccess: (response, variables, context) => {
-      queryClient.invalidateQueries(MFA_API_KEY.getActiveMethods())
+      queryClient.invalidateQueries({ queryKey: MFA_API_KEY.getActiveMethods() })
       options?.onSuccess?.(response, variables, context)
     },
   })

@@ -1,31 +1,31 @@
-import { IDjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
+import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
-import { ILoginMfaRequest, ILoginSimpleTokenResponse } from '../types/auth'
+import { LoginMfaRequest, LoginSimpleTokenResponse } from '../types/auth'
 import {
-  IMfaActivationResponse,
-  IMfaActiveMethodResponse,
-  IMfaConfigurationResponse,
-  IMfaConfirmationResponse,
-  IMfaDeactivateRequest,
-  IMfaRequest,
+  MfaActivationResponse,
+  MfaActiveMethodResponse,
+  MfaConfigurationResponse,
+  MfaConfirmationResponse,
+  MfaDeactivateRequest,
+  MfaRequest,
 } from '../types/mfa'
 
 const baseUrl = '/auth'
 
 export default class MfaApi {
-  static activate({ method }: Pick<IMfaRequest, 'method'>): Promise<IMfaActivationResponse> {
+  static activate({ method }: Pick<MfaRequest, 'method'>): Promise<MfaActivationResponse> {
     return axios.post(`${baseUrl}/${method}/activate/`)
   }
 
-  static confirmActivation({ method, code }: IMfaRequest): Promise<IMfaConfirmationResponse> {
+  static confirmActivation({ method, code }: MfaRequest): Promise<MfaConfirmationResponse> {
     return axios.post(`${baseUrl}/${method}/activate/confirm/`, { code })
   }
 
-  static getActiveMethods(): Promise<IDjangoPaginatedResponse<IMfaActiveMethodResponse>> {
+  static getActiveMethods(): Promise<DjangoPaginatedResponse<MfaActiveMethodResponse>> {
     return axios.get(`${baseUrl}/mfa/user-active-methods/`)
   }
 
-  static getConfiguration(): Promise<IMfaConfigurationResponse> {
+  static getConfiguration(): Promise<MfaConfigurationResponse> {
     return axios.get(`${baseUrl}/mfa/config/`)
   }
 
@@ -33,15 +33,15 @@ export default class MfaApi {
     return axios.get(`${baseUrl}/code/request/`)
   }
 
-  static deactivate({ method, code }: IMfaDeactivateRequest): Promise<void> {
+  static deactivate({ method, code }: MfaDeactivateRequest): Promise<void> {
     return axios.post(`${baseUrl}/${method}/deactivate/`, { code })
   }
 
-  static regenerateBackupCodes({ method, code }: IMfaRequest): Promise<void> {
+  static regenerateBackupCodes({ method, code }: MfaRequest): Promise<void> {
     return axios.post(`${baseUrl}/${method}/codes/regenerate/`, { code })
   }
 
-  static loginStep2(data: ILoginMfaRequest): Promise<ILoginSimpleTokenResponse> {
+  static loginStep2(data: LoginMfaRequest): Promise<LoginSimpleTokenResponse> {
     return axios.post('/auth/login/code', data)
   }
 }

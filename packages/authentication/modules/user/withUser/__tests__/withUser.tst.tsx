@@ -1,18 +1,18 @@
 import { FC } from 'react'
 
 import { render } from '@baseapp-frontend/test'
-import { IJWTContent } from '@baseapp-frontend/utils'
+import { JWTContent } from '@baseapp-frontend/utils'
 
 import withUser from '..'
-import { IUser } from '../../../../types/user'
+import { User } from '../../../../types/user'
 import getUser from '../../getUser'
 import { ComponentWithUser } from '../types'
 
 jest.mock('../../getUser', () => jest.fn())
 
-type User = IUser & IJWTContent
+type JWTUser = User & JWTContent
 
-const MockComponent: FC<ComponentWithUser<User>> = ({ user }) => (
+const MockComponent: FC<ComponentWithUser<JWTUser>> = ({ user }) => (
   <div>{user ? `Hello, ${user.firstName}` : 'No user'}</div>
 )
 
@@ -23,7 +23,7 @@ describe('withUser HOC', () => {
     const userMock = { firstName: 'John', lastName: 'Doe' }
     getUserMock.mockReturnValue(userMock)
 
-    const WithUserComponent = withUser<User>(MockComponent)
+    const WithUserComponent = withUser<JWTUser>(MockComponent)
     const { findByText } = render(WithUserComponent({}))
 
     const userElement = await findByText(`Hello, ${userMock.firstName}`)
@@ -33,7 +33,7 @@ describe('withUser HOC', () => {
   it('handles the case when there is no user', async () => {
     getUserMock.mockReturnValue(null)
 
-    const WithUserComponent = withUser<User>(MockComponent)
+    const WithUserComponent = withUser<JWTUser>(MockComponent)
     const { findByText } = render(WithUserComponent({}))
 
     const userElement = await findByText('No user')

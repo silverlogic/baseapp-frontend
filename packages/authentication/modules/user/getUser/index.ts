@@ -1,11 +1,11 @@
 import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
 import { decodeJWT, getToken } from '@baseapp-frontend/utils/functions/token'
-import { IJWTContent } from '@baseapp-frontend/utils/types/jwt'
+import { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
-import { IUser } from '../../../types/user'
+import { User } from '../../../types/user'
 import { GetUserOptions } from './types'
 
-const getUser = <TUser extends Partial<IUser> & IJWTContent>({
+const getUser = <TUser extends Partial<User> & JWTContent>({
   cookieName = ACCESS_COOKIE_NAME,
   noSSR = false,
 }: GetUserOptions = {}) => {

@@ -1,5 +1,13 @@
 # @baseapp-frontend/test
 
+## 2.0.0
+
+### Major Changes
+
+- Update several dependencies.
+- `ComponentWithProviders` creates its own `material-ui`'s theme and `React Query`'s provider. Removed `@baseapp-frontend/design-system-mui` and `@baseapp-frontend/provider` dependencies to avoid circular dependencies.
+- Move `react` to `peerDependencies` for better compatibility between the packages and the consumer app.
+
 ## 1.1.3
 
 ### Patch Changes

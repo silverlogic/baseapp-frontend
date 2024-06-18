@@ -1,5 +1,11 @@
 # @baseapp-frontend/core
 
+## 2.7.5
+
+### Patch Changes
+
+- Ignoring type errors.
+
 ## 2.7.4
 
 ### Patch Changes

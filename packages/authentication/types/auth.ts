@@ -1,54 +1,54 @@
 import { MfaMethod } from './mfa'
 
-export interface ILoginRequest {
+export interface LoginRequest {
   email: string
   password: string
 }
 
-export interface ILoginMfaRequest {
+export interface LoginMfaRequest {
   ephemeralToken: string
   token: string
 }
 
-export interface ILoginMfaResponse {
+export interface LoginMfaResponse {
   ephemeralToken: string
   method: MfaMethod
 }
 
-export interface ILoginSimpleTokenResponse {
+export interface LoginSimpleTokenResponse {
   token: string
 }
 
-export interface ILoginJWTResponse {
+export interface LoginJWTResponse {
   access: string
   refresh: string
 }
 
-export type LoginResponse = ILoginMfaResponse | ILoginSimpleTokenResponse | ILoginJWTResponse
+export type LoginResponse = LoginMfaResponse | LoginSimpleTokenResponse | LoginJWTResponse
 
-export interface IForgotPasswordRequest {
+export interface ForgotPasswordRequest {
   email: string
 }
 
-export interface IResetPasswordRequest {
+export interface ResetPasswordRequest {
   newPassword: string
   token: string
 }
 
-export interface IRegisterRequest {
+export interface RegisterRequest {
   firstName?: string
   lastName?: string
   email: string
   password: string
 }
 
-export interface ICookieName {
+export interface CustomCookieNames {
   cookieName?: string
   refreshCookieName?: string
 }
 
-export interface IPreAuthRequest {
+export interface PreAuthRequest {
   token: string
 }
 
-export type PreAuthResponse = ILoginSimpleTokenResponse | ILoginJWTResponse
+export type PreAuthResponse = LoginSimpleTokenResponse | LoginJWTResponse

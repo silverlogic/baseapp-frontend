@@ -1,5 +1,19 @@
 # @baseapp-frontend/design-system-mui
 
+## 2.0.0
+
+### Major Changes
+
+- Update several dependencies.
+- Add `SnackbarProvider` component. It provides a new toast bar system based on `material-ui` only.
+- Removed deprecated `CheckboxField`, `PasswordField` and `TextField` components.
+- Move `react`, `react-dom` and `@baseapp-frontend/utils` to `peerDependencies` for better compatibility between the packages and the consumer app.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@2.4.0
+
 ## 1.5.1
 
 ### Patch Changes

@@ -27,8 +27,8 @@ describe('useLogout hook', () => {
     result.current.logout()
 
     expect(Cookies.remove).toHaveBeenCalled()
-    expect(mockResetQueries).toHaveBeenCalledWith(USER_API_KEY.getUser())
-    expect(mockResetQueries).toHaveBeenCalledWith(MFA_API_KEY.default)
+    expect(mockResetQueries).toHaveBeenCalledWith({ queryKey: USER_API_KEY.getUser() })
+    expect(mockResetQueries).toHaveBeenCalledWith({ queryKey: MFA_API_KEY.default })
   })
 
   test('should call the onLogout callback if provided', async () => {

@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query'
 
 import MfaApi from '../../../services/mfa'
-import { IUseMfaActivate } from './types'
+import { UseMfaActivateOptions } from './types'
 
-const useMfaActivate = ({ options, ApiClass = MfaApi }: IUseMfaActivate = {}) =>
+const useMfaActivate = ({ options, ApiClass = MfaApi }: UseMfaActivateOptions = {}) =>
   useMutation({
     mutationFn: ({ method }) => ApiClass.activate({ method }),
     ...options, // needs to be placed bellow all overridable options

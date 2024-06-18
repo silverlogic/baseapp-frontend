@@ -1,10 +1,10 @@
-export interface IJWTResponse {
+export interface JWTResponse {
   access: string
   refresh: string
 }
 
-export interface IJWTContent {
-  token_type: 'access' | 'refresh'
+export interface JWTContent {
+  tokenType: 'access' | 'refresh'
   exp: number
   iat: number
   jti: string

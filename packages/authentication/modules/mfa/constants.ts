@@ -3,7 +3,7 @@ import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
 import { z } from 'zod'
 
 export const CODE_VALIDATION_SCHEMA = z.object({
-  code: z.string().nonempty(ZOD_MESSAGE.required),
+  code: z.string().min(1, ZOD_MESSAGE.required),
 })
 
 export const CODE_VALIDATION_INITIAL_VALUES = {

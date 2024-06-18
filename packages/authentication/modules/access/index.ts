@@ -15,6 +15,3 @@ export type * from './useResetPassword/types'
 
 export { default as useSignUp } from './useSignUp'
 export type * from './useSignUp/types'
-
-export { default as usePreAuth } from './usePreAuth'
-export type * from './usePreAuth/types'

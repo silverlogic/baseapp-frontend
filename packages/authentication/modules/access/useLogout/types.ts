@@ -1,6 +1,6 @@
-import { ICookieName } from '../../../types/auth'
+import { CustomCookieNames } from '../../../types/auth'
 
-export interface ILogoutOptions extends ICookieName {
+export interface UseLogoutOptions extends CustomCookieNames {
   onLogout?: () => void
   emitLogoutEvent?: boolean
 }

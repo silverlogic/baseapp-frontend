@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=docs^...",
     "clean": "turbo run clean && rm -rf node_modules && rm -rf ./apps/*/node_modules && rm -rf ./packages/*/node_modules && rm -rf",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
@@ -26,11 +26,11 @@
     "husky": "^8.0.0",
     "lint-staged": "^13.0.2",
     "prettier": "^2.8.8",
-    "turbo": "latest"
+    "turbo": "^2.0.3"
   },
   "engines": {
     "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "node": ">=18.0.0"
   },
   "lint-staged": {
     "apps/**/*.{js,ts,jsx,tsx}": [

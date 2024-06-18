@@ -46,6 +46,7 @@ export const BaseAppProvider = ({
   const [queryClient] = useState(() => buildQueryClient(queryClientOptions))
   return (
     <QueryClientProvider client={queryClient} contextSharing>
+      {/* @ts-ignore */}
       <Hydrate state={pageProps?.dehydratedState}>
         <UserProvider>{children}</UserProvider>
       </Hydrate>

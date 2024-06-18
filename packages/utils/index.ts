@@ -16,9 +16,11 @@ export * from './functions/form'
 export * from './functions/string'
 export * from './functions/token'
 
-export * from './hooks/useEventSubscription'
 export { default as useDebounce } from './hooks/useDebounce'
 export { default as useDjangoOrderBy } from './hooks/useDjangoOrderBy'
+export { default as useEventSubscription } from './hooks/useEventSubscription'
+export { default as useNotification } from './hooks/useNotification'
+export { NotificationProvider } from './hooks/useNotification'
 
 export type * from './types/cookie'
 export type * from './types/django'

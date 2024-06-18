@@ -3,7 +3,7 @@ import { axios } from '@baseapp-frontend/utils'
 
 import { z } from 'zod'
 
-import { IRegisterRequest } from '../../../../types/auth'
+import { RegisterRequest } from '../../../../types/auth'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
 
@@ -42,17 +42,17 @@ describe('useSignUp', () => {
     const customRequest = { ...request, customField: 123 }
     axiosMock.onPost('/register').reply(200, customRequest)
 
-    interface ICustomRegisterRequest extends IRegisterRequest {
+    interface CustomRegisterRequest extends RegisterRequest {
       customField: number
     }
 
-    interface ICustomRegisterResponse {
+    interface CustomRegisterResponse {
       name: string
     }
 
     const { result } = renderHook(
       () =>
-        useSignUp<ICustomRegisterRequest, ICustomRegisterResponse>({
+        useSignUp<CustomRegisterRequest, CustomRegisterResponse>({
           defaultValues: customRequest,
         }),
       {
@@ -107,11 +107,11 @@ describe('useSignUp', () => {
 
     let hasOnSuccessRan = false
 
-    interface ICustomRegisterRequest extends Pick<IRegisterRequest, 'email' | 'password'> {}
+    interface CustomRegisterRequest extends Pick<RegisterRequest, 'email' | 'password'> {}
 
     const { result } = renderHook(
       () =>
-        useSignUp<ICustomRegisterRequest>({
+        useSignUp<CustomRegisterRequest>({
           defaultValues: customDefaultValues,
           validationSchema: customValidationSchema,
           options: {

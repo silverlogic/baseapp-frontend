@@ -1,4 +1,4 @@
-import { IJWTResponse } from '../../../types/jwt'
+import { JWTResponse } from '../../../types/jwt'
 
 const REFRESH_TOKEN_URL = '/auth/refresh'
 
@@ -21,7 +21,7 @@ export const getAccessToken = async (refreshToken: string) => {
       throw new Error('Failed to get access token.')
     }
 
-    const { access: accessToken } = (await response.json()) as IJWTResponse
+    const { access: accessToken } = (await response.json()) as JWTResponse
 
     return accessToken
   } catch (error) {

@@ -1,11 +1,10 @@
-import { UseQueryOptions } from '@tanstack/react-query'
-
 import MfaApi from '../../../services/mfa'
-import { IMfaConfigurationResponse } from '../../../types/mfa'
+import { MfaConfigurationResponse } from '../../../types/mfa'
+import { CustomUseQueryOptions } from '../../../types/react-query'
 
 type ApiClass = Pick<typeof MfaApi, 'getConfiguration'>
 
-export interface IUseMfaConfiguration {
-  options?: UseQueryOptions<IMfaConfigurationResponse, unknown, IMfaConfigurationResponse, any>
+export interface UseMfaConfigurationOptions
+  extends CustomUseQueryOptions<MfaConfigurationResponse, unknown, MfaConfigurationResponse> {
   ApiClass?: ApiClass
 }

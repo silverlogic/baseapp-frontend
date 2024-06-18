@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 
 import {
@@ -16,19 +18,19 @@ import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
 import {
-  ILoginJWTResponse,
-  ILoginMfaRequest,
-  ILoginRequest,
-  ILoginSimpleTokenResponse,
+  LoginJWTResponse,
+  LoginMfaRequest,
+  LoginRequest,
+  LoginSimpleTokenResponse,
 } from '../../../types/auth'
 import { isJWTResponse, isLoginMfaResponse } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { IUseLogin } from './types'
+import { UseLoginOptions } from './types'
 
 const jwtSuccessHandler = (
-  response: ILoginJWTResponse,
+  response: LoginJWTResponse,
   cookieName: string,
   refreshCookieName: string,
 ) => {
@@ -41,7 +43,7 @@ const jwtSuccessHandler = (
 }
 
 const simpleTokenSuccessHandler = (
-  response: ILoginSimpleTokenResponse,
+  response: LoginSimpleTokenResponse,
   cookieName: string,
   onSuccess: () => void,
 ) => {
@@ -62,7 +64,7 @@ const useLogin = ({
   refreshCookieName = REFRESH_COOKIE_NAME,
   ApiClass = AuthApi,
   enableFormApiErrors = true,
-}: IUseLogin = {}) => {
+}: UseLoginOptions = {}) => {
   const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
   const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
@@ -70,13 +72,13 @@ const useLogin = ({
   /*
    * Handles login success  with the auth token in response
    */
-  async function handleLoginSuccess(response: ILoginJWTResponse | ILoginSimpleTokenResponse) {
+  async function handleLoginSuccess(response: LoginJWTResponse | LoginSimpleTokenResponse) {
     if (isJWTResponse(tokenType, response)) {
       jwtSuccessHandler(response, cookieName, refreshCookieName)
     } else {
       simpleTokenSuccessHandler(response, cookieName, () => {
         // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
-        queryClient.invalidateQueries(USER_API_KEY.getUser())
+        queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
         refetchUser()
       })
     }
@@ -89,7 +91,7 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ILoginRequest) => ApiClass.login(data),
+    mutationFn: (data: LoginRequest) => ApiClass.login(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
@@ -113,7 +115,8 @@ const useLogin = ({
     mode: 'onBlur',
   })
 
-  const mfaMutation = useMutation((data: ILoginMfaRequest) => MfaApi.loginStep2(data), {
+  const mfaMutation = useMutation({
+    mutationFn: (data: LoginMfaRequest) => MfaApi.loginStep2(data),
     ...mfaOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       mfaOptions?.onError?.(err, variables, context)
@@ -122,6 +125,7 @@ const useLogin = ({
       }
     },
     onSuccess: (response, variables, context) => {
+      // @ts-ignore BA-1206: fix typing
       handleLoginSuccess(response)
       mfaOptions?.onSuccess?.(response, variables, context)
     },

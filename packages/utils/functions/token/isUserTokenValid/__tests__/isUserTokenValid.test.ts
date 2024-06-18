@@ -15,7 +15,7 @@ describe('isUserTokenValid function', () => {
 
   it('returns true for a valid token', () => {
     const validUserToken = {
-      token_type: 'access',
+      tokenType: 'access',
       exp: mockCurrentTime + 1,
       iat: 123,
       jti: `jti`,
@@ -26,7 +26,7 @@ describe('isUserTokenValid function', () => {
 
   it('returns false for an expired token', () => {
     const expiredUserToken = {
-      token_type: 'access',
+      tokenType: 'access',
       exp: mockCurrentTime - 1,
       iat: 123,
       jti: `jti`,

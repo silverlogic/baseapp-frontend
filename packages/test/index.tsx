@@ -12,6 +12,7 @@ const customRender = (ui: ReactElement, options?: RenderOptions) => {
 }
 // re-export testing-library
 export * from '@testing-library/react'
+// @ts-ignore TODO: investigate error on jest-dom re-export
 export * from '@testing-library/jest-dom'
 export * from '@testing-library/user-event'
 

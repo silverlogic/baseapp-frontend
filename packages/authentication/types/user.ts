@@ -1,4 +1,4 @@
-export interface IUser {
+export interface User {
   id: number
   email: string
   isEmailVerified: boolean
@@ -14,7 +14,7 @@ export interface IUser {
   phoneNumber: string
 }
 
-export interface UserUpdateParams<TUser extends Partial<IUser>> {
+export interface UserUpdateParams<TUser extends Partial<User>> {
   userId: TUser['id']
   data: Partial<Omit<TUser, 'avatar' | 'id'>> & {
     avatar?: File | string

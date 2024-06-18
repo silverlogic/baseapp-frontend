@@ -1,5 +1,5 @@
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
-import type { IJWTResponse } from '@baseapp-frontend/utils/types/jwt'
+import type { JWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 const preAuthenticateJWT = async (token?: string) => {
   try {
@@ -7,7 +7,7 @@ const preAuthenticateJWT = async (token?: string) => {
       throw new Error('No token provided.')
     }
 
-    const response = await baseAppFetch<IJWTResponse>('/auth/pre-auth/jwt', {
+    const response = await baseAppFetch<JWTResponse>('/auth/pre-auth/jwt', {
       method: 'POST',
       body: { token },
     })

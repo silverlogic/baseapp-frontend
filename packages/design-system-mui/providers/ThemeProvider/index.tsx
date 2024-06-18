@@ -6,9 +6,9 @@ import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
 import { ThemeProvider as MUIThemeProvider } from '@mui/material'
 
-import { IThemeProvider } from './types'
+import { ThemeProviderProps } from './types'
 
-const ThemeProvider: FC<IThemeProvider> = ({ theme, cacheKey, children }) => {
+const ThemeProvider: FC<ThemeProviderProps> = ({ theme, cacheKey, children }) => {
   const emotionCache = createCache({ key: cacheKey })
 
   return (

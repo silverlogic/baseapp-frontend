@@ -10,7 +10,7 @@ export type ResetPasswordForm = {
   confirmNewPassword: string
 }
 
-export interface IUseResetPassword {
+export interface UseResetPasswordOptions {
   token: string
   validationSchema?: z.ZodObject<z.ZodRawShape> | z.ZodEffects<z.ZodObject<z.ZodRawShape>>
   defaultValues?: ResetPasswordForm

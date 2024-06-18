@@ -10,12 +10,12 @@ import { TokenTypes, axios } from '@baseapp-frontend/utils'
 import { UseMutationResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { IUser } from '../../../../types/user'
+import { User } from '../../../../types/user'
 import { UseUpdateUserOptions } from '../types'
 import request from './fixtures/request.json'
 
-interface IIUseUpdateUser<IUser> extends Omit<UseMutationResult<IUser, unknown>, 'data'> {
-  user?: IUser
+interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unknown>, 'data'> {
+  user?: TUser
 }
 
 // TODO: BA-1308: improve tests
@@ -23,9 +23,9 @@ describe('useUserUpdate', () => {
   // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
   const axiosMock = new MockAdapter(axios)
 
-  let useUserUpdate: <TUser extends Partial<IUser>>(
+  let useUserUpdate: <TUser extends Partial<User>>(
     props?: UseUpdateUserOptions<TUser>,
-  ) => IIUseUpdateUser<TUser>
+  ) => UseUpdateUserReturn<TUser>
 
   const decodeJWTMock = jest.fn()
   const refreshAccessTokenMock = jest.fn()
@@ -76,7 +76,7 @@ describe('useUserUpdate', () => {
 
     await result.current.mutateAsync({ userId: 1, data: { firstName: 'BB' } })
 
-    await waitFor(() => expect(result.current.isLoading).toBe(false))
+    await waitFor(() => expect(result.current.isPending).toBe(false))
     await waitFor(() => expect(hasOnSettledRan).toBe(true))
   })
 })
