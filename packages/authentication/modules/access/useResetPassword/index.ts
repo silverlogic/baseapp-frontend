@@ -26,7 +26,7 @@ const useResetPassword = ({
 
   const mutation = useMutation({
     mutationFn: ({ newPassword }) => ApiClass.resetPassword({ newPassword, token }),
-    ...options, // needs to be placed bellow all overridable options
+    ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
       if (enableFormApiErrors) {

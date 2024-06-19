@@ -1,5 +1,3 @@
-'use client'
-
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,26 +5,26 @@ import { useMutation } from '@tanstack/react-query'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { RegisterRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { UseSignUpOptions } from './types'
+import { ChangeExpiredPasswordForm, UseChangeExpiredPassword } from './types'
 
-const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse = void>({
+const useChangeExpiredPassword = ({
+  token,
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
-  defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
+  defaultValues = DEFAULT_INITIAL_VALUES,
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: UseSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
+}: UseChangeExpiredPassword) => {
   const form = useForm({
-    // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues,
     resolver: zodResolver(validationSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
   })
 
   const mutation = useMutation({
-    mutationFn: (values) => ApiClass.register<TRegisterResponse>(values),
+    mutationFn: ({ currentPassword, newPassword }) =>
+      ApiClass.changeExpiredPassword({ currentPassword, newPassword, token }),
     ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
@@ -39,11 +37,11 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
     },
   })
 
-  const handleSubmit: SubmitHandler<TRegisterRequest> = async (values) => {
+  const handleSubmit: SubmitHandler<ChangeExpiredPasswordForm> = async (values) => {
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
-      console.error(error)
+      // mutateAsync will raise an error if there's an API error
     }
   }
 
@@ -57,4 +55,4 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
   }
 }
 
-export default useSignUp
+export default useChangeExpiredPassword

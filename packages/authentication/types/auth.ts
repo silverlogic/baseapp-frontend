@@ -24,7 +24,15 @@ export interface LoginJWTResponse {
   refresh: string
 }
 
-export type LoginResponse = LoginMfaResponse | LoginSimpleTokenResponse | LoginJWTResponse
+export interface LoginChangeExpiredPasswordRedirectResponse {
+  redirectUrl: string
+}
+
+export type LoginResponse =
+  | LoginMfaResponse
+  | LoginSimpleTokenResponse
+  | LoginJWTResponse
+  | LoginChangeExpiredPasswordRedirectResponse
 
 export interface ForgotPasswordRequest {
   email: string
@@ -52,3 +60,9 @@ export interface PreAuthRequest {
 }
 
 export type PreAuthResponse = LoginSimpleTokenResponse | LoginJWTResponse
+
+export interface ChangeExpiredPasswordRequest {
+  currentPassword: string
+  newPassword: string
+  token: string
+}
