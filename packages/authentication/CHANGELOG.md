@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 3.1.0
+
+### Minor Changes
+
+- Add change expired password logic in useLogin and add change expired password api
+
 ## 3.0.1
 
 ### Patch Changes
