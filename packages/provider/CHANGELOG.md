@@ -1,5 +1,11 @@
 # @baseapp-frontend/provider
 
+## 2.0.1
+
+### Patch Changes
+
+- Standardize some of dependencies versions.
+
 ## 2.0.0
 
 ### Major Changes

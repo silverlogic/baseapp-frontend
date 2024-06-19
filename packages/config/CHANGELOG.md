@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.5
+
+### Patch Changes
+
+- Standardize some of dependencies versions.
+
 ## 2.1.4
 
 ### Patch Changes

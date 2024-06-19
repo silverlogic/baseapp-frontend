@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 3.0.1
+
+### Patch Changes
+
+- `preAuthenticateJWT` uses normal fetch to avoid Node.js module not supported in the Edge Runtime error when used in the `middleware`.
+- Standardize some of dependencies versions.
+- Updated dependencies
+  - @baseapp-frontend/provider@2.0.1
+
 ## 3.0.0
 
 ### Major Changes

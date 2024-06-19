@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -11,7 +11,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.40.1",
+    "@tanstack/react-query": "^5.45.1",
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
