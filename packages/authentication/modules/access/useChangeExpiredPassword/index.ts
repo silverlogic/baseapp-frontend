@@ -6,7 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { ChangeExpiredPasswordForm, IUseChangeExpiredPassword } from './types'
+import { ChangeExpiredPasswordForm, UseChangeExpiredPassword } from './types'
 
 const useChangeExpiredPassword = ({
   token,
@@ -15,7 +15,7 @@ const useChangeExpiredPassword = ({
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: IUseChangeExpiredPassword) => {
+}: UseChangeExpiredPassword) => {
   const form = useForm({
     defaultValues,
     resolver: zodResolver(validationSchema),

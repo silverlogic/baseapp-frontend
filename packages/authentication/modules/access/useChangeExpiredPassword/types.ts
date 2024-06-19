@@ -11,7 +11,7 @@ export type ChangeExpiredPasswordForm = {
   confirmNewPassword: string
 }
 
-export interface IUseChangeExpiredPassword {
+export interface UseChangeExpiredPassword {
   token: string
   validationSchema?: z.ZodObject<z.ZodRawShape> | z.ZodEffects<z.ZodObject<z.ZodRawShape>>
   defaultValues?: ChangeExpiredPasswordForm
