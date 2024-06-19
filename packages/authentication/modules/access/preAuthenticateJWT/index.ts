@@ -1,4 +1,3 @@
-import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import type { JWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 const preAuthenticateJWT = async (token?: string) => {
@@ -7,16 +6,21 @@ const preAuthenticateJWT = async (token?: string) => {
       throw new Error('No token provided.')
     }
 
-    const response = await baseAppFetch<JWTResponse>('/auth/pre-auth/jwt', {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`, {
       method: 'POST',
-      body: { token },
+      body: JSON.stringify({ token }),
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     })
 
     if (response instanceof Response && !response.ok) {
       throw new Error('Failed to pre-authenticate.')
     }
 
-    return response
+    const data = (await response.json()) as JWTResponse
+    return data
   } catch (error) {
     return Promise.reject(error)
   }

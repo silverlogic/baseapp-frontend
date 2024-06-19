@@ -34,8 +34,8 @@ describe('preAuthenticateJWT', () => {
     expect(fetch).toHaveBeenCalledWith(expectedUrl, {
       method: 'POST',
       body: JSON.stringify({ token }),
+      cache: 'no-store',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
       },
     })
