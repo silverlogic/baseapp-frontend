@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system-mui
 
+## 2.0.1
+
+### Patch Changes
+
+- Fix typo for IButtonWithLoadingProps
+
 ## 2.0.0
 
 ### Major Changes
