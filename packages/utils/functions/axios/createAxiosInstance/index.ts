@@ -2,7 +2,11 @@ import _axios from 'axios'
 import humps from 'humps'
 import Cookies from 'js-cookie'
 
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
+import {
+  ACCESS_COOKIE_NAME,
+  LANGUAGE_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+} from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { TokenTypes } from '../../../constants/token'
@@ -16,6 +20,7 @@ export const createAxiosInstance = ({
   file = false,
   cookieName = ACCESS_COOKIE_NAME,
   refreshCookieName = REFRESH_COOKIE_NAME,
+  languageCookieName = LANGUAGE_COOKIE_NAME,
   servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
   tokenType: instanceTokenType = TokenTypes.jwt,
   useFormData = true,
@@ -55,6 +60,11 @@ export const createAxiosInstance = ({
     if (request.headers && !request.headers.Authorization && authToken && isAuthTokenRequired) {
       request.headers.Authorization =
         tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
+    }
+
+    const language = Cookies.get(languageCookieName)
+    if (request.headers && language) {
+      request.headers['Accept-Language'] = language
     }
 
     if (request.data && !file) {

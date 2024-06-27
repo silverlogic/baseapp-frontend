@@ -53,6 +53,7 @@ export interface RegisterRequest {
 export interface CustomCookieNames {
   cookieName?: string
   refreshCookieName?: string
+  languageCookieName?: string
 }
 
 export interface PreAuthRequest {

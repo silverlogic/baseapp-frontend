@@ -2,6 +2,7 @@ import {
   ComponentWithProviders,
   CookiesGetByNameFn,
   MockAdapter,
+  cookiesMock,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
@@ -69,6 +70,19 @@ describe('useSimpleTokenUser', () => {
     await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
 
     expect(result.current.user?.customField).toBe(123)
+  })
+
+  test('should save language cookie', async () => {
+    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => 'fake token')
+    cookiesMock.set.mockImplementation((cookieName: string) => cookieName)
+    axiosMock.onGet('/users/me').reply(200, request)
+
+    const { result } = renderHook(() => useSimpleTokenUser(), {
+      wrapper: ComponentWithProviders,
+    })
+
+    await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
+    expect(cookiesMock.set).toHaveBeenCalledTimes(1)
   })
 
   test('should remove cookie if 401', async () => {

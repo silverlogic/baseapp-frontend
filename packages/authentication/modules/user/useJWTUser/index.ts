@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils'
+import { ACCESS_COOKIE_NAME, LANGUAGE_COOKIE_NAME, LanguagesEnum } from '@baseapp-frontend/utils'
 import { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
@@ -21,6 +21,7 @@ import { UseJWTUserOptions } from './types'
 const useJWTUser = <TUser extends Partial<User> & JWTContent>({
   options,
   cookieName = ACCESS_COOKIE_NAME,
+  languageCookieName = LANGUAGE_COOKIE_NAME,
   ApiClass = UserApi,
   noSSR = false,
 }: UseJWTUserOptions<TUser> = {}) => {
@@ -49,6 +50,12 @@ const useJWTUser = <TUser extends Partial<User> & JWTContent>({
       queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     }
   }, [query.error])
+
+  useEffect(() => {
+    if (user?.preferredLanguage && user?.preferredLanguage in LanguagesEnum) {
+      Cookies.set(languageCookieName, user?.preferredLanguage)
+    }
+  }, [user?.preferredLanguage])
 
   return { user, ...query }
 }

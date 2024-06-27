@@ -8,6 +8,7 @@ type NextFetchOptions = {
 type Config = {
   accessCookieName?: string
   refreshCookieName?: string
+  languageCookieName?: string
   baseUrl?: string
   servicesWithoutToken?: RegExp[]
   params?: Record<string, any>
@@ -30,6 +31,7 @@ type ExtraHeaders = {
   Accept?: string
   'Content-Type'?: string
   Authorization?: string
+  'Accept-Language'?: string
 }
 
 export interface RequestOptions extends Omit<RequestInit, 'body' | 'headers'> {

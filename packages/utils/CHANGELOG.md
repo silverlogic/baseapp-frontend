@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 2.5.0
+
+### Minor Changes
+
+- Store the user language preference on cookies
+- Sends the Accept-Language HEADER based on user language preference (HTTP calls and GraphQL)
+
 ## 2.4.0
 
 ### Minor Changes

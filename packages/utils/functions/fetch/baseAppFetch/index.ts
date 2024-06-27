@@ -1,10 +1,15 @@
 import humps from 'humps'
 
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
+import {
+  ACCESS_COOKIE_NAME,
+  LANGUAGE_COOKIE_NAME,
+  REFRESH_COOKIE_NAME,
+} from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { TokenTypes } from '../../../constants/token'
 import { eventEmitter } from '../../events'
+import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
 import { decodeJWT, getToken, isUserTokenValid, refreshAccessToken } from '../../token'
 import { BaseAppFetch, RequestOptions } from './types'
@@ -68,6 +73,7 @@ export const baseAppFetch: BaseAppFetch = async (
   {
     accessCookieName = ACCESS_COOKIE_NAME,
     refreshCookieName = REFRESH_COOKIE_NAME,
+    languageCookieName = LANGUAGE_COOKIE_NAME,
     baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
     servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
     params = {},
@@ -122,6 +128,12 @@ export const baseAppFetch: BaseAppFetch = async (
   if (authToken && isAuthTokenRequired) {
     fetchOptions.headers!.Authorization =
       tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
+  }
+
+  // set language header
+  const language = getLanguage(languageCookieName, { noSSR: false })
+  if (language) {
+    fetchOptions.headers!['Accept-Language'] = language
   }
 
   // set content-type header

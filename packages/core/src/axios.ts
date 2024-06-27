@@ -4,7 +4,7 @@ import Cookies from 'js-cookie'
 
 import { buildQueryString } from './queryString'
 
-function createAxiosInstance({ file = false } = {}) {
+function createAxiosInstance({ file = false, languageCookieName = 'Language' } = {}) {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     paramsSerializer(params) {
@@ -23,6 +23,13 @@ function createAxiosInstance({ file = false } = {}) {
     if (authToken) {
       if (request.headers && !request.headers.Authorization) {
         request.headers.Authorization = `Token ${authToken}`
+      }
+    }
+
+    const language = Cookies.get(languageCookieName)
+    if (language) {
+      if (request.headers) {
+        request.headers['Accept-Language'] = language
       }
     }
 
