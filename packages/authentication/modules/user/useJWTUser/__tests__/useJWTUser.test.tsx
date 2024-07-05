@@ -2,7 +2,6 @@ import {
   ComponentWithProviders,
   CookiesGetByNameFn,
   MockAdapter,
-  cookiesMock,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
@@ -86,28 +85,5 @@ describe('useJWTUser', () => {
     await waitFor(() => expect(result.current.isPending).toBe(false))
     await waitFor(() => expect(result.current.isLoading).toBe(false))
     await waitFor(() => expect(resetQueriesMock).toHaveBeenCalled())
-  })
-
-  it('should run save language cookie', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
-    decodeJWTMock.mockImplementation(() => undefined)
-    cookiesMock.set.mockImplementation((cookieName: string) => cookieName)
-    axiosMock.onGet('/users/me').reply(200, { ...request })
-    const { result } = renderHook(
-      () =>
-        useJWTUser({
-          options: {
-            placeholderData: undefined,
-            retry: false,
-          },
-        }),
-      {
-        wrapper: ComponentWithProviders,
-      },
-    )
-
-    expect(result.current.isLoading).toBe(true)
-    await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
-    expect(cookiesMock.set).toHaveBeenCalledTimes(1)
   })
 })

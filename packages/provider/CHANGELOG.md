@@ -1,6 +1,6 @@
 # @baseapp-frontend/provider
 
-## 3.0.0
+## 2.0.2
 
 ### Patch Changes
 

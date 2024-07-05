@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 
-import { ACCESS_COOKIE_NAME, LANGUAGE_COOKIE_NAME, LanguagesEnum } from '@baseapp-frontend/utils'
+import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
@@ -12,7 +12,6 @@ import { UseSimpleTokenUserOptions } from './types'
 const useSimpleTokenUser = <TUser extends Partial<User>>({
   options,
   cookieName = ACCESS_COOKIE_NAME,
-  languageCookieName = LANGUAGE_COOKIE_NAME,
   ApiClass = UserApi,
 }: UseSimpleTokenUserOptions<TUser> = {}) => {
   const token = Cookies.get(cookieName)
@@ -35,12 +34,6 @@ const useSimpleTokenUser = <TUser extends Partial<User>>({
       queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     }
   }, [query.error])
-
-  useEffect(() => {
-    if (user?.preferredLanguage && user?.preferredLanguage in LanguagesEnum) {
-      Cookies.set(languageCookieName, user?.preferredLanguage)
-    }
-  }, [user?.preferredLanguage])
 
   return { user, ...query }
 }

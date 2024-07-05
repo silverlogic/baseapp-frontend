@@ -1,6 +1,6 @@
 # @baseapp-frontend/authentication
 
-## 4.0.0
+## 3.2.0
 
 ### Minor Changes
 
@@ -11,7 +11,7 @@
 
 - Updated dependencies
   - @baseapp-frontend/utils@2.5.0
-  - @baseapp-frontend/provider@3.0.0
+  - @baseapp-frontend/provider@2.0.2
 
 ## 3.1.0
 
