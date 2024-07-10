@@ -1,5 +1,18 @@
 # @baseapp-frontend/authentication
 
+## 3.2.0
+
+### Minor Changes
+
+- Store the user language preference on cookies
+- Sends the Accept-Language HEADER based on user language preference (HTTP calls and GraphQL)
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.0
+  - @baseapp-frontend/provider@2.0.2
+
 ## 3.1.0
 
 ### Minor Changes

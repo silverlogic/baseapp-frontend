@@ -6,5 +6,6 @@
   "isEmailVerified": true,
   "isNewEmailConfirmed": false,
   "newEmail": "",
-  "referralCode": "1234"
+  "referralCode": "1234",
+  "preferredLanguage": "en"
 }

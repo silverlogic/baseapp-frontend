@@ -12,6 +12,7 @@ export interface User {
   firstName: string
   lastName: string
   phoneNumber: string
+  preferredLanguage: string
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
