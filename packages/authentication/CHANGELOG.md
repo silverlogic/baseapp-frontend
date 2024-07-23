@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 3.2.1
+
+### Patch Changes
+
+- Remove `@baseapp-frontend/provider` and `@baseapp-frontend/utils` from `dependencies`.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.1
+
 ## 3.2.0
 
 ### Minor Changes

@@ -7,8 +7,14 @@ export const getApiErrorMessage = (
   let message = defaultMessage
 
   if (error?.message) {
-    message = error.message
+    try {
+      const parsedMessage = JSON.parse(error.message)
+      message = parsedMessage.detail || parsedMessage || message
+    } catch {
+      message = error.message
+    }
   }
+
   if (error?.response?.data) {
     const dataKey = Object.keys(error.response.data)[0]
     const potentialMessage = error.response.data[dataKey] ?? message

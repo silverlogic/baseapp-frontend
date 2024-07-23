@@ -1,0 +1,61 @@
+{
+  "name": "@baseapp-frontend/design-system",
+  "description": "Design System components and configurations.",
+  "version": "0.0.1",
+  "main": "./dist/index.ts",
+  "module": "./dist/index.mjs",
+  "scripts": {
+    "build": "tsc --build",
+    "dev": "tsc --watch",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "dependencies": {
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.5",
+    "@iconify/react": "^5.0.1",
+    "@mui/icons-material": "^5.15.19",
+    "@mui/lab": "^5.0.0-alpha.170",
+    "@mui/material": "^5.15.19",
+    "@mui/x-date-pickers": "^7.6.2",
+    "framer-motion": "^11.2.10",
+    "lodash": "^4.17.21",
+    "next": "14.3.0-canary.24",
+    "react-hook-form": "^7.51.5",
+    "simplebar-react": "^3.2.5"
+  },
+  "peerDependencies": {
+    "@baseapp-frontend/utils": "*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@baseapp-frontend/config": "*",
+    "@baseapp-frontend/tsconfig": "*",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/lodash": "^4.17.6",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/design-system-mui"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "resolutions": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0"
+  }
+}

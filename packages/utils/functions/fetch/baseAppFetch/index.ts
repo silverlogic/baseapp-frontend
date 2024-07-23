@@ -160,7 +160,7 @@ export const baseAppFetch: BaseAppFetch = async (
 
     if (!response.ok && throwError) {
       const errorMessage = isJsonResponse ? await response.json() : response.statusText
-      throw new Error(errorMessage)
+      throw new Error(JSON.stringify(errorMessage))
     }
 
     if (isJsonResponse) {

@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 2.5.1
+
+### Patch Changes
+
+- Add date format utilities.
+- `baseAppFetch` throws `JSON.stringfy` error messages.
+- `getApiErrorMessage` can parse `JSON.stringfy` error messages.
+
 ## 2.5.0
 
 ### Minor Changes

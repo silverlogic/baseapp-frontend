@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@baseapp-frontend/core": "*",
-    "@baseapp-frontend/design-system-mui": "*",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
     "@mui/material": "^5.10.0",
