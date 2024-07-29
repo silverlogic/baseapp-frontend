@@ -45,3 +45,4 @@ tsconfig.tsbuildinfo
 **/.vscode
 **/routes.json
 .idea/
+*storybook.log

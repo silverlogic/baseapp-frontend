@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/authentication",
   "description": "Authentication modules.",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -12,8 +12,6 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@baseapp-frontend/provider": "*",
-    "@baseapp-frontend/utils": "*",
     "@hookform/resolvers": "^3.6.0",
     "@tanstack/react-query": "^5.45.1",
     "js-cookie": "^3.0.5",

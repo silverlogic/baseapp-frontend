@@ -1,0 +1,95 @@
+{
+  "name": "@baseapp-frontend/components",
+  "description": "BaseApp components",
+  "version": "0.0.1",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsc --watch",
+    "relay": "relay-compiler",
+    "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
+    "relay-update-schema": "yarn relay-download-schema && yarn relay",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.6.0",
+    "@mui/lab": "^5.0.0-alpha.170",
+    "@mui/material": "^5.15.19",
+    "graphql": "^16.8.1",
+    "luxon": "^3.4.4",
+    "next": "14.3.0-canary.24",
+    "react-hook-form": "^7.51.5",
+    "react-relay": "^16.2.0",
+    "react-virtuoso": "^4.7.11",
+    "use-long-press": "^3.2.0",
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
+  },
+  "peerDependencies": {
+    "@baseapp-frontend/design-system": "*",
+    "@baseapp-frontend/graphql": "*",
+    "@baseapp-frontend/utils": "*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
+    "@baseapp-frontend/config": "*",
+    "@baseapp-frontend/tsconfig": "*",
+    "@chromatic-com/storybook": "^1.5.0",
+    "@storybook/addon-essentials": "^8.1.10",
+    "@storybook/addon-interactions": "^8.1.10",
+    "@storybook/addon-links": "^8.1.10",
+    "@storybook/addon-styling-webpack": "^1.0.0",
+    "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
+    "@storybook/blocks": "^8.1.10",
+    "@storybook/react": "^8.1.10",
+    "@storybook/react-webpack5": "^8.1.10",
+    "@storybook/test": "^8.1.10",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-relay": "^16.0.6",
+    "autoprefixer": "^10.4.19",
+    "babel-plugin-macros": "^3.1.0",
+    "babel-plugin-relay": "^17.0.0",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
+    "eslint-plugin-storybook": "^0.8.0",
+    "get-graphql-schema": "^2.1.2",
+    "msw": "^2.3.1",
+    "msw-storybook-addon": "^2.0.2",
+    "postcss": "^8.4.38",
+    "postcss-loader": "^8.1.1",
+    "relay-compiler": "^16.2.0",
+    "relay-test-utils": "^17.0.0",
+    "storybook": "^8.1.10",
+    "tailwindcss": "^3.4.4",
+    "typescript": "^5.4.5"
+  },
+  "resolutions": {
+    "@types/react": "^18.3.3"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/graphql"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/graphql/README.md",
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

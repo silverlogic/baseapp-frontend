@@ -23,6 +23,7 @@ module.exports = {
     'postcss.config.js',
     'tailwind.config.js',
     'relay.config.js',
+    '**/mockServiceWorker.js',
   ],
   extends: [
     'next',
@@ -30,6 +31,7 @@ module.exports = {
     'airbnb-typescript',
     'plugin:react/jsx-runtime',
     'plugin:react/recommended',
+    'plugin:storybook/recommended',
     'prettier',
   ],
   plugins: ['react', 'react-hooks', '@typescript-eslint', '@emotion'],

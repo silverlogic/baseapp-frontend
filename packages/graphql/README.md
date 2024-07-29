@@ -44,8 +44,8 @@ In order to use common `Relay` features like `usePreloadedQuery` or `graphql` an
 
 - install dependecies
 ```bash
-    yarn add react-relay@^16.1.0
-    yarn add -D relay-compiler@^16.1.0 @types/react-relay@^16.0.5
+    yarn add react-relay@^16.2.0
+    yarn add -D relay-compiler@^16.2.0 @types/react-relay@^16.0.6
 ```
 
 ## **What is in here?**

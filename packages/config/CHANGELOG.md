@@ -1,5 +1,12 @@
 # @baseapp-frontend/config
 
+## 2.1.6
+
+### Patch Changes
+
+- Add `storybook/recommended` plugin.
+- Add `mockServiceWorker` to the `ignorePatterns` list.
+
 ## 2.1.5
 
 ### Patch Changes
