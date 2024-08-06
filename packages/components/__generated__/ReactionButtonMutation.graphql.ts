@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, Mutation } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type ReactionTypes = 'DISLIKE' | 'LIKE' | '%future added value'
 export type ReactionToggleInput = {
   clientMutationId?: string | null | undefined

@@ -5,6 +5,7 @@
 This package includes authentication modules such as login, signup, reset password, multifactor authentication and more.
 
 ## **Installation**
+
 You can install the package via npm, yarn or pnpm:
 
 ```bash
@@ -24,19 +25,21 @@ Handles login/mfa form and execute the login. Extends all ReactQuery's useMutati
 #### **Parameters**
 
 - `validationSchema` (optional)
-	- This is a validation schema used with Yup, a JavaScript object schema validator and builder.
+
+  - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-	- This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
+
+  - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `loginOptions` (optional)
-	- This object is used to provide additional configuration to the useMutation hook from react-query that handles the login request. By default, it's an empty object {}.
+
+  - This object is used to provide additional configuration to the useMutation hook from react-query that handles the login request. By default, it's an empty object {}.
 
 - `mfaOptions` (optional)
-	- This object provides additional configuration to the useMutation hook that handles the second step of login, which is the Multi-Factor Authentication (MFA) request. By default, it's an empty object {}.
-
+  - This object provides additional configuration to the useMutation hook that handles the second step of login, which is the Multi-Factor Authentication (MFA) request. By default, it's an empty object {}.
 
 Both options are just an shortcut for [react-query's mutation's options](https://react-query.tanstack.com/reference/useMutation)
 
@@ -51,10 +54,10 @@ Both options are just an shortcut for [react-query's mutation's options](https:/
 - `mfaMutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance is used for executing the MFA step of the login process when needed.
 
-
 #### **Usage**
 
 - `form` usage example:
+
 ```jsx
 const { form } = useLogin()
 return <form onSubmit={form.handleSubmit}>
@@ -71,12 +74,13 @@ return <form onSubmit={form.handleSubmit}>
     name="password"
     form={form}
   />
-	
+
   <button type="submit">Login</button>
 </form>
 ```
 
 - `mutation` usage example, login after a successful signup:
+
 ```js
 const { mutation: loginMutation } = useLogin()
 useSignUp({
@@ -85,7 +89,7 @@ useSignUp({
       email: variables.email,
       password: variables.password,
     })
-  }
+  },
 })
 ```
 
@@ -96,16 +100,17 @@ Handles password recovery form and sends a request for password recovery. Extend
 #### **Parameters**
 
 - `validationSchema` (optional)
+
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
+
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
   - This object is used to provide additional configuration to the useMutation hook from react-query that handles the password recovery request. By default, it's an empty object {}.
-
 
 #### **Returns**
 
@@ -114,10 +119,10 @@ Handles password recovery form and sends a request for password recovery. Extend
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance can be used to execute the password recovery at any time.
 
-
 #### **Usage**
 
 - `form` usage example:
+
 ```jsx
 const { form } = useRecoverPassword()
 return <form onSubmit={form.handleSubmit}>
@@ -128,7 +133,7 @@ return <form onSubmit={form.handleSubmit}>
     placeholder="Email"
     form={form}
   />
-  
+
   <button type="submit">Recover password</button>
 </form>
 ```
@@ -140,11 +145,13 @@ Handles password reset form and sends a request for password reset. Extends all 
 #### **Parameters**
 
 - `validationSchema` (optional)
+
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
+
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
@@ -157,10 +164,10 @@ Handles password reset form and sends a request for password reset. Extends all 
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance can be used to execute the password reset at any time.
 
-
 #### **Usage**
 
 - `form` usage example:
+
 ```jsx
 const { form } = useResetPassword()
 return <form onSubmit={form.handleSubmit}>
@@ -177,7 +184,7 @@ return <form onSubmit={form.handleSubmit}>
     placeholder="Token"
     form={form}
   />
-  
+
   <button type="submit">Reset password</button>
 </form>
 ```
@@ -189,11 +196,13 @@ Handles sign-up form and sends a request for registration. Extends all ReactQuer
 #### **Parameters**
 
 - `validationSchema` (optional)
+
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
+
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
@@ -206,10 +215,10 @@ Handles sign-up form and sends a request for registration. Extends all ReactQuer
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance can be used to execute the registration at any time.
 
-
 #### **Usage**
 
 - `form` usage example:
+
 ```jsx
 const { form } = useSignUp()
 return <form onSubmit={form.handleSubmit}>
@@ -226,11 +235,10 @@ return <form onSubmit={form.handleSubmit}>
     name="password"
     form={form}
   />
-  
+
   <button type="submit">Sign up</button>
 </form>
 ```
-
 
 ### **useUser**
 
@@ -253,6 +261,7 @@ This hook also removes the user's token cookie and invalidates the user data cac
 #### **Usage**
 
 - `useUser` usage example:
+
 ```jsx
 const { user, isLoading, isError, error } = useUser()
 
@@ -279,6 +288,7 @@ Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) 
 #### **Usage**
 
 - `useLogout` usage example:
+
 ```jsx
 const logout = useLogout()
 
@@ -292,16 +302,17 @@ This hook uses the activate method from the `MfaApi` to activate Multi-Factor Au
 #### **Parameters**
 
 - `options` (optional)
-	- This object is used to provide additional configuration to the useMutation hook from react-query that handles the MFA activation request. By default, it's an empty object {}.
+  - This object is used to provide additional configuration to the useMutation hook from react-query that handles the MFA activation request. By default, it's an empty object {}.
 
 #### **Returns**
 
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
-	- This instance can be used to execute the MFA activation at any time.
+  - This instance can be used to execute the MFA activation at any time.
 
 #### **Usage**
 
 - `useMfaActivate` usage example:
+
 ```jsx
 const { mutation: mutate: { activateMfa } } = useMfaActivate()
 
@@ -315,22 +326,26 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 #### **Parameters**
 
 - `method`
+
   - This is the MFA method that the user selected for activation.
 
 - `validationSchema` (optional)
-	- This is a validation schema used with Yup, a JavaScript object schema validator and builder.
+
+  - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `CODE_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-	- This is an object representing the initial values for the form fields. The default value for defaultValues is `CODE_VALIDATION_INITIAL_VALUES`.
+
+  - This is an object representing the initial values for the form fields. The default value for defaultValues is `CODE_VALIDATION_INITIAL_VALUES`.
 
 - `options` (optional)
-	- This object is used to provide additional configuration to the useMutation hook from react-query that handles the MFA activation confirmation. By default, it's an empty object {}.
+  - This object is used to provide additional configuration to the useMutation hook from react-query that handles the MFA activation confirmation. By default, it's an empty object {}.
 
 #### **Returns**
 
 - `form` ([react-hook-form's instance](https://react-hook-form.com/api/useform))
+
   - This instance is important for building the form's inputs and already handles the onSubmit behavior.
 
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
@@ -339,6 +354,7 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 #### **Usage**
 
 - `useMfaActivateConfirm` usage example:
+
 ```jsx
 const { form, mutation: { activateMfaConfirm } } = useMfaActivateConfirm({ method: 'your-method' })
 
@@ -360,13 +376,14 @@ Handles the fetching of the active MFA methods for the current user.
 #### **Parameters**
 
 - `options` (optional)
-	- This object is used to provide additional configuration to the useQuery hook from react-query that fetches the MFA active methods. By default, it's an empty object {}.
-	- `enabled` (optional)
-		- This is a boolean that defines if the query should run automatically when the component mounts. The default value is true.
+  - This object is used to provide additional configuration to the useQuery hook from react-query that fetches the MFA active methods. By default, it's an empty object {}.
+  - `enabled` (optional)
+    - This is a boolean that defines if the query should run automatically when the component mounts. The default value is true.
 
 #### **Returns**
 
 - `activeMethods`
+
   - This array contains the active MFA methods for the current user.
 
 - `...rest` (All remaining properties from useQuery's result)
@@ -375,6 +392,7 @@ Handles the fetching of the active MFA methods for the current user.
 #### **Usage**
 
 - `useMfaActiveMethods` usage example:
+
 ```jsx
 const { activeMethods, isLoading, isError, error } = useMfaActiveMethods()
 
@@ -403,13 +421,14 @@ Handles fetching the MFA configuration for the current user.
 #### **Parameters**
 
 - `options` (optional)
-	- This object is used to provide additional configuration to the useQuery hook from react-query that fetches the MFA configuration. By default, it's an empty object {}.
-	- `enabled` (optional)
-		- This is a boolean that defines if the query should run automatically when the component mounts. The default value is true.
+  - This object is used to provide additional configuration to the useQuery hook from react-query that fetches the MFA configuration. By default, it's an empty object {}.
+  - `enabled` (optional)
+    - This is a boolean that defines if the query should run automatically when the component mounts. The default value is true.
 
 #### **Returns**
 
 - `configuration`
+
   - This object contains the MFA configuration for the current user.
 
 - `...rest` (All remaining properties from useQuery's result)
@@ -418,6 +437,7 @@ Handles fetching the MFA configuration for the current user.
 #### **Usage**
 
 - `useMfaConfiguration` usage example:
+
 ```jsx
 const { configuration, isLoading, isError, error } = useMfaConfiguration()
 
@@ -461,4 +481,3 @@ const { mutate: deactivateMfa } = useMfaDeactivate()
 // to deactivate a method
 deactivateMfa.mutate({ method: 'your-method', code: 'your-code' })
 ```
-

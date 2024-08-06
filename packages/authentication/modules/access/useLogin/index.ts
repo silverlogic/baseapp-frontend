@@ -18,11 +18,11 @@ import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
 import {
+  LoginChangeExpiredPasswordRedirectResponse,
   LoginJWTResponse,
   LoginMfaRequest,
   LoginRequest,
   LoginSimpleTokenResponse,
-  LoginChangeExpiredPasswordRedirectResponse
 } from '../../../types/auth'
 import {
   isJWTResponse,

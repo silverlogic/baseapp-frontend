@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, Mutation } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentCreateInput = {
   body: string
   clientMutationId?: string | null | undefined
