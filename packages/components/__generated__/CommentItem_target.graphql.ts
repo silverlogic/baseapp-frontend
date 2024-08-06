@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentItem_target$data = {
   readonly id: string
   readonly ' $fragmentType': 'CommentItem_target'

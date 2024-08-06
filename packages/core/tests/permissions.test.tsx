@@ -1,16 +1,15 @@
 /**
  * @jest-environment jsdom
  */
-
 import { render } from '@testing-library/react'
 
 import {
-  isRole,
-  isAdmin,
-  hasPermission,
-  hasAnyPermission,
-  hasAllPermissions,
   DEFAULT_ROLES,
+  hasAllPermissions,
+  hasAnyPermission,
+  hasPermission,
+  isAdmin,
+  isRole,
   withPermissions,
 } from '../src/permissions'
 

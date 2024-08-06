@@ -5,6 +5,7 @@
 This package includes provider of different kinds that have "use client" directive on top.
 
 ## **Installation**
+
 You can install the package via npm, yarn or pnpm:
 
 ```bash
@@ -18,6 +19,7 @@ pnpm install @baseapp-frontend/provider
 ## **What is in here?**
 
 ### **ReactQueryProvider**
+
 A React component that provides the `QueryClient` context to its children using React Query's `QueryClientProvider`.
 
 #### **Parameters**
@@ -33,7 +35,9 @@ A React component that provides the `QueryClient` context to its children using 
 
 ```jsx
 import React from 'react'
+
 import { ReactQueryProvider } from 'your-react-query-provider-path'
+
 import YourComponent from './YourComponent'
 
 const config = {
@@ -44,11 +48,7 @@ const config = {
   },
 }
 
-const App = ({children}) => (
-  <ReactQueryProvider config={config}>
-    {children}
-  </ReactQueryProvider>
-)
+const App = ({ children }) => <ReactQueryProvider config={config}>{children}</ReactQueryProvider>
 
 export default App
 ```

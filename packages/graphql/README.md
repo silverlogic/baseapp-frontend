@@ -5,6 +5,7 @@
 This package includes GraphQL's configurations and utilities.
 
 ## **Installation**
+
 You can install the package via npm, yarn or pnpm:
 
 ```bash
@@ -16,10 +17,13 @@ pnpm install @baseapp-frontend/graphql
 ```
 
 ## **Setup**
+
 In order to use this package you will need to:
+
 - create `relay.config.js` file at the root level:
+
 ```ts
-  module.exports = require('@baseapp-frontend/graphql/relay.config.ts')
+module.exports = require('@baseapp-frontend/graphql/relay.config.ts')
 ```
 
 - add relay compiler configuration under `next.config.js`:
@@ -32,13 +36,15 @@ In order to use this package you will need to:
     ],
     compiler: {
       relay: {
-        src: "./",
-        language: "typescript",
-        artifactDirectory: "__generated__",
+        src: './',
+        language: 'typescript',
+        artifactDirectory: '__generated__',
       },
     },
   }
-```
+  ```
+
+````
 
 In order to use common `Relay` features like `usePreloadedQuery` or `graphql` and to be able to create the generated files and download the graphql schema, you may need to install these additional dependencies (they're also present in the `@baseapp-frontend/graphql` dependencies, so make sure to install the same versions):
 
@@ -46,7 +52,7 @@ In order to use common `Relay` features like `usePreloadedQuery` or `graphql` an
 ```bash
     yarn add react-relay@^16.2.0
     yarn add -D relay-compiler@^16.2.0 @types/react-relay@^16.0.6
-```
+````
 
 ## **What is in here?**
 
@@ -65,25 +71,25 @@ It uses `useEnvironment` from `config/environment` for dynamic Relay environment
 To utilize `RelayProvider`, wrap your application or specific components where Relay functionality is needed.
 
 - `RelayProvider` usage example inside the root layout:
-   ```tsx
-    import { RelayProvider } from '@baseapp-frontend/graphql';
 
-    const RootLayout: FC<PropsWithChildren> = ({ children }) => {
-      return (
-        <html lang="en">
-          <body>
-            <RelayProvider>
-              {children}
-            </RelayProvider>
-          </body>
-        </html>
-      )
-    }
+  ```tsx
+  import { RelayProvider } from '@baseapp-frontend/graphql'
 
-    export default RootLayout
-    ```
+  const RootLayout: FC<PropsWithChildren> = ({ children }) => {
+    return (
+      <html lang="en">
+        <body>
+          <RelayProvider>{children}</RelayProvider>
+        </body>
+      </html>
+    )
+  }
+
+  export default RootLayout
+  ```
 
 ### **withRelay**
+
 `withRelay` is a higher-order component for components that uses GraphQL preloaded queries.
 
 #### **Parameters**
@@ -93,67 +99,67 @@ To utilize `RelayProvider`, wrap your application or specific components where R
 - `fetchPolicy` (optional): Defines the query fetching policy. Default to 'store-or-network'.
 
 #### **Usage**
+
 - `withRelay` usage example in a client component that receives a pre loaded query:
-   ```tsx
-    'use client'
 
-    import { FC } from 'react'
+  ```tsx
+  'use client'
 
-    import { ComponentWithQueryRef, withRelay } from '@baseapp-frontend/graphql'
+  import { FC } from 'react'
 
-    import { graphql, usePreloadedQuery } from 'react-relay'
+  import { ComponentWithQueryRef, withRelay } from '@baseapp-frontend/graphql'
 
-    import ClientComponentTestQueryNode, {
-      ClientComponentTestQuery,
-    } from '__generated__/ClientComponentTestQuery.graphql'
+  import ClientComponentTestQueryNode, {
+    ClientComponentTestQuery,
+  } from '__generated__/ClientComponentTestQuery.graphql'
+  import { graphql, usePreloadedQuery } from 'react-relay'
 
-    const ClientComponent: FC<ComponentWithQueryRef<ClientComponentTestQuery>> = ({
-      queryRef,
-    }) => {
-      const data = usePreloadedQuery(
-        graphql`
-          query ClientComponentTestQuery {
-            user {
-              id
-              name
-              bio
-            }
+  const ClientComponent: FC<ComponentWithQueryRef<ClientComponentTestQuery>> = ({ queryRef }) => {
+    const data = usePreloadedQuery(
+      graphql`
+        query ClientComponentTestQuery {
+          user {
+            id
+            name
+            bio
           }
-        `,
-        queryRef,
-      )
+        }
+      `,
+      queryRef,
+    )
 
-      return <h1>{data.user?.bio}</h1>
-    }
+    return <h1>{data.user?.bio}</h1>
+  }
 
-    export default withRelay<
-      typeof ClientComponentTestQueryNode,
-      ClientComponentTestQuery
-    >(ClientComponent, { fallback: 'A different loading fallback', fetchPolicy: 'store-and-network' })
+  export default withRelay<typeof ClientComponentTestQueryNode, ClientComponentTestQuery>(
+    ClientComponent,
+    { fallback: 'A different loading fallback', fetchPolicy: 'store-and-network' },
+  )
   ```
 
 - A parent component that pre loads a query and passes it over to the `ClientComponent`:
+
   ```tsx
-    import { loadSerializableQuery } from '@baseapp-frontend/graphql'
+  import { loadSerializableQuery } from '@baseapp-frontend/graphql'
 
-    import ClientComponentTestQueryNode, {
-      ClientComponentTestQuery,
-    } from '__generated__/ClientComponentAboutArtistRegisterQuery.graphql'
+  import ClientComponentTestQueryNode, {
+    ClientComponentTestQuery,
+  } from '__generated__/ClientComponentAboutArtistRegisterQuery.graphql'
 
-    import ClientComponent from './ClientComponent'
+  import ClientComponent from './ClientComponent'
 
-    const ParentComponent = async () => {
-      const preloadedQuery = await loadSerializableQuery<
-        typeof ClientComponentTestQueryNode,
-        ClientComponentTestQuery
-      >(ClientComponentTestQueryNode.params, {})
+  const ParentComponent = async () => {
+    const preloadedQuery = await loadSerializableQuery<
+      typeof ClientComponentTestQueryNode,
+      ClientComponentTestQuery
+    >(ClientComponentTestQueryNode.params, {})
 
-      return (
-        <div>
-          <ClientComponent preloadedQuery={preloadedQuery} />
-        </div>
-      )
-    }
+    return (
+      <div>
+        <ClientComponent preloadedQuery={preloadedQuery} />
+      </div>
+    )
+  }
 
-    export default ParentComponent
+  export default ParentComponent
   ```

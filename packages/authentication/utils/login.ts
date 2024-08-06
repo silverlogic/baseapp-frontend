@@ -1,11 +1,11 @@
 import { TokenTypes } from '@baseapp-frontend/utils'
 
 import {
+  LoginChangeExpiredPasswordRedirectResponse,
   LoginJWTResponse,
   LoginMfaResponse,
   LoginResponse,
   LoginSimpleTokenResponse,
-  LoginChangeExpiredPasswordRedirectResponse
 } from '../types/auth'
 
 export const isLoginMfaResponse = (data: LoginResponse): data is LoginMfaResponse => {

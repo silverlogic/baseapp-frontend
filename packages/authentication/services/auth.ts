@@ -2,6 +2,7 @@ import { axios } from '@baseapp-frontend/utils'
 import { TokenTypes } from '@baseapp-frontend/utils/constants/token'
 
 import {
+  ChangeExpiredPasswordRequest,
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
@@ -9,7 +10,6 @@ import {
   PreAuthResponse,
   RegisterRequest,
   ResetPasswordRequest,
-  ChangeExpiredPasswordRequest
 } from '../types/auth'
 
 export default class AuthApi {

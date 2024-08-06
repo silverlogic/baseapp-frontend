@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, Query } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentsWithQuery$variables = Record<PropertyKey, never>
 export type CommentsWithQuery$data = {
   readonly target:

@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentsFragment$data = {
   readonly __typename: string
   readonly commentsCount: {

@@ -5,10 +5,11 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, Mutation } from 'relay-runtime'
+
 export type CommentPinMutation$variables = {
   id: string
 }
