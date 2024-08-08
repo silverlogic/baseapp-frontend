@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentsSubscription$variables = {
   connections: ReadonlyArray<string>
   targetObjectId?: string | null | undefined

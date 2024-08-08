@@ -5,11 +5,12 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { ConcreteRequest, Query } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
 export type CommentsRefetchQuery$variables = {
   id: string
   isCommentsOpened?: boolean | null | undefined
