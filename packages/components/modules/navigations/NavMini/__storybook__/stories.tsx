@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavMini from '..'
+import defaultTheme from '../../../../.storybook/__mocks__/theme'
 import ProjectLogoCondensed from '../../Header/__storybook__/ProjectLogoCondensed'
-import { navDataMock, themeSettingsMock } from '../../Header/__storybook__/navigationMocks'
+import { navDataMock } from '../../Header/__storybook__/navigationMocks'
 import { NavMiniProps } from '../types'
 
 const meta: Meta<typeof NavMini> = {
@@ -26,7 +27,7 @@ type Story = StoryObj<NavMiniProps>
 export const DefaultNavMini: Story = {
   args: {
     navData: navDataMock,
-    settings: themeSettingsMock,
+    settings: defaultTheme.settings,
     LogoIcon: ProjectLogoCondensed,
     openNav: false,
     hideToggleButton: true,

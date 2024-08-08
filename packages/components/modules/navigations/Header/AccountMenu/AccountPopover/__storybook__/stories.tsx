@@ -1,6 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import AccountPopover from '..'
+import { withTokenSetup } from '../../../../../../.storybook/decorators'
 import { AccountPopoverProps } from '../types'
 
 export default {
@@ -18,11 +19,12 @@ export default {
     hideLogoutButton: { control: 'boolean' },
   },
   tags: ['autodocs'],
+  decorators: [withTokenSetup],
 } as Meta
 
 type Story = StoryObj<AccountPopoverProps>
 
-export const DefaultAccountMenu: Story = {
+export const DefaultAccountPopover: Story = {
   parameters: {
     userType: 'valid',
   },
