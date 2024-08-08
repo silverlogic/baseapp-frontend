@@ -1,18 +1,4 @@
-import {
-  FavoriteIcon,
-  MentionIcon,
-  MenuIcon,
-  PenEditIcon,
-  UISettings,
-} from '@baseapp-frontend/design-system'
-
-export const themeSettingsMock: UISettings = {
-  themeMode: 'light',
-  themeContrast: 'default',
-  themeLayout: 'vertical',
-  themeColorPresets: 'default',
-  themeStretch: false,
-}
+import { FavoriteIcon, MentionIcon, MenuIcon, PenEditIcon } from '@baseapp-frontend/design-system'
 
 export const navDataMock = [
   {

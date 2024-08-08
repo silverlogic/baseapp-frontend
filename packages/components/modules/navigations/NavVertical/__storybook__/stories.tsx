@@ -1,8 +1,9 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavVertical from '..'
+import defaultTheme from '../../../../.storybook/__mocks__/theme'
 import ProjectLogoCondensed from '../../Header/__storybook__/ProjectLogoCondensed'
-import { navDataMock, themeSettingsMock } from '../../Header/__storybook__/navigationMocks'
+import { navDataMock } from '../../Header/__storybook__/navigationMocks'
 import { NavVerticalProps } from '../types'
 
 const meta: Meta<typeof NavVertical> = {
@@ -26,7 +27,7 @@ type Story = StoryObj<NavVerticalProps>
 export const DefaultNavVertical: Story = {
   args: {
     navData: navDataMock,
-    settings: themeSettingsMock,
+    settings: defaultTheme.settings,
     LogoIcon: ProjectLogoCondensed,
     openNav: false,
     hideToggleButton: true,

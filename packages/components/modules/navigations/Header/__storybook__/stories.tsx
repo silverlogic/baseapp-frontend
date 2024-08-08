@@ -1,9 +1,12 @@
+import { SendMessageIcon } from '@baseapp-frontend/design-system'
+
 import { Meta, StoryObj } from '@storybook/react'
 
 import Header from '..'
+import defaultTheme from '../../../../.storybook/__mocks__/theme'
+import { withTokenSetup } from '../../../../.storybook/decorators'
 import { HeaderProps } from '../types'
 import ProjectLogoCondensed from './ProjectLogoCondensed'
-import { themeSettingsMock } from './navigationMocks'
 
 const meta: Meta<typeof Header> = {
   title: '@baseapp-frontend | components/Navigation/Header',
@@ -19,19 +22,20 @@ const meta: Meta<typeof Header> = {
     children: { control: 'object' },
   },
   tags: ['autodocs'],
+  decorators: [withTokenSetup],
 }
 
 export default meta
 
 type Story = StoryObj<HeaderProps>
 
-export const DefaultHeader: Story = {
+export const InvalidUserHeader: Story = {
   parameters: {
     userType: 'invalid',
   },
   args: {
     settings: {
-      ...themeSettingsMock,
+      ...defaultTheme.settings,
       themeLayout: 'centered',
     },
     onOpenNav: () => {},
@@ -43,12 +47,12 @@ export const DefaultHeader: Story = {
   },
 }
 
-export const AuthenticatedUserHeader: Story = {
+export const ValidUserHeader: Story = {
   parameters: {
     userType: 'valid',
   },
   args: {
-    ...DefaultHeader.args,
+    ...InvalidUserHeader.args,
     AccountMenuProps: {
       menuItems: [
         {
@@ -60,12 +64,22 @@ export const AuthenticatedUserHeader: Story = {
   },
 }
 
+export const ValidUserHeaderWithAdditionalComponent: Story = {
+  parameters: {
+    userType: 'valid',
+  },
+  args: {
+    ...ValidUserHeader.args,
+    additionalComponent: <SendMessageIcon />,
+  },
+}
+
 export const CustomAccountMenuHeader: Story = {
   parameters: {
     userType: 'valid',
   },
   args: {
-    ...DefaultHeader.args,
+    ...ValidUserHeader.args,
     AccountMenu: () => <div>Custom AccountMenu</div>,
   },
 }
