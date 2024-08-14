@@ -3,6 +3,7 @@ import {
   REFRESH_COOKIE_NAME,
   TokenTypes,
   refreshAccessToken,
+  templateEnv,
 } from '@baseapp-frontend/utils'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -24,7 +25,7 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
     onSettled: async (data, error, variables, context) => {
       queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
       try {
-        const tokenType = process.env.NEXT_PUBLIC_TOKEN_TYPE as TokenTypes
+        const tokenType = templateEnv.NEXT_PUBLIC_TOKEN_TYPE as TokenTypes
         if (tokenType === TokenTypes.jwt) {
           await refreshAccessToken(cookieName, refreshCookieName)
         }
