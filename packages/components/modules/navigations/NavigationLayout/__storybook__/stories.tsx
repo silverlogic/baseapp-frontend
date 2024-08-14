@@ -19,7 +19,11 @@ const meta: Meta<typeof NavigationLayout> = {
     AccountMenu: { control: false },
     AccountMenuProps: { control: 'object' },
     ToolbarProps: { control: 'object' },
-    children: { control: 'text' },
+    children: {
+      control: false,
+      description: 'Page content.',
+      table: { type: { summary: 'ReactNode' } },
+    },
   },
   tags: ['autodocs'],
   decorators: [withTokenSetup],
