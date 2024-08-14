@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 2.5.2
+
+### Patch Changes
+
+- Create and use `templateEnv` object to access `process.env` variables.
+
 ## 2.5.1
 
 ### Patch Changes

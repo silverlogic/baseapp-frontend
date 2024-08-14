@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 3.2.2
+
+### Patch Changes
+
+- Use `templateEnv` object to access `process.env` variables.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.2
+
 ## 3.2.1
 
 ### Patch Changes

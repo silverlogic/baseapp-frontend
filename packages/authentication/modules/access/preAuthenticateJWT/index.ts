@@ -1,3 +1,4 @@
+import { templateEnv } from '@baseapp-frontend/utils/functions/env'
 import type { JWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 const preAuthenticateJWT = async (token?: string) => {
@@ -6,7 +7,7 @@ const preAuthenticateJWT = async (token?: string) => {
       throw new Error('No token provided.')
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`, {
+    const response = await fetch(`${templateEnv.NEXT_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`, {
       method: 'POST',
       body: JSON.stringify({ token }),
       cache: 'no-store',

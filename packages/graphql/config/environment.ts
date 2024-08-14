@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 
+import { templateEnv } from '@baseapp-frontend/utils/functions/env'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
@@ -67,7 +68,7 @@ export async function httpFetch(
 ): Promise<GraphQLResponse> {
   const fetchOptions = getFetchOptions({ request, variables, uploadables })
   const response = await baseAppFetch('', {
-    baseUrl: process.env.NEXT_PUBLIC_RELAY_ENDPOINT,
+    baseUrl: templateEnv.NEXT_PUBLIC_RELAY_ENDPOINT,
     decamelizeRequestBodyKeys: false,
     decamelizeRequestParamsKeys: false,
     camelizeResponseDataKeys: false,
@@ -91,7 +92,7 @@ export async function httpFetch(
 }
 
 const wsClient = createClient({
-  url: process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
+  url: templateEnv.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
   connectionParams: () => {
     const Authorization = getToken()
     if (!Authorization) return {}
@@ -175,8 +176,8 @@ function initEnvironment() {
 }
 
 export function useEnvironment() {
-  const env = useMemo(() => initEnvironment(), [relayEnvironment])
-  return env
+  const environment = useMemo(() => initEnvironment(), [relayEnvironment])
+  return environment
 }
 
 export function getCacheByEnvironment(environment: Environment) {
