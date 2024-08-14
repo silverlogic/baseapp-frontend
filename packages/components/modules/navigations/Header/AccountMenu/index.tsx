@@ -24,6 +24,11 @@ const AccountMenu: FC<AccountMenuProps> = ({
   const user = getUser<BaseUser & JWTContent>({ noSSR: false })
   const isUserValid = isUserTokenValid(user)
 
+  const renderAdditionalComponent = () => {
+    if (additionalComponent) return additionalComponent
+    return <div />
+  }
+
   const renderHeaderContent = () => {
     if (children) return children
     return <div />
@@ -56,7 +61,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
   return (
     <div className="grid w-full grid-cols-[1fr_40px_40px] items-center justify-center gap-1 min-lg:gap-2">
       {renderHeaderContent()}
-      {additionalComponent}
+      {renderAdditionalComponent()}
       <AccountPopover menuItems={menuItems} />
     </div>
   )

@@ -1,10 +1,18 @@
 # @baseapp-frontend/design-system
 
+## 0.0.2
+
+### Patch Changes
+
+- Move `Logo`, `Popover`, `avatars`, `icons` and `animate`, `usePopover` and `useResponsive` from template to package
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.3
+
 ## 0.0.1
 
 ### Patch Changes
 
-- Change the pakage name to `@baseapp-frontend/design-system`.
+- Change the package name to `@baseapp-frontend/design-system`.
 - Move several ui components from the template to the package.
 - Refactor ThemeProvider so it can be used on the template.
 - Move several theme tokens, configurations, components overrides from the template to the package.
