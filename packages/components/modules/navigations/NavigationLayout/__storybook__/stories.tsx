@@ -1,12 +1,11 @@
-import { SendMessageIcon } from '@baseapp-frontend/design-system'
+import { BaseAppLogoCondensed, SendMessageIcon } from '@baseapp-frontend/design-system'
 
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavigationLayout from '..'
+import { navDataMock } from '../../../../.storybook/__mocks__/navigation'
 import defaultTheme from '../../../../.storybook/__mocks__/theme'
 import { withTokenSetup } from '../../../../.storybook/decorators'
-import ProjectLogoCondensed from '../../Header/__storybook__/ProjectLogoCondensed'
-import { navDataMock } from '../../Header/__storybook__/navigationMocks'
 import { NavigationLayoutProps } from '../types'
 
 const meta: Meta<typeof NavigationLayout> = {
@@ -20,11 +19,13 @@ const meta: Meta<typeof NavigationLayout> = {
     AccountMenu: { control: false },
     AccountMenuProps: { control: 'object' },
     ToolbarProps: { control: 'object' },
-    additionalComponent: { control: 'object' },
     children: { control: 'text' },
   },
   tags: ['autodocs'],
   decorators: [withTokenSetup],
+  parameters: {
+    layout: 'fullscreen',
+  },
 }
 export default meta
 
@@ -38,7 +39,7 @@ export const InvalidUser: Story = {
     navData: navDataMock,
     settings: defaultTheme.settings,
     setSettings: () => {},
-    LogoIcon: ProjectLogoCondensed,
+    LogoIcon: BaseAppLogoCondensed,
     AccountMenuProps: {
       onRegisterClick: () => console.log('Register clicked'),
       onLoginClick: () => console.log('Login clicked'),
@@ -69,7 +70,9 @@ export const ValidUserWithAdditionalComponent: Story = {
   },
   args: {
     ...ValidUser.args,
-    additionalComponent: <SendMessageIcon />,
+    AccountMenuProps: {
+      additionalComponent: <SendMessageIcon />,
+    },
   },
 }
 
@@ -79,7 +82,11 @@ export const CustomAccountMenu: Story = {
   },
   args: {
     ...ValidUser.args,
-    AccountMenu: () => <div>Custom AccountMenu</div>,
+    AccountMenu: () => (
+      <div style={{ width: '100%', justifyContent: 'end', display: 'flex' }}>
+        Custom AccountMenu
+      </div>
+    ),
   },
 }
 

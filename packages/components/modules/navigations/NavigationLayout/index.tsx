@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 import { useBoolean } from '@baseapp-frontend/utils'
 
@@ -22,7 +22,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   AccountMenu,
   AccountMenuProps,
   ToolbarProps,
-  additionalComponent,
   children,
 }) => {
   const nav = useBoolean()
@@ -41,7 +40,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
-          additionalComponent={additionalComponent}
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
@@ -60,7 +58,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
-          additionalComponent={additionalComponent}
         />
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         <MainContainer isNavHorizontal>{children}</MainContainer>
@@ -78,7 +75,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
-          additionalComponent={additionalComponent}
         />
 
         <Box
@@ -111,7 +107,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         AccountMenu={AccountMenu}
         AccountMenuProps={AccountMenuProps}
         ToolbarProps={ToolbarProps}
-        additionalComponent={additionalComponent}
       />
       <Box
         sx={{

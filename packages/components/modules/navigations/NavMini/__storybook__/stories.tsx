@@ -1,9 +1,10 @@
+import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system'
+
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavMini from '..'
+import { navDataMock } from '../../../../.storybook/__mocks__/navigation'
 import defaultTheme from '../../../../.storybook/__mocks__/theme'
-import ProjectLogoCondensed from '../../Header/__storybook__/ProjectLogoCondensed'
-import { navDataMock } from '../../Header/__storybook__/navigationMocks'
 import { NavMiniProps } from '../types'
 
 const meta: Meta<typeof NavMini> = {
@@ -19,6 +20,9 @@ const meta: Meta<typeof NavMini> = {
     hideToggleButton: { control: 'boolean' },
   },
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 }
 export default meta
 
@@ -28,7 +32,7 @@ export const DefaultNavMini: Story = {
   args: {
     navData: navDataMock,
     settings: defaultTheme.settings,
-    LogoIcon: ProjectLogoCondensed,
+    LogoIcon: BaseAppLogoCondensed,
     openNav: false,
     hideToggleButton: true,
   },

@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const ProjectLogoCondensed: FC<SvgIconProps> = ({ sx, ...props }) => (
+const BaseAppLogoCondensed: FC<SvgIconProps> = ({ sx, ...props }) => (
   <SvgIcon sx={{ fontSize: 38, color: 'primary.main', ...sx }} {...props}>
     <svg xmlns="http://www.w3.org/2000/svg" width="38" height="34" viewBox="0 0 38 34" fill="none">
       <path
@@ -13,4 +13,4 @@ const ProjectLogoCondensed: FC<SvgIconProps> = ({ sx, ...props }) => (
   </SvgIcon>
 )
 
-export default ProjectLogoCondensed
+export default BaseAppLogoCondensed

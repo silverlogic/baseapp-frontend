@@ -38,8 +38,6 @@ export type * from './components/Logo/types'
 export { default as Popover } from './components/Popover'
 export type * from './components/Popover/types'
 
-export { default as HeaderShadow } from './components/HeaderShadow'
-
 // providers
 export { default as MotionLazyProvider } from './providers/MotionLazyProvider'
 

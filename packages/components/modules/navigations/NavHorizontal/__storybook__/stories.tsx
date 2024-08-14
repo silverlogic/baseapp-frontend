@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavHorizontal from '..'
-import { navDataMock } from '../../Header/__storybook__/navigationMocks'
+import { navDataMock } from '../../../../.storybook/__mocks__/navigation'
 import { NavHorizontalProps } from '../types'
 
 const meta: Meta<typeof NavHorizontal> = {

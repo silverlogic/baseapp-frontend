@@ -1,8 +1,8 @@
 'use client'
 
-import React, { FC, memo } from 'react'
+import { FC, memo } from 'react'
 
-import { HeaderShadow, Scrollbar, bgBlur, useResponsive } from '@baseapp-frontend/design-system'
+import { Scrollbar, bgBlur, useResponsive } from '@baseapp-frontend/design-system'
 
 import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
@@ -11,6 +11,7 @@ import { useTheme } from '@mui/material/styles'
 import { HEADER } from '../constants'
 import NavSectionHorizontal from '../shared/NavSectionHorizontal'
 import VerticalDrawer from '../shared/VerticalDrawer'
+import HeaderShadow from './HeaderShadow'
 import { NavHorizontalProps } from './types'
 
 const NavHorizontal: FC<NavHorizontalProps> = ({ navData, openNav, onCloseNav }) => {

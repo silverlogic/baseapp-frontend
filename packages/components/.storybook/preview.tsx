@@ -4,6 +4,7 @@ import { initialize, mswLoader } from 'msw-storybook-addon'
 import '../styles/tailwind/globals.css'
 import { handlers } from './__mocks__/handlers'
 import { withProviders } from './decorators'
+import './overrides.css'
 
 initialize({
   onUnhandledRequest: 'warn',
@@ -22,6 +23,15 @@ const preview: Preview = {
     options: {
       storySort: (a, b) => {
         const order = [
+          // Navigation
+          'NavigationLayout',
+          'Header',
+          'AccountPopover',
+          'NavMini',
+          'NavHorizontal',
+          'NavCentered',
+          'NavVertical',
+          // Social
           'Comments',
           'CommentsList',
           'CommentCreate',

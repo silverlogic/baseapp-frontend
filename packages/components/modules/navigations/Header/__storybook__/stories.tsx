@@ -1,4 +1,4 @@
-import { SendMessageIcon } from '@baseapp-frontend/design-system'
+import { BaseAppLogoCondensed, SendMessageIcon } from '@baseapp-frontend/design-system'
 
 import { Meta, StoryObj } from '@storybook/react'
 
@@ -6,7 +6,6 @@ import Header from '..'
 import defaultTheme from '../../../../.storybook/__mocks__/theme'
 import { withTokenSetup } from '../../../../.storybook/decorators'
 import { HeaderProps } from '../types'
-import ProjectLogoCondensed from './ProjectLogoCondensed'
 
 const meta: Meta<typeof Header> = {
   title: '@baseapp-frontend | components/Navigation/Header',
@@ -18,7 +17,6 @@ const meta: Meta<typeof Header> = {
     AccountMenu: { control: 'object' },
     AccountMenuProps: { control: 'object' },
     ToolbarProps: { control: 'object' },
-    additionalComponent: { control: 'object' },
     children: { control: 'object' },
   },
   tags: ['autodocs'],
@@ -39,7 +37,7 @@ export const InvalidUserHeader: Story = {
       themeLayout: 'centered',
     },
     onOpenNav: () => {},
-    LogoIcon: ProjectLogoCondensed,
+    LogoIcon: BaseAppLogoCondensed,
     AccountMenuProps: {
       onRegisterClick: () => console.log('Register clicked'),
       onLoginClick: () => console.log('Login clicked'),
@@ -70,7 +68,9 @@ export const ValidUserHeaderWithAdditionalComponent: Story = {
   },
   args: {
     ...ValidUserHeader.args,
-    additionalComponent: <SendMessageIcon />,
+    AccountMenuProps: {
+      additionalComponent: <SendMessageIcon />,
+    },
   },
 }
 
@@ -80,6 +80,10 @@ export const CustomAccountMenuHeader: Story = {
   },
   args: {
     ...ValidUserHeader.args,
-    AccountMenu: () => <div>Custom AccountMenu</div>,
+    AccountMenu: () => (
+      <div style={{ width: '100%', justifyContent: 'end', display: 'flex' }}>
+        Custom AccountMenu
+      </div>
+    ),
   },
 }

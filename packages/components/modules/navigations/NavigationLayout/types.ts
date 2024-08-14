@@ -15,5 +15,4 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
   ToolbarProps?: MuiToolbarProps
-  additionalComponent?: React.ReactNode
 }

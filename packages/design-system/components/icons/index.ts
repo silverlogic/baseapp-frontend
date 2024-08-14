@@ -1,4 +1,5 @@
 export { default as AttachementIcon } from './AttachementIcon'
+export { default as BaseAppLogoCondensed } from './BaseAppLogoCondensed'
 export { default as CheckMarkIcon } from './CheckMarkIcon'
 export { default as CloseIcon } from './CloseIcon'
 export { default as CommentReplyIcon } from './CommentReplyIcon'

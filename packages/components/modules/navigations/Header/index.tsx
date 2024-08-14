@@ -19,7 +19,6 @@ const Header: FC<HeaderProps> = ({
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
   ToolbarProps,
-  additionalComponent,
 }) => {
   const isNavHorizontal = settings.themeLayout === 'horizontal'
   const isNavCentered = settings.themeLayout === 'centered'
@@ -52,9 +51,7 @@ const Header: FC<HeaderProps> = ({
         >
           <MenuIcon />
         </IconButton>
-        <AccountMenu additionalComponent={additionalComponent} {...AccountMenuProps}>
-          {children}
-        </AccountMenu>
+        <AccountMenu {...AccountMenuProps}>{children}</AccountMenu>
       </Toolbar>
     </CustomAppBar>
   )

@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavCentered from '..'
-import { navDataMock } from '../../Header/__storybook__/navigationMocks'
+import { navDataMock } from '../../../../.storybook/__mocks__/navigation'
 import { NavCenteredProps } from '../types'
 
 const meta: Meta<typeof NavCentered> = {
@@ -13,6 +13,9 @@ const meta: Meta<typeof NavCentered> = {
     onCloseNav: { action: 'onCloseNav' },
   },
   tags: ['autodocs'],
+  parameters: {
+    layout: 'fullscreen',
+  },
 }
 export default meta
 
