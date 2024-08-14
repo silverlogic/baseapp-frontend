@@ -4,7 +4,7 @@ import CommentTextField from '..'
 import { CommentTextFieldProps } from '../types'
 
 export default {
-  title: '@baseapp-frontend | designSystem/Form/CommentTextField',
+  title: '@baseapp-frontend | designSystem/Inputs/CommentTextField',
   component: CommentTextField,
   argTypes: {
     isReply: { control: 'boolean' },

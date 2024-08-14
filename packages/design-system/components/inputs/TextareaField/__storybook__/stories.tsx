@@ -4,7 +4,7 @@ import TextareaField from '..'
 import { TextFieldProps } from '../../TextField/types'
 
 export default {
-  title: '@baseapp-frontend | designSystem/Form/TextareaField',
+  title: '@baseapp-frontend | designSystem/Inputs/TextareaField',
   component: TextareaField,
   argTypes: {
     label: { control: 'text' },

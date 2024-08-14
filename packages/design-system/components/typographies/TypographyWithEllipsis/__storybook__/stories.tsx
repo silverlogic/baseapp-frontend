@@ -4,7 +4,7 @@ import TypographyWithEllipsis from '..'
 import { TypographyWithEllipsisProps } from '../types'
 
 export default {
-  title: '@baseapp-frontend | designSystem/Typography/TypographyWithEllipsis',
+  title: '@baseapp-frontend | designSystem/Typographies/TypographyWithEllipsis',
   component: TypographyWithEllipsis,
   argTypes: {
     lineClamp: { control: 'number', table: { type: { summary: 'number' } } },

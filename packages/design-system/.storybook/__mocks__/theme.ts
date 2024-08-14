@@ -1,4 +1,5 @@
 import {
+  ThemeProviderProps,
   breakpoints,
   createCustomShadows,
   createPalette,
@@ -7,7 +8,6 @@ import {
   secondaryFont,
   typography,
 } from '@baseapp-frontend/design-system'
-import { ThemeProviderProps } from '@baseapp-frontend/design-system'
 
 const defaultTheme: ThemeProviderProps = {
   palette: createPalette('light'),

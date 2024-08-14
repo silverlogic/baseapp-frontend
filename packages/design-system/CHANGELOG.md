@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 0.0.3
+
+### Patch Changes
+
+- Add Storybook
+- Create stories for `Iconography`, `Avatars`, `Buttons`, `Dialogs`, `Displays`, `Drawers`, `Popover`, `Form`, `Typography`, `Logo` and `Scrollbar`
+
 ## 0.0.2
 
 ### Patch Changes

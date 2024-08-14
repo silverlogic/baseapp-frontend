@@ -4,7 +4,7 @@ import TextField from '..'
 import { TextFieldProps } from '../types'
 
 export default {
-  title: '@baseapp-frontend | designSystem/Form/TextField',
+  title: '@baseapp-frontend | designSystem/Inputs/TextField',
   component: TextField,
   argTypes: {
     isResponsive: { control: 'boolean' },

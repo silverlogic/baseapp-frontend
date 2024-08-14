@@ -1,64 +1,14 @@
 import { Meta, IconGallery, IconItem } from '@storybook/blocks'
-import AttachmentIcon from '../AttachmentIcon'
-import CheckMarkIcon from '../CheckMarkIcon'
-import CloseIcon from '../CloseIcon'
-import CommentReplyIcon from '../CommentReplyIcon'
-import FavoriteIcon from '../FavoriteIcon'
-import FavoriteSelectedIcon from '../FavoriteSelectedIcon'
-import LinkIcon from '../LinkIcon'
-import MentionIcon from '../MentionIcon'
-import PenEditIcon from '../PenEditIcon'
-import PinIcon from '../PinIcon'
-import SendMessageIcon from '../SendMessageIcon'
-import TrashCanIcon from '../TrashCanIcon'
-import MenuIcon from '../MenuIcon'
-import ChevronIcon from '../ChevronIcon'
+import * as AllIcons from '..' 
 
 <Meta title="@baseapp-frontend | designSystem/Iconography" />
 
 # Iconography
 
 <IconGallery>
-  <IconItem name="Attachment Icon">
-    <AttachmentIcon />
-  </IconItem>
-  <IconItem name="Check Mark Icon">
-    <CheckMarkIcon />
-  </IconItem>
-  <IconItem name="Close Icon">
-    <CloseIcon />
-  </IconItem>
-  <IconItem name="Comment Reply Icon">
-    <CommentReplyIcon />
-  </IconItem>
-  <IconItem name="Favorite Icon">
-    <FavoriteIcon />
-  </IconItem>
-  <IconItem name="Favorite Selected Icon">
-    <FavoriteSelectedIcon />
-  </IconItem>
-  <IconItem name="Link Icon">
-    <LinkIcon />
-  </IconItem>
-  <IconItem name="Mention Icon">
-    <MentionIcon />
-  </IconItem>
-  <IconItem name="Pen Edit Icon">
-    <PenEditIcon />
-  </IconItem>
-  <IconItem name="Pin Icon">
-    <PinIcon />
-  </IconItem>
-  <IconItem name="Send Message Icon">
-    <SendMessageIcon />
-  </IconItem>
-  <IconItem name="Trash Can Icon">
-    <TrashCanIcon />
-  </IconItem>
-  <IconItem name="Menu Icon">
-    <MenuIcon />
-  </IconItem>
-  <IconItem name="Chevron Icon">
-    <ChevronIcon />
-  </IconItem>
+  {Object.entries(AllIcons).map(([iconName, IconComponent]) => (
+    <IconItem key={iconName} name={iconName.replace(/([A-Z])/g, ' $1').replace('Icon', '').trim()}>
+      <IconComponent sx={{ color: 'primary.main' }} />
+    </IconItem>
+  ))}
 </IconGallery>
