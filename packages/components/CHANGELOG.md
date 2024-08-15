@@ -8,7 +8,7 @@
 - Add Storybook for Navigation features.
 - Updated dependencies
   - @baseapp-frontend/design-system@0.0.2
-  - @baseapp-frontend/utils@2.5.3
+  - @baseapp-frontend/utils@2.5.4
 
 ## 0.0.1
 
