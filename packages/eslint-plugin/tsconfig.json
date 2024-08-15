@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ES2020"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}

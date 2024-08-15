@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 3.2.3
+
+### Patch Changes
+
+- Trim `process.env` variables used in comparisons.
+- Remove `templateEnv` object to access `process.env` variables.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.3
+
 ## 3.2.2
 
 ### Patch Changes

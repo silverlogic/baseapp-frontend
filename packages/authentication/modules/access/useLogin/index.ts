@@ -7,7 +7,6 @@ import {
   REFRESH_COOKIE_NAME,
   TokenTypes,
   setFormApiErrors,
-  templateEnv,
 } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -41,10 +40,10 @@ const jwtSuccessHandler = (
   refreshCookieName: string,
 ) => {
   Cookies.set(cookieName, response.access, {
-    secure: templateEnv.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production',
   })
   Cookies.set(refreshCookieName, response.refresh, {
-    secure: templateEnv.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production',
   })
 }
 
@@ -54,7 +53,7 @@ const simpleTokenSuccessHandler = (
   onSuccess: () => void,
 ) => {
   Cookies.set(cookieName, response.token, {
-    secure: templateEnv.NODE_ENV === 'production',
+    secure: process.env.NODE_ENV === 'production',
   })
 
   onSuccess()

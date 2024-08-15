@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.1.6
+
+### Patch Changes
+
+- Remove `templateEnv` object to access `process.env` variables.
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.3
+
 ## 1.1.5
 
 ### Patch Changes

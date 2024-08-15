@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/config",
   "description": "Reusable configurations for eslint, prettier, jest and relay",
-  "version": "2.1.6",
+  "version": "2.1.7",
   "main": "index.js",
   "files": [
     ".eslintrc.js",
@@ -10,6 +10,7 @@
     "relay.config.ts"
   ],
   "devDependencies": {
+    "@baseapp-frontend/eslint-plugin": "*",
     "@emotion/eslint-plugin": "^11.11.0",
     "@next/eslint-plugin-next": "^13.1.6",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
