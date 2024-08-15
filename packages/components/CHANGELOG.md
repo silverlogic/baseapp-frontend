@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 0.0.2
+
+### Patch Changes
+
+- Add `navigation` module.
+- Add Storybook for Navigation features.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.2
+  - @baseapp-frontend/utils@2.5.3
+
 ## 0.0.1
 
 ### Patch Changes

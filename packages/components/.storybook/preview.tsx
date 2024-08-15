@@ -1,61 +1,14 @@
-import * as React from 'react'
-
-import {
-  LoadingState,
-  ThemeProvider,
-  breakpoints,
-  createCustomShadows,
-  createPalette,
-  createShadows,
-  primaryFont,
-  secondaryFont,
-  typography,
-} from '@baseapp-frontend/design-system'
-import { RelayTestProvider } from '@baseapp-frontend/graphql'
-import { NotificationProvider } from '@baseapp-frontend/utils'
-
-import type { Preview, StoryContext, StoryFn } from '@storybook/react'
+import type { Preview } from '@storybook/react'
 import { initialize, mswLoader } from 'msw-storybook-addon'
 
 import '../styles/tailwind/globals.css'
+import { handlers } from './__mocks__/handlers'
+import { withProviders } from './decorators'
+import './overrides.css'
 
 initialize({
   onUnhandledRequest: 'warn',
 })
-
-const withProviders = (Story: StoryFn, context: StoryContext) => {
-  // TODO: registering a few tailwind classess (used by @baseapp-frontend/design-system components), need to figure out why the @baseapp-frontend/components storybook are not including it correctly
-  // pb-3 px-3 w-full rounded-md bg-background-neutral px-2 py-1
-
-  const mockResolvers = context.parameters.mockResolvers || {}
-
-  return (
-    <RelayTestProvider mockResolvers={mockResolvers}>
-      <React.Suspense fallback={<LoadingState />}>
-        <ThemeProvider
-          palette={createPalette('light')}
-          breakpoints={breakpoints}
-          primaryFont={primaryFont}
-          secondaryFont={secondaryFont}
-          settings={{
-            themeMode: 'light',
-            themeContrast: 'default',
-            themeLayout: 'vertical',
-            themeColorPresets: 'default',
-            themeStretch: false,
-          }}
-          shadows={createShadows('light')}
-          customShadows={createCustomShadows('light')}
-          typography={typography}
-        >
-          <NotificationProvider>
-            <Story />
-          </NotificationProvider>
-        </ThemeProvider>
-      </React.Suspense>
-    </RelayTestProvider>
-  )
-}
 
 const preview: Preview = {
   decorators: [withProviders],
@@ -70,6 +23,15 @@ const preview: Preview = {
     options: {
       storySort: (a, b) => {
         const order = [
+          // Navigation
+          'NavigationLayout',
+          'Header',
+          'AccountPopover',
+          'NavMini',
+          'NavHorizontal',
+          'NavCentered',
+          'NavVertical',
+          // Social
           'Comments',
           'CommentsList',
           'CommentCreate',
@@ -92,6 +54,9 @@ const preview: Preview = {
 
         return indexA - indexB
       },
+    },
+    msw: {
+      handlers: handlers,
     },
   },
 }

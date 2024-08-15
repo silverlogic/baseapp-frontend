@@ -5,12 +5,14 @@
  */
 
 /* tslint:disable */
+
 /* eslint-disable */
 // @ts-nocheck
-
 import { Fragment, ReaderFragment } from 'relay-runtime'
-export type ReactionTypes = 'DISLIKE' | 'LIKE' | '%future added value'
 import { FragmentRefs } from 'relay-runtime'
+
+export type ReactionTypes = 'DISLIKE' | 'LIKE' | '%future added value'
+
 export type ReactionButton_target$data = {
   readonly id: string
   readonly myReaction:

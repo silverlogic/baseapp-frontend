@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 2.5.4
+
+### Patch Changes
+
+- Add `useBoolean` hook
+
 ## 2.5.3
 
 ### Patch Changes

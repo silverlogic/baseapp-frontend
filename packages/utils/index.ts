@@ -25,6 +25,7 @@ export { default as useEventSubscription } from './hooks/useEventSubscription'
 export { default as useNotification } from './hooks/useNotification'
 export { NotificationProvider } from './hooks/useNotification'
 export { default as useSSR } from './hooks/useSSR'
+export { default as useBoolean } from './hooks/useBoolean'
 
 export type * from './types/cookie'
 export type * from './types/date'

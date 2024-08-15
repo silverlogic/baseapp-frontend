@@ -4,10 +4,11 @@ import CommentReplyProvider from '../CommentReplyProvider'
 
 const withCommentReplyProvider =
   <TProps extends {}>(Component: FC<TProps>) =>
-  (props: TProps) => (
-    <CommentReplyProvider>
-      <Component {...props} />
-    </CommentReplyProvider>
-  )
+  (props: TProps) =>
+    (
+      <CommentReplyProvider>
+        <Component {...props} />
+      </CommentReplyProvider>
+    )
 
 export default withCommentReplyProvider

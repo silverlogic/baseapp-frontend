@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "./dist/index.js",
   "scripts": {
     "build": "tsup",
@@ -18,7 +18,9 @@
     "@hookform/resolvers": "^3.6.0",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.19",
+    "@storybook/react": "^8.1.10",
     "graphql": "^16.8.1",
+    "js-cookie": "^3.0.5",
     "luxon": "^3.4.4",
     "next": "14.3.0-canary.24",
     "react-hook-form": "^7.51.5",
@@ -29,6 +31,7 @@
     "zustand": "^4.5.2"
   },
   "peerDependencies": {
+    "@baseapp-frontend/authentication": "*",
     "@baseapp-frontend/design-system": "*",
     "@baseapp-frontend/graphql": "*",
     "@baseapp-frontend/utils": "*",
@@ -48,7 +51,6 @@
     "@storybook/addon-styling-webpack": "^1.0.0",
     "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
     "@storybook/blocks": "^8.1.10",
-    "@storybook/react": "^8.1.10",
     "@storybook/react-webpack5": "^8.1.10",
     "@storybook/test": "^8.1.10",
     "@types/react": "^18.3.3",
