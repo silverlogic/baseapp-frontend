@@ -6,7 +6,7 @@
 
 - Move `Logo`, `Popover`, `avatars`, `icons` and `animate`, `usePopover` and `useResponsive` from template to package
 - Updated dependencies
-  - @baseapp-frontend/utils@2.5.3
+  - @baseapp-frontend/utils@2.5.4
 
 ## 0.0.1
 
