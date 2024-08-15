@@ -2,7 +2,7 @@ import humps from 'humps'
 
 import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
-import { templateEnv } from '../../../env'
+import { TokenTypes } from '../../../../constants/token'
 import { eventEmitter } from '../../../events'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
 
@@ -22,13 +22,6 @@ jest.mock('../../../token', () => ({
   isUserTokenValid: jest.fn(),
   refreshAccessToken: jest.fn(),
   decodeJWT: jest.fn().mockImplementation(() => ({ exp: Date.now() / 1000 + 5000 })),
-}))
-
-jest.mock('../../../env', () => ({
-  templateEnv: {
-    NEXT_PUBLIC_TOKEN_TYPE: 'jwt',
-    NEXT_PUBLIC_API_BASE_URL: 'http://localhost:3000',
-  },
 }))
 
 const DEFAULT_FETCH_RESPONSE = {
@@ -51,8 +44,7 @@ let stringifySpy: jest.SpyInstance
 
 describe('baseAppFetch', () => {
   beforeEach(() => {
-    templateEnv.NEXT_PUBLIC_TOKEN_TYPE = 'jwt'
-    mockFetch()
+    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
     jest.clearAllMocks()
     const humpsMock = humps.decamelizeKeys as jest.Mock
     humpsMock.mockClear()
@@ -65,6 +57,7 @@ describe('baseAppFetch', () => {
 
   it('should stringify and decamelize request body if required', async () => {
     const requestBody = { test_key: 'testValue' }
+    mockFetch()
 
     await baseAppFetch('/test', {
       body: requestBody,
@@ -76,6 +69,8 @@ describe('baseAppFetch', () => {
   })
 
   it('should not stringify and decamelize the body if there is no body or if `stringifyBody` is false', async () => {
+    mockFetch()
+
     await baseAppFetch('/test', {
       method: 'POST',
     })
@@ -105,7 +100,7 @@ describe('baseAppFetch', () => {
   })
 
   it('should skip token refresh if token type is not jwt', async () => {
-    templateEnv.NEXT_PUBLIC_TOKEN_TYPE = 'simple'
+    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue('simple-token')
 
@@ -179,9 +174,8 @@ describe('baseAppFetch', () => {
   it('should set Authorization header correctly when using jwt token', async () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-
     getTokenMock.mockReturnValue(token)
+    const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
 
     await baseAppFetch('/test', {})
@@ -202,7 +196,7 @@ describe('baseAppFetch', () => {
     getTokenMock.mockReturnValue(token)
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
-    templateEnv.NEXT_PUBLIC_TOKEN_TYPE = 'simple'
+    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple
 
     await baseAppFetch('/test', {})
 

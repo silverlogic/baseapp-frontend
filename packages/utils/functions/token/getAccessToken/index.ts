@@ -1,5 +1,4 @@
 import { JWTResponse } from '../../../types/jwt'
-import { templateEnv } from '../../env'
 
 const REFRESH_TOKEN_URL = '/auth/refresh'
 
@@ -9,7 +8,7 @@ export const getAccessToken = async (refreshToken: string) => {
   }
 
   try {
-    const response = await fetch(`${templateEnv.NEXT_PUBLIC_API_BASE_URL}${REFRESH_TOKEN_URL}`, {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${REFRESH_TOKEN_URL}`, {
       method: 'POST',
       body: JSON.stringify({ refresh: refreshToken }),
       cache: 'no-store',

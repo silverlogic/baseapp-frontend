@@ -34,7 +34,7 @@ module.exports = {
     'plugin:storybook/recommended',
     'prettier',
   ],
-  plugins: ['react', 'react-hooks', '@typescript-eslint', '@emotion'],
+  plugins: ['react', 'react-hooks', '@typescript-eslint', '@emotion', '@baseapp-frontend'],
   rules: {
     'global-require': 0,
     '@emotion/jsx-import': 'error',
@@ -57,6 +57,7 @@ module.exports = {
         caughtErrorsIgnorePattern: '^_',
       },
     ],
+    '@baseapp-frontend/no-process-env-comparison': 'error',
   },
   settings: {
     react: {

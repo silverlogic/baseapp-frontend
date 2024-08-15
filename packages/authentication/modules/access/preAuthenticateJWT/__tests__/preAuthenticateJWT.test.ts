@@ -14,15 +14,9 @@ const mockFetchResponse = (body = {}, ok = true, status = 200) => {
   })
 }
 
-jest.mock('@baseapp-frontend/utils/functions/env', () => ({
-  templateEnv: {
-    NEXT_PUBLIC_TOKEN_TYPE: 'jwt',
-    NEXT_PUBLIC_API_BASE_URL: 'http://localhost:3000',
-  },
-}))
-
 describe('preAuthenticateJWT', () => {
   beforeEach(() => {
+    process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
     jest.clearAllMocks()
   })
 

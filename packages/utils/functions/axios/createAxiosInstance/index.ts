@@ -10,7 +10,6 @@ import {
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { TokenTypes } from '../../../constants/token'
-import { templateEnv } from '../../env'
 import { eventEmitter } from '../../events'
 import { buildQueryString } from '../../string'
 import { decodeJWT, isUserTokenValid } from '../../token'
@@ -27,14 +26,14 @@ export const createAxiosInstance = ({
   useFormData = true,
 } = {}) => {
   const instance = _axios.create({
-    baseURL: templateEnv.NEXT_PUBLIC_API_BASE_URL,
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     paramsSerializer(params: Record<string, any>) {
       return buildQueryString(params)
     },
   })
 
   const contentType = file ? 'multipart/form-data' : 'application/json'
-  const tokenType = templateEnv.NEXT_PUBLIC_TOKEN_TYPE ?? instanceTokenType
+  const tokenType = process.env.NEXT_PUBLIC_TOKEN_TYPE ?? instanceTokenType
 
   instance.defaults.headers.post['Content-Type'] = contentType
   instance.defaults.headers.patch['Content-Type'] = contentType

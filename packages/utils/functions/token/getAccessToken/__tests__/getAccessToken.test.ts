@@ -1,5 +1,4 @@
 import { getAccessToken } from '..'
-import { templateEnv } from '../../../env'
 
 global.fetch = jest.fn()
 
@@ -23,7 +22,7 @@ describe('getAccessToken', () => {
 
   it('should call fetch with the correct URL and headers', async () => {
     const refreshToken = 'test-refresh-token'
-    const expectedUrl = `${templateEnv.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
+    const expectedUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
     mockFetchResponse({ access: 'test-access-token' })
 
     await getAccessToken(refreshToken)

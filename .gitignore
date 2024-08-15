@@ -46,3 +46,6 @@ tsconfig.tsbuildinfo
 **/routes.json
 .idea/
 *storybook.log
+
+# parcel
+.parcel-cache

@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 2.5.3
+
+### Patch Changes
+
+- Trim `process.env` variables used in comparisons.
+- Remove `templateEnv` object to access `process.env` variables.
+
 ## 2.5.2
 
 ### Patch Changes

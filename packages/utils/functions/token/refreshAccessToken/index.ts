@@ -1,7 +1,6 @@
 import Cookies from 'js-cookie'
 
 import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
-import { templateEnv } from '../../env'
 import { getAccessToken } from '../getAccessToken'
 import { getToken } from '../getToken'
 
@@ -15,7 +14,7 @@ export const refreshAccessToken = async (
     const accessToken = await getAccessToken(refreshToken)
 
     Cookies.set(cookieName, accessToken, {
-      secure: templateEnv.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production',
     })
 
     return accessToken
