@@ -44,8 +44,7 @@ export interface ResetPasswordRequest {
 }
 
 export interface RegisterRequest {
-  firstName?: string
-  lastName?: string
+  name?: string
   email: string
   password: string
 }

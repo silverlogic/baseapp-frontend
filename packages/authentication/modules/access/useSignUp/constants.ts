@@ -5,8 +5,7 @@ import { z } from 'zod'
 import { RegisterRequest } from '../../../types/auth'
 
 export const DEFAULT_VALIDATION_SCHEMA = z.object({
-  firstName: z.string().min(1, ZOD_MESSAGE.required),
-  lastName: z.string().min(1, ZOD_MESSAGE.required),
+  name: z.string().min(1, ZOD_MESSAGE.required),
   password: z.string().min(1, ZOD_MESSAGE.required).regex(PASSWORD_REGEX, {
     message: ZOD_MESSAGE.password,
   }),
@@ -14,8 +13,7 @@ export const DEFAULT_VALIDATION_SCHEMA = z.object({
 })
 
 export const DEFAULT_INITIAL_VALUES: RegisterRequest = {
-  firstName: '',
-  lastName: '',
+  name: '',
   email: '',
   password: '',
 }
