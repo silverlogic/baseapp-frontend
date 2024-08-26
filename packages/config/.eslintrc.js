@@ -24,6 +24,7 @@ module.exports = {
     'tailwind.config.js',
     'relay.config.js',
     '**/mockServiceWorker.js',
+    'babel.config.js',
   ],
   extends: [
     'next',

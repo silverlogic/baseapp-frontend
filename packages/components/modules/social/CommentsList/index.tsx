@@ -53,13 +53,19 @@ const CommentsList: FC<CommentsListProps> = ({
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
 
-    return <LoadingState sx={{ paddingTop: 3 }} CircularProgressProps={{ size: 15 }} />
+    return (
+      <LoadingState
+        sx={{ paddingTop: 3, paddingBottom: 1 }}
+        CircularProgressProps={{ size: 15 }}
+        aria-label="loading more comments"
+      />
+    )
   }
 
   return (
     <>
       {subscriptionsEnabled && <CommentsSubscription targetObjectId={target.id} />}
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto hide-scrollbar">
         <Virtuoso
           useWindowScroll
           data={comments}

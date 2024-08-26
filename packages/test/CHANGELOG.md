@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.0.2
+
+### Patch Changes
+
+- Add `nextFontMock` file to mock `next/font/google`.
+
 ## 2.0.1
 
 ### Patch Changes

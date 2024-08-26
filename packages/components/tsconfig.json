@@ -1,5 +1,16 @@
 {
   "extends": "@baseapp-frontend/tsconfig/core.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx"],
+  "compilerOptions": {
+    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps"]
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "babel.config.js"
+  ],
   "exclude": ["node_modules"]
 }

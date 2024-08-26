@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.1.7
+
+### Patch Changes
+
+- Add `createTestEnvironment` that returns the test `environment` and `resolveMostRecentOperation`. This function can resolve operations by receiving `mockResolvers` or `data`.
+- Symplify `RelayTestProvider`, so it doesn't resolve test operations.
+- Rearrange files internally.
+
 ## 1.1.6
 
 ### Patch Changes

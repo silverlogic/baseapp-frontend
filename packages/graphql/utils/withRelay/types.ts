@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { PreloadFetchPolicy, PreloadedQuery } from 'react-relay'
 import { ConcreteRequest, OperationType } from 'relay-runtime'
 
-import { SerializablePreloadedQuery } from '../config/loadSerializableQuery'
+import { SerializablePreloadedQuery } from '../../config'
 
 export type WithRelayOptions = {
   fallback?: ReactNode

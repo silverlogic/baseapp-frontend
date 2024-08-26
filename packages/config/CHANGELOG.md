@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.8
+
+### Patch Changes
+
+- Add `babel.config.js` to the `ignorePatterns` list.
+
 ## 2.1.7
 
 ### Patch Changes

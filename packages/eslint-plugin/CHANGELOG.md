@@ -1,5 +1,11 @@
 # @baseapp-frontend/eslint-plugin
 
+## 0.0.2
+
+### Patch Changes
+
+- Fix test dependency.
+
 ## 0.0.1
 
 ### Patch Changes

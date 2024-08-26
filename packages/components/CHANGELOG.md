@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 0.0.3
+
+### Patch Changes
+
+- Add setup for Cypress component testing.
+- Add test cases for the `Comments` component.
+- Minor adjustments to several social components, focusing on enhancing accessibility.
+- Fix scrollbar glitching on web when loading more comments.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.3
+  - @baseapp-frontend/graphql@1.1.7
+
 ## 0.0.2
 
 ### Patch Changes

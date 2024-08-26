@@ -116,5 +116,16 @@ module.exports = {
         },
       })
     },
+    ({ addUtilities }) => {
+      addUtilities({
+        '.hide-scrollbar': {
+          'scrollbar-width': 'none',
+          '-ms-overflow-style': 'none',
+          '&::-webkit-scrollbar': {
+            display: 'none',
+          },
+        },
+      })
+    },
   ],
 }
