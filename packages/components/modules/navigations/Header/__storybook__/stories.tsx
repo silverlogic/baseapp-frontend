@@ -17,7 +17,11 @@ const meta: Meta<typeof Header> = {
     AccountMenu: { control: 'object' },
     AccountMenuProps: { control: 'object' },
     ToolbarProps: { control: 'object' },
-    children: { control: 'object' },
+    children: {
+      control: false,
+      description: 'Additional components to render inside the header',
+      table: { type: { summary: 'ReactNode' } },
+    },
   },
   tags: ['autodocs'],
   decorators: [withTokenSetup],

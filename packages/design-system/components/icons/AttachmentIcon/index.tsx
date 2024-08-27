@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const AttachementIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
+const AttachmentIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   <SvgIcon sx={{ fontSize: 14, color: 'action.active', ...sx }} {...props}>
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16" fill="none">
       <path
@@ -13,4 +13,4 @@ const AttachementIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   </SvgIcon>
 )
 
-export default AttachementIcon
+export default AttachmentIcon
