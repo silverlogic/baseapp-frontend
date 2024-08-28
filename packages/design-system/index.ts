@@ -10,6 +10,8 @@ export * from './styles/presets'
 export * from './styles/shadow'
 export * from './styles/typography'
 
+export * from './styles/tailwind/plugins'
+
 export { componentsOverrides } from './styles/material/overrides'
 export { createContrast } from './styles/material/options/contrast'
 export { createCustomShadows } from './styles/material/custom-shadows'

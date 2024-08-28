@@ -1,3 +1,5 @@
+'use client'
+
 // Convert preloaded query object (with raw GraphQL Response) into
 // Relay's PreloadedQuery.
 import { useMemo } from 'react'

@@ -1,3 +1,5 @@
+export { default as useEnvironment } from './useEnvironment'
+
 export * from './environment'
 
 export { default as loadSerializableQuery } from './loadSerializableQuery'

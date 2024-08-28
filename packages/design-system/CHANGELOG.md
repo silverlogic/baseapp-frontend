@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.5
+
+### Patch Changes
+
+- Export custom tailwind plugins to be reused.
+
 ## 0.0.4
 
 ### Patch Changes
