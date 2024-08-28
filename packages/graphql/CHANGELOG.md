@@ -1,5 +1,12 @@
 # @baseapp-frontend/graphql
 
+## 1.1.8
+
+### Patch Changes
+
+- Rearrange files internally.
+- Add `use client` directive on some files.
+
 ## 1.1.7
 
 ### Patch Changes

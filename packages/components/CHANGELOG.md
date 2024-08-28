@@ -1,5 +1,14 @@
 # @baseapp-frontend/components
 
+## 0.0.4
+
+### Patch Changes
+
+- Import custom tailwind plugins.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.5
+  - @baseapp-frontend/graphql@1.1.8
+
 ## 0.0.3
 
 ### Patch Changes

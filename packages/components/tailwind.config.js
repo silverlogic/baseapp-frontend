@@ -1,3 +1,7 @@
+const {
+  responsiveTypography,
+  hideScrollbar,
+} = require('@baseapp-frontend/design-system/styles/tailwind/plugins')
 const { breakpoints } = require('@baseapp-frontend/design-system/styles/breakpoint')
 const { typography } = require('@baseapp-frontend/design-system/styles/typography')
 const { createPalette } = require('@baseapp-frontend/design-system/styles/palette')
@@ -91,41 +95,5 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require('@tailwindcss/typography'),
-    ({ addUtilities }) => {
-      addUtilities({
-        // Responsive typography (from h1 to h6)
-        '.responsive-h1': {
-          '@apply prose-h1 min-md:text-[3.625rem] min-lg:text-[4rem]': {},
-        },
-        '.responsive-h2': {
-          '@apply prose-h2 min-md:text-[2.75rem] min-lg:text-[3rem]': {},
-        },
-        '.responsive-h3': {
-          '@apply prose-h3 min-md:text-[1.875rem] min-lg:text-[2rem]': {},
-        },
-        '.responsive-h4': {
-          '@apply prose-h4 min-md:text-[1.5rem] min-lg:text-[1.5rem]': {},
-        },
-        '.responsive-h5': {
-          '@apply prose-h5 min-md:text-[1.25rem] min-lg:text-[1.25rem]': {},
-        },
-        '.responsive-h6': {
-          '@apply prose-h6': {},
-        },
-      })
-    },
-    ({ addUtilities }) => {
-      addUtilities({
-        '.hide-scrollbar': {
-          'scrollbar-width': 'none',
-          '-ms-overflow-style': 'none',
-          '&::-webkit-scrollbar': {
-            display: 'none',
-          },
-        },
-      })
-    },
-  ],
+  plugins: [require('@tailwindcss/typography'), responsiveTypography, hideScrollbar],
 }

@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
@@ -149,7 +147,7 @@ function createQueryCache() {
 
 const responseCacheByEnvironment = new WeakMap<Environment, QueryResponseCache>()
 
-function createEnvironment() {
+export function createEnvironment() {
   const cache = createQueryCache()
   const network = createNetwork(cache)
   const store = new Store(RecordSource.create())
@@ -163,20 +161,6 @@ function createEnvironment() {
   responseCacheByEnvironment.set(environment, cache)
 
   return environment
-}
-
-let relayEnvironment: Environment | null = null
-function initEnvironment() {
-  const environment = relayEnvironment ?? createEnvironment()
-  // For SSR always return new environment;
-  if (typeof window === typeof undefined) return environment
-  if (!relayEnvironment) relayEnvironment = environment
-  return relayEnvironment
-}
-
-export function useEnvironment() {
-  const env = useMemo(() => initEnvironment(), [relayEnvironment])
-  return env
 }
 
 export function getCacheByEnvironment(environment: Environment) {

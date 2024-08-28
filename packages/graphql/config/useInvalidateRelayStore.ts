@@ -1,3 +1,5 @@
+'use client'
+
 import { commitLocalUpdate } from 'react-relay'
 import type { Environment } from 'react-relay'
 import { useRelayEnvironment } from 'react-relay/hooks'
