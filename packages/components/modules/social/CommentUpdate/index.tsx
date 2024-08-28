@@ -101,10 +101,15 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
       >
         <CommentUpsertActions />
         <div className="grid grid-cols-[max-content_max-content] gap-2">
-          <IconButton onClick={handleEditCancel}>
+          <IconButton onClick={handleEditCancel} aria-label="cancel comment edit">
             <CloseIcon />
           </IconButton>
-          <IconButton type="submit" form="comment-update" disabled={isEditButtonDisabled}>
+          <IconButton
+            type="submit"
+            form="comment-update"
+            disabled={isEditButtonDisabled}
+            aria-label="save comment edit"
+          >
             <CheckMarkIcon />
           </IconButton>
         </div>

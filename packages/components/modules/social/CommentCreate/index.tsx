@@ -123,7 +123,12 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
           {...CommentTextFieldProps}
         >
           <CommentUpsertActions />
-          <IconButton type="submit" form="comment-create" disabled={isCreateButtonDisabled}>
+          <IconButton
+            type="submit"
+            form="comment-create"
+            disabled={isCreateButtonDisabled}
+            aria-label="create comment"
+          >
             <SendMessageIcon />
           </IconButton>
         </CommentTextField>

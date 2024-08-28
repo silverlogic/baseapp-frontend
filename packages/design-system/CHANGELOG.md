@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.4
+
+### Patch Changes
+
+- Minor adjustment to `CommentTextField`, focusing on enhancing accessibility.
+
 ## 0.0.3
 
 ### Patch Changes

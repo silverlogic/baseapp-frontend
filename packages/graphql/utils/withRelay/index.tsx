@@ -5,7 +5,7 @@ import { FC, Suspense } from 'react'
 import { useRelayEnvironment } from 'react-relay'
 import { ConcreteRequest, OperationType } from 'relay-runtime'
 
-import { useSerializablePreloadedQuery } from '../config'
+import { useSerializablePreloadedQuery } from '../../config'
 import { ComponentWithPreloadedQuery, ComponentWithQueryRef, WithRelayOptions } from './types'
 
 /**
@@ -24,7 +24,11 @@ const withRelay =
   (props: Props & ComponentWithPreloadedQuery<QueryNode, Query>) => {
     const { preloadedQuery } = props
     const environment = useRelayEnvironment()
-    const queryRef = useSerializablePreloadedQuery(environment, preloadedQuery, fetchPolicy)
+    const queryRef = useSerializablePreloadedQuery<QueryNode, Query>(
+      environment,
+      preloadedQuery,
+      fetchPolicy,
+    )
 
     return (
       <Suspense fallback={fallback}>

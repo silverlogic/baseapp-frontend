@@ -11,14 +11,22 @@ const CommentReactionButton: FC<CommentReactionButtonProps> = ({ target: targetR
   <ReactionButton target={targetRef} reactionType="LIKE">
     {({ handleReaction, isLoading, target }) => (
       <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
-        <IconButton onClick={handleReaction} isLoading={isLoading}>
+        <IconButton
+          onClick={handleReaction}
+          isLoading={isLoading}
+          aria-label={`react to comment ${target.id}`}
+        >
           {target?.myReaction?.id ? (
             <FavoriteSelectedIcon sx={{ color: 'error.main' }} />
           ) : (
             <FavoriteIcon />
           )}
         </IconButton>
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          aria-label={`reactions count ${target?.id}`}
+        >
           {target?.reactionsCount?.total}
         </Typography>
       </div>

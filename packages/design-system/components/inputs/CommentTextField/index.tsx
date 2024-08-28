@@ -41,7 +41,7 @@ const CommentTextField: FC<CommentTextFieldProps> = ({
               {replyTargetName}
             </TypographyWithEllipsis>
           </ReplyContainer>
-          <IconButton onClick={onCancelReply}>
+          <IconButton onClick={onCancelReply} aria-label="cancel reply">
             <CloseIcon />
           </IconButton>
         </div>

@@ -78,6 +78,7 @@ const CommentOptions: FC<CommentOptionsProps> = ({
         <SwipeableDrawer
           open={shouldOpenCommentOptions && isLongPressingComment}
           onClose={handleDrawerClose}
+          aria-label="comment options"
           {...SwipeableDrawerProps}
         >
           <div className="grid grid-cols-[1fr] justify-start gap-2">
@@ -129,9 +130,13 @@ const CommentOptions: FC<CommentOptionsProps> = ({
     return (
       <>
         {renderDeleteDialog()}
-        <Container>
+        <Container aria-label="comment options">
           {isCommentDeletionAllowed && (
-            <IconButton onClick={handleDeleteDialogOpen} disabled={isDeletingComment}>
+            <IconButton
+              onClick={handleDeleteDialogOpen}
+              disabled={isDeletingComment}
+              aria-label="delete comment"
+            >
               <TrashCanIcon />
             </IconButton>
           )}
@@ -139,7 +144,7 @@ const CommentOptions: FC<CommentOptionsProps> = ({
             if (!hasPermission) return null
 
             return (
-              <IconButton key={label} onClick={onClick} disabled={disabled}>
+              <IconButton key={label} onClick={onClick} disabled={disabled} aria-label={label}>
                 {icon}
               </IconButton>
             )

@@ -184,6 +184,7 @@ const CommentItem: FC<CommentItemProps> = ({
                 <CommentReplyButton
                   onReply={replyToComment}
                   isLoadingReplies={isLoadingReplies}
+                  commentId={comment.id}
                   totalCommentsCount={comment.commentsCount.total}
                 />
               </div>

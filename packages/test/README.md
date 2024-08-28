@@ -53,7 +53,7 @@ In order to use this package you will need to:
 
 In order to test other `@baseapp-frontend`'s packages like `authentication` or if you are using `@baseapp-frontend/test` outside this monorepo, you may need to also install these additional dependencies (they're also present in the `@baseapp-frontend/test` dependencies, so make sure to install the same versions):
 
-- install dependecies
+- install dependencies
 
 ```bash
   yarn add -D babel-jest@^29.7.0 jest@^29.7.0 jest-environment-jsdom@^29.7.0 ts-jest@^29.1.4 ts-node@^10.9.2 @types/jest@^29.5.12 @testing-library/jest-dom@^6.4.6 @testing-library/react@^16.0.0 @testing-library/user-event@^14.5.2
