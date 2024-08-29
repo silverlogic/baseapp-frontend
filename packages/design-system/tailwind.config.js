@@ -111,7 +111,7 @@ module.exports = {
           '@apply prose-h5 min-md:text-[1.25rem] min-lg:text-[1.25rem]': {},
         },
         '.responsive-h6': {
-          '@apply prose-h6': {},
+          '@apply prose-h6 min-md:text-[1.125rem] min-lg:text-[1.125rem]': {},
         },
       })
     },
