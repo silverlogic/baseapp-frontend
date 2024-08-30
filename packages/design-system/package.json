@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "main": "./dist/index.ts",
   "module": "./dist/index.mjs",
   "scripts": {
@@ -27,7 +27,9 @@
     "next": "14.3.0-canary.24",
     "react-hook-form": "^7.51.5",
     "react-lazy-load-image-component": "^1.6.2",
-    "simplebar-react": "^3.2.5"
+    "simplebar-react": "^3.2.5",
+    "react-dropzone": "^14.2.3",
+    "jotai": "^2.9.3"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "*",
