@@ -40,6 +40,9 @@ export type * from './components/Logo/types'
 export { default as Popover } from './components/Popover'
 export type * from './components/Popover/types'
 
+export { default as Dropzone } from './components/Dropzone'
+export type * from './components/Dropzone/types'
+
 // providers
 export { default as MotionLazyProvider } from './providers/MotionLazyProvider'
 
@@ -52,6 +55,7 @@ export type { ThemeProviderProps } from './providers/ThemeProvider/types'
 // hooks
 export * from './hooks/useResponsive'
 export * from './hooks/usePopover'
+export * from './hooks/useLogoOverrides'
 
 // types
 export type * from './types'

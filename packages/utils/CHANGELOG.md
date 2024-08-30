@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 2.5.5
+
+### Patch Changes
+
+- Added useLogoOverrides hook and Dropzone component to Design System
+  Added getImageString to Utils pkg
+
 ## 2.5.4
 
 ### Patch Changes
