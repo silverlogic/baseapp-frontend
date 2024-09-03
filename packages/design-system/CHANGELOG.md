@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system
 
+## 0.0.7
+
+### Patch Changes
+
+- Modified typography font size and font height to match BA design system
+- Added responsive font sizes for h6 in both MUI and Tailwind
+- Moved `responsiveTypography` utility from `tailwind.config.js` to `/styles/tailwind/plugins`
+- Added `OutlinedEditIcon` and `ShareIcon` components
+
 ## 0.0.6
 
 ### Patch Changes
