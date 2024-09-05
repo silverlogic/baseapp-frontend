@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 3.2.4
+
+### Patch Changes
+
+- Replaced `firstName` and `lastName` with `name` in `ReigtserRequest` interface
+- Replaced `firstName` and `lastName` with `name` in `useSignUp` validation schema and form default values
+
 ## 3.2.3
 
 ### Patch Changes
