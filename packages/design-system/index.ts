@@ -34,6 +34,11 @@ export type * from './components/Iconify/types'
 export { default as Scrollbar } from './components/Scrollbar'
 export type * from './components/Scrollbar/types'
 
+export { default as ProjectLogo } from './components/ProjectLogo'
+export type * from './components/ProjectLogo/types'
+
+export { default as CustomLogoCondensed } from './components/CustomLogoCondensed'
+
 export { default as Logo } from './components/Logo'
 export type * from './components/Logo/types'
 
@@ -53,9 +58,9 @@ export { default as ThemeProvider } from './providers/ThemeProvider'
 export type { ThemeProviderProps } from './providers/ThemeProvider/types'
 
 // hooks
+export * from './hooks/useLogoOverrides'
 export * from './hooks/useResponsive'
 export * from './hooks/usePopover'
-export * from './hooks/useLogoOverrides'
 
 // types
 export type * from './types'

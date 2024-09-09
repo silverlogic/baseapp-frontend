@@ -1,48 +1,61 @@
 'use client'
 
-import { ServerSideRenderingOption, getCookie, setCookie } from '@baseapp-frontend/utils'
-
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+import { SyncStorage } from 'jotai/vanilla/utils/atomWithStorage'
 
 import { DEFAULT_LOGO_KEY, DEFAULT_LOGO_SETTINGS } from './constants'
 import { LogoOverrides } from './types'
 
-export const getLogoOverridesFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
-  const settings = getCookie<LogoOverrides>(DEFAULT_LOGO_KEY, { noSSR }) ?? DEFAULT_LOGO_SETTINGS
-
-  return settings
+export const localStorageSync: SyncStorage<LogoOverrides> = {
+  getItem: (key: string) => {
+    if (typeof window !== typeof undefined) {
+      const item = localStorage.getItem(key)
+      return item ? JSON.parse(item) : null
+    }
+    return null
+  },
+  setItem: (key: string, value: LogoOverrides) => {
+    if (typeof window !== typeof undefined) {
+      localStorage.setItem(key, JSON.stringify(value))
+    }
+  },
+  removeItem: (key: string) => {
+    if (typeof window !== typeof undefined) {
+      localStorage.removeItem(key)
+    }
+  },
 }
 
-const initialLogos = getLogoOverridesFromCookie()
+const logosAtom = atomWithStorage<LogoOverrides>(
+  DEFAULT_LOGO_KEY,
+  DEFAULT_LOGO_SETTINGS,
+  localStorageSync,
+  { getOnInit: true },
+)
 
-const settingsAtom = atom<LogoOverrides>(initialLogos)
-
-/**
- * By using `useLogoOverrides` with the `noSSR` option set to `false`, causes Next.js to dynamically render the affected pages, instead of statically rendering them.
- */
-const useLogoOverrides = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
-  const [settings, setSettings] = useAtom(settingsAtom)
+const useLogoOverrides = () => {
+  const [logos, setLogos] = useAtom(logosAtom)
   const isSSR = typeof window === typeof undefined
 
   const handleSetLogoOverrides = (newLogos: Partial<LogoOverrides>) => {
-    setSettings((prevLogos: LogoOverrides) => {
+    setLogos((prevLogos: LogoOverrides) => {
       const updatedLogoOverrides = { ...prevLogos, ...newLogos }
-      setCookie(DEFAULT_LOGO_KEY, updatedLogoOverrides)
-
       return updatedLogoOverrides
     })
   }
 
   if (isSSR) {
+    // SSR fallback, return default settings if in a server-side context
     return {
-      settings: getLogoOverridesFromCookie({ noSSR }),
-      setSettings: handleSetLogoOverrides,
+      logos: DEFAULT_LOGO_SETTINGS,
+      setLogos: handleSetLogoOverrides,
     }
   }
 
   return {
-    settings,
-    setSettings: handleSetLogoOverrides,
+    logos,
+    setLogos: handleSetLogoOverrides,
   }
 }
 

@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.8
+
+### Patch Changes
+
+- Changed useLogoOverrides to use localStorage instead of cookies, moved project logo to design-system
+
 ## 0.0.7
 
 ### Patch Changes
