@@ -7,7 +7,7 @@ import { SyncStorage } from 'jotai/vanilla/utils/atomWithStorage'
 import { DEFAULT_LOGO_KEY, DEFAULT_LOGO_SETTINGS } from './constants'
 import { LogoOverrides } from './types'
 
-export const localStorageSync: SyncStorage<LogoOverrides> = {
+const localStorageSync: SyncStorage<LogoOverrides> = {
   getItem: (key: string) => {
     if (typeof window !== typeof undefined) {
       const item = localStorage.getItem(key)

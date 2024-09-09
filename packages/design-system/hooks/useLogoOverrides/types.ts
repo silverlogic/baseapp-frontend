@@ -3,6 +3,8 @@ export type LogoOverrides = {
   square?: string
 }
 
+export type LogoOverridesKeys = keyof LogoOverrides
+
 export type LogoOverrideState = {
   settings: LogoOverrides
 }

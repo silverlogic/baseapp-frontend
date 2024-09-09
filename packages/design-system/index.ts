@@ -58,7 +58,8 @@ export { default as ThemeProvider } from './providers/ThemeProvider'
 export type { ThemeProviderProps } from './providers/ThemeProvider/types'
 
 // hooks
-export * from './hooks/useLogoOverrides'
+export { default as useLogoOverrides } from './hooks/useLogoOverrides'
+export type { LogoOverrides, LogoOverridesKeys } from './hooks/useLogoOverrides/types'
 export * from './hooks/useResponsive'
 export * from './hooks/usePopover'
 
