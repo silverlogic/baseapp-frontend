@@ -66,7 +66,7 @@ const Dropzone: FC<DropzoneProps> = ({ accept, size, storedImg, onSelect, onRemo
   const Preview = (
     <Card>
       {files && (
-        <Box mt={2} display="flex" flexDirection="column" alignItems="center">
+        <Box p={2} display="flex" flexDirection="column" alignItems="center">
           <img
             key={files}
             src={files}
