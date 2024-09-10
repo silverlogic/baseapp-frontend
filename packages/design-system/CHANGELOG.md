@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.9
+
+### Patch Changes
+
+- Improvements for the `Dropzone` component, such as fixing some styles and making it more reusable by adding dropzone props.
+
 ## 0.0.8
 
 ### Patch Changes

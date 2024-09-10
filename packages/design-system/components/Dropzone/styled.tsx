@@ -1,8 +1,8 @@
 import { CancelOutlined, PortraitOutlined } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { alpha, styled } from '@mui/material/styles'
 
-import { DropzoneTextProps, InputContainerProps } from './types'
+import { InputContainerProps } from './types'
 
 const getColor = ({ theme, isDragAccept, isDragReject, isFocused }: InputContainerProps) => {
   if (isDragAccept) {
@@ -25,15 +25,12 @@ export const CancelIcon = styled(CancelOutlined)(({ theme }) => ({
   color: theme.palette.error.main,
 }))
 
-export const DropzoneText = styled(Typography, {
+export const DropzoneText = styled('span', {
   shouldForwardProp: (props) => props !== 'hasError',
-})<DropzoneTextProps>(({ theme, hasError }) => ({
-  ...theme.typography.body2,
-  fontFamily: theme.typography.fontFamily,
-  color: hasError ? theme.palette.error.main : theme.palette.text.primary,
-  fontWeight: 400,
-  width: '100%',
+})(({ theme }) => ({
+  color: theme.palette.primary.main,
   textAlign: 'center',
+  width: '100%',
 }))
 
 export const InputContainer = styled('div', {
@@ -44,6 +41,8 @@ export const InputContainer = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
+  justifyContent: 'center',
+  minHeight: 180,
   padding: 20,
   borderWidth: 1,
   borderRadius: 5,
