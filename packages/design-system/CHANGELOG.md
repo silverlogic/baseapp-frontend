@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.10
+
+### Patch Changes
+
+- Add NotificationBellIcon
+
 ## 0.0.9
 
 ### Patch Changes

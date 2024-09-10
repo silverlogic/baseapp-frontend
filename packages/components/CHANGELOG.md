@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.5
+
+### Patch Changes
+
+- Add Notifications Component
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.10
+
 ## 0.0.4
 
 ### Patch Changes
