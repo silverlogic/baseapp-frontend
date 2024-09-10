@@ -58,7 +58,7 @@ const Dropzone: FC<DropzoneProps> = ({
       )
 
     return (
-      <div className="w-full container">
+      <div className="w-full container max-w-none">
         <InputContainer {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {isDragReject ? (
@@ -74,7 +74,7 @@ const Dropzone: FC<DropzoneProps> = ({
           ) : (
             <>
               <PortraitOutlinedIcon />
-              <Typography variant="body2" color="text.primary">
+              <Typography textAlign="center" variant="body2" color="text.primary">
                 <DropzoneText>Click to browse</DropzoneText> or drag and drop.
               </Typography>
               <Typography variant="caption" color="text.secondary">
