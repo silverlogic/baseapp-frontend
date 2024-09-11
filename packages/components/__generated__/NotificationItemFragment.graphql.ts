@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b693786ef8cd8361d78e99bc73f16789>>
+ * @generated SignedSource<<aff50348a1d5381b212ff90d7e8e6ff8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -35,9 +35,8 @@ export type NotificationItemFragment$data = {
             }
           | null
           | undefined
-        readonly firstName?: string
+        readonly fullName?: string | null | undefined
         readonly id: string
-        readonly lastName?: string
       }
     | null
     | undefined
@@ -179,14 +178,7 @@ const node: ReaderFragment = (function () {
                 alias: null,
                 args: null,
                 kind: 'ScalarField',
-                name: 'firstName',
-                storageKey: null,
-              },
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'lastName',
+                name: 'fullName',
                 storageKey: null,
               },
             ],
@@ -239,6 +231,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '03e3cac9af9caa0a4de822f6fae2f3ce'
+;(node as any).hash = '2a3ba381d2a70ce73014c7d7549c7e66'
 
 export default node

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<727988726efe06e4d4f506a40447bf11>>
+ * @generated SignedSource<<1dcdcad8858f2d642ffa1fa4866f565a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -178,14 +178,7 @@ const node: ConcreteRequest = (function () {
               alias: null,
               args: null,
               kind: 'ScalarField',
-              name: 'firstName',
-              storageKey: null,
-            },
-            {
-              alias: null,
-              args: null,
-              kind: 'ScalarField',
-              name: 'lastName',
+              name: 'fullName',
               storageKey: null,
             },
           ],
@@ -425,12 +418,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '81e0dfe4ff91c4834520f0ff12edefb5',
+      cacheID: 'd95ac6f350fcba9bf2db96551d0ee2df',
       id: null,
       metadata: {},
       name: 'useNotificationsSubscription',
       operationKind: 'subscription',
-      text: 'subscription useNotificationsSubscription {\n  onNotificationChange {\n    createdNotification {\n      node {\n        ...NotificationItemFragment\n        recipient {\n          id\n          ...NotificationUserMenuFragment\n        }\n        id\n      }\n    }\n    updatedNotification {\n      id\n      ...NotificationItemFragment\n    }\n    deletedNotificationId\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      firstName\n      lastName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationUserMenuFragment on User {\n  id\n  notificationsUnreadCount\n}\n',
+      text: 'subscription useNotificationsSubscription {\n  onNotificationChange {\n    createdNotification {\n      node {\n        ...NotificationItemFragment\n        recipient {\n          id\n          ...NotificationUserMenuFragment\n        }\n        id\n      }\n    }\n    updatedNotification {\n      id\n      ...NotificationItemFragment\n    }\n    deletedNotificationId\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationUserMenuFragment on User {\n  id\n  notificationsUnreadCount\n}\n',
     },
   }
 })()

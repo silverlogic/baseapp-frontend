@@ -18,8 +18,7 @@ export const NotificationItemFragment = graphql`
         avatar(width: 48, height: 48) {
           url
         }
-        firstName
-        lastName
+        fullName
       }
     }
 

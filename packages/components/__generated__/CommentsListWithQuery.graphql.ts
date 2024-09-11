@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b4000ebb71fe63a9eda602a5297295c5>>
+ * @generated SignedSource<<42b9c29b4cdce4190e8bad3f0ae90ea4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -264,20 +264,6 @@ const node: ConcreteRequest = (function () {
                                 },
                                 {
                                   alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'firstName',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'lastName',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
                                   args: [
                                     {
                                       kind: 'Literal',
@@ -444,7 +430,7 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'dd3d1ab78cb8bbf4bf424348c46c9cb2',
+      cacheID: 'eba3177159560ce677a33d0e4bfd216c',
       id: null,
       metadata: {
         relayTestingSelectionTypeInfo: {
@@ -527,10 +513,8 @@ const node: ConcreteRequest = (function () {
             type: 'File',
           },
           'target.comments.edges.node.user.avatar.url': v7 /*: any*/,
-          'target.comments.edges.node.user.firstName': v7 /*: any*/,
           'target.comments.edges.node.user.fullName': v8 /*: any*/,
           'target.comments.edges.node.user.id': v12 /*: any*/,
-          'target.comments.edges.node.user.lastName': v7 /*: any*/,
           'target.comments.edges.node.user.pk': v14 /*: any*/,
           'target.comments.pageInfo': {
             enumValues: null,
@@ -547,7 +531,7 @@ const node: ConcreteRequest = (function () {
       },
       name: 'CommentsListWithQuery',
       operationKind: 'query',
-      text: 'query CommentsListWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...CommentsList_comments\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    firstName\n    lastName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment CommentsList_comments on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  commentsCount {\n    total\n  }\n  comments(first: 5, orderBy: "-is_pinned,-created") {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        id\n        isPinned\n        ...CommentItem_comment\n        __typename\n      }\n      cursor\n    }\n  }\n  ...CommentItem_target\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
+      text: 'query CommentsListWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...CommentsList_comments\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment CommentsList_comments on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  commentsCount {\n    total\n  }\n  comments(first: 5, orderBy: "-is_pinned,-created") {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        id\n        isPinned\n        ...CommentItem_comment\n        __typename\n      }\n      cursor\n    }\n  }\n  ...CommentItem_target\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
     },
   }
 })()

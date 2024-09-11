@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<df0e6774f0f32a894e8d0ec2f6a25314>>
+ * @generated SignedSource<<16611dce7648bc5f4c1dc1a4e58e1359>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -282,14 +282,7 @@ const node: ConcreteRequest = (function () {
                                       alias: null,
                                       args: null,
                                       kind: 'ScalarField',
-                                      name: 'firstName',
-                                      storageKey: null,
-                                    },
-                                    {
-                                      alias: null,
-                                      args: null,
-                                      kind: 'ScalarField',
-                                      name: 'lastName',
+                                      name: 'fullName',
                                       storageKey: null,
                                     },
                                   ],
@@ -390,12 +383,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '1d0d65a5d3faca2600fadfad0e062e85',
+      cacheID: '46c6b7bc56079c11473c0034b604a617',
       id: null,
       metadata: {},
       name: 'notificationsListRefetchable',
       operationKind: 'query',
-      text: 'query notificationsListRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $verbs: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NotificationsListFragment_LXqp7\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      firstName\n      lastName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query notificationsListRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $verbs: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NotificationsListFragment_LXqp7\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()

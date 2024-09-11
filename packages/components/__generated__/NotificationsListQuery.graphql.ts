@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9565154d3038f29f190327d04c40b179>>
+ * @generated SignedSource<<84627b6ddb56fe7a135a471671d16a94>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -269,14 +269,7 @@ const node: ConcreteRequest = (function () {
                                   alias: null,
                                   args: null,
                                   kind: 'ScalarField',
-                                  name: 'firstName',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'lastName',
+                                  name: 'fullName',
                                   storageKey: null,
                                 },
                               ],
@@ -373,12 +366,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '7fe0f8b797769d7cc8dd719f94e39c79',
+      cacheID: '44a2a72157c5c4adae05c4d7a3dfb548',
       id: null,
       metadata: {},
       name: 'NotificationsListQuery',
       operationKind: 'query',
-      text: 'query NotificationsListQuery(\n  $count: Int!\n  $cursor: String\n  $verbs: String\n) {\n  me {\n    id\n    ...NotificationsListFragment_LXqp7\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      firstName\n      lastName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query NotificationsListQuery(\n  $count: Int!\n  $cursor: String\n  $verbs: String\n) {\n  me {\n    id\n    ...NotificationsListFragment_LXqp7\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()

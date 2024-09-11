@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import { AvatarWithPlaceholder, TypographyWithEllipsis } from '@baseapp-frontend/design-system'
-import { formatRelativeTime, joinWithSeparator } from '@baseapp-frontend/utils'
+import { formatRelativeTime } from '@baseapp-frontend/utils'
 
 import { TimelineDot } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
@@ -14,7 +14,7 @@ const CommentReply: FC<GenericItemProps> = ({ notification }) => (
     <AvatarWithPlaceholder
       width={40}
       height={40}
-      alt={notification.actor?.firstName ?? `Notification's user avatar`}
+      alt={notification.actor?.fullName ?? `Notification's user avatar`}
       src={notification.actor?.avatar?.url}
     />
     <Box display="grid" gap={1}>
@@ -27,7 +27,7 @@ const CommentReply: FC<GenericItemProps> = ({ notification }) => (
             gridTemplateColumns="repeat(2, max-content)"
           >
             <Typography variant="body2" sx={{ fontWeight: 700 }}>
-              {joinWithSeparator([notification?.actor?.firstName, notification?.actor?.lastName])}
+              {notification?.actor?.fullName}
             </Typography>
             <Typography variant="body2" display="flex" alignItems="center">
               replied your comment

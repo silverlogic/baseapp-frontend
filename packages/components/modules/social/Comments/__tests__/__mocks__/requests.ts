@@ -16,8 +16,6 @@ export const replytoCommentMockData = {
         id: 'user-2',
         pk: 2,
         fullName: 'Jane Smith',
-        firstName: 'Jane',
-        lastName: 'Smith',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
         },
@@ -39,8 +37,6 @@ export const replytoCommentMockData = {
                 id: 'VXNlcjo0',
                 pk: 4,
                 fullName: 'Alexandre Anicio',
-                firstName: 'Alexandre',
-                lastName: 'Anicio',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -169,8 +165,6 @@ export const commentEditMockData = {
                   id: 'VXNlcjo0',
                   pk: 4,
                   fullName: 'Alexandre Anicio',
-                  firstName: 'Alexandre',
-                  lastName: 'Anicio',
                   avatar: {
                     url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                   },
@@ -203,8 +197,6 @@ export const commentEditMockData = {
                   id: 'VXNlcjo0',
                   pk: 4,
                   fullName: 'Alexandre Anicio',
-                  firstName: 'Alexandre',
-                  lastName: 'Anicio',
                   avatar: {
                     url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                   },
@@ -287,8 +279,6 @@ export const commentsNextPageMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -321,8 +311,6 @@ export const commentsNextPageMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -355,8 +343,6 @@ export const commentsNextPageMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -389,8 +375,6 @@ export const commentsNextPageMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -423,8 +407,6 @@ export const commentsNextPageMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -456,8 +438,6 @@ export const replytoCommentWithElevenRepliesMockData = {
         id: 'user-1',
         pk: 1,
         fullName: 'John Doe',
-        firstName: 'John',
-        lastName: 'Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
         },
@@ -487,8 +467,6 @@ export const replytoCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -521,8 +499,6 @@ export const replytoCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -555,8 +531,6 @@ export const replytoCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -589,8 +563,6 @@ export const replytoCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -623,8 +595,6 @@ export const replytoCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -670,8 +640,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
         id: 'user-1',
         pk: 1,
         fullName: 'John Doe',
-        firstName: 'John',
-        lastName: 'Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
         },
@@ -701,8 +669,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -735,8 +701,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -769,8 +733,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -803,8 +765,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -837,8 +797,6 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
@@ -884,8 +842,6 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
         id: 'user-1',
         pk: 1,
         fullName: 'John Doe',
-        firstName: 'John',
-        lastName: 'Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
         },
@@ -915,8 +871,6 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
                 id: 'user-1',
                 pk: 1,
                 fullName: 'John Doe',
-                firstName: 'John',
-                lastName: 'Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },

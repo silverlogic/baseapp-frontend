@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d35ee80e3a22abdb0c9b2a3a7ee0430b>>
+ * @generated SignedSource<<a0b677f7866a111483be680b969938be>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -247,20 +247,6 @@ const node: ConcreteRequest = (function () {
                                     },
                                     {
                                       alias: null,
-                                      args: null,
-                                      kind: 'ScalarField',
-                                      name: 'firstName',
-                                      storageKey: null,
-                                    },
-                                    {
-                                      alias: null,
-                                      args: null,
-                                      kind: 'ScalarField',
-                                      name: 'lastName',
-                                      storageKey: null,
-                                    },
-                                    {
-                                      alias: null,
                                       args: [
                                         {
                                           kind: 'Literal',
@@ -429,12 +415,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '3e973e2b8e766fef7164c2e9485af8ad',
+      cacheID: '29c62fd9e62f6ecb8ffe052163e053c6',
       id: null,
       metadata: {},
       name: 'CommentsRefetchQuery',
       operationKind: 'query',
-      text: 'query CommentsRefetchQuery(\n  $isCommentsOpened: Boolean = true\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...CommentsFragment_2iZoM\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    firstName\n    lastName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment CommentsFragment_2iZoM on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  __typename\n  isCommentsEnabled\n  commentsCount {\n    total\n  }\n  ...CommentsList_comments @include(if: $isCommentsOpened)\n  ...CommentItem_target\n}\n\nfragment CommentsList_comments on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  commentsCount {\n    total\n  }\n  comments(first: 5, orderBy: "-is_pinned,-created") {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        id\n        isPinned\n        ...CommentItem_comment\n        __typename\n      }\n      cursor\n    }\n  }\n  ...CommentItem_target\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
+      text: 'query CommentsRefetchQuery(\n  $isCommentsOpened: Boolean = true\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...CommentsFragment_2iZoM\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment CommentsFragment_2iZoM on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  __typename\n  isCommentsEnabled\n  commentsCount {\n    total\n  }\n  ...CommentsList_comments @include(if: $isCommentsOpened)\n  ...CommentItem_target\n}\n\nfragment CommentsList_comments on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n  commentsCount {\n    total\n  }\n  comments(first: 5, orderBy: "-is_pinned,-created") {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        id\n        isPinned\n        ...CommentItem_comment\n        __typename\n      }\n      cursor\n    }\n  }\n  ...CommentItem_target\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
     },
   }
 })()
