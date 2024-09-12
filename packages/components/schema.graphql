@@ -368,6 +368,13 @@ type FollowTogglePayload {
 }
 
 """
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+"""
 Allows use of a JSON String for input / output from the GraphQL schema.
 
 Use of this type is *not recommended* as you lose the benefits of having a defined, static
@@ -434,7 +441,7 @@ type Notification implements Node {
   public: Boolean!
   deleted: Boolean!
   emailed: Boolean!
-  data: String
+  data: GenericScalar
   pk: Int!
   actor: Node
   target: Node

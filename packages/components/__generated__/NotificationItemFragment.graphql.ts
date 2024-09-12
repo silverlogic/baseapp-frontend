@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<aff50348a1d5381b212ff90d7e8e6ff8>>
+ * @generated SignedSource<<54c65b4705b09eb66456e99dd5901529>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -40,7 +40,7 @@ export type NotificationItemFragment$data = {
       }
     | null
     | undefined
-  readonly data: string | null | undefined
+  readonly data: any | null | undefined
   readonly description: string | null | undefined
   readonly id: string
   readonly level: BaseappNotificationsNotificationLevelChoices
