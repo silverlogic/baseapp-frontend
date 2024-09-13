@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, Suspense, useMemo } from 'react'
 
 import {
   CloseIcon,
@@ -127,4 +127,14 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 }
 
-export default NotificationsList
+const NotificationsListSuspended: FC<NotificationsListProps> = ({
+  LoadingState = DefaultLoadingState,
+  LoadingStateProps = {},
+  ...props
+}) => (
+  <Suspense fallback={<LoadingState {...LoadingStateProps} />}>
+    <NotificationsList {...{ LoadingState, LoadingStateProps, ...props }} />
+  </Suspense>
+)
+
+export default NotificationsListSuspended

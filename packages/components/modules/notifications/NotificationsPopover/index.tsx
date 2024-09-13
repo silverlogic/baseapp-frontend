@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, Suspense, useState } from 'react'
 
 import {
   NotificationBellIcon as DefaultNotificationBellIcon,
@@ -83,4 +83,20 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   )
 }
 
-export default NotificationsPopover
+const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = ({
+  NotificationBellIcon = DefaultNotificationBellIcon,
+  NotificationBellIconProps = {},
+  ...props
+}) => (
+  <Suspense
+    fallback={
+      <IconButton disabled>
+        <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+      </IconButton>
+    }
+  >
+    <NotificationsPopover {...{ NotificationBellIcon, NotificationBellIconProps, ...props }} />
+  </Suspense>
+)
+
+export default NotificationsPopoverSuspended
