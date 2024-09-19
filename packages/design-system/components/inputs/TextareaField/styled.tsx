@@ -1,8 +1,9 @@
 import { styled } from '@mui/material/styles'
 
 import { PureTextField } from '../TextField'
+import { TextareaFieldProps } from './types'
 
-export const Textarea = styled(PureTextField)(({ theme }) => ({
+export const Textarea = styled(PureTextField)<TextareaFieldProps>(({ theme, hideBorder }) => ({
   '& .MuiInputBase-root': {
     padding: 0,
   },
@@ -10,9 +11,11 @@ export const Textarea = styled(PureTextField)(({ theme }) => ({
     ...theme.typography.body1,
     padding: theme.spacing(1.5),
   },
-  '& fieldset': {
-    border: 'none',
-  },
+  ...(hideBorder && {
+    '& fieldset': {
+      border: 'none',
+    },
+  }),
   '& textarea': {
     '&::-webkit-scrollbar': {
       backgroundColor: 'transparent',
