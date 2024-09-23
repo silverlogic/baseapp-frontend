@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<54a1f14044a41f116ed749daf0598dad>>
+ * @generated SignedSource<<882195f32b7271fe4f396084c7617078>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -329,20 +329,6 @@ const node: ConcreteRequest = (function () {
                         },
                         {
                           alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'firstName',
-                          storageKey: null,
-                        },
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'lastName',
-                          storageKey: null,
-                        },
-                        {
-                          alias: null,
                           args: [
                             {
                               kind: 'Literal',
@@ -511,12 +497,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'e27be73eaeb5117a0ad68deab7fe4a60',
+      cacheID: '1df6b1cc4ffb8c4f9160a80391bb797e',
       id: null,
       metadata: {},
       name: 'CommentCreateMutation',
       operationKind: 'mutation',
-      text: 'mutation CommentCreateMutation(\n  $input: CommentCreateInput!\n) {\n  commentCreate(input: $input) {\n    comment {\n      node {\n        id\n        target {\n          __typename\n          id\n          commentsCount {\n            total\n            main\n            replies\n          }\n        }\n        inReplyTo {\n          id\n          commentsCount {\n            total\n            main\n            replies\n          }\n        }\n        ...CommentItem_comment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    firstName\n    lastName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
+      text: 'mutation CommentCreateMutation(\n  $input: CommentCreateInput!\n) {\n  commentCreate(input: $input) {\n    comment {\n      node {\n        id\n        target {\n          __typename\n          id\n          commentsCount {\n            total\n            main\n            replies\n          }\n        }\n        inReplyTo {\n          id\n          commentsCount {\n            total\n            main\n            replies\n          }\n        }\n        ...CommentItem_comment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
     },
   }
 })()

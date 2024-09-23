@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9a2dada20924229d547e859d0cfbd6a3>>
+ * @generated SignedSource<<cd8ae4e50f3bda54f195f843fdc9ea6d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -32,10 +32,8 @@ export type CommentItem_comment$data = {
             }
           | null
           | undefined
-        readonly firstName: string
         readonly fullName: string | null | undefined
         readonly id: string
-        readonly lastName: string
         readonly pk: number
       }
     | null
@@ -118,20 +116,6 @@ const node: ReaderFragment = (function () {
             args: null,
             kind: 'ScalarField',
             name: 'fullName',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'firstName',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'lastName',
             storageKey: null,
           },
           {
@@ -271,6 +255,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'a0dbcc7b54aaf4438837d53880e6e7f1'
+;(node as any).hash = '6b85079a50a9d42f07d0859fcf536a61'
 
 export default node

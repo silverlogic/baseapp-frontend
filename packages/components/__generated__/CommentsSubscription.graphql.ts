@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b5ee783ee7b9bcb8f727e36980a3067d>>
+ * @generated SignedSource<<51bf797c859d8ccb125c0762e04dd7fe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -164,20 +164,6 @@ const node: ConcreteRequest = (function () {
           args: null,
           kind: 'ScalarField',
           name: 'fullName',
-          storageKey: null,
-        },
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'firstName',
-          storageKey: null,
-        },
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'lastName',
           storageKey: null,
         },
         {
@@ -514,12 +500,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'ea38cbb3fffc8296ba8ae3ad5a67de81',
+      cacheID: 'e23e08eb3ec21610ecbc8771eed8f73f',
       id: null,
       metadata: {},
       name: 'CommentsSubscription',
       operationKind: 'subscription',
-      text: 'subscription CommentsSubscription(\n  $targetObjectId: ID\n) {\n  onCommentChange(targetObjectId: $targetObjectId) {\n    createdComment {\n      node {\n        id\n        ...CommentItem_comment\n        target {\n          __typename\n          commentsCount {\n            total\n            main\n            replies\n          }\n          id\n        }\n      }\n    }\n    updatedComment {\n      ...CommentItem_comment\n      id\n    }\n    deletedCommentId\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    firstName\n    lastName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
+      text: 'subscription CommentsSubscription(\n  $targetObjectId: ID\n) {\n  onCommentChange(targetObjectId: $targetObjectId) {\n    createdComment {\n      node {\n        id\n        ...CommentItem_comment\n        target {\n          __typename\n          commentsCount {\n            total\n            main\n            replies\n          }\n          id\n        }\n      }\n    }\n    updatedComment {\n      ...CommentItem_comment\n      id\n    }\n    deletedCommentId\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
     },
   }
 })()

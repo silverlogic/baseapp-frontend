@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78a7a3607a8dcc077690864bbb1f54f7>>
+ * @generated SignedSource<<506d303912dd2531951af07ebbd603b3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,8 +14,8 @@ import { FragmentRefs } from 'relay-runtime'
 export type ReactionTypes = 'DISLIKE' | 'LIKE' | '%future added value'
 export type ReactionToggleInput = {
   clientMutationId?: string | null | undefined
+  profileObjectId?: string | null | undefined
   reactionType: ReactionTypes
-  targetContentType?: string | null | undefined
   targetObjectId: string
 }
 export type ReactionButtonMutation$variables = {

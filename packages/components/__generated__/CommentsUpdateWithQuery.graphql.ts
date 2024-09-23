@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<37d2dccc311bc5c087b4aa8e687e3529>>
+ * @generated SignedSource<<07b041b7516968adca021d17a0dd0a4d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -178,20 +178,6 @@ const node: ConcreteRequest = (function () {
                     },
                     {
                       alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'firstName',
-                      storageKey: null,
-                    },
-                    {
-                      alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'lastName',
-                      storageKey: null,
-                    },
-                    {
-                      alias: null,
                       args: [
                         {
                           kind: 'Literal',
@@ -341,7 +327,7 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'cacf3130ee38b6466ce5acb673b7bce8',
+      cacheID: 'db4077014bdf5986fbfdc07879a630e9',
       id: null,
       metadata: {
         relayTestingSelectionTypeInfo: {
@@ -413,16 +399,14 @@ const node: ConcreteRequest = (function () {
             type: 'File',
           },
           'target.user.avatar.url': v4 /*: any*/,
-          'target.user.firstName': v4 /*: any*/,
           'target.user.fullName': v5 /*: any*/,
           'target.user.id': v8 /*: any*/,
-          'target.user.lastName': v4 /*: any*/,
           'target.user.pk': v9 /*: any*/,
         },
       },
       name: 'CommentsUpdateWithQuery',
       operationKind: 'query',
-      text: 'query CommentsUpdateWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...CommentItem_comment\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    firstName\n    lastName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
+      text: 'query CommentsUpdateWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...CommentItem_comment\n    id\n  }\n}\n\nfragment CommentItem_comment on Comment {\n  id\n  pk\n  body\n  isPinned\n  user {\n    id\n    pk\n    fullName\n    avatar(width: 50, height: 50) {\n      url\n    }\n  }\n  created\n  commentsCount {\n    total\n  }\n  canChange: hasPerm(perm: "change")\n  canDelete: hasPerm(perm: "delete")\n  canReport: hasPerm(perm: "report")\n  canPin: hasPerm(perm: "pin")\n  ...ReactionButton_target\n  ...CommentItem_target\n}\n\nfragment CommentItem_target on CommentsInterface {\n  __isCommentsInterface: __typename\n  id\n}\n\nfragment ReactionButton_target on ReactionsInterface {\n  __isReactionsInterface: __typename\n  id\n  reactionsCount {\n    total\n  }\n  myReaction {\n    id\n    reactionType\n  }\n}\n',
     },
   }
 })()

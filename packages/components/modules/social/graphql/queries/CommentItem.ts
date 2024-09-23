@@ -13,8 +13,6 @@ export const CommentItemFragmentQuery = graphql`
       id
       pk
       fullName
-      firstName
-      lastName
       avatar(width: 50, height: 50) {
         url
       }
