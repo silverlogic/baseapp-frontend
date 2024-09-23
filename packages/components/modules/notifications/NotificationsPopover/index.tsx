@@ -83,20 +83,21 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   )
 }
 
-const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = ({
-  NotificationBellIcon = DefaultNotificationBellIcon,
-  NotificationBellIconProps = {},
-  ...props
-}) => (
-  <Suspense
-    fallback={
-      <IconButton disabled>
-        <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
-      </IconButton>
-    }
-  >
-    <NotificationsPopover {...{ NotificationBellIcon, NotificationBellIconProps, ...props }} />
-  </Suspense>
-)
+const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => {
+  const { NotificationBellIcon = DefaultNotificationBellIcon, NotificationBellIconProps = {} } =
+    props
+
+  return (
+    <Suspense
+      fallback={
+        <IconButton disabled>
+          <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+        </IconButton>
+      }
+    >
+      <NotificationsPopover {...props} />
+    </Suspense>
+  )
+}
 
 export default NotificationsPopoverSuspended
