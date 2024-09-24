@@ -1,10 +1,17 @@
 # @baseapp-frontend/authentication
 
+## 3.2.5
+
+### Patch Changes
+
+- Replaced useLogin parameters `validationSchema` and `defaultValues` by unique object `loginFormOptions`
+- Replaced useSignUp parameters `validationSchema` and `defaultValues` by unique object `formOptions`
+
 ## 3.2.4
 
 ### Patch Changes
 
-- Replaced `firstName` and `lastName` with `name` in `ReigtserRequest` interface
+- Replaced `firstName` and `lastName` with `name` in `RegisterRequest,` interface
 - Replaced `firstName` and `lastName` with `name` in `useSignUp` validation schema and form default values
 
 ## 3.2.3
