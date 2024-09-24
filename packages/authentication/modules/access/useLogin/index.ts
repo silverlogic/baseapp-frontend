@@ -60,8 +60,7 @@ const simpleTokenSuccessHandler = (
 }
 
 const useLogin = ({
-  validationSchema = DEFAULT_VALIDATION_SCHEMA,
-  defaultValues = DEFAULT_INITIAL_VALUES,
+  loginFormOptions = {},
   loginOptions = {},
   mfaOptions = {},
   tokenType = TokenTypes.jwt,
@@ -98,9 +97,10 @@ const useLogin = ({
   }
 
   const form = useForm({
-    defaultValues,
-    resolver: zodResolver(validationSchema),
+    defaultValues: DEFAULT_INITIAL_VALUES,
+    resolver: zodResolver(DEFAULT_VALIDATION_SCHEMA),
     mode: 'onBlur',
+    ...loginFormOptions,
   })
 
   const mutation = useMutation({
@@ -150,7 +150,7 @@ const useLogin = ({
       // TODO: refactor types
       handleSubmit: form.handleSubmit(async (values) => {
         try {
-          await mutation.mutateAsync(values)
+          await mutation.mutateAsync(values as LoginRequest)
         } catch (error) {
           // mutateAsync will raise an error if there's an API error
         }

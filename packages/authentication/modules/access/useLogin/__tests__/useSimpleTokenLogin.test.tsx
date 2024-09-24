@@ -1,6 +1,7 @@
 import { ComponentWithProviders, MockAdapter, renderHook } from '@baseapp-frontend/test'
 import { TokenTypes, axios } from '@baseapp-frontend/utils'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import useLogin from '../index'
@@ -22,9 +23,11 @@ describe('useSimpleTokenLogin', () => {
     const { result } = renderHook(
       () =>
         useLogin({
-          defaultValues: {
-            email,
-            password,
+          loginFormOptions: {
+            defaultValues: {
+              email,
+              password,
+            },
           },
           loginOptions: {
             onSuccess: () => {
@@ -60,8 +63,10 @@ describe('useSimpleTokenLogin', () => {
     const { result } = renderHook(
       () =>
         useLogin({
-          defaultValues: customDefaultValues,
-          validationSchema: customValidationSchema,
+          loginFormOptions: {
+            defaultValues: customDefaultValues,
+            resolver: zodResolver(customValidationSchema),
+          },
           loginOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
