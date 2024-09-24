@@ -1,6 +1,7 @@
 import { ComponentWithProviders, MockAdapter, renderHook, waitFor } from '@baseapp-frontend/test'
 import { axios } from '@baseapp-frontend/utils'
 
+import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import { RegisterRequest } from '../../../../types/auth'
@@ -21,7 +22,9 @@ describe('useSignUp', () => {
     const { result } = renderHook(
       () =>
         useSignUp({
-          defaultValues: request,
+          formOptions: {
+            defaultValues: request,
+          },
           options: {
             onSuccess: () => {
               hasOnSuccessRan = true
@@ -53,7 +56,9 @@ describe('useSignUp', () => {
     const { result } = renderHook(
       () =>
         useSignUp<CustomRegisterRequest, CustomRegisterResponse>({
-          defaultValues: customRequest,
+          formOptions: {
+            defaultValues: customRequest,
+          },
         }),
       {
         wrapper: ComponentWithProviders,
@@ -76,7 +81,9 @@ describe('useSignUp', () => {
     const { result } = renderHook(
       () =>
         useSignUp({
-          defaultValues: request,
+          formOptions: {
+            defaultValues: request,
+          },
           options: {
             onError: () => {
               hasOnErrorRan = true
@@ -112,8 +119,10 @@ describe('useSignUp', () => {
     const { result } = renderHook(
       () =>
         useSignUp<CustomRegisterRequest>({
-          defaultValues: customDefaultValues,
-          validationSchema: customValidationSchema,
+          formOptions: {
+            defaultValues: customDefaultValues,
+            resolver: zodResolver(customValidationSchema),
+          },
           options: {
             onSuccess: () => {
               hasOnSuccessRan = true
