@@ -1,5 +1,5 @@
 import { UseMutationOptions } from '@tanstack/react-query'
-import { z } from 'zod'
+import { UseFormProps } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import { RegisterRequest } from '../../../types/auth'
@@ -7,7 +7,7 @@ import { RegisterRequest } from '../../../types/auth'
 type ApiClass = Pick<typeof AuthApi, 'register'>
 
 export interface UseSignUpOptions<TRegisterRequest = RegisterRequest, TRegisterResponse = void> {
-  validationSchema?: z.ZodObject<z.ZodRawShape>
+  formOptions?: UseFormProps<Partial<TRegisterRequest>>
   defaultValues?: TRegisterRequest
   ApiClass?: ApiClass
   options?: UseMutationOptions<TRegisterResponse, unknown, TRegisterRequest, any>

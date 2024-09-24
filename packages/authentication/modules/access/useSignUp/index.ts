@@ -12,17 +12,17 @@ import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import { UseSignUpOptions } from './types'
 
 const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse = void>({
-  validationSchema = DEFAULT_VALIDATION_SCHEMA,
-  defaultValues = DEFAULT_INITIAL_VALUES as TRegisterRequest,
+  formOptions = {},
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
 }: UseSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
-    defaultValues,
-    resolver: zodResolver(validationSchema),
+    defaultValues: DEFAULT_INITIAL_VALUES,
+    resolver: zodResolver(DEFAULT_VALIDATION_SCHEMA),
     mode: 'onBlur',
+    ...formOptions,
   })
 
   const mutation = useMutation({
@@ -51,7 +51,7 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
     form: {
       ...form,
       // TODO: improve types
-      handleSubmit: form.handleSubmit(handleSubmit) as any,
+      handleSubmit: form.handleSubmit(handleSubmit as () => void) as any,
     },
     mutation,
   }
