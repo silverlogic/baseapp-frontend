@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.6
+
+### Patch Changes
+
+- Moved setFormRelayErrors from baseapp-frontend/components to baseapp-frontend/utils
+- Updated dependencies
+  - @baseapp-frontend/utils@2.5.6
+
 ## 0.0.5
 
 ### Patch Changes

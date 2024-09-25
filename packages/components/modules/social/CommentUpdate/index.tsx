@@ -8,6 +8,7 @@ import {
   CommentTextField as DefaultCommentTextField,
   IconButton,
 } from '@baseapp-frontend/design-system'
+import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -16,7 +17,6 @@ import { CommentUpdateInput } from '../../../__generated__/CommentUpdateMutation
 import DefaultCommentUpsertActions from '../CommentUpsertActions'
 import { FORM_VALUE, VALIDATION_SCHEMA } from '../constants'
 import { useCommentUpdateMutation } from '../graphql/mutations/CommentUpdate'
-import { setFormRelayErrors } from '../utils'
 import { CommentUpdateProps } from './types'
 
 const CommentUpdate: FC<CommentUpdateProps> = ({

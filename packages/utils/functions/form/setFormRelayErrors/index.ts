@@ -14,7 +14,6 @@ type RelayMutationErrors =
   | null
   | undefined
 
-// TODO: move to @baseapp-frontend/utils package
 export const setFormRelayErrors = <T extends FieldValues>(
   form: UseFormReturn<T>,
   errors: RelayMutationErrors,

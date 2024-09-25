@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.11
+
+### Patch Changes
+
+- Added prop to hide/show border on TextareaField component
+
 ## 0.0.10
 
 ### Patch Changes
