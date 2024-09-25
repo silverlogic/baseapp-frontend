@@ -7,6 +7,7 @@ import {
   SendMessageIcon as DefaultSendMessageIcon,
   IconButton,
 } from '@baseapp-frontend/design-system'
+import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -17,7 +18,6 @@ import DefaultCommentUpsertActions from '../CommentUpsertActions'
 import { DEFAULT_FORM_VALUES, FORM_VALUE, VALIDATION_SCHEMA } from '../constants'
 import { useCommentReply } from '../context/comments'
 import { useCommentCreateMutation } from '../graphql/mutations/CommentCreate'
-import { setFormRelayErrors } from '../utils'
 import { CommentCreateProps } from './types'
 
 let nextClientMutationId = 0
