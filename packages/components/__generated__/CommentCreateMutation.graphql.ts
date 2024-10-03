@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<882195f32b7271fe4f396084c7617078>>
+ * @generated SignedSource<<35765f1d23fc101e8417e89d7675db1c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,7 @@ export type CommentCreateInput = {
   body: string
   clientMutationId?: string | null | undefined
   inReplyToId?: string | null | undefined
-  profileObjectId?: string | null | undefined
+  profileId?: string | null | undefined
   targetObjectId: string
 }
 export type CommentCreateMutation$variables = {

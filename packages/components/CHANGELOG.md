@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.7
+
+### Patch Changes
+
+- Update profileObjectId to profileId on createCommentMutation
+
 ## 0.0.6
 
 ### Patch Changes

@@ -62,7 +62,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
             ...data,
             targetObjectId,
             inReplyToId: commentReply.inReplyToId,
-            profileObjectId: profileId,
+            profileId,
             clientMutationId,
           },
           connections: [connectionID],

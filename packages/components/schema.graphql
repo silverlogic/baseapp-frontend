@@ -131,7 +131,7 @@ type CommentConnection {
 input CommentCreateInput {
   targetObjectId: ID!
   inReplyToId: ID
-  profileObjectId: ID
+  profileId: ID
   body: String!
   clientMutationId: String
 }
@@ -814,6 +814,7 @@ input ProfileUpdateInput {
   bannerImage: String
   biography: String
   urlPath: String
+  phoneNumber: String
   clientMutationId: String
 }
 
