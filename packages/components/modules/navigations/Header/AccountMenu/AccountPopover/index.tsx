@@ -2,9 +2,8 @@
 
 import { FC, useEffect, useState } from 'react'
 
-import { User as BaseUser, useJWTUser, useLogout } from '@baseapp-frontend/authentication'
-import { ChevronIcon, ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
-import { JWTContent, joinWithSeparator } from '@baseapp-frontend/utils'
+import { useLogout } from '@baseapp-frontend/authentication'
+import { ChevronIcon, Popover, usePopover } from '@baseapp-frontend/design-system'
 
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
@@ -13,6 +12,8 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 
 import { ProfilesSubmenusList } from '../../../../profiles'
+import useUserOrProfile from '../../../hooks/useUserOrProfile'
+import AccountAvatar from '../AccountAvatar'
 import { PopoverStyles } from './styled'
 import { AccountPopoverProps } from './types'
 
@@ -22,9 +23,9 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   switchProfileLabel = 'Switch Profile',
   hideLogoutButton = false,
 }) => {
-  const { user } = useJWTUser<BaseUser & JWTContent>()
   const { logout } = useLogout()
   const popover = usePopover()
+  const userOrProfile = useUserOrProfile()
 
   const [openProfilesSubmenus, setOpenProfilesSubmenus] = useState(false)
 
@@ -46,29 +47,35 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     }
   }, [popover.open, openProfilesSubmenus])
 
-  console.log('debug:user', user)
+  console.log('debug:userOrProfile', userOrProfile)
 
   return (
     <>
-      <ClickableAvatar
-        src={user?.avatar?.small}
-        alt={user?.email}
-        onClick={popover.onOpen}
-        isOpen={Boolean(popover.open)}
-      >
-        {user?.firstName && user?.lastName ? `${user?.firstName[0]}${user?.lastName[0]}` : ''}
-      </ClickableAvatar>
+      <AccountAvatar
+        userOrProfile={userOrProfile}
+        popoverOpen={Boolean(popover.open)}
+        popoverOnOpen={popover.onOpen}
+      />
 
       <Popover open={popover.open} onClose={popover.onClose} sx={{ ...PopoverStyles }}>
         <Box display={openProfilesSubmenus ? 'none' : undefined}>
-          <Box sx={{ p: 2, pb: 1.5 }}>
-            <Typography variant="subtitle2" noWrap>
-              {joinWithSeparator([user?.firstName, user?.lastName])}
-            </Typography>
+          <Box sx={{ p: 2, pb: 1.5, gap: 1.5 }} display="flex" alignItems="center">
+            <AccountAvatar
+              userOrProfile={userOrProfile}
+              popoverOpen={Boolean(popover.open)}
+              popoverOnOpen={popover.onOpen}
+            />
+            <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">
+              <Typography variant="subtitle2" noWrap>
+                {userOrProfile?.name}
+              </Typography>
 
-            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-              {user?.email}
-            </Typography>
+              {userOrProfile?.handle && (
+                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                  {userOrProfile?.handle}
+                </Typography>
+              )}
+            </Box>
           </Box>
 
           {/* TODO: check if profile is active. */}

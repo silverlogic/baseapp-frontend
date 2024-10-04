@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-system'
 
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import {
@@ -11,7 +11,7 @@ import {
 } from '../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../graphql/queries/ProfileItem'
 import { CurrentProfile } from '../hooks/useCurrentProfile/types'
-import { StyledMenuItem, StyledTypography } from './styled'
+import { StyledMenuItem } from './styled'
 
 // TODO: move interface to types.d.ts
 interface ProfileMenuItemProps {
@@ -43,13 +43,16 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
         height={height}
         src={profile.image?.url ?? ''}
         alt={avatarAlt}
+        color="secondary" // TODO: add props to control.
       />
-      <Box display="flex" flexDirection="column" flexGrow={1}>
-        <StyledTypography variant="subtitle2">{profile.name ?? ''}</StyledTypography>
+      <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">
+        <Typography variant="subtitle2" noWrap>
+          {profile.name ?? ''}
+        </Typography>
         {handle && (
-          <StyledTypography variant="caption" sx={{ color: 'text.secondary' }}>
+          <Typography variant="subtitle2" sx={{ color: 'text.secondary' }} noWrap>
             {handle}
-          </StyledTypography>
+          </Typography>
         )}
       </Box>
       {isActiveProfile && <CheckMarkIcon sx={{ fontSize: 24 }} />}

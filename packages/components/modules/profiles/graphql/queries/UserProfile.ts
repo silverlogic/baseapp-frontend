@@ -1,9 +1,9 @@
 import { graphql } from 'react-relay'
 
-export const ProfilesListQuery = graphql`
-  query ProfilesListQuery {
+export const UserProfileQuery = graphql`
+  query UserProfileQuery {
     me {
-      profiles {
+      profile {
         ...ProfileItemFragment
       }
     }

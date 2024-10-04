@@ -1,4 +1,4 @@
-import { MenuItem, Typography, alpha, styled } from '@mui/material'
+import { MenuItem, alpha, styled } from '@mui/material'
 
 import { ProfileMenuItemProps } from './types'
 
@@ -13,14 +13,4 @@ export const StyledMenuItem = styled(MenuItem, {
       backgroundColor: alpha(theme.palette.primary.main, 0.12),
     },
   }),
-}))
-
-export const StyledTypography = styled(Typography)(({ theme }) => ({
-  color: theme.palette.text.primary,
-  overflow: 'hidden',
-  whiteSpace: 'normal',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: 1,
-  WebkitBoxOrient: 'vertical',
 }))

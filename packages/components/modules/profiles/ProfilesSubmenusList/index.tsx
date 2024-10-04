@@ -23,7 +23,7 @@ interface ProfilesSubmenusListProps {
 
 const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({ handleCloseSubmenu }) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
-  const { currentProfile, setCurrentProfile } = useCurrentProfile(me?.profile)
+  const { currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     setCurrentProfile({ profile })

@@ -5,10 +5,12 @@ import { useEffect } from 'react'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { SyncStorage } from 'jotai/vanilla/utils/atomWithStorage'
-import { useFragment } from 'react-relay'
+import { useFragment, useLazyLoadQuery } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { UserProfileQuery as UserProfileQueryType } from '../../../../__generated__/UserProfileQuery.graphql'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
+import { UserProfileQuery } from '../../graphql/queries/UserProfile'
 import { DEFAULT_CURRENT_PROFILE_KEY, DEFAULT_CURRENT_PROFILE_SETTINGS } from './constants'
 import { CurrentProfile } from './types'
 
@@ -39,17 +41,31 @@ const currentProfileAtom = atomWithStorage<CurrentProfile>(
   { getOnInit: true },
 )
 
-const useCurrentProfile = (mainProfileRef?: ProfileItemFragment$key | null) => {
+/**
+ * Responsible for handling the current profile state. If there is no profile in the state, it will
+ * fetch the user's main profile and set it as the current profile.
+ *
+ * @returns {currentProfile, setCurrentProfile}
+ */
+const useCurrentProfile = () => {
   const [currentProfile, setCurrentProfile] = useAtom(currentProfileAtom)
-  const mainProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, mainProfileRef)
+
+  const isSSR = typeof window === 'undefined'
+  const shouldFetchProfile = !isSSR && !currentProfile?.profile
+
+  const { me } = useLazyLoadQuery<UserProfileQueryType>(
+    UserProfileQuery,
+    {},
+    { fetchPolicy: shouldFetchProfile ? 'store-or-network' : 'store-only' },
+  )
+
+  const userMainProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, me?.profile)
 
   useEffect(() => {
-    if (mainProfile && !currentProfile) {
-      setCurrentProfile({ profile: mainProfile })
+    if (userMainProfile && shouldFetchProfile) {
+      setCurrentProfile({ profile: userMainProfile })
     }
-  }, [mainProfile, currentProfile, setCurrentProfile])
-
-  const isSSR = typeof window === typeof undefined
+  }, [userMainProfile, shouldFetchProfile, setCurrentProfile])
 
   const handleSetCurrentProfile = (newCurrentProfile: Partial<CurrentProfile>) => {
     setCurrentProfile((prevCurrentProfile: CurrentProfile) => {

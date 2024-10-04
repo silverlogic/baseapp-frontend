@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a5bca4ae2854e79a70861c3137944321>>
+ * @generated SignedSource<<6a78928961965b4807c4cd830f7dd703>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,27 +11,23 @@
 import { ConcreteRequest, Query } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type ProfilesListQuery$variables = Record<PropertyKey, never>
-export type ProfilesListQuery$data = {
+export type UserProfileQuery$variables = Record<PropertyKey, never>
+export type UserProfileQuery$data = {
   readonly me:
     | {
-        readonly profiles:
-          | ReadonlyArray<
-              | {
-                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
-                }
-              | null
-              | undefined
-            >
+        readonly profile:
+          | {
+              readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
+            }
           | null
           | undefined
       }
     | null
     | undefined
 }
-export type ProfilesListQuery = {
-  response: ProfilesListQuery$data
-  variables: ProfilesListQuery$variables
+export type UserProfileQuery = {
+  response: UserProfileQuery$data
+  variables: UserProfileQuery$variables
 }
 
 const node: ConcreteRequest = (function () {
@@ -47,7 +43,7 @@ const node: ConcreteRequest = (function () {
       argumentDefinitions: [],
       kind: 'Fragment',
       metadata: null,
-      name: 'ProfilesListQuery',
+      name: 'UserProfileQuery',
       selections: [
         {
           alias: null,
@@ -62,8 +58,8 @@ const node: ConcreteRequest = (function () {
               args: null,
               concreteType: 'Profile',
               kind: 'LinkedField',
-              name: 'profiles',
-              plural: true,
+              name: 'profile',
+              plural: false,
               selections: [
                 {
                   args: null,
@@ -84,7 +80,7 @@ const node: ConcreteRequest = (function () {
     operation: {
       argumentDefinitions: [],
       kind: 'Operation',
-      name: 'ProfilesListQuery',
+      name: 'UserProfileQuery',
       selections: [
         {
           alias: null,
@@ -99,8 +95,8 @@ const node: ConcreteRequest = (function () {
               args: null,
               concreteType: 'Profile',
               kind: 'LinkedField',
-              name: 'profiles',
-              plural: true,
+              name: 'profile',
+              plural: false,
               selections: [
                 v0 /*: any*/,
                 {
@@ -168,16 +164,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'f45449b4beffd5247f8dd3fcb75e43cd',
+      cacheID: '4a09b56bb39794e18b189981877fa031',
       id: null,
       metadata: {},
-      name: 'ProfilesListQuery',
+      name: 'UserProfileQuery',
       operationKind: 'query',
-      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query UserProfileQuery {\n  me {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'ce9ca315be07ccdb58629abb177bc931'
+;(node as any).hash = '8febc9fbb812c3456d12d0ff6a69c90a'
 
 export default node
