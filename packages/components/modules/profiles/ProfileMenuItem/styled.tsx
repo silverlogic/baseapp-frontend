@@ -1,10 +1,10 @@
 import { MenuItem, alpha, styled } from '@mui/material'
 
-import { ProfileMenuItemProps } from './types'
+import { StyledMenuItemProps } from './types'
 
 export const StyledMenuItem = styled(MenuItem, {
   shouldForwardProp: (prop) => prop !== 'active',
-})<ProfileMenuItemProps>(({ theme, active }) => ({
+})<StyledMenuItemProps>(({ theme, active }) => ({
   gap: theme.spacing(1.5),
   ...(active && {
     backgroundColor: alpha(theme.palette.primary.main, 0.08),

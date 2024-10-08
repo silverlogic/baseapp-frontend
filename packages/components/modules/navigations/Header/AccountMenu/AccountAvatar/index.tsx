@@ -1,19 +1,17 @@
-import { FC, MouseEvent, useEffect, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { ClickableAvatar } from '@baseapp-frontend/design-system'
 
 import { Skeleton } from '@mui/material'
 
-import { UserOrProfile } from '../../../hooks/useUserOrProfile/types'
+import { AccountAvatarProps } from './types'
 
-// TODO: move to types.d.ts
-interface AccountAvatarProps {
-  userOrProfile: UserOrProfile | null
-  popoverOpen: boolean
-  popoverOnOpen: (event: MouseEvent<HTMLElement>) => void
-}
-
-const AccountAvatar: FC<AccountAvatarProps> = ({ userOrProfile, popoverOpen, popoverOnOpen }) => {
+const AccountAvatar: FC<AccountAvatarProps> = ({
+  userOrProfile,
+  popoverOpen,
+  popoverOnOpen,
+  ...props
+}) => {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -26,11 +24,12 @@ const AccountAvatar: FC<AccountAvatarProps> = ({ userOrProfile, popoverOpen, pop
 
   return (
     <ClickableAvatar
-      color="secondary" // TODO: add props to control.
+      color="secondary"
       src={userOrProfile?.avatar}
       alt={`Account avatar: ${userOrProfile?.name}`}
       onClick={popoverOnOpen}
       isOpen={popoverOpen}
+      {...props}
     />
   )
 }

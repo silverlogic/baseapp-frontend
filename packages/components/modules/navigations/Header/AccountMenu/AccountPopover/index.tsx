@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from 'react'
 
 import { useLogout } from '@baseapp-frontend/authentication'
-import { ChevronIcon, Popover, usePopover } from '@baseapp-frontend/design-system'
+import { AddIcon, ChevronIcon, Popover, usePopover } from '@baseapp-frontend/design-system'
 
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
@@ -21,6 +21,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   menuItems = [],
   logoutButtonLabel = 'Logout',
   switchProfileLabel = 'Switch Profile',
+  addNewProfileLabel = 'New profile',
   hideLogoutButton = false,
 }) => {
   const { logout } = useLogout()
@@ -46,8 +47,6 @@ const AccountPopover: FC<AccountPopoverProps> = ({
       }, 500) // Popover close transaction timeout
     }
   }, [popover.open, openProfilesSubmenus])
-
-  console.log('debug:userOrProfile', userOrProfile)
 
   return (
     <>
@@ -85,7 +84,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
               onClick={() => setOpenProfilesSubmenus(true)}
             >
               {switchProfileLabel}
-              <ChevronIcon position="right" />
+              <ChevronIcon position="right" color="action" />
             </MenuItem>
           </Stack>
 
@@ -114,13 +113,9 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
             {/* TODO: check if profile is active. */}
             {openProfilesSubmenus && (
-              <MenuItem
-                sx={{ m: 1, justifyContent: 'space-between' }}
-                onClick={() => console.log('Organization added')} // TODO: Add organization handler.
-              >
-                New organization
-                {/* // TODO: new organization spike. */}
-                {/* // TODO: add right icon. */}
+              <MenuItem sx={{ m: 1, justifyContent: 'space-between' }}>
+                {addNewProfileLabel}
+                <AddIcon color="action" />
               </MenuItem>
             )}
 

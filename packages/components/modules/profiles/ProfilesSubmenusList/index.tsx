@@ -3,6 +3,7 @@
 import { FC, Suspense } from 'react'
 
 import { ChevronIcon } from '@baseapp-frontend/design-system'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, List, Slide } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
@@ -13,20 +14,16 @@ import ProfileMenuItem from '../ProfileMenuItem'
 import { ProfilesListQuery } from '../graphql/queries/ProfilesList'
 import useCurrentProfile from '../hooks/useCurrentProfile'
 import { ProfileMenuItemSkeleton } from './styled'
-
-// TODO: move to types.d.ts
-interface ProfilesSubmenusListProps {
-  openSubmenu: boolean
-  handleCloseSubmenu: () => void
-  cancelLabel?: string
-}
+import { ProfilesSubmenusListProps } from './types'
 
 const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({ handleCloseSubmenu }) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
+  const { sendToast } = useNotification()
   const { currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     setCurrentProfile({ profile })
+    sendToast(`Switched to ${profile.name}`)
     handleCloseSubmenu()
   }
 
@@ -62,7 +59,7 @@ const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => 
             disableRipple
             onClick={() => handleCloseSubmenu()}
           >
-            <ChevronIcon position="left" />
+            <ChevronIcon position="left" color="action" />
             {cancelLabel}
           </ButtonBase>
         </Box>

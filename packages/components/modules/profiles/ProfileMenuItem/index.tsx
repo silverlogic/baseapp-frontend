@@ -5,29 +5,16 @@ import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-s
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import {
-  ProfileItemFragment$data,
-  ProfileItemFragment$key,
-} from '../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment$key } from '../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../graphql/queries/ProfileItem'
-import { CurrentProfile } from '../hooks/useCurrentProfile/types'
 import { StyledMenuItem } from './styled'
-
-// TODO: move interface to types.d.ts
-interface ProfileMenuItemProps {
-  profileRef: ProfileItemFragment$key
-  currentProfile: CurrentProfile
-  onProfileChange: (newProfile: ProfileItemFragment$data) => void
-  avatarAlt?: string
-  width?: number
-  height?: number
-}
+import { ProfileMenuItemProps } from './types'
 
 const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   profileRef,
   currentProfile,
   onProfileChange,
-  avatarAlt = 'Profile avatar',
+  avatarProps = {},
   width = 36,
   height = 36,
 }) => {
@@ -42,8 +29,9 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
         width={width}
         height={height}
         src={profile.image?.url ?? ''}
-        alt={avatarAlt}
-        color="secondary" // TODO: add props to control.
+        alt="Profile avatar"
+        color="secondary"
+        {...avatarProps}
       />
       <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">
         <Typography variant="subtitle2" noWrap>

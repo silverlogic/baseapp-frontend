@@ -1,9 +1,8 @@
 export { default as ProfileMenuItem } from './ProfileMenuItem'
-// export type * from './ProfileMenuItem/types'
+export type * from './ProfileMenuItem/types'
 
 export { default as ProfilesSubmenusList } from './ProfilesSubmenusList'
-// export type * from './ProfilesSubmenusList/types'
-// TODO: review types
+export type * from './ProfilesSubmenusList/types'
 
 // hooks
 export { default as useCurrentProfile } from './hooks/useCurrentProfile'
