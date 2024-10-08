@@ -7,7 +7,7 @@ import { Box, Typography } from '@mui/material'
 import { CurrentUserPlaceholderProps } from './types'
 
 const CurrentUserPlaceholder: FC<CurrentUserPlaceholderProps> = ({ user }) => (
-  <Box sx={{ p: 2, pb: 1.5 }}>
+  <Box sx={{ p: 1 }}>
     <Typography variant="subtitle2" noWrap>
       {joinWithSeparator([user?.firstName, user?.lastName])}
     </Typography>

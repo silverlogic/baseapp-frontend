@@ -6,7 +6,7 @@ import { User as BaseUser, useJWTUser, useLogout } from '@baseapp-frontend/authe
 import { Popover, usePopover } from '@baseapp-frontend/design-system'
 import { JWTContent } from '@baseapp-frontend/utils'
 
-import { List } from '@mui/material'
+import { ButtonBase, List } from '@mui/material'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
@@ -80,8 +80,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
       >
         {accountSection.show && (
           <>
-            {!disableCurrentUserPlaceholder && user && <CurrentUserPlaceholder user={user} />}
-            <Box sx={{ m: 1 }}>{renderItems(accountSection.items)}</Box>
+            <Box sx={{ m: 1 }}>
+              {!disableCurrentUserPlaceholder && user && <CurrentUserPlaceholder user={user} />}
+              {renderItems(accountSection.items)}
+            </Box>
             <Divider sx={{ borderStyle: 'solid' }} />
           </>
         )}
@@ -115,10 +117,11 @@ const AccountPopover: FC<AccountPopoverProps> = ({
         })}
 
         {accountActionsSection.show && (
-          <Box sx={{ m: 1 }}>
+          <Box display="flex" flexDirection="column" gap={0.5} sx={{ m: 1 }}>
             {renderItems(accountActionsSection.items)}
             {!hideLogoutButton && (
               <MenuItem
+                component={ButtonBase}
                 onClick={handleLogout}
                 sx={{ fontWeight: 'fontWeightBold', color: 'error.main' }}
               >
