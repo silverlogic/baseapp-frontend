@@ -1,133 +1,131 @@
 'use client'
 
-import { FC, useEffect, useState } from 'react'
+import { FC, Fragment } from 'react'
 
-import { useLogout } from '@baseapp-frontend/authentication'
-import { AddIcon, ChevronIcon, Popover, usePopover } from '@baseapp-frontend/design-system'
+import { User as BaseUser, useJWTUser, useLogout } from '@baseapp-frontend/authentication'
+import { Popover, usePopover } from '@baseapp-frontend/design-system'
+import { JWTContent } from '@baseapp-frontend/utils'
 
+import { List } from '@mui/material'
 import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 
-import { ProfilesSubmenusList } from '../../../../profiles'
-import useUserOrProfile from '../../../hooks/useUserOrProfile'
 import AccountAvatar from '../AccountAvatar'
-import { PopoverStyles } from './styled'
-import { AccountPopoverProps } from './types'
+import CurrentUserPlaceholder from '../CurrentUserPlaceholder'
+import { PopoverStyles as DefaultPopoverStyles } from './styled'
+import { AccountPopoverProps, ComponentItems } from './types'
 
 const AccountPopover: FC<AccountPopoverProps> = ({
+  accountAvatarUrl,
+  onCloseCallback,
   menuItems = [],
+  PopoverStyles = {},
+  accountSection = { show: true, items: [] },
+  menuSection = { show: true, items: [] },
+  accountActionsSection = { show: true, items: [] },
+  extraSections = [],
   logoutButtonLabel = 'Logout',
-  switchProfileLabel = 'Switch Profile',
-  addNewProfileLabel = 'New profile',
+  disableCurrentUserPlaceholder = false,
   hideLogoutButton = false,
 }) => {
+  const { user } = useJWTUser<BaseUser & JWTContent>()
   const { logout } = useLogout()
-  const popover = usePopover()
-  const userOrProfile = useUserOrProfile()
 
-  const [openProfilesSubmenus, setOpenProfilesSubmenus] = useState(false)
+  const popover = usePopover()
+
+  const handleOnClose = () => {
+    if (onCloseCallback) {
+      onCloseCallback()
+    }
+    popover.onClose()
+  }
 
   const handleLogout = async () => {
-    popover.onClose()
+    handleOnClose()
     logout()
   }
 
   const handleMenuItemClick = (onClick: () => void) => {
     onClick()
-    popover.onClose()
+    handleOnClose()
   }
 
-  useEffect(() => {
-    if (!popover.open && openProfilesSubmenus) {
-      setTimeout(() => {
-        setOpenProfilesSubmenus(false)
-      }, 500) // Popover close transaction timeout
-    }
-  }, [popover.open, openProfilesSubmenus])
+  const renderItems = (items: ComponentItems) =>
+    items.map((item, index) => {
+      if (!item) {
+        return null
+      }
+      if (typeof item === 'function') {
+        const Component = item as FC
+        return <Component key={index} /> // eslint-disable-line react/no-array-index-key
+      }
+      return <Fragment key={index}>{item}</Fragment> // eslint-disable-line react/no-array-index-key
+    })
 
   return (
     <>
       <AccountAvatar
-        userOrProfile={userOrProfile}
+        src={accountAvatarUrl ?? user?.avatar?.small}
+        alt="User avatar"
         popoverOpen={Boolean(popover.open)}
         popoverOnOpen={popover.onOpen}
       />
 
-      <Popover open={popover.open} onClose={popover.onClose} sx={{ ...PopoverStyles }}>
-        <Box display={openProfilesSubmenus ? 'none' : undefined}>
-          <Box sx={{ p: 2, pb: 1.5, gap: 1.5 }} display="flex" alignItems="center">
-            <AccountAvatar
-              userOrProfile={userOrProfile}
-              popoverOpen={Boolean(popover.open)}
-              popoverOnOpen={popover.onOpen}
-            />
-            <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">
-              <Typography variant="subtitle2" noWrap>
-                {userOrProfile?.name}
-              </Typography>
-
-              {userOrProfile?.handle && (
-                <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                  {userOrProfile?.handle}
-                </Typography>
-              )}
-            </Box>
-          </Box>
-
-          {/* TODO: check if profile is active. */}
-          <Stack sx={{ p: 1 }}>
-            <MenuItem
-              sx={{ justifyContent: 'space-between' }}
-              onClick={() => setOpenProfilesSubmenus(true)}
-            >
-              {switchProfileLabel}
-              <ChevronIcon position="right" color="action" />
-            </MenuItem>
-          </Stack>
-
-          <Divider sx={{ borderStyle: 'solid' }} />
-
-          <Stack sx={{ p: 1 }}>
-            {menuItems?.map((item) => (
-              <MenuItem key={item.label} onClick={() => handleMenuItemClick(item.onClick)}>
-                {item.label}
-              </MenuItem>
-            ))}
-          </Stack>
-        </Box>
-
-        {/* TODO: check if profile is active. */}
-        {openProfilesSubmenus && (
-          <ProfilesSubmenusList
-            openSubmenu={openProfilesSubmenus}
-            handleCloseSubmenu={() => setOpenProfilesSubmenus(false)}
-          />
+      <Popover
+        open={popover.open}
+        onClose={handleOnClose}
+        sx={{ ...DefaultPopoverStyles, ...PopoverStyles }}
+      >
+        {accountSection.show && (
+          <>
+            {!disableCurrentUserPlaceholder && user && <CurrentUserPlaceholder user={user} />}
+            <Box sx={{ m: 1 }}>{renderItems(accountSection.items)}</Box>
+            <Divider sx={{ borderStyle: 'solid' }} />
+          </>
         )}
 
-        {!hideLogoutButton && (
+        {menuSection.show && (
           <>
+            <Box sx={{ m: 1 }}>
+              <Stack component={List}>
+                {menuItems?.map((item) => (
+                  <MenuItem key={item.label} onClick={() => handleMenuItemClick(item.onClick)}>
+                    {item.label}
+                  </MenuItem>
+                ))}
+              </Stack>
+              {renderItems(menuSection.items)}
+            </Box>
             <Divider sx={{ borderStyle: 'solid' }} />
+          </>
+        )}
 
-            {/* TODO: check if profile is active. */}
-            {openProfilesSubmenus && (
-              <MenuItem sx={{ m: 1, justifyContent: 'space-between' }}>
-                {addNewProfileLabel}
-                <AddIcon color="action" />
-              </MenuItem>
-            )}
+        {extraSections.map((section) => {
+          if (!section.show) {
+            return null
+          }
+          return (
+            <>
+              {renderItems(section.items)}
+              <Divider sx={{ borderStyle: 'solid' }} />
+            </>
+          )
+        })}
 
+        {accountActionsSection.show && (
+          <Box sx={{ m: 1 }}>
+            {renderItems(accountActionsSection.items)}
             {!hideLogoutButton && (
               <MenuItem
                 onClick={handleLogout}
-                sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
+                sx={{ fontWeight: 'fontWeightBold', color: 'error.main' }}
               >
                 {logoutButtonLabel}
               </MenuItem>
             )}
-          </>
+          </Box>
         )}
       </Popover>
     </>

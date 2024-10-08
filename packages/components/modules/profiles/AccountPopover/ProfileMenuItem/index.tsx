@@ -5,8 +5,8 @@ import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-s
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment$key } from '../../../__generated__/ProfileItemFragment.graphql'
-import { ProfileItemFragment } from '../graphql/queries/ProfileItem'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { StyledMenuItem } from './styled'
 import { ProfileMenuItemProps } from './types'
 

@@ -6,12 +6,7 @@ import { Skeleton } from '@mui/material'
 
 import { AccountAvatarProps } from './types'
 
-const AccountAvatar: FC<AccountAvatarProps> = ({
-  userOrProfile,
-  popoverOpen,
-  popoverOnOpen,
-  ...props
-}) => {
+const AccountAvatar: FC<AccountAvatarProps> = ({ popoverOpen, popoverOnOpen, ...props }) => {
   const [isMounted, setIsMounted] = useState(false)
 
   useEffect(() => {
@@ -23,14 +18,7 @@ const AccountAvatar: FC<AccountAvatarProps> = ({
   }
 
   return (
-    <ClickableAvatar
-      color="secondary"
-      src={userOrProfile?.avatar}
-      alt={`Account avatar: ${userOrProfile?.name}`}
-      onClick={popoverOnOpen}
-      isOpen={popoverOpen}
-      {...props}
-    />
+    <ClickableAvatar color="secondary" onClick={popoverOnOpen} isOpen={popoverOpen} {...props} />
   )
 }
 

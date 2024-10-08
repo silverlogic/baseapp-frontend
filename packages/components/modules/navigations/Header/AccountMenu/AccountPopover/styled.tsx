@@ -1,7 +1,7 @@
 import { menuItemClasses } from '@mui/material'
 
 export const PopoverStyles = {
-  width: 256,
+  width: 200,
   p: 0,
   overflow: 'hidden',
   [`& .${menuItemClasses.root}`]: {

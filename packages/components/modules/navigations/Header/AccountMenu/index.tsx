@@ -7,7 +7,7 @@ import { JWTContent, isUserTokenValid } from '@baseapp-frontend/utils'
 
 import { Button } from '@mui/material'
 
-import AccountPopover from './AccountPopover'
+import AccountPopover from '../../../profiles/AccountPopover'
 import { AccountMenuProps } from './types'
 
 const AccountMenu: FC<AccountMenuProps> = ({
