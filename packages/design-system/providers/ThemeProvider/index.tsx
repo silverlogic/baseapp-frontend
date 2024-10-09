@@ -2,11 +2,11 @@
 
 import { FC, useMemo } from 'react'
 
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider as MuiThemeProvider, createTheme } from '@mui/material/styles'
 import merge from 'lodash/merge'
 
-import NextAppDirEmotionCacheProvider from '../../styles/material/next-emotion-cache'
 import { createContrast } from '../../styles/material/options/contrast'
 import { componentsOverrides } from '../../styles/material/overrides'
 import { createPresets } from '../../styles/presets'
@@ -77,12 +77,12 @@ const ThemeProvider: FC<ThemeProviderProps> = ({
   theme.components = merge(componentsOverrides(theme), contrast.components, customOverrides)
 
   return (
-    <NextAppDirEmotionCacheProvider options={{ key: 'css' }}>
+    <AppRouterCacheProvider options={{ key: 'css' }}>
       <MuiThemeProvider theme={theme}>
         <CssBaseline />
         {children}
       </MuiThemeProvider>
-    </NextAppDirEmotionCacheProvider>
+    </AppRouterCacheProvider>
   )
 }
 

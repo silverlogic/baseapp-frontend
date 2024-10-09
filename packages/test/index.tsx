@@ -5,7 +5,7 @@ import { RenderOptions, render } from '@testing-library/react'
 
 import { ComponentWithProviders } from './providers'
 
-const customRender = (ui: ReactElement, options?: RenderOptions) => {
+const customRender = (ui: ReactElement, options?: RenderOptions): ReturnType<typeof render> => {
   const { wrapper = ComponentWithProviders } = options || {}
 
   return render(ui, { wrapper, ...options })

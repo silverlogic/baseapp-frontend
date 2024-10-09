@@ -1,17 +1,17 @@
 import {
   ComponentWithProviders,
-  CookiesGetByNameFn,
+  type CookiesGetByNameFn,
   MockAdapter,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
-import { TokenTypes, axios } from '@baseapp-frontend/utils'
+import { axios } from '@baseapp-frontend/utils'
 
-import { UseQueryResult } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { User } from '../../../../types/user'
-import { UseJWTUserOptions } from '../types'
+import type { User } from '../../../../types/user'
+import type { UseJWTUserOptions } from '../types'
 import request from './fixtures/request.json'
 
 interface UseJWTUserOptionsReturn<TUser> extends Omit<UseQueryResult<TUser, unknown>, 'data'> {
@@ -35,7 +35,6 @@ describe('useJWTUser', () => {
   }))
 
   beforeAll(async () => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
     useJWTUser = (await import('../index')).default as any
     // freeze time to
     jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))

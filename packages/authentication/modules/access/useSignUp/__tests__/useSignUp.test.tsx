@@ -4,7 +4,7 @@ import { axios } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { RegisterRequest } from '../../../../types/auth'
+import type { RegisterRequest } from '../../../../types/auth'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
 

@@ -1,10 +1,10 @@
 'use client'
 
-import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
+import type { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 
 import { Controller } from 'react-hook-form'
 
-import { WithControllerProps } from './types'
+import type { WithControllerProps } from './types'
 
 function withController<T>(Component: FC<T>) {
   return ({ name, control, helperText, ...props }: WithControllerProps<T>) => {

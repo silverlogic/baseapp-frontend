@@ -2,7 +2,7 @@ import { PASSWORD_REGEX, ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
 import { z } from 'zod'
 
-import { RegisterRequest } from '../../../types/auth'
+import type { RegisterRequest } from '../../../types/auth'
 
 export const DEFAULT_VALIDATION_SCHEMA = z.object({
   name: z.string().min(1, ZOD_MESSAGE.required),

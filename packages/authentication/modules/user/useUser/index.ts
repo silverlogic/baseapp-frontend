@@ -1,10 +1,10 @@
-import { ACCESS_COOKIE_NAME, decodeJWT } from '@baseapp-frontend/utils'
-import { JWTContent } from '@baseapp-frontend/utils/types/jwt'
+import { ACCESS_KEY_NAME, decodeJWT } from '@baseapp-frontend/utils'
+import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
 import Cookies from 'js-cookie'
 
-import { User } from '../../../types/user'
-import { UseUserOptions } from './types'
+import type { User } from '../../../types/user'
+import type { UseUserOptions } from './types'
 
 /**
  * @deprecated
@@ -12,13 +12,12 @@ import { UseUserOptions } from './types'
  * - Prefer using the `getUser` function.
  *
  * On the client side:
- * - If you are using `JWT`, prefer using the `useJWTUser` hook.
- * - If you are using `Simple Token`, prefer using the `useSimpleTokenUser` hook.
+ * - Prefer using the `useJWTUser` hook.
  */
 const useUser = <TUser extends Partial<User> & Partial<JWTContent>>({
-  cookieName = ACCESS_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
 }: UseUserOptions = {}): TUser | null => {
-  const token = Cookies.get(cookieName)
+  const token = Cookies.get(accessKeyName)
   if (token) {
     try {
       return decodeJWT<TUser>(token) as TUser

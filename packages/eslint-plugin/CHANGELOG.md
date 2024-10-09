@@ -1,5 +1,12 @@
 # @baseapp-frontend/eslint-plugin
 
+## 0.0.3
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+
 ## 0.0.2
 
 ### Patch Changes

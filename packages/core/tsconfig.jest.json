@@ -1,3 +1,0 @@
-{
-  "extends": "@baseapp-frontend/tsconfig/test.json"
-}

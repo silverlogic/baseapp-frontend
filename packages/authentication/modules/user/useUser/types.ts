@@ -1,3 +1,3 @@
-import { CustomCookieNames } from '../../../types/auth'
+import type { CustomJWTKeyNames } from '../../../types/auth'
 
-export interface UseUserOptions extends CustomCookieNames {}
+export interface UseUserOptions extends CustomJWTKeyNames {}

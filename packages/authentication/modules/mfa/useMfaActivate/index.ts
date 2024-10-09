@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 
 import MfaApi from '../../../services/mfa'
-import { UseMfaActivateOptions } from './types'
+import type { UseMfaActivateOptions } from './types'
 
 const useMfaActivate = ({ options, ApiClass = MfaApi }: UseMfaActivateOptions = {}) =>
   useMutation({

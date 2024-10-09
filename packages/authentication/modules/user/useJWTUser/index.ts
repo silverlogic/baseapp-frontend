@@ -1,15 +1,14 @@
 import { useEffect } from 'react'
 
-import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils'
-import { JWTContent } from '@baseapp-frontend/utils/types/jwt'
+import { ACCESS_KEY_NAME, getToken } from '@baseapp-frontend/utils'
+import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
-import Cookies from 'js-cookie'
 
 import UserApi, { USER_API_KEY } from '../../../services/user'
-import { User } from '../../../types/user'
+import type { User } from '../../../types/user'
 import getUser from '../getUser'
-import { UseJWTUserOptions } from './types'
+import type { UseJWTUserOptions } from './types'
 
 /**
  * Fetches the user data using the JWT token data as placeholder data.
@@ -20,14 +19,14 @@ import { UseJWTUserOptions } from './types'
  */
 const useJWTUser = <TUser extends Partial<User> & JWTContent>({
   options,
-  cookieName = ACCESS_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
   ApiClass = UserApi,
   noSSR = false,
 }: UseJWTUserOptions<TUser> = {}) => {
   // TODO: placeholderData generic type is not working as expected, open an issue on react-query github
   type NonFunctionGuard<T> = T extends Function ? never : T
-  const token = Cookies.get(cookieName) ?? ''
-  const placeholderData = getUser<TUser>({ cookieName, noSSR }) as NonFunctionGuard<TUser>
+  const token = getToken(accessKeyName, { noSSR }) ?? ''
+  const placeholderData = getUser<TUser>({ accessKeyName, noSSR }) as NonFunctionGuard<TUser>
 
   const queryClient = useQueryClient()
 

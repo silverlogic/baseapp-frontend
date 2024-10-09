@@ -1,6 +1,4 @@
-import { JWTResponse } from '../../../types/jwt'
-
-const REFRESH_TOKEN_URL = '/auth/refresh'
+import { type JWTResponse } from '../../../types/jwt'
 
 export const getAccessToken = async (refreshToken: string) => {
   if (!refreshToken) {
@@ -8,14 +6,17 @@ export const getAccessToken = async (refreshToken: string) => {
   }
 
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}${REFRESH_TOKEN_URL}`, {
-      method: 'POST',
-      body: JSON.stringify({ refresh: refreshToken }),
-      cache: 'no-store',
-      headers: {
-        'Content-Type': 'application/json',
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.EXPO_PUBLIC_API_BASE_URL}/auth/refresh`,
+      {
+        method: 'POST',
+        body: JSON.stringify({ refresh: refreshToken }),
+        cache: 'no-store',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       },
-    })
+    )
 
     if (response instanceof Response && !response.ok) {
       throw new Error('Failed to get access token.')

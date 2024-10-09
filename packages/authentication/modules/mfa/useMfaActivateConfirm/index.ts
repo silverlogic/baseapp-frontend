@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form'
 
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../constants'
-import { UseMfaActivateConfirmOptions } from './types'
+import type { UseMfaActivateConfirmOptions } from './types'
 
 const useMfaActivateConfirm = ({
   method,

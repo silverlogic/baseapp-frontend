@@ -3,6 +3,6 @@ import type { ServerSideRenderingOption } from '../../../types/server'
 import { getCookie } from '../../cookie'
 
 export const getLanguage = (
-  cookieName = LANGUAGE_COOKIE_NAME,
+  accessKeyName = LANGUAGE_COOKIE_NAME,
   { noSSR = false }: ServerSideRenderingOption = {},
-) => getCookie<string>(cookieName, { noSSR })
+) => getCookie<string>(accessKeyName, { noSSR })
