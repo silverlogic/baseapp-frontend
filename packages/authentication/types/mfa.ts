@@ -1,4 +1,4 @@
-import { ValueOf } from '@baseapp-frontend/utils'
+import type { ValueOf } from '@baseapp-frontend/utils'
 
 import { MFA_METHOD } from '../modules/mfa/constants'
 

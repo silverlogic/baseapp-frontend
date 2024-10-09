@@ -1,4 +1,4 @@
-import { CookiesGetByNameFn } from '@baseapp-frontend/test'
+import type { CookiesGetByNameFn } from '@baseapp-frontend/test'
 
 import Cookies from 'js-cookie'
 

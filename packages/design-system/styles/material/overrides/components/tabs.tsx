@@ -1,7 +1,7 @@
 import { tabClasses } from '@mui/material/Tab'
 import { Theme } from '@mui/material/styles'
 
-export function tabs(theme: Theme) {
+export function tabs(theme: Theme): Record<string, any> {
   return {
     MuiTabs: {
       styleOverrides: {

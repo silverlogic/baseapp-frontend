@@ -1,4 +1,4 @@
-import { QueryKey, UseQueryOptions } from '@tanstack/react-query'
+import type { QueryKey, UseQueryOptions } from '@tanstack/react-query'
 
 /**
  * This utility type allows the `queryKey` to be optional, as the custom hook may provide a default `queryKey` internally.

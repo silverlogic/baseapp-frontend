@@ -10,7 +10,7 @@ import { Theme, alpha } from '@mui/material/styles'
 
 import { paper } from '../../css'
 
-export function dataGrid(theme: Theme) {
+export function dataGrid(theme: Theme): Record<string, any> {
   const paperStyles = paper({ theme, dropdown: true })
 
   return {

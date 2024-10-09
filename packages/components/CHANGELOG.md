@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 0.0.8
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.0
+  - @baseapp-frontend/utils@3.0.0
+  - @baseapp-frontend/design-system@0.0.12
+  - @baseapp-frontend/graphql@1.1.9
+
 ## 0.0.7
 
 ### Patch Changes

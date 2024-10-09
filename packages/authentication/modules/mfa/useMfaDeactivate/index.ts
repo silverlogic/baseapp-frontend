@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
-import { UseMfaDeactivateOptions } from './types'
+import type { UseMfaDeactivateOptions } from './types'
 
 const useMfaDeactivate = ({ options, ApiClass = MfaApi }: UseMfaDeactivateOptions = {}) => {
   const queryClient = useQueryClient()

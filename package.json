@@ -1,39 +1,32 @@
 {
   "name": "baseapp-frontend",
   "description": "A modularized package system for TSL's frontend baseapp.",
-  "version": "0.0.0",
   "private": true,
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "scripts": {
-    "build": "turbo run build --filter=docs^...",
-    "clean": "turbo run clean && rm -rf node_modules && rm -rf ./apps/*/node_modules && rm -rf ./packages/*/node_modules && rm -rf",
+    "build": "turbo run build --filter=./packages/utils",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test": "turbo run test",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "prepare": "husky install",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish"
+    "release": "turbo run build --filter=docs^... && changeset publish",
+    "clean": "turbo clean && git clean -xdf node_modules",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "replace-catalogs": "node replace-catalogs.js",
+    "prepare": "husky"
   },
-  "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "@parcel/packager-ts": "2.12.0",
     "@parcel/transformer-typescript-types": "2.12.0",
-    "eslint": "^8.42.0",
-    "husky": "^8.0.0",
-    "lint-staged": "^13.0.2",
-    "prettier": "^2.8.8",
-    "turbo": "^2.0.3",
-    "typescript": "^5.4.5"
-  },
-  "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=18.0.0"
+    "@types/node": "catalog:",
+    "eslint": "catalog:lint",
+    "husky": "catalog:lint",
+    "lint-staged": "catalog:lint",
+    "prettier": "catalog:lint",
+    "turbo": "^2.1.1",
+    "typescript": "catalog:",
+    "yaml": "^2.5.1"
   },
   "lint-staged": {
     "apps/**/*.{js,ts,jsx,tsx}": [
@@ -48,5 +41,8 @@
       "prettier --write"
     ]
   },
-  "packageManager": "yarn@1.22.17"
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "packageManager": "pnpm@9.12.0"
 }

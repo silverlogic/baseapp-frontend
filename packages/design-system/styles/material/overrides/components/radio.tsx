@@ -1,7 +1,7 @@
 import { RadioProps, radioClasses } from '@mui/material/Radio'
 import { Theme } from '@mui/material/styles'
 
-export function radio(theme: Theme) {
+export function radio(theme: Theme): Record<string, any> {
   return {
     // CHECKBOX, RADIO, SWITCH
     MuiFormControlLabel: {
