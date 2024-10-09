@@ -9,8 +9,8 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  release:
-    name: Release
+  setup:
+    name: Setup and Install Dependencies
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
