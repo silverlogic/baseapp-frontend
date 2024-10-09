@@ -1,8 +1,8 @@
-import { DjangoPaginatedResponse } from '@baseapp-frontend/utils'
+import type { DjangoPaginatedResponse } from '@baseapp-frontend/utils'
 
 import MfaApi from '../../../services/mfa'
-import { MfaActiveMethodResponse } from '../../../types/mfa'
-import { CustomUseQueryOptions } from '../../../types/react-query'
+import type { MfaActiveMethodResponse } from '../../../types/mfa'
+import type { CustomUseQueryOptions } from '../../../types/react-query'
 
 type ApiClass = Pick<typeof MfaApi, 'getActiveMethods'>
 

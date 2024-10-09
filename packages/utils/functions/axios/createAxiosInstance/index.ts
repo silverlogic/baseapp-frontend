@@ -2,14 +2,10 @@ import _axios from 'axios'
 import humps from 'humps'
 import Cookies from 'js-cookie'
 
-import {
-  ACCESS_COOKIE_NAME,
-  LANGUAGE_COOKIE_NAME,
-  REFRESH_COOKIE_NAME,
-} from '../../../constants/cookie'
+import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
-import { TokenTypes } from '../../../constants/token'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { buildQueryString } from '../../string'
 import { decodeJWT, isUserTokenValid } from '../../token'
@@ -18,12 +14,13 @@ import { refreshAccessToken } from '../../token/refreshAccessToken'
 export const createAxiosInstance = ({
   returnData = true,
   file = false,
-  cookieName = ACCESS_COOKIE_NAME,
-  refreshCookieName = REFRESH_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
+  refreshKeyName = REFRESH_KEY_NAME,
   languageCookieName = LANGUAGE_COOKIE_NAME,
   servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
-  tokenType: instanceTokenType = TokenTypes.jwt,
   useFormData = true,
+  refreshToken = true,
+  tokenType = 'Bearer',
 } = {}) => {
   const instance = _axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -33,7 +30,6 @@ export const createAxiosInstance = ({
   })
 
   const contentType = file ? 'multipart/form-data' : 'application/json'
-  const tokenType = process.env.NEXT_PUBLIC_TOKEN_TYPE ?? instanceTokenType
 
   instance.defaults.headers.post['Content-Type'] = contentType
   instance.defaults.headers.patch['Content-Type'] = contentType
@@ -41,13 +37,13 @@ export const createAxiosInstance = ({
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
     const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
-    let authToken = Cookies.get(cookieName)
+    let authToken = Cookies.get(accessKeyName)
 
-    if (authToken && isAuthTokenRequired && tokenType === TokenTypes.jwt) {
+    if (authToken && isAuthTokenRequired && refreshToken) {
       const isTokenValid = isUserTokenValid(decodeJWT(authToken))
       if (!isTokenValid) {
         try {
-          authToken = await refreshAccessToken(cookieName, refreshCookieName)
+          authToken = await refreshAccessToken(accessKeyName, refreshKeyName)
         } catch (error) {
           if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
             eventEmitter.emit(LOGOUT_EVENT)
@@ -58,8 +54,7 @@ export const createAxiosInstance = ({
     }
 
     if (request.headers && !request.headers.Authorization && authToken && isAuthTokenRequired) {
-      request.headers.Authorization =
-        tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
+      request.headers.Authorization = `${tokenType} ${authToken}`
     }
 
     const language = Cookies.get(languageCookieName)

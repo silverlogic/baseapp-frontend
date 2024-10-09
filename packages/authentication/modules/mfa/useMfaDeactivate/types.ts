@@ -1,7 +1,7 @@
-import { UseMutationOptions } from '@tanstack/react-query'
+import type { UseMutationOptions } from '@tanstack/react-query'
 
 import MfaApi from '../../../services/mfa'
-import { MfaDeactivateRequest } from '../../../types/mfa'
+import type { MfaDeactivateRequest } from '../../../types/mfa'
 
 type ApiClass = Pick<typeof MfaApi, 'deactivate'>
 

@@ -1,15 +1,15 @@
-import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
+import { ACCESS_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 import { decodeJWT, getToken } from '@baseapp-frontend/utils/functions/token'
-import { JWTContent } from '@baseapp-frontend/utils/types/jwt'
+import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
-import { User } from '../../../types/user'
-import { GetUserOptions } from './types'
+import type { User } from '../../../types/user'
+import type { GetUserOptions } from './types'
 
 const getUser = <TUser extends Partial<User> & JWTContent>({
-  cookieName = ACCESS_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
   noSSR = false,
 }: GetUserOptions = {}) => {
-  const token = getToken(cookieName, { noSSR })
+  const token = getToken(accessKeyName, { noSSR })
   if (token) {
     try {
       const user = decodeJWT<TUser>(token)

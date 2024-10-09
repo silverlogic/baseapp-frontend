@@ -1,15 +1,18 @@
 {
+  "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "lib": ["ES2020"],
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "declaration": true,
-    "sourceMap": true
+    "lib": ["es2022"],
+    "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx"],
-  "exclude": ["node_modules", "dist"]
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "*.d.ts",
+    "jest.config.ts"
+  ],
+  "exclude": ["node_modules"]
 }

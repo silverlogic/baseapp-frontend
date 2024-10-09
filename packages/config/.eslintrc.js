@@ -39,6 +39,7 @@ module.exports = {
   rules: {
     'global-require': 0,
     '@emotion/jsx-import': 'error',
+    'no-html-link-for-pages': 0,
     '@emotion/no-vanilla': 'error',
     '@emotion/import-from-emotion': 'error',
     '@emotion/styled-import': 'error',

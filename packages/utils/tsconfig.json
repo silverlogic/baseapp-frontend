@@ -1,5 +1,18 @@
 {
-  "extends": "@baseapp-frontend/tsconfig/core.json",
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.js", "*.jsx", "index.d.ts"],
+  "extends": "@baseapp-frontend/tsconfig/lib.json",
+  "compilerOptions": {
+    "types": ["node", "jest"],
+    "outDir": "./dist"
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "index.d.ts",
+    "jest.config.ts"
+  ],
   "exclude": ["node_modules"]
 }

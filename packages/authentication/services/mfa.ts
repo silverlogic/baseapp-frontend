@@ -1,7 +1,7 @@
-import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
+import { type DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
-import { LoginMfaRequest, LoginSimpleTokenResponse } from '../types/auth'
-import {
+import type { LoginMfaRequest } from '../types/auth'
+import type {
   MfaActivationResponse,
   MfaActiveMethodResponse,
   MfaConfigurationResponse,
@@ -41,7 +41,8 @@ export default class MfaApi {
     return axios.post(`${baseUrl}/${method}/codes/regenerate/`, { code })
   }
 
-  static loginStep2(data: LoginMfaRequest): Promise<LoginSimpleTokenResponse> {
+  // TODO: review this endpoint
+  static loginStep2(data: LoginMfaRequest): Promise<any> {
     return axios.post('/auth/login/code', data)
   }
 }

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import MfaApi, { MFA_API_KEY } from '../../../services/mfa'
-import { UseMfaConfigurationOptions } from './types'
+import type { UseMfaConfigurationOptions } from './types'
 
 const useMfaConfiguration = ({ options, ApiClass = MfaApi }: UseMfaConfigurationOptions = {}) => {
   const { enabled = true } = options ?? {}

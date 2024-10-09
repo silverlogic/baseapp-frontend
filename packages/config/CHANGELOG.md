@@ -1,5 +1,13 @@
 # @baseapp-frontend/config
 
+## 2.1.9
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Add `@trivago/prettier-plugin-sort-imports` and `prettier-plugin-tailwindcss` plugings to the `prettierrc.js` config.
+- Disable `no-html-link-for-pages` to the `eslintrc.js` config.
+
 ## 2.1.8
 
 ### Patch Changes

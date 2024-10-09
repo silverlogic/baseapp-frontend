@@ -1,13 +1,9 @@
 import humps from 'humps'
 
-import {
-  ACCESS_COOKIE_NAME,
-  LANGUAGE_COOKIE_NAME,
-  REFRESH_COOKIE_NAME,
-} from '../../../constants/cookie'
+import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
-import { TokenTypes } from '../../../constants/token'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
@@ -62,19 +58,19 @@ import { BaseAppFetch, RequestOptions } from './types'
  * export const customBaseAppFetch = (props: BaseAppFetchOptions) => baseAppFetch('/not/authenticated/api/route', {
  *            baseUrl: 'https://another.api.io',
  *            servicesWithoutToken: [/^\/not\/authenticated\/api\/route/, /\/another\/public\/route/],
- *            accessCookieName: "My Custom Access Cookie",
- *            refreshCookieName: "My Custom Refresh Cookie",
+ *            accessKeyName: "My Custom Access Cookie",
+ *            refreshKeyName: "My Custom Refresh Cookie",
  *            ...props,
  *          })
  * ```
  */
 export const baseAppFetch: BaseAppFetch = async (
-  path: `/${string}` | '',
+  path,
   {
-    accessCookieName = ACCESS_COOKIE_NAME,
-    refreshCookieName = REFRESH_COOKIE_NAME,
+    accessKeyName = ACCESS_KEY_NAME,
+    refreshKeyName = REFRESH_KEY_NAME,
     languageCookieName = LANGUAGE_COOKIE_NAME,
-    baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
+    baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.EXPO_PUBLIC_API_BASE_URL,
     servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
     params = {},
     decamelizeRequestBodyKeys = true,
@@ -83,12 +79,13 @@ export const baseAppFetch: BaseAppFetch = async (
     stringifyBody = true,
     setContentType = true,
     throwError = true,
+    refreshToken = true,
+    tokenType = 'Bearer',
     ...options
   } = {},
 ) => {
   const url = `${baseUrl}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
-  const tokenType = process.env.NEXT_PUBLIC_TOKEN_TYPE as TokenTypes | undefined
 
   const fetchOptions: RequestOptions = {
     ...options,
@@ -108,13 +105,13 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // token refresh logic
-  let authToken = getToken(accessCookieName, { noSSR: false })
+  let authToken = getToken(accessKeyName, { noSSR: false })
 
-  if (authToken && isAuthTokenRequired && tokenType === TokenTypes.jwt) {
+  if (authToken && isAuthTokenRequired && refreshToken) {
     const isTokenValid = isUserTokenValid(decodeJWT(authToken))
     if (!isTokenValid) {
       try {
-        authToken = await refreshAccessToken(accessCookieName, refreshCookieName)
+        authToken = await refreshAccessToken(accessKeyName, refreshKeyName)
       } catch (error) {
         if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
           eventEmitter.emit(LOGOUT_EVENT)
@@ -126,8 +123,7 @@ export const baseAppFetch: BaseAppFetch = async (
 
   // set Authorization header
   if (authToken && isAuthTokenRequired) {
-    fetchOptions.headers!.Authorization =
-      tokenType === TokenTypes.jwt ? `Bearer ${authToken}` : `Token ${authToken}`
+    fetchOptions.headers!.Authorization = `${tokenType} ${authToken}`
   }
 
   // set language header

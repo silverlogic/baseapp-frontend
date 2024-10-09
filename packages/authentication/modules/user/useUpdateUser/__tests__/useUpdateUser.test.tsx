@@ -1,17 +1,17 @@
 import {
   ComponentWithProviders,
-  CookiesGetByNameFn,
+  type CookiesGetByNameFn,
   MockAdapter,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
-import { TokenTypes, axios } from '@baseapp-frontend/utils'
+import { axios } from '@baseapp-frontend/utils'
 
-import { UseMutationResult } from '@tanstack/react-query'
+import type { UseMutationResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { User } from '../../../../types/user'
-import { UseUpdateUserOptions } from '../types'
+import type { User } from '../../../../types/user'
+import type { UseUpdateUserOptions } from '../types'
 import request from './fixtures/request.json'
 
 interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unknown>, 'data'> {
@@ -42,7 +42,6 @@ describe('useUserUpdate', () => {
   }))
 
   beforeAll(async () => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
     useUserUpdate = (await import('../index')).default as any
     // freeze time to
     jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))

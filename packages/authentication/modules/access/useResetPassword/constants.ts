@@ -2,7 +2,7 @@ import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
 
 import { z } from 'zod'
 
-import { ResetPasswordForm } from './types'
+import type { ResetPasswordForm } from './types'
 
 export const DEFAULT_VALIDATION_SCHEMA = z
   .object({

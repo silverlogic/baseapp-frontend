@@ -1,17 +1,17 @@
-import { axios } from '@baseapp-frontend/utils'
+import { baseAppFetch } from '@baseapp-frontend/utils'
 
-import { User, UserUpdateParams } from '../types/user'
+import type { User, UserUpdateParams } from '../types/user'
 
 export default class UserApi {
   static getUser<TUser extends Partial<User>>(): Promise<TUser> {
-    return axios.get(`/users/me`)
+    return baseAppFetch(`/users/me`)
   }
 
   static updateUser<TUser extends Partial<User>>({
     userId,
     data,
   }: UserUpdateParams<TUser>): Promise<TUser> {
-    return axios.patch(`/users/${userId}`, data)
+    return baseAppFetch(`/users/${userId}`, { method: 'PATCH', body: data })
   }
 }
 

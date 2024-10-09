@@ -1,7 +1,8 @@
 {
-  "extends": "@baseapp-frontend/tsconfig/core.json",
+  "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps"]
+    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node", "jest"],
+    "outDir": "./dist"
   },
   "include": [
     "**/*.ts",

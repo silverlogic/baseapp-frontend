@@ -19,7 +19,7 @@ describe('useLogin', () => {
     axiosMock.onPost('/auth/login').reply(200, {
       token: 'fake token',
     })
-    cookiesMock.set.mockImplementation((cookieName: string) => cookieName)
+    cookiesMock.set.mockImplementation((accessKeyName: string) => accessKeyName)
 
     const email = 'test@tsl.io'
     const password = '123456789'

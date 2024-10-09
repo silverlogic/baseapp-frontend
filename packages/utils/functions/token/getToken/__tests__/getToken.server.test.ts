@@ -1,31 +1,37 @@
 /**
  * @jest-environment node
  */
-import { CookiesGetByNameFn } from '@baseapp-frontend/test'
-
-import ClientCookies from 'js-cookie'
+import { getItem } from 'expo-secure-store'
 
 import { getToken } from '..'
+import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
+import { getCookie } from '../../../cookie'
 
-const clientCookieValue = 'client-value'
 const serverCookieValue = 'server-value'
 
-jest.mock('next/headers', () => ({
-  cookies: jest.fn(() => ({
-    get: jest.fn().mockReturnValue({ value: serverCookieValue }),
-  })),
+jest.mock('expo-secure-store', () => ({
+  getItem: jest.fn(),
+}))
+
+jest.mock('../../../cookie', () => ({
+  getCookie: jest.fn(),
 }))
 
 describe('getToken function on the server', () => {
-  const cookieName = 'client-cookie'
+  const accessKeyName = ACCESS_KEY_NAME
 
   beforeEach(() => {
     jest.clearAllMocks()
+    process.env.EXPO_PUBLIC_PLATFORM = undefined // Ensure the platform is non-mobile to simulate server environment
   })
 
-  it('retrieves a server-side cookie', () => {
-    ;(ClientCookies.get as CookiesGetByNameFn) = jest.fn(() => clientCookieValue)
+  it('retrieves a server-side cookie using getCookie', () => {
+    ;(getCookie as jest.Mock).mockReturnValue(serverCookieValue)
 
-    expect(getToken(cookieName)).toBe(serverCookieValue)
+    const result = getToken(accessKeyName)
+
+    expect(result).toBe(serverCookieValue)
+    expect(getCookie).toHaveBeenCalledWith(accessKeyName, { noSSR: false })
+    expect(getItem).not.toHaveBeenCalled()
   })
 })

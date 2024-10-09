@@ -1,5 +1,21 @@
 # @baseapp-frontend/authentication
 
+## 4.0.0
+
+### Major Changes
+
+- `useLogin` now uses `setTokenAsync` to set access/refresh tokens for both web and mobile platforms.
+- Remove `useSimpleTokenLogin` and `useSimpleTokenUser` hooks along side with the remaning simple token logic on several functions, that should now only for with JWT tokens and API's.
+- `useLogout` now uses `removeTokenAsync` to remove access/refresh tokens for both web and mobile platforms.
+- Switch from `axios` to `baseAppFetch` on the `AuthApi` and `UserApi` as it was causing issues on the mobile app.
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Create `getUserAsync` function, an async version of `getUser`.
+- Rename the options `cookieName` and `refreshCookieName` to `accessKeyName` and `refreshKeyName` on several functions.
+- Update tsconfig to use `lib.json`.
+- Add `type` prefix for type imports.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.0
+
 ## 3.2.5
 
 ### Patch Changes
