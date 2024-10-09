@@ -79,6 +79,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint-plugin-storybook": "^0.8.0",
     "get-graphql-schema": "^2.1.2",
+    "html-webpack-plugin": "^5.6.0",
     "msw": "^2.3.1",
     "msw-storybook-addon": "^2.0.2",
     "postcss": "^8.4.41",

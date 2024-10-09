@@ -1,0 +1,27 @@
+name: Deploy Storybook
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18.x'
+
+      - uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
+        with:
+          install_command: yarn workspace @baseapp-frontend/components install --frozen-lockfile
+          build_command: yarn workspace @baseapp-frontend/components storybook:build
+          path: packages/components/storybook-static
+          checkout: false 
