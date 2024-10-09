@@ -1,21 +1,31 @@
-import { ComponentWithProviders, MockAdapter, renderHook } from '@baseapp-frontend/test'
-import { axios } from '@baseapp-frontend/utils'
+import {
+  ComponentWithProviders,
+  mockFetch,
+  mockFetchError,
+  renderHook,
+} from '@baseapp-frontend/test'
 
 import { z } from 'zod'
 
 import useResetPassword from '../index'
 
-// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-export const axiosMock = new MockAdapter(axios)
-
 describe('useResetPassword', () => {
   const password = '123456'
   const token = 'fake-token'
+  const resetPasswordUrl = '/forgot-password/reset'
+
+  afterEach(() => {
+    ;(global.fetch as jest.Mock).mockClear()
+  })
 
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/forgot-password/reset').reply(200, {
-      newPassword: password,
-      token,
+    mockFetch(resetPasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: {
+        newPassword: password,
+        token,
+      },
     })
 
     let hasOnSuccessRan = false
@@ -45,7 +55,9 @@ describe('useResetPassword', () => {
   })
 
   test('should run onError', async () => {
-    axiosMock.onPost('/forgot-password/reset').reply(500, {
+    mockFetchError(resetPasswordUrl, {
+      method: 'POST',
+      status: 500,
       error: 'any',
     })
 
@@ -76,7 +88,11 @@ describe('useResetPassword', () => {
   })
 
   test('should run onError when newPassword and confirmNewPassword are different', async () => {
-    axiosMock.onPost('/forgot-password/reset').reply(200, {})
+    mockFetch(resetPasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: {},
+    })
 
     let hasOnSuccessRan = false
 
@@ -105,15 +121,19 @@ describe('useResetPassword', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    axiosMock.onPost('/forgot-password/reset').reply(200, {})
+    mockFetch(resetPasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: {},
+    })
 
     const customDefaultValues = {
       newPassword: '12345',
       confirmNewPassword: '123456', // that would pass since the schema is not the default one, and doesnt check for password equality
     }
     const customValidationSchema = z.object({
-      newPassword: z.string().nonempty(),
-      confirmNewPassword: z.string().nonempty(),
+      newPassword: z.string().min(1),
+      confirmNewPassword: z.string().min(1),
     })
 
     let hasOnSuccessRan = false

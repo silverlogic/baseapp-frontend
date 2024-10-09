@@ -1,26 +1,26 @@
-import Cookies from 'js-cookie'
-
-import { ACCESS_COOKIE_NAME, REFRESH_COOKIE_NAME } from '../../../constants/cookie'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { getAccessToken } from '../getAccessToken'
 import { getToken } from '../getToken'
+import { removeTokenAsync } from '../removeTokenAsync'
+import { setTokenAsync } from '../setTokenAsync'
 
 export const refreshAccessToken = async (
-  cookieName = ACCESS_COOKIE_NAME,
-  refreshCookieName = REFRESH_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
+  refreshKeyName = REFRESH_KEY_NAME,
 ) => {
   try {
-    const refreshToken = getToken(refreshCookieName) ?? ''
+    const refreshToken = getToken(refreshKeyName) ?? ''
 
     const accessToken = await getAccessToken(refreshToken)
 
-    Cookies.set(cookieName, accessToken, {
+    await setTokenAsync(accessKeyName, accessToken, {
       secure: process.env.NODE_ENV === 'production',
     })
 
     return accessToken
   } catch (error) {
-    Cookies.remove(cookieName)
-    Cookies.remove(refreshCookieName)
+    await removeTokenAsync(accessKeyName)
+    await removeTokenAsync(refreshKeyName)
 
     return Promise.reject(error)
   }

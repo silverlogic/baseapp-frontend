@@ -6,8 +6,8 @@ type NextFetchOptions = {
 }
 
 type Config = {
-  accessCookieName?: string
-  refreshCookieName?: string
+  accessKeyName?: string
+  refreshKeyName?: string
   languageCookieName?: string
   baseUrl?: string
   servicesWithoutToken?: RegExp[]
@@ -18,6 +18,8 @@ type Config = {
   stringifyBody?: boolean
   setContentType?: boolean
   throwError?: boolean
+  refreshToken?: boolean
+  tokenType?: 'Bearer' | 'Token'
 }
 
 type GraphQLBody = {

@@ -1,5 +1,12 @@
 # @baseapp-frontend/tsconfig
 
+## 2.0.0
+
+### Major Changes
+
+- Create `lib.json`, the `tsconfig` for libraries.
+- Remove `base.json` and `core.json` configs.
+
 ## 1.1.5
 
 ### Patch Changes

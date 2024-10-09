@@ -1,8 +1,8 @@
-import { UseMutationOptions } from '@tanstack/react-query'
+import type { UseMutationOptions } from '@tanstack/react-query'
 import { z } from 'zod'
 
 import MfaApi from '../../../services/mfa'
-import { MfaConfirmationResponse, MfaMethod, MfaRequest } from '../../../types/mfa'
+import type { MfaConfirmationResponse, MfaMethod, MfaRequest } from '../../../types/mfa'
 
 type ApiClass = Pick<typeof MfaApi, 'confirmActivation'>
 

@@ -1,5 +1,4 @@
 import { createAxiosInstance } from '..'
-import { TokenTypes } from '../../../../constants/token'
 
 jest.mock('humps')
 jest.mock('axios', () => ({
@@ -45,14 +44,14 @@ describe('createAxiosInstance', () => {
     expect(axios.defaults.headers.put['Content-Type']).toEqual('multipart/form-data')
   })
 
-  it('should add Authorization header if simple authToken is available', () => {
+  it('should use Token as tokenType when provided', () => {
     const {
       axios: {
         interceptors: {
           request: { use },
         },
       },
-    } = createAxiosInstance({ tokenType: TokenTypes.simple })
+    } = createAxiosInstance({ tokenType: 'Token' })
     const [[interceptorFn]] = (use as jest.Mock).mock.calls
     const request = { headers: { Authorization: undefined }, url: 'someUrl' }
 
@@ -61,14 +60,14 @@ describe('createAxiosInstance', () => {
     expect(request.headers.Authorization).toBe('Token someAuthToken')
   })
 
-  it('should add Authorization header if jwt authToken is available', () => {
+  it('should add Authorization header using jwt authToken by default', () => {
     const {
       axios: {
         interceptors: {
           request: { use },
         },
       },
-    } = createAxiosInstance({ tokenType: TokenTypes.jwt })
+    } = createAxiosInstance()
     const [[interceptorFn]] = (use as jest.Mock).mock.calls
     const request = { headers: { Authorization: undefined }, url: 'someUrl' }
 

@@ -1,5 +1,14 @@
 # @baseapp-frontend/test
 
+## 2.0.3
+
+### Patch Changes
+
+- Add `mockFetch` and `mockFetchError` for mocking `fetch` operations.
+- Add `expoSecureStoreMock` mock for `expo-secure-store`.
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+
 ## 2.0.2
 
 ### Patch Changes

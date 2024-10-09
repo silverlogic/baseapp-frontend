@@ -1,18 +1,28 @@
-import { ComponentWithProviders, MockAdapter, renderHook } from '@baseapp-frontend/test'
-import { axios } from '@baseapp-frontend/utils'
+import {
+  ComponentWithProviders,
+  mockFetch,
+  mockFetchError,
+  renderHook,
+} from '@baseapp-frontend/test'
 
 import { z } from 'zod'
 
 import useRecoverPassword from '../index'
 
-// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-export const axiosMock = new MockAdapter(axios)
-
 describe('useResetPassword', () => {
   const email = 'test@tsl.io'
+  const forgotPasswordUrl = '/forgot-password'
+
+  afterEach(() => {
+    ;(global.fetch as jest.Mock).mockClear()
+  })
 
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/forgot-password').reply(200, { email })
+    mockFetch(forgotPasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: { email },
+    })
 
     let hasOnSuccessRan = false
 
@@ -39,7 +49,9 @@ describe('useResetPassword', () => {
   })
 
   test('should run onError', async () => {
-    axiosMock.onPost('/forgot-password').reply(500, {
+    mockFetchError(forgotPasswordUrl, {
+      method: 'POST',
+      status: 500,
       error: 'any',
     })
 
@@ -68,13 +80,17 @@ describe('useResetPassword', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    axiosMock.onPost('/forgot-password').reply(200, {})
+    mockFetch(forgotPasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: {},
+    })
 
     const customDefaultValues = {
       email: 'test@tsl.io',
     }
     const customValidationSchema = z.object({
-      email: z.string().nonempty().email('custom error message'),
+      email: z.string().min(1).email('custom error message'),
     })
 
     let hasOnSuccessRan = false

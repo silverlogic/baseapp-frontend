@@ -3,97 +3,58 @@
 import { useState } from 'react'
 
 import {
-  ACCESS_COOKIE_NAME,
-  REFRESH_COOKIE_NAME,
-  TokenTypes,
+  ACCESS_KEY_NAME,
+  REFRESH_KEY_NAME,
   setFormApiErrors,
+  setTokenAsync,
 } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import Cookies from 'js-cookie'
+import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
-import { USER_API_KEY } from '../../../services/user'
-import {
+import type {
   LoginChangeExpiredPasswordRedirectResponse,
   LoginJWTResponse,
   LoginMfaRequest,
   LoginRequest,
-  LoginSimpleTokenResponse,
 } from '../../../types/auth'
 import {
-  isJWTResponse,
   isLoginChangeExpiredPasswordRedirectResponse,
   isLoginMfaResponse,
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { useSimpleTokenUser } from '../../user'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { UseLoginOptions } from './types'
-
-const jwtSuccessHandler = (
-  response: LoginJWTResponse,
-  cookieName: string,
-  refreshCookieName: string,
-) => {
-  Cookies.set(cookieName, response.access, {
-    secure: process.env.NODE_ENV === 'production',
-  })
-  Cookies.set(refreshCookieName, response.refresh, {
-    secure: process.env.NODE_ENV === 'production',
-  })
-}
-
-const simpleTokenSuccessHandler = (
-  response: LoginSimpleTokenResponse,
-  cookieName: string,
-  onSuccess: () => void,
-) => {
-  Cookies.set(cookieName, response.token, {
-    secure: process.env.NODE_ENV === 'production',
-  })
-
-  onSuccess()
-}
+import type { UseLoginOptions } from './types'
 
 const useLogin = ({
   loginFormOptions = {},
   loginOptions = {},
   mfaOptions = {},
-  tokenType = TokenTypes.jwt,
-  cookieName = ACCESS_COOKIE_NAME,
-  refreshCookieName = REFRESH_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
+  refreshKeyName = REFRESH_KEY_NAME,
   ApiClass = AuthApi,
   enableFormApiErrors = true,
 }: UseLoginOptions = {}) => {
-  const queryClient = useQueryClient()
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
-  const { refetch: refetchUser } = useSimpleTokenUser({ options: { enabled: false } })
 
   /*
    * Handles login success  with the auth token in response
    */
   async function handleLoginSuccess(
-    response:
-      | LoginJWTResponse
-      | LoginSimpleTokenResponse
-      | LoginChangeExpiredPasswordRedirectResponse,
+    response: LoginJWTResponse | LoginChangeExpiredPasswordRedirectResponse,
   ) {
     if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
       return
     }
-    if (isJWTResponse(tokenType, response)) {
-      jwtSuccessHandler(response, cookieName, refreshCookieName)
-    } else {
-      simpleTokenSuccessHandler(response, cookieName, () => {
-        // by invalidating the cache we force a reload of /v1/users/me and the state used by useUser hook
-        queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
-        refetchUser()
-      })
-    }
+    await setTokenAsync(accessKeyName, response.access, {
+      secure: process.env.NODE_ENV === 'production',
+    })
+    await setTokenAsync(refreshKeyName, response.refresh, {
+      secure: process.env.NODE_ENV === 'production',
+    })
   }
 
   const form = useForm({
