@@ -9,8 +9,7 @@
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "prepare": "pnpm build"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.45.1",

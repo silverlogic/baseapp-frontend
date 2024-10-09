@@ -10,8 +10,7 @@
     "dev": "tsc --watch",
     "test": "jest --config ./jest.config.ts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "prepare": "pnpm build"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
