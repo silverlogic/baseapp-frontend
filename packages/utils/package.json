@@ -2,7 +2,7 @@
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
   "version": "3.0.0",
-  "main": "./dist/index.js",
+  "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {

@@ -2,7 +2,7 @@
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
   "version": "0.0.12",
-  "main": "./dist/index.js",
+  "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {

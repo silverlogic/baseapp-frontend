@@ -2,7 +2,7 @@
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components",
   "version": "0.0.8",
-  "main": "./dist/index.js",
+  "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {

@@ -3,7 +3,7 @@
   "description": "Eslint custom rules for BaseApp.",
   "version": "0.0.3",
   "source": "index.ts",
-  "main": "dist/index.js",
+  "main": "./index.ts",
   "module": "dist/module.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
