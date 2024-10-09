@@ -4,13 +4,13 @@ import { AddIcon, ChevronIcon } from '@baseapp-frontend/design-system'
 
 import { ButtonBase, MenuItem, Stack } from '@mui/material'
 
-import NavAccountPopover from '../../navigations/Header/AccountMenu/AccountPopover'
+import AccountPopover from '../../navigations/Header/AccountMenu/AccountPopover'
 import useCurrentProfile from '../hooks/useCurrentProfile'
 import CurrentProfilePlaceholder from './CurrentProfilePlaceholder'
 import ProfilesSubmenusList from './ProfilesSubmenusList'
-import { AccountPopoverProps } from './types'
+import { ProfileAccountPopoverProps } from './types'
 
-const AccountPopover: FC<AccountPopoverProps> = ({
+const ProfileAccountPopover: FC<ProfileAccountPopoverProps> = ({
   switchProfileLabel = 'Switch Profile',
   addNewProfileLabel = 'New profile',
   ...props
@@ -57,7 +57,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   ]
 
   return (
-    <NavAccountPopover
+    <AccountPopover
       accountAvatarUrl={currentProfile.profile?.image?.url}
       onCloseCallback={onPopoverClose}
       PopoverStyles={{ width: 256 }}
@@ -74,4 +74,4 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   )
 }
 
-export default AccountPopover
+export default ProfileAccountPopover

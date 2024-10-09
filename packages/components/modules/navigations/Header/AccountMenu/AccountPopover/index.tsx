@@ -31,6 +31,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   hideLogoutButton = false,
 }) => {
   const { user } = useJWTUser<BaseUser & JWTContent>()
+  console.log('debug:user', user)
   const { logout } = useLogout()
 
   const popover = usePopover()
