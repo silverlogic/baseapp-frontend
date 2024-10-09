@@ -1,4 +1,3 @@
-import { setItemAsync } from 'expo-secure-store'
 import { CookieAttributes } from 'js-cookie'
 
 import { setCookie } from '../../cookie'
@@ -6,6 +5,8 @@ import { setCookie } from '../../cookie'
 export const setTokenAsync = async (key: string, value: string, config?: CookieAttributes) => {
   try {
     if (process.env.EXPO_PUBLIC_PLATFORM === 'mobile') {
+      const { setItemAsync } = await import('expo-secure-store')
+
       await setItemAsync(key, value)
     } else {
       setCookie(key, value, config)
