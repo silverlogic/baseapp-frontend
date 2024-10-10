@@ -8,7 +8,7 @@ import { CurrentUserPlaceholderProps } from './types'
 
 const CurrentUserPlaceholder: FC<CurrentUserPlaceholderProps> = ({ user }) => (
   <Box sx={{ p: 1 }}>
-    <Typography variant="subtitle2" noWrap>
+    <Typography component="p" variant="subtitle2" noWrap>
       {joinWithSeparator([user?.firstName, user?.lastName])}
     </Typography>
 

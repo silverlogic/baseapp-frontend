@@ -23,7 +23,7 @@ const CurrentProfilePlaceholder: FC = () => {
         color="secondary"
       />
       <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">
-        <Typography variant="subtitle2" noWrap>
+        <Typography component="p" variant="subtitle2" noWrap>
           {profile.name}
         </Typography>
 
