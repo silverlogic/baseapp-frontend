@@ -1,7 +1,6 @@
 import { FC } from 'react'
 
-import Image from 'next/image'
-
+import AvatarUploadFallbackIcon from '../../icons/AvatarUploadFallbackIcon'
 import { AvatarStyled } from './styled'
 import { AvatarWithPlaceholderProps } from './types'
 
@@ -13,12 +12,7 @@ const AvatarWithPlaceholder: FC<AvatarWithPlaceholderProps> = ({
 }) => (
   <AvatarStyled width={width} height={height} {...props}>
     {children || (
-      <Image
-        src="/svg/avatar-upload-fallback.svg"
-        alt="Avatar Fallback"
-        width={width}
-        height={height}
-      />
+      <AvatarUploadFallbackIcon sx={{ fontSize: width }} titleAccess="Avatar Fallback" />
     )}
   </AvatarStyled>
 )
