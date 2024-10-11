@@ -6,7 +6,7 @@ import { TextFieldProps } from '../TextField/types'
 
 export type TextAreaProps = Omit<TextFieldProps, 'variant'>
 
-export type CommentTextFieldProps = FormControl &
+export type SocialTextFieldProps = FormControl &
   TextFieldProps &
   PropsWithChildren & {
     isReply?: boolean

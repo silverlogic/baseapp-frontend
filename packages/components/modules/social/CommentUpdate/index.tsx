@@ -1,42 +1,36 @@
 'use client'
 
-import { FC, KeyboardEventHandler, useEffect, useRef } from 'react'
+import { FC, useEffect, useRef } from 'react'
 
-import {
-  CheckMarkIcon,
-  CloseIcon,
-  CommentTextField as DefaultCommentTextField,
-  IconButton,
-} from '@baseapp-frontend/design-system'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { CommentUpdateInput } from '../../../__generated__/CommentUpdateMutation.graphql'
-import DefaultCommentUpsertActions from '../CommentUpsertActions'
+import DefaultSocialTextFieldForm from '../SocialTextFieldForm'
 import { FORM_VALUE, VALIDATION_SCHEMA } from '../constants'
 import { useCommentUpdateMutation } from '../graphql/mutations/CommentUpdate'
+import { SocialUpsertForm } from '../types'
+import CommentUpdateSubmitActions from './CommentUpdateSubmitActions'
 import { CommentUpdateProps } from './types'
 
 const CommentUpdate: FC<CommentUpdateProps> = ({
   comment,
   onCancel,
-  CommentTextField = DefaultCommentTextField,
-  CommentTextFieldProps,
-  CommentUpsertActions = DefaultCommentUpsertActions,
+  SocialTextFieldForm = DefaultSocialTextFieldForm,
+  SocialTextFieldFormProps = {},
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const form = useForm<CommentUpdateInput>({
+  const form = useForm<SocialUpsertForm>({
     defaultValues: { body: comment.body ?? '' },
     resolver: zodResolver(VALIDATION_SCHEMA),
   })
 
   const [commitUpdate, isMutationInFlight] = useCommentUpdateMutation()
 
-  const onSubmit = async (data: CommentUpdateInput) => {
-    if (isMutationInFlight) return null
+  const onSubmit = async (data: SocialUpsertForm) => {
+    if (isMutationInFlight) return
 
     commitUpdate({
       variables: {
@@ -62,24 +56,12 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
       // TODO: handle errors
       onError: console.error,
     })
-
-    return null
-  }
-
-  const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-    if (event.key === 'Enter' && !event.shiftKey) {
-      event.preventDefault()
-      form.handleSubmit(onSubmit)(event)
-    }
   }
 
   const handleEditCancel = () => {
     onCancel()
     form.setValue(FORM_VALUE.body, comment.body ?? '')
   }
-
-  const isEditButtonDisabled =
-    isMutationInFlight || !form.formState.isValid || !form.formState.isDirty
 
   useEffect(() => {
     if (inputRef.current) {
@@ -90,31 +72,21 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   }, [inputRef])
 
   return (
-    <form id="comment-update" onSubmit={form.handleSubmit(onSubmit)}>
-      <CommentTextField
-        inputRef={inputRef}
-        name={FORM_VALUE.body}
-        control={form.control}
-        onKeyDown={handleKeyDown}
-        autoFocus
-        {...CommentTextFieldProps}
-      >
-        <CommentUpsertActions />
-        <div className="grid grid-cols-[max-content_max-content] gap-2">
-          <IconButton onClick={handleEditCancel} aria-label="cancel comment edit">
-            <CloseIcon />
-          </IconButton>
-          <IconButton
-            type="submit"
-            form="comment-update"
-            disabled={isEditButtonDisabled}
-            aria-label="save comment edit"
-          >
-            <CheckMarkIcon />
-          </IconButton>
-        </div>
-      </CommentTextField>
-    </form>
+    <SocialTextFieldForm
+      ref={inputRef}
+      submit={onSubmit}
+      isLoading={isMutationInFlight}
+      form={form}
+      formId="comment-update"
+      autoFocusInput
+      SubmitActions={CommentUpdateSubmitActions}
+      SubmitActionsProps={{
+        handleEditCancel,
+        formId: 'comment-update',
+        disabled: isMutationInFlight,
+      }}
+      {...SocialTextFieldFormProps}
+    />
   )
 }
 

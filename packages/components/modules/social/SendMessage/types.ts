@@ -1,11 +1,10 @@
 import { FC } from 'react'
 
-import { CommentItem_comment$data } from '../../../__generated__/CommentItem_comment.graphql'
 import { SocialTextFieldFormProps } from '../SocialTextFieldForm/types'
 
-export interface CommentUpdateProps {
-  comment: CommentItem_comment$data
-  onCancel: () => void
+export interface SendMessageProps {
+  profileId: string
+  roomId: string
   SocialTextFieldForm?: FC<SocialTextFieldFormProps>
   SocialTextFieldFormProps?: Partial<SocialTextFieldFormProps>
 }

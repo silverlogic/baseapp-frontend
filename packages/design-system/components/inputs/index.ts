@@ -1,5 +1,5 @@
-export { default as CommentTextField } from './CommentTextField'
-export type * from './CommentTextField/types'
+export { default as SocialTextField } from './SocialTextField'
+export type * from './SocialTextField/types'
 
 export { default as TextareaField } from './TextareaField'
 

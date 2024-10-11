@@ -10,33 +10,29 @@ import { ConnectionHandler } from 'react-relay'
 
 import DefaultSocialTextFieldForm from '../SocialTextFieldForm'
 import { DEFAULT_FORM_VALUES, VALIDATION_SCHEMA } from '../constants'
-import { useCommentReply } from '../context/comments'
-import { useCommentCreateMutation } from '../graphql/mutations/CommentCreate'
+import { useSendMessageMutation } from '../graphql/mutations/SendMessage'
 import { SocialUpsertForm } from '../types'
-import { CommentCreateProps } from './types'
+import { SendMessageProps } from './types'
 
 let nextClientMutationId = 0
 
-const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
+const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   (
     {
-      targetObjectId,
-      placeholder = 'Comment...',
       profileId,
-      autoFocusInput,
+      roomId,
       SocialTextFieldForm = DefaultSocialTextFieldForm,
       SocialTextFieldFormProps = {},
     },
     ref,
   ) => {
-    const commentReply = useCommentReply()
-    const isReply = !!commentReply.inReplyToId
+    // TODO: Add message reply
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_FORM_VALUES,
       resolver: zodResolver(VALIDATION_SCHEMA),
     })
-    const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
+    const [commitMutation, isMutationInFlight] = useSendMessageMutation()
 
     const onSubmit = (data: SocialUpsertForm) => {
       if (isMutationInFlight) return
@@ -44,18 +40,14 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
       nextClientMutationId += 1
       const clientMutationId = nextClientMutationId.toString()
 
-      const connectionID = ConnectionHandler.getConnectionID(
-        commentReply.inReplyToId ?? targetObjectId,
-        'CommentsList_comments',
-      )
+      const connectionID = ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages')
 
       commitMutation({
         variables: {
           input: {
-            body: data.body,
-            targetObjectId,
-            inReplyToId: commentReply.inReplyToId,
+            content: data.body,
             profileId,
+            roomId,
             clientMutationId,
           },
           connections: [connectionID],
@@ -64,21 +56,12 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
           if (errors) {
             // TODO: handle errors
             console.error(errors)
-            return
           }
-          const mutationErrors = response?.commentCreate?.errors
+          const mutationErrors = response?.chatRoomSendMessage?.errors
           setFormRelayErrors(form, mutationErrors)
 
           if (!mutationErrors?.length) {
-            commentReply.resetCommentReply()
             form.reset()
-            if (commentReply.commentItemRef?.current) {
-              commentReply.commentItemRef.current.scrollIntoView({
-                block: 'nearest',
-                inline: 'start',
-                behavior: 'smooth',
-              })
-            }
           }
         },
         // TODO: handle errors
@@ -89,22 +72,13 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     return (
       <SocialTextFieldForm
         ref={ref}
-        placeholder={placeholder}
-        autoFocusInput={autoFocusInput}
         form={form}
-        formId="comment-create"
         submit={onSubmit}
         isLoading={isMutationInFlight}
-        isReply={isReply}
-        replyTargetName={commentReply.name}
-        onCancelReply={commentReply.resetCommentReply}
-        SubmitActionsProps={{
-          ariaLabel: 'create comment',
-        }}
         {...SocialTextFieldFormProps}
       />
     )
   },
 )
 
-export default CommentCreate
+export default SendMessage

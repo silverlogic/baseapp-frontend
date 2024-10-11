@@ -23,13 +23,13 @@
     "@mui/x-date-pickers": "^7.6.2",
     "@storybook/react": "^8.2.8",
     "framer-motion": "^11.2.10",
+    "jotai": "^2.9.3",
     "lodash": "^4.17.21",
     "next": "14.3.0-canary.24",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.5",
     "react-lazy-load-image-component": "^1.6.2",
-    "simplebar-react": "^3.2.5",
-    "react-dropzone": "^14.2.3",
-    "jotai": "^2.9.3"
+    "simplebar-react": "^3.2.5"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "*",

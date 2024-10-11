@@ -1,11 +1,11 @@
 import { Meta, StoryObj } from '@storybook/react'
 
-import CommentTextField from '..'
-import { CommentTextFieldProps } from '../types'
+import SocialTextField from '..'
+import { SocialTextFieldProps } from '../types'
 
 export default {
-  title: '@baseapp-frontend | designSystem/Inputs/CommentTextField',
-  component: CommentTextField,
+  title: '@baseapp-frontend | designSystem/Inputs/SocialTextField',
+  component: SocialTextField,
   argTypes: {
     isReply: { control: 'boolean' },
     helperText: { control: 'text', table: { type: { summary: 'string' } } },
@@ -18,9 +18,9 @@ export default {
     },
   },
   tags: ['autodocs'],
-} as Meta<CommentTextFieldProps>
+} as Meta<SocialTextFieldProps>
 
-type Story = StoryObj<CommentTextFieldProps>
+type Story = StoryObj<SocialTextFieldProps>
 
 export const Default: Story = {
   args: {
@@ -36,8 +36,8 @@ export const ReplyMode: Story = {
     placeholder: 'Type your reply...',
   },
   render: (args) => (
-    <CommentTextField {...args}>
+    <SocialTextField {...args}>
       <div>Custom content inside the text field</div>
-    </CommentTextField>
+    </SocialTextField>
   ),
 }

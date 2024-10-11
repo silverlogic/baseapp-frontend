@@ -44,38 +44,20 @@ const meta: Meta<typeof CommentCreate> = {
         },
       },
     },
-    CommentTextField: {
-      description: 'Overrides the CommentTextField component.',
+    SocialTextFieldForm: {
+      description: 'Overrides the SocialTextFieldForm component.',
       control: false,
       table: {
         type: {
-          summary: 'FC<CommentTextFieldProps>',
+          summary: 'FC<SocialTextFieldFormProps>',
         },
       },
     },
-    CommentTextFieldProps: {
-      description: 'See CommentTextField`s story for more details.',
+    SocialTextFieldFormProps: {
+      description: 'See SocialTextFieldForm`s story for more details.',
       table: {
         type: {
-          summary: 'Partial<CommentTextFieldProps>',
-        },
-      },
-    },
-    CommentUpsertActions: {
-      description: 'Component for upsert actions.',
-      control: false,
-      table: {
-        type: {
-          summary: 'FC',
-        },
-      },
-    },
-    SendMessageIcon: {
-      description: 'Overrides the SendMessageIcon component.',
-      control: false,
-      table: {
-        type: {
-          summary: 'FC<SvgIconProps>',
+          summary: 'Partial<SocialTextFieldFormProps>',
         },
       },
     },

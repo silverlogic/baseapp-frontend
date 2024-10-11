@@ -9,7 +9,7 @@ import { CloseIcon, CommentReplyIcon } from '../../icons'
 import { TypographyWithEllipsis } from '../../typographies'
 import TextareaField from '../TextareaField'
 import { Container, OutsideReplyContainer, ReplyContainer } from './styled'
-import { CommentTextFieldProps } from './types'
+import { SocialTextFieldProps } from './types'
 
 /**
  * This is a TextField component made for comments creation.
@@ -21,7 +21,7 @@ import { CommentTextFieldProps } from './types'
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  */
-const CommentTextField: FC<CommentTextFieldProps> = ({
+const SocialTextField: FC<SocialTextFieldProps> = ({
   children,
   isReply,
   replyTargetName,
@@ -52,4 +52,4 @@ const CommentTextField: FC<CommentTextFieldProps> = ({
   </Container>
 )
 
-export default CommentTextField
+export default SocialTextField

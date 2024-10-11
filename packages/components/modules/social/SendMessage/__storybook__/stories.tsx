@@ -1,25 +1,23 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import CommentUpdate from '..'
-import CommentsUpdateWithQuery from './CommentsUpdateWithQuery'
-import { mockResolvers } from './mockResolvers'
+import SendMessage from '..'
 
-const meta: Meta<typeof CommentUpdate> = {
-  title: '@baseapp-frontend | components/Social/CommentUpdate',
-  component: CommentsUpdateWithQuery,
+const meta: Meta<typeof SendMessage> = {
+  title: '@baseapp-frontend | components/Social/SendMessage',
+  // component: CommentsUpdateWithQuery,
   tags: ['autodocs'],
   argTypes: {
-    comment: {
-      description: 'The comment data to be updated.',
-      control: 'object',
+    profileId: {
+      description: 'The Profile ID of the user sending the message.',
+      control: false,
       table: {
         type: {
-          summary: 'CommentItem_comment$data',
+          summary: 'string',
         },
       },
     },
-    onCancel: {
-      description: 'Callback function to handle the cancel action.',
+    roomId: {
+      description: 'Room ID of the chat.',
       control: false,
       table: {
         type: {
@@ -50,11 +48,11 @@ const meta: Meta<typeof CommentUpdate> = {
 
 export default meta
 
-type Story = StoryObj<typeof CommentUpdate>
+type Story = StoryObj<typeof SendMessage>
 
 export const DefaultComments: Story = {
-  name: 'Default CommentUpdate',
+  name: 'Default SendMessage',
   parameters: {
-    mockResolvers,
+    // mockResolvers,
   },
 }
