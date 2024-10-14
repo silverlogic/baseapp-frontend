@@ -72,6 +72,7 @@
     "babel-plugin-relay": "^17.0.0",
     "cypress": "^13.13.3",
     "cypress-plugin-steps": "^1.1.1",
+    "cypress-wait-until": "^3.0.2",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.2",
     "eslint-plugin-storybook": "^0.8.0",

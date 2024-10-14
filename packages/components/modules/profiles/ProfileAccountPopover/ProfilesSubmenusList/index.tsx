@@ -16,15 +16,20 @@ import ProfileMenuItem from '../ProfileMenuItem'
 import { ProfileMenuItemSkeleton } from './styled'
 import { ProfilesSubmenusListProps } from './types'
 
-const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({ handleCloseSubmenu }) => {
+const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({
+  handleCloseSubmenu,
+  MenuItemProps,
+}) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
-    setCurrentProfile({ profile })
-    sendToast(`Switched to ${profile.name}`)
-    handleCloseSubmenu()
+    if (currentProfile?.id !== profile.id) {
+      setCurrentProfile({ profile })
+      sendToast(`Switched to ${profile.name}`)
+      handleCloseSubmenu()
+    }
   }
 
   return me?.profiles?.map((profileRef, index) => {
@@ -35,6 +40,7 @@ const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({ handleCloseSubmen
         profileRef={profileRef}
         currentProfile={currentProfile}
         onProfileChange={handleProfileChange}
+        {...MenuItemProps}
       />
     )
   })
@@ -48,7 +54,7 @@ const LoadingState: FC = () => (
 )
 
 const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => {
-  const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel' } = props
+  const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel', listMaxHeight = 300 } = props
 
   return (
     <Slide direction={openSubmenu ? 'left' : 'right'} in={openSubmenu} mountOnEnter unmountOnExit>
@@ -65,7 +71,7 @@ const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => 
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />
         <Box sx={{ p: 1 }}>
-          <List disablePadding>
+          <List disablePadding sx={{ maxHeight: listMaxHeight, overflowY: 'auto' }}>
             <Suspense fallback={<LoadingState />}>
               <ProfilesSubmenusList {...props} />
             </Suspense>

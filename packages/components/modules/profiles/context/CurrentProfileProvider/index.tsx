@@ -2,9 +2,7 @@
 
 import { FC, PropsWithChildren, createContext, useEffect, useRef } from 'react'
 
-import { useEnvironment } from '@baseapp-frontend/graphql'
-
-import { Environment, fetchQuery, readInlineData } from 'react-relay'
+import { Environment, fetchQuery, readInlineData, useRelayEnvironment } from 'react-relay'
 import { StoreApi, create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
@@ -18,6 +16,7 @@ import { UseCurrentProfile } from './types'
 export const CurrentProfileContext = createContext<StoreApi<UseCurrentProfile> | null>(null)
 
 const fetchUserProfile = async (environment: Environment) => {
+  // TODO: test error case.
   const data = await fetchQuery<UserProfileQueryType>(
     environment,
     UserProfileQuery,
@@ -33,7 +32,7 @@ const fetchUserProfile = async (environment: Environment) => {
 }
 
 const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
-  const environment = useEnvironment()
+  const environment = useRelayEnvironment()
   const storeRef = useRef<StoreApi<UseCurrentProfile>>()
 
   if (!storeRef.current) {

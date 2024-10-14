@@ -4,7 +4,7 @@ export const mockUserProfileData = {
   data: {
     me: {
       profile: {
-        id: 'profile-1',
+        id: 'user-profile-1',
         name: faker.name.fullName(),
         image: {
           url: faker.image.avatar(),
@@ -17,39 +17,24 @@ export const mockUserProfileData = {
   },
 }
 
-export const mockProfilesListData = {
-  data: {
-    profiles: [
-      {
-        id: 'profile-1',
-        name: faker.name.fullName(),
-        image: {
-          url: faker.image.avatar(),
-        },
-        urlPath: {
-          path: faker.internet.url(),
-        },
+export const mockProfilesListData = (size: number) => {
+  return {
+    data: {
+      me: {
+        profiles: [
+          mockUserProfileData.data.me.profile,
+          ...Array.from({ length: size }).map((_, index) => ({
+            id: `profile-${index}`,
+            name: faker.name.fullName(),
+            image: {
+              url: faker.image.avatar(),
+            },
+            urlPath: {
+              path: faker.internet.url(),
+            },
+          })),
+        ],
       },
-      {
-        id: 'profile-2',
-        name: faker.name.fullName(),
-        image: {
-          url: faker.image.avatar(),
-        },
-        urlPath: {
-          path: faker.internet.url(),
-        },
-      },
-      {
-        id: 'profile-3',
-        name: faker.name.fullName(),
-        image: {
-          url: faker.image.avatar(),
-        },
-        urlPath: {
-          path: faker.internet.url(),
-        },
-      },
-    ],
-  },
+    },
+  }
 }
