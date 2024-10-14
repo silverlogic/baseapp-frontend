@@ -19,7 +19,6 @@
     "version-packages": "changeset version",
     "release": "turbo run build --filter=docs^... && changeset publish"
   },
-  "dependencies": {},
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
     "@parcel/packager-ts": "2.12.0",
