@@ -4,12 +4,10 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 
-import useCurrentProfile from '../../hooks/useCurrentProfile'
+import useCurrentProfile from '../../context/useCurrentProfile'
 
 const CurrentProfilePlaceholder: FC = () => {
-  const { currentProfile } = useCurrentProfile()
-
-  const { profile } = currentProfile
+  const { profile } = useCurrentProfile()
 
   if (!profile) return null
 

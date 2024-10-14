@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useState } from 'react'
 
 import { AddIcon, ChevronIcon } from '@baseapp-frontend/design-system'
@@ -59,7 +61,7 @@ const ProfileAccountSections: FC<ProfileAccountSectionsProps> = ({
 
   return (
     <AccountPopover
-      accountAvatarUrl={currentProfile.profile?.image?.url}
+      accountAvatarUrl={currentProfile?.image?.url}
       onCloseCallback={onPopoverClose}
       PopoverStyles={{ width: 256 }}
       accountSection={{

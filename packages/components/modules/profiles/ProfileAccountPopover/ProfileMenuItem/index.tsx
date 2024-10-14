@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
-import { useFragment } from 'react-relay'
+import { readInlineData } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
@@ -18,10 +18,10 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   width = 36,
   height = 36,
 }) => {
-  const profile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, profileRef)
+  const profile = readInlineData<ProfileItemFragment$key>(ProfileItemFragment, profileRef)
 
   const handle = profile.urlPath?.path
-  const isActiveProfile = profile.id === currentProfile?.profile?.id
+  const isActiveProfile = profile.id === currentProfile?.id
 
   return (
     <StyledMenuItem active={isActiveProfile} onClick={() => onProfileChange(profile)}>

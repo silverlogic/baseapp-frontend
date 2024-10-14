@@ -10,8 +10,8 @@ import { useLazyLoadQuery } from 'react-relay'
 
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
+import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
-import useCurrentProfile from '../../hooks/useCurrentProfile'
 import ProfileMenuItem from '../ProfileMenuItem'
 import { ProfileMenuItemSkeleton } from './styled'
 import { ProfilesSubmenusListProps } from './types'
@@ -19,7 +19,7 @@ import { ProfilesSubmenusListProps } from './types'
 const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({ handleCloseSubmenu }) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
   const { sendToast } = useNotification()
-  const { currentProfile, setCurrentProfile } = useCurrentProfile()
+  const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     setCurrentProfile({ profile })

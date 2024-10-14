@@ -1,6 +1,6 @@
-import type { CurrentProfile } from '../../hooks/useCurrentProfile/types'
+import type { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import type { ProfileAccountPopoverProps } from '../types'
 
 export interface ProfileAccountSectionsProps extends ProfileAccountPopoverProps {
-  currentProfile: CurrentProfile
+  currentProfile: ProfileItemFragment$data
 }

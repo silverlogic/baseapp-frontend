@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a5bca4ae2854e79a70861c3137944321>>
+ * @generated SignedSource<<c99ebc31cf2eda3e5514d56aa2bd13ba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -36,12 +36,55 @@ export type ProfilesListQuery = {
 
 const node: ConcreteRequest = (function () {
   var v0 = {
-    alias: null,
-    args: null,
-    kind: 'ScalarField',
-    name: 'id',
-    storageKey: null,
-  }
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    v1 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'name',
+      storageKey: null,
+    },
+    v2 = {
+      alias: null,
+      args: [
+        {
+          kind: 'Literal',
+          name: 'height',
+          value: 100,
+        },
+        {
+          kind: 'Literal',
+          name: 'width',
+          value: 100,
+        },
+      ],
+      concreteType: 'File',
+      kind: 'LinkedField',
+      name: 'image',
+      plural: false,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'url',
+          storageKey: null,
+        },
+      ],
+      storageKey: 'image(height:100,width:100)',
+    },
+    v3 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'path',
+      storageKey: null,
+    }
   return {
     fragment: {
       argumentDefinitions: [],
@@ -66,9 +109,25 @@ const node: ConcreteRequest = (function () {
               plural: true,
               selections: [
                 {
-                  args: null,
-                  kind: 'FragmentSpread',
+                  kind: 'InlineDataFragmentSpread',
                   name: 'ProfileItemFragment',
+                  selections: [
+                    v0 /*: any*/,
+                    v1 /*: any*/,
+                    v2 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: 'URLPath',
+                      kind: 'LinkedField',
+                      name: 'urlPath',
+                      plural: false,
+                      selections: [v3 /*: any*/],
+                      storageKey: null,
+                    },
+                  ],
+                  args: null,
+                  argumentDefinitions: [],
                 },
               ],
               storageKey: null,
@@ -103,42 +162,8 @@ const node: ConcreteRequest = (function () {
               plural: true,
               selections: [
                 v0 /*: any*/,
-                {
-                  alias: null,
-                  args: null,
-                  kind: 'ScalarField',
-                  name: 'name',
-                  storageKey: null,
-                },
-                {
-                  alias: null,
-                  args: [
-                    {
-                      kind: 'Literal',
-                      name: 'height',
-                      value: 100,
-                    },
-                    {
-                      kind: 'Literal',
-                      name: 'width',
-                      value: 100,
-                    },
-                  ],
-                  concreteType: 'File',
-                  kind: 'LinkedField',
-                  name: 'image',
-                  plural: false,
-                  selections: [
-                    {
-                      alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'url',
-                      storageKey: null,
-                    },
-                  ],
-                  storageKey: 'image(height:100,width:100)',
-                },
+                v1 /*: any*/,
+                v2 /*: any*/,
                 {
                   alias: null,
                   args: null,
@@ -146,16 +171,7 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'urlPath',
                   plural: false,
-                  selections: [
-                    {
-                      alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'path',
-                      storageKey: null,
-                    },
-                    v0 /*: any*/,
-                  ],
+                  selections: [v3 /*: any*/, v0 /*: any*/],
                   storageKey: null,
                 },
               ],

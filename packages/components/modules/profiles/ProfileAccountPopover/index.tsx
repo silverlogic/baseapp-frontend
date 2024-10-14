@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import AccountPopover from '../../navigations/Header/AccountMenu/AccountPopover'
-import useCurrentProfile from '../hooks/useCurrentProfile'
+import useCurrentProfile from '../context/useCurrentProfile'
 import ProfileAccountSections from './ProfileAccountSections'
 import { ProfileAccountPopoverProps } from './types'
 
@@ -10,9 +10,9 @@ const ProfileAccountPopover: FC<ProfileAccountPopoverProps> = ({
   addNewProfileLabel = 'New profile',
   ...props
 }) => {
-  const { currentProfile } = useCurrentProfile()
+  const { profile: currentProfile } = useCurrentProfile()
 
-  if (!currentProfile || !currentProfile.profile) {
+  if (!currentProfile) {
     return <AccountPopover {...props} />
   }
 

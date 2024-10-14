@@ -1,17 +1,11 @@
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 
-export type CurrentProfile = {
+export type CurrentProfileState = {
   profile?: ProfileItemFragment$data
 }
 
-export type CurrentProfileKeys = keyof CurrentProfile
-
-export type CurrentProfileState = {
-  settings: CurrentProfile
-}
-
 type CurrentProfileFunctions = {
-  setCurrentProfile: (newCurrentProfiles: Partial<CurrentProfile>) => void
+  setCurrentProfile: (newCurrentProfiles: Partial<CurrentProfileState>) => void
 }
 
 export type UseCurrentProfile = CurrentProfileState & CurrentProfileFunctions
