@@ -78,6 +78,7 @@ describe('ProfileAccountPopover', () => {
     cy.stub(utilsPackage, 'useNotification').callsFake(() => ({
       sendToast: sendToastSpy,
     }))
+    cy.viewport('iphone-6')
   })
 
   it('should render the profiles account popover and be able to interact with it', () => {
