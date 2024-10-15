@@ -5,7 +5,7 @@ import { FC, Suspense } from 'react'
 import { ChevronIcon } from '@baseapp-frontend/design-system'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Box, ButtonBase, Divider, List, Slide } from '@mui/material'
+import { Box, ButtonBase, Divider, Slide } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
@@ -13,7 +13,7 @@ import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__genera
 import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import ProfileMenuItem from '../ProfileMenuItem'
-import { ProfileMenuItemSkeleton } from './styled'
+import { ProfileMenuItemSkeleton, ProfilesList } from './styled'
 import { ProfilesSubmenusListProps } from './types'
 
 const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({
@@ -71,11 +71,11 @@ const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => 
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />
         <Box sx={{ p: 1 }}>
-          <List disablePadding sx={{ maxHeight: listMaxHeight, overflowY: 'auto' }}>
+          <ProfilesList disablePadding maxHeight={listMaxHeight}>
             <Suspense fallback={<LoadingState />}>
               <ProfilesSubmenusList {...props} />
             </Suspense>
-          </List>
+          </ProfilesList>
         </Box>
       </Box>
     </Slide>
