@@ -5,5 +5,5 @@ export interface ProfilesSubmenusListProps {
   handleCloseSubmenu: () => void
   cancelLabel?: string
   listMaxHeight?: number
-  MenuItemProps?: ProfileMenuItemProps
+  MenuItemProps?: Partial<ProfileMenuItemProps>
 }

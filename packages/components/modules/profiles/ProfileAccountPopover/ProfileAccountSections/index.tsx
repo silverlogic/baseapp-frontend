@@ -15,6 +15,7 @@ const ProfileAccountSections: FC<ProfileAccountSectionsProps> = ({
   currentProfile,
   switchProfileLabel,
   addNewProfileLabel,
+  ProfilesSubmenusListProps,
   ...props
 }) => {
   const [openProfilesSubmenus, setOpenProfilesSubmenus] = useState(false)
@@ -55,6 +56,7 @@ const ProfileAccountSections: FC<ProfileAccountSectionsProps> = ({
           key={1}
           openSubmenu={openProfilesSubmenus}
           handleCloseSubmenu={() => setOpenProfilesSubmenus(false)}
+          {...ProfilesSubmenusListProps}
         />,
       ]
     : []

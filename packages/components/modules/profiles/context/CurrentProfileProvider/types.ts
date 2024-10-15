@@ -2,6 +2,7 @@ import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemF
 
 export type CurrentProfileState = {
   profile?: ProfileItemFragment$data
+  userId?: number
 }
 
 type CurrentProfileFunctions = {

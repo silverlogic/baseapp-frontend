@@ -23,7 +23,16 @@ const createTestEnvironment = () => {
     }
   }
 
-  return { environment, resolveMostRecentOperation }
+  const rejectMostRecentOperation = (errorMessage: string) => {
+    try {
+      environment.mock.rejectMostRecentOperation(new Error(errorMessage))
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  return { environment, resolveMostRecentOperation, rejectMostRecentOperation }
 }
 
 export default createTestEnvironment
