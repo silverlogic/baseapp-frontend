@@ -25,3 +25,5 @@ cd packages/wagtail
 
 yarn storybook
 ```
+
+// TODO: tutorial of where to add the pages.
