@@ -10,7 +10,15 @@ function getAbsolutePath(value: string): any {
 }
 
 const config: StorybookConfig = {
-  stories: ['./*.mdx', '../modules/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)'],
+  stories: [
+    resolve(__dirname, './*.mdx'),
+    resolve(__dirname, '../modules/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)'),
+    resolve(__dirname, '../../design-system/components/**/__storybook__/*.mdx'),
+    resolve(
+      __dirname,
+      '../../design-system/components/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
+    ),
+  ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),
     options: {},
@@ -59,8 +67,10 @@ const config: StorybookConfig = {
       config.resolve.alias = {
         ...config.resolve.alias,
         'next/font/google': resolve(__dirname, './__mocks__/nextFontMock.ts'),
+        'next/image': resolve(__dirname, './__mocks__/nextImageMock.tsx'),
       }
     }
+
     return config
   },
 }
