@@ -1,12 +1,20 @@
 # @baseapp-frontend/components
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated Storybook configs
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.14
+
 ## 0.0.9
 
 ### Patch Changes
 
 - Add Messages module with SendMessage input for messages
 - Make the previus comment input a reusable component to be used in comments and messages
-- Reorganize modules to break previus social folder into comments, messages and __shared__
+- Reorganize modules to break previous social folder into comments, messages and __shared__
 - Updated dependencies
   - @baseapp-frontend/design-system@0.0.13
 
