@@ -1,3 +1,3 @@
 import { CommentCreateInput } from '../../__generated__/CommentCreateMutation.graphql'
 
-export type CommentUpsertForm = Pick<CommentCreateInput, 'body'>
+export type SocialUpsertForm = Pick<CommentCreateInput, 'body'>

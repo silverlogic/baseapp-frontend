@@ -1,12 +1,12 @@
 import { z } from 'zod'
 
-import { CommentUpsertForm } from './types'
+import { SocialUpsertForm } from './types'
 
-export const DEFAULT_FORM_VALUES: CommentUpsertForm = {
+export const DEFAULT_FORM_VALUES: SocialUpsertForm = {
   body: '',
 }
 
-export const FORM_VALUE: Record<keyof CommentUpsertForm, keyof CommentUpsertForm> = {
+export const FORM_VALUE: Record<keyof SocialUpsertForm, keyof SocialUpsertForm> = {
   body: 'body',
 }
 
