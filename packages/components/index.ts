@@ -1,3 +1,5 @@
-export * from './modules/social'
+export * from './modules/__shared__'
+export * from './modules/comments'
+export * from './modules/messages'
 export * from './modules/navigations'
 export * from './modules/notifications'

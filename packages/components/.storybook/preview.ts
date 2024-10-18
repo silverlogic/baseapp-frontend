@@ -25,6 +25,20 @@ const preview: Preview = {
       // @ts-ignore
       storySort: (a, b) => {
         const order = [
+          //Shared
+          'ReactionButton',
+          'SocialInput',
+          'SocialUpsertActions',
+          'Timestamp',
+          // Comments
+          'Comments',
+          'CommentsList',
+          'CommentCreate',
+          'CommentUpdate',
+          'CommentItem',
+          'CommentUpsertActions',
+          // Messages
+          'SendMessage',
           // Navigation
           'NavigationLayout',
           'Header',
@@ -33,15 +47,6 @@ const preview: Preview = {
           'NavHorizontal',
           'NavCentered',
           'NavVertical',
-          // Social
-          'Comments',
-          'CommentsList',
-          'CommentCreate',
-          'CommentUpdate',
-          'CommentItem',
-          'CommentUpsertActions',
-          'ReactionButton',
-          'Timestamp',
         ]
 
         const titleA = a.title || ''

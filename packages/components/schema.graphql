@@ -76,6 +76,141 @@ type BlockTogglePayload {
   clientMutationId: String
 }
 
+type ChatRoom implements Node {
+  """The ID of the object"""
+  id: ID!
+  image: String
+  lastMessage: Message
+  lastMessageTime: DateTime
+  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
+  pk: Int!
+  allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
+  unreadMessagesCount(profileId: ID): Int
+}
+
+type ChatRoomConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ChatRoomEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input ChatRoomCreateInput {
+  profileId: ID!
+  participants: [ID]!
+  clientMutationId: String
+}
+
+type ChatRoomCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoomEdge
+  profile: Profile
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `ChatRoom` and its cursor."""
+type ChatRoomEdge {
+  """The item at the end of the edge"""
+  node: ChatRoom
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ChatRoomOnMessagesCountUpdate {
+  profile: Profile
+}
+
+type ChatRoomOnNewMessage {
+  message: MessageEdge
+}
+
+type ChatRoomOnRoomUpdate {
+  room: ChatRoomEdge
+}
+
+type ChatRoomParticipant implements Node {
+  """The ID of the object"""
+  id: ID!
+  profile: Profile
+  pk: Int!
+}
+
+type ChatRoomParticipantConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ChatRoomParticipantEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ChatRoomParticipant` and its cursor."""
+type ChatRoomParticipantEdge {
+  """The item at the end of the edge"""
+  node: ChatRoomParticipant
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input ChatRoomReadMessagesInput {
+  roomId: ID!
+  profileId: ID!
+  messageIds: [ID]
+  clientMutationId: String
+}
+
+type ChatRoomReadMessagesPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  profile: Profile
+  messages: [Message]
+  clientMutationId: String
+}
+
+input ChatRoomSendMessageInput {
+  roomId: ID!
+  profileId: ID!
+  content: String!
+  inReplyToId: ID
+  clientMutationId: String
+}
+
+type ChatRoomSendMessagePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  message: MessageEdge
+  clientMutationId: String
+}
+
+interface ChatRoomsInterface {
+  """The ID of the object"""
+  id: ID!
+  chatRooms(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+  ): ChatRoomConnection
+  unreadMessagesCount: Int
+}
+
 type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface {
   created: DateTime!
   modified: DateTime!
@@ -389,6 +524,40 @@ enum Languages {
   pt
 }
 
+type Message implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  content: String
+  user: User
+  profile: Profile
+  verb: Verbs
+  room: ChatRoom
+  inReplyTo: Message
+  extraData: JSONString
+  pk: Int!
+  actionObject: Node
+}
+
+type MessageConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MessageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Message` and its cursor."""
+type MessageEdge {
+  """The item at the end of the edge"""
+  node: Message
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Metadata {
   created: DateTime!
   modified: DateTime!
@@ -403,6 +572,9 @@ type Metadata {
 }
 
 type Mutation {
+  chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
+  chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
+  chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -708,7 +880,7 @@ interface PermissionsInterface {
   hasPerm(perm: String!): Boolean
 }
 
-type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface {
+type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
@@ -745,6 +917,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
+  chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
 
   """
   Determine if the logged in user has a specific permission for this object.
@@ -755,8 +929,21 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   metadata: Metadata
   isFollowedByMe(profileId: ID): Boolean
   isBlockedByMe(profileId: ID): Boolean
-  target: ProfileInterface
+  chatRooms(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+  ): ChatRoomConnection
+  unreadMessagesCount: Int
   pk: Int!
+  target: ProfileInterface
 }
 
 type ProfileConnection {
@@ -827,6 +1014,10 @@ type ProfileUpdatePayload {
 }
 
 type Query {
+  chatRoom(
+    """The ID of the object"""
+    id: ID!
+  ): ChatRoom
   rate(
     """The ID of the object"""
     id: ID!
@@ -1076,6 +1267,9 @@ enum ReportTypes {
 }
 
 type Subscription {
+  chatRoomOnNewMessage(roomId: ID!): ChatRoomOnNewMessage
+  chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
+  chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
   onNotificationChange: OnNotificationChange
   onCommentChange(targetObjectId: ID): OnCommentChange
 }
@@ -1174,5 +1368,10 @@ interface UserProfiles {
   """The ID of the object"""
   id: ID!
   profiles: [Profile]
+}
+
+"""An enumeration."""
+enum Verbs {
+  SENT_MESSAGE
 }
 
