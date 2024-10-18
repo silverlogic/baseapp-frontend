@@ -1,17 +1,16 @@
 import {
   ComponentWithProviders,
-  CookiesGetByNameFn,
-  MockAdapter,
+  type CookiesGetByNameFn,
+  mockFetch,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
-import { TokenTypes, axios } from '@baseapp-frontend/utils'
 
-import { UseMutationResult } from '@tanstack/react-query'
+import type { UseMutationResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { User } from '../../../../types/user'
-import { UseUpdateUserOptions } from '../types'
+import useUpdateUser from '..'
+import type { User } from '../../../../types/user'
 import request from './fixtures/request.json'
 
 interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unknown>, 'data'> {
@@ -19,14 +18,7 @@ interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unkno
 }
 
 // TODO: BA-1308: improve tests
-describe('useUserUpdate', () => {
-  // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-  const axiosMock = new MockAdapter(axios)
-
-  let useUserUpdate: <TUser extends Partial<User>>(
-    props?: UseUpdateUserOptions<TUser>,
-  ) => UseUpdateUserReturn<TUser>
-
+describe('useUpdateUser', () => {
   const decodeJWTMock = jest.fn()
   const refreshAccessTokenMock = jest.fn()
   jest.mock('@baseapp-frontend/utils', () => ({
@@ -42,9 +34,6 @@ describe('useUserUpdate', () => {
   }))
 
   beforeAll(async () => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
-    useUserUpdate = (await import('../index')).default as any
-    // freeze time to
     jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
   })
 
@@ -59,10 +48,15 @@ describe('useUserUpdate', () => {
 
     let hasOnSettledRan = false
 
-    axiosMock.onPatch('/users/1').reply(201, request)
+    mockFetch('/users/1', {
+      method: 'PATCH',
+      status: 201,
+      response: request,
+    })
+
     const { result } = renderHook(
       () =>
-        useUserUpdate({
+        useUpdateUser<User>({
           options: {
             onSettled: () => {
               hasOnSettledRan = true

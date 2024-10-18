@@ -1,5 +1,6 @@
 'use client'
 
+import { StyledComponent } from '@emotion/styled'
 import { alpha, styled } from '@mui/material/styles'
 import SimpleBar from 'simplebar-react'
 
@@ -9,7 +10,8 @@ export const StyledRootScrollbar = styled('div')(() => ({
   overflow: 'hidden',
 }))
 
-export const StyledScrollbar = styled(SimpleBar)(({ theme }) => ({
+// @ts-ignore TODO: investigate import issue
+export const StyledScrollbar: StyledComponent = styled(SimpleBar)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {

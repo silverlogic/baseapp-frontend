@@ -1,24 +1,27 @@
 {
   "name": "@baseapp-frontend/eslint-plugin",
   "description": "Eslint custom rules for BaseApp.",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "source": "index.ts",
-  "main": "dist/main.js",
+  "main": "dist/index.js",
   "module": "dist/module.js",
-  "types": "dist/types.d.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
     "build": "parcel build",
     "dev": "parcel watch",
     "clean": "rm -rf node_modules dist",
-    "test": "ts-node ./rules/**/*.test.ts"
+    "test": "ts-node ./rules/**/*.test.ts",
+    "prepare": "pnpm build"
   },
   "dependencies": {
     "eslint": "^8.42.0"
   },
   "devDependencies": {
+    "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/eslint": "^9.6.1",
+    "@types/jest": "^29.5.12",
     "parcel": "^2.12.0",
-    "prettier": "^2.8.8",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   },
@@ -26,7 +29,7 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/silverlogic/baseapp-frontend.git",
-    "directory": "packages/coneslint-pluginfig"
+    "directory": "packages/eslint-plugin"
   },
   "bugs": {
     "url": "https://github.com/silverlogic/baseapp-frontend/issues"

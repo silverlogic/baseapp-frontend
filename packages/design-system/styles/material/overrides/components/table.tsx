@@ -2,7 +2,7 @@ import { tableCellClasses } from '@mui/material/TableCell'
 import { tableRowClasses } from '@mui/material/TableRow'
 import { Theme, alpha } from '@mui/material/styles'
 
-export function table(theme: Theme) {
+export function table(theme: Theme): Record<string, any> {
   return {
     MuiTableContainer: {
       styleOverrides: {

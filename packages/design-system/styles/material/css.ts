@@ -5,6 +5,7 @@ import { checkboxClasses } from '@mui/material/Checkbox'
 import { dividerClasses } from '@mui/material/Divider'
 import { menuItemClasses } from '@mui/material/MenuItem'
 import { Theme, alpha } from '@mui/material/styles'
+import { CSSObject } from '@mui/system'
 
 type BgBlurProps = {
   blur?: number
@@ -73,7 +74,7 @@ export const paper = ({
   }),
 })
 
-export const menuItem = (theme: Theme) => ({
+export const menuItem = (theme: Theme): CSSObject => ({
   ...theme.typography.body2,
   padding: theme.spacing(0.75, 1),
   borderRadius: theme.shape.borderRadius * 0.75,

@@ -1,11 +1,12 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "0.0.11",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "0.0.12",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
@@ -20,30 +21,31 @@
     "@mui/icons-material": "^5.15.19",
     "@mui/lab": "^5.0.0-alpha.170",
     "@mui/material": "^5.15.19",
+    "@mui/material-nextjs": "^6.1.4",
+    "@mui/system": "^5.15.19",
     "@mui/x-date-pickers": "^7.6.2",
     "@storybook/react": "^8.2.8",
     "framer-motion": "^11.2.10",
+    "jotai": "^2.9.3",
     "lodash": "^4.17.21",
     "next": "14.3.0-canary.24",
+    "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.5",
     "react-lazy-load-image-component": "^1.6.2",
-    "simplebar-react": "^3.2.5",
-    "react-dropzone": "^14.2.3",
-    "jotai": "^2.9.3"
+    "simplebar-react": "^3.2.5"
   },
   "peerDependencies": {
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
     "@babel/preset-typescript": "^7.24.7",
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/tsconfig": "*",
-    "@chromatic-com/storybook": "^1.6.1",
-    "@mdx-js/loader": "^3.0.1",
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@chromatic-com/storybook": "^1.5.0",
     "@storybook/addon-docs": "^8.2.8",
     "@storybook/addon-essentials": "^8.2.8",
     "@storybook/addon-interactions": "^8.2.8",
@@ -51,17 +53,19 @@
     "@storybook/addon-styling-webpack": "^1.0.0",
     "@storybook/addon-webpack5-compiler-babel": "^3.0.3",
     "@storybook/blocks": "^8.2.8",
-    "@storybook/react-webpack5": "^8.2.6",
+    "@storybook/react-webpack5": "^8.2.8",
     "@storybook/test": "^8.2.8",
     "@tailwindcss/typography": "^0.5.13",
-    "@types/lodash": "^4.17.6",
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "autoprefixer": "^10.4.19",
+    "css-loader": "^7.1.2",
     "eslint-plugin-storybook": "^0.8.0",
     "postcss": "^8.4.41",
     "postcss-loader": "^8.1.1",
     "storybook": "^8.2.8",
+    "style-loader": "^4.0.0",
     "tailwindcss": "^3.4.4",
     "typescript": "^5.4.5"
   },
@@ -69,16 +73,12 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/silverlogic/baseapp-frontend.git",
-    "directory": "packages/design-system-mui"
+    "directory": "packages/design-system"
   },
   "bugs": {
     "url": "https://github.com/silverlogic/baseapp-frontend/issues"
   },
   "publishConfig": {
     "access": "public"
-  },
-  "resolutions": {
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0"
   }
 }

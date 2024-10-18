@@ -1,11 +1,12 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.2",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "2.0.3",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -15,17 +16,15 @@
     "lodash": "^4.17.21"
   },
   "peerDependencies": {
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "18.3.1"
   },
   "devDependencies": {
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/tsconfig": "*",
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",
     "typescript": "^5.4.5"
-  },
-  "resolutions": {
-    "@types/react": "^18.3.3"
   },
   "license": "MIT",
   "repository": {

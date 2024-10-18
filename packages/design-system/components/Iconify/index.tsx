@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react'
 
+// @ts-ignore TODO: investigate import issue
 import { Icon } from '@iconify/react'
 import Box from '@mui/material/Box'
 

@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material/styles'
 
-export function treeView(theme: Theme) {
+export function treeView(theme: Theme): Record<string, any> {
   return {
     MuiTreeItem: {
       styleOverrides: {

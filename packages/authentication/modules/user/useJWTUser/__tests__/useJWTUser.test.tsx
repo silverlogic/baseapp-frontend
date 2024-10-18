@@ -1,17 +1,17 @@
 import {
   ComponentWithProviders,
-  CookiesGetByNameFn,
-  MockAdapter,
+  type CookiesGetByNameFn,
+  mockFetch,
+  mockFetchError,
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
-import { TokenTypes, axios } from '@baseapp-frontend/utils'
 
-import { UseQueryResult } from '@tanstack/react-query'
+import type { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
-import { User } from '../../../../types/user'
-import { UseJWTUserOptions } from '../types'
+import type { User } from '../../../../types/user'
+import type { UseJWTUserOptions } from '../types'
 import request from './fixtures/request.json'
 
 interface UseJWTUserOptionsReturn<TUser> extends Omit<UseQueryResult<TUser, unknown>, 'data'> {
@@ -19,30 +19,26 @@ interface UseJWTUserOptionsReturn<TUser> extends Omit<UseQueryResult<TUser, unkn
 }
 
 describe('useJWTUser', () => {
-  // @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-  const axiosMock = new MockAdapter(axios)
-
   let useJWTUser: <TUser extends Partial<User>>(
     props?: UseJWTUserOptions<TUser>,
   ) => UseJWTUserOptionsReturn<TUser>
 
   const decodeJWTMock = jest.fn()
-
   const useQueryClientMock = jest.fn()
+
   jest.mock('@tanstack/react-query', () => ({
     ...jest.requireActual('@tanstack/react-query'),
     useQueryClient: useQueryClientMock,
   }))
 
-  beforeAll(async () => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
-    useJWTUser = (await import('../index')).default as any
-    // freeze time to
-    jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
+  afterEach(() => {
+    ;(global.fetch as jest.Mock).mockClear()
   })
 
-  beforeEach(() => {
-    axiosMock.reset()
+  beforeAll(async () => {
+    // @ts-ignore
+    useJWTUser = (await import('../index')).default as any
+    jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
   })
 
   const token =
@@ -51,7 +47,12 @@ describe('useJWTUser', () => {
   it(`should call the user's endpoint if there is no initial data`, async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)
-    axiosMock.onGet('/users/me').reply(200, { ...request })
+
+    mockFetch('/users/me', {
+      method: 'GET',
+      status: 200,
+      response: { ...request },
+    })
 
     const { result } = renderHook(() => useJWTUser({ options: { placeholderData: undefined } }), {
       wrapper: ComponentWithProviders,
@@ -69,7 +70,12 @@ describe('useJWTUser', () => {
     const resetQueriesMock = jest.fn()
     useQueryClientMock.mockImplementation(() => ({ resetQueries: resetQueriesMock }))
 
-    axiosMock.onGet('/users/me').reply(401)
+    mockFetchError('/users/me', {
+      method: 'GET',
+      status: 401,
+      error: 'Unauthorized',
+    })
+
     const { result } = renderHook(
       () =>
         useJWTUser({
@@ -82,6 +88,7 @@ describe('useJWTUser', () => {
         wrapper: ComponentWithProviders,
       },
     )
+
     await waitFor(() => expect(result.current.isPending).toBe(false))
     await waitFor(() => expect(result.current.isLoading).toBe(false))
     await waitFor(() => expect(resetQueriesMock).toHaveBeenCalled())

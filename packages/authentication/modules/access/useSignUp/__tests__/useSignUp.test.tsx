@@ -1,20 +1,32 @@
-import { ComponentWithProviders, MockAdapter, renderHook, waitFor } from '@baseapp-frontend/test'
-import { axios } from '@baseapp-frontend/utils'
+import {
+  ComponentWithProviders,
+  mockFetch,
+  mockFetchError,
+  renderHook,
+  waitFor,
+} from '@baseapp-frontend/test'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { RegisterRequest } from '../../../../types/auth'
+import type { RegisterRequest } from '../../../../types/auth'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
 
-// @ts-ignore TODO: (BA-1081) investigate AxiosRequestHeaders error
-export const axiosMock = new MockAdapter(axios)
-
 describe('useSignUp', () => {
+  const registerUrl = '/register'
+
+  afterEach(() => {
+    ;(global.fetch as jest.Mock).mockClear()
+  })
+
   test('should run onSuccess', async () => {
-    axiosMock.onPost('/register').reply(200, {
-      email: request.email,
+    mockFetch(registerUrl, {
+      method: 'POST',
+      status: 200,
+      response: {
+        email: request.email,
+      },
     })
 
     let hasOnSuccessRan = false
@@ -43,7 +55,12 @@ describe('useSignUp', () => {
 
   test('can use a custom type interface', async () => {
     const customRequest = { ...request, customField: 123 }
-    axiosMock.onPost('/register').reply(200, customRequest)
+
+    mockFetch(registerUrl, {
+      method: 'POST',
+      status: 200,
+      response: customRequest,
+    })
 
     interface CustomRegisterRequest extends RegisterRequest {
       customField: number
@@ -64,7 +81,6 @@ describe('useSignUp', () => {
         wrapper: ComponentWithProviders,
       },
     )
-    // call the submit function
     result.current.form.handleSubmit()
     await waitFor(() => expect(result.current.mutation.isSuccess).toBeTruthy())
 
@@ -72,7 +88,9 @@ describe('useSignUp', () => {
   })
 
   test('should run onError', async () => {
-    axiosMock.onPost('/register').reply(500, {
+    mockFetchError(registerUrl, {
+      method: 'POST',
+      status: 500,
       error: 'any',
     })
 
@@ -101,15 +119,20 @@ describe('useSignUp', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    axiosMock.onPost('/register').reply(200, {})
+    mockFetch(registerUrl, {
+      method: 'POST',
+      status: 200,
+      response: {},
+    })
 
     const customDefaultValues = {
       email: 'test@tsl.io',
       password: 'fW7q0jwv',
     }
+
     const customValidationSchema = z.object({
-      password: z.string().nonempty(),
-      email: z.string().nonempty().email(),
+      password: z.string().min(1),
+      email: z.string().min(1).email(),
     })
 
     let hasOnSuccessRan = false

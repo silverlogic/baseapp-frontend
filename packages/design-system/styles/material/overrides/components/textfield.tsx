@@ -4,7 +4,7 @@ import { inputLabelClasses } from '@mui/material/InputLabel'
 import { outlinedInputClasses } from '@mui/material/OutlinedInput'
 import { Theme, alpha } from '@mui/material/styles'
 
-export function textField(theme: Theme) {
+export function textField(theme: Theme): Record<string, any> {
   const color = {
     focused: theme.palette.text.primary,
     active: theme.palette.text.secondary,

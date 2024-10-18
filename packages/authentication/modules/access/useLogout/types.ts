@@ -1,6 +1,6 @@
-import { CustomCookieNames } from '../../../types/auth'
+import type { CustomJWTKeyNames } from '../../../types/auth'
 
-export interface UseLogoutOptions extends CustomCookieNames {
+export interface UseLogoutOptions extends CustomJWTKeyNames {
   onLogout?: () => void
   emitLogoutEvent?: boolean
 }

@@ -3,7 +3,7 @@ import { Theme, alpha } from '@mui/material/styles'
 
 const COLORS = ['info', 'success', 'warning', 'error'] as const
 
-export function alert(theme: Theme) {
+export function alert(theme: Theme): Record<string, any> {
   const lightMode = theme.palette.mode === 'light'
 
   const rootStyles = (ownerState: AlertProps) => {

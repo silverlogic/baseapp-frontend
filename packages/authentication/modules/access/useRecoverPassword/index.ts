@@ -4,12 +4,12 @@ import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { ForgotPasswordRequest } from '../../../types/auth'
+import type { ForgotPasswordRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { UseRecoverPasswordOptions } from './types'
+import type { UseRecoverPasswordOptions } from './types'
 
 const useRecoverPassword = ({
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
