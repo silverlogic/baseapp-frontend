@@ -1,8 +1,8 @@
 import { graphql, useLazyLoadQuery } from 'react-relay'
 
 import CommentItem from '../..'
-import { CommentItemWithQuery as Query } from '../../../../../../__generated__/CommentItemWithQuery.graphql'
-import { CommentItem_comment$key } from '../../../../../../__generated__/CommentItem_comment.graphql'
+import { CommentItemWithQuery as Query } from '../../../../../__generated__/CommentItemWithQuery.graphql'
+import { CommentItem_comment$key } from '../../../../../__generated__/CommentItem_comment.graphql'
 import CommentReplyProvider from '../../../context/CommentReplyProvider'
 import { CommentItemProps } from '../../types'
 

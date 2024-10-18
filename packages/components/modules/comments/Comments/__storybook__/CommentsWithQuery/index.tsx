@@ -1,8 +1,8 @@
 import { graphql, useLazyLoadQuery } from 'react-relay'
 
 import Comments from '../..'
-import { CommentsFragment$key } from '../../../../../../__generated__/CommentsFragment.graphql'
-import { CommentsWithQuery as Query } from '../../../../../../__generated__/CommentsWithQuery.graphql'
+import { CommentsFragment$key } from '../../../../../__generated__/CommentsFragment.graphql'
+import { CommentsWithQuery as Query } from '../../../../../__generated__/CommentsWithQuery.graphql'
 import { CommentsProps } from '../../types'
 
 const CommentsWithQuery = (props: CommentsProps) => {

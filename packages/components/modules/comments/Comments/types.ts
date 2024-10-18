@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { CommentsFragment$key } from '../../../../__generated__/CommentsFragment.graphql'
+import { CommentsFragment$key } from '../../../__generated__/CommentsFragment.graphql'
 import { CommentCreateProps } from '../CommentCreate/types'
 import { CommentsListProps } from '../CommentsList/types'
 

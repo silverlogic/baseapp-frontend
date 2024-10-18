@@ -2,7 +2,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { SendMessageMutation } from '../../../../../__generated__/SendMessageMutation.graphql'
+import { SendMessageMutation } from '../../../../__generated__/SendMessageMutation.graphql'
 
 export const SendMessageMutationQuery = graphql`
   mutation SendMessageMutation($input: ChatRoomSendMessageInput!, $connections: [ID!]!) {

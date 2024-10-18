@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import type { SwipeableDrawerProps } from '@baseapp-frontend/design-system'
 
-import type { CommentItem_comment$data } from '../../../../../__generated__/CommentItem_comment.graphql'
+import type { CommentItem_comment$data } from '../../../../__generated__/CommentItem_comment.graphql'
 import type { CommentOption, LongPressHandler } from '../types'
 
 export interface CommentOptionsProps {
