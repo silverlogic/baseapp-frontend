@@ -2,11 +2,10 @@ import { PropsWithChildren } from 'react'
 
 import PageBuilder from '../../components/PageTypes/PageBuilder'
 import { WagtailPagesProvider } from '../../providers'
-import { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 import { PagesAPI } from '../../services/Wagtail/PagesAPI'
 import { IPage } from '../../services/Wagtail/PagesAPI/types'
 import { handlePageRequestError } from '../../utils/requests'
-import { IPageParams } from './types'
+import { IPageParams, IWagtailPage, ProviderDefaultSettingsType } from './types'
 
 const getCurrentPage = async (path: string): Promise<IPage> => {
   try {
@@ -16,23 +15,28 @@ const getCurrentPage = async (path: string): Promise<IPage> => {
   }
 }
 
+export const wagtailPage = (
+  currentPage: IPage,
+  providerDefaultSettings?: ProviderDefaultSettingsType,
+): IWagtailPage => ({
+  WagtailPagesProvider: ({ children }: PropsWithChildren) => (
+    <WagtailPagesProvider
+      defaultSettings={{
+        currentPage,
+        ...(providerDefaultSettings ?? {}),
+      }}
+    >
+      {children}
+    </WagtailPagesProvider>
+  ),
+  WagtailPageBuilder: PageBuilder,
+})
+
 export const createWagtailPage = async (
   { params }: IPageParams,
-  providerDefaultSettings?: Omit<WagtailPagesContextState, 'currentPage'>,
+  providerDefaultSettings?: ProviderDefaultSettingsType,
 ) => {
   const currentPage = await getCurrentPage(params.path.join('/'))
 
-  return {
-    WagtailPagesProvider: ({ children }: PropsWithChildren) => (
-      <WagtailPagesProvider
-        defaultSettings={{
-          currentPage,
-          ...(providerDefaultSettings ?? {}),
-        }}
-      >
-        {children}
-      </WagtailPagesProvider>
-    ),
-    WagtailPageBuilder: PageBuilder,
-  }
+  return wagtailPage(currentPage, providerDefaultSettings)
 }
