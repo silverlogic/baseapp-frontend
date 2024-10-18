@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.13
+
+### Patch Changes
+
+- Change CommentTextField name to SocialTextField
+
 ## 0.0.12
 
 ### Patch Changes
