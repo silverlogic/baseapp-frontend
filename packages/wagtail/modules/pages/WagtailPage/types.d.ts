@@ -6,7 +6,7 @@ export interface IPageParams {
 
 export interface IWagtailPage {
   WagtailPagesProvider: (props: PropsWithChildren) => JSX.Element
-  WagtailPageBuilder: any
+  WagtailPageBuilder: () => JSX.Element
 }
 
 export type ProviderDefaultSettingsType = Omit<WagtailPagesContextState, 'currentPage'>
