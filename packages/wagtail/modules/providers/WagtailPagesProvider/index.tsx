@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { PROVIDER_INITIAL_STATE } from './constants'
 import { WagtailPagesContext } from './context'
@@ -12,12 +12,16 @@ export const WagtailPagesProvider: FC<WagtailPagesProviderProps> = ({
 }) => {
   const [state, setState] = useState<WagtailPagesContextState>({
     ...PROVIDER_INITIAL_STATE,
-    ...defaultSettings,
+    currentPage: defaultSettings.currentPage,
+    availablePageTypes: () => ({
+      ...PROVIDER_INITIAL_STATE.availablePageTypes(),
+      ...defaultSettings.availablePageTypes?.(),
+    }),
+    availableBlocks: () => ({
+      ...PROVIDER_INITIAL_STATE.availableBlocks(),
+      ...defaultSettings.availableBlocks?.(),
+    }),
   })
-
-  useEffect(() => {
-    setState((prev: WagtailPagesContextState) => ({ ...prev, ...defaultSettings }))
-  }, [defaultSettings])
 
   const memoizedValue = useMemo(
     () => ({

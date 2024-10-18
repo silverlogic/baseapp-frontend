@@ -7,13 +7,14 @@ import { IPageBodyItem } from '../../services/Wagtail/PagesAPI/types'
 import { IStreamFieldProps } from './types'
 
 const StreamField: FC<IStreamFieldProps> = ({ body }) => {
-  const { streamFields } = useWagtailPagesContext()
+  const { availableBlocks } = useWagtailPagesContext()
+  const blocks = availableBlocks()
   return (
     <>
       {body.map((block) => {
         const blockType = block.type
 
-        const BlockComponent = streamFields[blockType]()
+        const BlockComponent = blocks[blockType]
 
         if (BlockComponent) {
           const TypedComponent = BlockComponent as FC<

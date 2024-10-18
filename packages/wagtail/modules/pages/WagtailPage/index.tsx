@@ -1,7 +1,8 @@
 import { PropsWithChildren } from 'react'
 
-import PageTypes from '../../components/PageTypes'
+import PageBuilder from '../../components/PageTypes/PageBuilder'
 import { WagtailPagesProvider } from '../../providers'
+import { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 import { PagesAPI } from '../../services/Wagtail/PagesAPI'
 import { IPage } from '../../services/Wagtail/PagesAPI/types'
 import { handlePageRequestError } from '../../utils/requests'
@@ -15,7 +16,10 @@ const getCurrentPage = async (path: string): Promise<IPage> => {
   }
 }
 
-export const createWagtailPage = async ({ params }: IPageParams) => {
+export const createWagtailPage = async (
+  { params }: IPageParams,
+  providerDefaultSettings?: Omit<WagtailPagesContextState, 'currentPage'>,
+) => {
   const currentPage = await getCurrentPage(params.path.join('/'))
 
   return {
@@ -23,11 +27,12 @@ export const createWagtailPage = async ({ params }: IPageParams) => {
       <WagtailPagesProvider
         defaultSettings={{
           currentPage,
+          ...(providerDefaultSettings ?? {}),
         }}
       >
         {children}
       </WagtailPagesProvider>
     ),
-    WagtailPageTypes: PageTypes,
+    WagtailPageBuilder: PageBuilder,
   }
 }

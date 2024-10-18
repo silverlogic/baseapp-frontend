@@ -1,5 +1,5 @@
-import type { IPageType } from '../../components/PageTypes/types'
-import type { DefaultStreamFieldsTableType } from '../../components/StreamField/types'
+import type { AvailableBlocksType } from '../../components/Blocks/types'
+import type { AvailablePageTypesType } from '../../components/PageTypes/types'
 import type { IPage } from '../../services/Wagtail/PagesAPI/types'
 import type { PartialExcept } from '../../services/Wagtail/types'
 
@@ -10,10 +10,8 @@ export type WagtailPagesProviderProps = {
 
 export type WagtailPagesContextState = {
   currentPage: IPage
-  availablePageTypes: {
-    [key: string]: () => FC<IPageType>
-  }
-  streamFields: DefaultStreamFieldsTableType
+  availablePageTypes: () => AvailablePageTypesType
+  availableBlocks: () => AvailableBlocksType
 }
 
 export type WagtailPagesContextProps = WagtailPagesContextState & {
