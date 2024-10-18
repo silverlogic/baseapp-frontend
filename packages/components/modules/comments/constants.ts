@@ -1,0 +1,1 @@
+export const NUMBER_OF_COMMENTS_TO_LOAD_NEXT = 5
