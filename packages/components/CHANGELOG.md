@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.9
+
+### Patch Changes
+
+- Updated Storybook configs
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.13
+
 ## 0.0.8
 
 ### Patch Changes
