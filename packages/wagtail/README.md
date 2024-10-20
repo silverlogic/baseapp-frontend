@@ -27,3 +27,4 @@ yarn storybook
 ```
 
 // TODO: tutorial of where to add the pages.
+// TODO: Explain the importance of using 'use client' for the new blocks.

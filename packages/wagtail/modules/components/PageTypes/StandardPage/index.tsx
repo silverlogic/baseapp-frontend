@@ -4,7 +4,8 @@ import { FC } from 'react'
 
 import { Box, Container, Typography } from '@mui/material'
 
-import { PageLayoutProvider, useWagtailPagesContext } from '../../../providers'
+import { PageLayoutProvider } from '../../../providers/PageLayoutProvider'
+import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import { IPageType } from '../types'
 
 const StandardPage: FC<IPageType> = ({ children }) => {

@@ -4,6 +4,7 @@ import { IPageBodyItem } from '../../services/Wagtail/PagesAPI/types'
 
 export interface IStreamFieldProps {
   body: IPageBodyItem[]
+  availableBlocks: StreamFieldsTableType
 }
 
 export type StreamFieldsTableType = {

@@ -1,4 +1,3 @@
-import { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 import { PagePreviewAPI } from '../../services/Wagtail/PagePreviewAPI'
 import { IPage } from '../../services/Wagtail/PagesAPI/types'
 import { handlePageRequestError } from '../../utils/requests'
@@ -13,11 +12,8 @@ const getCurrentPage = async (token: string, contentType: string): Promise<IPage
   }
 }
 
-export const createWagtailPagePreview = async (
-  { searchParams }: IPagePreviewParams,
-  providerDefaultSettings?: Omit<WagtailPagesContextState, 'currentPage'>,
-) => {
+export const createWagtailPagePreview = async ({ searchParams }: IPagePreviewParams) => {
   const currentPage = await getCurrentPage(searchParams.token, searchParams.content_type)
 
-  return wagtailPage(currentPage, providerDefaultSettings)
+  return wagtailPage(currentPage)
 }

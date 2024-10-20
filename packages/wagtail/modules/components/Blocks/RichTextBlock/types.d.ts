@@ -7,4 +7,5 @@ export interface IRichTextBlock extends IPageBodyItem {
 
 export interface IRichTextBlockProps extends Omit<IRichTextBlock, 'type'> {
   id?: string
+  WrapperProps?: BoxProps
 }

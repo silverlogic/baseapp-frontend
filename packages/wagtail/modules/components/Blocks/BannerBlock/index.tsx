@@ -1,9 +1,11 @@
+'client side'
+
 import { Typography } from '@mui/material'
 import Image from 'next/image'
 
 import BlockContainer from '../../BlockContainer'
 import BannerDescriptionRichText from './BannerDescriptionRichText'
-import { BannerContainer, ContentContainer, ImageContainer, TextContainer } from './styles'
+import { BannerContainer, ContentContainer, ImageContainer, TextContainer } from './styled'
 import { IBannerBlockProps } from './types'
 
 const BannerBlock = ({ value }: IBannerBlockProps) => (

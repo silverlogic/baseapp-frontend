@@ -12,15 +12,16 @@ export const WagtailPagesProvider: FC<WagtailPagesProviderProps> = ({
 }) => {
   const [state, setState] = useState<WagtailPagesContextState>({
     ...PROVIDER_INITIAL_STATE,
+    ...defaultSettings,
     currentPage: defaultSettings.currentPage,
-    availablePageTypes: () => ({
-      ...PROVIDER_INITIAL_STATE.availablePageTypes(),
-      ...defaultSettings.availablePageTypes?.(),
-    }),
-    availableBlocks: () => ({
-      ...PROVIDER_INITIAL_STATE.availableBlocks(),
-      ...defaultSettings.availableBlocks?.(),
-    }),
+    availablePageTypes: {
+      ...PROVIDER_INITIAL_STATE.availablePageTypes,
+      ...defaultSettings.availablePageTypes,
+    },
+    availableBlocks: {
+      ...PROVIDER_INITIAL_STATE.availableBlocks,
+      ...defaultSettings.availableBlocks,
+    },
   })
 
   const memoizedValue = useMemo(

@@ -1,12 +1,13 @@
+import { PropsWithChildren } from 'react'
+
 export interface IPageParams {
   params: {
     path: string[]
   }
 }
 
-export interface IWagtailPage {
-  WagtailPagesProvider: (props: PropsWithChildren) => JSX.Element
-  WagtailPageBuilder: () => JSX.Element
+export interface IWagtailPageProps extends PropsWithChildren {
+  defaultSettings?: ProviderDefaultSettingsType
 }
 
-export type ProviderDefaultSettingsType = Omit<WagtailPagesContextState, 'currentPage'>
+export type ProviderDefaultSettingsType = Partial<Omit<WagtailPagesContextState, 'currentPage'>>

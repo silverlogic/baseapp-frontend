@@ -10,8 +10,8 @@ export type WagtailPagesProviderProps = {
 
 export type WagtailPagesContextState = {
   currentPage: IPage
-  availablePageTypes: () => AvailablePageTypesType
-  availableBlocks: () => AvailableBlocksType
+  availablePageTypes: AvailablePageTypesType
+  availableBlocks: AvailableBlocksType
 }
 
 export type WagtailPagesContextProps = WagtailPagesContextState & {

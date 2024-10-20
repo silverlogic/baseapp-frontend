@@ -1,3 +1,5 @@
+'client side'
+
 import { RichTextBlockWrapper } from './styled'
 
 const BannerDescriptionRichText = ({ value }: { value: string }) => (
