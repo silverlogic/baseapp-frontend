@@ -1,6 +1,6 @@
 import MfaApi from '../../../services/mfa'
-import { MfaConfigurationResponse } from '../../../types/mfa'
-import { CustomUseQueryOptions } from '../../../types/react-query'
+import type { MfaConfigurationResponse } from '../../../types/mfa'
+import type { CustomUseQueryOptions } from '../../../types/react-query'
 
 type ApiClass = Pick<typeof MfaApi, 'getConfiguration'>
 

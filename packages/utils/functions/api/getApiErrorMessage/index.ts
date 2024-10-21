@@ -17,7 +17,7 @@ export const getApiErrorMessage = (
 
   if (error?.response?.data) {
     const dataKey = Object.keys(error.response.data)[0]
-    const potentialMessage = error.response.data[dataKey] ?? message
+    const potentialMessage = (dataKey && error.response.data?.[dataKey]) ?? message
 
     message = isArray(potentialMessage) ? potentialMessage.join(' ') : potentialMessage
   }

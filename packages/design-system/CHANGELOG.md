@@ -1,5 +1,28 @@
 # @baseapp-frontend/design-system
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated AvatarWithPlacehoder
+
+## 0.0.13
+
+### Patch Changes
+
+- Change CommentTextField name to SocialTextField
+
+## 0.0.12
+
+### Patch Changes
+
+- Use `AppRouterCacheProvider` from `@mui/material-nextjs` for emotion cache provider. Remove `NextAppDirEmotionCacheProvider` previous solution.
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.0
+
 ## 0.0.11
 
 ### Patch Changes

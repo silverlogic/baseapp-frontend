@@ -1,5 +1,14 @@
 # @baseapp-frontend/graphql
 
+## 1.1.9
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.0
+
 ## 1.1.8
 
 ### Patch Changes

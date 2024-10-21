@@ -1,6 +1,6 @@
 import { Theme } from '@mui/material/styles'
 
-export function breadcrumbs(theme: Theme) {
+export function breadcrumbs(theme: Theme): Record<string, any> {
   return {
     MuiBreadcrumbs: {
       styleOverrides: {

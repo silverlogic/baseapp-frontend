@@ -1,42 +1,40 @@
 {
   "name": "@baseapp-frontend/graphql",
   "description": "GraphQL configurations and utilities",
-  "version": "1.1.8",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "1.1.9",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "graphql": "^16.8.1",
-    "graphql-ws": "^5.16.0",
-    "isomorphic-ws": "^5.0.0",
-    "js-cookie": "^3.0.5",
-    "react-relay": "^16.2.0",
-    "relay-runtime": "^16.2.0",
-    "relay-test-utils": "^17.0.0"
+    "graphql": "catalog:graphql",
+    "graphql-ws": "catalog:graphql",
+    "isomorphic-ws": "catalog:graphql",
+    "js-cookie": "catalog:",
+    "react-relay": "catalog:graphql",
+    "relay-runtime": "catalog:graphql",
+    "relay-test-utils": "catalog:graphql"
   },
   "peerDependencies": {
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "catalog:react18"
   },
   "devDependencies": {
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/tsconfig": "*",
-    "@types/js-cookie": "^3.0.6",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "@types/react-relay": "^16.0.6",
-    "@types/relay-runtime": "^17.0.3",
-    "@types/relay-test-utils": "^14.1.4",
-    "relay-compiler": "^16.2.0",
-    "typescript": "^5.4.5"
-  },
-  "resolutions": {
-    "@types/react": "^18.3.3"
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@types/js-cookie": "catalog:",
+    "@types/react": "catalog:react18",
+    "@types/react-dom": "catalog:react18",
+    "@types/react-relay": "catalog:graphql",
+    "@types/relay-runtime": "catalog:graphql",
+    "@types/relay-test-utils": "catalog:graphql",
+    "relay-compiler": "catalog:graphql",
+    "typescript": "catalog:"
   },
   "license": "MIT",
   "repository": {

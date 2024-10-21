@@ -1,12 +1,12 @@
 'use client'
 
-import { FC, PropsWithChildren, createContext, useContext, useRef } from 'react'
+import React, { type FC, type PropsWithChildren, createContext, useContext, useRef } from 'react'
 
 import { createStore, useStore } from 'zustand'
 
 import { getApiErrorMessage } from '../../functions/api'
 import { INITIAL_NOTIFICATION_STATE } from './constants'
-import { UseNotification } from './types'
+import type { UseNotification } from './types'
 
 const createNotificationStore = () =>
   createStore<UseNotification>((set) => ({

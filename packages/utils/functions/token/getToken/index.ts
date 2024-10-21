@@ -1,8 +1,14 @@
-import { ACCESS_COOKIE_NAME } from '../../../constants/cookie'
+import { getItem } from 'expo-secure-store'
+
+import { ACCESS_KEY_NAME } from '../../../constants/jwt'
 import type { ServerSideRenderingOption } from '../../../types/server'
 import { getCookie } from '../../cookie'
 
 export const getToken = (
-  cookieName = ACCESS_COOKIE_NAME,
+  key = ACCESS_KEY_NAME,
   { noSSR = false }: ServerSideRenderingOption = {},
-) => getCookie<string>(cookieName, { noSSR })
+) => {
+  if (process.env.EXPO_PUBLIC_PLATFORM === 'mobile') return getItem(key)
+
+  return getCookie<string>(key, { noSSR })
+}
