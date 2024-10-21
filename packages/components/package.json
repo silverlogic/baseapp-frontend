@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -79,6 +79,7 @@
     "dotenv-cli": "^7.4.2",
     "eslint-plugin-storybook": "catalog:lint",
     "get-graphql-schema": "catalog:graphql",
+    "html-webpack-plugin": "catalog:storybook",
     "msw": "catalog:storybook",
     "msw-storybook-addon": "catalog:storybook",
     "postcss": "catalog:tailwind",

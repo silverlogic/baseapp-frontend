@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated AvatarWithPlacehoder
+
 ## 0.0.13
 
 ### Patch Changes
