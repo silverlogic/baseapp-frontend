@@ -1,5 +1,22 @@
 # @baseapp-frontend/utils
 
+## 3.0.0
+
+### Major Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+- Remove simple token logic on several functions, that should now only for with JWT tokens and API's. Most noticiable changes were made on `createAxiosInstance` and `baseAppFetch`.
+- `getToken` can now get token on both mobile and web by looking at the `EXPO_PUBLIC_PLATFORM` env variable.
+- Introduce `EXPO_PUBLIC_API_BASE_URL` as an the api URL to be used on mobile platforms on `getAccessToken` and `baseAppFetch` functions.
+- Create `removeTokenAsync` function to remove access/refresh tokens for both web and mobile platforms.
+- Create `setTokenAsync` function to set access/refresh tokens for both web and mobile platforms.
+- Adapt `refreshAccessToken` to use `setTokenAsync` and `removeTokenAsync` to set/remove access/refresh tokens for both web and mobile platforms.
+- Create `getTokenAsync` function, an async version of `getToken`.
+- Create `getCookieAsync` function, an async version of `getCookie`.
+- Rename the options `cookieName` and `refreshCookieName` to `accessKeyName` and `refreshKeyName` on several functions.
+- Deprecate `ACCESS_COOKIE_NAME` and `REFRESH_COOKIE_NAME` in favor of `ACCESS_KEY_NAME` and `REFRESH_KEY_NAME` constans.
+
 ## 2.5.6
 
 ### Patch Changes

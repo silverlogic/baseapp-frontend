@@ -4,7 +4,7 @@ import { Theme, alpha } from '@mui/material/styles'
 
 import { menuItem, paper } from '../../css'
 
-export function autocomplete(theme: Theme) {
+export function autocomplete(theme: Theme): Record<string, any> {
   return {
     MuiAutocomplete: {
       styleOverrides: {

@@ -1,46 +1,47 @@
 {
   "name": "@baseapp-frontend/authentication",
   "description": "Authentication modules.",
-  "version": "3.2.5",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "4.0.0",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "test": "jest --config ./jest.config.ts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@hookform/resolvers": "^3.6.0",
-    "@tanstack/react-query": "^5.45.1",
-    "js-cookie": "^3.0.5",
-    "react-hook-form": "^7.51.5",
-    "zod": "^3.23.8"
+    "@hookform/resolvers": "catalog:",
+    "@tanstack/react-query": "catalog:",
+    "js-cookie": "catalog:",
+    "react-hook-form": "catalog:",
+    "zod": "catalog:"
   },
   "peerDependencies": {
-    "@baseapp-frontend/provider": "*",
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "catalog:react18"
   },
   "devDependencies": {
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/test": "*",
-    "@baseapp-frontend/tsconfig": "*",
-    "@testing-library/jest-dom": "^6.4.6",
-    "@testing-library/react": "^16.0.0",
-    "@testing-library/user-event": "^14.5.2",
-    "@types/humps": "^2.0.6",
-    "@types/jest": "^29.5.12",
-    "@types/js-cookie": "^3.0.6",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "babel-jest": "^29.7.0",
-    "jest": "^29.7.0",
-    "jest-environment-jsdom": "^29.7.0",
-    "ts-jest": "^29.1.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
+    "@baseapp-frontend/test": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@testing-library/jest-dom": "catalog:test",
+    "@testing-library/react": "catalog:test",
+    "@testing-library/user-event": "catalog:test",
+    "@types/jest": "catalog:test",
+    "@types/js-cookie": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:react18",
+    "@types/react-dom": "catalog:react18",
+    "babel-jest": "catalog:test",
+    "jest": "catalog:test",
+    "jest-environment-jsdom": "catalog:test",
+    "ts-jest": "catalog:test",
+    "ts-node": "catalog:test",
+    "typescript": "catalog:"
   },
   "license": "MIT",
   "repository": {
@@ -53,5 +54,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/authentication/README.md"
 }

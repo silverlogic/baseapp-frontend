@@ -1,20 +1,15 @@
-import {
-  ACCESS_COOKIE_NAME,
-  REFRESH_COOKIE_NAME,
-  TokenTypes,
-  refreshAccessToken,
-} from '@baseapp-frontend/utils'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME, refreshAccessToken } from '@baseapp-frontend/utils'
 
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import UserApi, { USER_API_KEY } from '../../../services/user'
-import { User, UserUpdateParams } from '../../../types/user'
-import { UseUpdateUserOptions } from './types'
+import type { User, UserUpdateParams } from '../../../types/user'
+import type { UseUpdateUserOptions } from './types'
 
 const useUpdateUser = <TUser extends Pick<User, 'id'>>({
   options,
-  cookieName = ACCESS_COOKIE_NAME,
-  refreshCookieName = REFRESH_COOKIE_NAME,
+  accessKeyName = ACCESS_KEY_NAME,
+  refreshKeyName = REFRESH_KEY_NAME,
   ApiClass = UserApi,
 }: UseUpdateUserOptions<TUser> = {}) => {
   const queryClient = useQueryClient()
@@ -24,10 +19,7 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
     onSettled: async (data, error, variables, context) => {
       queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
       try {
-        const tokenType = process.env.NEXT_PUBLIC_TOKEN_TYPE as TokenTypes
-        if (tokenType === TokenTypes.jwt) {
-          await refreshAccessToken(cookieName, refreshCookieName)
-        }
+        await refreshAccessToken(accessKeyName, refreshKeyName)
       } catch (e) {
         // silently fail
         // eslint-disable-next-line no-console

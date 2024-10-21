@@ -62,9 +62,14 @@ const config: StorybookConfig = {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
+        events: require.resolve('./__mocks__/eventEmitterMock.ts'),
+        'expo-secure-store': false,
+        'react-native': false,
         'next/font/google': resolve(__dirname, './__mocks__/nextFontMock.ts'),
-        'next/image': resolve(__dirname, './__mocks__/nextImageMock.tsx'),
+        'next/image': resolve(__dirname, './__mocks__/NextImageMock.tsx'),
       }
+
+      config.resolve.modules = [resolve(__dirname, 'node_modules'), 'node_modules']
     }
 
     return config

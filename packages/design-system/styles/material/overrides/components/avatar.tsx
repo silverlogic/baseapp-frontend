@@ -16,7 +16,7 @@ const colorByName = (name: string) => {
   return 'default'
 }
 
-export function avatar(theme: Theme) {
+export function avatar(theme: Theme): Record<string, any> {
   return {
     MuiAvatar: {
       variants: COLORS.map((color) =>

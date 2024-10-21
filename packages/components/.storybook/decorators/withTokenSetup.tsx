@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { ACCESS_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
+import { ACCESS_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 
 import { StoryContext, StoryFn } from '@storybook/react'
 import Cookies from 'js-cookie'
@@ -12,9 +12,9 @@ const withTokenSetup = (Story: StoryFn, context: StoryContext) => {
 
   useEffect(() => {
     if (context.parameters.userType === 'valid') {
-      Cookies.set(ACCESS_COOKIE_NAME, jwt.token)
+      Cookies.set(ACCESS_KEY_NAME, jwt.token)
     } else {
-      Cookies.remove(ACCESS_COOKIE_NAME)
+      Cookies.remove(ACCESS_KEY_NAME)
     }
     setTimeout(() => {
       setIsTokenSet(true)

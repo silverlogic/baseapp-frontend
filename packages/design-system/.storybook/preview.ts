@@ -14,6 +14,7 @@ const preview: Preview = {
       },
     },
     options: {
+      // @ts-ignore
       storySort: (a, b) => {
         const order = [
           'Iconography',

@@ -1,5 +1,35 @@
 # @baseapp-frontend/components
 
+## 0.0.10
+
+### Patch Changes
+
+- Updated Storybook configs
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.14
+
+## 0.0.9
+
+### Patch Changes
+
+- Add Messages module with SendMessage input for messages
+- Make the previus comment input a reusable component to be used in comments and messages
+- Reorganize modules to break previous social folder into comments, messages and __shared__
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.13
+
+## 0.0.8
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.0
+  - @baseapp-frontend/utils@3.0.0
+  - @baseapp-frontend/design-system@0.0.12
+  - @baseapp-frontend/graphql@1.1.9
+
 ## 0.0.7
 
 ### Patch Changes

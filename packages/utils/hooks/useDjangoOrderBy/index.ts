@@ -22,7 +22,7 @@ const useDjangoOrderBy = <OrderPair extends Record<string, OrderingDirection>>({
   const handleOrderBy = (fields: (keyof OrderPair)[]) => {
     fields.forEach((field) => {
       setOrderingPairs((prevOrderingPairs) => {
-        const previousPairMatch = prevOrderingPairs[field]
+        const previousPairMatch = prevOrderingPairs[field] as OrderingDirection
         return {
           ...prevOrderingPairs,
           [field]: togglePairOrder(previousPairMatch),

@@ -1,31 +1,30 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.2",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "2.0.3",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.45.1",
-    "lodash": "^4.17.21"
+    "@tanstack/react-query": "catalog:",
+    "lodash": "catalog:"
   },
   "peerDependencies": {
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "catalog:react18"
   },
   "devDependencies": {
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/tsconfig": "*",
-    "@types/react": "^18.3.3",
-    "typescript": "^5.4.5"
-  },
-  "resolutions": {
-    "@types/react": "^18.3.3"
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@types/lodash": "catalog:",
+    "@types/react": "catalog:react18",
+    "typescript": "catalog:"
   },
   "license": "MIT",
   "repository": {
