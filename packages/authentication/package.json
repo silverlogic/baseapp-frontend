@@ -1,11 +1,12 @@
 {
   "name": "@baseapp-frontend/authentication",
   "description": "Authentication modules.",
-  "version": "3.2.5",
-  "main": "./dist/index.ts",
-  "module": "./dist/index.mjs",
+  "version": "4.0.0",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
   "scripts": {
-    "build": "tsc --build",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "tsc --watch",
     "test": "jest --config ./jest.config.ts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
@@ -19,20 +20,20 @@
     "zod": "^3.23.8"
   },
   "peerDependencies": {
-    "@baseapp-frontend/provider": "*",
-    "@baseapp-frontend/utils": "*",
-    "react": "^18.3.1"
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "18.3.1"
   },
   "devDependencies": {
-    "@baseapp-frontend/config": "*",
-    "@baseapp-frontend/test": "*",
-    "@baseapp-frontend/tsconfig": "*",
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
+    "@baseapp-frontend/test": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
-    "@types/humps": "^2.0.6",
     "@types/jest": "^29.5.12",
     "@types/js-cookie": "^3.0.6",
+    "@types/node": "^22.7.2",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "babel-jest": "^29.7.0",
@@ -53,5 +54,6 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/authentication/README.md"
 }

@@ -1,4 +1,4 @@
-import { CookiesGetByNameFn, renderHook } from '@baseapp-frontend/test'
+import { type CookiesGetByNameFn, renderHook } from '@baseapp-frontend/test'
 
 import Cookies from 'js-cookie'
 

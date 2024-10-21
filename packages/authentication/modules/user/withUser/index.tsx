@@ -1,9 +1,9 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 
-import { JWTContent } from '@baseapp-frontend/utils'
+import type { JWTContent } from '@baseapp-frontend/utils'
 
 import getUser from '../getUser'
-import { ComponentWithUser } from './types'
+import type { ComponentWithUser } from './types'
 
 /**
  * HOC to provide the `user` object to the component as a prop.

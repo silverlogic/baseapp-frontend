@@ -1,5 +1,14 @@
 # @baseapp-frontend/provider
 
+## 2.0.3
+
+### Patch Changes
+
+- Add common and reusable dependencies to the `pnpm` catalog.
+- Update tsconfig to use `lib.json`.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.0
+
 ## 2.0.2
 
 ### Patch Changes

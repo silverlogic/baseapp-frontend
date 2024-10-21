@@ -1,8 +1,8 @@
-import { UseMutationOptions } from '@tanstack/react-query'
-import { UseFormProps } from 'react-hook-form'
+import type { UseMutationOptions } from '@tanstack/react-query'
+import type { UseFormProps } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import { RegisterRequest } from '../../../types/auth'
+import type { RegisterRequest } from '../../../types/auth'
 
 type ApiClass = Pick<typeof AuthApi, 'register'>
 

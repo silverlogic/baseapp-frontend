@@ -1,8 +1,8 @@
-import { UseMutationOptions } from '@tanstack/react-query'
+import type { UseMutationOptions } from '@tanstack/react-query'
 import { z } from 'zod'
 
 import AuthApi from '../../../services/auth'
-import { ForgotPasswordRequest } from '../../../types/auth'
+import type { ForgotPasswordRequest } from '../../../types/auth'
 
 type ApiClass = Pick<typeof AuthApi, 'recoverPassword'>
 

@@ -17,7 +17,7 @@ jest.mock('next/headers', () => ({
 }))
 
 describe('getLanguage function on the server', () => {
-  const cookieName = 'client-cookie'
+  const accessKeyName = 'client-cookie'
 
   beforeEach(() => {
     jest.clearAllMocks()
@@ -26,6 +26,6 @@ describe('getLanguage function on the server', () => {
   it('retrieves a server-side language cookie', () => {
     ;(ClientCookies.get as CookiesGetByNameFn) = jest.fn(() => clientCookieValue)
 
-    expect(getLanguage(cookieName)).toBe(serverCookieValue)
+    expect(getLanguage(accessKeyName)).toBe(serverCookieValue)
   })
 })

@@ -4,11 +4,11 @@ import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import { ResetPasswordForm, UseResetPasswordOptions } from './types'
+import type { ResetPasswordForm, UseResetPasswordOptions } from './types'
 
 const useResetPassword = ({
   token,

@@ -2,7 +2,6 @@ import humps from 'humps'
 
 import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
-import { TokenTypes } from '../../../../constants/token'
 import { eventEmitter } from '../../../events'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
 
@@ -44,7 +43,6 @@ let stringifySpy: jest.SpyInstance
 
 describe('baseAppFetch', () => {
   beforeEach(() => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.jwt
     jest.clearAllMocks()
     const humpsMock = humps.decamelizeKeys as jest.Mock
     humpsMock.mockClear()
@@ -99,16 +97,6 @@ describe('baseAppFetch', () => {
     expect(stringifySpy).toHaveBeenCalledWith(requestBody)
   })
 
-  it('should skip token refresh if token type is not jwt', async () => {
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('simple-token')
-
-    await baseAppFetch('/test', {})
-
-    expect(refreshAccessToken).not.toHaveBeenCalled()
-  })
-
   it('should refresh token if it is invalid and auth is required', async () => {
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue('old-token')
@@ -137,6 +125,17 @@ describe('baseAppFetch', () => {
     isUserTokenValidMock.mockReturnValue(true)
 
     await baseAppFetch('/test', {})
+
+    expect(refreshAccessToken).not.toHaveBeenCalled()
+  })
+
+  it('should not attempt to refresh token if refreshToken is false', async () => {
+    const getTokenMock = getToken as jest.Mock
+    getTokenMock.mockReturnValue('old-token')
+    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    isUserTokenValidMock.mockReturnValue(false)
+
+    await baseAppFetch('/test', { refreshToken: false })
 
     expect(refreshAccessToken).not.toHaveBeenCalled()
   })
@@ -190,15 +189,14 @@ describe('baseAppFetch', () => {
     )
   })
 
-  it('should set Authorization header correctly when using simple token', async () => {
+  it('should set Authorization header when using Token tokentype', async () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue(token)
     const isUserTokenValidMock = isUserTokenValid as jest.Mock
     isUserTokenValidMock.mockReturnValue(true)
-    process.env.NEXT_PUBLIC_TOKEN_TYPE = TokenTypes.simple
 
-    await baseAppFetch('/test', {})
+    await baseAppFetch('/test', { tokenType: 'Token' })
 
     expect(fetch).toHaveBeenCalledWith(
       expect.any(String),
