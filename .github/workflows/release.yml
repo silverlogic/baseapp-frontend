@@ -9,46 +9,9 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  setup:
-    name: Setup and Install Dependencies
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js 20.17.0
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.17.0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.0
-
-      - name: Restore pnpm Cache
-        uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
-
-      - name: Install Dependencies
-        run: pnpm install
-        env:
-          CI: true
-
-      - name: Save pnpm Cache
-        uses: actions/cache/save@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-
   release:
     name: Release
     runs-on: ubuntu-latest
-    needs: setup
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -63,13 +26,8 @@ jobs:
         with:
           version: 9.12.0
 
-      - name: Restore pnpm Cache
-        uses: actions/cache/restore@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
 
       - name: Create Release Pull Request or Publish to npm
         id: changesets
