@@ -1,3 +1,4 @@
+export { default as AddIcon } from './AddIcon'
 export { default as AttachmentIcon } from './AttachmentIcon'
 export { default as BaseAppLogoCondensed } from './BaseAppLogoCondensed'
 export { default as CheckMarkIcon } from './CheckMarkIcon'
