@@ -9,7 +9,7 @@
     "test": "turbo run test",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build --filter=docs^... && changeset publish",
+    "release": "turbo run build && changeset publish",
     "clean": "turbo clean && git clean -xdf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "replace-catalogs": "node replace-catalogs.js",
