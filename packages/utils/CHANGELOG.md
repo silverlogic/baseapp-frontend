@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.0.1
+
+### Patch Changes
+
+- Adds `use-client` directive to `useSSR` and `useBoolean`.
+
 ## 3.0.0
 
 ### Major Changes

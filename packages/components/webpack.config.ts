@@ -14,6 +14,13 @@ const config: Configuration = {
   mode: 'development',
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    fallback: {
+      events: require.resolve('./__mocks__/eventEmitterMock.ts'),
+    },
+    alias: {
+      'expo-secure-store': false,
+      'react-native': false,
+    },
   },
   module: {
     rules: [

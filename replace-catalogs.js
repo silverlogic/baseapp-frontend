@@ -10,6 +10,7 @@ const loadWorkspaceCatalogs = () => {
   const workspaceConfig = YAML.parse(workspaceContent)
   const rootCatalog = workspaceConfig.catalog || {}
   const catalogs = workspaceConfig.catalogs || {}
+
   return { rootCatalog, catalogs }
 }
 
@@ -42,12 +43,17 @@ const replaceCatalogDependencies = (packageJsonPath, rootCatalog, catalogs) => {
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
 }
 
-const updatePackagesDependencies = () => {
+const updatePackagesDependencies = (selectedPackages) => {
   const { rootCatalog, catalogs } = loadWorkspaceCatalogs()
   const packagesPath = path.resolve(__dirname, 'packages')
   const packageFolders = fs.readdirSync(packagesPath)
 
-  packageFolders.forEach((folder) => {
+  const foldersToProcess =
+    selectedPackages.length > 0
+      ? packageFolders.filter((folder) => selectedPackages.includes(folder))
+      : packageFolders
+
+  foldersToProcess.forEach((folder) => {
     const packageJsonPath = path.join(packagesPath, folder, 'package.json')
     if (fs.existsSync(packageJsonPath)) {
       replaceCatalogDependencies(packageJsonPath, rootCatalog, catalogs)
@@ -55,17 +61,18 @@ const updatePackagesDependencies = () => {
   })
 }
 
-updatePackagesDependencies()
+const selectedPackages = process.argv.slice(2)
+updatePackagesDependencies(selectedPackages)
 console.log(
   'Catalog dependencies have been replaced successfully. Be sure to double-check the changes made. 😉',
 )
 
-console.log('Regenerating pnpm-lock.yaml...');
+console.log('Regenerating pnpm-lock.yaml...')
 try {
   execSync('pnpm install --lockfile-only', { stdio: 'inherit' })
   console.log('pnpm-lock.yaml has been successfully regenerated.')
 } catch (error) {
-  console.error('An error occurred while regenerating pnpm-lock.yaml:', error);
+  console.error('An error occurred while regenerating pnpm-lock.yaml:', error)
 }
 
 console.log(
