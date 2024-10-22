@@ -1,6 +1,6 @@
 import { graphql } from 'react-relay'
 
-export const fragmentQuery = graphql`
+export const MessagesListFragment = graphql`
   fragment MessagesListFragment on ChatRoom
   @argumentDefinitions(count: { type: "Int", defaultValue: 20 }, cursor: { type: "String" })
   @refetchable(queryName: "ChatRoomMessagesListPaginationQuery") {
@@ -11,6 +11,9 @@ export const fragmentQuery = graphql`
           id
           content
           created
+          profile {
+            id
+          }
           ...MessageItemFragment
         }
       }
