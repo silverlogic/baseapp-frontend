@@ -2,7 +2,7 @@
 
 This is the baseapp-frontend monorepo that contains our apps and packages.
 
-So, everything inside `packages` are meant to be part of the `@baseapp-frontend` packages, for instance:
+So, everything inside `packages` is meant to be part of the `@baseapp-frontend` packages, for instance:
 
 ```
 - /packages
@@ -12,7 +12,7 @@ So, everything inside `packages` are meant to be part of the `@baseapp-frontend`
 
 In that case, both `authentication` and `tsconfig` are unique packages, but they all belong to the `@baseapp-frontend` organization.
 
-If one of the apps want to consume any package feature, we could simply add that package as a dependency like that:
+If one of the apps wants to consume any package feature, we could simply add that package as a dependency like this:
 
 ```
   "dependencies": {
@@ -53,9 +53,9 @@ export default function Docs() {
 
 ## NVM
 
-This step is optional but it is highly suggested you to use NVM.
+This step is optional but it is highly suggested you use NVM.
 
-Instalation instructions can be found here: https://github.com/nvm-sh/nvm#installing-and-updating
+Installation instructions can be found here: https://github.com/nvm-sh/nvm#installing-and-updating
 
 Once installed run:
 
@@ -138,7 +138,7 @@ If you need to install a package version that hasn't been published yet, follow 
   In the consumer app (the app that will use the non-published version), update the package entry to point to the GitHub source. Replace `<commit-hash>` with the actual commit hash you copied:
 
   ```json
-  "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path=packages/components",
+  "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
   ```
 
 5. **Undo Changes and Merge**:
@@ -153,15 +153,15 @@ If you need to install a package version that hasn't been published yet, follow 
 
 We have 3 mandatory steps before pushing modifications:
 
-1. If we did any modification in any `package`, before pushing we need to generate a changeset, that basically is a file that summarize which type of changes we did (major, minor or none) alongside with the summary of those changes. So, to do that we run:
+1. If we did any modification in any `package`, before pushing we need to generate a changeset, which basically is a file that summarizes which type of changes we did (major, minor or none) alongside with the summary of those changes. So, to do that we run:
 
 ```bash
 pnpm changeset
 ```
 
-After that, we need to choose which packages were changed, the bump they had and write the summary for that change.
+After that, we need to choose which packages were changed, and the bump they had and write the summary for that change.
 
-2. With the changesets created, we need to consume them to actually increase the packages version accordingly. So, we do:
+2. With the changesets created, we need to consume them to actually increase the package versions accordingly. So, we do:
 
 ```bash
 pnpm version-packages
