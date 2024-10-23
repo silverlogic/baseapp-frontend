@@ -58,3 +58,18 @@ export const formatRelativeTime = (
 
   return daysDiff >= 2 ? `${Math.floor(daysDiff)} days ago` : '1 day ago'
 }
+
+export const isToday = (date: string) => {
+  if (!date) return false
+  return DateTime.fromISO(date).hasSame(DateTime.now(), 'day')
+}
+
+export const isYesterday = (date: string) => {
+  if (!date) return false
+  return DateTime.fromISO(date).hasSame(DateTime.now().minus({ days: 1 }), 'day')
+}
+
+export const datesDontHaveSameDay = (date1: string, date2: string) => {
+  if (!date1 || !date2) return false
+  return !DateTime.fromISO(date1).hasSame(DateTime.fromISO(date2), 'day')
+}

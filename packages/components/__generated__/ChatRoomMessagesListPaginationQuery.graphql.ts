@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<031c50efdf4ee4926bb648d68980076f>>
+ * @generated SignedSource<<ba18d2413d90f9fedf3c2d3c48e2ffdd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -79,7 +79,8 @@ const node: ConcreteRequest = (function () {
         name: 'first',
         variableName: 'count',
       },
-    ]
+    ],
+    v5 = [v3 /*: any*/]
   return {
     fragment: {
       argumentDefinitions: v0 /*: any*/,
@@ -179,11 +180,21 @@ const node: ConcreteRequest = (function () {
                             {
                               alias: null,
                               args: null,
+                              concreteType: 'Profile',
+                              kind: 'LinkedField',
+                              name: 'profile',
+                              plural: false,
+                              selections: v5 /*: any*/,
+                              storageKey: null,
+                            },
+                            {
+                              alias: null,
+                              args: null,
                               concreteType: 'Message',
                               kind: 'LinkedField',
                               name: 'inReplyTo',
                               plural: false,
-                              selections: [v3 /*: any*/],
+                              selections: v5 /*: any*/,
                               storageKey: null,
                             },
                             {
@@ -191,6 +202,20 @@ const node: ConcreteRequest = (function () {
                               args: null,
                               kind: 'ScalarField',
                               name: 'pk',
+                              storageKey: null,
+                            },
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
+                              name: 'verb',
+                              storageKey: null,
+                            },
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
+                              name: 'extraData',
                               storageKey: null,
                             },
                             v2 /*: any*/,
@@ -254,16 +279,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '319bcdda3d7eb6e1d0374c1970c0de87',
+      cacheID: '47b6016c5c7034a439332475e625409a',
       id: null,
       metadata: {},
       name: 'ChatRoomMessagesListPaginationQuery',
       operationKind: 'query',
-      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  inReplyTo {\n    id\n  }\n  content\n  pk\n  created\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  allMessages(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        content\n        created\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  inReplyTo {\n    id\n  }\n  content\n  pk\n  created\n  verb\n  extraData\n  profile {\n    id\n  }\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  allMessages(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        content\n        created\n        profile {\n          id\n        }\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'a0ce3052d446f1aa6bfddce2517b1e75'
+;(node as any).hash = 'bd6c0bf41fccd39109157be9c96e36b4'
 
 export default node

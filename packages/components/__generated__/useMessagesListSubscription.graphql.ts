@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1baf40942387c22fe247bb060a0d9897>>
+ * @generated SignedSource<<815159241c450a317f32748d3e9cc834>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,39 +8,26 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { ConcreteRequest, Mutation } from 'relay-runtime'
+import { ConcreteRequest, GraphQLSubscription } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type ChatRoomSendMessageInput = {
-  clientMutationId?: string | null | undefined
-  content: string
-  inReplyToId?: string | null | undefined
-  profileId: string
+export type useMessagesListSubscription$variables = {
+  connections: ReadonlyArray<string>
   roomId: string
 }
-export type SendMessageMutation$variables = {
-  connections: ReadonlyArray<string>
-  input: ChatRoomSendMessageInput
-}
-export type SendMessageMutation$data = {
-  readonly chatRoomSendMessage:
+export type useMessagesListSubscription$data = {
+  readonly chatRoomOnNewMessage:
     | {
-        readonly errors:
-          | ReadonlyArray<
-              | {
-                  readonly field: string
-                  readonly messages: ReadonlyArray<string>
-                }
-              | null
-              | undefined
-            >
-          | null
-          | undefined
         readonly message:
           | {
               readonly node:
                 | {
-                    readonly id: string
+                    readonly actionObject:
+                      | {
+                          readonly id: string
+                        }
+                      | null
+                      | undefined
                     readonly ' $fragmentSpreads': FragmentRefs<'MessageItemFragment'>
                   }
                 | null
@@ -52,9 +39,9 @@ export type SendMessageMutation$data = {
     | null
     | undefined
 }
-export type SendMessageMutation = {
-  response: SendMessageMutation$data
-  variables: SendMessageMutation$variables
+export type useMessagesListSubscription = {
+  response: useMessagesListSubscription$data
+  variables: useMessagesListSubscription$variables
 }
 
 const node: ConcreteRequest = (function () {
@@ -66,13 +53,13 @@ const node: ConcreteRequest = (function () {
     v1 = {
       defaultValue: null,
       kind: 'LocalArgument',
-      name: 'input',
+      name: 'roomId',
     },
     v2 = [
       {
         kind: 'Variable',
-        name: 'input',
-        variableName: 'input',
+        name: 'roomId',
+        variableName: 'roomId',
       },
     ],
     v3 = {
@@ -82,45 +69,20 @@ const node: ConcreteRequest = (function () {
       name: 'id',
       storageKey: null,
     },
-    v4 = {
-      alias: null,
-      args: null,
-      concreteType: 'ErrorType',
-      kind: 'LinkedField',
-      name: 'errors',
-      plural: true,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'field',
-          storageKey: null,
-        },
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'messages',
-          storageKey: null,
-        },
-      ],
-      storageKey: null,
-    },
-    v5 = [v3 /*: any*/]
+    v4 = [v3 /*: any*/]
   return {
     fragment: {
       argumentDefinitions: [v0 /*: any*/, v1 /*: any*/],
       kind: 'Fragment',
       metadata: null,
-      name: 'SendMessageMutation',
+      name: 'useMessagesListSubscription',
       selections: [
         {
           alias: null,
           args: v2 /*: any*/,
-          concreteType: 'ChatRoomSendMessagePayload',
+          concreteType: 'ChatRoomOnNewMessage',
           kind: 'LinkedField',
-          name: 'chatRoomSendMessage',
+          name: 'chatRoomOnNewMessage',
           plural: false,
           selections: [
             {
@@ -139,11 +101,20 @@ const node: ConcreteRequest = (function () {
                   name: 'node',
                   plural: false,
                   selections: [
-                    v3 /*: any*/,
                     {
                       args: null,
                       kind: 'FragmentSpread',
                       name: 'MessageItemFragment',
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: null,
+                      kind: 'LinkedField',
+                      name: 'actionObject',
+                      plural: false,
+                      selections: v4 /*: any*/,
+                      storageKey: null,
                     },
                   ],
                   storageKey: null,
@@ -151,26 +122,25 @@ const node: ConcreteRequest = (function () {
               ],
               storageKey: null,
             },
-            v4 /*: any*/,
           ],
           storageKey: null,
         },
       ],
-      type: 'Mutation',
+      type: 'Subscription',
       abstractKey: null,
     },
     kind: 'Request',
     operation: {
       argumentDefinitions: [v1 /*: any*/, v0 /*: any*/],
       kind: 'Operation',
-      name: 'SendMessageMutation',
+      name: 'useMessagesListSubscription',
       selections: [
         {
           alias: null,
           args: v2 /*: any*/,
-          concreteType: 'ChatRoomSendMessagePayload',
+          concreteType: 'ChatRoomOnNewMessage',
           kind: 'LinkedField',
-          name: 'chatRoomSendMessage',
+          name: 'chatRoomOnNewMessage',
           plural: false,
           selections: [
             {
@@ -197,7 +167,7 @@ const node: ConcreteRequest = (function () {
                       kind: 'LinkedField',
                       name: 'inReplyTo',
                       plural: false,
-                      selections: v5 /*: any*/,
+                      selections: v4 /*: any*/,
                       storageKey: null,
                     },
                     {
@@ -242,7 +212,26 @@ const node: ConcreteRequest = (function () {
                       kind: 'LinkedField',
                       name: 'profile',
                       plural: false,
-                      selections: v5 /*: any*/,
+                      selections: v4 /*: any*/,
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: null,
+                      kind: 'LinkedField',
+                      name: 'actionObject',
+                      plural: false,
+                      selections: [
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: '__typename',
+                          storageKey: null,
+                        },
+                        v3 /*: any*/,
+                      ],
                       storageKey: null,
                     },
                   ],
@@ -267,23 +256,22 @@ const node: ConcreteRequest = (function () {
                 },
               ],
             },
-            v4 /*: any*/,
           ],
           storageKey: null,
         },
       ],
     },
     params: {
-      cacheID: '07099beaee81c828105a03af6b068602',
+      cacheID: '1c7d6f4dce5c6ab81a0032ed1561e06c',
       id: null,
       metadata: {},
-      name: 'SendMessageMutation',
-      operationKind: 'mutation',
-      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  inReplyTo {\n    id\n  }\n  content\n  pk\n  created\n  verb\n  extraData\n  profile {\n    id\n  }\n}\n',
+      name: 'useMessagesListSubscription',
+      operationKind: 'subscription',
+      text: 'subscription useMessagesListSubscription(\n  $roomId: ID!\n) {\n  chatRoomOnNewMessage(roomId: $roomId) {\n    message {\n      node {\n        ...MessageItemFragment\n        actionObject {\n          __typename\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  inReplyTo {\n    id\n  }\n  content\n  pk\n  created\n  verb\n  extraData\n  profile {\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '7fd0124ce48b9ceff7e9bf2091d0709e'
+;(node as any).hash = '3a374ae22dfceafafaa817179b020ccb'
 
 export default node

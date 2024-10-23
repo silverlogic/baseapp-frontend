@@ -7,15 +7,21 @@ import { DateTime } from 'luxon'
 
 import { TimestampProps } from './types'
 
-const Timestamp: FC<TimestampProps> = ({ date }) => {
+const Timestamp: FC<TimestampProps> = ({ date, isMessages = false }) => {
   const dateTime = DateTime.fromISO(date)
   const isToday = dateTime.hasSame(DateTime.now(), 'day')
 
   return (
     <Typography variant="caption" color="text.secondary" display="flex" alignItems="center">
-      {isToday ? 'Today' : formatDate(dateTime, { toFormat: TIME_FORMAT[3] })}
-      <div className="mx-2 inline-block h-1 w-1 rounded-full bg-text-disabled" />
-      {formatDate(dateTime, { toFormat: DATE_FORMAT[2] })}
+      {isMessages ? (
+        formatDate(dateTime, { toFormat: TIME_FORMAT[2] })
+      ) : (
+        <>
+          {isToday ? 'Today' : formatDate(dateTime, { toFormat: TIME_FORMAT[3] })}
+          <div className="mx-2 inline-block h-1 w-1 rounded-full bg-text-disabled" />
+          {formatDate(dateTime, { toFormat: DATE_FORMAT[2] })}
+        </>
+      )}
     </Typography>
   )
 }

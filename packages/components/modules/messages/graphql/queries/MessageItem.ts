@@ -9,5 +9,10 @@ export const MessageItemFragment = graphql`
     content
     pk
     created
+    verb
+    extraData
+    profile {
+      id
+    }
   }
 `

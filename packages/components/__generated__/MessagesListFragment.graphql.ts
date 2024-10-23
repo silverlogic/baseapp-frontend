@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3054fdfe9c387978eb82a9a38ca85393>>
+ * @generated SignedSource<<7a4908066fe1772d313fe4231349d6d6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,6 +21,12 @@ export type MessagesListFragment$data = {
                     readonly content: string | null | undefined
                     readonly created: any
                     readonly id: string
+                    readonly profile:
+                      | {
+                          readonly id: string
+                        }
+                      | null
+                      | undefined
                     readonly ' $fragmentSpreads': FragmentRefs<'MessageItemFragment'>
                   }
                 | null
@@ -136,6 +142,16 @@ const node: ReaderFragment = (function () {
                     storageKey: null,
                   },
                   {
+                    alias: null,
+                    args: null,
+                    concreteType: 'Profile',
+                    kind: 'LinkedField',
+                    name: 'profile',
+                    plural: false,
+                    selections: [v1 /*: any*/],
+                    storageKey: null,
+                  },
+                  {
                     args: null,
                     kind: 'FragmentSpread',
                     name: 'MessageItemFragment',
@@ -194,6 +210,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'a0ce3052d446f1aa6bfddce2517b1e75'
+;(node as any).hash = 'bd6c0bf41fccd39109157be9c96e36b4'
 
 export default node
