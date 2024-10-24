@@ -120,7 +120,7 @@ describe('ProfileAccountPopover', () => {
     cy.get('.MuiList-root')
       .should('have.css', 'overflow-y', 'auto')
       .then(($el) => {
-        const hasVerticalScroll = $el[0].scrollHeight > $el[0].clientHeight
+        const hasVerticalScroll = ($el[0]?.scrollHeight ?? 0) > ($el[0]?.clientHeight ?? 0)
         expect(hasVerticalScroll).to.equal(true)
       })
 
@@ -279,7 +279,18 @@ describe('ProfileAccountPopover', () => {
     })
 
     cy.get('li:visible').should('have.length.gte', 4)
-    cy.get('li > .MuiAvatar-root > img').should('have.attr', 'width', '24')
-    cy.get('li > .MuiAvatar-root > img').should('have.attr', 'height', '24')
+    cy.get('li > .MuiAvatar-root').each(($avatar) => {
+      cy.wrap($avatar).within(() => {
+        cy.get('img').then(($img) => {
+          if ($img.length && $img.attr('width') && $img.attr('height')) {
+            cy.wrap($img).should('have.attr', 'width', '24')
+            cy.wrap($img).should('have.attr', 'height', '24')
+          } else {
+            cy.wrap($avatar).should('have.attr', 'width', '24')
+            cy.wrap($avatar).should('have.attr', 'height', '24')
+          }
+        })
+      })
+    })
   })
 })

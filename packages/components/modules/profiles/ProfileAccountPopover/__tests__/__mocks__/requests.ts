@@ -6,7 +6,7 @@ export const mockUserProfileFactory = (id: string) => {
       me: {
         profile: {
           id,
-          name: faker.name.fullName(),
+          name: faker.person.fullName(),
           image: {
             url: faker.image.avatar(),
           },
@@ -27,7 +27,7 @@ export const mockProfilesListFactory = (size: number, userProfile: any) => {
           userProfile,
           ...Array.from({ length: size }).map((_, index) => ({
             id: `profile-${index}`,
-            name: faker.name.fullName(),
+            name: faker.person.fullName(),
             image: {
               url: faker.image.avatar(),
             },

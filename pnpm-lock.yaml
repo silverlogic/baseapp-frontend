@@ -27,6 +27,9 @@ catalogs:
     axios:
       specifier: ^1.7.2
       version: 1.7.7
+    events:
+      specifier: ^3.3.0
+      version: 3.3.0
     jotai:
       specifier: ^2.9.3
       version: 2.10.1
@@ -289,6 +292,9 @@ catalogs:
     '@cypress/webpack-dev-server':
       specifier: ^3.10.1
       version: 3.11.0
+    '@faker-js/faker':
+      specifier: ^9.0.3
+      version: 9.0.3
     '@testing-library/cypress':
       specifier: ^10.0.2
       version: 10.0.2
@@ -313,6 +319,9 @@ catalogs:
     cypress-plugin-steps:
       specifier: ^1.1.1
       version: 1.1.1
+    cypress-wait-until:
+      specifier: ^3.0.2
+      version: 3.0.2
     jest:
       specifier: ^29.7.0
       version: 29.7.0
@@ -536,6 +545,9 @@ importers:
       '@cypress/webpack-dev-server':
         specifier: catalog:test
         version: 3.11.0(webpack-cli@5.1.4)(webpack@5.95.0)
+      '@faker-js/faker':
+        specifier: catalog:test
+        version: 9.0.3
       '@storybook/addon-essentials':
         specifier: catalog:storybook
         version: 8.3.6(storybook@8.3.6)(webpack-sources@3.2.3)
@@ -602,6 +614,9 @@ importers:
       cypress-plugin-steps:
         specifier: catalog:test
         version: 1.1.1(cypress@13.15.0)
+      cypress-wait-until:
+        specifier: catalog:test
+        version: 3.0.2
       dotenv:
         specifier: ^16.4.5
         version: 16.4.5
@@ -1062,6 +1077,9 @@ importers:
       axios:
         specifier: 'catalog:'
         version: 1.7.7
+      events:
+        specifier: 'catalog:'
+        version: 3.3.0
       expo-secure-store:
         specifier: ^13.0.2
         version: 13.0.2(expo@51.0.38(@babel/core@7.25.8)(@babel/preset-env@7.25.8(@babel/core@7.25.8)))
@@ -2343,6 +2361,10 @@ packages:
   '@expo/xcpretty@4.3.1':
     resolution: {integrity: sha512-sqXgo1SCv+j4VtYEwl/bukuOIBrVgx6euIoCat3Iyx5oeoXwEA2USCoeL0IPubflMxncA2INkqJ/Wr3NGrSgzw==}
     hasBin: true
+
+  '@faker-js/faker@9.0.3':
+    resolution: {integrity: sha512-lWrrK4QNlFSU+13PL9jMbMKLJYXDFu3tQfayBsMXX7KL/GiQeqfB1CzHkqD5UHBUtPAuPo6XwGbMFNdVMZObRA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@floating-ui/core@1.6.8':
     resolution: {integrity: sha512-7XJ9cPU+yI2QeLS+FCSlqNFZJq8arvswefkZrYI1yQBbftw6FyrZOxYSh+9S7z7TpeWlRt9zJ5IhM1WIL334jA==}
@@ -5092,6 +5114,9 @@ packages:
     resolution: {integrity: sha512-0TYBp8sIJovW9mfsN0uJXVMqW9XV9rqbX5fFwmbBmz0D2vMZShMD9BkBfjNC3Y812hZoTWw4dLE4UmV6fidycA==}
     peerDependencies:
       cypress: '>=10'
+
+  cypress-wait-until@3.0.2:
+    resolution: {integrity: sha512-iemies796dD5CgjG5kV0MnpEmKSH+s7O83ZoJLVzuVbZmm4lheMsZqAVT73hlMx4QlkwhxbyUzhOBUOZwoOe0w==}
 
   cypress@13.15.0:
     resolution: {integrity: sha512-53aO7PwOfi604qzOkCSzNlWquCynLlKE/rmmpSPcziRH6LNfaDUAklQT6WJIsD8ywxlIy+uVZsnTMCCQVd2kTw==}
@@ -11559,6 +11584,8 @@ snapshots:
       find-up: 5.0.0
       js-yaml: 4.1.0
 
+  '@faker-js/faker@9.0.3': {}
+
   '@floating-ui/core@1.6.8':
     dependencies:
       '@floating-ui/utils': 0.2.8
@@ -15258,6 +15285,8 @@ snapshots:
   cypress-plugin-steps@1.1.1(cypress@13.15.0):
     dependencies:
       cypress: 13.15.0
+
+  cypress-wait-until@3.0.2: {}
 
   cypress@13.15.0:
     dependencies:
