@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, PropsWithChildren, createContext, useEffect, useRef } from 'react'
+import { FC, PropsWithChildren, createContext, useCallback, useEffect, useRef } from 'react'
 
 import { User, useJWTUser } from '@baseapp-frontend/authentication'
 import { JWTContent, LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
@@ -33,23 +33,16 @@ const fetchUserProfile = async (environment: Environment) => {
   return userProfile
 }
 
-const validateStoredState = (currentUserId: number, store: StoreApi<UseCurrentProfile>) => {
-  if (store.getState().userId !== currentUserId) {
-    store.setState({ ...INITIAL_CURRENT_PROFILE_STATE, userId: currentUserId })
-  }
-}
-
 const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   const { user } = useJWTUser<User & JWTContent>()
   const environment = useRelayEnvironment()
   const storeRef = useRef<StoreApi<UseCurrentProfile>>()
 
-  if (user?.id && !storeRef.current) {
+  if (!storeRef.current) {
     storeRef.current = create(
       persist<UseCurrentProfile>(
         (set) => ({
           ...INITIAL_CURRENT_PROFILE_STATE,
-          userId: user.id,
           setCurrentProfile: set,
         }),
         {
@@ -57,27 +50,43 @@ const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
         },
       ),
     )
-    validateStoredState(user.id, storeRef.current)
   }
 
-  const shouldFetchProfile = storeRef.current && !storeRef.current.getState().profile
-
-  const logoutListener = () => {
-    storeRef.current?.setState({ ...INITIAL_CURRENT_PROFILE_STATE })
-  }
-
-  useEffect(() => {
-    if (shouldFetchProfile && environment) {
+  const fetchAndStoreUserProfile = useCallback(() => {
+    const shouldFetchProfile = Boolean(storeRef.current && !storeRef.current.getState().profile)
+    if (shouldFetchProfile && environment && user?.id) {
       fetchUserProfile(environment)
         .then((userProfile) => {
           if (userProfile) {
-            storeRef.current?.setState({ profile: userProfile })
+            storeRef.current?.setState({ profile: userProfile, userId: user.id })
           }
         })
         // If the user profile request fails, the current profile state will remain empty.
         .catch(() => {})
     }
-  }, [shouldFetchProfile, environment])
+  }, [environment, user])
+
+  const validateStoredState = useCallback(() => {
+    if (!storeRef.current) {
+      return
+    }
+    if (user?.id) {
+      if (storeRef.current.getState().userId !== user.id) {
+        storeRef.current.setState({ ...INITIAL_CURRENT_PROFILE_STATE })
+        fetchAndStoreUserProfile()
+      }
+    } else {
+      storeRef.current.setState({ ...INITIAL_CURRENT_PROFILE_STATE })
+    }
+  }, [fetchAndStoreUserProfile, user])
+
+  const logoutListener = () => {
+    storeRef.current?.setState({ ...INITIAL_CURRENT_PROFILE_STATE })
+  }
+
+  useEffect(() => fetchAndStoreUserProfile(), [fetchAndStoreUserProfile])
+
+  useEffect(() => validateStoredState(), [validateStoredState])
 
   useEffect(() => {
     eventEmitter.on(LOGOUT_EVENT, logoutListener)
