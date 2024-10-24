@@ -3,7 +3,6 @@
 import { Box, alpha, styled } from '@mui/material'
 
 export const RichTextBlockWrapper = styled(Box)(({ theme }) => ({
-  paddingRight: theme.spacing(2),
   '& > *:not(:last-child)': {
     paddingBottom: theme.spacing(2),
   },
