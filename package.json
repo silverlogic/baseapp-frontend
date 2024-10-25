@@ -6,7 +6,7 @@
     "build": "turbo run build --filter=./packages/utils",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
-    "test": "turbo run test",
+    "test:unit": "turbo run test:unit",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build && changeset publish",
