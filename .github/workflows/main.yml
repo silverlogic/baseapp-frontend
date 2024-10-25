@@ -54,8 +54,8 @@ jobs:
       - name: Lint Applications and Packages
         run: pnpm lint
 
-  test:
-    name: Test
+  test-unit:
+    name: Unit Test
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -75,4 +75,4 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Test Applications and Packages
-        run: pnpm test
+        run: pnpm test:unit
