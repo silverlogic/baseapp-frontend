@@ -8,10 +8,10 @@ import { ButtonBase, MenuItem, Stack } from '@mui/material'
 
 import AccountPopover from '../../../navigations/Header/AccountMenu/AccountPopover'
 import CurrentProfilePlaceholder from '../CurrentProfilePlaceholder'
-import ProfilesSubmenusList from '../ProfilesSubmenusList'
-import { ProfileAccountSectionsProps } from './types'
+import ProfilesSubmenusList from '../ProfilesList'
+import { ProfilePopoverSectionsProps } from './types'
 
-const ProfileAccountSections: FC<ProfileAccountSectionsProps> = ({
+const ProfilePopoverSections: FC<ProfilePopoverSectionsProps> = ({
   currentProfile,
   switchProfileLabel,
   addNewProfileLabel,
@@ -66,17 +66,17 @@ const ProfileAccountSections: FC<ProfileAccountSectionsProps> = ({
       accountAvatarUrl={currentProfile?.image?.url}
       onCloseCallback={onPopoverClose}
       PopoverStyles={{ width: 256 }}
-      accountSection={{
+      accountInfoSectionController={{
         show: !openProfilesSubmenus,
         items: [CurrentProfilePlaceholder, SwitchProfileMenu],
       }}
-      menuSection={{ show: !openProfilesSubmenus, items: [] }}
-      accountActionsSection={{ show: true, items: [AddProfileMenu] }}
-      extraSections={[{ show: openProfilesSubmenus, items: extraSections }]}
+      menuItemsSectionController={{ show: !openProfilesSubmenus, items: [] }}
+      menuActionsSectionController={{ show: true, items: [AddProfileMenu] }}
+      extraSectionControllersList={[{ show: openProfilesSubmenus, items: extraSections }]}
       disableCurrentUserPlaceholder
       {...props}
     />
   )
 }
 
-export default ProfileAccountSections
+export default ProfilePopoverSections

@@ -9,16 +9,16 @@ export interface AccountPopoverProps {
   onCloseCallback?: () => void
   menuItems?: MenuItemProps[]
   PopoverStyles?: CSSProperties
-  accountSection?: AccountPopoverSection
-  menuSection?: AccountPopoverSection
-  accountActionsSection?: AccountPopoverSection
-  extraSections?: AccountPopoverSection[]
+  accountInfoSectionController?: SectionController
+  menuItemsSectionController?: SectionController
+  menuActionsSectionController?: SectionController
+  extraSectionControllersList?: SectionController[]
   logoutButtonLabel?: string
   disableCurrentUserPlaceholder?: boolean
   hideLogoutButton?: boolean
 }
 
-export interface AccountPopoverSection {
+export interface SectionController {
   show: boolean
   items: ComponentItems
 }

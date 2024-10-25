@@ -13,13 +13,10 @@ import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__genera
 import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import ProfileMenuItem from '../ProfileMenuItem'
-import { ProfileMenuItemSkeleton, ProfilesList } from './styled'
-import { ProfilesSubmenusListProps } from './types'
+import { ProfileMenuItemSkeleton, StyledList } from './styled'
+import { ProfilesListProps } from './types'
 
-const ProfilesSubmenusList: FC<ProfilesSubmenusListProps> = ({
-  handleCloseSubmenu,
-  MenuItemProps,
-}) => {
+const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps }) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
@@ -53,7 +50,7 @@ const LoadingState: FC = () => (
   </>
 )
 
-const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => {
+const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
   const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel', listMaxHeight = 300 } = props
 
   return (
@@ -71,15 +68,15 @@ const ProfilesSubmenusListSuspended: FC<ProfilesSubmenusListProps> = (props) => 
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />
         <Box sx={{ p: 1 }}>
-          <ProfilesList disablePadding maxHeight={listMaxHeight}>
+          <StyledList disablePadding maxHeight={listMaxHeight}>
             <Suspense fallback={<LoadingState />}>
-              <ProfilesSubmenusList {...props} />
+              <ProfilesList {...props} />
             </Suspense>
-          </ProfilesList>
+          </StyledList>
         </Box>
       </Box>
     </Slide>
   )
 }
 
-export default ProfilesSubmenusListSuspended
+export default ProfilesListSuspended

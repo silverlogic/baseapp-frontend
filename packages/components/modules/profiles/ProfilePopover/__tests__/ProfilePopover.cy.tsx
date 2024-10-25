@@ -7,7 +7,7 @@ import 'cypress-wait-until'
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { CURRENT_PROFILE_STORAGE_KEY } from '../../context/CurrentProfileProvider/constants'
 import { CurrentProfileState } from '../../context/CurrentProfileProvider/types'
-import { ProfileAccountPopoverProps } from '../types'
+import { ProfilePopoverProps } from '../types'
 import {
   emptyMockUserProfileData,
   mockProfilesListFactory,
@@ -15,13 +15,13 @@ import {
   mockUserProfileFactory,
 } from './__mocks__/requests'
 import { userMockData, userMockData2 } from './__mocks__/user'
-import ProfileAccountPopoverForTesting from './__utils__/ProfileAccountPopoverForTesting'
+import ProfilePopoverForTesting from './__utils__/ProfilePopoverForTesting'
 
-describe('ProfileAccountPopover', () => {
+describe('ProfilePopover', () => {
   const loadPopoverBasicStructure = (
     profilesSize: number,
     openSwitchProfileList: boolean = true,
-    mountProps?: ProfileAccountPopoverProps,
+    mountProps?: ProfilePopoverProps,
   ) => {
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
 
@@ -29,13 +29,11 @@ describe('ProfileAccountPopover', () => {
       user: userMockData,
     }))
 
-    cy.mount(<ProfileAccountPopoverForTesting environment={environment} {...mountProps} />).then(
-      () => {
-        cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-          resolveMostRecentOperation({ data: mockUserProfileData })
-        })
-      },
-    )
+    cy.mount(<ProfilePopoverForTesting environment={environment} {...mountProps} />).then(() => {
+      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
+        resolveMostRecentOperation({ data: mockUserProfileData })
+      })
+    })
 
     cy.findByRole('button').click()
     cy.get('.MuiPaper-root').should('exist')
@@ -149,7 +147,7 @@ describe('ProfileAccountPopover', () => {
       user: userMockData,
     }))
 
-    cy.mount(<ProfileAccountPopoverForTesting environment={environment} />)
+    cy.mount(<ProfilePopoverForTesting environment={environment} />)
 
     cy.findByRole('button').click()
     cy.get('.MuiPaper-root').should('exist')
@@ -210,7 +208,7 @@ describe('ProfileAccountPopover', () => {
       user: userMockData,
     }))
 
-    cy.mount(<ProfileAccountPopoverForTesting environment={environment} />).then(() => {
+    cy.mount(<ProfilePopoverForTesting environment={environment} />).then(() => {
       cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
         resolveMostRecentOperation({ data: emptyMockUserProfileData })
       })
@@ -231,7 +229,7 @@ describe('ProfileAccountPopover', () => {
       user: userMockData,
     }))
 
-    cy.mount(<ProfileAccountPopoverForTesting environment={environment} />).then(() => {
+    cy.mount(<ProfilePopoverForTesting environment={environment} />).then(() => {
       cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
         rejectMostRecentOperation("Error finding user's profile")
       })

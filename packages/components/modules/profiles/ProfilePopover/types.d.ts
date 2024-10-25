@@ -1,7 +1,7 @@
 import { AccountPopoverProps } from '../../navigations/Header/AccountMenu/AccountPopover/types'
-import { ProfilesSubmenusListProps } from './ProfilesSubmenusList/types'
+import { ProfilesSubmenusListProps } from './ProfilesList/types'
 
-export interface ProfileAccountPopoverProps extends AccountPopoverProps {
+export interface ProfilePopoverProps extends AccountPopoverProps {
   switchProfileLabel?: string
   addNewProfileLabel?: string
   ProfilesSubmenusListProps?: Partial<ProfilesSubmenusListProps>

@@ -2,10 +2,10 @@ import { FC } from 'react'
 
 import AccountPopover from '../../navigations/Header/AccountMenu/AccountPopover'
 import useCurrentProfile from '../context/useCurrentProfile'
-import ProfileAccountSections from './ProfileAccountSections'
-import { ProfileAccountPopoverProps } from './types'
+import ProfilePopoverSections from './ProfilePopoverSections'
+import { ProfilePopoverProps } from './types'
 
-const ProfileAccountPopover: FC<ProfileAccountPopoverProps> = ({
+const ProfilePopover: FC<ProfilePopoverProps> = ({
   switchProfileLabel = 'Switch Profile',
   addNewProfileLabel = 'New profile',
   ProfilesSubmenusListProps,
@@ -18,7 +18,7 @@ const ProfileAccountPopover: FC<ProfileAccountPopoverProps> = ({
   }
 
   return (
-    <ProfileAccountSections
+    <ProfilePopoverSections
       {...props}
       currentProfile={currentProfile}
       switchProfileLabel={switchProfileLabel}
@@ -28,4 +28,4 @@ const ProfileAccountPopover: FC<ProfileAccountPopoverProps> = ({
   )
 }
 
-export default ProfileAccountPopover
+export default ProfilePopover

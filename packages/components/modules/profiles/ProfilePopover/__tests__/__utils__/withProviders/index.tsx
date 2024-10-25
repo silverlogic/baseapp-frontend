@@ -7,15 +7,15 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import CurrentProfileProvider from '../../../../context/CurrentProfileProvider'
-import { ProfileAccountPopoverProps } from '../../../types'
+import { ProfilePopoverProps } from '../../../types'
 import defaultTheme from '../../__mocks__/theme'
 import { WithProvidersOptions } from './types'
 
 const queryClient = new QueryClient()
 
 const withProviders =
-  (Component: FC<ProfileAccountPopoverProps>) =>
-  ({ environment, ...props }: WithProvidersOptions & ProfileAccountPopoverProps) => (
+  (Component: FC<ProfilePopoverProps>) =>
+  ({ environment, ...props }: WithProvidersOptions & ProfilePopoverProps) => (
     <QueryClientProvider client={queryClient}>
       <RelayTestProvider environment={environment}>
         <ThemeProvider {...defaultTheme}>

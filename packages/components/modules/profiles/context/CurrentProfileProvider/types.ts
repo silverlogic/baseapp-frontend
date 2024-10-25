@@ -6,7 +6,7 @@ export type CurrentProfileState = {
 }
 
 type CurrentProfileFunctions = {
-  setCurrentProfile: (newCurrentProfiles: Partial<CurrentProfileState>) => void
+  setCurrentProfile: (newCurrentProfile: Partial<CurrentProfileState>) => void
 }
 
 export type UseCurrentProfile = CurrentProfileState & CurrentProfileFunctions

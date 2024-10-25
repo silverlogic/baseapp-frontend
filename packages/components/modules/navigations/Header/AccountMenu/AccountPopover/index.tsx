@@ -22,10 +22,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   onCloseCallback,
   menuItems = [],
   PopoverStyles = {},
-  accountSection = { show: true, items: [] },
-  menuSection = { show: true, items: [] },
-  accountActionsSection = { show: true, items: [] },
-  extraSections = [],
+  accountInfoSectionController = { show: true, items: [] },
+  menuItemsSectionController = { show: true, items: [] },
+  menuActionsSectionController = { show: true, items: [] },
+  extraSectionControllersList = [],
   logoutButtonLabel = 'Logout',
   disableCurrentUserPlaceholder = false,
   hideLogoutButton = false,
@@ -78,17 +78,17 @@ const AccountPopover: FC<AccountPopoverProps> = ({
         onClose={handleOnClose}
         sx={{ ...DefaultPopoverStyles, ...PopoverStyles }}
       >
-        {accountSection.show && (
+        {accountInfoSectionController.show && (
           <>
             <Box sx={{ m: 1 }}>
               {!disableCurrentUserPlaceholder && user && <CurrentUserPlaceholder user={user} />}
-              {renderItems(accountSection.items)}
+              {renderItems(accountInfoSectionController.items)}
             </Box>
             <Divider sx={{ borderStyle: 'solid' }} />
           </>
         )}
 
-        {menuSection.show && (
+        {menuItemsSectionController.show && (
           <>
             <Box sx={{ m: 1 }}>
               <Stack component={List}>
@@ -98,27 +98,27 @@ const AccountPopover: FC<AccountPopoverProps> = ({
                   </MenuItem>
                 ))}
               </Stack>
-              {renderItems(menuSection.items)}
+              {renderItems(menuItemsSectionController.items)}
             </Box>
             <Divider sx={{ borderStyle: 'solid' }} />
           </>
         )}
 
-        {extraSections.map((section) => {
-          if (!section.show) {
+        {extraSectionControllersList.map((sectionController) => {
+          if (!sectionController.show) {
             return null
           }
           return (
             <>
-              {renderItems(section.items)}
+              {renderItems(sectionController.items)}
               <Divider sx={{ borderStyle: 'solid' }} />
             </>
           )
         })}
 
-        {accountActionsSection.show && (
+        {menuActionsSectionController.show && (
           <Box display="flex" flexDirection="column" gap={0.5} sx={{ m: 1 }}>
-            {renderItems(accountActionsSection.items)}
+            {renderItems(menuActionsSectionController.items)}
             {!hideLogoutButton && (
               <MenuItem
                 component={ButtonBase}

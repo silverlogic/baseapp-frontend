@@ -7,7 +7,7 @@ import { JWTContent, isUserTokenValid } from '@baseapp-frontend/utils'
 
 import { Button } from '@mui/material'
 
-import { ProfileAccountPopover } from '../../../profiles'
+import { ProfilePopover } from '../../../profiles'
 import { AccountMenuProps } from './types'
 
 const AccountMenu: FC<AccountMenuProps> = ({
@@ -62,7 +62,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
     <div className="grid w-full grid-cols-[1fr_40px_40px] items-center justify-center gap-1 min-lg:gap-2">
       {renderHeaderContent()}
       {renderAdditionalComponent()}
-      <ProfileAccountPopover menuItems={menuItems} />
+      <ProfilePopover menuItems={menuItems} />
     </div>
   )
 }

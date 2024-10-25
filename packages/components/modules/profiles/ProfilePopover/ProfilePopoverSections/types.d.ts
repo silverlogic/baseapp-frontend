@@ -1,6 +1,6 @@
 import type { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
-import type { ProfileAccountPopoverProps } from '../types'
+import type { ProfilePopoverProps } from '../types'
 
-export interface ProfileAccountSectionsProps extends ProfileAccountPopoverProps {
+export interface ProfilePopoverSectionsProps extends ProfilePopoverProps {
   currentProfile: ProfileItemFragment$data
 }

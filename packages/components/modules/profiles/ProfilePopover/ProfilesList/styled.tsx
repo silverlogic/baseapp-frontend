@@ -6,7 +6,7 @@ export const ProfileMenuItemSkeleton = styled(Skeleton)(({ theme }) => ({
   borderRadius: theme.spacing(0.75),
 }))
 
-export const ProfilesList = styled(List, { shouldForwardProp: (prop) => prop !== 'active' })<
+export const StyledList = styled(List, { shouldForwardProp: (prop) => prop !== 'active' })<
   ListProps & { maxHeight: number }
 >(({ maxHeight }) => ({
   maxHeight,

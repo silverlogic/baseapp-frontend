@@ -20,7 +20,7 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
 }) => {
   const profile = readInlineData<ProfileItemFragment$key>(ProfileItemFragment, profileRef)
 
-  const handle = profile.urlPath?.path
+  const profileUrlPath = profile.urlPath?.path
   const isActiveProfile = profile.id === currentProfile?.id
 
   return (
@@ -37,9 +37,9 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
         <Typography component="p" variant="subtitle2" noWrap>
           {profile.name ?? ''}
         </Typography>
-        {handle && (
+        {profileUrlPath && (
           <Typography variant="subtitle2" sx={{ color: 'text.secondary' }} noWrap>
-            {handle}
+            {profileUrlPath}
           </Typography>
         )}
       </Box>

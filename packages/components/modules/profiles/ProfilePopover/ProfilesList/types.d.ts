@@ -1,6 +1,6 @@
 import { ProfileMenuItemProps } from '../ProfileMenuItem/types'
 
-export interface ProfilesSubmenusListProps {
+export interface ProfilesListProps {
   openSubmenu: boolean
   handleCloseSubmenu: () => void
   cancelLabel?: string

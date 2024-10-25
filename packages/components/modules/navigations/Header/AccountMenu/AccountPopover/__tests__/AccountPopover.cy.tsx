@@ -66,17 +66,17 @@ describe('AccountPopover', () => {
   it('should render custom sections', () => {
     const { environment } = createTestEnvironment()
 
-    const accountSectionMock = {
+    const accountInfoSectionControllerMock = {
       show: true,
       items: [<div key="account-section">Account Section</div>],
     }
 
-    const menuSectionMock = {
+    const menuItemsSectionControllerMock = {
       show: true,
       items: [<div key="menu-section">Menu Section</div>],
     }
 
-    const accountActionsSectionMock = {
+    const menuActionsSectionControllerMock = {
       show: true,
       items: [<div key="account-actions-section">Account Actions Section</div>],
     }
@@ -84,9 +84,9 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        accountSection={accountSectionMock}
-        menuSection={menuSectionMock}
-        accountActionsSection={accountActionsSectionMock}
+        accountInfoSectionController={accountInfoSectionControllerMock}
+        menuItemsSectionController={menuItemsSectionControllerMock}
+        menuActionsSectionController={menuActionsSectionControllerMock}
       />,
     )
 
@@ -100,13 +100,16 @@ describe('AccountPopover', () => {
   it('should hide custom section', () => {
     const { environment } = createTestEnvironment()
 
-    const accountSectionMock = {
+    const accountInfoSectionControllerMock = {
       show: false,
       items: [],
     }
 
     cy.mount(
-      <AccountPopoverForTesting environment={environment} accountSection={accountSectionMock} />,
+      <AccountPopoverForTesting
+        environment={environment}
+        accountInfoSectionController={accountInfoSectionControllerMock}
+      />,
     )
 
     cy.findByRole('button').click()
@@ -117,7 +120,7 @@ describe('AccountPopover', () => {
   it('should add and hide extra sections', () => {
     const { environment } = createTestEnvironment()
 
-    const extraSectionsMock = [
+    const extraSectionControllersListMock = [
       {
         show: true,
         items: [<div key="extra-section-1">Extra Section 1</div>],
@@ -129,7 +132,10 @@ describe('AccountPopover', () => {
     ]
 
     cy.mount(
-      <AccountPopoverForTesting environment={environment} extraSections={extraSectionsMock} />,
+      <AccountPopoverForTesting
+        environment={environment}
+        extraSectionControllersList={extraSectionControllersListMock}
+      />,
     )
 
     cy.findByRole('button').click()
