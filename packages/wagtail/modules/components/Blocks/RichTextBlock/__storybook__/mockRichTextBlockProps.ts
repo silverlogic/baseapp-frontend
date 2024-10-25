@@ -3,7 +3,6 @@ import imageFile from './static/image.jpeg'
 
 export const mockRichTextBlockProps: IRichTextBlockProps = {
   value: `
-  <div class="MuiBox-root css-gp6r4z">
     <p></p>
     <h2><b>Welcome to Our Technology Solutions</b></h2>
     <p>We provide <b>bold</b> and <i>italic</i> text to emphasize important aspects of your
@@ -36,12 +35,6 @@ export const mockRichTextBlockProps: IRichTextBlockProps = {
     <h3><b>Contact Us</b></h3>
     <p>You can also find us on social media or download our brochure below:</p>
 
-    <p>Image full width:</p>
-    <img alt="0e6d538ae41e5359babfae5a7d1a4beb"
-        class="richtext-image full-width" height="364"
-        src="${imageFile}" width="480">
-    <p></p>
-
     <p>Image left aligned:</p>
     <img alt="0e6d538ae41e5359babfae5a7d1a4beb"
         class="richtext-image left" height="364" src="${imageFile}"
@@ -51,13 +44,6 @@ export const mockRichTextBlockProps: IRichTextBlockProps = {
         porttitor molestie ante. Quisque nulla ipsum, ullamcorper et commodo ac, mollis at dui. Pellentesque et sem nec
         lectus condimentum pellentesque ac sit amet odio. Vestibulum tellus ante, maximus vitae elit nec, condimentum
         sollicitudin orci. Maecenas eu blandit nisi. Duis at tempus enim, id facilisis ipsum.</p>
-    <p></p>
-    <p></p>
-
-    <p>Image right aligned</p>
-    <img alt="0e6d538ae41e5359babfae5a7d1a4beb"
-        class="richtext-image right" height="364" src="${imageFile}"
-        width="480">
     <p>Mauris vestibulum congue felis mollis porta. Mauris et arcu blandit, gravida risus a,
         suscipit mi. Morbi sed arcu id quam interdum luctus vitae in nunc. Morbi efficitur neque eu facilisis bibendum.
         Praesent quis mauris quis magna lacinia dignissim eget eget ipsum. Duis blandit magna suscipit pharetra
@@ -67,6 +53,35 @@ export const mockRichTextBlockProps: IRichTextBlockProps = {
     <p></p>
     <p></p>
     <p></p>
+
+    <p>Image full width:</p>
+    <img alt="0e6d538ae41e5359babfae5a7d1a4beb"
+        class="richtext-image full-width" height="364"
+        src="${imageFile}" width="480">
+    <p></p>
+
+    <p>Image right aligned</p>
+    <img alt="0e6d538ae41e5359babfae5a7d1a4beb"
+        class="richtext-image right" height="364" src="${imageFile}"
+        width="480">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi faucibus dapibus ornare.
+        Suspendisse ut lobortis enim. Proin maximus rutrum efficitur. Integer mi orci, consequat et est tincidunt,
+        porttitor molestie ante. Quisque nulla ipsum, ullamcorper et commodo ac, mollis at dui. Pellentesque et sem nec
+        lectus condimentum pellentesque ac sit amet odio. Vestibulum tellus ante, maximus vitae elit nec, condimentum
+        sollicitudin orci. Maecenas eu blandit nisi. Duis at tempus enim, id facilisis ipsum.</p>
+    <p>Mauris vestibulum congue felis mollis porta. Mauris et arcu blandit, gravida risus a,
+        suscipit mi. Morbi sed arcu id quam interdum luctus vitae in nunc. Morbi efficitur neque eu facilisis bibendum.
+        Praesent quis mauris quis magna lacinia dignissim eget eget ipsum. Duis blandit magna suscipit pharetra
+        porttitor. Nulla suscipit commodo ipsum, sed ullamcorper massa dapibus vel. Donec iaculis tristique libero,
+        hendrerit vestibulum tortor consectetur vel. Aenean eu purus justo.</p>
+    <p></p>
+    <p></p>
+    <p></p>
+    <p></p>
+
+    <p>Image original size:</p><img alt="0e6d538ae41e5359babfae5a7d1a4beb"
+        class="richtext-image original-size" height="364"
+        src="${imageFile}" width="480">
     <p></p>
 
     <p>Image centered:</p>
@@ -74,11 +89,5 @@ export const mockRichTextBlockProps: IRichTextBlockProps = {
         class="richtext-image centered" height="227" src="${imageFile}"
         width="300">
     <p></p>
-
-    <p>Image original size:</p><img alt="0e6d538ae41e5359babfae5a7d1a4beb"
-        class="richtext-image original-size" height="364"
-        src="${imageFile}" width="480">
-    <p></p>
-</div>
   `,
 }

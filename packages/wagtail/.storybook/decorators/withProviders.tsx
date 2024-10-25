@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { LoadingState, ThemeProvider } from '@baseapp-frontend/design-system'
 import { RelayTestProvider, createTestEnvironment } from '@baseapp-frontend/graphql'
 
+import GlobalStyles from '@mui/material/GlobalStyles'
 import type { StoryContext, StoryFn } from '@storybook/react'
 
 import defaultTheme from '../__mocks__/theme'
@@ -27,6 +28,14 @@ const withProviders = (Story: StoryFn, context: StoryContext) => {
     <RelayTestProvider environment={environment}>
       <React.Suspense fallback={<LoadingState />}>
         <ThemeProvider {...defaultTheme}>
+          <GlobalStyles
+            styles={{
+              '*': {
+                marginBlockStart: 0,
+                marginBlockEnd: 0,
+              },
+            }}
+          />
           <Story />
         </ThemeProvider>
       </React.Suspense>
