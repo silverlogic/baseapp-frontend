@@ -55,7 +55,7 @@ jobs:
         run: pnpm lint
 
   test-unit:
-    name: Unit Test
+    name: Unit Test Applications and Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -78,7 +78,7 @@ jobs:
         run: pnpm test:unit
 
   test-component:
-    name: Component Test
+    name: Component Test Applications and Packages
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
