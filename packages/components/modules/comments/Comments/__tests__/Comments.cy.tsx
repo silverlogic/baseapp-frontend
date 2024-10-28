@@ -98,9 +98,12 @@ describe('Comments', () => {
     cy.findByLabelText('replies count comment-2').should('have.text', '2')
 
     cy.step('Unpin a comment')
-    cy.findByText('This is a pinned comment.').click()
+    cy.findByText('This is a pinned comment.')
+      .click()
+      .wait(500) // Add small delay to ensure menu is rendered
     cy.findByText('Pinned').should('exist')
     cy.findByRole('button', { name: /unpin comment/i })
+      .should('be.visible') // Add visibility check
       .click()
       .then(() => {
         resolveMostRecentOperation({ data: unpinACommentMockData })
