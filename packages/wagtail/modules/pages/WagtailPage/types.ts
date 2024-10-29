@@ -1,4 +1,6 @@
-import { PropsWithChildren } from 'react'
+import type { PropsWithChildren } from 'react'
+
+import type { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 
 export interface IPageParams {
   params: {

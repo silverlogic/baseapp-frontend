@@ -1,3 +1,5 @@
+import type { BoxProps } from '@mui/system'
+
 import type { IPageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
 
 export interface IRichTextBlock extends IPageBodyItem {
@@ -6,6 +8,5 @@ export interface IRichTextBlock extends IPageBodyItem {
 }
 
 export interface IRichTextBlockProps extends Omit<IRichTextBlock, 'type'> {
-  id?: string
   WrapperProps?: BoxProps
 }

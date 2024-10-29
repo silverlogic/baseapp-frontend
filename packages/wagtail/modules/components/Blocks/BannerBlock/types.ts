@@ -1,6 +1,6 @@
 import type { BoxProps } from '@mui/material'
-import type { IPageBodyItem } from 'services/Wagtail/PagesAPI/types'
 
+import type { IPageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
 import type { IImageRecordItem } from '../../../services/Wagtail/types'
 
 export interface IBannerBlock extends IPageBodyItem {
@@ -8,9 +8,7 @@ export interface IBannerBlock extends IPageBodyItem {
   type: 'banner_block'
 }
 
-export interface IBannerBlockProps extends Omit<IBannerBlock, 'type'> {
-  id?: string
-}
+export interface IBannerBlockProps extends Omit<IBannerBlock, 'type'> {}
 
 export interface IBannerBlockValue {
   featuredImage: IImageRecordItem
