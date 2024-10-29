@@ -28,7 +28,7 @@ export const wagtailPage = (currentPage: IPage) => ({
 })
 
 export const createWagtailPage = async ({ params }: IPageParams) => {
-  const currentPage = await getCurrentPage(params.path.join('/'))
+  const currentPage = await getCurrentPage(params.path?.join('/') ?? '/')
 
   return wagtailPage(currentPage)
 }

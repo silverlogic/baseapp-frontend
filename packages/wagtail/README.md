@@ -34,7 +34,7 @@ The following steps are already applied in the baseapp-frontend-template. If you
 
 #### Create Page to Render Wagtail Content
 
-Inside `apps/web/app/`, define where you want the Wagtail pages to appear. In the baseapp-frontend-template, we set the pages to display at `/pages/<page-slug>`, so Wagtail pages are rendered in `apps/web/app/(with-navigation)/(wagtail)/pages/[...path]/page.tsx`. Note the `[...path]/page.tsx` structure, which you’ll need wherever you decide to place the Wagtail page renderer.
+Inside `apps/web/app/`, define where you want the Wagtail pages to appear. In the baseapp-frontend-template, we set the pages to display at `/pages/<page-slug>`, so Wagtail pages are rendered in `apps/web/app/(with-navigation)/(wagtail)/pages/[[...path]]/page.tsx`. Note the `[[...path]]/page.tsx` structure, which you’ll need wherever you decide to place the Wagtail page renderer.
 
 In the `page.tsx` file you created, add the following code:
 
@@ -64,7 +64,7 @@ This code shows a simple way to render Wagtail page content on a Next.js page. I
 
 One of Wagtail’s key features is providing an easy way for authors to review content before publishing. This feature allows authors to preview pages they are editing.
 
-To create this page under `apps/web/app/`, place it near the previous `page.tsx`, so developers recognize they’re related. In the baseapp-frontend-template, we added this page at `apps/web/app/(with-navigation)/(wagtail)/page-preview/page.tsx`, making it accessible at `/page-preview` and positioning it within the `(wagtail)` folder near `pages/[...path]/page.tsx`.
+To create this page under `apps/web/app/`, place it near the previous `page.tsx`, so developers recognize they’re related. In the baseapp-frontend-template, we added this page at `apps/web/app/(with-navigation)/(wagtail)/page-preview/page.tsx`, making it accessible at `/page-preview` and positioning it within the `(wagtail)` folder near `pages/[[...path]]/page.tsx`.
 
 In the `page.tsx` file you created, add the following code:
 
