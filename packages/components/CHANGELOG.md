@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.11
+
+### Patch Changes
+
+- Add `fallbacks` and `alias` to the Cypress webpack configuration.
+
 ## 0.0.10
 
 ### Patch Changes
@@ -13,8 +19,8 @@
 ### Patch Changes
 
 - Add Messages module with SendMessage input for messages
-- Make the previus comment input a reusable component to be used in comments and messages
-- Reorganize modules to break previous social folder into comments, messages and __shared__
+- Make the previous comment input a reusable component to be used in comments and messages
+- Reorganize modules to break previus social folder into comments, messages and `__shared__`
 - Updated dependencies
   - @baseapp-frontend/design-system@0.0.13
 
