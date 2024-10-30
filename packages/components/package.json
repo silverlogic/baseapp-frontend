@@ -16,7 +16,8 @@
     "storybook": "storybook dev -p 6007",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
-    "cypress:open": "cypress open --browser chrome"
+    "cypress:open": "cypress open --browser chrome",
+    "test:component": "cypress run --component --browser chrome --headed"
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
