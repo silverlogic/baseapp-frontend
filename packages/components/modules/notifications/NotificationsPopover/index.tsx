@@ -38,6 +38,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
     {},
     { fetchPolicy: 'store-and-network' },
   )
+
   const user = useFragment<NotificationUserMenuFragment$key>(NotificationUserMenuFragment, me)
 
   useNotificationsSubscription(user?.id)
@@ -53,6 +54,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
         whileHover="hover"
         variants={varHover(1.05)}
         onClick={() => setIsDrawerOpened(true)}
+        aria-label="see notifications"
       >
         <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
           <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
