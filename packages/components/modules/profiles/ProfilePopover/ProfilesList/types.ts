@@ -1,4 +1,4 @@
-import { ProfileMenuItemProps } from '../ProfileMenuItem/types'
+import type { ProfileMenuItemProps } from './ProfileMenuItem/types'
 
 export interface ProfilesListProps {
   openSubmenu: boolean
