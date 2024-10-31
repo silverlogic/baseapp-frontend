@@ -1,21 +1,21 @@
 import type { FC } from 'react'
 
-import { CSSProperties } from '@mui/material/styles/createMixins'
+import type { CSSProperties } from '@mui/material/styles/createMixins'
 
+import type { AddProfileMenuItemProps } from '../../../../profiles/ProfilePopover/AddProfileMenuItem/types'
+import type { ProfilesListProps } from '../../../../profiles/ProfilePopover/ProfilesList/types'
+import type { SwitchProfileMenuProps } from '../../../../profiles/ProfilePopover/SwitchProfileMenu/types'
 import type { MenuItemProps } from '../types'
 
 export interface AccountPopoverProps {
-  accountAvatarUrl?: string
-  onCloseCallback?: () => void
-  menuItems?: MenuItemProps[]
   PopoverStyles?: CSSProperties
-  accountInfoSectionController?: SectionController
-  menuItemsSectionController?: SectionController
-  menuActionsSectionController?: SectionController
-  extraSectionControllersList?: SectionController[]
-  logoutButtonLabel?: string
-  disableCurrentUserPlaceholder?: boolean
-  hideLogoutButton?: boolean
+  menuItems?: MenuItemProps[]
+  CurrentUser?: FC
+  MenuItems?: FC
+  CurrentProfile?: FC
+  SwitchProfileMenu?: FC<SwitchProfileMenuProps>
+  ProfilesList?: FC<ProfilesListProps>
+  AddProfileMenuItem?: FC<AddProfileMenuItemProps>
 }
 
 export interface SectionController {

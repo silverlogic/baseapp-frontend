@@ -1,5 +1,7 @@
 import type { AvatarWithPlaceholderProps } from '@baseapp-frontend/design-system'
 
+import { MenuItemProps } from '@mui/material'
+
 import type {
   ProfileItemFragment$data,
   ProfileItemFragment$key,

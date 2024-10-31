@@ -3,4 +3,4 @@ export { default as CurrentProfileProvider } from './context/CurrentProfileProvi
 export { default as useCurrentProfile } from './context/useCurrentProfile'
 
 // Components
-export { default as ProfilePopover } from './ProfilePopover'
+export * from './ProfilePopover'

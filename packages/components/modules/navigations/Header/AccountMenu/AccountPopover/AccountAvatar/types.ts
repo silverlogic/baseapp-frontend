@@ -1,4 +1,6 @@
-import { ClickableAvatarProps } from '@baseapp-frontend/design-system'
+import type { MouseEvent } from 'react'
+
+import type { ClickableAvatarProps } from '@baseapp-frontend/design-system'
 
 export interface AccountAvatarProps extends ClickableAvatarProps {
   popoverOpen: boolean

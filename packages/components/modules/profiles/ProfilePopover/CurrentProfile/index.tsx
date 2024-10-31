@@ -4,15 +4,16 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 
+import { PopoverContentBox } from '../../../navigations/Header/AccountMenu/AccountPopover/styled'
 import useCurrentProfile from '../../context/useCurrentProfile'
 
-const CurrentProfilePlaceholder: FC = () => {
+const CurrentProfile: FC = () => {
   const { profile } = useCurrentProfile()
 
   if (!profile) return null
 
   return (
-    <Box sx={{ p: 1, gap: 1.5 }} display="flex" alignItems="center">
+    <PopoverContentBox sx={{ gap: 1.5 }} display="flex" alignItems="center">
       <AvatarWithPlaceholder
         width={40}
         height={40}
@@ -31,8 +32,8 @@ const CurrentProfilePlaceholder: FC = () => {
           </Typography>
         )}
       </Box>
-    </Box>
+    </PopoverContentBox>
   )
 }
 
-export default CurrentProfilePlaceholder
+export default CurrentProfile
