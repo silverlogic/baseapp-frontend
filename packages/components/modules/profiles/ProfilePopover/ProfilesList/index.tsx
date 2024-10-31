@@ -12,8 +12,9 @@ import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemF
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
 import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
-import ProfileMenuItem from '../ProfileMenuItem'
-import { ProfileMenuItemSkeleton, StyledList } from './styled'
+import LoadingState from './LoadingState'
+import ProfileMenuItem from './ProfileMenuItem'
+import { StyledList } from './styled'
 import { ProfilesListProps } from './types'
 
 const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps }) => {
@@ -42,13 +43,6 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
     )
   })
 }
-
-const LoadingState: FC = () => (
-  <>
-    <ProfileMenuItemSkeleton variant="rectangular" sx={{ mb: 0.5 }} />
-    <ProfileMenuItemSkeleton variant="rectangular" />
-  </>
-)
 
 const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
   const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel', listMaxHeight = 300 } = props
