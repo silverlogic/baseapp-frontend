@@ -15,7 +15,7 @@ const CurrentUser: FC = () => {
   }
 
   return (
-    <PopoverContentBox>
+    <PopoverContentBox sx={{ px: 1, py: 0.75 }}>
       <Typography component="p" variant="subtitle2" noWrap>
         {joinWithSeparator([user?.firstName, user?.lastName])}
       </Typography>

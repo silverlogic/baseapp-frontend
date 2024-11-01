@@ -14,5 +14,5 @@ export const PopoverStyles = {
 }
 
 export const PopoverContentBox = styled(Box)(({ theme }) => ({
-  margin: theme.spacing(1),
+  margin: theme.spacing(1.5),
 }))

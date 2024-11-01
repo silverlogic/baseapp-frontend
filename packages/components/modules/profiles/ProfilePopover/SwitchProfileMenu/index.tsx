@@ -11,7 +11,7 @@ const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
   openProfilesList,
   switchProfileLabel = 'Switch Profile',
 }) => (
-  <PopoverContentBox>
+  <PopoverContentBox sx={{ mt: 0.5 }}>
     <Stack>
       <MenuItem
         tabIndex={0}

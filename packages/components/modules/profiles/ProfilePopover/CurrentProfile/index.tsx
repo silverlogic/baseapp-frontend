@@ -13,7 +13,7 @@ const CurrentProfile: FC = () => {
   if (!profile) return null
 
   return (
-    <PopoverContentBox sx={{ gap: 1.5 }} display="flex" alignItems="center">
+    <PopoverContentBox sx={{ px: 1, py: 0.75, mb: 0, gap: 1.5 }} display="flex" alignItems="center">
       <AvatarWithPlaceholder
         width={40}
         height={40}
