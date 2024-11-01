@@ -14,6 +14,7 @@ const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
   <PopoverContentBox>
     <Stack>
       <MenuItem
+        tabIndex={0}
         component={ButtonBase}
         sx={{ justifyContent: 'space-between' }}
         onClick={openProfilesList}

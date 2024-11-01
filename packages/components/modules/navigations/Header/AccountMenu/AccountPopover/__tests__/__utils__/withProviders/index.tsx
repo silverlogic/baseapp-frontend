@@ -6,6 +6,7 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import CurrentProfileProvider from '../../../../../../../profiles/context/CurrentProfileProvider'
 import { AccountPopoverProps } from '../../../types'
 import defaultTheme from '../../__mocks__/theme'
 import { WithProvidersOptions } from './types'
@@ -19,7 +20,9 @@ const withProviders =
       <RelayTestProvider environment={environment}>
         <ThemeProvider {...defaultTheme}>
           <NotificationProvider>
-            <Component {...props} />
+            <CurrentProfileProvider>
+              <Component {...props} />
+            </CurrentProfileProvider>
           </NotificationProvider>
         </ThemeProvider>
       </RelayTestProvider>

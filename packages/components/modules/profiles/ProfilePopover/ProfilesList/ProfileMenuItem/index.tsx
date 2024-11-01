@@ -24,7 +24,12 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   const isActiveProfile = profile.id === currentProfile?.id
 
   return (
-    <StyledMenuItem active={isActiveProfile} onClick={() => onProfileChange(profile)}>
+    <StyledMenuItem
+      tabIndex={0}
+      active={isActiveProfile}
+      onClick={() => onProfileChange(profile)}
+      aria-label={`Switch to ${profile.name ?? 'this profile'}`}
+    >
       <AvatarWithPlaceholder
         width={width}
         height={height}

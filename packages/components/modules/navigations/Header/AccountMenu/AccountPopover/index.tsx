@@ -18,18 +18,23 @@ import {
 import AccountAvatar from './AccountAvatar'
 import DefaultCurrentUser from './CurrentUser'
 import LogoutItem from './LogoutItem'
-import MenuItems from './MenuItems'
+import DefaultMenuItems from './MenuItems'
 import { PopoverStyles as DefaultPopoverStyles } from './styled'
 import { AccountPopoverProps } from './types'
 
 const AccountPopover: FC<AccountPopoverProps> = ({
   PopoverStyles = {},
-  menuItems = [],
+  MenuItems = DefaultMenuItems,
+  MenuItemsProps = {},
   CurrentUser = DefaultCurrentUser,
   CurrentProfile = DefaultCurrentProfile,
   SwitchProfileMenu = DefaultSwitchProfileMenu,
+  SwitchProfileMenuProps = {},
   ProfilesList = DefaultProfilesList,
+  ProfilesListProps = {},
   AddProfileMenuItem = DefaultAddProfileMenuItem,
+  AddProfileMenuItemProps = {},
+  LogoutItemProps = {},
 }) => {
   const { user } = useJWTUser<BaseUser & JWTContent>()
   const { profile } = useCurrentProfile()
@@ -49,7 +54,6 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
   const loadCurrentProfile: boolean = Boolean(CurrentProfile) && Boolean(profile)
   const loadCurrentUser: boolean = !loadCurrentProfile && Boolean(CurrentUser)
-  const loadMenuItems: boolean = Boolean(menuItems.length)
 
   return (
     <>
@@ -69,6 +73,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
           <ProfilesList
             openSubmenu={openProfilesList}
             handleCloseSubmenu={() => setOpenProfilesList(false)}
+            {...ProfilesListProps}
           />
         ) : (
           <>
@@ -76,15 +81,20 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
             {loadCurrentUser && <CurrentUser />}
 
-            <SwitchProfileMenu openProfilesList={() => setOpenProfilesList(true)} />
+            {loadCurrentProfile && Boolean(SwitchProfileMenu) && (
+              <SwitchProfileMenu
+                openProfilesList={() => setOpenProfilesList(true)}
+                {...SwitchProfileMenuProps}
+              />
+            )}
 
-            {loadMenuItems && (
+            {Boolean(MenuItemsProps?.menuItems?.length) && (
               <>
                 {Boolean(loadCurrentProfile || loadCurrentUser || Boolean(SwitchProfileMenu)) && (
                   <Divider sx={{ borderStyle: 'solid' }} />
                 )}
 
-                <MenuItems menuItems={menuItems} handlePopoverOnClose={handlePopoverOnClose} />
+                <MenuItems handlePopoverOnClose={handlePopoverOnClose} {...MenuItemsProps} />
               </>
             )}
           </>
@@ -92,8 +102,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
         {Boolean(LogoutItem) && <Divider sx={{ borderStyle: 'solid' }} />}
 
-        <LogoutItem handlePopoverOnClose={handlePopoverOnClose}>
-          {openProfilesList && Boolean(AddProfileMenuItem) && <AddProfileMenuItem />}
+        <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps}>
+          {openProfilesList && Boolean(AddProfileMenuItem) && (
+            <AddProfileMenuItem {...AddProfileMenuItemProps} />
+          )}
         </LogoutItem>
       </Popover>
     </>

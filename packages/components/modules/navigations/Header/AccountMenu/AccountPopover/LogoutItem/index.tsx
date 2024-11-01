@@ -18,6 +18,8 @@ const LogoutItem: FC<LogoutItemProps> = ({
     <PopoverContentBox display="flex" flexDirection="column" gap={0.5}>
       {children}
       <MenuItem
+        type="button"
+        tabIndex={0}
         component={ButtonBase}
         onClick={() => {
           handlePopoverOnClose()

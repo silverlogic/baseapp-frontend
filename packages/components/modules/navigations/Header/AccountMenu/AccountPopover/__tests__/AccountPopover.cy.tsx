@@ -1,11 +1,17 @@
 import * as authHooks from '@baseapp-frontend/authentication'
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
+import * as utilsPackage from '@baseapp-frontend/utils'
 
+import 'cypress-wait-until'
+
+import { mockProfilesListFactory, mockUserProfileData } from './__mocks__/profiles'
 import { userMockData } from './__mocks__/user'
 import AccountPopoverForTesting from './__utils__/AccountPopoverForTesting'
 
 describe('AccountPopover', () => {
   beforeEach(() => {
+    cy.viewport('iphone-6')
+
     cy.stub(authHooks, 'useJWTUser').callsFake(() => ({
       user: userMockData,
     }))
@@ -14,133 +20,180 @@ describe('AccountPopover', () => {
     cy.stub(authHooks, 'useLogout').callsFake(() => ({
       logout: logoutSpy,
     }))
+
+    const sendToastSpy = cy.spy().as('sendToastSpy')
+    cy.stub(utilsPackage, 'useNotification').callsFake(() => ({
+      sendToast: sendToastSpy,
+    }))
   })
 
-  it('should render the account popover and be able to interact with it', () => {
-    const { environment } = createTestEnvironment()
+  it('should render the account popover without profile and be able to interact with it', () => {
+    const { environment, rejectMostRecentOperation } = createTestEnvironment()
 
-    cy.mount(<AccountPopoverForTesting environment={environment} />)
+    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
+      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
+        rejectMostRecentOperation("Error finding user's profile")
+      })
+    })
 
     cy.findByRole('button').click()
-    cy.get('.MuiPaper-root').should('exist')
 
     cy.contains(userMockData.firstName).should('exist')
     cy.contains(userMockData.lastName).should('exist')
     cy.contains(userMockData.email).should('exist')
 
-    cy.contains('button', /logout/i).click()
+    cy.findByRole('menuitem', { name: /logout/i }).click()
 
     cy.get('@logoutSpy').should('have.been.calledOnce')
   })
 
-  it('should render custom menu items', () => {
-    const { environment } = createTestEnvironment()
+  it('should render the account popover with profile and be able to interact with it', () => {
+    const { environment, resolveMostRecentOperation } = createTestEnvironment()
 
-    const menusMock = [
-      {
-        label: 'Menu1',
-        onClick: cy.stub().as('menu1'),
-      },
-      {
-        label: 'Menu2',
-        onClick: cy.stub().as('menu2'),
-      },
-    ]
-    cy.mount(<AccountPopoverForTesting environment={environment} menuItems={menusMock} />)
+    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
+      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
+        resolveMostRecentOperation({ data: mockUserProfileData })
+      })
+    })
 
     cy.findByRole('button').click()
 
-    cy.contains('li', /menu1/i).click()
-    cy.get('@menu1').should('have.been.calledOnce')
-    cy.wait(300) // wait for the menu to close
-    cy.get('.MuiPaper-root').should('not.exist')
+    cy.contains(mockUserProfileData.data.me.profile.name).should('exist')
+    cy.contains(mockUserProfileData.data.me.profile.urlPath.path).should('exist')
 
-    cy.findByRole('button').click()
+    // Step 1.
+    cy.step('should be able to switch profile')
 
-    cy.contains('li', /menu2/i).click()
-    cy.get('@menu2').should('have.been.calledOnce')
-    cy.wait(300) // wait for the menu to close
-    cy.get('.MuiPaper-root').should('not.exist')
+    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+
+    cy.findByRole('menuitem', { name: /switch profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
+
+    profileListData.data.me.profiles.forEach((profile) => {
+      cy.contains('li', profile.name).should('exist')
+      cy.contains('li', profile.urlPath.path).should('exist')
+    })
+
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
+    cy.get('@sendToastSpy').should('have.been.calledOnce')
+
+    // Step 2.
+    cy.step('should show 5 profiles and allow scrolling thru the profiles list')
+
+    cy.findByRole('menuitem', { name: /switch profile/i }).click()
+
+    cy.findByLabelText('List of available profiles')
+      .should('have.css', 'overflow-y', 'auto')
+      .then(($el) => {
+        const hasVerticalScroll = ($el[0]?.scrollHeight ?? 0) > ($el[0]?.clientHeight ?? 0)
+        expect(hasVerticalScroll).to.equal(true)
+      })
+
+    cy.findAllByLabelText(/^switch to/i)
+      .filter(':visible')
+      .should('have.length.lte', 5)
+
+    // Step 3.
+    cy.step('should be able to cancel the profile switch')
+
+    cy.findByRole('menuitem', { name: /cancel/i }).click()
+
+    // Step 4.
+    cy.step('should not show the success toast when profile is not changed')
+
+    cy.findByRole('menuitem', { name: /switch profile/i }).click()
+
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
+    // Since it was triggered in Step 1, now it still should be called once, since the profile was
+    // not changed
+    cy.get('@sendToastSpy').should('have.been.calledOnce')
   })
 
-  it('should render custom sections', () => {
-    const { environment } = createTestEnvironment()
-
-    const accountInfoSectionControllerMock = {
-      show: true,
-      items: [<div key="account-section">Account Section</div>],
-    }
-
-    const menuItemsSectionControllerMock = {
-      show: true,
-      items: [<div key="menu-section">Menu Section</div>],
-    }
-
-    const menuActionsSectionControllerMock = {
-      show: true,
-      items: [<div key="account-actions-section">Account Actions Section</div>],
-    }
+  it('should show all sub-components custom props', () => {
+    const { environment, resolveMostRecentOperation } = createTestEnvironment()
 
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        accountInfoSectionController={accountInfoSectionControllerMock}
-        menuItemsSectionController={menuItemsSectionControllerMock}
-        menuActionsSectionController={menuActionsSectionControllerMock}
+        MenuItemsProps={{
+          menuItems: [
+            {
+              label: 'Custom Menu Item',
+              onClick: () => {},
+            },
+          ],
+        }}
+        SwitchProfileMenuProps={{ switchProfileLabel: 'Change profile' }}
+        ProfilesListProps={{
+          cancelLabel: 'Close',
+          listMaxHeight: 240,
+          MenuItemProps: {
+            width: 24,
+            height: 24,
+          },
+        }}
+        AddProfileMenuItemProps={{ addNewProfileLabel: 'Add organization' }}
+        LogoutItemProps={{ logoutButtonLabel: 'Sign Out' }}
       />,
-    )
+    ).then(() => {
+      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
+        resolveMostRecentOperation({ data: mockUserProfileData })
+      })
+    })
 
     cy.findByRole('button').click()
 
-    cy.contains('div', /account section/i).should('exist')
-    cy.contains('div', /menu section/i).should('exist')
-    cy.contains('div', /account actions section/i).should('exist')
-  })
+    // Step 1.
+    cy.step('should show custom menu item')
 
-  it('should hide custom section', () => {
-    const { environment } = createTestEnvironment()
+    cy.findByRole('menuitem', { name: /custom menu item/i }).should('exist')
 
-    const accountInfoSectionControllerMock = {
-      show: false,
-      items: [],
-    }
+    // Step 2.
+    cy.step('should show custom switch profile label')
 
-    cy.mount(
-      <AccountPopoverForTesting
-        environment={environment}
-        accountInfoSectionController={accountInfoSectionControllerMock}
-      />,
-    )
+    cy.findByRole('menuitem', { name: /change profile/i }).should('exist')
 
-    cy.findByRole('button').click()
+    // Step 3.
+    cy.step('should show profile list customizations')
 
-    cy.contains('div', /account section/i).should('not.exist')
-  })
+    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    cy.findByRole('menuitem', { name: /change profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
+    cy.findByRole('menuitem', { name: /close/i }).should('exist')
+    cy.findByLabelText('List of available profiles').filter(':visible').should('have.length.lte', 4)
 
-  it('should add and hide extra sections', () => {
-    const { environment } = createTestEnvironment()
+    cy.findByLabelText('List of available profiles').within(() => {
+      cy.get('li:visible').each(($li) => {
+        cy.wrap($li)
+          .find('.MuiAvatar-root')
+          .within(($avatar) => {
+            cy.get('img').then(($img) => {
+              if ($img.length && $img.attr('width') && $img.attr('height')) {
+                cy.wrap($img).should('have.attr', 'width', '24')
+                cy.wrap($img).should('have.attr', 'height', '24')
+              } else {
+                cy.wrap($avatar).should('have.attr', 'width', '24')
+                cy.wrap($avatar).should('have.attr', 'height', '24')
+              }
+            })
+          })
+      })
+    })
 
-    const extraSectionControllersListMock = [
-      {
-        show: true,
-        items: [<div key="extra-section-1">Extra Section 1</div>],
-      },
-      {
-        show: false,
-        items: [<div key="extra-section-2">Extra Section 2</div>],
-      },
-    ]
+    // Step 4.
+    cy.step('should show custom add profile label')
 
-    cy.mount(
-      <AccountPopoverForTesting
-        environment={environment}
-        extraSectionControllersList={extraSectionControllersListMock}
-      />,
-    )
+    cy.findByRole('menuitem', { name: /add organization/i }).should('exist')
 
-    cy.findByRole('button').click()
+    // Step 5.
+    cy.step('should show custom logout button label')
 
-    cy.contains('div', /extra section 1/i).should('exist')
-    cy.contains('div', /extra section 2/i).should('not.exist')
+    cy.findByRole('menuitem', { name: /sign out/i }).should('exist')
   })
 })

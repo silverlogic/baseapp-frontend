@@ -10,7 +10,7 @@ const AddProfileMenuItem: FC<AddProfileMenuItemProps> = ({
   addNewProfileLabel = 'New profile',
 }) => (
   <Stack>
-    <MenuItem component={ButtonBase} sx={{ justifyContent: 'space-between' }}>
+    <MenuItem tabIndex={0} component={ButtonBase} sx={{ justifyContent: 'space-between' }}>
       {addNewProfileLabel}
       <AddIcon color="action" />
     </MenuItem>

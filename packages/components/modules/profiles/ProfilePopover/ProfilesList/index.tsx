@@ -14,7 +14,7 @@ import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
-import { StyledList } from './styled'
+import { CancelMenuItem, StyledList } from './styled'
 import { ProfilesListProps } from './types'
 
 const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps }) => {
@@ -51,18 +51,18 @@ const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
     <Slide direction={openSubmenu ? 'left' : 'right'} in={openSubmenu} mountOnEnter unmountOnExit>
       <Box>
         <Box sx={{ p: 1 }}>
-          <ButtonBase
-            sx={{ p: 1, gap: 1, justifyContent: 'start', width: '100%' }}
-            disableRipple
-            onClick={() => handleCloseSubmenu()}
-          >
+          <CancelMenuItem tabIndex={0} component={ButtonBase} onClick={() => handleCloseSubmenu()}>
             <ChevronIcon position="left" color="action" />
             {cancelLabel}
-          </ButtonBase>
+          </CancelMenuItem>
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />
         <Box sx={{ p: 1 }}>
-          <StyledList disablePadding maxHeight={listMaxHeight}>
+          <StyledList
+            disablePadding
+            maxHeight={listMaxHeight}
+            aria-label="List of available profiles"
+          >
             <Suspense fallback={<LoadingState />}>
               <ProfilesList {...props} />
             </Suspense>
