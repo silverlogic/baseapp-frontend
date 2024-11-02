@@ -1,5 +1,6 @@
 {
   "extends": "./tsconfig.json",
+  "include": ["**/*.tsx", "**/*.ts"],
   "compilerOptions": {
     "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
     "outDir": "./dist"

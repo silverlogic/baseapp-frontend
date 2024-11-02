@@ -1,8 +1,9 @@
 {
   "extends": "./tsconfig.json",
+  "include": ["**/*.tsx", "**/*.ts", ".storybook/**/*", ".storybook/**/*.json"],
   "compilerOptions": {
-    "types": ["jest", "@testing-library/jest-dom", "node"],
+    "types": ["node", "jest", "@testing-library/jest-dom"],
     "outDir": "./dist"
   },
-  "exclude": ["node_modules", "**/*.cy.ts", "**/*.cy.tsx"]
+  "exclude": ["node_modules", "cypress.config.ts", "**/*.cy.tsx"]
 }

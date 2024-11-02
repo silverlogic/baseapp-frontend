@@ -1,4 +1,6 @@
+import { GraphQLTaggedNode, Variables } from 'react-relay'
 import { MockPayloadGenerator, createMockEnvironment } from 'relay-test-utils'
+import { MockResolvers } from 'relay-test-utils/lib/RelayMockPayloadGenerator'
 
 import { ResolveMostRecentOperationParams } from './types'
 
@@ -32,7 +34,35 @@ const createTestEnvironment = () => {
     }
   }
 
-  return { environment, resolveMostRecentOperation, rejectMostRecentOperation }
+  const queueOperationResolver = (mockResolvers: MockResolvers) => {
+    try {
+      environment.mock.queueOperationResolver((operation) => {
+        // eslint-disable-next-line no-console
+        console.log(`react-relay mock: ${operation.request.node.operation.name}`)
+        return MockPayloadGenerator.generate(operation, mockResolvers)
+      })
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  const queuePendingOperation = (operation: GraphQLTaggedNode, variables?: Variables) => {
+    try {
+      environment.mock.queuePendingOperation(operation, variables ?? {})
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  return {
+    environment,
+    resolveMostRecentOperation,
+    rejectMostRecentOperation,
+    queueOperationResolver,
+    queuePendingOperation,
+  }
 }
 
 export default createTestEnvironment

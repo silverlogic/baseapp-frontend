@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "cypress.config.ts",
+    "babel.config.js",
+    "jest.config.ts",
+    ".storybook/**/*",
+    ".storybook/**/*.json"
+  ],
+  "exclude": ["node_modules"]
+}

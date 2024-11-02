@@ -1,6 +1,6 @@
 import { List, ListProps, MenuItem, MenuItemProps, styled } from '@mui/material'
 
-export const StyledList = styled(List, { shouldForwardProp: (prop) => prop !== 'active' })<
+export const StyledList = styled(List, { shouldForwardProp: (prop) => prop !== 'maxHeight' })<
   ListProps & { maxHeight: number }
 >(({ maxHeight }) => ({
   maxHeight,

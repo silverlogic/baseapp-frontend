@@ -91,7 +91,7 @@ const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   useEffect(() => {
     eventEmitter.on(LOGOUT_EVENT, logoutListener)
     return () => {
-      eventEmitter.removeListener(LOGOUT_EVENT, logoutListener)
+      eventEmitter.off(LOGOUT_EVENT, logoutListener)
     }
   }, [])
 

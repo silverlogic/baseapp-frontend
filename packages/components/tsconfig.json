@@ -1,7 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["node", "jest", "cypress"],
+    "types": ["node"],
     "outDir": "./dist"
   },
   "include": [
@@ -25,5 +25,13 @@
       "path": "./tsconfig.jest.json"
     }
   ],
-  "exclude": ["node_modules", "**/*.cy.ts", "**/*.cy.tsx", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": [
+    "node_modules",
+    "cypress.config.ts",
+    "cypress",
+    "**/*.cy.ts",
+    "**/*.cy.tsx",
+    "**/*.test.ts",
+    "**/*.test.tsx"
+  ]
 }

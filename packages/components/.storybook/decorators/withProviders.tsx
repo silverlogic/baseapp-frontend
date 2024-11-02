@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import { LoadingState, ThemeProvider } from '@baseapp-frontend/design-system'
 import { RelayTestProvider, createTestEnvironment } from '@baseapp-frontend/graphql'
@@ -15,18 +15,14 @@ const queryClient = new QueryClient()
 const withProviders = (Story: StoryFn, context: StoryContext) => {
   // TODO: registering a few tailwind classess (used by @baseapp-frontend/design-system components), need to figure out why the @baseapp-frontend/components storybook are not including it correctly
   // pb-3 px-3 w-full rounded-md bg-background-neutral px-2 py-1
-  const { environment, resolveMostRecentOperation } = createTestEnvironment()
+  const relayMockEnvironment = createTestEnvironment()
+  const { environment, queueOperationResolver } = relayMockEnvironment
+
+  context.parameters.relayMockEnvironment = relayMockEnvironment
 
   const mockResolvers = context.parameters.mockResolvers || {}
 
-  useEffect(() => {
-    try {
-      resolveMostRecentOperation({ mockResolvers })
-    } catch (error) {
-      // eslint-disable-next-line
-      console.log(error)
-    }
-  }, [mockResolvers, resolveMostRecentOperation])
+  queueOperationResolver(mockResolvers)
 
   return (
     <QueryClientProvider client={queryClient}>
