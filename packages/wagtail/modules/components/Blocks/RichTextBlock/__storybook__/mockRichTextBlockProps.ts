@@ -2,6 +2,7 @@ import type { IRichTextBlockProps } from '../types'
 import imageFile from './static/image.jpeg'
 
 export const mockRichTextBlockProps: IRichTextBlockProps = {
+  id: 'rich-text-block-mock-id',
   value: `
     <p></p>
     <h2><b>Welcome to Our Technology Solutions</b></h2>

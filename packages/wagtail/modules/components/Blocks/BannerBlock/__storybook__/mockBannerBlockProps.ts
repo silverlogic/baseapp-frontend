@@ -2,6 +2,7 @@ import type { IBannerBlockProps } from '../types'
 import imageFile from './static/image.jpeg'
 
 export const mockBannerBlockProps: IBannerBlockProps = {
+  id: 'banner-block-mock-id',
   value: {
     title: 'Your Technology Partner',
     description: `<p>We are your trusted partner in solving complex problems with innovative technological solutions. Whether you're looking to optimize processes, scale your operations, or tackle new challenges, we are here to provide the expertise and tools you need to succeed.</p>`,

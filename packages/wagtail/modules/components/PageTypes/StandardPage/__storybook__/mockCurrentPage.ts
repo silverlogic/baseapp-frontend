@@ -8,12 +8,10 @@ export const mockCurrentPage: IPage = {
   title: 'Mock Current Page',
   body: [
     {
-      id: 'rich_text_block_1',
       type: 'rich_text_block',
       ...mockRichTextBlockProps,
     },
     {
-      id: 'banner_block_1',
       type: 'banner_block',
       ...mockBannerBlockProps,
     },
