@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.15
+
+### Patch Changes
+
+- Add Storybook for notifications components.
+
 ## 0.0.14
 
 ### Patch Changes
