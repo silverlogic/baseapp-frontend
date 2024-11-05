@@ -59,6 +59,11 @@ const preview: Preview = {
           // General
           'Logo',
           'Scrollbar',
+          // Notifications
+          'NotificationsPopover',
+          'NotificationsList',
+          'NotificationItem',
+          'NotificationUserMenu',
         ]
 
         const componentsStoriesOrder = [
@@ -104,6 +109,11 @@ const preview: Preview = {
           'CommentUpsertActions',
           'ReactionButton',
           'Timestamp',
+          //Notifications
+          'NotificationsPopover',
+          'NotificationsList',
+          'NotificationItem',
+          'NotificationUserMenu',
         ]
         const final = [...storiesOrder, ...componentsStoriesOrder]
 
