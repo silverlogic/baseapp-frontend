@@ -7,6 +7,7 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 import type { StoryContext, StoryFn } from '@storybook/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+import CurrentProfileProvider from '../../modules/profiles/context/CurrentProfileProvider'
 import '../../styles/tailwind/globals.css'
 import defaultTheme from '../__mocks__/theme'
 
@@ -30,7 +31,9 @@ const withProviders = (Story: StoryFn, context: StoryContext) => {
         <React.Suspense fallback={<LoadingState />}>
           <ThemeProvider {...defaultTheme}>
             <NotificationProvider>
-              <Story />
+              <CurrentProfileProvider>
+                <Story />
+              </CurrentProfileProvider>
             </NotificationProvider>
           </ThemeProvider>
         </React.Suspense>

@@ -1,5 +1,4 @@
-import { Box, menuItemClasses } from '@mui/material'
-import { styled } from '@mui/system'
+import { menuItemClasses } from '@mui/material'
 
 export const PopoverStyles = {
   width: 256,
@@ -12,7 +11,3 @@ export const PopoverStyles = {
     },
   },
 }
-
-export const PopoverContentBox = styled(Box)(({ theme }) => ({
-  margin: theme.spacing(1.5),
-}))

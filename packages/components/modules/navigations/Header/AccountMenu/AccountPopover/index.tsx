@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
@@ -41,15 +41,26 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
   const [openProfilesList, setOpenProfilesList] = useState(false)
 
+  let timeoutId: NodeJS.Timeout | null = null
+
   const handlePopoverOnClose = () => {
     popover.onClose()
     // If the profiles list is open, close it after the close animation.
     if (openProfilesList) {
-      setTimeout(() => {
+      timeoutId = setTimeout(() => {
         setOpenProfilesList(false)
       }, 500)
     }
   }
+
+  useEffect(
+    () => () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    },
+    [timeoutId],
+  )
 
   const loadCurrentProfile: boolean = Boolean(CurrentProfile) && Boolean(profile)
   const loadCurrentUser: boolean = !loadCurrentProfile && Boolean(CurrentUser)

@@ -5,9 +5,7 @@ import { Meta, StoryObj } from '@storybook/react'
 
 import AccountPopover from '..'
 import { withTokenSetup } from '../../../../../../.storybook/decorators'
-import CurrentProfileProvider from '../../../../../profiles/context/CurrentProfileProvider'
 import { CURRENT_PROFILE_STORAGE_KEY } from '../../../../../profiles/context/CurrentProfileProvider/constants'
-import { ProfilesListQuery } from '../../../../../profiles/graphql/queries/ProfilesList'
 import { AccountPopoverProps } from '../types'
 import { mockResolvers } from './mockResolvers'
 
@@ -62,17 +60,13 @@ export default {
     (Story, context) => {
       localStorage.removeItem(CURRENT_PROFILE_STORAGE_KEY)
 
-      const { queueOperationResolver, queuePendingOperation } = context.parameters
-        .relayMockEnvironment as ReturnType<typeof createTestEnvironment>
+      const { queueOperationResolver } = context.parameters.relayMockEnvironment as ReturnType<
+        typeof createTestEnvironment
+      >
 
       queueOperationResolver(mockResolvers)
-      queuePendingOperation(ProfilesListQuery)
 
-      return (
-        <CurrentProfileProvider>
-          <Story />
-        </CurrentProfileProvider>
-      )
+      return <Story />
     },
   ],
 } as Meta

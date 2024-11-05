@@ -2,16 +2,15 @@ import { FC } from 'react'
 
 import { ChevronIcon } from '@baseapp-frontend/design-system'
 
-import { ButtonBase, MenuItem, Stack } from '@mui/material'
+import { Box, ButtonBase, MenuItem, Stack } from '@mui/material'
 
-import { PopoverContentBox } from '../../../navigations/Header/AccountMenu/AccountPopover/styled'
 import { SwitchProfileMenuProps } from './types'
 
 const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
   openProfilesList,
   switchProfileLabel = 'Switch Profile',
 }) => (
-  <PopoverContentBox sx={{ mt: 0.5 }}>
+  <Box sx={{ m: 1.5, mt: 0.5 }}>
     <Stack>
       <MenuItem
         tabIndex={0}
@@ -23,7 +22,7 @@ const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
         <ChevronIcon position="right" color="action" />
       </MenuItem>
     </Stack>
-  </PopoverContentBox>
+  </Box>
 )
 
 export default SwitchProfileMenu

@@ -1,14 +1,13 @@
 import { FC } from 'react'
 
-import { List, MenuItem, Stack } from '@mui/material'
+import { Box, List, MenuItem, Stack } from '@mui/material'
 
-import { PopoverContentBox } from '../styled'
 import { MenuItemsProps } from './types'
 
 const MenuItems: FC<MenuItemsProps> = ({ handlePopoverOnClose, menuItems }) => {
   if (!menuItems || !menuItems.length) return null
   return (
-    <PopoverContentBox>
+    <Box margin={1.5}>
       <Stack component={List}>
         {menuItems?.map((item) => (
           <MenuItem
@@ -22,7 +21,7 @@ const MenuItems: FC<MenuItemsProps> = ({ handlePopoverOnClose, menuItems }) => {
           </MenuItem>
         ))}
       </Stack>
-    </PopoverContentBox>
+    </Box>
   )
 }
 

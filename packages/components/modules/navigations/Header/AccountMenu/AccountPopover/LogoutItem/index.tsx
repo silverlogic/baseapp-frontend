@@ -2,9 +2,8 @@ import { FC } from 'react'
 
 import { useLogout } from '@baseapp-frontend/authentication'
 
-import { ButtonBase, MenuItem } from '@mui/material'
+import { Box, ButtonBase, MenuItem } from '@mui/material'
 
-import { PopoverContentBox } from '../styled'
 import { LogoutItemProps } from './types'
 
 const LogoutItem: FC<LogoutItemProps> = ({
@@ -15,7 +14,7 @@ const LogoutItem: FC<LogoutItemProps> = ({
   const { logout } = useLogout()
 
   return (
-    <PopoverContentBox display="flex" flexDirection="column" gap={0.5}>
+    <Box margin={1.5} display="flex" flexDirection="column" gap={0.5}>
       {children}
       <MenuItem
         type="button"
@@ -29,7 +28,7 @@ const LogoutItem: FC<LogoutItemProps> = ({
       >
         {logoutButtonLabel}
       </MenuItem>
-    </PopoverContentBox>
+    </Box>
   )
 }
 
