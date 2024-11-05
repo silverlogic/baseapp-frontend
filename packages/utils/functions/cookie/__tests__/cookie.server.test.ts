@@ -22,10 +22,10 @@ describe('Cookie Functions in the server side', () => {
     })
 
     it('should be able to parse the cookie if it is a JSON string', () => {
-      const mockCookie = '{"key": "value"}'
+      const mockCookie = JSON.stringify({ key: 'value' })
       cookiesGetMock.mockReturnValue({ value: mockCookie })
 
-      const result = getCookie('test')
+      const result = getCookie('test', { parseJSON: true })
 
       expect(result).toEqual({ key: 'value' })
     })

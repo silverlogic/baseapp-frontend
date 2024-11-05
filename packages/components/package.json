@@ -7,7 +7,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
-    "dev": "tsc --watch",
+    "dev": "rm -rf dist && tsc --watch",
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay-update-schema": "yarn relay-download-schema && yarn relay",
