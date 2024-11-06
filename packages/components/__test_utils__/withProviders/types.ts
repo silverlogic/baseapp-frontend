@@ -2,4 +2,5 @@ import type { RelayMockEnvironment } from 'relay-test-utils/lib/RelayModernMockE
 
 export type WithProvidersOptions = {
   environment: RelayMockEnvironment
+  [key: string]: any
 }

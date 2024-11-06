@@ -50,6 +50,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
+
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
     if (!notification.unread && notifications[index - 1]?.unread) {
@@ -116,7 +117,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
             <MarkAllAsReadButton refetch={refetchNotifications} />
           )}
           {smDown && (
-            <IconButton onClick={() => setIsDrawerOpened(false)}>
+            <IconButton onClick={() => setIsDrawerOpened(false)} aria-label="close notifications">
               <CloseIcon />
             </IconButton>
           )}

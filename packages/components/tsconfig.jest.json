@@ -4,6 +4,6 @@
     "types": ["jest", "@testing-library/jest-dom", "node"]
   },
   "include": ["jest", "**/*.test.ts", "**/*.test.tsx"],
-  "exclude": ["**/*.cy.ts", "**/*.cy.tsx", "cypress.config.ts", "cypress"],
+  "exclude": ["node_modules", "dist", "**/*.cy.ts", "**/*.cy.tsx", "cypress.config.ts", "cypress"],
   "references": [{ "path": "./tsconfig.json" }]
 }

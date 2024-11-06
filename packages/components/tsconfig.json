@@ -22,5 +22,5 @@
       "path": "./tsconfig.jest.json"
     }
   ],
-  "exclude": ["node_modules", "jest", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }

@@ -1,7 +1,6 @@
-// @ts-ignore
-import ClientCookies, { CookieAttributes } from 'js-cookie'
+import ClientCookies from 'js-cookie'
 
-import { GetCookieOptions } from './types'
+import type { GetCookieOptions, SetCookieOptions } from './types'
 
 const parseCookie = <T>(cookie: string) => {
   try {
@@ -13,7 +12,7 @@ const parseCookie = <T>(cookie: string) => {
 
 export const getCookie = <T>(
   key: string,
-  { noSSR = false, parseJSON = true }: GetCookieOptions = {},
+  { noSSR = false, parseJSON = false }: GetCookieOptions = {},
 ) => {
   let cookie
   if (typeof window === typeof undefined && !noSSR) {
@@ -27,7 +26,7 @@ export const getCookie = <T>(
 
 export const getCookieAsync = async <T>(
   key: string,
-  { noSSR = false, parseJSON = true }: GetCookieOptions = {},
+  { noSSR = false, parseJSON = false }: GetCookieOptions = {},
 ) => {
   let cookie
   if (typeof window === typeof undefined && !noSSR) {
@@ -40,9 +39,14 @@ export const getCookieAsync = async <T>(
   return parseJSON ? parseCookie<T>(cookie as string) : (cookie as T)
 }
 
-export const setCookie = (key: string, value: any, config?: CookieAttributes) => {
+export const setCookie = (
+  key: string,
+  value: any,
+  { stringfyValue = false, ...config }: SetCookieOptions = {},
+) => {
   try {
-    ClientCookies.set(key, JSON.stringify(value), config)
+    const formattedValue = stringfyValue ? JSON.stringify(value) : value
+    ClientCookies.set(key, formattedValue, config)
   } catch (error) {
     console.error(error)
   }
