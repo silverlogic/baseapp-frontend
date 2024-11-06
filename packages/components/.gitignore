@@ -56,3 +56,6 @@ cypress/downloads
 
 # Sentry Config File
 .sentryclirc
+
+# editorconfig
+.editorconfig

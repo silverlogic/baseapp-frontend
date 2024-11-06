@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { ACCESS_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 

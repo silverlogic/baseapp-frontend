@@ -1,81 +1,123 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 
-import { User as BaseUser, useJWTUser, useLogout } from '@baseapp-frontend/authentication'
+import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
-import { JWTContent, joinWithSeparator } from '@baseapp-frontend/utils'
+import { JWTContent } from '@baseapp-frontend/utils'
 
-import Box from '@mui/material/Box'
 import Divider from '@mui/material/Divider'
-import MenuItem from '@mui/material/MenuItem'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 
+import {
+  AddProfileMenuItem as DefaultAddProfileMenuItem,
+  CurrentProfile as DefaultCurrentProfile,
+  ProfilesList as DefaultProfilesList,
+  SwitchProfileMenu as DefaultSwitchProfileMenu,
+  useCurrentProfile,
+} from '../../../../profiles'
+import DefaultCurrentUser from './CurrentUser'
+import LogoutItem from './LogoutItem'
+import DefaultMenuItems from './MenuItems'
+import { PopoverStyles as DefaultPopoverStyles } from './styled'
 import { AccountPopoverProps } from './types'
 
 const AccountPopover: FC<AccountPopoverProps> = ({
-  menuItems = [],
-  logoutButtonLabel = 'Logout',
-  hideLogoutButton = false,
+  PopoverStyles = {},
+  MenuItems = DefaultMenuItems,
+  MenuItemsProps = {},
+  CurrentUser = DefaultCurrentUser,
+  CurrentProfile = DefaultCurrentProfile,
+  SwitchProfileMenu = DefaultSwitchProfileMenu,
+  SwitchProfileMenuProps = {},
+  ProfilesList = DefaultProfilesList,
+  ProfilesListProps = {},
+  AddProfileMenuItem = DefaultAddProfileMenuItem,
+  AddProfileMenuItemProps = {},
+  LogoutItemProps = {},
 }) => {
   const { user } = useJWTUser<BaseUser & JWTContent>()
-  const { logout } = useLogout()
+  const { profile } = useCurrentProfile()
   const popover = usePopover()
 
-  const handleLogout = async () => {
+  const [openProfilesList, setOpenProfilesList] = useState(false)
+
+  let timeoutId: NodeJS.Timeout | null = null
+
+  const handlePopoverOnClose = () => {
     popover.onClose()
-    logout()
+    // If the profiles list is open, close it after the close animation.
+    if (openProfilesList) {
+      timeoutId = setTimeout(() => {
+        setOpenProfilesList(false)
+      }, 500)
+    }
   }
 
-  const handleMenuItemClick = (onClick: () => void) => {
-    onClick()
-    popover.onClose()
-  }
+  useEffect(
+    () => () => {
+      if (timeoutId) {
+        clearTimeout(timeoutId)
+      }
+    },
+    [timeoutId],
+  )
+
+  const loadCurrentProfile = Boolean(CurrentProfile) && Boolean(profile)
+  const loadCurrentUser = !loadCurrentProfile && Boolean(CurrentUser)
 
   return (
     <>
       <ClickableAvatar
-        src={user?.avatar?.small}
-        alt={user?.email}
+        color="secondary"
+        src={profile?.image?.url ?? user?.avatar?.small}
+        alt="User avatar"
         onClick={popover.onOpen}
-        isOpen={!!popover.open}
+        isOpen={Boolean(popover.open)}
+      />
+
+      <Popover
+        open={popover.open}
+        onClose={handlePopoverOnClose}
+        sx={{ ...DefaultPopoverStyles, ...PopoverStyles }}
       >
-        {user?.firstName && user?.lastName ? `${user?.firstName[0]}${user?.lastName[0]}` : ''}
-      </ClickableAvatar>
-
-      <Popover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
-        <Box sx={{ p: 2, pb: 1.5 }}>
-          <Typography variant="subtitle2" noWrap>
-            {joinWithSeparator([user?.firstName, user?.lastName])}
-          </Typography>
-
-          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.email}
-          </Typography>
-        </Box>
-
-        <Divider sx={{ borderStyle: 'solid' }} />
-
-        <Stack sx={{ p: 1 }}>
-          {menuItems?.map((item) => (
-            <MenuItem key={item.label} onClick={() => handleMenuItemClick(item.onClick)}>
-              {item.label}
-            </MenuItem>
-          ))}
-        </Stack>
-
-        {!hideLogoutButton && (
+        {openProfilesList ? (
+          <ProfilesList
+            openSubmenu={openProfilesList}
+            handleCloseSubmenu={() => setOpenProfilesList(false)}
+            {...ProfilesListProps}
+          />
+        ) : (
           <>
-            <Divider sx={{ borderStyle: 'solid' }} />
-            <MenuItem
-              onClick={handleLogout}
-              sx={{ m: 1, fontWeight: 'fontWeightBold', color: 'error.main' }}
-            >
-              {logoutButtonLabel}
-            </MenuItem>
+            {loadCurrentProfile && <CurrentProfile />}
+
+            {loadCurrentUser && <CurrentUser />}
+
+            {loadCurrentProfile && Boolean(SwitchProfileMenu) && (
+              <SwitchProfileMenu
+                openProfilesList={() => setOpenProfilesList(true)}
+                {...SwitchProfileMenuProps}
+              />
+            )}
+
+            {Boolean(MenuItemsProps?.menuItems?.length) && (
+              <>
+                {Boolean(loadCurrentProfile || loadCurrentUser || Boolean(SwitchProfileMenu)) && (
+                  <Divider sx={{ borderStyle: 'solid' }} />
+                )}
+
+                <MenuItems handlePopoverOnClose={handlePopoverOnClose} {...MenuItemsProps} />
+              </>
+            )}
           </>
         )}
+
+        {Boolean(LogoutItem) && <Divider sx={{ borderStyle: 'solid' }} />}
+
+        <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps}>
+          {openProfilesList && Boolean(AddProfileMenuItem) && (
+            <AddProfileMenuItem {...AddProfileMenuItemProps} />
+          )}
+        </LogoutItem>
       </Popover>
     </>
   )

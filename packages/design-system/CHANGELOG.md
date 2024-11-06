@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.15
+
+### Patch Changes
+
+- Add the AddIcon to the icons library
+
 ## 0.0.14
 
 ### Patch Changes

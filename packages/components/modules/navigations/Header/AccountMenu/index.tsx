@@ -62,7 +62,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
     <div className="grid w-full grid-cols-[1fr_40px_40px] items-center justify-center gap-1 min-lg:gap-2">
       {renderHeaderContent()}
       {renderAdditionalComponent()}
-      <AccountPopover menuItems={menuItems} />
+      <AccountPopover MenuItemsProps={{ menuItems }} />
     </div>
   )
 }

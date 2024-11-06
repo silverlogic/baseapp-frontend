@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.1.10
+
+### Patch Changes
+
+- Add new helpful mock functions to the react-relay "createTestEnvironment" helper.
+
 ## 1.1.9
 
 ### Patch Changes

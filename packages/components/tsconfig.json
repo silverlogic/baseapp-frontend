@@ -12,8 +12,15 @@
     "*.ts",
     "*.tsx",
     "babel.config.js",
+    "cypress.config.ts",
+    "webpack.config.ts",
     ".storybook/**/*",
     ".storybook/**/*.json"
   ],
-  "exclude": ["node_modules", "dist"]
+  "references": [
+    {
+      "path": "./tsconfig.jest.json"
+    }
+  ],
+  "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }
