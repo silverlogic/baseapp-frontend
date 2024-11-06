@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Adding the profile switcher to the AccountPopover component.
+- Add the AddIcon to the icons library
 - Updated dependencies
   - @baseapp-frontend/utils@3.0.3
 

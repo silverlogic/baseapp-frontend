@@ -11,14 +11,14 @@
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay-update-schema": "yarn relay-download-schema && yarn relay",
-    "test": "jest --config ./jest.config.ts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "storybook": "storybook dev -p 6007",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
     "cypress:open": "cypress open --browser chrome",
-    "test:component": "cypress run --component --browser chrome --headed"
+    "test:component": "cypress run --component --browser chrome --headed",
+    "test:unit": "jest --config ./jest.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
@@ -68,6 +68,8 @@
     "@tailwindcss/typography": "catalog:tailwind",
     "@testing-library/cypress": "catalog:test",
     "@testing-library/jest-dom": "catalog:test",
+    "@testing-library/react": "catalog:test",
+    "@testing-library/user-event": "catalog:test",
     "@types/jest": "catalog:test",
     "@types/js-cookie": "catalog:",
     "@types/luxon": "catalog:",
@@ -100,6 +102,7 @@
     "style-loader": "catalog:storybook",
     "tailwindcss": "catalog:tailwind",
     "ts-jest": "catalog:test",
+    "ts-node": "catalog:test",
     "typescript": "catalog:",
     "webpack": "catalog:storybook",
     "webpack-cli": "catalog:storybook",

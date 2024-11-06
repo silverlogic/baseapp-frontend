@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- Adding the profile switcher to the AccountPopover component.
+- Add new helpful mock functions to the react-relay "createTestEnvironment" helper.
 - Updated dependencies
   - @baseapp-frontend/utils@3.0.3
 
