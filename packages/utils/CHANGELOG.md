@@ -1,11 +1,5 @@
 # @baseapp-frontend/utils
 
-## 3.0.3
-
-### Patch Changes
-
-- Adding the profile switcher to the AccountPopover component.
-
 ## 3.0.2
 
 ### Patch Changes

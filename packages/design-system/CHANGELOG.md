@@ -5,8 +5,6 @@
 ### Patch Changes
 
 - Add the AddIcon to the icons library
-- Updated dependencies
-  - @baseapp-frontend/utils@3.0.3
 
 ## 0.0.14
 
