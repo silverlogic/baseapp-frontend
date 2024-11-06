@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.13
+
+### Patch Changes
+
+- Exclude cypress and jest folders from the tsconfig.build.json file
+
 ## 0.0.12
 
 ### Patch Changes
