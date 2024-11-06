@@ -5,7 +5,7 @@ import { MenuItemProps } from '@mui/material'
 import type {
   ProfileItemFragment$data,
   ProfileItemFragment$key,
-} from '../../../../__generated__/ProfileItemFragment.graphql'
+} from '../../../../../__generated__/ProfileItemFragment.graphql'
 
 export interface ProfileMenuItemProps {
   profileRef: ProfileItemFragment$key

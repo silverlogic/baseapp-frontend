@@ -5,7 +5,7 @@ module.exports = {
   testMatch: [...(jestConfigs.testMatch ?? []), '<rootDir>/**/*.(spec|test).(ts|tsx)'],
   setupFilesAfterEnv: [
     ...(jestConfigs.setupFilesAfterEnv ?? []),
-    '<rootDir>/__mocks__/graphqlWsMock.ts',
+    '<rootDir>/jest/__mocks__/graphqlWsMock.ts',
   ],
   // Only one transform can be applied to the tests files.
   transform: {

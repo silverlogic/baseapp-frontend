@@ -1,7 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["node"],
+    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
     "outDir": "./dist"
   },
   "include": [
@@ -11,27 +11,16 @@
     ".eslintrc.js",
     "*.ts",
     "*.tsx",
-    "cypress.config.ts",
     "babel.config.js",
-    "jest.config.ts",
+    "cypress.config.ts",
+    "webpack.config.ts",
     ".storybook/**/*",
     ".storybook/**/*.json"
   ],
   "references": [
     {
-      "path": "./tsconfig.cypress.json"
-    },
-    {
       "path": "./tsconfig.jest.json"
     }
   ],
-  "exclude": [
-    "node_modules",
-    "cypress.config.ts",
-    "cypress",
-    "**/*.cy.ts",
-    "**/*.cy.tsx",
-    "**/*.test.ts",
-    "**/*.test.tsx"
-  ]
+  "exclude": ["node_modules", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }
