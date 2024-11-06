@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 0.0.15
+
+### Patch Changes
+
+- Adding the profile switcher to the AccountPopover component.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.3
+
 ## 0.0.14
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.1.10
+
+### Patch Changes
+
+- Adding the profile switcher to the AccountPopover component.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.3
+
 ## 1.1.9
 
 ### Patch Changes
