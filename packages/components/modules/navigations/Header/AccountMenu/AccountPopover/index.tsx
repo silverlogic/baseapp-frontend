@@ -62,8 +62,8 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     [timeoutId],
   )
 
-  const loadCurrentProfile: boolean = Boolean(CurrentProfile) && Boolean(profile)
-  const loadCurrentUser: boolean = !loadCurrentProfile && Boolean(CurrentUser)
+  const loadCurrentProfile = Boolean(CurrentProfile) && Boolean(profile)
+  const loadCurrentUser = !loadCurrentProfile && Boolean(CurrentUser)
 
   return (
     <>
