@@ -112,7 +112,6 @@ const preview: Preview = {
           'NotificationsPopover',
           'NotificationsList',
           'NotificationItem',
-          'NotificationUserMenu',
         ]
         const final = [...storiesOrder, ...componentsStoriesOrder]
 
