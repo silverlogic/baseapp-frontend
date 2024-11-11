@@ -33,8 +33,8 @@ const preview: Preview = {
       // @ts-ignore
       storySort: (a, b) => {
         // NOTE: Storybook does not accept importing external variables for storySort,
-        // so the `storiesOrder` and `componentsStoriesOrder` are defined inline.
-        const storiesOrder = [
+        // so the `designSystemStoriesOrder` and `componentsStoriesOrder` are defined inline.
+        const designSystemStoriesOrder = [
           'Iconography',
           // Avatars
           'AvatarWithPlaceholder',
@@ -59,10 +59,6 @@ const preview: Preview = {
           // General
           'Logo',
           'Scrollbar',
-          // Notifications
-          'NotificationsPopover',
-          'NotificationsList',
-          'NotificationItem',
         ]
 
         const componentsStoriesOrder = [
@@ -99,6 +95,10 @@ const preview: Preview = {
           'NavHorizontal',
           'NavCentered',
           'NavVertical',
+          //Notifications
+          'NotificationItem',
+          'NotificationsList',
+          'NotificationsPopover',
           // Social
           'Comments',
           'CommentsList',
@@ -108,12 +108,8 @@ const preview: Preview = {
           'CommentUpsertActions',
           'ReactionButton',
           'Timestamp',
-          //Notifications
-          'NotificationsPopover',
-          'NotificationsList',
-          'NotificationItem',
         ]
-        const final = [...storiesOrder, ...componentsStoriesOrder]
+        const final = [...designSystemStoriesOrder, ...componentsStoriesOrder]
 
         const titleA = a.title || ''
         const titleB = b.title || ''
