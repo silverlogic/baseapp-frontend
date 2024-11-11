@@ -1,5 +1,19 @@
 # @baseapp-frontend/components
 
+## 0.0.14
+
+### Patch Changes
+
+- Add Message components including `MessageItem`, `MessageRoom`, `MessagesGroup` and `MessageList`.
+- Temporarily remove the `overscan` props on Virtuoso lists since that could cause bugs.
+- `AccountMenu` only show login/signup buttons when there is no user object instead of looking if the user is valid. That avoid issues when the refresh is is still going to be executed and the ui changing unnecessarily.
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.1.11
+  - @baseapp-frontend/utils@3.0.3
+  - @baseapp-frontend/authentication@4.0.1
+  - @baseapp-frontend/design-system@0.0.16
+
 ## 0.0.13
 
 ### Patch Changes

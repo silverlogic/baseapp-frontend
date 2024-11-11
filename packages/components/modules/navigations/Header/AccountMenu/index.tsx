@@ -3,7 +3,7 @@
 import { FC } from 'react'
 
 import { User as BaseUser, getUser } from '@baseapp-frontend/authentication'
-import { JWTContent, isUserTokenValid } from '@baseapp-frontend/utils'
+import { JWTContent } from '@baseapp-frontend/utils'
 
 import { Button } from '@mui/material'
 
@@ -22,7 +22,6 @@ const AccountMenu: FC<AccountMenuProps> = ({
   additionalComponent,
 }) => {
   const user = getUser<BaseUser & JWTContent>({ noSSR: false })
-  const isUserValid = isUserTokenValid(user)
 
   const renderAdditionalComponent = () => {
     if (additionalComponent) return additionalComponent
@@ -34,7 +33,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
     return <div />
   }
 
-  if (!isUserValid) {
+  if (!user) {
     return (
       <div className="grid w-full grid-cols-[1fr_max-content_max-content] items-center justify-center gap-1 min-lg:gap-2">
         {renderHeaderContent()}

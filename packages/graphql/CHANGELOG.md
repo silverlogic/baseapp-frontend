@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.1.11
+
+### Patch Changes
+
+- Fix an issue with `useEnvironment` entering in a loop on dev mode.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.3
+
 ## 1.1.10
 
 ### Patch Changes

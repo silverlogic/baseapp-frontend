@@ -4,6 +4,11 @@
     "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
     "outDir": "./dist"
   },
+  "references": [
+    {
+      "path": "./tsconfig.jest.json"
+    }
+  ],
   "include": [
     "**/*.ts",
     "**/*.tsx",
@@ -16,11 +21,6 @@
     "webpack.config.ts",
     ".storybook/**/*",
     ".storybook/**/*.json"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.jest.json"
-    }
   ],
   "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }

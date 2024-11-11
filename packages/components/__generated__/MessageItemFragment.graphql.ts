@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e54d4a2732c6f0b4695aa75fda382e78>>
+ * @generated SignedSource<<6d1833ac04981218b0763c0c00df00f9>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,9 +11,12 @@
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
+export type Verbs = 'SENT_MESSAGE' | '%future added value'
+
 export type MessageItemFragment$data = {
   readonly content: string | null | undefined
   readonly created: any
+  readonly extraData: any | null | undefined
   readonly id: string
   readonly inReplyTo:
     | {
@@ -22,6 +25,13 @@ export type MessageItemFragment$data = {
     | null
     | undefined
   readonly pk: number
+  readonly profile:
+    | {
+        readonly id: string
+      }
+    | null
+    | undefined
+  readonly verb: Verbs | null | undefined
   readonly ' $fragmentType': 'MessageItemFragment'
 }
 export type MessageItemFragment$key = {
@@ -31,12 +41,13 @@ export type MessageItemFragment$key = {
 
 const node: ReaderFragment = (function () {
   var v0 = {
-    alias: null,
-    args: null,
-    kind: 'ScalarField',
-    name: 'id',
-    storageKey: null,
-  }
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    v1 = [v0 /*: any*/]
   return {
     argumentDefinitions: [],
     kind: 'Fragment',
@@ -47,18 +58,32 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        concreteType: 'Message',
-        kind: 'LinkedField',
-        name: 'inReplyTo',
-        plural: false,
-        selections: [v0 /*: any*/],
+        kind: 'ScalarField',
+        name: 'content',
         storageKey: null,
       },
       {
         alias: null,
         args: null,
         kind: 'ScalarField',
-        name: 'content',
+        name: 'created',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'extraData',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        concreteType: 'Message',
+        kind: 'LinkedField',
+        name: 'inReplyTo',
+        plural: false,
+        selections: v1 /*: any*/,
         storageKey: null,
       },
       {
@@ -71,8 +96,18 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
+        concreteType: 'Profile',
+        kind: 'LinkedField',
+        name: 'profile',
+        plural: false,
+        selections: v1 /*: any*/,
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
         kind: 'ScalarField',
-        name: 'created',
+        name: 'verb',
         storageKey: null,
       },
     ],
@@ -81,6 +116,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '891c2bbead6331839e01adb05253c2aa'
+;(node as any).hash = '4604c0648fefbb7d9620f96f514a43af'
 
 export default node

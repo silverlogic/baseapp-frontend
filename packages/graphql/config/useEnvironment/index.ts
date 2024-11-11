@@ -1,23 +1,30 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useRef } from 'react'
 
 import type { Environment } from 'relay-runtime'
 
 import { createEnvironment } from '../environment'
 
 const useEnvironment = () => {
-  let relayEnvironment: Environment | null = null
+  const relayEnvironment = useRef<Environment | null>(null)
 
   const initEnvironment = () => {
-    const environment = relayEnvironment ?? createEnvironment()
     // For SSR always return new environment;
-    if (typeof window === typeof undefined) return environment
-    if (!relayEnvironment) relayEnvironment = environment
-    return relayEnvironment
+    if (typeof window === typeof undefined) {
+      return createEnvironment()
+    }
+
+    // For client, reuse existing environment or create new one
+    if (!relayEnvironment.current) {
+      relayEnvironment.current = createEnvironment()
+    }
+
+    return relayEnvironment.current
   }
 
-  const env = useMemo(() => initEnvironment(), [initEnvironment, relayEnvironment])
+  const env = useMemo(initEnvironment, [])
+
   return env
 }
 
