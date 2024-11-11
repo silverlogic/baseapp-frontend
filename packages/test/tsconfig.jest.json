@@ -1,3 +1,10 @@
 {
-  "extends": "@baseapp-frontend/tsconfig/test.json"
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2020",
+    "isolatedModules": false
+  },
+  "include": ["jest", "**/*.test.ts", "**/*.test.tsx", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
 }

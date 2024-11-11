@@ -7,15 +7,6 @@ const meta: Meta<typeof SendMessage> = {
   component: SendMessage,
   tags: ['autodocs'],
   argTypes: {
-    profileId: {
-      description: 'The Profile ID of the user sending the message.',
-      control: false,
-      table: {
-        type: {
-          summary: 'string',
-        },
-      },
-    },
     roomId: {
       description: 'Room ID of the chat.',
       control: false,

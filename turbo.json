@@ -12,16 +12,19 @@
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "test:unit": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "test:component": {
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "outputs": []
     },
     "clean": {
       "cache": false
     },
     "lint": {
-      "dependsOn": ["^lint"]
+      "dependsOn": ["^lint"],
+      "outputs": []
     },
     "storybook": {
       "dependsOn": ["^storybook"]

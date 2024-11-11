@@ -87,7 +87,8 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <Box sx={{ backgroundColor: 'common.white' }}>
         <Virtuoso
           data={notifications}
-          overscan={NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT}
+          // TODO: using overscan can cause Maximum call stack size exceeded error
+          // overscan={NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT}
           style={{ height: 'calc(100vh - 68px)' }}
           itemContent={(index, notification) => renderNotificationItem(notification, index)}
           components={{
