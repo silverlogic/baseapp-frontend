@@ -4,7 +4,7 @@ import React, { type FC, type PropsWithChildren, createContext, useContext, useR
 
 import { createStore, useStore } from 'zustand'
 
-import { getApiErrorMessage } from '../../functions/api'
+import { getAllAuthApiErrorMessage, getApiErrorMessage } from '../../functions/api'
 import { INITIAL_NOTIFICATION_STATE } from './constants'
 import type { UseNotification } from './types'
 
@@ -14,6 +14,8 @@ const createNotificationStore = () =>
     sendToast: (message, { type = 'success' } = {}) => set({ message, type, open: true }),
     sendApiErrorToast: (error) =>
       set({ message: getApiErrorMessage(error), type: 'error', open: true }),
+    sendAllAuthApiErrorToast: (error) =>
+      set({ message: getAllAuthApiErrorMessage(error), type: 'error', open: true }),
     closeToast: () => set({ open: false }),
   }))
 

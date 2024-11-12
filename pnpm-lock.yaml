@@ -375,9 +375,15 @@ importers:
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.59.15(react@18.3.1)
+      axios:
+        specifier: 'catalog:'
+        version: 1.7.7
       js-cookie:
         specifier: 'catalog:'
         version: 3.0.5
+      lodash:
+        specifier: 'catalog:'
+        version: 4.17.21
       react:
         specifier: catalog:react18
         version: 18.3.1
@@ -415,6 +421,9 @@ importers:
       '@types/js-cookie':
         specifier: 'catalog:'
         version: 3.0.6
+      '@types/lodash':
+        specifier: 'catalog:'
+        version: 4.17.12
       '@types/node':
         specifier: 'catalog:'
         version: 22.7.7
@@ -4156,6 +4165,7 @@ packages:
   '@xmldom/xmldom@0.7.13':
     resolution: {integrity: sha512-lm2GW5PkosIzccsaZIz7tp8cPADSIlIHWDFTR1N0SzfinhhYgeIQjFMz4rYzanCScr3DqQLeomUDArp6MWKm+g==}
     engines: {node: '>=10.0.0'}
+    deprecated: this version is no longer supported, please update to at least 0.8.*
 
   '@xmldom/xmldom@0.8.10':
     resolution: {integrity: sha512-2WALfTl4xo2SkGCYRt6rDTFfk9R1czmBvUQy12gK2KuRKIpWEhcbbzy8EZXtz/jkRqHX8bFEc6FC1HjX4TUWYw==}

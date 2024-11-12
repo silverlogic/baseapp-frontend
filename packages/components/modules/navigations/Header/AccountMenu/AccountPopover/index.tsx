@@ -2,7 +2,8 @@
 
 import { FC } from 'react'
 
-import { User as BaseUser, useJWTUser, useLogout } from '@baseapp-frontend/authentication'
+import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
+import { useAllAuthLogout } from '@baseapp-frontend/authentication/modules/access/allauth/useAllAuthLogout'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
 import { JWTContent, joinWithSeparator } from '@baseapp-frontend/utils'
 
@@ -20,7 +21,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   hideLogoutButton = false,
 }) => {
   const { user } = useJWTUser<BaseUser & JWTContent>()
-  const { logout } = useLogout()
+  const { logout } = useAllAuthLogout({})
   const popover = usePopover()
 
   const handleLogout = async () => {
