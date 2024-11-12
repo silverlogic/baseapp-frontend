@@ -8,6 +8,7 @@ import { readInlineData } from 'react-relay'
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { MemberStatuses } from '../constants'
+import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation } from './styled'
 import { MemberItemProps } from './types'
 
@@ -38,9 +39,11 @@ const MemberItem: FC<MemberItemProps> = ({
         </Box>
       </MemberPersonalInformation>
 
-      <Box sx={{ textTransform: 'lowercase' }}>
+      <Box>
         <Button variant="soft" color="inherit">
-          {status === MemberStatuses.active ? memberRole : status}
+          {status === MemberStatuses.active
+            ? capitalizeFirstLetter(memberRole)
+            : capitalizeFirstLetter(status)}
         </Button>
       </Box>
     </MemberItemContainer>

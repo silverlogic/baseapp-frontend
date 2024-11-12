@@ -12,8 +12,8 @@ export interface IMemberPersonalInformation extends BoxProps {
 
 export interface MemberItemProps {
   member: ProfileItemFragment$key | null | undefined
-  memberRole: ProfileRoles | null | undefined | 'owner'
-  status: ProfileRoleStatus | null | undefined
+  memberRole: ProfileRoles | 'owner'
+  status: ProfileRoleStatus
   avatarProps?: AvatarProps
   avatarWidth?: number
   avatarHeight?: number
