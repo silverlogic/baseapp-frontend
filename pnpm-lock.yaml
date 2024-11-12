@@ -394,6 +394,9 @@ importers:
       js-cookie:
         specifier: 'catalog:'
         version: 3.0.5
+      lodash:
+        specifier: 'catalog:'
+        version: 4.17.21
       react:
         specifier: catalog:react18
         version: 18.3.1
@@ -434,6 +437,9 @@ importers:
       '@types/js-cookie':
         specifier: 'catalog:'
         version: 3.0.6
+      '@types/lodash':
+        specifier: 'catalog:'
+        version: 4.17.12
       '@types/node':
         specifier: 'catalog:'
         version: 22.10.1

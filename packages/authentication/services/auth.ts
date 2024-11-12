@@ -9,6 +9,9 @@ import type {
   ResetPasswordRequest,
 } from '../types/auth'
 
+// TODO: Remove these endpoints from BE and FE.
+// Ensure reset & recover password working with allAuth
+// Refactor changeExpiredPassword to work with allAuth
 export default class AuthApi {
   static login({ email, password }: LoginRequest): Promise<LoginResponse> {
     return baseAppFetch(`/auth/login`, { method: 'POST', body: { email, password } })

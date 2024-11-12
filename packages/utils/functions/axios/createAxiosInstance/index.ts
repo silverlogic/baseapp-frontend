@@ -101,6 +101,9 @@ export const createAxiosInstance = ({
         error.response?.headers?.['content-type'] === 'application/json'
       ) {
         const newError = { response: { data: {} } }
+        if (!returnData) {
+          newError.response = error.response
+        }
         newError.response.data = humps.camelizeKeys(error.response.data)
 
         return Promise.reject(newError)
@@ -120,3 +123,9 @@ export const {
   requestInterceptorId: requestInterceptorIdForFiles,
   responseInterceptorId: responseInterceptorIdForFiles,
 } = createAxiosInstance({ file: true })
+
+export const {
+  axios: axiosForAllAuth,
+  requestInterceptorId: requestInterceptorIdForAllAuth,
+  responseInterceptorId: responseInterceptorIdForAllAuth,
+} = createAxiosInstance({ returnData: false })
