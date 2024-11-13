@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3080db9b73205ee7af67d39f8d877dd1>>
+ * @generated SignedSource<<862e9f95a1e50f0c861f2b8878f34e3b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -45,35 +45,15 @@ const node: ConcreteRequest = (function () {
       name: 'name',
       storageKey: null,
     },
-    v2 = {
-      alias: null,
-      args: [
-        {
-          kind: 'Literal',
-          name: 'height',
-          value: 100,
-        },
-        {
-          kind: 'Literal',
-          name: 'width',
-          value: 100,
-        },
-      ],
-      concreteType: 'File',
-      kind: 'LinkedField',
-      name: 'image',
-      plural: false,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'url',
-          storageKey: null,
-        },
-      ],
-      storageKey: 'image(height:100,width:100)',
-    },
+    v2 = [
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'url',
+        storageKey: null,
+      },
+    ],
     v3 = {
       alias: null,
       args: null,
@@ -110,7 +90,27 @@ const node: ConcreteRequest = (function () {
                   selections: [
                     v0 /*: any*/,
                     v1 /*: any*/,
-                    v2 /*: any*/,
+                    {
+                      alias: null,
+                      args: [
+                        {
+                          kind: 'Variable',
+                          name: 'height',
+                          variableName: 'avatarSize',
+                        },
+                        {
+                          kind: 'Variable',
+                          name: 'width',
+                          variableName: 'avatarSize',
+                        },
+                      ],
+                      concreteType: 'File',
+                      kind: 'LinkedField',
+                      name: 'image',
+                      plural: false,
+                      selections: v2 /*: any*/,
+                      storageKey: null,
+                    },
                     {
                       alias: null,
                       args: null,
@@ -123,7 +123,13 @@ const node: ConcreteRequest = (function () {
                     },
                   ],
                   args: null,
-                  argumentDefinitions: [],
+                  argumentDefinitions: [
+                    {
+                      defaultValue: 100,
+                      kind: 'LocalArgument',
+                      name: 'avatarSize',
+                    },
+                  ],
                 },
               ],
               storageKey: null,
@@ -159,7 +165,27 @@ const node: ConcreteRequest = (function () {
               selections: [
                 v0 /*: any*/,
                 v1 /*: any*/,
-                v2 /*: any*/,
+                {
+                  alias: null,
+                  args: [
+                    {
+                      kind: 'Literal',
+                      name: 'height',
+                      value: 100,
+                    },
+                    {
+                      kind: 'Literal',
+                      name: 'width',
+                      value: 100,
+                    },
+                  ],
+                  concreteType: 'File',
+                  kind: 'LinkedField',
+                  name: 'image',
+                  plural: false,
+                  selections: v2 /*: any*/,
+                  storageKey: 'image(height:100,width:100)',
+                },
                 {
                   alias: null,
                   args: null,

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<765a41dfcc81e65193be81bcec7783dc>>
+ * @generated SignedSource<<1d3cf037c869a3294443cecd5eb5bc17>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,10 @@
 import { ConcreteRequest, Query } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type MessageRoomQuery$variables = {
+export type ChatRoomQuery$variables = {
   roomId: string
 }
-export type MessageRoomQuery$data = {
+export type ChatRoomQuery$data = {
   readonly chatRoom:
     | {
         readonly id: string
@@ -53,9 +53,9 @@ export type MessageRoomQuery$data = {
     | null
     | undefined
 }
-export type MessageRoomQuery = {
-  response: MessageRoomQuery$data
-  variables: MessageRoomQuery$variables
+export type ChatRoomQuery = {
+  response: ChatRoomQuery$data
+  variables: ChatRoomQuery$variables
 }
 
 const node: ConcreteRequest = (function () {
@@ -157,7 +157,7 @@ const node: ConcreteRequest = (function () {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Fragment',
       metadata: null,
-      name: 'MessageRoomQuery',
+      name: 'ChatRoomQuery',
       selections: [
         {
           alias: null,
@@ -216,7 +216,7 @@ const node: ConcreteRequest = (function () {
     operation: {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Operation',
-      name: 'MessageRoomQuery',
+      name: 'ChatRoomQuery',
       selections: [
         {
           alias: null,
@@ -422,16 +422,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '51398ccf9af30216c41ffae90d72a021',
+      cacheID: '9bf20b63b6591af0c171bd5d00d69793',
       id: null,
       metadata: {},
-      name: 'MessageRoomQuery',
+      name: 'ChatRoomQuery',
       operationKind: 'query',
-      text: 'query MessageRoomQuery(\n  $roomId: ID!\n) {\n  chatRoom(id: $roomId) {\n    id\n    participants {\n      edges {\n        node {\n          profile {\n            id\n            __typename\n            name\n            image(width: 100, height: 100) {\n              url\n            }\n          }\n          id\n        }\n      }\n    }\n    ...MessagesListFragment\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomQuery(\n  $roomId: ID!\n) {\n  chatRoom(id: $roomId) {\n    id\n    participants {\n      edges {\n        node {\n          profile {\n            id\n            __typename\n            name\n            image(width: 100, height: 100) {\n              url\n            }\n          }\n          id\n        }\n      }\n    }\n    ...MessagesListFragment\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '7f9f5ef4e48a13e3a6d5c1f030bab8ee'
+;(node as any).hash = '05693484a73cde0be72b71dabab2833a'
 
 export default node
