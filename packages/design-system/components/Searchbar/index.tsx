@@ -5,9 +5,12 @@ import { ChangeEvent, FC } from 'react'
 import { useDebounce } from '@baseapp-frontend/utils'
 
 import { CircularProgress, InputAdornment } from '@mui/material'
+import { Box } from '@mui/system'
+import { useForm } from 'react-hook-form'
 
 import Iconify from '../Iconify'
-import { PureTextField } from '../inputs'
+import { IconButton } from '../buttons'
+import { TextField } from '../inputs'
 import { SearchbarProps } from './types'
 
 const Searchbar: FC<SearchbarProps> = ({
@@ -18,6 +21,8 @@ const Searchbar: FC<SearchbarProps> = ({
   InputProps,
   ...props
 }) => {
+  const { control, watch, reset } = useForm({ defaultValues: { search: '' } })
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value || ''
     startTransition(() => {
@@ -25,10 +30,18 @@ const Searchbar: FC<SearchbarProps> = ({
     })
   }
 
+  const handleReset = () => {
+    startTransition(() => {
+      reset()
+      refetch({ q: '' })
+    })
+  }
+  const watchSearch = watch('search')
+
   const { debouncedFunction: handleDebouncedChange } = useDebounce(handleChange)
 
   return (
-    <PureTextField
+    <TextField
       variant="filled"
       placeholder="Search"
       onChange={handleDebouncedChange}
@@ -38,15 +51,35 @@ const Searchbar: FC<SearchbarProps> = ({
         },
         ...sx,
       }}
+      control={control}
+      name="search"
       InputProps={{
         startAdornment: (
           <InputAdornment position="start">
             {isPending ? (
-              <div className="mr-1 flex items-center justify-center">
+              <Box
+                sx={{
+                  display: 'flex',
+                  marginRight: '4px',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
                 <CircularProgress size={16} />
-              </div>
+              </Box>
             ) : (
               <Iconify icon="eva:search-fill" />
+            )}
+          </InputAdornment>
+        ),
+        endAdornment: (
+          <InputAdornment position="end">
+            {watchSearch ? (
+              <IconButton onClick={handleReset}>
+                <Iconify icon="mingcute:close-line" />
+              </IconButton>
+            ) : (
+              <div />
             )}
           </InputAdornment>
         ),
