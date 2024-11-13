@@ -15,10 +15,13 @@ export const MessageItemContainer = styled(Box)<MessageItemContainerProps>(({
     padding: theme.spacing(1, 1.5),
     borderRadius: isOwnMessage ? ownMessageRadius : otherMessageRadius,
     flexDirection: 'column',
-    maxWidth: '400px',
+    maxWidth: '60%',
     justifyContent: 'center',
     alignSelf: isOwnMessage ? 'flex-end' : 'flex-start',
     alignItems: isOwnMessage ? 'flex-end' : 'flex-start',
     backgroundColor: isOwnMessage ? theme.palette.background.default : theme.palette.grey[800],
+    [theme.breakpoints.down('sm')]: {
+      maxWidth: '80%',
+    },
   }
 })

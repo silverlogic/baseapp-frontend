@@ -100,9 +100,13 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   if (!message) return null
 
   return (
-    <Box display="flex" flexDirection="column" sx={{ paddingTop: 1 / 2, paddingRight: 2 }}>
+    <Box
+      display="flex"
+      flexDirection="column"
+      sx={{ paddingTop: 1 / 2, paddingRight: 2, width: '100%' }}
+    >
       {renderDateOnTopOfMessagesGroup(messageIndex)}
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}>
         {canShowAvatar && (
           <Box paddingRight="12px">
             <AvatarWithPlaceholder
@@ -121,6 +125,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
             alignSelf: flexAlignments,
             alignItems: flexAlignments,
             flexDirection: 'column',
+            width: '100%',
           }}
         >
           {canShowName && (
