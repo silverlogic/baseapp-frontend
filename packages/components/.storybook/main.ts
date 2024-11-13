@@ -12,8 +12,9 @@ function getAbsolutePath(value: string): any {
 const config: StorybookConfig = {
   stories: [
     resolve(__dirname, './*.mdx'),
-    resolve(__dirname, '../modules/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)'),
+    resolve(__dirname, '../modules/**/__storybook__/*.mdx'),
     resolve(__dirname, '../../design-system/components/**/__storybook__/*.mdx'),
+    resolve(__dirname, '../modules/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)'),
     resolve(
       __dirname,
       '../../design-system/components/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
@@ -25,6 +26,7 @@ const config: StorybookConfig = {
   },
   staticDirs: [resolve(__dirname, '../public')],
   addons: [
+    '@storybook/addon-docs',
     getAbsolutePath('@storybook/addon-webpack5-compiler-babel'),
     getAbsolutePath('@storybook/addon-links'),
     getAbsolutePath('@storybook/addon-essentials'),

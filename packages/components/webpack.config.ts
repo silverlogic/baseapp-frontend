@@ -40,6 +40,7 @@ const config: Configuration = {
               ],
               '@babel/preset-typescript',
             ],
+            plugins: [['@babel/plugin-transform-modules-commonjs', { loose: true }]],
           },
         },
       },

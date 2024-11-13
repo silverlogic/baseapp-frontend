@@ -170,3 +170,31 @@ pnpm version-packages
 After running that, you might notice version bumps on the package's `version` and an update on the package's `CHANGELOG.md`.
 
 3. By now, we just need to commit & push those files and, after merging the PR, the `packages updates` will be automatically published :)
+
+## Documentation Guide
+
+To ensure that all pages, components, and utilities are thoroughly documented in Storybook, please follow these steps.
+
+### 1. Write Storybook Stories
+
+Each component and page should have a corresponding Storybook story that showcases its various states and usage scenarios:
+
+- **Include All Possible States**: Each story should cover possible states of the component or page, such as default, disabled, loading, or error configurations.
+- **Use Mocks for Data**: Use MSW (Mock Service Worker) to mock any necessary API requests, ensuring stories are self-contained and reproducible.
+- **Decorators**: Pass any necessary decorators to simulate the environment (e.g., authentication with `withTokenSetup`).
+- **Type Safety**: Ensure correct typings for all props and arguments.
+- **Conciseness**: Be thorough but concise, focusing on the most relevant states and interactions.
+
+**After creating the story**:
+- Add the story name to `storySort` in the `preview.ts` file to ensure it appears in the correct order. If you’re unsure where to add this, please ask a COP member for assistance.
+
+### 2. Add MDX Documentation
+
+In addition to stories, create an MDX file to provide detailed documentation for each page or component:
+
+- **Create an MDX File**: Place the `.mdx` file in the corresponding `__storybook__` folder. The file name should match the component or page name (e.g., `Button.mdx` for the `Button` component).
+- **Use Consistent Titles**: Match the title in the MDX file to the Storybook story for consistency:
+  - **Pages**: `@baseapp-frontend-template / Pages/[PageName]`
+  - **Components**: `@baseapp-frontend-template / [ComponentSection]/[ComponentCategory]/[ComponentName]`
+
+For detailed documentation templates and examples, refer to our [Tettra page](https://app.tettra.co/teams/TSL/pages/frontend-documentation).

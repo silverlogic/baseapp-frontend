@@ -11,6 +11,7 @@ catalog:
   "@types/luxon": ^3.4.2
   "@types/node": ^22.7.2
   axios: ^1.7.2
+  events: ^3.3.0
   jotai: ^2.9.3
   js-cookie: ^3.0.5
   lodash: ^4.17.21
@@ -62,7 +63,7 @@ catalogs:
 
   test:
     "@cypress/webpack-dev-server": ^3.10.1
-    "@faker-js/faker": "^9.0.3"
+    "@faker-js/faker": ^9.0.3
     "@testing-library/cypress": ^10.0.2
     "@testing-library/jest-dom": ^6.4.6
     "@testing-library/react": ^16.0.0
@@ -70,6 +71,7 @@ catalogs:
     "@types/jest": ^29.5.12
     babel-jest: ^29.7.0
     cypress-plugin-steps: ^1.1.1
+    cypress-wait-until: ^3.0.2
     cypress: ^13.13.3
     jest-environment-jsdom: ^29.7.0
     jest: ^29.7.0

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3c5159ec498498e39327d88a08880033>>
+ * @generated SignedSource<<850d8d2b6162ef90880d0b8d4c29025e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -106,7 +106,8 @@ const node: ConcreteRequest = (function () {
         },
       ],
       storageKey: null,
-    }
+    },
+    v5 = [v3 /*: any*/]
   return {
     fragment: {
       argumentDefinitions: [v0 /*: any*/, v1 /*: any*/],
@@ -192,18 +193,32 @@ const node: ConcreteRequest = (function () {
                     {
                       alias: null,
                       args: null,
-                      concreteType: 'Message',
-                      kind: 'LinkedField',
-                      name: 'inReplyTo',
-                      plural: false,
-                      selections: [v3 /*: any*/],
+                      kind: 'ScalarField',
+                      name: 'content',
                       storageKey: null,
                     },
                     {
                       alias: null,
                       args: null,
                       kind: 'ScalarField',
-                      name: 'content',
+                      name: 'created',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'extraData',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: 'Message',
+                      kind: 'LinkedField',
+                      name: 'inReplyTo',
+                      plural: false,
+                      selections: v5 /*: any*/,
                       storageKey: null,
                     },
                     {
@@ -216,8 +231,18 @@ const node: ConcreteRequest = (function () {
                     {
                       alias: null,
                       args: null,
+                      concreteType: 'Profile',
+                      kind: 'LinkedField',
+                      name: 'profile',
+                      plural: false,
+                      selections: v5 /*: any*/,
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
                       kind: 'ScalarField',
-                      name: 'created',
+                      name: 'verb',
                       storageKey: null,
                     },
                   ],
@@ -249,12 +274,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '2d701e1c799355ad8305f593fa42a5f6',
+      cacheID: '1838c3c055734b92abd6548a0b70caac',
       id: null,
       metadata: {},
       name: 'SendMessageMutation',
       operationKind: 'mutation',
-      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  inReplyTo {\n    id\n  }\n  content\n  pk\n  created\n}\n',
+      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
     },
   }
 })()

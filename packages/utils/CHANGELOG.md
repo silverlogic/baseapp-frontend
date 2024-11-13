@@ -1,5 +1,18 @@
 # @baseapp-frontend/utils
 
+## 3.0.3
+
+### Patch Changes
+
+- Add `isToday`, `isYesterday` and `datesDontHaveSameDay` date functions.
+
+## 3.0.2
+
+### Patch Changes
+
+- `getCookie` and `getCookieAsync` won't parse the value as default.
+- `setCookie` won't stringfy the value as default.
+
 ## 3.0.1
 
 ### Patch Changes

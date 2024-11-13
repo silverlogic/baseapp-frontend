@@ -1,13 +1,13 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "0.0.14",
+  "version": "0.0.17",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
-    "dev": "tsc --watch",
+    "dev": "rm -rf dist && tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "storybook": "storybook dev -p 6006",

@@ -1,5 +1,19 @@
 # @baseapp-frontend/graphql
 
+## 1.1.11
+
+### Patch Changes
+
+- Fix an issue with `useEnvironment` entering in a loop on dev mode.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.3
+
+## 1.1.10
+
+### Patch Changes
+
+- Add new helpful mock functions to the react-relay "createTestEnvironment" helper.
+
 ## 1.1.9
 
 ### Patch Changes
