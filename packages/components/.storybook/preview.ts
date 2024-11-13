@@ -35,6 +35,7 @@ const preview: Preview = {
         // NOTE: Storybook does not accept importing external variables for storySort,
         // so the `designSystemStoriesOrder` and `componentsStoriesOrder` are defined inline.
         const designSystemStoriesOrder = [
+          'Introduction',
           'Iconography',
           // Avatars
           'AvatarWithPlaceholder',
@@ -62,6 +63,7 @@ const preview: Preview = {
         ]
 
         const componentsStoriesOrder = [
+          'Introduction',
           'Iconography',
           // Avatars
           'AvatarWithPlaceholder',

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "0.0.15",
+  "version": "0.0.16",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -57,6 +57,7 @@
     "@chromatic-com/storybook": "catalog:storybook",
     "@cypress/webpack-dev-server": "catalog:test",
     "@faker-js/faker": "catalog:test",
+    "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",
     "@storybook/addon-links": "catalog:storybook",

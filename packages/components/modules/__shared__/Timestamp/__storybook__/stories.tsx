@@ -5,19 +5,6 @@ import Timestamp from '..'
 const meta: Meta<typeof Timestamp> = {
   title: '@baseapp-frontend | components/Shared/Timestamp',
   component: Timestamp,
-  tags: ['autodocs'],
-  argTypes: {
-    date: {
-      name: 'date',
-      description: 'The date to be formatted.',
-      control: 'text',
-      table: {
-        type: {
-          summary: 'string',
-        },
-      },
-    },
-  },
 }
 
 export default meta
