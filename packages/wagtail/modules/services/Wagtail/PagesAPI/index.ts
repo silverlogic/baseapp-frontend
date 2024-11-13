@@ -2,7 +2,7 @@ import { WagtailAPI } from '..'
 import { IPage } from './types'
 
 export class PagesAPI extends WagtailAPI {
-  static namespace = `pages`
+  static namespace = `base/pages`
 
   static getPageByPath(path: string, extraParams: any = {}): Promise<IPage> {
     return this.axios.get(`${this.baseURL}/${this.namespace}/path/`, {
