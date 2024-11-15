@@ -2,8 +2,8 @@
 
 import { FC, PropsWithChildren, createContext, useCallback, useEffect, useRef } from 'react'
 
-import { User, useJWTUser } from '@baseapp-frontend/authentication'
-import { JWTContent, LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
+import { User, getUser, useJWTUser } from '@baseapp-frontend/authentication'
+import { JWTContent, LOGOUT_EVENT, eventEmitter, setCookie } from '@baseapp-frontend/utils'
 
 import { Environment, fetchQuery, readInlineData, useRelayEnvironment } from 'react-relay'
 import { StoreApi, create } from 'zustand'
@@ -35,6 +35,9 @@ const fetchUserProfile = async (environment: Environment) => {
 
 const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   const { user } = useJWTUser<User & JWTContent>()
+  const user2 = getUser<User & JWTContent>()
+  console.log(user2)
+  if (user2) setCookie('active-profile', user2!.profile, { stringfyValue: true })
   const environment = useRelayEnvironment()
   const storeRef = useRef<StoreApi<UseCurrentProfile>>()
 
