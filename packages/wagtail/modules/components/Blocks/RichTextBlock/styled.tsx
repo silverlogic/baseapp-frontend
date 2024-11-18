@@ -96,6 +96,7 @@ export const RichTextBlockWrapper = styled(Box)(({ theme }) => ({
       float: 'right',
       marginLeft: theme.spacing(4),
       borderRadius: theme.spacing(1.5),
+      maxWidth: '70%',
     },
   },
   '& img.left': {
@@ -103,14 +104,13 @@ export const RichTextBlockWrapper = styled(Box)(({ theme }) => ({
       float: 'left',
       marginRight: theme.spacing(4),
       borderRadius: theme.spacing(1.5),
+      maxWidth: '70%',
     },
   },
   '& img.centered': {
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
   },
   '& iframe': {
     width: '100%',
