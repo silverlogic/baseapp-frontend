@@ -16,6 +16,10 @@ import { UserProfileQuery } from '../../graphql/queries/UserProfile'
 import { CURRENT_PROFILE_STORAGE_KEY, INITIAL_CURRENT_PROFILE_STATE } from './constants'
 import { UseCurrentProfile } from './types'
 
+import { atom, useAtom } from 'jotai'
+
+import { PROFILE_KEY } from './constants'
+
 export const CurrentProfileContext = createContext<StoreApi<UseCurrentProfile> | null>(null)
 
 const fetchUserProfile = async (environment: Environment) => {
@@ -31,6 +35,43 @@ const fetchUserProfile = async (environment: Environment) => {
     : null
 
   return userProfile
+}
+
+const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
+  const settings = getCookie<Profile>(PROFILE_KEY, { noSSR, parseJSON: true }) ?? null
+
+  return settings
+})
+
+const initialProfile = getProfileFromCookie()
+
+const profileAtom = atom<Profile>(initialProfile)
+
+/**
+ * By using `useCurrentProfile` with the `noSSR` option set to `false`, causes Next.js to dynamically render the affected pages, instead of statically rendering them.
+ */
+const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
+  const [profile, setProfile] = useAtom(profileAtom)
+  const isSSR = typeof window === typeof undefined
+
+  const handleSetProfile = (newProfile: Profile) => {
+    setProfile(() => {
+      setCookie(PROFILE_KEY, newProfile, { stringfyValue: true })
+      return newProfile
+    })
+  }
+
+  if (isSSR) {
+    return {
+      profile: getProfileFromCookie({ noSSR }),
+      setProfile: handleSetProfile
+    }
+  } else {
+    return {
+      profile,
+      setProfile: handleSetProfile
+    }
+  }
 }
 
 const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {

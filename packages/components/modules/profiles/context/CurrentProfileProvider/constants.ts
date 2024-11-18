@@ -5,3 +5,5 @@ export const INITIAL_CURRENT_PROFILE_STATE: CurrentProfileState = {
   profile: undefined,
   userId: undefined,
 }
+
+export const PROFILE_KEY = 'myCurrentProfile'

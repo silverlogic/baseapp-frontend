@@ -1,3 +1,5 @@
+import { Profile } from '@baseapp-frontend/components/modules/profiles/types'
+
 export interface User {
   id: number
   email: string
@@ -5,14 +7,7 @@ export interface User {
   newEmail: string
   isNewEmailConfirmed: boolean
   referralCode: string
-  profile: {
-    id: number
-    name: string
-    image: {
-      fullSize: string
-    }
-    url_path: string
-  }
+  profile: Profile
   phoneNumber: string
   preferredLanguage: string
 }
