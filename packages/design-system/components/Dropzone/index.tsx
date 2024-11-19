@@ -20,7 +20,8 @@ const Dropzone: FC<DropzoneProps> = ({
   onSelect,
   onRemove,
   actionText = 'Upload Image',
-  subTitle = 'Max. File Size: 15MB',
+  maxFileSize = 15,
+  subTitle = `Max. File Size: ${maxFileSize}MB`,
   DropzoneOptions,
 }) => {
   const [files, setFiles] = useState<string | undefined>(storedImg)
@@ -30,8 +31,8 @@ const Dropzone: FC<DropzoneProps> = ({
     accept,
     onDrop: async (acceptedFiles: any) => {
       if (acceptedFiles.length === 0) return
-      if (acceptedFiles[0].size > 15 * 1024 * 1024) {
-        sendToast('This file is too large (max 15 MB).', { type: 'error' })
+      if (acceptedFiles[0].size > maxFileSize * 1024 * 1024) {
+        sendToast(`This file is too large (max ${maxFileSize} MB).`, { type: 'error' })
         return
       }
       const imgString = await getImageString(acceptedFiles[0])
