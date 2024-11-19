@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d1fa912c5581bd952d0b9abd24137811>>
+ * @generated SignedSource<<90594853ede98080a5f45b3437de98c7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,10 +14,16 @@ import { FragmentRefs } from 'relay-runtime'
 export type chatRoomsPaginationQuery$variables = {
   count?: number | null | undefined
   cursor?: string | null | undefined
+  id: string
   q?: string | null | undefined
 }
 export type chatRoomsPaginationQuery$data = {
-  readonly ' $fragmentSpreads': FragmentRefs<'RoomsListFragment'>
+  readonly node:
+    | {
+        readonly ' $fragmentSpreads': FragmentRefs<'RoomsListFragment'>
+      }
+    | null
+    | undefined
 }
 export type chatRoomsPaginationQuery = {
   response: chatRoomsPaginationQuery$data
@@ -25,36 +31,53 @@ export type chatRoomsPaginationQuery = {
 }
 
 const node: ConcreteRequest = (function () {
-  var v0 = [
+  var v0 = {
+      defaultValue: 5,
+      kind: 'LocalArgument',
+      name: 'count',
+    },
+    v1 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'cursor',
+    },
+    v2 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'id',
+    },
+    v3 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'q',
+    },
+    v4 = [
       {
-        defaultValue: 5,
-        kind: 'LocalArgument',
-        name: 'count',
-      },
-      {
-        defaultValue: null,
-        kind: 'LocalArgument',
-        name: 'cursor',
-      },
-      {
-        defaultValue: null,
-        kind: 'LocalArgument',
-        name: 'q',
+        kind: 'Variable',
+        name: 'id',
+        variableName: 'id',
       },
     ],
-    v1 = {
+    v5 = {
       kind: 'Variable',
       name: 'q',
       variableName: 'q',
     },
-    v2 = {
+    v6 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: '__typename',
+      storageKey: null,
+    },
+    v7 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v3 = [
+    v8 = [
       {
         kind: 'Variable',
         name: 'after',
@@ -65,16 +88,25 @@ const node: ConcreteRequest = (function () {
         name: 'first',
         variableName: 'count',
       },
-      v1 /*: any*/,
+      v5 /*: any*/,
     ],
-    v4 = {
+    v9 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'unreadMessagesCount',
       storageKey: null,
     },
-    v5 = {
+    v10 = [
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'url',
+        storageKey: null,
+      },
+    ],
+    v11 = {
       alias: null,
       args: [
         {
@@ -92,40 +124,103 @@ const node: ConcreteRequest = (function () {
       kind: 'LinkedField',
       name: 'image',
       plural: false,
+      selections: v10 /*: any*/,
+      storageKey: 'image(height:100,width:100)',
+    },
+    v12 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'content',
+      storageKey: null,
+    },
+    v13 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'totalCount',
+      storageKey: null,
+    },
+    v14 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'name',
+      storageKey: null,
+    },
+    v15 = [
+      {
+        kind: 'Literal',
+        name: 'first',
+        value: 20,
+      },
+    ],
+    v16 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'cursor',
+      storageKey: null,
+    },
+    v17 = {
+      alias: null,
+      args: null,
+      concreteType: 'PageInfo',
+      kind: 'LinkedField',
+      name: 'pageInfo',
+      plural: false,
       selections: [
         {
           alias: null,
           args: null,
           kind: 'ScalarField',
-          name: 'url',
+          name: 'hasNextPage',
+          storageKey: null,
+        },
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'endCursor',
           storageKey: null,
         },
       ],
-      storageKey: 'image(height:100,width:100)',
+      storageKey: null,
     }
   return {
     fragment: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v0 /*: any*/, v1 /*: any*/, v2 /*: any*/, v3 /*: any*/],
       kind: 'Fragment',
       metadata: null,
       name: 'chatRoomsPaginationQuery',
       selections: [
         {
-          args: [
+          alias: null,
+          args: v4 /*: any*/,
+          concreteType: null,
+          kind: 'LinkedField',
+          name: 'node',
+          plural: false,
+          selections: [
             {
-              kind: 'Variable',
-              name: 'count',
-              variableName: 'count',
+              args: [
+                {
+                  kind: 'Variable',
+                  name: 'count',
+                  variableName: 'count',
+                },
+                {
+                  kind: 'Variable',
+                  name: 'cursor',
+                  variableName: 'cursor',
+                },
+                v5 /*: any*/,
+              ],
+              kind: 'FragmentSpread',
+              name: 'RoomsListFragment',
             },
-            {
-              kind: 'Variable',
-              name: 'cursor',
-              variableName: 'cursor',
-            },
-            v1 /*: any*/,
           ],
-          kind: 'FragmentSpread',
-          name: 'RoomsListFragment',
+          storageKey: null,
         },
       ],
       type: 'Query',
@@ -133,31 +228,26 @@ const node: ConcreteRequest = (function () {
     },
     kind: 'Request',
     operation: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v0 /*: any*/, v1 /*: any*/, v3 /*: any*/, v2 /*: any*/],
       kind: 'Operation',
       name: 'chatRoomsPaginationQuery',
       selections: [
         {
           alias: null,
-          args: null,
-          concreteType: 'User',
+          args: v4 /*: any*/,
+          concreteType: null,
           kind: 'LinkedField',
-          name: 'me',
+          name: 'node',
           plural: false,
           selections: [
-            v2 /*: any*/,
+            v6 /*: any*/,
+            v7 /*: any*/,
             {
-              alias: null,
-              args: null,
-              concreteType: 'Profile',
-              kind: 'LinkedField',
-              name: 'profile',
-              plural: false,
+              kind: 'InlineFragment',
               selections: [
-                v2 /*: any*/,
                 {
                   alias: null,
-                  args: v3 /*: any*/,
+                  args: v8 /*: any*/,
                   concreteType: 'ChatRoomConnection',
                   kind: 'LinkedField',
                   name: 'chatRooms',
@@ -179,9 +269,9 @@ const node: ConcreteRequest = (function () {
                           name: 'node',
                           plural: false,
                           selections: [
-                            v2 /*: any*/,
-                            v4 /*: any*/,
-                            v5 /*: any*/,
+                            v7 /*: any*/,
+                            v9 /*: any*/,
+                            v11 /*: any*/,
                             {
                               alias: null,
                               args: null,
@@ -196,16 +286,7 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'lastMessage',
                               plural: false,
-                              selections: [
-                                v2 /*: any*/,
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'content',
-                                  storageKey: null,
-                                },
-                              ],
+                              selections: [v7 /*: any*/, v12 /*: any*/],
                               storageKey: null,
                             },
                             {
@@ -223,13 +304,7 @@ const node: ConcreteRequest = (function () {
                               name: 'participants',
                               plural: false,
                               selections: [
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'totalCount',
-                                  storageKey: null,
-                                },
+                                v13 /*: any*/,
                                 {
                                   alias: null,
                                   args: null,
@@ -246,7 +321,7 @@ const node: ConcreteRequest = (function () {
                                       name: 'node',
                                       plural: false,
                                       selections: [
-                                        v2 /*: any*/,
+                                        v7 /*: any*/,
                                         {
                                           alias: null,
                                           args: null,
@@ -255,15 +330,10 @@ const node: ConcreteRequest = (function () {
                                           name: 'profile',
                                           plural: false,
                                           selections: [
-                                            v2 /*: any*/,
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'name',
-                                              storageKey: null,
-                                            },
-                                            v5 /*: any*/,
+                                            v7 /*: any*/,
+                                            v6 /*: any*/,
+                                            v14 /*: any*/,
+                                            v11 /*: any*/,
                                           ],
                                           storageKey: null,
                                         },
@@ -278,64 +348,149 @@ const node: ConcreteRequest = (function () {
                             },
                             {
                               alias: null,
-                              args: null,
-                              kind: 'ScalarField',
-                              name: '__typename',
-                              storageKey: null,
+                              args: v15 /*: any*/,
+                              concreteType: 'MessageConnection',
+                              kind: 'LinkedField',
+                              name: 'allMessages',
+                              plural: false,
+                              selections: [
+                                v13 /*: any*/,
+                                {
+                                  alias: null,
+                                  args: null,
+                                  concreteType: 'MessageEdge',
+                                  kind: 'LinkedField',
+                                  name: 'edges',
+                                  plural: true,
+                                  selections: [
+                                    {
+                                      alias: null,
+                                      args: null,
+                                      concreteType: 'Message',
+                                      kind: 'LinkedField',
+                                      name: 'node',
+                                      plural: false,
+                                      selections: [
+                                        v7 /*: any*/,
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          kind: 'ScalarField',
+                                          name: 'created',
+                                          storageKey: null,
+                                        },
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          concreteType: 'Profile',
+                                          kind: 'LinkedField',
+                                          name: 'profile',
+                                          plural: false,
+                                          selections: [
+                                            v7 /*: any*/,
+                                            v14 /*: any*/,
+                                            {
+                                              alias: null,
+                                              args: [
+                                                {
+                                                  kind: 'Literal',
+                                                  name: 'height',
+                                                  value: 32,
+                                                },
+                                                {
+                                                  kind: 'Literal',
+                                                  name: 'width',
+                                                  value: 32,
+                                                },
+                                              ],
+                                              concreteType: 'File',
+                                              kind: 'LinkedField',
+                                              name: 'image',
+                                              plural: false,
+                                              selections: v10 /*: any*/,
+                                              storageKey: 'image(height:32,width:32)',
+                                            },
+                                          ],
+                                          storageKey: null,
+                                        },
+                                        v12 /*: any*/,
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          kind: 'ScalarField',
+                                          name: 'extraData',
+                                          storageKey: null,
+                                        },
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          concreteType: 'Message',
+                                          kind: 'LinkedField',
+                                          name: 'inReplyTo',
+                                          plural: false,
+                                          selections: [v7 /*: any*/],
+                                          storageKey: null,
+                                        },
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          kind: 'ScalarField',
+                                          name: 'pk',
+                                          storageKey: null,
+                                        },
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          kind: 'ScalarField',
+                                          name: 'verb',
+                                          storageKey: null,
+                                        },
+                                        v6 /*: any*/,
+                                      ],
+                                      storageKey: null,
+                                    },
+                                    v16 /*: any*/,
+                                  ],
+                                  storageKey: null,
+                                },
+                                v17 /*: any*/,
+                              ],
+                              storageKey: 'allMessages(first:20)',
                             },
+                            {
+                              alias: null,
+                              args: v15 /*: any*/,
+                              filters: null,
+                              handle: 'connection',
+                              key: 'chatRoom_allMessages',
+                              kind: 'LinkedHandle',
+                              name: 'allMessages',
+                            },
+                            v6 /*: any*/,
                           ],
                           storageKey: null,
                         },
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'cursor',
-                          storageKey: null,
-                        },
+                        v16 /*: any*/,
                       ],
                       storageKey: null,
                     },
-                    {
-                      alias: null,
-                      args: null,
-                      concreteType: 'PageInfo',
-                      kind: 'LinkedField',
-                      name: 'pageInfo',
-                      plural: false,
-                      selections: [
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'hasNextPage',
-                          storageKey: null,
-                        },
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'endCursor',
-                          storageKey: null,
-                        },
-                      ],
-                      storageKey: null,
-                    },
+                    v17 /*: any*/,
                   ],
                   storageKey: null,
                 },
                 {
                   alias: null,
-                  args: v3 /*: any*/,
+                  args: v8 /*: any*/,
                   filters: ['q'],
                   handle: 'connection',
                   key: 'roomsList_chatRooms',
                   kind: 'LinkedHandle',
                   name: 'chatRooms',
                 },
-                v4 /*: any*/,
+                v9 /*: any*/,
               ],
-              storageKey: null,
+              type: 'ChatRoomsInterface',
+              abstractKey: '__isChatRoomsInterface',
             },
           ],
           storageKey: null,
@@ -343,16 +498,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '0eaffa81ba4ab925d547d72bcafd5fd3',
+      cacheID: 'd2e62465c109463b6975a50af0ffa5c5',
       id: null,
       metadata: {},
       name: 'chatRoomsPaginationQuery',
       operationKind: 'query',
-      text: 'query chatRoomsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n) {\n  ...RoomsListFragment_XhAmI\n}\n\nfragment RoomsListFragment_XhAmI on Query {\n  me {\n    id\n    profile {\n      id\n      chatRooms(first: $count, after: $cursor, q: $q) {\n        edges {\n          node {\n            id\n            unreadMessagesCount\n            image(width: 100, height: 100) {\n              url\n            }\n            lastMessageTime\n            lastMessage {\n              id\n              content\n            }\n            title\n            participants {\n              totalCount\n              edges {\n                node {\n                  id\n                  profile {\n                    id\n                    name\n                    image(width: 100, height: 100) {\n                      url\n                    }\n                  }\n                }\n              }\n            }\n            __typename\n          }\n          cursor\n        }\n        pageInfo {\n          hasNextPage\n          endCursor\n        }\n      }\n      unreadMessagesCount\n    }\n  }\n}\n',
+      text: 'query chatRoomsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RoomsListFragment_XhAmI\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  image(width: 100, height: 100) {\n    url\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  title\n  participants {\n    totalCount\n    edges {\n      node {\n        id\n        profile {\n          id\n          __typename\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n      }\n    }\n  }\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment_XhAmI on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  id\n  chatRooms(first: $count, after: $cursor, q: $q) {\n    edges {\n      node {\n        id\n        unreadMessagesCount\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  unreadMessagesCount\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'af01a3ee2b3946a228bfc0c137480f5a'
+;(node as any).hash = '503f16e1be2d090bcacfff6d0c023a45'
 
 export default node

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c7e97c099619f133d392181efa218b80>>
+ * @generated SignedSource<<c81ebbf0070c8d9d62ec494d9e9daeba>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,87 +12,31 @@ import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type RoomsListFragment$data = {
-  readonly me:
+  readonly chatRooms:
     | {
-        readonly id: string
-        readonly profile:
+        readonly edges: ReadonlyArray<
           | {
-              readonly chatRooms:
+              readonly node:
                 | {
-                    readonly edges: ReadonlyArray<
-                      | {
-                          readonly node:
-                            | {
-                                readonly id: string
-                                readonly image:
-                                  | {
-                                      readonly url: string
-                                    }
-                                  | null
-                                  | undefined
-                                readonly lastMessage:
-                                  | {
-                                      readonly content: string | null | undefined
-                                      readonly id: string
-                                    }
-                                  | null
-                                  | undefined
-                                readonly lastMessageTime: any | null | undefined
-                                readonly participants:
-                                  | {
-                                      readonly edges: ReadonlyArray<
-                                        | {
-                                            readonly node:
-                                              | {
-                                                  readonly id: string
-                                                  readonly profile:
-                                                    | {
-                                                        readonly id: string
-                                                        readonly image:
-                                                          | {
-                                                              readonly url: string
-                                                            }
-                                                          | null
-                                                          | undefined
-                                                        readonly name: string | null | undefined
-                                                      }
-                                                    | null
-                                                    | undefined
-                                                }
-                                              | null
-                                              | undefined
-                                          }
-                                        | null
-                                        | undefined
-                                      >
-                                      readonly totalCount: number | null | undefined
-                                    }
-                                  | null
-                                  | undefined
-                                readonly title: string | null | undefined
-                                readonly unreadMessagesCount: number | null | undefined
-                              }
-                            | null
-                            | undefined
-                        }
-                      | null
-                      | undefined
-                    >
-                    readonly pageInfo: {
-                      readonly endCursor: string | null | undefined
-                      readonly hasNextPage: boolean
-                    }
+                    readonly id: string
+                    readonly unreadMessagesCount: number | null | undefined
+                    readonly ' $fragmentSpreads': FragmentRefs<'RoomFragment'>
                   }
                 | null
                 | undefined
-              readonly id: string
-              readonly unreadMessagesCount: number | null | undefined
             }
           | null
           | undefined
+        >
+        readonly pageInfo: {
+          readonly endCursor: string | null | undefined
+          readonly hasNextPage: boolean
+        }
       }
     | null
     | undefined
+  readonly id: string
+  readonly unreadMessagesCount: number | null | undefined
   readonly ' $fragmentType': 'RoomsListFragment'
 }
 export type RoomsListFragment$key = {
@@ -101,7 +45,7 @@ export type RoomsListFragment$key = {
 }
 
 const node: ReaderFragment = (function () {
-  var v0 = ['me', 'profile', 'chatRooms'],
+  var v0 = ['chatRooms'],
     v1 = {
       alias: null,
       args: null,
@@ -115,35 +59,6 @@ const node: ReaderFragment = (function () {
       kind: 'ScalarField',
       name: 'unreadMessagesCount',
       storageKey: null,
-    },
-    v3 = {
-      alias: null,
-      args: [
-        {
-          kind: 'Literal',
-          name: 'height',
-          value: 100,
-        },
-        {
-          kind: 'Literal',
-          name: 'width',
-          value: 100,
-        },
-      ],
-      concreteType: 'File',
-      kind: 'LinkedField',
-      name: 'image',
-      plural: false,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'url',
-          storageKey: null,
-        },
-      ],
-      storageKey: 'image(height:100,width:100)',
     }
   return {
     argumentDefinitions: [
@@ -182,218 +97,109 @@ const node: ReaderFragment = (function () {
           backward: null,
           path: v0 /*: any*/,
         },
-        fragmentPathInResult: [],
+        fragmentPathInResult: ['node'],
         operation: require('./chatRoomsPaginationQuery.graphql'),
+        identifierInfo: {
+          identifierField: 'id',
+          identifierQueryVariableName: 'id',
+        },
       },
     },
     name: 'RoomsListFragment',
     selections: [
+      v1 /*: any*/,
       {
-        alias: null,
-        args: null,
-        concreteType: 'User',
+        alias: 'chatRooms',
+        args: [
+          {
+            kind: 'Variable',
+            name: 'q',
+            variableName: 'q',
+          },
+        ],
+        concreteType: 'ChatRoomConnection',
         kind: 'LinkedField',
-        name: 'me',
+        name: '__roomsList_chatRooms_connection',
         plural: false,
         selections: [
-          v1 /*: any*/,
           {
             alias: null,
             args: null,
-            concreteType: 'Profile',
+            concreteType: 'ChatRoomEdge',
             kind: 'LinkedField',
-            name: 'profile',
-            plural: false,
+            name: 'edges',
+            plural: true,
             selections: [
-              v1 /*: any*/,
               {
-                alias: 'chatRooms',
-                args: [
-                  {
-                    kind: 'Variable',
-                    name: 'q',
-                    variableName: 'q',
-                  },
-                ],
-                concreteType: 'ChatRoomConnection',
+                alias: null,
+                args: null,
+                concreteType: 'ChatRoom',
                 kind: 'LinkedField',
-                name: '__roomsList_chatRooms_connection',
+                name: 'node',
                 plural: false,
                 selections: [
+                  v1 /*: any*/,
+                  v2 /*: any*/,
                   {
-                    alias: null,
                     args: null,
-                    concreteType: 'ChatRoomEdge',
-                    kind: 'LinkedField',
-                    name: 'edges',
-                    plural: true,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        concreteType: 'ChatRoom',
-                        kind: 'LinkedField',
-                        name: 'node',
-                        plural: false,
-                        selections: [
-                          v1 /*: any*/,
-                          v2 /*: any*/,
-                          v3 /*: any*/,
-                          {
-                            alias: null,
-                            args: null,
-                            kind: 'ScalarField',
-                            name: 'lastMessageTime',
-                            storageKey: null,
-                          },
-                          {
-                            alias: null,
-                            args: null,
-                            concreteType: 'Message',
-                            kind: 'LinkedField',
-                            name: 'lastMessage',
-                            plural: false,
-                            selections: [
-                              v1 /*: any*/,
-                              {
-                                alias: null,
-                                args: null,
-                                kind: 'ScalarField',
-                                name: 'content',
-                                storageKey: null,
-                              },
-                            ],
-                            storageKey: null,
-                          },
-                          {
-                            alias: null,
-                            args: null,
-                            kind: 'ScalarField',
-                            name: 'title',
-                            storageKey: null,
-                          },
-                          {
-                            alias: null,
-                            args: null,
-                            concreteType: 'ChatRoomParticipantConnection',
-                            kind: 'LinkedField',
-                            name: 'participants',
-                            plural: false,
-                            selections: [
-                              {
-                                alias: null,
-                                args: null,
-                                kind: 'ScalarField',
-                                name: 'totalCount',
-                                storageKey: null,
-                              },
-                              {
-                                alias: null,
-                                args: null,
-                                concreteType: 'ChatRoomParticipantEdge',
-                                kind: 'LinkedField',
-                                name: 'edges',
-                                plural: true,
-                                selections: [
-                                  {
-                                    alias: null,
-                                    args: null,
-                                    concreteType: 'ChatRoomParticipant',
-                                    kind: 'LinkedField',
-                                    name: 'node',
-                                    plural: false,
-                                    selections: [
-                                      v1 /*: any*/,
-                                      {
-                                        alias: null,
-                                        args: null,
-                                        concreteType: 'Profile',
-                                        kind: 'LinkedField',
-                                        name: 'profile',
-                                        plural: false,
-                                        selections: [
-                                          v1 /*: any*/,
-                                          {
-                                            alias: null,
-                                            args: null,
-                                            kind: 'ScalarField',
-                                            name: 'name',
-                                            storageKey: null,
-                                          },
-                                          v3 /*: any*/,
-                                        ],
-                                        storageKey: null,
-                                      },
-                                    ],
-                                    storageKey: null,
-                                  },
-                                ],
-                                storageKey: null,
-                              },
-                            ],
-                            storageKey: null,
-                          },
-                          {
-                            alias: null,
-                            args: null,
-                            kind: 'ScalarField',
-                            name: '__typename',
-                            storageKey: null,
-                          },
-                        ],
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'cursor',
-                        storageKey: null,
-                      },
-                    ],
-                    storageKey: null,
+                    kind: 'FragmentSpread',
+                    name: 'RoomFragment',
                   },
                   {
                     alias: null,
                     args: null,
-                    concreteType: 'PageInfo',
-                    kind: 'LinkedField',
-                    name: 'pageInfo',
-                    plural: false,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'hasNextPage',
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'endCursor',
-                        storageKey: null,
-                      },
-                    ],
+                    kind: 'ScalarField',
+                    name: '__typename',
                     storageKey: null,
                   },
                 ],
                 storageKey: null,
               },
-              v2 /*: any*/,
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'cursor',
+                storageKey: null,
+              },
+            ],
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            concreteType: 'PageInfo',
+            kind: 'LinkedField',
+            name: 'pageInfo',
+            plural: false,
+            selections: [
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'hasNextPage',
+                storageKey: null,
+              },
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'endCursor',
+                storageKey: null,
+              },
             ],
             storageKey: null,
           },
         ],
         storageKey: null,
       },
+      v2 /*: any*/,
     ],
-    type: 'Query',
-    abstractKey: null,
+    type: 'ChatRoomsInterface',
+    abstractKey: '__isChatRoomsInterface',
   }
 })()
 
-;(node as any).hash = 'af01a3ee2b3946a228bfc0c137480f5a'
+;(node as any).hash = '503f16e1be2d090bcacfff6d0c023a45'
 
 export default node

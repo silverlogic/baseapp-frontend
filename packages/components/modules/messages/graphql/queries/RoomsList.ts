@@ -4,56 +4,28 @@ import { RoomsListFragment$key } from '../../../../__generated__/RoomsListFragme
 import { chatRoomsPaginationQuery } from '../../../../__generated__/chatRoomsPaginationQuery.graphql'
 
 export const RoomsListFragment = graphql`
-  fragment RoomsListFragment on Query
-  @refetchable(queryName: "chatRoomsPaginationQuery")
+  fragment RoomsListFragment on ChatRoomsInterface
   @argumentDefinitions(
     cursor: { type: "String" }
     count: { type: "Int", defaultValue: 5 }
     q: { type: "String", defaultValue: null }
-  ) {
-    me {
-      id
-      profile {
-        id
-        chatRooms(first: $count, after: $cursor, q: $q) @connection(key: "roomsList_chatRooms") {
-          edges {
-            node {
-              id
-              unreadMessagesCount
-              image(width: 100, height: 100) {
-                url
-              }
-              lastMessageTime
-              lastMessage {
-                id
-                content
-              }
-              title
-              participants {
-                totalCount
-                edges {
-                  node {
-                    id
-                    profile {
-                      id
-                      name
-                      image(width: 100, height: 100) {
-                        url
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-          pageInfo {
-            hasNextPage
-            endCursor
-          }
+  )
+  @refetchable(queryName: "chatRoomsPaginationQuery") {
+    id
+    chatRooms(first: $count, after: $cursor, q: $q) @connection(key: "roomsList_chatRooms") {
+      edges {
+        node {
+          id
+          unreadMessagesCount
+          ...RoomFragment
         }
-        unreadMessagesCount
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
+    unreadMessagesCount
   }
 `
 
