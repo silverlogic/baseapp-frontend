@@ -19,6 +19,7 @@ export const ChatRoomQuery = graphql`
           }
         }
       }
+      unreadMessagesCount
       ...MessagesListFragment
     }
   }

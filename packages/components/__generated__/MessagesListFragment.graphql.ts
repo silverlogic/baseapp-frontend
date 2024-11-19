@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4cd4d07aa30c188f82b80c8eebe02979>>
+ * @generated SignedSource<<91b489da3df08f0b62ec9dce25b08a58>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,6 +20,7 @@ export type MessagesListFragment$data = {
                 | {
                     readonly created: any
                     readonly id: string
+                    readonly isRead: boolean | null | undefined
                     readonly profile:
                       | {
                           readonly id: string
@@ -56,6 +57,7 @@ export type MessagesListFragment$data = {
       }
     | null
     | undefined
+  readonly unreadMessagesCount: number | null | undefined
   readonly ' $fragmentType': 'MessagesListFragment'
 }
 export type MessagesListFragment$key = {
@@ -130,6 +132,13 @@ const node: ReaderFragment = (function () {
         name: 'participants',
         plural: false,
         selections: [v2 /*: any*/],
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'unreadMessagesCount',
         storageKey: null,
       },
       {
@@ -214,6 +223,13 @@ const node: ReaderFragment = (function () {
                     storageKey: null,
                   },
                   {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: 'isRead',
+                    storageKey: null,
+                  },
+                  {
                     args: null,
                     kind: 'FragmentSpread',
                     name: 'MessageItemFragment',
@@ -272,6 +288,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '140657eaa254ee3833f86c73b44cc05a'
+;(node as any).hash = '1eebe2365c138d57d71fb4d1365102b9'
 
 export default node

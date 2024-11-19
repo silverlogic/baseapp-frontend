@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c81ebbf0070c8d9d62ec494d9e9daeba>>
+ * @generated SignedSource<<d6f06c646cd42a6b8700e1f1364cf831>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -77,6 +77,11 @@ const node: ReaderFragment = (function () {
         kind: 'LocalArgument',
         name: 'q',
       },
+      {
+        defaultValue: false,
+        kind: 'LocalArgument',
+        name: 'unreadMessages',
+      },
     ],
     kind: 'Fragment',
     metadata: {
@@ -108,6 +113,7 @@ const node: ReaderFragment = (function () {
     name: 'RoomsListFragment',
     selections: [
       v1 /*: any*/,
+      v2 /*: any*/,
       {
         alias: 'chatRooms',
         args: [
@@ -115,6 +121,11 @@ const node: ReaderFragment = (function () {
             kind: 'Variable',
             name: 'q',
             variableName: 'q',
+          },
+          {
+            kind: 'Variable',
+            name: 'unreadMessages',
+            variableName: 'unreadMessages',
           },
         ],
         concreteType: 'ChatRoomConnection',
@@ -193,13 +204,12 @@ const node: ReaderFragment = (function () {
         ],
         storageKey: null,
       },
-      v2 /*: any*/,
     ],
     type: 'ChatRoomsInterface',
     abstractKey: '__isChatRoomsInterface',
   }
 })()
 
-;(node as any).hash = '503f16e1be2d090bcacfff6d0c023a45'
+;(node as any).hash = 'cf8dd10e5de039944535e8c431f1adfb'
 
 export default node

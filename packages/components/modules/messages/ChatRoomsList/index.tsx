@@ -13,7 +13,6 @@ import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
 import { RoomsListFragment$key } from '../../../__generated__/RoomsListFragment.graphql'
-import { useCurrentProfile } from '../../profiles'
 import { useChatRoom } from '../context'
 import { useRoomsList } from '../graphql/queries/RoomsList'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
@@ -33,13 +32,17 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
 }) => {
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
 
-  const { profile } = useCurrentProfile()
   const { data, loadNext, isLoadingNext, hasNext, refetch } = useRoomsList(
     targetRef?.me?.profile as RoomsListFragment$key,
   )
 
+  const [isPending, startTransition] = useTransition()
+
   const handleChange = (event: React.SyntheticEvent, newTab: string) => {
     setTab(newTab as ChatTabValues)
+    startTransition(() => {
+      refetch({ unreadMessages: newTab === CHAT_TAB_VALUES.unread })
+    })
   }
 
   const isMobile = useResponsive('down', 'sm')
@@ -69,7 +72,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     [selectedRoom, setChatRoom, ChatRoomCardProps, ChatRoomCard],
   )
 
-  useRoomListSubscription(data?.id as string, profile?.id as string)
+  useRoomListSubscription(data?.id as string)
 
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
@@ -82,8 +85,6 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
       />
     )
   }
-
-  const [isPending, startTransition] = useTransition()
 
   return (
     <div className="grid h-full w-full grid-rows-[min-content_min-content_auto]">

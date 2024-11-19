@@ -3,7 +3,7 @@ import { FC, useCallback, useMemo } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
 
 import { useCurrentProfile } from '../../profiles'
@@ -28,6 +28,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   MessageItemProps = {},
 }) => {
   const { profile: currentProfile } = useCurrentProfile()
+  const theme = useTheme()
 
   const renderDateOnTopOfMessagesGroup = useCallback(
     (index: number) => {
@@ -49,6 +50,38 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       return null
     },
     [allMessages, allMessagesLastIndex, hasNext],
+  )
+
+  const renderUnreadMessagesDivider = useCallback(
+    (index: number) => {
+      const previousMessage = allMessages?.[index + 1]
+      const currentMessage = allMessages?.[index]
+      const hasPreviousMessage = !!previousMessage
+      const isFirstUnreadMessage =
+        currentMessage?.profile?.id !== currentProfile?.id &&
+        !currentMessage?.isRead &&
+        (!hasPreviousMessage || previousMessage?.isRead)
+
+      if (!!currentMessage && isFirstUnreadMessage) {
+        return (
+          <Divider
+            variant="fullWidth"
+            sx={{
+              '&.MuiDivider-root::before, &.MuiDivider-root::after': {
+                borderTop: `1px solid ${theme.palette.error.light}`,
+              },
+            }}
+          >
+            <Typography variant="caption" color="error" sx={{ textAlign: 'center' }}>
+              New Messages
+            </Typography>
+          </Divider>
+        )
+      }
+
+      return null
+    },
+    [allMessages, currentProfile, theme.palette.error.light],
   )
 
   const renderLastMessageTime = useCallback(
@@ -100,11 +133,8 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   if (!message) return null
 
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      sx={{ paddingTop: 1 / 2, paddingRight: 2, width: '100%' }}
-    >
+    <Box display="flex" flexDirection="column" sx={{ paddingTop: 1 / 2, paddingRight: 2 }}>
+      {renderUnreadMessagesDivider(messageIndex)}
       {renderDateOnTopOfMessagesGroup(messageIndex)}
       <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}>
         {canShowAvatar && (

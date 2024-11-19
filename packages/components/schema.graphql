@@ -208,6 +208,7 @@ interface ChatRoomsInterface {
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -538,6 +539,7 @@ type Message implements Node {
   extraData: JSONString
   pk: Int!
   actionObject: Node
+  isRead(profileId: ID): Boolean
 }
 
 type MessageConnection {
@@ -942,6 +944,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
