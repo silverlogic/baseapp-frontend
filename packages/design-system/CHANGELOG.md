@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.18
+
+### Patch Changes
+
+- Impose file size limits on Dropzones
+
 ## 0.0.17
 
 ### Patch Changes
