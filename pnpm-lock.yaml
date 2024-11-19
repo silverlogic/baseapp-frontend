@@ -6,131 +6,16 @@ settings:
 
 catalogs:
   default:
-    '@hookform/resolvers':
-      specifier: ^3.6.0
-      version: 3.9.1
-    '@tanstack/react-query':
-      specifier: ^5.45.1
-      version: 5.60.6
-    '@types/js-cookie':
-      specifier: ^3.0.6
-      version: 3.0.6
-    '@types/lodash':
-      specifier: ^4.17.7
-      version: 4.17.13
-    '@types/luxon':
-      specifier: ^3.4.2
-      version: 3.4.2
     '@types/node':
       specifier: ^22.7.2
       version: 22.9.1
-    axios:
-      specifier: ^1.7.2
-      version: 1.7.7
-    events:
-      specifier: ^3.3.0
-      version: 3.3.0
-    js-cookie:
-      specifier: ^3.0.5
-      version: 3.0.5
-    lodash:
-      specifier: ^4.17.21
-      version: 4.17.21
-    luxon:
-      specifier: ^3.4.4
-      version: 3.5.0
-    next:
-      specifier: 14.3.0-canary.24
-      version: 14.3.0-canary.24
-    react-hook-form:
-      specifier: ^7.51.5
-      version: 7.53.2
     typescript:
       specifier: ^5.4.5
       version: 5.6.3
-    zod:
-      specifier: ^3.23.8
-      version: 3.23.8
-    zustand:
-      specifier: ^4.5.2
-      version: 4.5.5
-  graphql:
-    '@types/react-relay':
-      specifier: ^16.0.6
-      version: 16.0.6
-    '@types/relay-runtime':
-      specifier: ^17.0.3
-      version: 17.0.4
-    '@types/relay-test-utils':
-      specifier: ^14.1.4
-      version: 14.1.4
-    graphql:
-      specifier: ^16.8.1
-      version: 16.9.0
-    graphql-ws:
-      specifier: ^5.16.0
-      version: 5.16.0
-    isomorphic-ws:
-      specifier: ^5.0.0
-      version: 5.0.0
-    react-relay:
-      specifier: ^16.2.0
-      version: 16.2.0
-    relay-compiler:
-      specifier: ^16.2.0
-      version: 16.2.0
-    relay-runtime:
-      specifier: ^16.2.0
-      version: 16.2.0
-    relay-test-utils:
-      specifier: ^17.0.0
-      version: 17.0.0
   lint:
-    '@emotion/eslint-plugin':
-      specifier: ^11.11.0
-      version: 11.12.0
-    '@next/eslint-plugin-next':
-      specifier: ^13.1.6
-      version: 13.5.7
-    '@trivago/prettier-plugin-sort-imports':
-      specifier: ^4.3.0
-      version: 4.3.0
-    '@types/eslint':
-      specifier: ^9.6.1
-      version: 9.6.1
-    '@typescript-eslint/eslint-plugin':
-      specifier: ^5.59.11
-      version: 5.62.0
-    '@typescript-eslint/parser':
-      specifier: ^5.29.0
-      version: 5.62.0
     eslint:
       specifier: ^8.42.0
       version: 8.57.1
-    eslint-config-airbnb:
-      specifier: ^19.0.4
-      version: 19.0.4
-    eslint-config-airbnb-typescript:
-      specifier: ^17.0.0
-      version: 17.1.0
-    eslint-config-next:
-      specifier: ^13.4.6
-      version: 13.5.7
-    eslint-config-prettier:
-      specifier: ^8.8.0
-      version: 8.10.0
-    eslint-plugin-import:
-      specifier: ^2.26.0
-      version: 2.31.0
-    eslint-plugin-jsx-a11y:
-      specifier: ^6.6.1
-      version: 6.10.2
-    eslint-plugin-react:
-      specifier: ^7.31.11
-      version: 7.37.2
-    eslint-plugin-react-hooks:
-      specifier: ^4.6.0
-      version: 4.6.2
     husky:
       specifier: ^9.1.6
       version: 9.1.7
@@ -140,57 +25,6 @@ catalogs:
     prettier:
       specifier: ^3.3.3
       version: 3.3.3
-    prettier-plugin-tailwindcss:
-      specifier: ^0.6.3
-      version: 0.6.9
-  material-ui:
-    '@emotion/cache':
-      specifier: ^11.11.0
-      version: 11.13.1
-    '@emotion/react':
-      specifier: ^11.11.4
-      version: 11.13.3
-    '@mui/material':
-      specifier: ^5.15.19
-      version: 5.16.7
-  react18:
-    '@types/react':
-      specifier: ^18.3.3
-      version: 18.3.12
-    '@types/react-dom':
-      specifier: ^18.3.0
-      version: 18.3.1
-    react:
-      specifier: 18.3.1
-      version: 18.3.1
-  test:
-    '@testing-library/jest-dom':
-      specifier: ^6.4.6
-      version: 6.6.3
-    '@testing-library/react':
-      specifier: ^16.0.0
-      version: 16.0.1
-    '@testing-library/user-event':
-      specifier: ^14.5.2
-      version: 14.5.2
-    '@types/jest':
-      specifier: ^29.5.12
-      version: 29.5.14
-    babel-jest:
-      specifier: ^29.7.0
-      version: 29.7.0
-    jest:
-      specifier: ^29.7.0
-      version: 29.7.0
-    jest-environment-jsdom:
-      specifier: ^29.7.0
-      version: 29.7.0
-    ts-jest:
-      specifier: ^29.1.4
-      version: 29.2.5
-    ts-node:
-      specifier: ^10.9.2
-      version: 10.9.2
 
 importers:
 
@@ -236,22 +70,22 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@hookform/resolvers':
-        specifier: 'catalog:'
+        specifier: ^3.6.0
         version: 3.9.1(react-hook-form@7.53.2(react@18.3.1))
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: ^5.45.1
         version: 5.60.6(react@18.3.1)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: ^3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: ^7.51.5
         version: 7.53.2(react@18.3.1)
       zod:
-        specifier: 'catalog:'
+        specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
       '@baseapp-frontend/config':
@@ -267,46 +101,46 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: ^6.4.6
         version: 6.6.3
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: ^16.0.0
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: catalog:test
+        specifier: ^29.5.12
         version: 29.5.14
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: ^3.0.6
         version: 3.0.6
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.7.2
         version: 22.9.1
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^18.3.3
         version: 18.3.12
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^18.3.0
         version: 18.3.1
       babel-jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: ^29.1.4
         version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.0)(jest@29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)))(typescript@5.6.3)
       ts-node:
-        specifier: catalog:test
+        specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
   packages/components:
@@ -571,52 +405,52 @@ importers:
         specifier: workspace:*
         version: link:../eslint-plugin
       '@emotion/eslint-plugin':
-        specifier: catalog:lint
+        specifier: ^11.11.0
         version: 11.12.0(eslint@8.57.1)(typescript@5.6.3)
       '@next/eslint-plugin-next':
-        specifier: catalog:lint
+        specifier: ^13.1.6
         version: 13.5.7
       '@trivago/prettier-plugin-sort-imports':
-        specifier: catalog:lint
+        specifier: ^4.3.0
         version: 4.3.0(prettier@3.3.3)
       '@typescript-eslint/eslint-plugin':
-        specifier: catalog:lint
+        specifier: ^5.59.11
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3)
       '@typescript-eslint/parser':
-        specifier: catalog:lint
+        specifier: ^5.29.0
         version: 5.62.0(eslint@8.57.1)(typescript@5.6.3)
       eslint:
-        specifier: catalog:lint
+        specifier: ^8.42.0
         version: 8.57.1
       eslint-config-airbnb:
-        specifier: catalog:lint
+        specifier: ^19.0.4
         version: 19.0.4(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.2(eslint@8.57.1))(eslint@8.57.1)
       eslint-config-airbnb-typescript:
-        specifier: catalog:lint
+        specifier: ^17.0.0
         version: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1)(typescript@5.6.3))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1)
       eslint-config-next:
-        specifier: catalog:lint
+        specifier: ^13.4.6
         version: 13.5.7(eslint@8.57.1)(typescript@5.6.3)
       eslint-config-prettier:
-        specifier: catalog:lint
+        specifier: ^8.8.0
         version: 8.10.0(eslint@8.57.1)
       eslint-plugin-import:
-        specifier: catalog:lint
+        specifier: ^2.26.0
         version: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-typescript@3.6.3(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint-import-resolver-node@0.3.9)(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.6.3))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
       eslint-plugin-jsx-a11y:
-        specifier: catalog:lint
+        specifier: ^6.6.1
         version: 6.10.2(eslint@8.57.1)
       eslint-plugin-react:
-        specifier: catalog:lint
+        specifier: ^7.31.11
         version: 7.37.2(eslint@8.57.1)
       eslint-plugin-react-hooks:
-        specifier: catalog:lint
+        specifier: ^4.6.0
         version: 4.6.2(eslint@8.57.1)
       prettier:
-        specifier: catalog:lint
+        specifier: ^3.3.3
         version: 3.3.3
       prettier-plugin-tailwindcss:
-        specifier: catalog:lint
+        specifier: ^0.6.3
         version: 0.6.9(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.3.3))(prettier@3.3.3)
 
   packages/design-system:
@@ -776,26 +610,26 @@ importers:
   packages/eslint-plugin:
     dependencies:
       eslint:
-        specifier: catalog:lint
+        specifier: ^8.42.0
         version: 8.57.1
     devDependencies:
       '@baseapp-frontend/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/eslint':
-        specifier: catalog:lint
+        specifier: ^9.6.1
         version: 9.6.1
       '@types/jest':
-        specifier: catalog:test
+        specifier: ^29.5.12
         version: 29.5.14
       parcel:
         specifier: ^2.12.0
         version: 2.13.0(@swc/helpers@0.5.15)(postcss@8.4.49)(relateurl@0.2.7)(terser@5.36.0)(typescript@5.6.3)
       ts-node:
-        specifier: catalog:test
+        specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
   packages/graphql:
@@ -804,28 +638,28 @@ importers:
         specifier: workspace:*
         version: link:../utils
       graphql:
-        specifier: catalog:graphql
+        specifier: ^16.8.1
         version: 16.9.0
       graphql-ws:
-        specifier: catalog:graphql
+        specifier: ^5.16.0
         version: 5.16.0(graphql@16.9.0)
       isomorphic-ws:
-        specifier: catalog:graphql
+        specifier: ^5.0.0
         version: 5.0.0(ws@8.18.0)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: ^3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-relay:
-        specifier: catalog:graphql
+        specifier: ^16.2.0
         version: 16.2.0(react@18.3.1)
       relay-runtime:
-        specifier: catalog:graphql
+        specifier: ^16.2.0
         version: 16.2.0
       relay-test-utils:
-        specifier: catalog:graphql
+        specifier: ^17.0.0
         version: 17.0.0
     devDependencies:
       '@baseapp-frontend/config':
@@ -835,28 +669,28 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: ^3.0.6
         version: 3.0.6
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^18.3.3
         version: 18.3.12
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^18.3.0
         version: 18.3.1
       '@types/react-relay':
-        specifier: catalog:graphql
+        specifier: ^16.0.6
         version: 16.0.6
       '@types/relay-runtime':
-        specifier: catalog:graphql
+        specifier: ^17.0.3
         version: 17.0.4
       '@types/relay-test-utils':
-        specifier: catalog:graphql
+        specifier: ^14.1.4
         version: 14.1.4
       relay-compiler:
-        specifier: catalog:graphql
+        specifier: ^16.2.0
         version: 16.2.0
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
   packages/provider:
@@ -865,13 +699,13 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: ^5.45.1
         version: 5.60.6(react@18.3.1)
       lodash:
-        specifier: 'catalog:'
+        specifier: ^4.17.21
         version: 4.17.21
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
     devDependencies:
       '@baseapp-frontend/config':
@@ -881,37 +715,37 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/lodash':
-        specifier: 'catalog:'
+        specifier: ^4.17.7
         version: 4.17.13
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^18.3.3
         version: 18.3.12
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
   packages/test:
     dependencies:
       '@emotion/cache':
-        specifier: catalog:material-ui
+        specifier: ^11.11.0
         version: 11.13.1
       '@emotion/react':
-        specifier: catalog:material-ui
+        specifier: ^11.11.4
         version: 11.13.3(@types/react@18.3.12)(react@18.3.1)
       '@mui/material':
-        specifier: catalog:material-ui
+        specifier: ^5.15.19
         version: 5.16.7(@emotion/react@11.13.3(@types/react@18.3.12)(react@18.3.1))(@emotion/styled@11.13.0(@emotion/react@11.13.3(@types/react@18.3.12)(react@18.3.1))(@types/react@18.3.12)(react@18.3.1))(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: ^5.45.1
         version: 5.60.6(react@18.3.1)
       axios-mock-adapter:
         specifier: ^1.22.0
         version: 1.22.0(axios@1.7.7)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: ^3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
     devDependencies:
       '@baseapp-frontend/config':
@@ -921,46 +755,46 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: ^6.4.6
         version: 6.6.3
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: ^16.0.0
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: catalog:test
+        specifier: ^29.5.12
         version: 29.5.14
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: ^3.0.6
         version: 3.0.6
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.7.2
         version: 22.9.1
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^18.3.3
         version: 18.3.12
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^18.3.0
         version: 18.3.1
       babel-jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: ^29.1.4
         version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.0)(jest@29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)))(typescript@5.6.3)
       ts-node:
-        specifier: catalog:test
+        specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
   packages/tsconfig: {}
@@ -968,10 +802,10 @@ importers:
   packages/utils:
     dependencies:
       axios:
-        specifier: 'catalog:'
+        specifier: ^1.7.2
         version: 1.7.7
       events:
-        specifier: 'catalog:'
+        specifier: ^3.3.0
         version: 3.3.0
       expo-secure-store:
         specifier: ^13.0.2
@@ -980,34 +814,34 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       js-cookie:
-        specifier: 'catalog:'
+        specifier: ^3.0.5
         version: 3.0.5
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
       lodash:
-        specifier: 'catalog:'
+        specifier: ^4.17.21
         version: 4.17.21
       luxon:
-        specifier: 'catalog:'
+        specifier: ^3.4.4
         version: 3.5.0
       next:
-        specifier: 'catalog:'
+        specifier: 14.3.0-canary.24
         version: 14.3.0-canary.24(@babel/core@7.26.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       qs:
         specifier: ^6.12.1
         version: 6.13.1
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: ^7.51.5
         version: 7.53.2(react@18.3.1)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
       zustand:
-        specifier: 'catalog:'
+        specifier: ^4.5.2
         version: 4.5.5(@types/react@18.3.12)(react@18.3.1)
     devDependencies:
       '@baseapp-frontend/config':
@@ -1020,58 +854,58 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: ^6.4.6
         version: 6.6.3
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: ^16.0.0
         version: 16.0.1(@testing-library/dom@10.4.0)(@types/react-dom@18.3.1)(@types/react@18.3.12)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: ^14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/humps':
         specifier: ^2.0.6
         version: 2.0.6
       '@types/jest':
-        specifier: catalog:test
+        specifier: ^29.5.12
         version: 29.5.14
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: ^3.0.6
         version: 3.0.6
       '@types/lodash':
-        specifier: 'catalog:'
+        specifier: ^4.17.7
         version: 4.17.13
       '@types/luxon':
-        specifier: 'catalog:'
+        specifier: ^3.4.2
         version: 3.4.2
       '@types/node':
-        specifier: 'catalog:'
+        specifier: ^22.7.2
         version: 22.9.1
       '@types/qs':
         specifier: ^6.9.7
         version: 6.9.17
       '@types/react':
-        specifier: catalog:react18
+        specifier: ^18.3.3
         version: 18.3.12
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: ^18.3.0
         version: 18.3.1
       babel-jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: ^29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: ^29.1.4
         version: 29.2.5(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.0)(jest@29.7.0(@types/node@22.9.1)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)))(typescript@5.6.3)
       ts-node:
-        specifier: catalog:test
+        specifier: ^10.9.2
         version: 10.9.2(@swc/core@1.9.2(@swc/helpers@0.5.15))(@types/node@22.9.1)(typescript@5.6.3)
       typescript:
-        specifier: 'catalog:'
+        specifier: ^5.4.5
         version: 5.6.3
 
 packages:
@@ -9851,7 +9685,7 @@ snapshots:
 
   '@babel/generator@7.17.7':
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.26.0
       jsesc: 2.5.2
       source-map: 0.5.7
 
