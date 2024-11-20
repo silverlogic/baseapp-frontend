@@ -5,19 +5,24 @@ export interface User {
   newEmail: string
   isNewEmailConfirmed: boolean
   referralCode: string
-  avatar: {
-    fullSize: string
-    small: string
-  }
-  firstName: string
-  lastName: string
+  profile: Profile
   phoneNumber: string
   preferredLanguage: string
 }
 
+export interface Profile {
+  id: string
+  name: string
+  image: {
+    fullSize: string
+    // Add other optional sizes?
+  }
+  urlPath: string
+}
+
 export interface UserUpdateParams<TUser extends Partial<User>> {
   userId: TUser['id']
-  data: Partial<Omit<TUser, 'avatar' | 'id'>> & {
+  data: Partial<Omit<TUser, 'profile.avatar' | 'id'>> & {
     avatar?: File | string
   }
 }
