@@ -23,30 +23,31 @@ export const useAllAuthLogout = ({
 }: UseAllAuthLogout) => {
   const queryClient = useQueryClient()
 
+  const clearData = async () => {
+    await removeTokenAsync(accessKeyName)
+    await removeTokenAsync(refreshKeyName)
+    // eslint-disable-next-line no-underscore-dangle
+    AllAuthApi._clearData()
+  }
+
   const mutation = useMutation({
     mutationFn: () => AllAuthApi.logout(),
     onError: async (error: any) => {
       // 401: SessionInfo with SessionResponseNotAuthenticated (to reauthenticate)
       const response = get(error, 'response')
-      switch (response.status) {
-        case 401: {
-          await removeTokenAsync(accessKeyName)
-          await removeTokenAsync(refreshKeyName)
-          queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
-          onSuccess?.()
-          if (emitLogoutEvent) {
-            eventEmitter.emit(LOGOUT_EVENT)
-          }
-          break
-        }
-        default: {
-          break
+      if ([401, 410].includes(response.status)) {
+        clearData()
+        queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
+        onSuccess?.()
+        if (emitLogoutEvent) {
+          eventEmitter.emit(LOGOUT_EVENT)
         }
       }
     },
   })
 
   return {
+    clearData,
     logout: () => mutation.mutateAsync(),
   }
 }

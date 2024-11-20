@@ -98,6 +98,19 @@ export default class AllAuthApi {
     return Promise.reject(new Error('Invalid client'))
   }
 
+  /**
+   * Delete applicable cookies and session data
+   */
+  static _clearData() {
+    // eslint-disable-next-line no-empty
+    if (ALL_AUTH_CLIENT === AllAuthTypes.Client.BROWSER) {
+    }
+    if (ALL_AUTH_CLIENT === AllAuthTypes.Client.APP) {
+      const tokenStorage = window.sessionStorage
+      tokenStorage.removeItem('sessionToken')
+    }
+  }
+
   // Catch 401 and 410 errors and add sessionInfo to the error
   static _addSessionInfo<T = any, R = AxiosResponse<T>>(promise: Promise<R>): Promise<R> {
     return promise.catch((error) => {
@@ -134,7 +147,7 @@ export default class AllAuthApi {
         const _session = session as AllAuthTypes.SessionResponseNotAuthenticated
         pendingFlow =
           _session.data.flows.find((flow) => flow.isPending) || _session.data.flows[0] || null
-        tokenStorage.removeItem('sessionToken')
+        AllAuthApi._clearData()
       }
     }
 
@@ -255,8 +268,7 @@ export default class AllAuthApi {
   // 401: SessionInfo with SessionResponseNotAuthenticated
   // 409: ConflictResponse
   static login(data: AllAuthTypes.LoginRequest): Promise<AllAuthTypes.SessionInfo> {
-    const tokenStorage = window.sessionStorage
-    tokenStorage.removeItem('sessionToken')
+    AllAuthApi._clearData()
 
     return AllAuthApi._request({
       url: ALL_AUTH_URLS.LOGIN,
@@ -274,7 +286,11 @@ export default class AllAuthApi {
     return AllAuthApi._request({
       url: ALL_AUTH_URLS.SESSION,
       method: 'DELETE',
-    }).then((response) => response.data)
+    })
+      .then((response) => response.data)
+      .finally(() => {
+        AllAuthApi._clearData()
+      })
   }
 
   // Can return the following status codes and data
@@ -284,8 +300,7 @@ export default class AllAuthApi {
   static requestLoginEmailCode(
     data: AllAuthTypes.RequestLoginEmailCodeRequest,
   ): Promise<AllAuthTypes.SessionInfo> {
-    const tokenStorage = window.sessionStorage
-    tokenStorage.removeItem('sessionToken')
+    AllAuthApi._clearData()
 
     return AllAuthApi._request({
       url: ALL_AUTH_URLS.REQUEST_LOGIN_EMAIL_CODE,
@@ -423,8 +438,7 @@ export default class AllAuthApi {
   // 403: ForbiddenResponse
   // 409: ConflictResponse
   static signUp(data: AllAuthTypes.SignUpRequest): Promise<AllAuthTypes.SessionInfo> {
-    const tokenStorage = window.sessionStorage
-    tokenStorage.removeItem('sessionToken')
+    AllAuthApi._clearData()
 
     return AllAuthApi._request({
       url: ALL_AUTH_URLS.SIGNUP,
