@@ -27,7 +27,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   MessageItem = DefaultMessageItem,
   MessageItemProps = {},
 }) => {
-  const { profile: currentProfile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
 
   const renderDateOnTopOfMessagesGroup = useCallback(
     (index: number) => {
