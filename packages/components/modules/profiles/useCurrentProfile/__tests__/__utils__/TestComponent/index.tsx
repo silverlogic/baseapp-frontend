@@ -1,4 +1,4 @@
-import useCurrentProfile from '../../../../useCurrentProfile'
+import useCurrentProfile from '../../..'
 
 const TestComponent = () => {
   const { profile } = useCurrentProfile()
