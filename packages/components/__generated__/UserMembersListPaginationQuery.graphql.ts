@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5590b423755faa5cae40c081ea26fb23>>
+ * @generated SignedSource<<fcb7e26ef0948a55ad3b89368f3301eb>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,10 +15,12 @@ export type UserMembersListPaginationQuery$variables = {
   count?: number | null | undefined
   cursor?: string | null | undefined
   orderByStatus?: string | null | undefined
+  profileId: string
 }
 export type UserMembersListPaginationQuery$data = {
-  readonly me:
+  readonly profile:
     | {
+        readonly pk: number
         readonly ' $fragmentSpreads': FragmentRefs<'UserMembersListFragment'>
       }
     | null
@@ -46,27 +48,46 @@ const node: ConcreteRequest = (function () {
         kind: 'LocalArgument',
         name: 'orderByStatus',
       },
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'profileId',
+      },
     ],
-    v1 = {
+    v1 = [
+      {
+        kind: 'Variable',
+        name: 'id',
+        variableName: 'profileId',
+      },
+    ],
+    v2 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'pk',
+      storageKey: null,
+    },
+    v3 = {
       kind: 'Variable',
       name: 'orderByStatus',
       variableName: 'orderByStatus',
     },
-    v2 = {
+    v4 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v3 = {
+    v5 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'name',
       storageKey: null,
     },
-    v4 = {
+    v6 = {
       alias: null,
       args: [
         {
@@ -95,7 +116,7 @@ const node: ConcreteRequest = (function () {
       ],
       storageKey: 'image(height:100,width:100)',
     },
-    v5 = {
+    v7 = {
       alias: null,
       args: null,
       concreteType: 'URLPath',
@@ -110,11 +131,11 @@ const node: ConcreteRequest = (function () {
           name: 'path',
           storageKey: null,
         },
-        v2 /*: any*/,
+        v4 /*: any*/,
       ],
       storageKey: null,
     },
-    v6 = [
+    v8 = [
       {
         kind: 'Variable',
         name: 'after',
@@ -125,7 +146,7 @@ const node: ConcreteRequest = (function () {
         name: 'first',
         variableName: 'count',
       },
-      v1 /*: any*/,
+      v3 /*: any*/,
     ]
   return {
     fragment: {
@@ -136,12 +157,13 @@ const node: ConcreteRequest = (function () {
       selections: [
         {
           alias: null,
-          args: null,
-          concreteType: 'User',
+          args: v1 /*: any*/,
+          concreteType: 'Profile',
           kind: 'LinkedField',
-          name: 'me',
+          name: 'profile',
           plural: false,
           selections: [
+            v2 /*: any*/,
             {
               args: [
                 {
@@ -154,7 +176,7 @@ const node: ConcreteRequest = (function () {
                   name: 'cursor',
                   variableName: 'cursor',
                 },
-                v1 /*: any*/,
+                v3 /*: any*/,
               ],
               kind: 'FragmentSpread',
               name: 'UserMembersListFragment',
@@ -174,104 +196,68 @@ const node: ConcreteRequest = (function () {
       selections: [
         {
           alias: null,
-          args: null,
-          concreteType: 'User',
+          args: v1 /*: any*/,
+          concreteType: 'Profile',
           kind: 'LinkedField',
-          name: 'me',
+          name: 'profile',
           plural: false,
           selections: [
+            v2 /*: any*/,
+            v4 /*: any*/,
+            v5 /*: any*/,
+            v6 /*: any*/,
+            v7 /*: any*/,
             {
               alias: null,
-              args: null,
-              concreteType: 'Profile',
+              args: v8 /*: any*/,
+              concreteType: 'ProfileUserRoleConnection',
               kind: 'LinkedField',
-              name: 'profile',
+              name: 'members',
               plural: false,
               selections: [
-                v2 /*: any*/,
-                v3 /*: any*/,
-                v4 /*: any*/,
-                v5 /*: any*/,
                 {
                   alias: null,
-                  args: v6 /*: any*/,
-                  concreteType: 'ProfileUserRoleConnection',
+                  args: null,
+                  kind: 'ScalarField',
+                  name: 'totalCount',
+                  storageKey: null,
+                },
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: 'ProfileUserRoleEdge',
                   kind: 'LinkedField',
-                  name: 'members',
-                  plural: false,
+                  name: 'edges',
+                  plural: true,
                   selections: [
                     {
                       alias: null,
                       args: null,
-                      kind: 'ScalarField',
-                      name: 'totalCount',
-                      storageKey: null,
-                    },
-                    {
-                      alias: null,
-                      args: null,
-                      concreteType: 'ProfileUserRoleEdge',
+                      concreteType: 'ProfileUserRole',
                       kind: 'LinkedField',
-                      name: 'edges',
-                      plural: true,
+                      name: 'node',
+                      plural: false,
                       selections: [
+                        v4 /*: any*/,
                         {
                           alias: null,
                           args: null,
-                          concreteType: 'ProfileUserRole',
+                          concreteType: 'User',
                           kind: 'LinkedField',
-                          name: 'node',
+                          name: 'user',
                           plural: false,
                           selections: [
-                            v2 /*: any*/,
                             {
                               alias: null,
                               args: null,
-                              concreteType: 'User',
+                              concreteType: 'Profile',
                               kind: 'LinkedField',
-                              name: 'user',
+                              name: 'profile',
                               plural: false,
-                              selections: [
-                                {
-                                  alias: null,
-                                  args: null,
-                                  concreteType: 'Profile',
-                                  kind: 'LinkedField',
-                                  name: 'profile',
-                                  plural: false,
-                                  selections: [
-                                    v2 /*: any*/,
-                                    v3 /*: any*/,
-                                    v4 /*: any*/,
-                                    v5 /*: any*/,
-                                  ],
-                                  storageKey: null,
-                                },
-                                v2 /*: any*/,
-                              ],
+                              selections: [v4 /*: any*/, v5 /*: any*/, v6 /*: any*/, v7 /*: any*/],
                               storageKey: null,
                             },
-                            {
-                              alias: null,
-                              args: null,
-                              kind: 'ScalarField',
-                              name: 'role',
-                              storageKey: null,
-                            },
-                            {
-                              alias: null,
-                              args: null,
-                              kind: 'ScalarField',
-                              name: 'status',
-                              storageKey: null,
-                            },
-                            {
-                              alias: null,
-                              args: null,
-                              kind: 'ScalarField',
-                              name: '__typename',
-                              storageKey: null,
-                            },
+                            v4 /*: any*/,
                           ],
                           storageKey: null,
                         },
@@ -279,7 +265,21 @@ const node: ConcreteRequest = (function () {
                           alias: null,
                           args: null,
                           kind: 'ScalarField',
-                          name: 'cursor',
+                          name: 'role',
+                          storageKey: null,
+                        },
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: 'status',
+                          storageKey: null,
+                        },
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: '__typename',
                           storageKey: null,
                         },
                       ],
@@ -288,26 +288,8 @@ const node: ConcreteRequest = (function () {
                     {
                       alias: null,
                       args: null,
-                      concreteType: 'PageInfo',
-                      kind: 'LinkedField',
-                      name: 'pageInfo',
-                      plural: false,
-                      selections: [
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'endCursor',
-                          storageKey: null,
-                        },
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'hasNextPage',
-                          storageKey: null,
-                        },
-                      ],
+                      kind: 'ScalarField',
+                      name: 'cursor',
                       storageKey: null,
                     },
                   ],
@@ -315,33 +297,57 @@ const node: ConcreteRequest = (function () {
                 },
                 {
                   alias: null,
-                  args: v6 /*: any*/,
-                  filters: ['orderByStatus'],
-                  handle: 'connection',
-                  key: 'UserMembersFragment_members',
-                  kind: 'LinkedHandle',
-                  name: 'members',
+                  args: null,
+                  concreteType: 'PageInfo',
+                  kind: 'LinkedField',
+                  name: 'pageInfo',
+                  plural: false,
+                  selections: [
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'endCursor',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'hasNextPage',
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
                 },
               ],
               storageKey: null,
             },
-            v2 /*: any*/,
+            {
+              alias: null,
+              args: v8 /*: any*/,
+              filters: ['orderByStatus'],
+              handle: 'connection',
+              key: 'UserMembersFragment_members',
+              kind: 'LinkedHandle',
+              name: 'members',
+            },
           ],
           storageKey: null,
         },
       ],
     },
     params: {
-      cacheID: '01fb387e0c0ef07a4b949c31accf3a0c',
+      cacheID: '9b67c794489795c15c6ba25fca17e848',
       id: null,
       metadata: {},
       name: 'UserMembersListPaginationQuery',
       operationKind: 'query',
-      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String\n) {\n  me {\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on User {\n  profile {\n    ...ProfileItemFragment\n    members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n      totalCount\n      edges {\n        node {\n          id\n          user {\n            profile {\n              ...ProfileItemFragment\n              id\n            }\n            id\n          }\n          role\n          status\n          __typename\n        }\n        cursor\n      }\n      pageInfo {\n        endCursor\n        hasNextPage\n      }\n    }\n    id\n  }\n  id\n}\n',
+      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String\n  $profileId: ID!\n) {\n  profile(id: $profileId) {\n    pk\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '5925af2542eb06c4457a1e16c1591fd9'
+;(node as any).hash = '6816a1706adef7eb99737264e9ab6582'
 
 export default node

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6487acdc5c21d43116573cae55a8dfc0>>
+ * @generated SignedSource<<ffd4f527789c78fbe402c8b2cb4992db>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,44 +16,39 @@ export type ProfileRoles = 'ADMIN' | 'MANAGER' | '%future added value'
 
 export type UserMembersListFragment$data = {
   readonly id: string
-  readonly profile:
+  readonly members:
     | {
-        readonly members:
+        readonly edges: ReadonlyArray<
           | {
-              readonly edges: ReadonlyArray<
+              readonly node:
                 | {
-                    readonly node:
-                      | {
-                          readonly id: string
-                          readonly role: ProfileRoles | null | undefined
-                          readonly status: ProfileRoleStatus | null | undefined
-                          readonly user: {
-                            readonly profile:
-                              | {
-                                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
-                                }
-                              | null
-                              | undefined
+                    readonly id: string
+                    readonly role: ProfileRoles | null | undefined
+                    readonly status: ProfileRoleStatus | null | undefined
+                    readonly user: {
+                      readonly profile:
+                        | {
+                            readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
                           }
-                        }
-                      | null
-                      | undefined
+                        | null
+                        | undefined
+                    }
                   }
                 | null
                 | undefined
-              >
-              readonly pageInfo: {
-                readonly endCursor: string | null | undefined
-                readonly hasNextPage: boolean
-              }
-              readonly totalCount: number | null | undefined
             }
           | null
           | undefined
-        readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
+        >
+        readonly pageInfo: {
+          readonly endCursor: string | null | undefined
+          readonly hasNextPage: boolean
+        }
+        readonly totalCount: number | null | undefined
       }
     | null
     | undefined
+  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
   readonly ' $fragmentType': 'UserMembersListFragment'
 }
 export type UserMembersListFragment$key = {
@@ -62,7 +57,7 @@ export type UserMembersListFragment$key = {
 }
 
 const node: ReaderFragment = (function () {
-  var v0 = ['profile', 'members'],
+  var v0 = ['members'],
     v1 = {
       alias: null,
       args: null,
@@ -180,93 +175,61 @@ const node: ReaderFragment = (function () {
     },
     name: 'UserMembersListFragment',
     selections: [
+      v2 /*: any*/,
       {
-        alias: null,
-        args: null,
-        concreteType: 'Profile',
+        alias: 'members',
+        args: [
+          {
+            kind: 'Variable',
+            name: 'orderByStatus',
+            variableName: 'orderByStatus',
+          },
+        ],
+        concreteType: 'ProfileUserRoleConnection',
         kind: 'LinkedField',
-        name: 'profile',
+        name: '__UserMembersFragment_members_connection',
         plural: false,
         selections: [
-          v2 /*: any*/,
           {
-            alias: 'members',
-            args: [
-              {
-                kind: 'Variable',
-                name: 'orderByStatus',
-                variableName: 'orderByStatus',
-              },
-            ],
-            concreteType: 'ProfileUserRoleConnection',
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'totalCount',
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            concreteType: 'ProfileUserRoleEdge',
             kind: 'LinkedField',
-            name: '__UserMembersFragment_members_connection',
-            plural: false,
+            name: 'edges',
+            plural: true,
             selections: [
               {
                 alias: null,
                 args: null,
-                kind: 'ScalarField',
-                name: 'totalCount',
-                storageKey: null,
-              },
-              {
-                alias: null,
-                args: null,
-                concreteType: 'ProfileUserRoleEdge',
+                concreteType: 'ProfileUserRole',
                 kind: 'LinkedField',
-                name: 'edges',
-                plural: true,
+                name: 'node',
+                plural: false,
                 selections: [
+                  v1 /*: any*/,
                   {
                     alias: null,
                     args: null,
-                    concreteType: 'ProfileUserRole',
+                    concreteType: 'User',
                     kind: 'LinkedField',
-                    name: 'node',
+                    name: 'user',
                     plural: false,
                     selections: [
-                      v1 /*: any*/,
                       {
                         alias: null,
                         args: null,
-                        concreteType: 'User',
+                        concreteType: 'Profile',
                         kind: 'LinkedField',
-                        name: 'user',
+                        name: 'profile',
                         plural: false,
-                        selections: [
-                          {
-                            alias: null,
-                            args: null,
-                            concreteType: 'Profile',
-                            kind: 'LinkedField',
-                            name: 'profile',
-                            plural: false,
-                            selections: [v2 /*: any*/],
-                            storageKey: null,
-                          },
-                        ],
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'role',
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'status',
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: '__typename',
+                        selections: [v2 /*: any*/],
                         storageKey: null,
                       },
                     ],
@@ -276,7 +239,21 @@ const node: ReaderFragment = (function () {
                     alias: null,
                     args: null,
                     kind: 'ScalarField',
-                    name: 'cursor',
+                    name: 'role',
+                    storageKey: null,
+                  },
+                  {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: 'status',
+                    storageKey: null,
+                  },
+                  {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: '__typename',
                     storageKey: null,
                   },
                 ],
@@ -285,26 +262,33 @@ const node: ReaderFragment = (function () {
               {
                 alias: null,
                 args: null,
-                concreteType: 'PageInfo',
-                kind: 'LinkedField',
-                name: 'pageInfo',
-                plural: false,
-                selections: [
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'endCursor',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'hasNextPage',
-                    storageKey: null,
-                  },
-                ],
+                kind: 'ScalarField',
+                name: 'cursor',
+                storageKey: null,
+              },
+            ],
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            concreteType: 'PageInfo',
+            kind: 'LinkedField',
+            name: 'pageInfo',
+            plural: false,
+            selections: [
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'endCursor',
+                storageKey: null,
+              },
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'hasNextPage',
                 storageKey: null,
               },
             ],
@@ -315,11 +299,11 @@ const node: ReaderFragment = (function () {
       },
       v1 /*: any*/,
     ],
-    type: 'User',
+    type: 'Profile',
     abstractKey: null,
   }
 })()
 
-;(node as any).hash = '5114446aef93bf0eb196a55ba3f9a429'
+;(node as any).hash = '038f3f85d02ec3d5e31279acd14c0269'
 
 export default node

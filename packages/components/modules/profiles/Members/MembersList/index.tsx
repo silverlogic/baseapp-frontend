@@ -12,7 +12,7 @@ import { MemberStatuses, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
 import { MemberListProps } from '../types'
 
 const MembersList: FC<MemberListProps> = ({
-  meRef,
+  userRef,
   MemberItem = DefaultMemberItem,
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
@@ -20,13 +20,12 @@ const MembersList: FC<MemberListProps> = ({
 }) => {
   const { data, loadNext, hasNext, isLoadingNext } = usePaginationFragment(
     UserMembersListFragment,
-    meRef,
+    userRef,
   )
 
   const members = useMemo(
-    () =>
-      data?.profile?.members?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
-    [data?.profile?.members?.edges],
+    () => data?.members?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    [data?.members?.edges],
   )
 
   const renderLoadingState = () => {
@@ -44,18 +43,32 @@ const MembersList: FC<MemberListProps> = ({
   const renderMemberItem = (member: any, index: number) => {
     if (!member) return null
     if (
-      member.status === MemberStatuses.active &&
-      members[index - 1]?.status !== MemberStatuses.active
+      (member.status === MemberStatuses.active &&
+        members[index - 1]?.status !== MemberStatuses.active) ||
+      (member.status === MemberStatuses.active && !members[index - 1]?.status)
     ) {
       return (
         <>
           <Divider />
-          <MemberItem member={data.profile} memberRole="owner" status={MemberStatuses.active} />
+          <MemberItem member={data} memberRole="owner" status={MemberStatuses.active} />
           <MemberItem
             member={member?.user?.profile}
             memberRole={member?.role}
             status={member?.status}
           />
+        </>
+      )
+    }
+    if (member.status !== MemberStatuses.active && !members[index + 1]?.status) {
+      return (
+        <>
+          <MemberItem
+            member={member?.user?.profile}
+            memberRole={member?.role}
+            status={member?.status}
+          />
+          <Divider />
+          <MemberItem member={data} memberRole="owner" status={MemberStatuses.active} />
         </>
       )
     }
@@ -74,16 +87,16 @@ const MembersList: FC<MemberListProps> = ({
         <Typography variant="subtitle2" mb={4}>
           1 member
         </Typography>
-        <MemberItem member={data.profile} memberRole="owner" status={MemberStatuses.active} />
+        <MemberItem member={data} memberRole="owner" status={MemberStatuses.active} />
       </>
     )
   }
 
   return (
     <>
-      {data.profile?.members?.totalCount && (
+      {data.members?.totalCount && (
         <Typography variant="subtitle2" mb={4}>
-          {(data.profile?.members?.totalCount ?? 0) + 1} members
+          {(data.members?.totalCount ?? 0) + 1} members
         </Typography>
       )}
       <Virtuoso

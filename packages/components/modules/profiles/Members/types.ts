@@ -7,7 +7,7 @@ import type { MemberItemProps } from './MemberItem/types'
 
 export interface MemberListProps {
   MemberItem: FC<MemberItemProps>
-  meRef: UserMembersListFragment$key
+  userRef: UserMembersListFragment$key
   LoadingState: FC<LoadingStateProps>
   LoadingStateProps: LoadingStateProps
   membersContainerHeight?: number
@@ -23,4 +23,4 @@ export interface UserMembersSuspendedProps {
   membersContainerHeight?: number
 }
 
-export interface UserMembersProps extends Omit<MemberListProps, 'meRef'> {}
+export interface UserMembersProps extends Omit<MemberListProps, 'userRef'> {}

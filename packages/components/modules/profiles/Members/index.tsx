@@ -6,6 +6,7 @@ import { Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { UserMembersListPaginationQuery as IUserMembersListPaginationQuery } from '../../../__generated__/UserMembersListPaginationQuery.graphql'
+import useCurrentProfile from '../context/useCurrentProfile'
 import { UserMembersListPaginationQuery } from '../graphql/queries/UserMembersList'
 import DefaultMemberItem from './MemberItem'
 import MembersList from './MembersList'
@@ -31,14 +32,18 @@ const Members: FC<UserMembersProps> = ({
   LoadingStateProps,
   membersContainerHeight,
 }) => {
+  const { profile: currentProfile } = useCurrentProfile()
+
   const data = useLazyLoadQuery<IUserMembersListPaginationQuery>(UserMembersListPaginationQuery, {
+    profileId: currentProfile?.id || '',
     count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
     orderByStatus: 'custom',
   })
-  if (!data.me) return null
+
+  if (!data.profile) return null
   return (
     <MembersList
-      meRef={data?.me}
+      userRef={data?.profile}
       MemberItem={MemberItem}
       LoadingState={LoadingState}
       LoadingStateProps={LoadingStateProps}
