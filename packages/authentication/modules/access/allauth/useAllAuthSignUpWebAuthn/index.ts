@@ -2,6 +2,9 @@
 
 import { useMutation } from '@tanstack/react-query'
 
+// TODO: MFA Follow Up | Sign Up & Login with Passkey
+// Example how to perform signup
+
 // import {
 //   create,
 //   parseCreationOptionsFromJSON
@@ -10,10 +13,8 @@ import { useMutation } from '@tanstack/react-query'
 // import AllAuthApi from '../../../../services/allAuth'
 
 export const useAllAuthSignUpWebAuthn = () => {
-  // TODO: Finish implementation
   const mutation = useMutation({
     mutationFn: async () => {
-      // Example how to create signup passkey
       // const optionsResponse = await AllAuthApi.createWebAuthnAuthenticatorOptions({ passwordless: true })
       // if (optionsResponse.status === 200) {
       //   const jsonOptions = optionsResponse.data.creationOptions
