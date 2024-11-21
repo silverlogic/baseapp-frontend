@@ -9,7 +9,15 @@ export const ImageBox = styled(Box)(({ theme }) => ({
   height: '260px',
   borderRadius: theme.spacing(1),
   overflow: 'hidden',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
   [theme.breakpoints.up('md')]: {
     height: '290px',
+  },
+  '& img': {
+    width: '100%',
+    height: 'auto',
+    objectFit: 'cover',
   },
 }))

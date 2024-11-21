@@ -15,7 +15,7 @@ export default meta
 type Story = StoryObj<typeof PageTypes>
 
 export const DefaultRichTextBlock: Story = {
-  name: 'Default RichTextBlock',
+  name: 'Default StandardPage',
   args: {
     currentPage: mockCurrentPage,
   },
