@@ -3,9 +3,9 @@
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import StreamField from '../../StreamField'
 import { StreamFieldWrapper } from './styled'
-import type { ISectionStreamBlockProps } from './types'
+import type { SectionStreamBlockProps } from './types'
 
-const SectionStreamBlock = ({ value }: ISectionStreamBlockProps) => {
+const SectionStreamBlock = ({ value }: SectionStreamBlockProps) => {
   const { availableBlocks } = useWagtailPagesContext()
   return (
     <StreamFieldWrapper>

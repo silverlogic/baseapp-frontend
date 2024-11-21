@@ -1,10 +1,10 @@
 import { WagtailAPI } from '..'
-import { IPage } from './types'
+import { Page } from './types'
 
 export class PagesAPI extends WagtailAPI {
   static namespace = `base/pages`
 
-  static getPageByPath(path: string, extraParams: any = {}): Promise<IPage> {
+  static getPageByPath(path: string, extraParams: any = {}): Promise<Page> {
     return this.axios.get(`${this.baseURL}/${this.namespace}/path/`, {
       params: {
         fields: '*',
@@ -14,7 +14,7 @@ export class PagesAPI extends WagtailAPI {
     })
   }
 
-  static getPage(id: number, type: string): Promise<IPage> {
+  static getPage(id: number, type: string): Promise<Page> {
     return this.axios.get(`${this.baseURL}/${this.namespace}/${id}/`, {
       params: {
         fields: '*',

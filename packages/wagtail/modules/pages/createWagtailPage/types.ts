@@ -2,13 +2,13 @@ import type { PropsWithChildren } from 'react'
 
 import type { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 
-export interface IPageParams {
+export interface PageParams {
   params: {
     path: string[]
   }
 }
 
-export interface IWagtailPageProps extends PropsWithChildren {
+export interface WagtailPageProps extends PropsWithChildren {
   defaultSettings?: ProviderDefaultSettingsType
 }
 

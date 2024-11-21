@@ -1,5 +1,5 @@
-export { createWagtailPage } from './WagtailPage'
-export type * from './WagtailPage/types'
+export { default as createWagtailPage } from './createWagtailPage'
+export type * from './createWagtailPage/types'
 
-export { createWagtailPagePreview } from './WagtailPagePreview'
-export type * from './WagtailPagePreview/types'
+export { default as createWagtailPagePreview } from './createWagtailPagePreview'
+export type * from './createWagtailPagePreview/types'

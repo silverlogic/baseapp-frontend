@@ -1,32 +1,32 @@
 export type PartialExcept<T, K extends keyof T> = Partial<Omit<T, K>> & Pick<T, K>
 
-export interface IListData<T> {
-  meta: IListMeta
+export interface ListData<T> {
+  meta: ListMeta
   items: T[]
 }
 
-export interface IListMeta {
+export interface ListMeta {
   totalCount: number
   totalPages: number
   pageSize: number
   currentPage: number
 }
 
-export interface IImageRecordItem {
+export interface ImageRecordItem {
   id: number
   downloadUrl: string
-  imageSizes: IImageSizes
+  imageSizes: ImageSizes
   altText?: string
 }
 
-export interface IImageSizes {
-  small: IImageData
-  medium: IImageData
-  mediumSquare: IImageData
-  full: IImageData
+export interface ImageSizes {
+  small: ImageData
+  medium: ImageData
+  mediumSquare: ImageData
+  full: ImageData
 }
 
-export interface IImageData {
+export interface ImageData {
   width: number
   height: number
   imageUrl: string

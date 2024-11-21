@@ -12,7 +12,7 @@ const meta: Meta<typeof BannerBlock> = {
       description: 'The value returned from the Wagtail API.',
       table: {
         type: {
-          summary: 'IBannerBlockValue',
+          summary: 'BannerBlockValue',
         },
       },
     },

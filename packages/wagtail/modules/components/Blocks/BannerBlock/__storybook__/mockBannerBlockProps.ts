@@ -1,7 +1,7 @@
-import type { IBannerBlockProps } from '../types'
+import type { BannerBlockProps } from '../types'
 import imageFile from './static/image.jpeg'
 
-export const mockBannerBlockProps: IBannerBlockProps = {
+export const mockBannerBlockProps: BannerBlockProps = {
   id: 'banner-block-mock-id',
   value: {
     title: 'Your Technology Partner',

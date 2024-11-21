@@ -1,9 +1,9 @@
 import { Container } from '@mui/material'
 
 import RichTextBlock from '../..'
-import { IRichTextBlockProps } from '../../types'
+import { RichTextBlockProps } from '../../types'
 
-const RichTextBlockWithContainer = (props: IRichTextBlockProps) => (
+const RichTextBlockWithContainer = (props: RichTextBlockProps) => (
   <Container>
     <RichTextBlock {...props} />
   </Container>

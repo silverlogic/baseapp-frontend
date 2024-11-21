@@ -1,14 +1,14 @@
-import type { IImageRecordItem } from '../types'
+import type { ImageRecordItem } from '../types'
 
-export interface IPage {
+export interface Page {
   id: number
   title: string
-  meta: IPageMeta
-  featuredImage: IFeaturedImage
-  body: IPageBodyItem[]
+  meta: PageMeta
+  featuredImage: FeaturedImage
+  body: PageBodyItem[]
 }
 
-export interface IPageMeta {
+export interface PageMeta {
   type: string
   htmlUrl: string
   urlPath: string
@@ -16,30 +16,30 @@ export interface IPageMeta {
   lastPublishedAt: string
   searchDescription: string
   locale: string
-  ancestors: IPageLinkItem[]
+  ancestors: PageLinkItem[]
 }
 
-export interface IFeaturedImage {
-  image: IImageRecordItem
+export interface FeaturedImage {
+  image: ImageRecordItem
   altText: string
   caption: string
   attribution: string
 }
 
-export interface IPageBodyItem {
+export interface PageBodyItem {
   type: string
   value: any
   id: string
 }
 
-export interface IPageLinkItem {
+export interface PageLinkItem {
   id: number
   type: string
   title: string
   urlPath: string
 }
 
-export interface IPageCardItem extends IPageLinkItem {
+export interface PageCardItem extends PageLinkItem {
   description: string
-  featuredImage: IFeaturedImage
+  featuredImage: FeaturedImage
 }

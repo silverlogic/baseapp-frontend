@@ -6,9 +6,9 @@ import Image from 'next/image'
 import BlockContainer from '../../BlockContainer'
 import BannerDescriptionRichText from './BannerDescriptionRichText'
 import { BannerContainer, ContentContainer, ImageContainer, TextContainer } from './styled'
-import { IBannerBlockProps } from './types'
+import { BannerBlockProps } from './types'
 
-const BannerBlock = ({ value }: IBannerBlockProps) => (
+const BannerBlock = ({ value }: BannerBlockProps) => (
   <BlockContainer>
     <BannerContainer imagePosition={value.imagePosition}>
       <ContentContainer>

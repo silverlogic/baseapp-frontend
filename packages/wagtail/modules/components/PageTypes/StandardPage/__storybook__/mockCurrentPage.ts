@@ -1,9 +1,9 @@
-import type { IPage } from '../../../../services/Wagtail/PagesAPI/types'
+import type { Page } from '../../../../services/Wagtail/PagesAPI/types'
 import { mockBannerBlockProps } from '../../../Blocks/BannerBlock/__storybook__/mockBannerBlockProps'
 import { mockRichTextBlockProps } from '../../../Blocks/RichTextBlock/__storybook__/mockRichTextBlockProps'
 import imageFile from './static/image.jpeg'
 
-export const mockCurrentPage: IPage = {
+export const mockCurrentPage: Page = {
   id: 1,
   title: 'Mock Current Page',
   body: [

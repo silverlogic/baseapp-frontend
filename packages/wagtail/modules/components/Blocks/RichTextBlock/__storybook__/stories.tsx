@@ -13,7 +13,7 @@ const meta: Meta<typeof RichTextBlock> = {
       description: 'The value returned from the Wagtail API.',
       table: {
         type: {
-          summary: 'IRichTextBlockValue',
+          summary: 'RichTextBlockValue',
         },
       },
     },

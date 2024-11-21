@@ -1,8 +1,8 @@
-import type { IPageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
+import type { PageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
 
-export interface ISectionStreamBlock extends IPageBodyItem {
+export interface SectionStreamBlockBodyItem extends PageBodyItem {
   type: 'section_stream_block'
-  value: IPageBodyItem[]
+  value: PageBodyItem[]
 }
 
-export interface ISectionStreamBlockProps extends Omit<ISectionStreamBlock, 'type'> {}
+export interface SectionStreamBlockProps extends Omit<SectionStreamBlockBodyItem, 'type'> {}

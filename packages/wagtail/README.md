@@ -41,11 +41,11 @@ In the `page.tsx` file you created, add the following code:
 ```tsx
 import { FC } from 'react'
 
-import { IPageParams, createWagtailPage } from '@baseapp-frontend/wagtail'
+import { PageParams, createWagtailPage } from '@baseapp-frontend/wagtail'
 
 import { availableBlocks } from 'components/wagtail/blocks'
 
-const WagtailPage: FC<IPageParams> = async ({ params }) => {
+const WagtailPage: FC<PageParams> = async ({ params }) => {
   const { WagtailPagesProvider, WagtailPageTypes } = await createWagtailPage({ params })
 
   return (
@@ -71,11 +71,11 @@ In the `page.tsx` file you created, add the following code:
 ```tsx
 import { FC } from 'react'
 
-import { IPagePreviewParams, createWagtailPagePreview } from '@baseapp-frontend/wagtail'
+import { PagePreviewParams, createWagtailPagePreview } from '@baseapp-frontend/wagtail'
 
 import { availableBlocks } from 'components/wagtail/blocks'
 
-const WagtailPagePreview: FC<IPagePreviewParams> = async ({ searchParams }) => {
+const WagtailPagePreview: FC<PagePreviewParams> = async ({ searchParams }) => {
   const { WagtailPagesProvider, WagtailPageTypes } = await createWagtailPagePreview({
     searchParams,
   })
@@ -103,10 +103,10 @@ With this in mind, the package also functions as a framework for adding or overr
 The process for overriding and creating new blocks is quite similar. The baseapp-frontend-template project includes a great example of overriding an existing block. Inside `apps/web/components/wagtail/blocks/`, you’ll find an example of overriding `RichTextBlock`, a basic block already provided by the package. Follow these steps to override or create blocks:
 
 1. Create the component inside `apps/web/components/wagtail/blocks/`. This ensures everything related to Wagtail is grouped within a Wagtail folder.
-2. The component interface must extend the `IPageBodyItem` interface. Typically, two interfaces are needed. Using `RichTextBlock` as an example:
+2. The component interface must extend the `PageBodyItem` interface. Typically, two interfaces are needed. Using `RichTextBlock` as an example:
 
-   - `IRichTextBlock` extends `IPageBodyItem`, defines the block type value, and is used by the blocks factory.
-   - `IRichTextBlockProps` is the second interface, extending `IRichTextBlock` and omitting the type from props. This is the interface used by the component itself.
+   - `RichTextBlock` extends `PageBodyItem`, defines the block type value, and is used by the blocks factory.
+   - `RichTextBlockProps` is the second interface, extending `RichTextBlock` and omitting the type from props. This is the interface used by the component itself.
 
    Follow this pattern for all blocks.
 
@@ -132,9 +132,9 @@ import { availablePageTypes } from 'components/wagtail/pageTypes'
 
 // ...
 return (
-    <WagtailPagesProvider defaultSettings={{ availableBlocks, availablePageTypes }}>
-        <WagtailPageTypes />
-    </WagtailPagesProvider>
+  <WagtailPagesProvider defaultSettings={{ availableBlocks, availablePageTypes }}>
+    <WagtailPageTypes />
+  </WagtailPagesProvider>
 )
 
 // ...

@@ -7,10 +7,10 @@ import Image from 'next/image'
 
 import { PageLayoutProvider } from '../../../providers/PageLayoutProvider'
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
-import { IPageType } from '../types'
+import { PageType } from '../types'
 import { ImageBox } from './styled'
 
-const StandardPage: FC<IPageType> = ({ children }) => {
+const StandardPage: FC<PageType> = ({ children }) => {
   const { currentPage } = useWagtailPagesContext()
   return (
     <PageLayoutProvider>

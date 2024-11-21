@@ -1,11 +1,11 @@
 import PageTypes from '../../components/PageTypes'
 import { WagtailPagesProvider } from '../../providers/WagtailPagesProvider'
 import { PagesAPI } from '../../services/Wagtail/PagesAPI'
-import { IPage } from '../../services/Wagtail/PagesAPI/types'
+import { Page } from '../../services/Wagtail/PagesAPI/types'
 import { handlePageRequestError } from '../../utils/requests'
-import { IPageParams, IWagtailPageProps } from './types'
+import { PageParams, WagtailPageProps } from './types'
 
-const getCurrentPage = async (path: string): Promise<IPage> => {
+const getCurrentPage = async (path: string): Promise<Page> => {
   try {
     return await PagesAPI.getPageByPath(path)
   } catch (error) {
@@ -13,8 +13,8 @@ const getCurrentPage = async (path: string): Promise<IPage> => {
   }
 }
 
-export const wagtailPage = (currentPage: IPage) => ({
-  WagtailPagesProvider: ({ children, defaultSettings }: IWagtailPageProps) => (
+export const generateWagtailPageComponents = (currentPage: Page) => ({
+  WagtailPagesProvider: ({ children, defaultSettings }: WagtailPageProps) => (
     <WagtailPagesProvider
       defaultSettings={{
         currentPage,
@@ -27,8 +27,10 @@ export const wagtailPage = (currentPage: IPage) => ({
   WagtailPageTypes: PageTypes,
 })
 
-export const createWagtailPage = async ({ params }: IPageParams) => {
+const createWagtailPage = async ({ params }: PageParams) => {
   const currentPage = await getCurrentPage(params.path?.join('/') ?? '/')
 
-  return wagtailPage(currentPage)
+  return generateWagtailPageComponents(currentPage)
 }
+
+export default createWagtailPage

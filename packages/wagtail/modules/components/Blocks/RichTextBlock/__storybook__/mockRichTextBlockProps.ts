@@ -1,7 +1,7 @@
-import type { IRichTextBlockProps } from '../types'
+import type { RichTextBlockProps } from '../types'
 import imageFile from './static/image.jpeg'
 
-export const mockRichTextBlockProps: IRichTextBlockProps = {
+export const mockRichTextBlockProps: RichTextBlockProps = {
   id: 'rich-text-block-mock-id',
   value: `
     <p></p>

@@ -1,15 +1,15 @@
 import { FC } from 'react'
 
-import { IPageBodyItem } from '../../services/Wagtail/PagesAPI/types'
+import { PageBodyItem } from '../../services/Wagtail/PagesAPI/types'
 
-export interface IStreamFieldProps {
-  body: IPageBodyItem[]
+export interface StreamFieldProps {
+  body: PageBodyItem[]
   availableBlocks: StreamFieldsTableType
 }
 
 export type StreamFieldsTableType = {
-  [key: string]: ExtractFC<IPageBodyItem>
+  [key: string]: ExtractFC<PageBodyItem>
 }
 
-// helper type to transform IPageBodyItem into FC<IRichTextBlockProps> | FC<IImageBlockProps> | ...
+// helper type to transform PageBodyItem into FC<RichTextBlockProps> | FC<ImageBlockProps> | ...
 export type ExtractFC<T> = T extends { type: string } ? FC<T> : never

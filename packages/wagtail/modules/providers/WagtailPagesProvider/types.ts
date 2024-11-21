@@ -1,6 +1,6 @@
 import type { AvailableBlocksType } from '../../components/Blocks/types'
 import type { AvailablePageTypesType } from '../../components/PageTypes/types'
-import type { IPage } from '../../services/Wagtail/PagesAPI/types'
+import type { Page } from '../../services/Wagtail/PagesAPI/types'
 import type { PartialExcept } from '../../services/Wagtail/types'
 
 export type WagtailPagesProviderProps = {
@@ -9,7 +9,7 @@ export type WagtailPagesProviderProps = {
 }
 
 export type WagtailPagesContextState = {
-  currentPage: IPage
+  currentPage: Page
   availablePageTypes: AvailablePageTypesType
   availableBlocks: AvailableBlocksType
 }
