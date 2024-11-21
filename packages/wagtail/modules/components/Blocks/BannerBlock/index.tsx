@@ -1,4 +1,4 @@
-'client side'
+'use client'
 
 import { Typography } from '@mui/material'
 import Image from 'next/image'

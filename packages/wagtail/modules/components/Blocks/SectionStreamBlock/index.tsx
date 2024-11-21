@@ -1,4 +1,4 @@
-'client side'
+'use client'
 
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import StreamField from '../../StreamField'

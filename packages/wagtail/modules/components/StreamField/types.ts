@@ -8,6 +8,7 @@ export interface StreamFieldProps {
 }
 
 export type StreamFieldsTableType = {
+  // TODO (Tech Debt): Switch "key: string" to a list of valid types that can be added within the availableBlocks.
   [key: string]: ExtractFC<PageBodyItem>
 }
 

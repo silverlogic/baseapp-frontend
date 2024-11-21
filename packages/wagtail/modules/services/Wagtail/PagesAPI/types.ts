@@ -28,6 +28,7 @@ export interface FeaturedImage {
 
 export interface PageBodyItem {
   type: string
+  // TODO (Tech Debt): Switch "any" to a list of valid types that can be added within the availableBlocks.
   value: any
   id: string
 }
