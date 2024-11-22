@@ -1,3 +1,14 @@
 # @baseapp-frontend/wagtail
 
-## 0.0.1
+## 1.0.0
+
+### Major Changes
+
+- Create the Wagtail package providing:
+  - Blocks:
+    - RichTextBlock
+    - BannerBlock
+    - SectionStreamBlock
+  - PageTypes:
+    - StandardPage
+  - Structure for reusing and extend components from Wagtail.

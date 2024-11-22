@@ -1,3 +1,5 @@
+import React from 'react'
+
 import type { AvailableBlocksType } from '../../components/Blocks/types'
 import type { AvailablePageTypesType } from '../../components/PageTypes/types'
 import type { Page } from '../../services/Wagtail/PagesAPI/types'
