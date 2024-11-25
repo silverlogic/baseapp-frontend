@@ -1,5 +1,20 @@
 # @baseapp-frontend/components
 
+## 0.0.17
+
+### Patch Changes
+
+Updated dependencies
+  - @baseapp-frontend/design-system@0.0.17
+
+## 0.0.16
+
+### Patch Changes
+
+- Storybook cleanup
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.17
+
 ## 0.0.15
 
 ### Patch Changes

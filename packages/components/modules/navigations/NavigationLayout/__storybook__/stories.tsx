@@ -11,21 +11,6 @@ import { NavigationLayoutProps } from '../types'
 const meta: Meta<typeof NavigationLayout> = {
   title: '@baseapp-frontend | components/Navigation/NavigationLayout',
   component: NavigationLayout,
-  argTypes: {
-    navData: { control: 'object' },
-    settings: { control: 'object' },
-    setSettings: { action: 'setSettings' },
-    LogoIcon: { control: false },
-    AccountMenu: { control: false },
-    AccountMenuProps: { control: 'object' },
-    ToolbarProps: { control: 'object' },
-    children: {
-      control: false,
-      description: 'Page content.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
   decorators: [withTokenSetup],
   parameters: {
     layout: 'fullscreen',

@@ -7,14 +7,6 @@ import { ScrollbarProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/General/Scrollbar',
   component: Scrollbar,
-  argTypes: {
-    children: {
-      control: false,
-      description: 'Content to be rendered.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<ScrollbarProps>
 
 type Story = StoryObj<ScrollbarProps>

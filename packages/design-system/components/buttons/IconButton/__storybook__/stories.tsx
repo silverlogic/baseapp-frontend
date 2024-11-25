@@ -8,20 +8,6 @@ import { IconButtonProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Buttons/IconButton',
   component: IconButton,
-  argTypes: {
-    isLoading: { control: 'boolean' },
-    disabled: { control: 'boolean' },
-    color: {
-      control: 'select',
-      options: ['default', 'primary', 'secondary', 'error', 'info', 'success', 'warning'],
-    },
-    children: {
-      control: false,
-      description: 'Icon to be rendered inside the button.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<IconButtonProps>
 
 type Story = StoryObj<IconButtonProps>
