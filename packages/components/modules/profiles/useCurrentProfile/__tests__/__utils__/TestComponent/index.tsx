@@ -1,7 +1,7 @@
 import useCurrentProfile from '../../..'
 
 const TestComponent = () => {
-  const { profile } = useCurrentProfile()
+  const profile = useCurrentProfile().currentProfile
 
   if (!profile) {
     return null

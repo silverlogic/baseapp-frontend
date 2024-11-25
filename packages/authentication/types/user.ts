@@ -5,19 +5,26 @@ export interface User {
   newEmail: string
   isNewEmailConfirmed: boolean
   referralCode: string
-  profile: Profile
+  profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
 }
 
-export interface Profile {
+export interface MinimalProfile {
   id: string
-  name: string
-  image: {
-    fullSize: string
-    // Add other optional sizes?
-  }
-  urlPath: string
+  name: string | null | undefined
+  image:
+    | {
+        url: string
+      }
+    | null
+    | undefined
+  urlPath:
+    | {
+        path: string
+      }
+    | null
+    | undefined
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {

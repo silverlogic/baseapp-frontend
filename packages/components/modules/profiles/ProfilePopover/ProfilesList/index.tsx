@@ -24,7 +24,7 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     if (currentProfile?.id !== profile.id) {
-      setCurrentProfile({ profile })
+      setCurrentProfile(profile)
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
     }
