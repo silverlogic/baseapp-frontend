@@ -11,7 +11,7 @@ import type {
 export interface ProfileMenuItemProps {
   profileRef: ProfileItemFragment$key
   onProfileChange: (newProfile: ProfileItemFragment$data) => void
-  currentProfile?: MinimalProfile
+  currentProfile?: MinimalProfile | null
   avatarProps?: AvatarWithPlaceholderProps
   width?: number
   height?: number

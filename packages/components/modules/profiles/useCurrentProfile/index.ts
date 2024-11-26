@@ -18,14 +18,14 @@ import { PROFILE_KEY } from './constants'
 
 const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
   const settings =
-    getCookie<MinimalProfile | null>(PROFILE_KEY, { noSSR, parseJSON: true }) ?? undefined
+    getCookie<MinimalProfile | undefined>(PROFILE_KEY, { noSSR, parseJSON: true }) ?? null
 
   return settings
 }
 
 const initialProfile = getProfileFromCookie()
 
-const profileAtom = atom<MinimalProfile | undefined>(initialProfile)
+const profileAtom = atom<MinimalProfile | null>(initialProfile)
 
 /**
  * By using `useCurrentProfile` with the `noSSR` option set to `false`, causes Next.js to dynamically render the affected pages, instead of statically rendering them.
@@ -36,19 +36,29 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
 
   const setCurrentProfile = (newProfile: MinimalProfile) => {
     setProfile(() => {
-      setCookie(PROFILE_KEY, newProfile, { stringfyValue: true })
+      try {
+        setCookie(PROFILE_KEY, newProfile, { stringfyValue: true })
+      } catch (error) {
+        console.log(error)
+      }
       return newProfile
     })
   }
 
   const updateProfileIfActive = (newProfile: MinimalProfile) => {
-    if (currentProfile?.id === newProfile.id) setCurrentProfile(newProfile)
+    if (currentProfile?.id === newProfile.id) {
+      setCurrentProfile(newProfile)
+    }
   }
 
   const removeCurrentProfile = () => {
     setProfile(() => {
-      removeCookie(PROFILE_KEY)
-      return undefined
+      try {
+        removeCookie(PROFILE_KEY)
+      } catch (error) {
+        console.log(error)
+      }
+      return null
     })
   }
 

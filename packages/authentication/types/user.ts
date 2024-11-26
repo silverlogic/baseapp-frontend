@@ -5,6 +5,8 @@ export interface User {
   newEmail: string
   isNewEmailConfirmed: boolean
   referralCode: string
+  firstName: string
+  lastName: string
   profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
