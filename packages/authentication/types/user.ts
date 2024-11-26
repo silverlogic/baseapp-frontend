@@ -29,7 +29,7 @@ export interface MinimalProfile {
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
   userId: TUser['id']
-  data: Partial<Omit<TUser, 'profile.avatar' | 'id'>> & {
+  data: Partial<Omit<TUser, 'id'>> & {
     avatar?: File | string
   }
 }
