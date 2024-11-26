@@ -10,20 +10,6 @@ import { HeaderProps } from '../types'
 const meta: Meta<typeof Header> = {
   title: '@baseapp-frontend | components/Navigation/Header',
   component: Header,
-  argTypes: {
-    settings: { control: 'object' },
-    onOpenNav: { action: 'onOpenNav' },
-    LogoIcon: { control: 'object' },
-    AccountMenu: { control: 'object' },
-    AccountMenuProps: { control: 'object' },
-    ToolbarProps: { control: 'object' },
-    children: {
-      control: false,
-      description: 'Additional components to render inside the header',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
   decorators: [withTokenSetup],
 }
 

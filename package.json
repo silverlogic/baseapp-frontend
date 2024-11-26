@@ -3,7 +3,7 @@
   "description": "A modularized package system for TSL's frontend baseapp.",
   "private": true,
   "scripts": {
-    "build": "turbo run build --filter=./packages/utils",
+    "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test:unit": "turbo run test:unit",
@@ -18,8 +18,8 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
-    "@parcel/packager-ts": "2.13.0",
-    "@parcel/transformer-typescript-types": "2.13.0",
+    "@parcel/packager-ts": "2.13.2",
+    "@parcel/transformer-typescript-types": "2.13.2",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",

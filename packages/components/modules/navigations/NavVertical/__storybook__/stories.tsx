@@ -10,16 +10,6 @@ import { NavVerticalProps } from '../types'
 const meta: Meta<typeof NavVertical> = {
   title: '@baseapp-frontend | components/Navigation/NavVertical',
   component: NavVertical,
-  argTypes: {
-    navData: { control: 'object' },
-    settings: { control: 'object' },
-    setSettings: { action: 'setSettings' },
-    LogoIcon: { control: false },
-    openNav: { control: 'boolean' },
-    onCloseNav: { action: 'onCloseNav' },
-    hideToggleButton: { control: 'boolean' },
-  },
-  tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
   },

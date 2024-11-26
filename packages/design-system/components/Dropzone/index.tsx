@@ -1,6 +1,6 @@
-import { FC, useState } from 'react'
+import React, { FC, useState } from 'react'
 
-import { getImageString } from '@baseapp-frontend/utils'
+import { getImageString, useNotification } from '@baseapp-frontend/utils'
 
 import { Box, Button, Card, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
@@ -20,15 +20,21 @@ const Dropzone: FC<DropzoneProps> = ({
   onSelect,
   onRemove,
   actionText = 'Upload Image',
-  subTitle = 'Max. File Size: 15MB',
+  maxFileSize = 15,
+  subTitle = `Max. File Size: ${maxFileSize}MB`,
   DropzoneOptions,
 }) => {
   const [files, setFiles] = useState<string | undefined>(storedImg)
+  const { sendToast } = useNotification()
 
   const { open, getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept,
     onDrop: async (acceptedFiles: any) => {
       if (acceptedFiles.length === 0) return
+      if (acceptedFiles[0].size > maxFileSize * 1024 * 1024) {
+        sendToast(`This file is too large (max ${maxFileSize} MB).`, { type: 'error' })
+        return
+      }
       const imgString = await getImageString(acceptedFiles[0])
       if (!imgString) return
       setFiles(imgString)
@@ -45,20 +51,23 @@ const Dropzone: FC<DropzoneProps> = ({
   const renderContent = () => {
     if (files)
       return (
-        <Card>
-          <Box p={2} display="flex" flexDirection="column" alignItems="center">
-            <img
-              key={files}
-              src={files}
-              alt="preview"
-              style={{ maxHeight: '200px', maxWidth: '100%' }}
-            />
-          </Box>
-        </Card>
+        <>
+          <input {...getInputProps()} />
+          <Card>
+            <Box p={2} display="flex" flexDirection="column" alignItems="center">
+              <img
+                key={files}
+                src={files}
+                alt="preview"
+                style={{ maxHeight: '200px', maxWidth: '100%' }}
+              />
+            </Box>
+          </Card>
+        </>
       )
 
     return (
-      <div className="w-full container max-w-none">
+      <div className="container w-full max-w-none">
         <InputContainer {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
           <input {...getInputProps()} />
           {isDragReject ? (

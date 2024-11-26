@@ -5,7 +5,6 @@ import SocialUpsertActions from '..'
 const meta: Meta<typeof SocialUpsertActions> = {
   title: '@baseapp-frontend | components/Shared/SocialUpsertActions',
   component: SocialUpsertActions,
-  tags: ['autodocs'],
 }
 
 export default meta
