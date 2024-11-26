@@ -31,7 +31,6 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
   VirtuosoProps = {},
-  setIsInChatRoom,
   setIsInExistingChatRoomsView,
 }) => {
   const {
@@ -73,7 +72,6 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
     return (
       <ChatRoomListCard
         item={item}
-        setIsInChatRoom={setIsInChatRoom}
         setIsInExistingChatRoomsView={setIsInExistingChatRoomsView}
         isMutationInFlight={isMutationInFlight}
         commit={commit}

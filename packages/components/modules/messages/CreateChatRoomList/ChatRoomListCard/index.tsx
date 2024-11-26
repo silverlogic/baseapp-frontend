@@ -7,18 +7,20 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 
+import { useChatRoom } from '../../context'
 import { MainContainer } from './styled'
 import { ChatRoomListCardProps } from './types'
 
 const ChatRoomListCard: FC<ChatRoomListCardProps> = ({
   item,
-  setIsInChatRoom,
   setIsInExistingChatRoomsView,
   currentProfile,
   commit,
   isMutationInFlight,
 }) => {
   const { id, image, name, urlPath } = item
+
+  const { setChatRoom } = useChatRoom()
 
   return (
     <MainContainer key={`profile-${id}`}>
@@ -43,8 +45,8 @@ const ChatRoomListCard: FC<ChatRoomListCardProps> = ({
               variables: {
                 input: { profileId: currentProfile.profile.id, participants: [id] },
               },
-              onCompleted: () => {
-                setIsInChatRoom(true)
+              onCompleted: (data) => {
+                setChatRoom({ id: data?.chatRoomCreate?.room?.node?.id })
                 setIsInExistingChatRoomsView(true)
               },
             })

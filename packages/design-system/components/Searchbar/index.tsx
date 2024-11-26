@@ -19,6 +19,7 @@ const Searchbar: FC<SearchbarProps> = ({
   isPending,
   sx,
   InputProps,
+  variant = 'filled',
   ...props
 }) => {
   const { control, watch, reset } = useForm({ defaultValues: { search: '' } })
@@ -42,7 +43,7 @@ const Searchbar: FC<SearchbarProps> = ({
 
   return (
     <TextField
-      variant="filled"
+      variant={variant}
       placeholder="Search"
       onChange={handleDebouncedChange}
       sx={{
