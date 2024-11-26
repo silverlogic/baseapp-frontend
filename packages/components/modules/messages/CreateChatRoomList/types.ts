@@ -14,21 +14,5 @@ export interface CreateChatRoomListProps extends PropsWithChildren {
   ChatRoomListCard?: FC<ChatRoomListCardProps>
   ChatRoomListCardProps?: Partial<ChatRoomListCardProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
-  setIsInChatRoom: Dispatch<SetStateAction<boolean>>
   setIsInExistingChatRoomsView: Dispatch<SetStateAction<boolean>>
-  noResultsImage?: string
-  noConnectionsImage?: string
-}
-
-export interface Edge {
-  node:
-    | {
-        id: string
-        pk: number
-        name: string | undefined | null
-        image: { url: string } | undefined | null
-        urlPath: { path: string } | undefined | null
-      }
-    | undefined
-    | null
 }

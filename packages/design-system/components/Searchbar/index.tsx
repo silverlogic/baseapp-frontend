@@ -6,6 +6,7 @@ import { useDebounce } from '@baseapp-frontend/utils'
 
 import { CircularProgress, InputAdornment } from '@mui/material'
 import { Box } from '@mui/system'
+import { useForm } from 'react-hook-form'
 
 import Iconify from '../Iconify'
 import { IconButton } from '../buttons'
@@ -18,11 +19,11 @@ const Searchbar: FC<SearchbarProps> = ({
   isPending,
   sx,
   InputProps,
-  form,
-  name,
+  variant = 'filled',
   ...props
 }) => {
-  const { watch, control, reset } = form
+  const { control, watch, reset } = useForm({ defaultValues: { search: '' } })
+
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value || ''
     startTransition(() => {
@@ -32,17 +33,17 @@ const Searchbar: FC<SearchbarProps> = ({
 
   const handleReset = () => {
     startTransition(() => {
-      reset({ [name]: '' })
+      reset()
       refetch({ q: '' })
     })
   }
-  const watchSearch = watch(name)
+  const watchSearch = watch('search')
 
   const { debouncedFunction: handleDebouncedChange } = useDebounce(handleChange)
 
   return (
     <TextField
-      variant="filled"
+      variant={variant}
       placeholder="Search"
       onChange={handleDebouncedChange}
       sx={{

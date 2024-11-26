@@ -79,7 +79,8 @@ type BlockTogglePayload {
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
-  image: String
+  title: String
+  image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection

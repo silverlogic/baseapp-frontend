@@ -16,7 +16,11 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
 
   return (
     <MessageItemContainer isOwnMessage={isOwnMessage} isFirstGroupedMessage={isFirstGroupedMessage}>
-      <Typography variant="body2" color={isOwnMessage ? 'text.primary' : 'primary.contrastText'}>
+      <Typography
+        variant="body2"
+        color={isOwnMessage ? 'text.primary' : 'primary.contrastText'}
+        sx={{ maxWidth: '100%', wordWrap: 'break-word' }}
+      >
         {message?.content}
       </Typography>
     </MessageItemContainer>
