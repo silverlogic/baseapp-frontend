@@ -41,6 +41,10 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
     })
   }
 
+  const updateProfileIfActive = (newProfile: MinimalProfile) => {
+    if (currentProfile?.id === newProfile.id) setCurrentProfile(newProfile)
+  }
+
   const removeCurrentProfile = () => {
     setProfile(() => {
       removeCookie(PROFILE_KEY)
@@ -59,11 +63,13 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
     return {
       currentProfile: getProfileFromCookie({ noSSR }),
       setCurrentProfile,
+      updateProfileIfActive,
     }
   }
   return {
     currentProfile,
     setCurrentProfile,
+    updateProfileIfActive,
   }
 }
 
