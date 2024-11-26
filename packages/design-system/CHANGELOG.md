@@ -1,11 +1,18 @@
 # @baseapp-frontend/design-system
 
+## 0.0.20
+
+### Patch Changes
+
+- Create `Searchbar` component. 
+- Add `NoMessagesIcon` icon. 
+- Export `PureTextFieldProps` type. 
+
 ## 0.0.19
 
 ### Patch Changes
 
 - Added the Searchbar component
-
 
 ## 0.0.18
 

@@ -1,7 +1,6 @@
 import { FC, SyntheticEvent } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
-import { formatDateWithDiffNow } from '@baseapp-frontend/utils'
 
 import { Badge as DefaultBadge, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
@@ -12,6 +11,7 @@ import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constan
 import { RoomFragment } from '../../graphql/queries/Room'
 import { StyledChatCard } from './styled'
 import { ChatRoomCardProps } from './types'
+import { formatDate } from './utils'
 
 const ChatRoomCard: FC<ChatRoomCardProps> = ({
   roomRef,
@@ -69,7 +69,7 @@ const ChatRoomCard: FC<ChatRoomCardProps> = ({
           {lastMessage && lastMessageTime && (
             <>
               <Typography variant="caption" color="text.secondary" noWrap>
-                {formatDateWithDiffNow(lastMessageTime)}
+                {formatDate(lastMessageTime)}
               </Typography>
               <div className="mx-2 inline-block h-1.5 w-1.5 rounded-full bg-text-disabled" />
               <Typography
