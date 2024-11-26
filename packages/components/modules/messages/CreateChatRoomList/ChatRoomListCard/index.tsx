@@ -3,6 +3,7 @@
 import { FC } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
+import { joinWithSeparator } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
@@ -33,7 +34,7 @@ const ChatRoomListCard: FC<ChatRoomListCardProps> = ({
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
         <Typography variant="subtitle2">{name}</Typography>
         <Typography variant="caption" color="text.secondary">
-          {urlPath?.path}
+          {joinWithSeparator(['@', urlPath?.path], { separator: '' })}
         </Typography>
       </Box>
       <LoadingButton

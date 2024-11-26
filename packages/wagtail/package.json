@@ -1,0 +1,103 @@
+{
+  "name": "@baseapp-frontend/wagtail",
+  "description": "BaseApp Wagtail",
+  "version": "1.0.2",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
+    "dev": "tsc --watch",
+    "relay": "relay-compiler",
+    "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
+    "relay-update-schema": "yarn relay-download-schema && yarn relay",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "storybook": "storybook dev -p 6007",
+    "storybook:build": "storybook build",
+    "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
+    "cypress:open": "cypress open --browser chrome"
+  },
+  "dependencies": {
+    "@mui/material": "catalog:material-ui",
+    "@mui/system": "catalog:material-ui",
+    "@storybook/react": "catalog:storybook",
+    "axios": "catalog:",
+    "graphql": "catalog:graphql",
+    "next": "catalog:",
+    "react-relay": "catalog:graphql"
+  },
+  "peerDependencies": {
+    "@baseapp-frontend/design-system": "workspace:*",
+    "@baseapp-frontend/graphql": "workspace:*",
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "catalog:react18"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "catalog:storybook",
+    "@babel/preset-react": "catalog:storybook",
+    "@babel/preset-typescript": "catalog:storybook",
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@chromatic-com/storybook": "catalog:storybook",
+    "@cypress/webpack-dev-server": "catalog:test",
+    "@storybook/addon-essentials": "catalog:storybook",
+    "@storybook/addon-interactions": "catalog:storybook",
+    "@storybook/addon-links": "catalog:storybook",
+    "@storybook/addon-styling-webpack": "catalog:storybook",
+    "@storybook/addon-webpack5-compiler-babel": "catalog:storybook",
+    "@storybook/blocks": "catalog:storybook",
+    "@storybook/react-webpack5": "catalog:storybook",
+    "@storybook/test": "catalog:storybook",
+    "@tailwindcss/typography": "catalog:tailwind",
+    "@testing-library/cypress": "catalog:test",
+    "@types/js-cookie": "catalog:",
+    "@types/luxon": "catalog:",
+    "@types/react": "catalog:react18",
+    "@types/react-dom": "catalog:react18",
+    "@types/react-relay": "catalog:graphql",
+    "@types/relay-test-utils": "catalog:graphql",
+    "autoprefixer": "catalog:tailwind",
+    "babel-loader": "catalog:storybook",
+    "babel-plugin-relay": "catalog:graphql",
+    "css-loader": "catalog:storybook",
+    "cypress": "catalog:test",
+    "cypress-plugin-steps": "catalog:test",
+    "dotenv": "^16.4.5",
+    "dotenv-cli": "^7.4.2",
+    "eslint-plugin-storybook": "catalog:lint",
+    "get-graphql-schema": "catalog:graphql",
+    "html-webpack-plugin": "catalog:storybook",
+    "msw": "catalog:storybook",
+    "msw-storybook-addon": "catalog:storybook",
+    "postcss": "catalog:tailwind",
+    "postcss-loader": "catalog:storybook",
+    "relay-compiler": "catalog:graphql",
+    "relay-test-utils": "catalog:graphql",
+    "storybook": "catalog:storybook",
+    "style-loader": "catalog:storybook",
+    "tailwindcss": "catalog:tailwind",
+    "typescript": "catalog:",
+    "webpack": "catalog:storybook",
+    "webpack-cli": "catalog:storybook",
+    "webpack-dev-server": "catalog:storybook"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/wagtail"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "readme": "https://github.com/silverlogic/baseapp-frontend/blob/master/packages/wagtail/README.md",
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
+}

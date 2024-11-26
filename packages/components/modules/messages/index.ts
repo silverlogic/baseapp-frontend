@@ -15,7 +15,6 @@ export type * from './SendMessage/types'
 
 export { default as CreateChatRoomList } from './CreateChatRoomList'
 export type * from './CreateChatRoomList/types'
-
 export * from './context'
 
 export * from './graphql/mutations/SendMessage'

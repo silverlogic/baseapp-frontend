@@ -1,5 +1,43 @@
 # @baseapp-frontend/components
 
+## 0.0.19
+
+### Patch Changes
+
+- Add Active Tab functionality to the `messages` module.
+- Tweaks on `MessageItem` styles so it have the correct `max-width`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.20
+
+## 0.0.18
+
+### Patch Changes
+
+- Added the CreateChatRoom components for the messages module
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.19
+
+## 0.0.17
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.17
+
+## 0.0.16
+
+### Patch Changes
+
+- Storybook cleanup
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.17
+
+## 0.0.15
+
+### Patch Changes
+
+- Add Storybook for notifications components.
+
 ## 0.0.14
 
 ### Patch Changes

@@ -28,33 +28,6 @@ export default {
       ],
     },
   },
-  argTypes: {
-    popoverStyles: { control: 'object', table: { type: { summary: 'CSSProperties' } } },
-    CurrentUser: { control: false, table: { type: { summary: 'FC' } } },
-    CurrentProfile: { control: false, table: { type: { summary: 'FC' } } },
-    MenuItems: { control: false, table: { type: { summary: 'FC<MenuItemsProps>' } } },
-    MenuItemsProps: { control: 'object', table: { type: { summary: 'MenuItemsProps' } } },
-    SwitchProfileMenu: {
-      control: false,
-      table: { type: { summary: 'FC<SwitchProfileMenuProps>' } },
-    },
-    SwitchProfileMenuProps: {
-      control: 'object',
-      table: { type: { summary: 'SwitchProfileMenuProps' } },
-    },
-    ProfilesList: { control: false, table: { type: { summary: 'FC<ProfilesListProps>' } } },
-    ProfilesListProps: { control: 'object', table: { type: { summary: 'ProfilesListProps' } } },
-    AddProfileMenuItem: {
-      control: false,
-      table: { type: { summary: 'FC<AddProfileMenuItemProps>' } },
-    },
-    AddProfileMenuItemProps: {
-      control: 'object',
-      table: { type: { summary: 'AddProfileMenuItemProps' } },
-    },
-    LogoutItemProps: { control: 'object', table: { type: { summary: 'LogoutItemProps' } } },
-  },
-  tags: ['autodocs'],
   decorators: [
     withTokenSetup,
     (Story, context) => {
