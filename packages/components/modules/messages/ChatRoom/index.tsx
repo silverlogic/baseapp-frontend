@@ -7,22 +7,22 @@ import { LoadingState } from '@baseapp-frontend/design-system'
 import { Box } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
-import { MessageRoomQuery as MessageRoomQueryType } from '../../../__generated__/MessageRoomQuery.graphql'
+import { ChatRoomQuery as ChatRoomQueryType } from '../../../__generated__/ChatRoomQuery.graphql'
 import DefaultMessagesList from '../MessagesList'
 import DefaultSendMessage from '../SendMessage'
-import { MessageRoomQuery } from '../graphql/queries/MessageRoomQuery'
-import { MessageRoomContainer } from './styled'
-import { MessageRoomProps } from './types'
+import { ChatRoomQuery } from '../graphql/queries/ChatRoomQuery'
+import { ChatRoomContainer } from './styled'
+import { ChatRoomProps } from './types'
 
-const MessageRoom: FC<MessageRoomProps> = ({
+const ChatRoom: FC<ChatRoomProps> = ({
   roomId,
   MessagesList = DefaultMessagesList,
   MessagesListProps = {},
   SendMessage = DefaultSendMessage,
   SendMessageProps = {},
 }) => {
-  const { chatRoom } = useLazyLoadQuery<MessageRoomQueryType>(
-    MessageRoomQuery,
+  const { chatRoom } = useLazyLoadQuery<ChatRoomQueryType>(
+    ChatRoomQuery,
     {
       roomId,
     },
@@ -38,19 +38,19 @@ const MessageRoom: FC<MessageRoomProps> = ({
   }
 
   return (
-    <MessageRoomContainer>
+    <ChatRoomContainer>
       <MessagesList roomRef={chatRoom} {...MessagesListProps} />
       <Box paddingRight={2}>
         <SendMessage roomId={roomId} {...SendMessageProps} />
       </Box>
-    </MessageRoomContainer>
+    </ChatRoomContainer>
   )
 }
 
-const SuspendedMessageRoom: FC<MessageRoomProps> = (props) => (
+const SuspendedChatRoom: FC<ChatRoomProps> = (props) => (
   <Suspense fallback={<LoadingState />}>
-    <MessageRoom {...props} />
+    <ChatRoom {...props} />
   </Suspense>
 )
 
-export default SuspendedMessageRoom
+export default SuspendedChatRoom

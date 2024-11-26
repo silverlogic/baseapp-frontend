@@ -34,6 +34,9 @@ export type * from './components/Iconify/types'
 export { default as Scrollbar } from './components/Scrollbar'
 export type * from './components/Scrollbar/types'
 
+export { default as Searchbar } from './components/Searchbar'
+export type * from './components/Searchbar/types'
+
 export { default as ProjectLogo } from './components/ProjectLogo'
 export type * from './components/ProjectLogo/types'
 

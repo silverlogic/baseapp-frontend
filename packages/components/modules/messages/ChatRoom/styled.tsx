@@ -3,7 +3,7 @@ import { alpha, styled } from '@mui/material/styles'
 
 import { HEADER } from '../../navigations/constants'
 
-export const MessageRoomContainer = styled(Box)(({ theme }) => ({
+export const ChatRoomContainer = styled(Box)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
   border: `1px solid ${theme.palette.grey[200]}`,
   borderRadius: 8,

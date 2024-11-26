@@ -1,7 +1,7 @@
 import { graphql } from 'react-relay'
 
-export const MessageRoomQuery = graphql`
-  query MessageRoomQuery($roomId: ID!) {
+export const ChatRoomQuery = graphql`
+  query ChatRoomQuery($roomId: ID!) {
     chatRoom(id: $roomId) {
       id
       participants {
