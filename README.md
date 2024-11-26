@@ -115,10 +115,10 @@ If you need to install a package version that hasn't been published yet, follow 
 
   ```bash
   # will replace catalogs for utils and authentication packages
-  node replace-catalogs.js utils authentication
+  pnpm replace-catalogs utils authentication
 
   # will replace catalogs for all packages
-  node replace-catalogs.js
+  pnpm replace-catalogs
   ```
 
 2. **Commit and Push**:
@@ -141,13 +141,29 @@ If you need to install a package version that hasn't been published yet, follow 
   "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
   ```
 
-5. **Undo Changes and Merge**:
+5. **Restore Catalog Entries and Merge**:
 
-  Once you’ve finished testing or using the non-published version, undo the commit that removed the catalogs. You can now proceed with merging and publishing the changes.
+  Once you’ve finished testing or using the non-published version, you can restore the catalog entries in one of two ways:
 
-  ```bash
-  git revert <commit-hash>
-  ```
+  - Option 1: Revert the Commit
+
+    Revert the commit that removed the catalogs to restore them to their previous state:
+
+    ```bash
+    git revert <commit-hash>
+    ```
+    This will effectively undo the catalog removal and bring back the original entries.
+
+  - Option 2: Run the `add-catalogs` script
+
+    Run the `add-catalogs` script to reapply catalog entries without reverting the commit:
+
+    ```bash
+    pnpm add-catalogs
+    ```
+    This will update all package.json files to include catalog entries again.
+
+After using either option, proceed with committing and merging the changes
 
 ## Packages Versioning and Publishing
 

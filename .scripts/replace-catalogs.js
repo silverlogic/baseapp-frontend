@@ -3,7 +3,9 @@ const path = require('path')
 const YAML = require('yaml')
 const { execSync } = require('child_process')
 
-const workspaceConfigPath = path.resolve(__dirname, 'pnpm-workspace.yaml')
+const scriptDir = path.resolve(__dirname)
+const rootDir = path.resolve(scriptDir, '..')
+const workspaceConfigPath = path.join(rootDir, 'pnpm-workspace.yaml')
 
 const loadWorkspaceCatalogs = () => {
   const workspaceContent = fs.readFileSync(workspaceConfigPath, 'utf8')
@@ -18,34 +20,37 @@ const replaceCatalogDependencies = (packageJsonPath, rootCatalog, catalogs) => {
   const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf8')
   const packageJson = JSON.parse(packageJsonContent)
 
-  ;['dependencies', 'devDependencies', 'peerDependencies', 'resolutions'].forEach((depType) => {
-    if (packageJson[depType]) {
-      Object.keys(packageJson[depType]).forEach((dep) => {
-        const version = packageJson[depType][dep]
-        if (version.startsWith('catalog:')) {
-          const catalogName = version.split(':')[1]
+  ;['dependencies', 'devDependencies', 'peerDependencies', 'resolutions'].forEach(
+    (dependencyType) => {
+      if (packageJson[dependencyType]) {
+        Object.keys(packageJson[dependencyType]).forEach((dependency) => {
+          const version = packageJson[dependencyType][dependency]
+          if (version.startsWith('catalog:')) {
+            const catalogName = version.split(':')[1]
 
-          let resolvedVersion =
-            rootCatalog[dep] || (catalogs[catalogName] && catalogs[catalogName][dep])
+            let resolvedVersion =
+              rootCatalog[dependency] ||
+              (catalogs[catalogName] && catalogs[catalogName][dependency])
 
-          if (resolvedVersion) {
-            packageJson[depType][dep] = resolvedVersion
-          } else {
-            console.warn(
-              `Could not find a matching version for ${dep} in catalog "${catalogName}" or root catalog.`,
-            )
+            if (resolvedVersion) {
+              packageJson[dependencyType][dependency] = resolvedVersion
+            } else {
+              console.warn(
+                `Could not find a matching version for ${dependency} in catalog "${catalogName}" or root catalog.`,
+              )
+            }
           }
-        }
-      })
-    }
-  })
+        })
+      }
+    },
+  )
 
   fs.writeFileSync(packageJsonPath, JSON.stringify(packageJson, null, 2) + '\n')
 }
 
 const updatePackagesDependencies = (selectedPackages) => {
   const { rootCatalog, catalogs } = loadWorkspaceCatalogs()
-  const packagesPath = path.resolve(__dirname, 'packages')
+  const packagesPath = path.join(rootDir, 'packages')
   const packageFolders = fs.readdirSync(packagesPath)
 
   const foldersToProcess =
@@ -69,7 +74,7 @@ console.log(
 
 console.log('Regenerating pnpm-lock.yaml...')
 try {
-  execSync('pnpm install --lockfile-only', { stdio: 'inherit' })
+  execSync('pnpm install --lockfile-only', { stdio: 'inherit', cwd: rootDir })
   console.log('pnpm-lock.yaml has been successfully regenerated.')
 } catch (error) {
   console.error('An error occurred while regenerating pnpm-lock.yaml:', error)
