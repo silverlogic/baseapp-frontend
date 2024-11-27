@@ -1,9 +1,9 @@
-import { MinimalProfile } from '@baseapp-frontend/authentication'
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 import { act, render, waitFor } from '@baseapp-frontend/test'
+import { MinimalProfile } from '@baseapp-frontend/utils'
 import { LOGOUT_EVENT, eventEmitter, getCookie, setCookie } from '@baseapp-frontend/utils'
 
-import { PROFILE_KEY } from '../constants'
+import { CURRENT_PROFILE_KEY } from '../constants'
 import { mockUserProfileFactory } from './__mock__/profiles'
 import { userMockData, userMockData2 } from './__mock__/user'
 
@@ -26,7 +26,7 @@ describe('CurrentProfileProvider', () => {
   const loadPreStoredData = (customUserProfileMockData: any) => {
     const profile = customUserProfileMockData.data.me.profile as MinimalProfile
 
-    setCookie(PROFILE_KEY, profile, { stringfyValue: true })
+    setCookie(CURRENT_PROFILE_KEY, profile, { stringfyValue: true })
   }
 
   it('should get the user from local storage and not trigger the user profile fetch', async () => {
@@ -57,7 +57,7 @@ describe('CurrentProfileProvider', () => {
     })
 
     await waitFor(() => {
-      expect(getCookie(PROFILE_KEY, { parseJSON: true })).toEqual(undefined)
+      expect(getCookie(CURRENT_PROFILE_KEY, { parseJSON: true })).toEqual(undefined)
 
       expect(document.getElementById('profile-id')).toBeNull()
     })

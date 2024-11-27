@@ -11,7 +11,7 @@ import { useLazyLoadQuery } from 'react-relay'
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
-import useCurrentProfile from '../../useCurrentProfile'
+import useCurrentProfile, { getMinimalProfile } from '../../useCurrentProfile'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
 import { CancelMenuItem, StyledList } from './styled'
@@ -24,7 +24,7 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     if (currentProfile?.id !== profile.id) {
-      setCurrentProfile(profile)
+      setCurrentProfile(getMinimalProfile(profile))
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
     }

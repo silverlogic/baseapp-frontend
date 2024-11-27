@@ -2,9 +2,9 @@
 
 import { useEffect } from 'react'
 
-import { MinimalProfile } from '@baseapp-frontend/authentication'
 import {
   LOGOUT_EVENT,
+  MinimalProfile,
   ServerSideRenderingOption,
   eventEmitter,
   getCookie,
@@ -14,11 +14,23 @@ import {
 
 import { atom, useAtom } from 'jotai'
 
-import { PROFILE_KEY } from './constants'
+import { ProfileItemFragment$data } from '../../../__generated__/ProfileItemFragment.graphql'
+import { CURRENT_PROFILE_KEY } from './constants'
 
-const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
+export const getMinimalProfile = function <T extends ProfileItemFragment$data>(
+  profile: T,
+): MinimalProfile {
+  return {
+    id: profile.id,
+    name: profile.name ?? null,
+    image: profile.image?.url ?? null,
+    urlPath: profile.urlPath?.path ?? null,
+  }
+}
+
+export const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
   const settings =
-    getCookie<MinimalProfile | undefined>(PROFILE_KEY, { noSSR, parseJSON: true }) ?? null
+    getCookie<MinimalProfile | undefined>(CURRENT_PROFILE_KEY, { noSSR, parseJSON: true }) ?? null
 
   return settings
 }
@@ -37,7 +49,7 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
   const setCurrentProfile = (newProfile: MinimalProfile) => {
     setProfile(() => {
       try {
-        setCookie(PROFILE_KEY, newProfile, { stringfyValue: true })
+        setCookie(CURRENT_PROFILE_KEY, newProfile, { stringfyValue: true })
       } catch (error) {
         console.log(error)
       }
@@ -54,7 +66,7 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
   const removeCurrentProfile = () => {
     setProfile(() => {
       try {
-        removeCookie(PROFILE_KEY)
+        removeCookie(CURRENT_PROFILE_KEY)
       } catch (error) {
         console.log(error)
       }

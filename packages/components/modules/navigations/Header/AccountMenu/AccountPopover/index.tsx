@@ -66,7 +66,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     <>
       <ClickableAvatar
         color="secondary"
-        src={profile?.image?.url ?? ''}
+        src={profile?.image ?? ''}
         alt="User avatar"
         onClick={popover.onOpen}
         isOpen={Boolean(popover.open)}

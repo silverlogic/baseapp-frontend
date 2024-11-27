@@ -1,5 +1,3 @@
-// Contexts & Providers
-export { default as useCurrentProfile } from './useCurrentProfile'
+export { default as useCurrentProfile, getMinimalProfile } from './useCurrentProfile'
 
-// Components
 export * from './ProfilePopover'

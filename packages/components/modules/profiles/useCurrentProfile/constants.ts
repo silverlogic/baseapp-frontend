@@ -1,1 +1,1 @@
-export const PROFILE_KEY = 'myCurrentProfile'
+export const CURRENT_PROFILE_KEY = 'CurrentProfile'

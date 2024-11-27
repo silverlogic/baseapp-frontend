@@ -1,3 +1,5 @@
+import { MinimalProfile } from '@baseapp-frontend/utils'
+
 export interface User {
   id: number
   email: string
@@ -10,23 +12,6 @@ export interface User {
   profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
-}
-
-export interface MinimalProfile {
-  id: string
-  name: string | null | undefined
-  image:
-    | {
-        url: string
-      }
-    | null
-    | undefined
-  urlPath:
-    | {
-        path: string
-      }
-    | null
-    | undefined
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
