@@ -41,9 +41,7 @@ const useJWTUser = <TUser extends Partial<User> & JWTContent>({
   })
 
   useEffect(() => {
-    console.log('useJWTUser error:', query.error) // Check if this gets printed
     if ((query.error as any)?.response?.status === 401) {
-      console.log('useJWTUser 401 error triggered')
       queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     }
   }, [query.error])

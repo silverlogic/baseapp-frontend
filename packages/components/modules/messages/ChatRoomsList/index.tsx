@@ -1,78 +1,93 @@
 'use client'
 
-import { FC, useCallback, useMemo, useState, useTransition } from 'react'
+import { ChangeEventHandler, FC, useCallback, useMemo, useState, useTransition } from 'react'
 
-import {
-  NoMessagesIcon as DefaultNoMessagesIcon,
-  Searchbar as DefaultSearchbar,
-  LoadingState,
-  useResponsive,
-} from '@baseapp-frontend/design-system'
+import { Searchbar as DefaultSearchbar, LoadingState } from '@baseapp-frontend/design-system'
 
-import { Box, Tab, Tabs, Typography, useTheme } from '@mui/material'
+import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
+import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
 import { RoomsListFragment$key } from '../../../__generated__/RoomsListFragment.graphql'
+import SearchNotFoundState from '../SearchNotFoundState'
 import { useChatRoom } from '../context'
 import { useRoomsList } from '../graphql/queries/RoomsList'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
-import DefaultChatRoomCard from './ChatRoomCard'
+import DefaultChatRoomItem from './ChatRoomItem'
+import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
 import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from './constants'
-import { ChatRoomsListProps, ChatTabValues } from './types'
+import { ChatRoomListContainer } from './styled'
+import { ChatRoomNode, ChatRoomsListProps, ChatTabValues } from './types'
 
 const ChatRoomsList: FC<ChatRoomsListProps> = ({
   targetRef,
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
-  ChatRoomCard = DefaultChatRoomCard,
-  ChatRoomCardProps = {},
-  NoMessagesIcon = DefaultNoMessagesIcon,
-  NoMessagesIconProps = {},
+  ChatRoomItem = DefaultChatRoomItem,
+  ChatRoomItemProps = {},
+  EmptyChatRoomsState = DefaultEmptyChatRoomsState,
   VirtuosoProps = {},
 }) => {
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
 
+  const [isRefetchPending, startRefetchTransition] = useTransition()
   const { data, loadNext, isLoadingNext, hasNext, refetch } = useRoomsList(
     targetRef?.me?.profile as RoomsListFragment$key,
   )
 
   const [isPending, startTransition] = useTransition()
+  const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
-  const handleChange = (event: React.SyntheticEvent, newTab: string) => {
-    setTab(newTab as ChatTabValues)
+  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = e.target.value || ''
     startTransition(() => {
-      refetch({ unreadMessages: newTab === CHAT_TAB_VALUES.unread })
+      refetch({ q: value })
     })
   }
 
-  const isMobile = useResponsive('down', 'sm')
-  const theme = useTheme()
+  const handleSearchClear = () => {
+    startTransition(() => {
+      reset()
+      refetch({ q: '' })
+    })
+  }
+
+  const handleChange = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab as ChatTabValues)
+    startRefetchTransition(() => {
+      refetch(
+        { unreadMessages: newTab === CHAT_TAB_VALUES.unread },
+        { fetchPolicy: 'store-and-network' },
+      )
+    })
+  }
+
   const { id: selectedRoom, setChatRoom } = useChatRoom()
 
-  const memoizedChatRooms = useMemo(
+  const chatRooms = useMemo(
     () => data?.chatRooms?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.chatRooms?.edges],
   )
 
-  const renderChatCard = useCallback(
-    (room: any) => {
+  useRoomListSubscription(data.id)
+
+  const renderItem = useCallback(
+    (room: ChatRoomNode) => {
       if (!room) return null
 
       return (
-        <ChatRoomCard
+        <ChatRoomItem
           roomRef={room}
           isCardSelected={selectedRoom === room.id}
           handleClick={() => {
             setChatRoom({ id: room.id })
           }}
-          {...ChatRoomCardProps}
+          {...ChatRoomItemProps}
         />
       )
     },
-    [selectedRoom, setChatRoom, ChatRoomCardProps, ChatRoomCard],
+    [selectedRoom, setChatRoom, ChatRoomItemProps, ChatRoomItem],
   )
-
-  useRoomListSubscription(data?.id as string)
 
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
@@ -86,19 +101,59 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     )
   }
 
+  const renderTabLabel = (tabValue: ChatTabValues) => (
+    <Box display="grid" gap={1} gridTemplateColumns="1fr min-content" alignItems="center">
+      <Typography variant="subtitle2" color="text.primary">
+        {CHAT_TAB_LABEL[CHAT_TAB_VALUES[tabValue]]}
+      </Typography>
+      {isRefetchPending && tab === tabValue && <CircularProgress size={15} />}
+    </Box>
+  )
+
+  const renderListContent = () => {
+    const emptyChatRoomsList = chatRooms.length === 0
+    const searchValue = watch('search')
+
+    if (!isPending && searchValue && emptyChatRoomsList) return <SearchNotFoundState />
+
+    if (!isPending && emptyChatRoomsList) return <EmptyChatRoomsState />
+
+    return (
+      <Virtuoso
+        data={chatRooms}
+        overscan={1}
+        itemContent={(_index, item) => renderItem(item)}
+        style={{ scrollbarWidth: 'none' }}
+        components={{
+          Footer: renderLoadingState,
+        }}
+        endReached={() => {
+          if (hasNext) {
+            loadNext(5)
+          }
+        }}
+        {...VirtuosoProps}
+      />
+    )
+  }
+
   return (
-    <div className="grid h-full w-full grid-rows-[min-content_min-content_auto]">
+    <ChatRoomListContainer>
       <Box
         sx={{
-          paddingX: isMobile ? theme.spacing(1.5) : theme.spacing(2.5),
-          paddingTop: theme.spacing(2),
+          paddingX: {
+            xs: 1.5,
+            sm: 2.5,
+          },
+          paddingTop: 2,
         }}
       >
-        {/* @ts-ignore TODO: Check typing */}
         <Searchbar
+          name="search"
+          control={control}
+          onChange={handleSearchChange}
+          onClear={handleSearchClear}
           isPending={isPending}
-          startTransition={startTransition}
-          refetch={refetch}
           {...SearchbarProps}
         />
       </Box>
@@ -108,48 +163,19 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
         centered
         variant="fullWidth"
         sx={{
-          paddingX: isMobile ? 0 : theme.spacing(2.5),
-          paddingTop: theme.spacing(2),
+          paddingX: {
+            xs: 0,
+            sm: 2.5,
+          },
+          paddingTop: 2,
         }}
       >
-        <Tab label={CHAT_TAB_LABEL[CHAT_TAB_VALUES.active]} value={CHAT_TAB_VALUES.active} />
-        <Tab label={CHAT_TAB_LABEL[CHAT_TAB_VALUES.unread]} value={CHAT_TAB_VALUES.unread} />
-        <Tab label={CHAT_TAB_LABEL[CHAT_TAB_VALUES.archived]} value={CHAT_TAB_VALUES.archived} />
+        <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
+        <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
+        <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
       </Tabs>
-      <div className="h-full w-full self-start sm:h-screen">
-        {memoizedChatRooms.length === 0 ? (
-          <Box
-            sx={{
-              display: 'grid',
-              justifyContent: 'center',
-              gap: theme.spacing(1.5),
-              padding: theme.spacing(4),
-            }}
-          >
-            <NoMessagesIcon {...NoMessagesIconProps} />
-            <Typography variant="subtitle2" color="text.secondary">
-              No messages to be displayed.
-            </Typography>
-          </Box>
-        ) : (
-          <Virtuoso
-            data={memoizedChatRooms}
-            overscan={1}
-            itemContent={(_index, item) => renderChatCard(item)}
-            style={{ scrollbarWidth: 'none' }}
-            components={{
-              Footer: renderLoadingState,
-            }}
-            endReached={() => {
-              if (hasNext) {
-                loadNext(5)
-              }
-            }}
-            {...VirtuosoProps}
-          />
-        )}
-      </div>
-    </div>
+      {renderListContent()}
+    </ChatRoomListContainer>
   )
 }
 

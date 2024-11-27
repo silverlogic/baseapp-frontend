@@ -2,7 +2,7 @@ import { createTestEnvironment } from '@baseapp-frontend/graphql'
 import { act, render, waitFor } from '@baseapp-frontend/test'
 import { LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
 
-import { ProfileItemFragment$data } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemInlineFragment$data } from '../../../../../__generated__/ProfileItemInlineFragment.graphql'
 import { CURRENT_PROFILE_STORAGE_KEY } from '../constants'
 import { CurrentProfileState } from '../types'
 import { mockUserProfileFactory } from './__mock__/profiles'
@@ -27,7 +27,7 @@ describe('CurrentProfileProvider', () => {
 
   const loadPreStoredData = (customUserMockData: any, customUserProfileMockData: any) => {
     const storedCurrentProfile: CurrentProfileState = {
-      profile: customUserProfileMockData.data.me.profile as ProfileItemFragment$data,
+      profile: customUserProfileMockData.data.me.profile as ProfileItemInlineFragment$data,
       userId: customUserMockData.id,
     }
 

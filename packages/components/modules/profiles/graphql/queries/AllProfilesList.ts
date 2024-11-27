@@ -21,14 +21,7 @@ export const fragmentQuery = graphql`
       edges {
         node {
           id
-          pk
-          name
-          image(width: 48, height: 48) {
-            url
-          }
-          urlPath {
-            path
-          }
+          ...ProfileItemFragment
         }
       }
     }

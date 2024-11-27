@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo, useTransition } from 'react'
+import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
 import {
   AvatarWithPlaceholder,
@@ -8,26 +8,22 @@ import {
   LoadingState,
 } from '@baseapp-frontend/design-system'
 
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
+import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
-import useCurrentProfile from '../../profiles/context/useCurrentProfile'
 import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
-import { useCreateChatRoomMutation } from '../graphql/mutations/CreateChatRoom'
-import DefaultChatRoomListCard from './ChatRoomListCard'
-import {
-  CreateChatRoomListContainer,
-  GroupChatContainer,
-  MainContainer,
-  SearchbarContainer,
-} from './styled'
-import { CreateChatRoomListProps } from './types'
+import SearchNotFoundState from '../SearchNotFoundState'
+import DefaultChatRoomListItem from './ChatRoomListItem'
+import EmptyProfilesListState from './EmptyProfilesListState'
+import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
+import { CreateChatRoomListProps, ProfileNode } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   allProfilesRef,
-  ChatRoomListCard = DefaultChatRoomListCard,
-  ChatRoomListCardProps = {},
+  ChatRoomListItem = DefaultChatRoomListItem,
+  ChatRoomListItemProps = {},
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
   VirtuosoProps = {},
@@ -40,19 +36,27 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
     hasNext,
     refetch,
   } = useAllProfilesList(allProfilesRef)
+  const [isPending, startTransition] = useTransition()
+  const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
-  const currentProfile = useCurrentProfile()
+  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const value = e.target.value || ''
+    startTransition(() => {
+      refetch({ q: value })
+    })
+  }
 
-  const theme = useTheme()
+  const handleSearchClear = () => {
+    startTransition(() => {
+      reset()
+      refetch({ q: '' })
+    })
+  }
 
-  const [commit, isMutationInFlight] = useCreateChatRoomMutation()
-
-  const memoizedItems = useMemo(
+  const profiles = useMemo(
     () => allProfiles?.edges.filter((edge: any) => edge?.node).map((edge: any) => edge?.node) || [],
     [allProfiles],
   )
-
-  const [isPending, startTransition] = useTransition()
 
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
@@ -61,22 +65,45 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more comments"
+        aria-label="loading more profiles"
       />
     )
   }
 
-  const renderItem = (item: any) => {
-    if (!item) return null
+  const renderItem = (profile: ProfileNode) => {
+    if (!profile) return null
 
     return (
-      <ChatRoomListCard
-        item={item}
+      <ChatRoomListItem
+        profile={profile}
         setIsInExistingChatRoomsView={setIsInExistingChatRoomsView}
-        isMutationInFlight={isMutationInFlight}
-        commit={commit}
-        currentProfile={currentProfile}
-        {...ChatRoomListCardProps}
+        {...ChatRoomListItemProps}
+      />
+    )
+  }
+
+  const renderListContent = () => {
+    const emptyProfilesList = profiles.length === 0
+    const searchValue = watch('search')
+
+    if (!isPending && searchValue && emptyProfilesList) return <SearchNotFoundState />
+
+    if (!isPending && emptyProfilesList) return <EmptyProfilesListState />
+
+    return (
+      <Virtuoso
+        data={profiles}
+        itemContent={(_index, item) => renderItem(item)}
+        style={{ scrollbarWidth: 'none' }}
+        components={{
+          Footer: renderLoadingState,
+        }}
+        endReached={() => {
+          if (hasNext) {
+            loadNext(5)
+          }
+        }}
+        {...VirtuosoProps}
       />
     )
   }
@@ -84,11 +111,12 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   return (
     <MainContainer>
       <SearchbarContainer>
-        {/* @ts-ignore TODO: Check typing */}
         <Searchbar
+          name="search"
+          onChange={handleSearchChange}
+          onClear={handleSearchClear}
+          control={control}
           isPending={isPending}
-          startTransition={startTransition}
-          refetch={refetch}
           {...SearchbarProps}
         />
       </SearchbarContainer>
@@ -98,7 +126,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
           width={48}
           height={48}
           sx={{
-            bgcolor: theme.palette.primary.main,
+            bgcolor: 'primary.main',
             alignSelf: 'flex-start',
             justifySelf: 'center',
           }}
@@ -114,23 +142,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
           New Group
         </Typography>
       </GroupChatContainer>
-      <CreateChatRoomListContainer>
-        <Virtuoso
-          data={memoizedItems}
-          overscan={1}
-          itemContent={(_index, item) => renderItem(item)}
-          style={{ scrollbarWidth: 'none' }}
-          components={{
-            Footer: renderLoadingState,
-          }}
-          endReached={() => {
-            if (hasNext) {
-              loadNext(5)
-            }
-          }}
-          {...VirtuosoProps}
-        />
-      </CreateChatRoomListContainer>
+      {renderListContent()}
     </MainContainer>
   )
 }

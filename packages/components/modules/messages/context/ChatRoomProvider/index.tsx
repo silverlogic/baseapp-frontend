@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, PropsWithChildren, createContext, useRef } from 'react'
 
 import { StoreApi, create } from 'zustand'
