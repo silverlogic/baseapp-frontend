@@ -25,6 +25,7 @@ export * from './components/dialogs'
 export * from './components/displays'
 export * from './components/drawers'
 export * from './components/icons'
+export * from './components/illustrations'
 export * from './components/inputs'
 export * from './components/typographies'
 
@@ -33,9 +34,6 @@ export type * from './components/Iconify/types'
 
 export { default as Scrollbar } from './components/Scrollbar'
 export type * from './components/Scrollbar/types'
-
-export { default as Searchbar } from './components/Searchbar'
-export type * from './components/Searchbar/types'
 
 export { default as ProjectLogo } from './components/ProjectLogo'
 export type * from './components/ProjectLogo/types'

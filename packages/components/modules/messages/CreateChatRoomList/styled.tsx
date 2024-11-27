@@ -25,12 +25,3 @@ export const GroupChatContainer = styled(Box)(({ theme }) => ({
     padding: `${theme.spacing(1.5)} ${theme.spacing(1.5)}`,
   },
 }))
-
-export const CreateChatRoomListContainer = styled(Box)(({ theme }) => ({
-  width: '100%',
-  height: '100%',
-  alignSelf: 'start',
-  [theme.breakpoints.down('sm')]: {
-    height: '100vh',
-  },
-}))

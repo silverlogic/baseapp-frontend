@@ -3,6 +3,8 @@ import { useMemo } from 'react'
 import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
 
+import { useCurrentProfile } from '../../../profiles'
+
 const RoomListSubscription = graphql`
   subscription useRoomListSubscription($profileId: ID!) {
     chatRoomOnRoomUpdate(profileId: $profileId) {
@@ -32,13 +34,14 @@ const RoomListSubscription = graphql`
 `
 
 // TODO: check if BE subscription is working properly
-const useRoomListSubscription = (nodeId: string, currentProfileId: string) => {
+const useRoomListSubscription = (nodeId: string) => {
+  const { profile } = useCurrentProfile()
   const config = useMemo(
     () => ({
       subscription: RoomListSubscription,
       onError: console.error,
       variables: {
-        profileId: currentProfileId, // TODO: use currentProfile hook when available
+        profileId: profile?.id,
       },
       updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
         const node = store.get(nodeId)

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<862e9f95a1e50f0c861f2b8878f34e3b>>
+ * @generated SignedSource<<f3527d4c54b58cbec40354c7eedb4f9f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,7 +17,7 @@ export type UserProfileQuery$data = {
     | {
         readonly profile:
           | {
-              readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
+              readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemInlineFragment'>
             }
           | null
           | undefined
@@ -86,7 +86,7 @@ const node: ConcreteRequest = (function () {
               selections: [
                 {
                   kind: 'InlineDataFragmentSpread',
-                  name: 'ProfileItemFragment',
+                  name: 'ProfileItemInlineFragment',
                   selections: [
                     v0 /*: any*/,
                     v1 /*: any*/,
@@ -206,16 +206,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '4a09b56bb39794e18b189981877fa031',
+      cacheID: 'a85f1b3f866dce00c22e0195d8f91a9a',
       id: null,
       metadata: {},
       name: 'UserProfileQuery',
       operationKind: 'query',
-      text: 'query UserProfileQuery {\n  me {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query UserProfileQuery {\n  me {\n    profile {\n      ...ProfileItemInlineFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemInlineFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '8febc9fbb812c3456d12d0ff6a69c90a'
+;(node as any).hash = 'fe5b9485e3ef19ae48b2142a3c72c7f7'
 
 export default node

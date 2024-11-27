@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<29dd7fcd5910c311d1ab1ac81ecbbb6c>>
+ * @generated SignedSource<<5f1b4c7974ce16c3ce1eff8e23f1c2a6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type ProfilesListQuery$data = {
         readonly profiles:
           | ReadonlyArray<
               | {
-                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
+                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemInlineFragment'>
                 }
               | null
               | undefined
@@ -90,7 +90,7 @@ const node: ConcreteRequest = (function () {
               selections: [
                 {
                   kind: 'InlineDataFragmentSpread',
-                  name: 'ProfileItemFragment',
+                  name: 'ProfileItemInlineFragment',
                   selections: [
                     v0 /*: any*/,
                     v1 /*: any*/,
@@ -210,16 +210,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'f45449b4beffd5247f8dd3fcb75e43cd',
+      cacheID: '52d75d6be606957b650bc2b8ef5c5abf',
       id: null,
       metadata: {},
       name: 'ProfilesListQuery',
       operationKind: 'query',
-      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemInlineFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemInlineFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'ce9ca315be07ccdb58629abb177bc931'
+;(node as any).hash = 'e33762cabf29142fa4a43f70fa2f0640'
 
 export default node

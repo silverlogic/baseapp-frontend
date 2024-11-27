@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b43c76e7c3d878e82162d5c3e47978cb>>
+ * @generated SignedSource<<24f2c4202c29cd58a90fc8b782d50cdc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,20 +19,7 @@ export type AllProfilesListFragment$data = {
               readonly node:
                 | {
                     readonly id: string
-                    readonly image:
-                      | {
-                          readonly url: string
-                        }
-                      | null
-                      | undefined
-                    readonly name: string | null | undefined
-                    readonly pk: number
-                    readonly urlPath:
-                      | {
-                          readonly path: string
-                        }
-                      | null
-                      | undefined
+                    readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
                   }
                 | null
                 | undefined
@@ -179,65 +166,9 @@ const node: ReaderFragment = (function () {
                     storageKey: null,
                   },
                   {
-                    alias: null,
                     args: null,
-                    kind: 'ScalarField',
-                    name: 'pk',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'name',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: [
-                      {
-                        kind: 'Literal',
-                        name: 'height',
-                        value: 48,
-                      },
-                      {
-                        kind: 'Literal',
-                        name: 'width',
-                        value: 48,
-                      },
-                    ],
-                    concreteType: 'File',
-                    kind: 'LinkedField',
-                    name: 'image',
-                    plural: false,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'url',
-                        storageKey: null,
-                      },
-                    ],
-                    storageKey: 'image(height:48,width:48)',
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    concreteType: 'URLPath',
-                    kind: 'LinkedField',
-                    name: 'urlPath',
-                    plural: false,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'path',
-                        storageKey: null,
-                      },
-                    ],
-                    storageKey: null,
+                    kind: 'FragmentSpread',
+                    name: 'ProfileItemFragment',
                   },
                   {
                     alias: null,
@@ -268,6 +199,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '1f6125a68c568e0d408512ebf4295bee'
+;(node as any).hash = '145d7609bc0dcee3b0940096fa289337'
 
 export default node

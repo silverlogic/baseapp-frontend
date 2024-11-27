@@ -8,7 +8,7 @@ import AppBar from '@mui/material/AppBar'
 import Toolbar from '@mui/material/Toolbar'
 import { useTheme } from '@mui/material/styles'
 
-import { HEADER } from '../constants'
+import { HEADER_HEIGHT } from '../constants'
 import NavSectionHorizontal from '../shared/NavSectionHorizontal'
 import VerticalDrawer from '../shared/VerticalDrawer'
 import HeaderShadow from './HeaderShadow'
@@ -26,7 +26,7 @@ const NavHorizontal: FC<NavHorizontalProps> = ({ navData, openNav, onCloseNav })
     <AppBar
       component="div"
       sx={{
-        top: HEADER.H_DESKTOP_OFFSET,
+        top: HEADER_HEIGHT.DESKTOP_OFFSET,
         display: { xs: 'none', lg: 'flex' },
       }}
     >

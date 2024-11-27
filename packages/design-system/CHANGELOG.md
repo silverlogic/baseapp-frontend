@@ -1,12 +1,22 @@
 # @baseapp-frontend/design-system
 
+## 0.0.21
+
+### Patch Changes
+
+- Change `SearchBar` to use `withController`.
+- Add `illustrations` icons.
+- Remove `NoMessagesIcon` icon.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.4
+
 ## 0.0.20
 
 ### Patch Changes
 
-- Create `Searchbar` component. 
-- Add `NoMessagesIcon` icon. 
-- Export `PureTextFieldProps` type. 
+- Create `Searchbar` component.
+- Add `NoMessagesIcon` icon.
+- Export `PureTextFieldProps` type.
 
 ## 0.0.19
 

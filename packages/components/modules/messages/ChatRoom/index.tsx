@@ -21,6 +21,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
   SendMessage = DefaultSendMessage,
   SendMessageProps = {},
 }) => {
+  // TODO: pre load this query and instead of lazyload
   const { chatRoom } = useLazyLoadQuery<ChatRoomQueryType>(
     ChatRoomQuery,
     {
