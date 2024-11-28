@@ -6,8 +6,8 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import type { StoryContext, StoryFn } from '@storybook/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Provider as JotaiProvider } from 'jotai'
 
-import CurrentProfileProvider from '../../modules/profiles/context/CurrentProfileProvider'
 import '../../styles/tailwind/globals.css'
 import defaultTheme from '../__mocks__/theme'
 
@@ -34,19 +34,19 @@ const withProviders = (Story: StoryFn, context: StoryContext) => {
   }, [mockData, resolveMostRecentOperation, queueOperationResolver, mockResolvers])
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RelayTestProvider environment={environment}>
-        <React.Suspense fallback={<LoadingState />}>
-          <ThemeProvider {...defaultTheme}>
-            <NotificationProvider>
-              <CurrentProfileProvider>
+    <JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <RelayTestProvider environment={environment}>
+          <React.Suspense fallback={<LoadingState />}>
+            <ThemeProvider {...defaultTheme}>
+              <NotificationProvider>
                 <Story />
-              </CurrentProfileProvider>
-            </NotificationProvider>
-          </ThemeProvider>
-        </React.Suspense>
-      </RelayTestProvider>
-    </QueryClientProvider>
+              </NotificationProvider>
+            </ThemeProvider>
+          </React.Suspense>
+        </RelayTestProvider>
+      </QueryClientProvider>
+    </JotaiProvider>
   )
 }
 

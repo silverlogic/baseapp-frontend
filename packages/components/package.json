@@ -29,6 +29,7 @@
     "@tanstack/react-query": "catalog:",
     "framer-motion": "^11.5.4",
     "graphql": "catalog:graphql",
+    "jotai": "catalog:",
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",

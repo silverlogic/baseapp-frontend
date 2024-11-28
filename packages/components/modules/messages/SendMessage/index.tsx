@@ -75,7 +75,7 @@ let nextClientMutationId = 0
  */
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
-    const { profile: currentProfile } = useCurrentProfile()
+    const { currentProfile } = useCurrentProfile()
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,

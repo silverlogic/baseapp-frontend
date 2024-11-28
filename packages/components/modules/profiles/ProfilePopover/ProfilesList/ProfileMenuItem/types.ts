@@ -1,4 +1,5 @@
 import type { AvatarWithPlaceholderProps } from '@baseapp-frontend/design-system'
+import type { MinimalProfile } from '@baseapp-frontend/utils'
 
 import { type MenuItemProps } from '@mui/material'
 
@@ -10,7 +11,7 @@ import type {
 export interface ProfileMenuItemProps {
   profileRef: ProfileItemInlineFragment$key
   onProfileChange: (newProfile: ProfileItemInlineFragment$data) => void
-  currentProfile?: ProfileItemInlineFragment$data
+  currentProfile?: MinimalProfile | null
   avatarProps?: AvatarWithPlaceholderProps
   width?: number
   height?: number

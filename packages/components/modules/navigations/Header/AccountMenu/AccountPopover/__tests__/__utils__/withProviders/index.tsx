@@ -5,8 +5,8 @@ import { RelayTestProvider } from '@baseapp-frontend/graphql'
 import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Provider as JotaiProvider } from 'jotai'
 
-import CurrentProfileProvider from '../../../../../../../profiles/context/CurrentProfileProvider'
 import { AccountPopoverProps } from '../../../types'
 import defaultTheme from '../../__mocks__/theme'
 import { WithProvidersOptions } from './types'
@@ -16,17 +16,17 @@ const queryClient = new QueryClient()
 const withProviders =
   (Component: FC<AccountPopoverProps>) =>
   ({ environment, ...props }: WithProvidersOptions & AccountPopoverProps) => (
-    <QueryClientProvider client={queryClient}>
-      <RelayTestProvider environment={environment}>
-        <ThemeProvider {...defaultTheme}>
-          <NotificationProvider>
-            <CurrentProfileProvider>
+    <JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <RelayTestProvider environment={environment}>
+          <ThemeProvider {...defaultTheme}>
+            <NotificationProvider>
               <Component {...props} />
-            </CurrentProfileProvider>
-          </NotificationProvider>
-        </ThemeProvider>
-      </RelayTestProvider>
-    </QueryClientProvider>
+            </NotificationProvider>
+          </ThemeProvider>
+        </RelayTestProvider>
+      </QueryClientProvider>
+    </JotaiProvider>
   )
 
 export default withProviders

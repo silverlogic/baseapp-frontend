@@ -1,3 +1,5 @@
+import { MinimalProfile } from '@baseapp-frontend/utils'
+
 export interface User {
   id: number
   email: string
@@ -5,19 +7,16 @@ export interface User {
   newEmail: string
   isNewEmailConfirmed: boolean
   referralCode: string
-  avatar: {
-    fullSize: string
-    small: string
-  }
   firstName: string
   lastName: string
+  profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
   userId: TUser['id']
-  data: Partial<Omit<TUser, 'avatar' | 'id'>> & {
+  data: Partial<Omit<TUser, 'id'>> & {
     avatar?: File | string
   }
 }

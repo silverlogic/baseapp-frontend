@@ -1,15 +1,15 @@
+import { Provider as JotaiProvider } from 'jotai'
 import { Environment, RelayEnvironmentProvider } from 'react-relay'
 
-import CurrentProfileProvider from '../../..'
 import TestComponent from '../TestComponent'
 
 const TestComponentWithProviders = ({ environment }: { environment: Environment }) => {
   return (
-    <RelayEnvironmentProvider environment={environment}>
-      <CurrentProfileProvider>
+    <JotaiProvider>
+      <RelayEnvironmentProvider environment={environment}>
         <TestComponent />
-      </CurrentProfileProvider>
-    </RelayEnvironmentProvider>
+      </RelayEnvironmentProvider>
+    </JotaiProvider>
   )
 }
 
