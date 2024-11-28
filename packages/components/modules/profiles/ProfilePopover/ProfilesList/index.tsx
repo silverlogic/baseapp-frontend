@@ -36,7 +36,6 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
       <ProfileMenuItem
         key={index} // eslint-disable-line react/no-array-index-key
         profileRef={profileRef}
-        currentProfile={currentProfile}
         onProfileChange={handleProfileChange}
         {...MenuItemProps}
       />

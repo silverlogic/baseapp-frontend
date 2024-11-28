@@ -7,17 +7,18 @@ import { readInlineData } from 'react-relay'
 
 import { ProfileItemInlineFragment$key } from '../../../../../__generated__/ProfileItemInlineFragment.graphql'
 import { ProfileItemInlineFragment } from '../../../graphql/queries/ProfileItemInline'
+import useCurrentProfile from '../../../useCurrentProfile'
 import { StyledMenuItem } from './styled'
 import { ProfileMenuItemProps } from './types'
 
 const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   profileRef,
-  currentProfile,
   onProfileChange,
   avatarProps = {},
   width = 36,
   height = 36,
 }) => {
+  const { currentProfile } = useCurrentProfile()
   const profile = readInlineData<ProfileItemInlineFragment$key>(
     ProfileItemInlineFragment,
     profileRef,
