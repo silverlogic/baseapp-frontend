@@ -5,8 +5,8 @@ import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-s
 import { Box, Typography } from '@mui/material'
 import { readInlineData } from 'react-relay'
 
-import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
-import { ProfileItemFragment } from '../../../graphql/queries/ProfileItem'
+import { ProfileItemInlineFragment$key } from '../../../../../__generated__/ProfileItemInlineFragment.graphql'
+import { ProfileItemInlineFragment } from '../../../graphql/queries/ProfileItemInline'
 import { StyledMenuItem } from './styled'
 import { ProfileMenuItemProps } from './types'
 
@@ -18,7 +18,10 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   width = 36,
   height = 36,
 }) => {
-  const profile = readInlineData<ProfileItemFragment$key>(ProfileItemFragment, profileRef)
+  const profile = readInlineData<ProfileItemInlineFragment$key>(
+    ProfileItemInlineFragment,
+    profileRef,
+  )
 
   const profileUrlPath = profile.urlPath?.path
   const isActiveProfile = profile.id === currentProfile?.id

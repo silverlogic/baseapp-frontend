@@ -7,22 +7,6 @@ import { ClickableAvatarProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Avatars/ClickableAvatar',
   component: ClickableAvatar,
-  argTypes: {
-    isOpen: { control: 'boolean' },
-    width: { control: 'number' },
-    height: { control: 'number' },
-    children: {
-      control: false,
-      description:
-        'Content to be rendered inside the avatar component. Recommended to be an image or text.',
-      table: {
-        type: {
-          summary: 'ReactNode',
-        },
-      },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<ClickableAvatarProps>
 
 type Story = StoryObj<ClickableAvatarProps>

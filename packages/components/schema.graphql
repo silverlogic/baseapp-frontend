@@ -111,7 +111,8 @@ type ChatRoom implements Node {
   The ID of the object
   """
   id: ID!
-  image: String
+  title: String
+  image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
   participants(
@@ -284,6 +285,7 @@ interface ChatRoomsInterface {
     """
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -729,6 +731,7 @@ type Message implements Node {
   extraData: JSONString
   pk: Int!
   actionObject: Node
+  isRead(profileId: ID): Boolean
 }
 
 type MessageConnection {
@@ -1221,59 +1224,16 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """
     orderBy: String
   ): CommentConnection!
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  following(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
-  followers(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
-  reactions(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReactionConnection!
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
-  members(
-    orderByStatus: String
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    role: ProfileRoles
-  ): ProfileUserRoleConnection
-  chatroomparticipantSet(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    profile_TargetContentType: ID
-  ): ChatRoomParticipantConnection!
-  messageSet(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    verb: Verbs
-  ): MessageConnection!
+  members(offset: Int, before: String, after: String, first: Int, last: Int, role: ProfileRoles): ProfileUserRoleConnection
+  chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
 
   """
   Determine if the logged in user has a specific permission for this object.
@@ -1297,6 +1257,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
@@ -1355,44 +1316,28 @@ interface ProfileInterface {
   profile: Profile
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfileRoles {
-  """
-  admin
-  """
+  """admin"""
   ADMIN
 
-  """
-  manager
-  """
+  """manager"""
   MANAGER
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfileRoleStatus {
-  """
-  active
-  """
+  """active"""
   ACTIVE
 
-  """
-  pending
-  """
+  """pending"""
   PENDING
 
-  """
-  inactive
-  """
+  """inactive"""
   INACTIVE
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfilesProfileStatusChoices {
   """
   public
@@ -1428,9 +1373,7 @@ type ProfileUpdatePayload {
 }
 
 type ProfileUserRole implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   user: User!
   role: ProfileRoles
@@ -1439,31 +1382,21 @@ type ProfileUserRole implements Node {
 }
 
 type ProfileUserRoleConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ProfileUserRoleEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `ProfileUserRole` and its cursor.
-"""
+"""A Relay edge containing a `ProfileUserRole` and its cursor."""
 type ProfileUserRoleEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: ProfileUserRole
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -1527,6 +1460,10 @@ type Query {
     first: Int
     last: Int
     name: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
   ): ProfileConnection
   profile(
     """
@@ -1861,6 +1798,8 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   passwordChangedDate: DateTime
   newEmail: String
   isNewEmailConfirmed: Boolean
+  firstName: String @deprecated(reason: "Deprecated in favor of fullName and shortName")
+  lastName: String @deprecated(reason: "Deprecated in favor of fullName and shortName")
   phoneNumber: String
 
   """

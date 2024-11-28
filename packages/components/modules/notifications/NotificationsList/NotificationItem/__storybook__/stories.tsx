@@ -7,18 +7,6 @@ import { mockResolvers } from './mockResolvers'
 const meta: Meta<typeof NotificationItem> = {
   title: '@baseapp-frontend | components/Notifications/NotificationItem',
   component: NotificationItemWithQuery,
-  tags: ['autodocs'],
-  argTypes: {
-    notification: {
-      description: 'The notification data.',
-      control: 'object',
-      table: {
-        type: {
-          summary: 'NotificationItem_notification$key',
-        },
-      },
-    },
-  },
 }
 
 export default meta

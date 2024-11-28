@@ -3,7 +3,7 @@
   "description": "A modularized package system for TSL's frontend baseapp.",
   "private": true,
   "scripts": {
-    "build": "turbo run build --filter=./packages/utils",
+    "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
     "test:unit": "turbo run test:unit",
@@ -13,13 +13,14 @@
     "release": "turbo run build && changeset publish",
     "clean": "turbo clean && git clean -xdf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "replace-catalogs": "node replace-catalogs.js",
+    "add-catalogs": "node .scripts/add-catalogs.js",
+    "replace-catalogs": "node .scripts/replace-catalogs.js",
     "prepare": "husky"
   },
   "devDependencies": {
     "@changesets/cli": "^2.23.0",
-    "@parcel/packager-ts": "2.12.0",
-    "@parcel/transformer-typescript-types": "2.12.0",
+    "@parcel/packager-ts": "2.13.2",
+    "@parcel/transformer-typescript-types": "2.13.2",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",

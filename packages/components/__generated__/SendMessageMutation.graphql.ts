@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<850d8d2b6162ef90880d0b8d4c29025e>>
+ * @generated SignedSource<<02cc7cf8caa3d796e42f687781773bfc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -225,6 +225,13 @@ const node: ConcreteRequest = (function () {
                       alias: null,
                       args: null,
                       kind: 'ScalarField',
+                      name: 'isRead',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
                       name: 'pk',
                       storageKey: null,
                     },
@@ -274,12 +281,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '1838c3c055734b92abd6548a0b70caac',
+      cacheID: '1d655e68797f0439e7ca317168d662ce',
       id: null,
       metadata: {},
       name: 'SendMessageMutation',
       operationKind: 'mutation',
-      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
+      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
     },
   }
 })()

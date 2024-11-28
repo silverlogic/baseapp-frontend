@@ -8,7 +8,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
-import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemInlineFragment$data } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
 import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
@@ -22,7 +22,7 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
-  const handleProfileChange = (profile: ProfileItemFragment$data) => {
+  const handleProfileChange = (profile: ProfileItemInlineFragment$data) => {
     if (currentProfile?.id !== profile.id) {
       setCurrentProfile({ profile })
       sendToast(`Switched to ${profile.name}`)

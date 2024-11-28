@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6d1833ac04981218b0763c0c00df00f9>>
+ * @generated SignedSource<<98457f1eacc573a4e2f55afe1a4060e0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -24,6 +24,7 @@ export type MessageItemFragment$data = {
       }
     | null
     | undefined
+  readonly isRead: boolean | null | undefined
   readonly pk: number
   readonly profile:
     | {
@@ -90,6 +91,13 @@ const node: ReaderFragment = (function () {
         alias: null,
         args: null,
         kind: 'ScalarField',
+        name: 'isRead',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
         name: 'pk',
         storageKey: null,
       },
@@ -116,6 +124,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '4604c0648fefbb7d9620f96f514a43af'
+;(node as any).hash = 'c4f28d75734c65a3d4e80722daecfd7e'
 
 export default node

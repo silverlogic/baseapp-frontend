@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a8cb47cd1359f5ef420eee05b846d7d7>>
+ * @generated SignedSource<<b369959e47b460afa09bf7fbc3844e9e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -195,6 +195,13 @@ const node: ConcreteRequest = (function () {
                       alias: null,
                       args: null,
                       kind: 'ScalarField',
+                      name: 'isRead',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
                       name: 'pk',
                       storageKey: null,
                     },
@@ -262,12 +269,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'e80a0ccb5a15d422171b18aa4708cbf1',
+      cacheID: '883bb43d76a5fc883f45f30697fd86db',
       id: null,
       metadata: {},
       name: 'useMessagesListSubscription',
       operationKind: 'subscription',
-      text: 'subscription useMessagesListSubscription(\n  $roomId: ID!\n) {\n  chatRoomOnNewMessage(roomId: $roomId) {\n    message {\n      node {\n        ...MessageItemFragment\n        actionObject {\n          __typename\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
+      text: 'subscription useMessagesListSubscription(\n  $roomId: ID!\n) {\n  chatRoomOnNewMessage(roomId: $roomId) {\n    message {\n      node {\n        ...MessageItemFragment\n        actionObject {\n          __typename\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
     },
   }
 })()
