@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<68687e846777bc425817ef6bdefdb60c>>
+ * @generated SignedSource<<d34e16bc6872435bdafbdf6bc79afc67>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -203,6 +203,19 @@ const node: ConcreteRequest = (function () {
             {
               kind: 'InlineFragment',
               selections: [
+                {
+                  alias: 'canChangeRole',
+                  args: [
+                    {
+                      kind: 'Literal',
+                      name: 'perm',
+                      value: 'baseapp_profiles.change_profileuserrole',
+                    },
+                  ],
+                  kind: 'ScalarField',
+                  name: 'hasPerm',
+                  storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
+                },
                 v8 /*: any*/,
                 v9 /*: any*/,
                 v10 /*: any*/,
@@ -340,16 +353,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '4b1dca117f539126bf6f6bde7a7171d3',
+      cacheID: '5cf32453d172eeae0bcc2dd81296faaf',
       id: null,
       metadata: {},
       name: 'userMembersListPaginationRefetchable',
       operationKind: 'query',
-      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String = "custom"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
+      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String = "custom"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '038f3f85d02ec3d5e31279acd14c0269'
+;(node as any).hash = 'e907557bac45e8f023628ea32f2dde2e'
 
 export default node

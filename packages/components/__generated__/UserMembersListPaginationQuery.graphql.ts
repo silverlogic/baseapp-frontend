@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fcb7e26ef0948a55ad3b89368f3301eb>>
+ * @generated SignedSource<<3489c9ac37880625211c2c6c4822b438>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -203,6 +203,19 @@ const node: ConcreteRequest = (function () {
           plural: false,
           selections: [
             v2 /*: any*/,
+            {
+              alias: 'canChangeRole',
+              args: [
+                {
+                  kind: 'Literal',
+                  name: 'perm',
+                  value: 'baseapp_profiles.change_profileuserrole',
+                },
+              ],
+              kind: 'ScalarField',
+              name: 'hasPerm',
+              storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
+            },
             v4 /*: any*/,
             v5 /*: any*/,
             v6 /*: any*/,
@@ -338,12 +351,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '9b67c794489795c15c6ba25fca17e848',
+      cacheID: 'd375198eac5bbcf64b0a06bcc540e992',
       id: null,
       metadata: {},
       name: 'UserMembersListPaginationQuery',
       operationKind: 'query',
-      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String\n  $profileId: ID!\n) {\n  profile(id: $profileId) {\n    pk\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
+      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String\n  $profileId: ID!\n) {\n  profile(id: $profileId) {\n    pk\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()

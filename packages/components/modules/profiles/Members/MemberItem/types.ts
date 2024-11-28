@@ -14,7 +14,9 @@ export interface MemberItemProps {
   member: ProfileItemFragment$key | null | undefined
   memberRole: ProfileRoles | 'owner'
   status: ProfileRoleStatus
+  userId?: string
   avatarProps?: AvatarProps
   avatarWidth?: number
   avatarHeight?: number
+  canChangeMember?: boolean
 }

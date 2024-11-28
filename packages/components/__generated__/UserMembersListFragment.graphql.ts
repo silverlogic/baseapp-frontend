@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ffd4f527789c78fbe402c8b2cb4992db>>
+ * @generated SignedSource<<2824d78b4b30fe5e86823ab79ed02827>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,6 +15,7 @@ export type ProfileRoleStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING' | '%future add
 export type ProfileRoles = 'ADMIN' | 'MANAGER' | '%future added value'
 
 export type UserMembersListFragment$data = {
+  readonly canChangeRole: boolean | null | undefined
   readonly id: string
   readonly members:
     | {
@@ -26,6 +27,7 @@ export type UserMembersListFragment$data = {
                     readonly role: ProfileRoles | null | undefined
                     readonly status: ProfileRoleStatus | null | undefined
                     readonly user: {
+                      readonly id: string
                       readonly profile:
                         | {
                             readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
@@ -175,6 +177,19 @@ const node: ReaderFragment = (function () {
     },
     name: 'UserMembersListFragment',
     selections: [
+      {
+        alias: 'canChangeRole',
+        args: [
+          {
+            kind: 'Literal',
+            name: 'perm',
+            value: 'baseapp_profiles.change_profileuserrole',
+          },
+        ],
+        kind: 'ScalarField',
+        name: 'hasPerm',
+        storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
+      },
       v2 /*: any*/,
       {
         alias: 'members',
@@ -232,6 +247,7 @@ const node: ReaderFragment = (function () {
                         selections: [v2 /*: any*/],
                         storageKey: null,
                       },
+                      v1 /*: any*/,
                     ],
                     storageKey: null,
                   },
@@ -304,6 +320,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '038f3f85d02ec3d5e31279acd14c0269'
+;(node as any).hash = 'e907557bac45e8f023628ea32f2dde2e'
 
 export default node
