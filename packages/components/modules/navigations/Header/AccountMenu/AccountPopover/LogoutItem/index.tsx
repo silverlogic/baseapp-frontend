@@ -9,7 +9,7 @@ import { LogoutItemProps } from './types'
 const LogoutItem: FC<LogoutItemProps> = ({
   children,
   handlePopoverOnClose,
-  logoutButtonLabel = 'logout',
+  logoutButtonLabel = 'Logout',
 }) => {
   const { logout } = useLogout()
 

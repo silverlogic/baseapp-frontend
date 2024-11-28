@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9830889f9a9caa44cf21d6c2a3abafb5>>
+ * @generated SignedSource<<ab234a963c6c28551e767bd80eb114d0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { InlineFragment, ReaderInlineDataFragment } from 'relay-runtime'
+import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type ProfileItemFragment$data = {
@@ -33,11 +33,84 @@ export type ProfileItemFragment$key = {
   readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
 }
 
-const node: ReaderInlineDataFragment = {
-  kind: 'InlineDataFragment',
+const node: ReaderFragment = {
+  argumentDefinitions: [
+    {
+      defaultValue: 100,
+      kind: 'LocalArgument',
+      name: 'avatarSize',
+    },
+  ],
+  kind: 'Fragment',
+  metadata: null,
   name: 'ProfileItemFragment',
+  selections: [
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'name',
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: [
+        {
+          kind: 'Variable',
+          name: 'height',
+          variableName: 'avatarSize',
+        },
+        {
+          kind: 'Variable',
+          name: 'width',
+          variableName: 'avatarSize',
+        },
+      ],
+      concreteType: 'File',
+      kind: 'LinkedField',
+      name: 'image',
+      plural: false,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'url',
+          storageKey: null,
+        },
+      ],
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: null,
+      concreteType: 'URLPath',
+      kind: 'LinkedField',
+      name: 'urlPath',
+      plural: false,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'path',
+          storageKey: null,
+        },
+      ],
+      storageKey: null,
+    },
+  ],
+  type: 'Profile',
+  abstractKey: null,
 }
 
-;(node as any).hash = 'ec58c5f19a59f85fb5a12e4e454da0cd'
+;(node as any).hash = 'b32115278ad65ec9a310b97d23b5c85b'
 
 export default node

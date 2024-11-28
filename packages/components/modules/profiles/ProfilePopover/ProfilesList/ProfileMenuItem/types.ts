@@ -1,16 +1,16 @@
 import type { AvatarWithPlaceholderProps } from '@baseapp-frontend/design-system'
 
-import { MenuItemProps } from '@mui/material'
+import { type MenuItemProps } from '@mui/material'
 
 import type {
-  ProfileItemFragment$data,
-  ProfileItemFragment$key,
-} from '../../../../../__generated__/ProfileItemFragment.graphql'
+  ProfileItemInlineFragment$data,
+  ProfileItemInlineFragment$key,
+} from '../../../../../__generated__/ProfileItemInlineFragment.graphql'
 
 export interface ProfileMenuItemProps {
-  profileRef: ProfileItemFragment$key
-  onProfileChange: (newProfile: ProfileItemFragment$data) => void
-  currentProfile?: ProfileItemFragment$data
+  profileRef: ProfileItemInlineFragment$key
+  onProfileChange: (newProfile: ProfileItemInlineFragment$data) => void
+  currentProfile?: ProfileItemInlineFragment$data
   avatarProps?: AvatarWithPlaceholderProps
   width?: number
   height?: number

@@ -64,7 +64,8 @@ type BlockTogglePayload {
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
-  image: String
+  title: String
+  image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
@@ -192,6 +193,7 @@ interface ChatRoomsInterface {
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -522,6 +524,7 @@ type Message implements Node {
   extraData: JSONString
   pk: Int!
   actionObject: Node
+  isRead(profileId: ID): Boolean
 }
 
 type MessageConnection {
@@ -942,6 +945,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
@@ -1104,6 +1108,7 @@ type Query {
     after: String
     first: Int
     last: Int
+    name: String
     q: String
 
     """Ordering"""

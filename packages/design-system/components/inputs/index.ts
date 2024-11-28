@@ -1,3 +1,6 @@
+export { default as Searchbar } from './Searchbar'
+export type * from './Searchbar/types'
+
 export { default as SocialTextField } from './SocialTextField'
 export type * from './SocialTextField/types'
 

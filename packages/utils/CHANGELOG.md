@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.0.4
+
+### Patch Changes
+
+- `withController` have an option for debounce the `handleChange` function provided.
+
 ## 3.0.3
 
 ### Patch Changes

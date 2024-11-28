@@ -1,10 +1,41 @@
 # @baseapp-frontend/components
 
+## 0.0.20
+
+### Patch Changes
+
+- Add Active Tab functionality to the `messages` module.
+- Several tweaks on the messages modules in general.
+- Adapt `ChatRoomListItem` so it uses a fragment.
+- Add `ViewportHeightContainer` component and make sure `MainCointainer` uses variables from the navigation's constants.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.2
+  - @baseapp-frontend/design-system@0.0.21
+  - @baseapp-frontend/graphql@1.1.12
+  - @baseapp-frontend/utils@3.0.4
+
+## 0.0.19
+
+### Patch Changes
+
+- Add Active Tab functionality to the `messages` module.
+- Tweaks on `MessageItem` styles so it have the correct `max-width`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.20
+
+## 0.0.18
+
+### Patch Changes
+
+- Added the CreateChatRoom components for the messages module
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.19
+
 ## 0.0.17
 
 ### Patch Changes
 
-Updated dependencies
+- Updated dependencies
   - @baseapp-frontend/design-system@0.0.17
 
 ## 0.0.16

@@ -9,6 +9,7 @@ export const MessageItemFragment = graphql`
     inReplyTo {
       id
     }
+    isRead
     pk
     profile {
       id

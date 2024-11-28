@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import { AvatarWithPlaceholder, ConfirmDialog } from '@baseapp-frontend/design-system'
 
 import { Box, Button, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
-import { readInlineData } from 'react-relay'
+import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import useCurrentProfile from '../../context/useCurrentProfile'
@@ -28,8 +28,8 @@ const MemberItem: FC<MemberItemProps> = ({
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
 
-  if (!member) return null
-  const memberProfile = readInlineData<ProfileItemFragment$key>(ProfileItemFragment, member)
+  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
+  if (!memberProfile) return null
 
   const changeRole = (roleType: MemberRoles) => {
     if (currentProfile?.id && userId) {

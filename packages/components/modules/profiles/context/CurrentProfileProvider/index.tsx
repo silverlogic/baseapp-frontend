@@ -9,9 +9,9 @@ import { Environment, fetchQuery, readInlineData, useRelayEnvironment } from 're
 import { StoreApi, create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemInlineFragment$key } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
 import { UserProfileQuery as UserProfileQueryType } from '../../../../__generated__/UserProfileQuery.graphql'
-import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
+import { ProfileItemInlineFragment } from '../../graphql/queries/ProfileItemInline'
 import { UserProfileQuery } from '../../graphql/queries/UserProfile'
 import { CURRENT_PROFILE_STORAGE_KEY, INITIAL_CURRENT_PROFILE_STATE } from './constants'
 import { UseCurrentProfile } from './types'
@@ -27,7 +27,7 @@ const fetchUserProfile = async (environment: Environment) => {
   ).toPromise()
 
   const userProfile = data?.me?.profile
-    ? readInlineData<ProfileItemFragment$key>(ProfileItemFragment, data.me.profile)
+    ? readInlineData<ProfileItemInlineFragment$key>(ProfileItemInlineFragment, data.me.profile)
     : null
 
   return userProfile
