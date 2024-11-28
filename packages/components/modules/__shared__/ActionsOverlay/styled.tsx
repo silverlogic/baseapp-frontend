@@ -12,9 +12,15 @@ export const ActionOverlayContainer = styled(Box)<ActionOverlayContainerProps>(
     gap: theme.spacing(1),
     padding: theme.spacing(0.75, 1),
     position: 'absolute',
+    role: 'menu',
+    'aria-label': 'Action options',
     right: 12 - offsetRight,
     top: -12 - offsetTop,
-    zIndex: 1,
+    zIndex: theme.zIndex.tooltip,
+    transition: theme.transitions.create(['opacity', 'visibility'], {
+      duration: theme.transitions.duration.shorter,
+      easing: theme.transitions.easing.easeInOut,
+    }),
   }),
 )
 

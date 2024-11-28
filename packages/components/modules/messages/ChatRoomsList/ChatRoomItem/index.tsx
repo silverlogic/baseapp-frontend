@@ -1,8 +1,8 @@
 import { FC, SyntheticEvent, useRef } from 'react'
 
-import { AvatarWithPlaceholder, LinkIcon, PenEditIcon } from '@baseapp-frontend/design-system'
+import { ArchiveIcon, AvatarWithPlaceholder, UnreadIcon } from '@baseapp-frontend/design-system'
 
-import { Box, BoxProps, Badge as DefaultBadge, Typography } from '@mui/material'
+import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
@@ -28,7 +28,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
     if (handleClick) handleClick()
   }
 
-  const chatCardRef = useRef<BoxProps>(null)
+  const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { profile } = useCurrentProfile()
 
@@ -60,21 +60,21 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
       actions={[
         {
           disabled: true,
-          icon: <LinkIcon />,
-          label: 'Share Comment',
-          onClick: () => console.log('Share'),
+          icon: <ArchiveIcon />,
+          label: 'Archive Chat',
+          onClick: () => {},
           hasPermission: true,
         },
         {
           disabled: false,
-          icon: <PenEditIcon />,
-          label: 'Edit Comment',
-          onClick: () => console.log('Edit'),
+          icon: <UnreadIcon />,
+          label: 'Mark as Unread',
+          onClick: () => {},
           hasPermission: true,
         },
       ]}
       enableDelete
-      handleDeleteItem={() => console.log('Delete')}
+      handleDeleteItem={() => {}}
       isDeletingItem={false}
       ref={chatCardRef}
     >

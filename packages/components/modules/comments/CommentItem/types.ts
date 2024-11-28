@@ -4,9 +4,9 @@ import type { BoxProps } from '@mui/material'
 
 import { CommentItem_comment$key } from '../../../__generated__/CommentItem_comment.graphql'
 import { CommentItem_target$key } from '../../../__generated__/CommentItem_target.graphql'
+import { ActionOverlayProps } from '../../__shared__/ActionsOverlay/types'
 import type { TimestampProps } from '../../__shared__/Timestamp/types'
 import type { CommentUpdateProps } from '../CommentUpdate/types'
-import type { CommentOptionsProps } from './CommentOptions/types'
 import type { CommentPinnedBadgeProps } from './CommentPinnedBadge/types'
 import type { CommentReactionButtonProps } from './CommentReactionButton/types'
 import type { CommentReplyButtonProps } from './CommentReplyButton/types'
@@ -28,10 +28,10 @@ export interface CommentItemProps {
   subscriptionsEnabled: boolean
   onReplyClick?: () => void
   enableDelete?: boolean
+  ActionOverlayProps?: Partial<ActionOverlayProps>
   CommentUpdate?: FC<CommentUpdateProps>
   CommentUpdateProps?: Partial<CommentUpdateProps>
   CommentsRepliesProps?: Partial<CommentsRepliesProps>
-  CommentOptionsProps?: Partial<CommentOptionsProps>
   CommentReactionButton?: FC<CommentReactionButtonProps>
   CommentReplyButton?: FC<CommentReplyButtonProps>
   CommentPinnedBadge?: FC<CommentPinnedBadgeProps>

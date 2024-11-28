@@ -6,21 +6,21 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Typography } from '@mui/material'
 import { useRefetchableFragment } from 'react-relay'
-import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
 import { CommentItemRefetchQuery } from '../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../__generated__/CommentItem_comment.graphql'
+import ActionsOverlay from '../../__shared__/ActionsOverlay'
 import DefaultTimestamp from '../../__shared__/Timestamp'
 import DefaultCommentUpdate from '../CommentUpdate'
 import { useCommentReply } from '../context'
+import useCommentDeleteMutation from '../graphql/mutations/CommentDelete'
 import { CommentItemFragmentQuery } from '../graphql/queries/CommentItem'
-import CommentOptions from './CommentOptions'
 import DefaultCommentPinnedBadge from './CommentPinnedBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
 import CommentsReplies from './CommentsReplies'
 import { CommentContainer, CommentContainerWrapper } from './styled'
-import { CommentItemProps, LongPressHandler } from './types'
+import { CommentItemProps } from './types'
 import useCommentOptions from './useCommentOptions'
 
 const CommentItem: FC<CommentItemProps> = ({
@@ -31,7 +31,7 @@ const CommentItem: FC<CommentItemProps> = ({
   onReplyClick,
   CommentUpdateProps,
   CommentsRepliesProps,
-  CommentOptionsProps,
+  ActionOverlayProps,
   enableDelete = true,
   Timestamp = DefaultTimestamp,
   CommentUpdate = DefaultCommentUpdate,
@@ -44,49 +44,27 @@ const CommentItem: FC<CommentItemProps> = ({
     CommentItem_comment$key
   >(CommentItemFragmentQuery, commentRef)
   const { setCommentReply } = useCommentReply()
+
   const commentItemRef = useRef<HTMLDivElement>(null)
 
-  const [isHoveringComment, setIsHoveringComment] = useState(false)
   const [isEditMode, setIsEditMode] = useState(false)
-  const [isRepliesExpanded, setIsReplyRepliesExpanded] = useState(false)
-
-  const [longPressHandler, setLongPressHandler] = useState<LongPressHandler>({
-    isLongPressingComment: false,
-    shouldOpenCommentOptions: false,
-  })
-
-  const longPressHandlers = useLongPress<HTMLDivElement>(
-    () => setLongPressHandler({ isLongPressingComment: true, shouldOpenCommentOptions: true }),
-    {
-      onCancel: (e, { reason }) => {
-        // This is a workaround to prevent the comment options's drawer from closing when the user clicks on the drawer's content.
-        // Ideally, we would call setLongPressHandler({ isLongPressingComment: false }) on `onFinished` instead of `onCancel`.
-        // But, on mobile google chrome devices, the long press click is being wrongly propagated to the backdrop and closing the comment options's drawer right after it opens.
-        const className = (e?.target as HTMLElement)?.className || ''
-        const classNameString = typeof className === 'string' ? className : ''
-        const isClickOnBackdrop = classNameString.includes('MuiBackdrop')
-        if (reason === LongPressCallbackReason.CancelledByRelease && isClickOnBackdrop) {
-          setLongPressHandler((prevState) => ({ ...prevState, isLongPressingComment: false }))
-        }
-      },
-      cancelOutsideElement: true,
-      threshold: 400,
-    },
-  )
-  const handleLongPressCommentOptionsClose = () => {
-    setLongPressHandler({ isLongPressingComment: false, shouldOpenCommentOptions: false })
-  }
+  const [isReplyExpanded, setIsReplyExpanded] = useState(false)
 
   const defaultCommentOptions = useCommentOptions({
     comment,
-    onLongPressLeave: handleLongPressCommentOptionsClose,
     onEdit: () => setIsEditMode(true),
   })
 
+  const { actions = defaultCommentOptions, ...restOfActionOverlayProps } = ActionOverlayProps ?? {}
+
   const [isLoadingReplies, startLoadingReplies] = useTransition()
 
+  const { resetCommentReply } = useCommentReply()
+
+  const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
+
   const showReplies = () => {
-    if (isRepliesExpanded) return
+    if (isReplyExpanded) return
 
     startLoadingReplies(() => {
       refetchCommentItem(
@@ -97,7 +75,7 @@ const CommentItem: FC<CommentItemProps> = ({
             if (error) {
               console.error(error)
             } else {
-              setIsReplyRepliesExpanded(true)
+              setIsReplyExpanded(true)
             }
           },
         },
@@ -143,57 +121,55 @@ const CommentItem: FC<CommentItemProps> = ({
     return null
   }
 
-  const { options = defaultCommentOptions, ...restOfCommentOptionsProps } =
-    CommentOptionsProps ?? {}
+  const handleDeleteComment = () => {
+    deleteComment({ variables: { id: comment.id } })
+    resetCommentReply()
+  }
 
   return (
     <div>
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
-        <CommentContainer
+        <ActionsOverlay
+          actions={actions}
+          enableDelete={enableDelete && !!comment?.canDelete}
+          handleDeleteItem={handleDeleteComment}
+          isDeletingItem={isDeletingComment}
+          title="Comment"
+          {...restOfActionOverlayProps}
           ref={commentItemRef}
-          onMouseEnter={() => setIsHoveringComment(true)}
-          onMouseLeave={() => setIsHoveringComment(false)}
-          {...longPressHandlers()}
         >
-          <CommentOptions
-            comment={comment}
-            options={options}
-            isHoveringComment={isHoveringComment}
-            onLongPressLeave={handleLongPressCommentOptionsClose}
-            longPressHandler={longPressHandler}
-            enableDelete={enableDelete}
-            {...restOfCommentOptionsProps}
-          />
-          <AvatarWithPlaceholder
-            width={40}
-            height={40}
-            alt={comment.user?.fullName ?? `Comment's user avatar`}
-            src={comment.user?.avatar?.url}
-          />
-          <div className="grid gap-3">
-            <div className="grid grid-cols-1 justify-start">
-              <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
-                <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
-                <CommentPinnedBadge isPinned={comment.isPinned} />
+          <CommentContainer>
+            <AvatarWithPlaceholder
+              width={40}
+              height={40}
+              alt={comment.user?.fullName ?? `Comment's user avatar`}
+              src={comment.user?.avatar?.url}
+            />
+            <div className="grid gap-3">
+              <div className="grid grid-cols-1 justify-start">
+                <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
+                  <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
+                  <CommentPinnedBadge isPinned={comment.isPinned} />
+                </div>
+                {renderCommentContent()}
               </div>
-              {renderCommentContent()}
-            </div>
-            <div className="flex justify-between">
-              <div className="grid grid-cols-[repeat(2,max-content)] gap-4">
-                <CommentReactionButton target={comment} />
-                <CommentReplyButton
-                  onReply={replyToComment}
-                  isLoadingReplies={isLoadingReplies}
-                  commentId={comment.id}
-                  totalCommentsCount={comment.commentsCount.total}
-                />
+              <div className="flex justify-between">
+                <div className="grid grid-cols-[repeat(2,max-content)] gap-4">
+                  <CommentReactionButton target={comment} />
+                  <CommentReplyButton
+                    onReply={replyToComment}
+                    isLoadingReplies={isLoadingReplies}
+                    commentId={comment.id}
+                    totalCommentsCount={comment.commentsCount.total}
+                  />
+                </div>
+                <Timestamp date={comment.created} />
               </div>
-              <Timestamp date={comment.created} />
             </div>
-          </div>
-        </CommentContainer>
+          </CommentContainer>
+        </ActionsOverlay>
       </CommentContainerWrapper>
-      {isRepliesExpanded && !isLoadingReplies && (
+      {isReplyExpanded && !isLoadingReplies && (
         <CommentsReplies
           key={`replies-of-${comment.id}`}
           target={comment}

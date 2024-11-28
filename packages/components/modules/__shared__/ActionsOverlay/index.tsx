@@ -8,26 +8,26 @@ import {
 } from '@baseapp-frontend/design-system'
 
 import { LoadingButton } from '@mui/lab'
-import { Box, BoxProps, Divider, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
 import { ActionOverlayContainer, IconButtonContentContainer } from './styled'
 import { ActionOverlayProps, LongPressHandler } from './types'
 
-const ActionsOverlay = forwardRef<BoxProps, ActionOverlayProps>(
+const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
   (
     {
-      ContainerProps = {},
+      actions = [],
       children,
-      title,
-      isDeletingItem,
-      handleDeleteItem,
-      enableDelete,
-      actions: options,
-      SwipeableDrawerProps,
-      SwipeableDrawer = DefaultSwipeableDrawer,
-      offsetRight = 0,
+      title = 'Item',
+      enableDelete = false,
+      isDeletingItem = false,
+      handleDeleteItem = () => {},
       offsetTop = 0,
+      offsetRight = 0,
+      ContainerProps = {},
+      SwipeableDrawerProps = {},
+      SwipeableDrawer = DefaultSwipeableDrawer,
     },
     ref,
   ) => {
@@ -39,7 +39,7 @@ const ActionsOverlay = forwardRef<BoxProps, ActionOverlayProps>(
     })
 
     const longPressHandlers = useLongPress<HTMLDivElement>(
-      (e: any) => {
+      (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
         e.stopPropagation()
         setLongPressHandler({ isLongPressingItem: true, shouldOpenItemOptions: true })
       },
@@ -67,11 +67,13 @@ const ActionsOverlay = forwardRef<BoxProps, ActionOverlayProps>(
       setIsDeleteDialogOpen(true)
     }
 
-    const deviceHasHover = window.matchMedia('(hover: hover)').matches
+    const deviceHasHover =
+      typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
 
     const onDeleteItemClick = () => {
       setIsDeleteDialogOpen(false)
       handleDeleteItem?.()
+      handleLongPressItemOptionsClose()
     }
 
     const renderDeleteDialog = () => (
@@ -102,91 +104,106 @@ const ActionsOverlay = forwardRef<BoxProps, ActionOverlayProps>(
         }
 
         return (
-          <>
-            {renderDeleteDialog()}
-            <SwipeableDrawer
-              open={longPressHandler.shouldOpenItemOptions && longPressHandler.isLongPressingItem}
-              onClose={handleDrawerClose}
-              aria-label="actions overlay"
-              {...SwipeableDrawerProps}
-            >
-              <div className="grid grid-cols-[1fr] justify-start gap-2">
-                {options?.map(({ label, icon, onClick, disabled, hasPermission }) => {
-                  if (!hasPermission) return null
+          <SwipeableDrawer
+            open={longPressHandler.shouldOpenItemOptions && longPressHandler.isLongPressingItem}
+            onClose={handleDrawerClose}
+            aria-label="actions overlay"
+            {...SwipeableDrawerProps}
+          >
+            <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1}>
+              {actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
+                if (!hasPermission) return null
 
-                  return (
-                    <IconButton
-                      key={label}
-                      onClick={onClick}
-                      disabled={disabled}
-                      sx={{ width: 'fit-content' }}
-                    >
-                      <IconButtonContentContainer>
-                        <Box display="grid" justifySelf="center" height="min-content">
-                          {icon}
-                        </Box>
-                        <Typography variant="body2">{label}</Typography>
-                      </IconButtonContentContainer>
-                    </IconButton>
-                  )
-                })}
-                {enableDelete && (
-                  <>
-                    <Divider />
-                    <IconButton
-                      onClick={handleDeleteDialogOpen}
-                      disabled={isDeletingItem}
-                      sx={{ width: 'fit-content' }}
-                    >
-                      <IconButtonContentContainer>
-                        <Box display="grid" justifySelf="center" height="min-content">
-                          <TrashCanIcon />
-                        </Box>
-                        <Typography variant="body2" color="error.main">
-                          {`Delete ${title}`}
-                        </Typography>
-                      </IconButtonContentContainer>
-                    </IconButton>
-                  </>
-                )}
-              </div>
-            </SwipeableDrawer>
-          </>
+                const handleClick = () => {
+                  onClick?.()
+                  if (closeOnClick) {
+                    handleLongPressItemOptionsClose()
+                  }
+                }
+
+                return (
+                  <IconButton
+                    key={label}
+                    onClick={handleClick}
+                    disabled={disabled}
+                    sx={{ width: 'fit-content' }}
+                    aria-label={label}
+                  >
+                    <IconButtonContentContainer>
+                      <Box display="grid" justifySelf="center" height="min-content">
+                        {icon}
+                      </Box>
+                      <Typography variant="body2">{label}</Typography>
+                    </IconButtonContentContainer>
+                  </IconButton>
+                )
+              })}
+              {enableDelete && (
+                <>
+                  <Divider />
+                  <IconButton
+                    onClick={handleDeleteDialogOpen}
+                    disabled={isDeletingItem}
+                    sx={{ width: 'fit-content' }}
+                    aria-label="delete item"
+                  >
+                    <IconButtonContentContainer>
+                      <Box display="grid" justifySelf="center" height="min-content">
+                        <TrashCanIcon />
+                      </Box>
+                      <Typography variant="body2" color="error.main">
+                        {`Delete ${title}`}
+                      </Typography>
+                    </IconButtonContentContainer>
+                  </IconButton>
+                </>
+              )}
+            </Box>
+          </SwipeableDrawer>
         )
       }
 
       if (deviceHasHover && isHoveringItem) {
         return (
-          <>
-            {renderDeleteDialog()}
-            <ActionOverlayContainer
-              offsetRight={offsetRight}
-              offsetTop={offsetTop}
-              aria-label="actions overlay"
-            >
-              {enableDelete && (
-                <IconButton
-                  onClick={handleDeleteDialogOpen}
-                  disabled={isDeletingItem}
-                  aria-label="delete item"
-                >
-                  <TrashCanIcon />
-                </IconButton>
-              )}
-              {options?.map(({ label, icon, onClick, disabled, hasPermission }) => {
-                if (!hasPermission) return null
+          <ActionOverlayContainer
+            offsetRight={offsetRight}
+            offsetTop={offsetTop}
+            aria-label="actions overlay"
+          >
+            {enableDelete && (
+              <IconButton
+                onClick={handleDeleteDialogOpen}
+                disabled={isDeletingItem}
+                aria-label="delete item"
+              >
+                <TrashCanIcon />
+              </IconButton>
+            )}
+            {actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
+              if (!hasPermission) return null
 
-                return (
-                  <IconButton key={label} onClick={onClick} disabled={disabled} aria-label={label}>
-                    {icon}
-                  </IconButton>
-                )
-              })}
-            </ActionOverlayContainer>
-          </>
+              const handleClick = () => {
+                onClick?.()
+                if (closeOnClick) {
+                  handleLongPressItemOptionsClose()
+                }
+              }
+
+              return (
+                <IconButton
+                  key={label}
+                  onClick={handleClick}
+                  disabled={disabled}
+                  aria-label={label}
+                >
+                  {icon}
+                </IconButton>
+              )
+            })}
+          </ActionOverlayContainer>
         )
       }
-      return renderDeleteDialog()
+      return <div />
     }
 
     return (
@@ -196,8 +213,9 @@ const ActionsOverlay = forwardRef<BoxProps, ActionOverlayProps>(
         onMouseLeave={() => setIsHoveringItem(false)}
         {...longPressHandlers()}
         {...ContainerProps}
-        sx={{ position: 'relative' }}
+        sx={{ position: 'relative', maxWidth: 'max-content' }}
       >
+        {renderDeleteDialog()}
         {renderActionsOverlay()}
         {children}
       </Box>

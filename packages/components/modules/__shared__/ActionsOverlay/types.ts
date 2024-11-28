@@ -8,7 +8,7 @@ export type OverlayAction = {
   label: string
   icon: JSX.Element
   onClick: () => void
-  disabled: boolean
+  disabled?: boolean
   hasPermission?: boolean | null
   closeOnClick?: boolean
 }
@@ -18,16 +18,15 @@ export type LongPressHandler = {
   shouldOpenItemOptions: boolean
 }
 
-export interface ActionOverlayProps extends BoxProps {
-  ContainerProps?: BoxProps
+export interface ActionOverlayProps extends ActionOverlayContainerProps {
+  actions: OverlayAction[]
+  title: string
   enableDelete?: boolean
   isDeletingItem?: boolean
   handleDeleteItem?: () => void
-  actions: OverlayAction[]
+  ContainerProps?: Partial<BoxProps>
   SwipeableDrawer?: FC<SwipeableDrawerProps>
   SwipeableDrawerProps?: Partial<SwipeableDrawerProps>
-  offsetTop?: number
-  offsetRight?: number
 }
 
 export interface ActionOverlayContainerProps extends BoxProps {
