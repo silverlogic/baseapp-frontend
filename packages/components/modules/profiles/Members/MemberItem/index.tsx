@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Box, Button, Typography } from '@mui/material'
-import { readInlineData } from 'react-relay'
+import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
@@ -20,8 +20,8 @@ const MemberItem: FC<MemberItemProps> = ({
   avatarWidth = 40,
   avatarHeight = 40,
 }) => {
-  if (!member) return null
-  const memberProfile = readInlineData<ProfileItemFragment$key>(ProfileItemFragment, member)
+  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
+  if (!memberProfile) return null
   return (
     <MemberItemContainer>
       <MemberPersonalInformation isActive={status === MemberStatuses.active || false}>
