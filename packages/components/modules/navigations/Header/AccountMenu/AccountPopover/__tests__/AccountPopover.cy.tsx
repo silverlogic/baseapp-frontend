@@ -28,13 +28,9 @@ describe('AccountPopover', () => {
   })
 
   it('should render the account popover without profile and be able to interact with it', () => {
-    const { environment, rejectMostRecentOperation } = createTestEnvironment()
+    const { environment } = createTestEnvironment()
 
-    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        rejectMostRecentOperation("Error finding user's profile")
-      })
-    })
+    cy.mount(<AccountPopoverForTesting environment={environment} initialProfile={null} />)
 
     cy.findByRole('button').click()
 
@@ -50,21 +46,19 @@ describe('AccountPopover', () => {
   it('should render the account popover with profile and be able to interact with it', () => {
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
 
-    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        resolveMostRecentOperation({ data: mockUserProfileData })
-      })
-    })
+    cy.mount(
+      <AccountPopoverForTesting environment={environment} initialProfile={mockUserProfileData} />,
+    )
 
     cy.findByRole('button').click()
 
-    cy.contains(mockUserProfileData.data.me.profile.name).should('exist')
-    cy.contains(mockUserProfileData.data.me.profile.urlPath.path).should('exist')
+    cy.contains(mockUserProfileData.name).should('exist')
+    cy.contains(mockUserProfileData.urlPath).should('exist')
 
     // Step 1.
     cy.step('should be able to switch profile')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    const profileListData = mockProfilesListFactory(6, mockUserProfileData)
 
     cy.findByRole('menuitem', { name: /switch profile/i })
       .click()
@@ -118,6 +112,7 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
+        initialProfile={mockUserProfileData}
         MenuItemsProps={{
           menuItems: [
             {
@@ -138,11 +133,7 @@ describe('AccountPopover', () => {
         AddProfileMenuItemProps={{ addNewProfileLabel: 'Add organization' }}
         LogoutItemProps={{ logoutButtonLabel: 'Sign Out' }}
       />,
-    ).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        resolveMostRecentOperation({ data: mockUserProfileData })
-      })
-    })
+    )
 
     cy.findByRole('button').click()
 
@@ -159,7 +150,7 @@ describe('AccountPopover', () => {
     // Step 3.
     cy.step('should show profile list customizations')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    const profileListData = mockProfilesListFactory(6, mockUserProfileData)
     cy.findByRole('menuitem', { name: /change profile/i })
       .click()
       .then(() => {
