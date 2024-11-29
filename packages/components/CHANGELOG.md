@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.21
+
+### Patch Changes
+
+- Removed CommentOptions from CommentItem component and refactored into ActionsOverlay. Applied ActionsOverlay to CommentItem and ChatRoomItem components.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.22
+
 ## 0.0.20
 
 ### Patch Changes

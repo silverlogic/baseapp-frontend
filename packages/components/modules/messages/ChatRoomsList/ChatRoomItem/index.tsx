@@ -1,11 +1,12 @@
-import { FC, SyntheticEvent } from 'react'
+import { FC, SyntheticEvent, useRef } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
+import { ArchiveIcon, AvatarWithPlaceholder, UnreadIcon } from '@baseapp-frontend/design-system'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
+import ActionsOverlay from '../../../__shared__/ActionsOverlay'
 import { useCurrentProfile } from '../../../profiles'
 import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
 import { RoomFragment } from '../../graphql/queries/Room'
@@ -26,6 +27,8 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
     event.stopPropagation()
     if (handleClick) handleClick()
   }
+
+  const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { profile } = useCurrentProfile()
 
@@ -51,57 +54,82 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const showBadge = room.unreadMessagesCount && room.unreadMessagesCount > 0
 
   return (
-    <StyledChatCard
-      key={`room-${room.id}`}
-      onClick={handleCardClick}
-      isCardSelected={isCardSelected}
-      showPointer={!!handleClick}
+    <ActionsOverlay
+      title="Chat"
+      offsetTop={-12}
+      actions={[
+        {
+          disabled: true,
+          icon: <ArchiveIcon />,
+          label: 'Archive Chat',
+          onClick: () => {},
+          hasPermission: true,
+        },
+        {
+          disabled: false,
+          icon: <UnreadIcon />,
+          label: 'Mark as Unread',
+          onClick: () => {},
+          hasPermission: true,
+        },
+      ]}
+      enableDelete
+      handleDeleteItem={() => {}}
+      isDeletingItem={false}
+      ref={chatCardRef}
     >
-      <AvatarWithPlaceholder
-        sx={{ alignSelf: 'center', justifySelf: 'center' }}
-        width={48}
-        height={48}
-        src={roomData.avatarUrl}
-      />
-      <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr)">
-        <Typography variant="subtitle2">{roomData.title}</Typography>
-        <Box display="grid" gridTemplateColumns="1fr min-content" alignItems="center">
-          {lastMessage && lastMessageTime && (
-            <>
-              <Typography variant="caption" color="text.secondary" noWrap>
-                {formatDate(lastMessageTime)}
-              </Typography>
-              <Box
-                sx={{
-                  display: 'inline-block',
-                  height: '6px',
-                  width: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: 'text.disabled',
-                  marginX: '8px',
-                }}
-              />
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                noWrap
-                sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-              >
-                {lastMessage}
-              </Typography>
-            </>
-          )}
+      <StyledChatCard
+        key={`room-${room.id}`}
+        onClick={handleCardClick}
+        isCardSelected={isCardSelected}
+        showPointer={!!handleClick}
+      >
+        <AvatarWithPlaceholder
+          sx={{ alignSelf: 'center', justifySelf: 'center' }}
+          width={48}
+          height={48}
+          src={roomData.avatarUrl}
+        />
+        <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr)">
+          <Typography variant="subtitle2">{roomData.title}</Typography>
+          <Box display="grid" gridTemplateColumns="1fr min-content" alignItems="center">
+            {lastMessage && lastMessageTime && (
+              <>
+                <Typography variant="caption" color="text.secondary" noWrap>
+                  {formatDate(lastMessageTime)}
+                </Typography>
+                <Box
+                  sx={{
+                    display: 'inline-block',
+                    height: '6px',
+                    width: '6px',
+                    borderRadius: '50%',
+                    backgroundColor: 'text.disabled',
+                    marginX: '8px',
+                  }}
+                />
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  noWrap
+                  sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+                >
+                  {lastMessage}
+                </Typography>
+              </>
+            )}
+          </Box>
         </Box>
-      </Box>
-      <Badge
-        sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
-        badgeContent={room.unreadMessagesCount}
-        color="error"
-        max={99}
-        invisible={!showBadge}
-        {...BadgeProps}
-      />
-    </StyledChatCard>
+        <Badge
+          sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
+          badgeContent={room.unreadMessagesCount}
+          color="error"
+          max={99}
+          invisible={!showBadge}
+          {...BadgeProps}
+        />
+      </StyledChatCard>
+    </ActionsOverlay>
   )
 }
 

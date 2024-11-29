@@ -146,7 +146,7 @@ describe('Comments', () => {
 
     cy.step('Delete a comment')
     cy.findByText('This is another reply').click()
-    cy.findAllByRole('button', { name: /delete comment/i })
+    cy.findAllByRole('button', { name: /delete item/i })
       .last()
       .click()
     cy.findByText('Delete Comment?').should('exist')
@@ -157,7 +157,7 @@ describe('Comments', () => {
     cy.findByText('This is another reply').should('exist')
 
     cy.step('Confirm comment deletion')
-    cy.findAllByRole('button', { name: /delete comment/i })
+    cy.findAllByRole('button', { name: /delete item/i })
       .last()
       .click()
     cy.findByRole('button', { name: /delete/i })
