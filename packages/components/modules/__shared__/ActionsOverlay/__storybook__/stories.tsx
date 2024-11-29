@@ -23,7 +23,7 @@ export const DefaultActionsOverlay: Story = {
     offsetRight: 0,
     offsetTop: 0,
     ContainerProps: {
-      sx: { width: '100px' },
+      sx: { maxWidth: 'max-content' },
     },
     actions: [
       {

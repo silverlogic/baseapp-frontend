@@ -18,7 +18,7 @@ export type LongPressHandler = {
   shouldOpenItemOptions: boolean
 }
 
-export interface ActionOverlayProps extends ActionOverlayContainerProps {
+export interface ActionOverlayProps extends ActionOverlayTooltipContainerProps {
   actions: OverlayAction[]
   title: string
   enableDelete?: boolean
@@ -29,7 +29,7 @@ export interface ActionOverlayProps extends ActionOverlayContainerProps {
   SwipeableDrawerProps?: Partial<SwipeableDrawerProps>
 }
 
-export interface ActionOverlayContainerProps extends BoxProps {
+export interface ActionOverlayTooltipContainerProps extends BoxProps {
   offsetTop?: number
   offsetRight?: number
 }

@@ -11,7 +11,7 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Divider, Typography } from '@mui/material'
 import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
-import { ActionOverlayContainer, IconButtonContentContainer } from './styled'
+import { ActionOverlayTooltipContainer, IconButtonContentContainer } from './styled'
 import { ActionOverlayProps, LongPressHandler } from './types'
 
 const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
@@ -67,6 +67,11 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       setIsDeleteDialogOpen(true)
     }
 
+    const handleDeleteDialogClose = () => {
+      setIsDeleteDialogOpen(false)
+      setIsHoveringItem(false)
+    }
+
     const deviceHasHover =
       typeof window !== 'undefined' && window.matchMedia('(hover: hover)').matches
 
@@ -74,6 +79,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       setIsDeleteDialogOpen(false)
       handleDeleteItem?.()
       handleLongPressItemOptionsClose()
+      setIsHoveringItem(false)
     }
 
     const renderDeleteDialog = () => (
@@ -90,7 +96,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
             Delete
           </LoadingButton>
         }
-        onClose={() => setIsDeleteDialogOpen(false)}
+        onClose={handleDeleteDialogClose}
         open={isDeleteDialogOpen}
       />
     )
@@ -165,7 +171,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
 
       if (deviceHasHover && isHoveringItem) {
         return (
-          <ActionOverlayContainer
+          <ActionOverlayTooltipContainer
             offsetRight={offsetRight}
             offsetTop={offsetTop}
             aria-label="actions overlay"
@@ -200,7 +206,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                 </IconButton>
               )
             })}
-          </ActionOverlayContainer>
+          </ActionOverlayTooltipContainer>
         )
       }
       return <div />
@@ -211,9 +217,9 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
         ref={ref}
         onMouseEnter={() => setIsHoveringItem(true)}
         onMouseLeave={() => setIsHoveringItem(false)}
+        position="relative"
         {...longPressHandlers()}
         {...ContainerProps}
-        sx={{ position: 'relative', maxWidth: 'max-content' }}
       >
         {renderDeleteDialog()}
         {renderActionsOverlay()}

@@ -1,9 +1,9 @@
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-import { ActionOverlayContainerProps } from './types'
+import { ActionOverlayTooltipContainerProps } from './types'
 
-export const ActionOverlayContainer = styled(Box)<ActionOverlayContainerProps>(
+export const ActionOverlayTooltipContainer = styled(Box)<ActionOverlayTooltipContainerProps>(
   ({ theme, offsetTop = 0, offsetRight = 0 }) => ({
     backgroundColor: theme.palette.background.default,
     border: `1px solid ${theme.palette.divider}`,
@@ -16,7 +16,7 @@ export const ActionOverlayContainer = styled(Box)<ActionOverlayContainerProps>(
     'aria-label': 'Action options',
     right: 12 - offsetRight,
     top: -12 - offsetTop,
-    zIndex: theme.zIndex.tooltip,
+    zIndex: theme.zIndex.drawer, // zIndex.modal is 1300, so using zIndex.drawer (1200) insead of zIndex.tooltip (1500)
     transition: theme.transitions.create(['opacity', 'visibility'], {
       duration: theme.transitions.duration.shorter,
       easing: theme.transitions.easing.easeInOut,
