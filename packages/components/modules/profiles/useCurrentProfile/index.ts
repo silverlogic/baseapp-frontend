@@ -48,11 +48,7 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
 
   const setCurrentProfile = (newProfile: MinimalProfile) => {
     setProfile(() => {
-      try {
-        setCookie(CURRENT_PROFILE_KEY, newProfile, { stringfyValue: true })
-      } catch (error) {
-        console.log(error)
-      }
+      setCookie(CURRENT_PROFILE_KEY, newProfile, { stringfyValue: true })
       return newProfile
     })
   }
@@ -65,11 +61,7 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
 
   const removeCurrentProfile = () => {
     setProfile(() => {
-      try {
-        removeCookie(CURRENT_PROFILE_KEY)
-      } catch (error) {
-        console.log(error)
-      }
+      removeCookie(CURRENT_PROFILE_KEY)
       return null
     })
   }

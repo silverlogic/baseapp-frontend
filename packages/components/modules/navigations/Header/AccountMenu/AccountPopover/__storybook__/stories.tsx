@@ -2,11 +2,9 @@ import { User, UserApi } from '@baseapp-frontend/authentication'
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
 import { Meta, StoryObj } from '@storybook/react'
-import Cookies from 'js-cookie'
 
 import AccountPopover from '..'
 import { withTokenSetup } from '../../../../../../.storybook/decorators'
-import { CURRENT_PROFILE_KEY } from '../../../../../profiles/useCurrentProfile/constants'
 import { AccountPopoverProps } from '../types'
 import { mockResolvers } from './mockResolvers'
 
@@ -32,16 +30,6 @@ export default {
   decorators: [
     withTokenSetup,
     (Story, context) => {
-      Cookies.set(
-        CURRENT_PROFILE_KEY,
-        JSON.stringify({
-          id: '1234',
-          name: 'test',
-          image: null,
-          url: 'path',
-        }),
-      )
-
       const { queueOperationResolver } = context.parameters.relayMockEnvironment as ReturnType<
         typeof createTestEnvironment
       >
