@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.22
+
+### Patch Changes
+
+- Fixed overlay not closing issue by forcing hover state to 'false' when exiting the delete dialog
+
 ## 0.0.21
 
 ### Patch Changes
