@@ -20,7 +20,12 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   const { currentProfile } = useCurrentProfile()
   const profile = useFragment(ProfileItemFragment, profileRef)
 
+  if (!profile) {
+    return null // Safeguard for invalid fragment reference
+  }
+
   const profileUrlPath = profile.urlPath?.path
+
   const isActiveProfile = profile.id === currentProfile?.id
 
   return (

@@ -6,6 +6,7 @@ import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
+import { useFragment } from 'react-relay'
 
 import {
   MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME,
