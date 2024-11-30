@@ -1,51 +1,130 @@
 'use client'
 
-import { FC, Suspense } from 'react'
+import { FC, Suspense, useMemo } from 'react'
 
 import { ChevronIcon } from '@baseapp-frontend/design-system'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
-import { useLazyLoadQuery } from 'react-relay'
+import { useFragment, useLazyLoadQuery, usePaginationFragment } from 'react-relay'
+import { Virtuoso } from 'react-virtuoso'
 
-import { ProfileItemInlineFragment$data } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
+import {
+  ProfileItemFragment$data,
+  ProfileItemFragment$key,
+} from '../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfilesListFragment$key } from '../../../../__generated__/ProfilesListFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
+import EmptyState from '../../../notifications/NotificationsList/EmptyState'
 import useCurrentProfile from '../../context/useCurrentProfile'
-import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
+import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
+import { ProfilesListFragment, ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
 import { CancelMenuItem, StyledList } from './styled'
 import { ProfilesListProps } from './types'
 
-const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps }) => {
-  const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
+const ProfilesList: FC<ProfilesListProps> = ({
+  handleCloseSubmenu,
+  MenuItemProps,
+  LoadingStateProps = {},
+  listMaxHeight = 300,
+}) => {
+  const options = { count: 10 }
+  const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, options, {
+    fetchPolicy: 'store-and-network',
+  })
+
+  console.log('me', me)
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
-  const handleProfileChange = (profile: ProfileItemInlineFragment$data) => {
-    if (currentProfile?.id !== profile.id) {
-      setCurrentProfile({ profile })
+  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
+
+  const handleProfileChange = (profile: ProfileItemFragment$data) => {
+    if (currentProfileData?.id !== profile.id) {
+      // Convert profile data to fragment key by adding $fragmentSpreads
+      const profileKey = { ...profile, ' $fragmentSpreads': ProfileItemFragment }
+      setCurrentProfile({ profile: profileKey })
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
     }
   }
 
-  return me?.profiles?.map((profileRef, index) => {
-    if (!profileRef) return null
+  const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
+    ProfilesListQueryType,
+    ProfilesListFragment$key
+  >(ProfilesListFragment, me)
+
+  const profiles = useMemo(
+    () => data?.profiles?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    [data?.profiles?.edges],
+  )
+
+  const renderVirtuosoLoadingState = () => {
+    if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
+
+    return (
+      <LoadingState
+        sx={{ paddingTop: 3 }}
+        CircularProgressProps={{ size: 15 }}
+        {...LoadingStateProps}
+      />
+    )
+  }
+
+  const renderProfileItem = (
+    profile: ProfileItemFragment$key | null | undefined,
+    index: number,
+  ) => {
+    if (!profile) return null
+
     return (
       <ProfileMenuItem
-        key={index} // eslint-disable-line react/no-array-index-key
-        profileRef={profileRef}
+        profileRef={profile}
+        key={`profile-${index}`}
         currentProfile={currentProfile}
         onProfileChange={handleProfileChange}
         {...MenuItemProps}
       />
     )
-  })
+  }
+
+  const renderContent = () => {
+    if (profiles.length === 0) return <EmptyState />
+
+    const minHeight = profiles.length * 56 > listMaxHeight ? listMaxHeight : profiles.length * 56
+
+    return (
+      <Box sx={{ backgroundColor: 'common.white' }}>
+        <Virtuoso
+          data={profiles}
+          style={{ height: 'auto', minHeight }}
+          itemContent={(index, profile) => renderProfileItem(profile, index)}
+          components={{
+            Footer: renderVirtuosoLoadingState,
+          }}
+          endReached={() => {
+            if (hasNext) {
+              loadNext(10)
+            }
+          }}
+        />
+      </Box>
+    )
+  }
+
+  return (
+    <Box>
+      <StyledList disablePadding maxHeight={listMaxHeight} aria-label="List of available profiles">
+        {renderContent()}
+      </StyledList>
+    </Box>
+  )
 }
 
 const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
-  const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel', listMaxHeight = 300 } = props
+  const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel' } = props
 
   return (
     <Slide direction={openSubmenu ? 'left' : 'right'} in={openSubmenu} mountOnEnter unmountOnExit>
@@ -58,15 +137,9 @@ const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />
         <Box sx={{ p: 1 }}>
-          <StyledList
-            disablePadding
-            maxHeight={listMaxHeight}
-            aria-label="List of available profiles"
-          >
-            <Suspense fallback={<LoadingState />}>
-              <ProfilesList {...props} />
-            </Suspense>
-          </StyledList>
+          <Suspense fallback={<LoadingState />}>
+            <ProfilesList {...props} />
+          </Suspense>
         </Box>
       </Box>
     </Slide>

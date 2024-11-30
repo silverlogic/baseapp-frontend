@@ -6,7 +6,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { ConnectionHandler } from 'react-relay'
+import { ConnectionHandler, useFragment } from 'react-relay'
 
 import DefaultSocialInput from '../../__shared__/SocialInput'
 import {
@@ -15,6 +15,7 @@ import {
 } from '../../__shared__/constants'
 import { SocialUpsertForm } from '../../__shared__/types'
 import { useCurrentProfile } from '../../profiles'
+import { ProfileItemFragment } from '../../profiles/graphql/queries/ProfileItem'
 import { useSendMessageMutation } from '../graphql/mutations/SendMessage'
 import { SendMessageProps } from './types'
 
@@ -75,7 +76,9 @@ let nextClientMutationId = 0
  */
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
-    const { profile: currentProfile } = useCurrentProfile()
+    const { profile } = useCurrentProfile()
+
+    const currentProfile = useFragment(ProfileItemFragment, profile)
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,

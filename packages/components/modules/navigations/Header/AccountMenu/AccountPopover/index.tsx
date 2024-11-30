@@ -7,6 +7,7 @@ import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-s
 import { JWTContent } from '@baseapp-frontend/utils'
 
 import Divider from '@mui/material/Divider'
+import { useFragment } from 'react-relay'
 
 import {
   AddProfileMenuItem as DefaultAddProfileMenuItem,
@@ -15,6 +16,7 @@ import {
   SwitchProfileMenu as DefaultSwitchProfileMenu,
   useCurrentProfile,
 } from '../../../../profiles'
+import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
 import DefaultCurrentUser from './CurrentUser'
 import LogoutItem from './LogoutItem'
 import DefaultMenuItems from './MenuItems'
@@ -38,6 +40,8 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   const { user } = useJWTUser<BaseUser & JWTContent>()
   const { profile } = useCurrentProfile()
   const popover = usePopover()
+
+  const profileData = useFragment(ProfileItemFragment, profile)
 
   const [openProfilesList, setOpenProfilesList] = useState(false)
 
@@ -69,7 +73,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     <>
       <ClickableAvatar
         color="secondary"
-        src={profile?.image?.url ?? user?.avatar?.small}
+        src={profileData?.image?.url ?? user?.avatar?.small}
         alt="User avatar"
         onClick={popover.onOpen}
         isOpen={Boolean(popover.open)}

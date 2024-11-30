@@ -1,7 +1,7 @@
-import { ProfileItemInlineFragment$data } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 
 export type CurrentProfileState = {
-  profile?: ProfileItemInlineFragment$data
+  profile?: ProfileItemFragment$key
   userId?: number
 }
 

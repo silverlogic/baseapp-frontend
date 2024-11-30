@@ -5,13 +5,11 @@ import { FC, PropsWithChildren, createContext, useCallback, useEffect, useRef } 
 import { User, useJWTUser } from '@baseapp-frontend/authentication'
 import { JWTContent, LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
 
-import { Environment, fetchQuery, readInlineData, useRelayEnvironment } from 'react-relay'
+import { Environment, fetchQuery, useRelayEnvironment } from 'react-relay'
 import { StoreApi, create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-import { ProfileItemInlineFragment$key } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
 import { UserProfileQuery as UserProfileQueryType } from '../../../../__generated__/UserProfileQuery.graphql'
-import { ProfileItemInlineFragment } from '../../graphql/queries/ProfileItemInline'
 import { UserProfileQuery } from '../../graphql/queries/UserProfile'
 import { CURRENT_PROFILE_STORAGE_KEY, INITIAL_CURRENT_PROFILE_STATE } from './constants'
 import { UseCurrentProfile } from './types'
@@ -26,9 +24,9 @@ const fetchUserProfile = async (environment: Environment) => {
     { fetchPolicy: 'store-or-network' },
   ).toPromise()
 
+  // useFragment is a React hook and can't be used outside of a React component
+  // We need to use the fragment node directly since this is in an async function
   const userProfile = data?.me?.profile
-    ? readInlineData<ProfileItemInlineFragment$key>(ProfileItemInlineFragment, data.me.profile)
-    : null
 
   return userProfile
 }

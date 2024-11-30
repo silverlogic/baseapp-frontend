@@ -1,3 +1,6 @@
+import { useFragment } from 'react-relay'
+
+import { ProfileItemFragment } from '../../../../../graphql/queries/ProfileItem'
 import useCurrentProfile from '../../../../useCurrentProfile'
 
 const TestComponent = () => {
@@ -7,9 +10,11 @@ const TestComponent = () => {
     return null
   }
 
+  const profileData = useFragment(ProfileItemFragment, profile)
+
   return (
     <>
-      <span id="profile-id">{profile.id}</span>
+      <span id="profile-id">{profileData?.id}</span>
     </>
   )
 }
