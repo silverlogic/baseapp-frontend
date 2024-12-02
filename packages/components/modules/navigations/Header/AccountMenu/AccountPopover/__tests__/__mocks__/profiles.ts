@@ -23,19 +23,23 @@ export const mockProfilesListFactory = (size: number, userProfile: any) => {
   return {
     data: {
       me: {
-        profiles: [
-          userProfile,
-          ...Array.from({ length: size }).map((_, index) => ({
-            id: `profile-${index}`,
-            name: faker.person.fullName(),
-            image: {
-              url: faker.image.avatar(),
-            },
-            urlPath: {
-              path: faker.internet.url(),
-            },
-          })),
-        ],
+        profiles: {
+          edges: [
+            { node: userProfile },
+            ...Array.from({ length: size }).map((_, index) => ({
+              node: {
+                id: `profile-${index}`,
+                name: faker.person.fullName(),
+                image: {
+                  url: faker.image.avatar(),
+                },
+                urlPath: {
+                  path: faker.internet.url(),
+                },
+              },
+            })),
+          ],
+        },
       },
     },
   }
