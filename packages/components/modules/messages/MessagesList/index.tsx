@@ -4,7 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box } from '@mui/material'
-import { usePaginationFragment } from 'react-relay'
+import { useFragment, usePaginationFragment } from 'react-relay'
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'

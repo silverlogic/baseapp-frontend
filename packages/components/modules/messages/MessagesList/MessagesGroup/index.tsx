@@ -59,7 +59,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       const currentMessage = allMessages?.[index]
       const hasPreviousMessage = !!previousMessage
       const isFirstUnreadMessage =
-        currentMessage?.profile?.id !== currentProfile?.id &&
+        currentMessage?.profile?.id !== currentProfileData?.id &&
         !currentMessage?.isRead &&
         (!hasPreviousMessage || previousMessage?.isRead)
 
