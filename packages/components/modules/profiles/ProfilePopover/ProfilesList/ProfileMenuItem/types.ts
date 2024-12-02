@@ -9,11 +9,8 @@ import {
 
 export interface ProfileMenuItemProps {
   profileRef: ProfileItemFragment$key
-  onProfileChange: (
-    newProfile: ProfileItemFragment$data,
-    profileKey: ProfileItemFragment$key,
-  ) => void
-  currentProfile?: ProfileItemFragment$key
+  onProfileChange: (newProfile: ProfileItemFragment$data) => void
+  currentProfile?: ProfileItemFragment$data
   avatarProps?: AvatarWithPlaceholderProps
   width?: number
   height?: number

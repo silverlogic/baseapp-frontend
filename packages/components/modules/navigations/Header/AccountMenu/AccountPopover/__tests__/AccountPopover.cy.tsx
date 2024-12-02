@@ -58,7 +58,7 @@ describe('AccountPopover', () => {
     // Step 1.
     cy.step('should be able to switch profile')
 
-    const profilesListLenght = 6
+    const profilesListLength = 6
 
     const profileListData = mockProfilesListFactory(6, mockUserProfileData)
 
@@ -75,7 +75,7 @@ describe('AccountPopover', () => {
     })
 
     cy.findByLabelText(
-      `Switch to ${profileListData.data.me.profiles.edges[profilesListLenght - 1]?.node.name}`,
+      `Switch to ${profileListData.data.me.profiles.edges[profilesListLength - 1]?.node.name}`,
     ).click()
     cy.get('@sendToastSpy').should('have.been.calledOnce')
 

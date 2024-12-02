@@ -6,7 +6,6 @@ import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
-import { useFragment } from 'react-relay'
 
 import {
   MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME,
@@ -59,7 +58,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       const currentMessage = allMessages?.[index]
       const hasPreviousMessage = !!previousMessage
       const isFirstUnreadMessage =
-        currentMessage?.profile?.id !== currentProfileData?.id &&
+        currentMessage?.profile?.id !== currentProfile?.id &&
         !currentMessage?.isRead &&
         (!hasPreviousMessage || previousMessage?.isRead)
 

@@ -32,7 +32,7 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
     <StyledMenuItem
       tabIndex={0}
       active={isActiveProfile}
-      onClick={() => onProfileChange(profile, profileRef)}
+      onClick={() => onProfileChange(profile)}
       aria-label={`Switch to ${profile.name ?? 'this profile'}`}
     >
       <AvatarWithPlaceholder

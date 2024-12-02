@@ -12,7 +12,6 @@ import { MessageItemProps } from './types'
 const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }) => {
   const { currentProfile } = useCurrentProfile()
   const message = useFragment(MessageItemFragment, messageRef)
-
   const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   return (

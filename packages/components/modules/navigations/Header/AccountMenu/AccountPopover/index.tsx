@@ -6,7 +6,6 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
 
 import Divider from '@mui/material/Divider'
-import { useFragment } from 'react-relay'
 
 import {
   AddProfileMenuItem as DefaultAddProfileMenuItem,
@@ -14,7 +13,6 @@ import {
   ProfilesList as DefaultProfilesList,
   SwitchProfileMenu as DefaultSwitchProfileMenu,
 } from '../../../../profiles'
-import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
 import DefaultCurrentUser from './CurrentUser'
 import LogoutItem from './LogoutItem'
 import DefaultMenuItems from './MenuItems'
