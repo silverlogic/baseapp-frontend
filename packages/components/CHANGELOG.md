@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.24
+
+### Patch Changes
+
+- Move useMessageCountUpdate to be used on chatrooms list instead of being used on the templates
+- update useMessageCountUpdate query
+- Fix unread count badge alignment
+
 ## 0.0.23
 
 ### Patch Changes
