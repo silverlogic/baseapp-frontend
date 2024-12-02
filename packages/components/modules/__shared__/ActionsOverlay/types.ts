@@ -21,7 +21,7 @@ export type LongPressHandler = {
 export interface ActionOverlayProps extends ActionOverlayTooltipContainerProps {
   actions: OverlayAction[]
   title: string
-  enableDelete?: boolean
+  enableDelete?: boolean | null
   isDeletingItem?: boolean
   handleDeleteItem?: () => void
   ContainerProps?: Partial<BoxProps>

@@ -144,8 +144,12 @@ describe('Comments', () => {
       })
     cy.findByText('This is not a pinned comment anymore.').should('exist')
 
+    cy.step('Cannot delete a comment')
+    cy.findByText('This is a regular comment.').click()
+    cy.findAllByRole('button', { name: /delete item/i }).should('not.exist')
+
     cy.step('Delete a comment')
-    cy.findByText('This is another reply').click()
+    cy.findByText('This is not a pinned comment anymore.').click()
     cy.findAllByRole('button', { name: /delete item/i })
       .last()
       .click()
@@ -154,9 +158,10 @@ describe('Comments', () => {
     cy.step('Cancel comment deletion')
     cy.findByRole('button', { name: /cancel/i }).click()
     cy.findByText('Delete Comment?').should('not.exist')
-    cy.findByText('This is another reply').should('exist')
+    cy.findByText('This is not a pinned comment anymore.').should('exist')
 
     cy.step('Confirm comment deletion')
+    cy.findByText('This is not a pinned comment anymore.').click()
     cy.findAllByRole('button', { name: /delete item/i })
       .last()
       .click()
@@ -165,7 +170,7 @@ describe('Comments', () => {
       .then(() => {
         resolveMostRecentOperation({ data: commentDeleteMockData })
       })
-    cy.findByText('This is another reply').should('not.exist')
+    cy.findByText('This is not a pinned comment anymore.').should('not.exist')
   })
 
   it('should render more comments when the bottom is reached', () => {

@@ -39,6 +39,7 @@ const CommentsList: FC<CommentsListProps> = ({
         currentThreadDepth={1}
         subscriptionsEnabled={subscriptionsEnabled}
         onReplyClick={onReplyClick}
+        enableDelete
         {...CommentItemProps}
       />
     )

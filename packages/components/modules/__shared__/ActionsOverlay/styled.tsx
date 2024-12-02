@@ -16,7 +16,7 @@ export const ActionOverlayTooltipContainer = styled(Box)<ActionOverlayTooltipCon
     'aria-label': 'Action options',
     right: 12 - offsetRight,
     top: -12 - offsetTop,
-    zIndex: theme.zIndex.drawer, // zIndex.modal is 1300, so using zIndex.drawer (1200) insead of zIndex.tooltip (1500)
+    zIndex: theme.zIndex.drawer, // zIndex.modal is 1300, so using zIndex.drawer (1200) instead of zIndex.tooltip (1500)
     transition: theme.transitions.create(['opacity', 'visibility'], {
       duration: theme.transitions.duration.shorter,
       easing: theme.transitions.easing.easeInOut,
