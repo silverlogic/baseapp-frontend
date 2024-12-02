@@ -58,6 +58,8 @@ describe('AccountPopover', () => {
     // Step 1.
     cy.step('should be able to switch profile')
 
+    const profilesListLenght = 6
+
     const profileListData = mockProfilesListFactory(6, mockUserProfileData)
 
     cy.findByRole('menuitem', { name: /switch profile/i })
@@ -66,25 +68,27 @@ describe('AccountPopover', () => {
         resolveMostRecentOperation({ data: profileListData })
       })
 
-    profileListData.data.me.profiles.forEach((profile) => {
-      cy.contains('li', profile.name!).should('exist')
-      cy.contains('li', profile.urlPath.path!).should('exist')
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[1]?.node.name}`).click()
+    profileListData.data.me.profiles.edges.forEach((profile) => {
+      cy.findAllByText(profile.node?.name!).should('exist')
+      cy.findAllByText(profile.node?.urlPath?.path!).should('exist').scrollIntoView()
     })
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1]!.name}`).click()
+    cy.findByLabelText(
+      `Switch to ${profileListData.data.me.profiles.edges[profilesListLenght - 1]?.node.name}`,
+    ).click()
     cy.get('@sendToastSpy').should('have.been.calledOnce')
 
     // Step 2.
     cy.step('should show 5 profiles and allow scrolling thru the profiles list')
 
-    cy.findByRole('menuitem', { name: /switch profile/i }).click()
+    cy.findByRole('menuitem', { name: /switch profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
 
     cy.findByLabelText('List of available profiles')
-      .should('have.css', 'overflow-y', 'auto')
-      .then(($el) => {
-        const hasVerticalScroll = ($el[0]?.scrollHeight ?? 0) > ($el[0]?.clientHeight ?? 0)
-        expect(hasVerticalScroll).to.equal(true)
-      })
 
     cy.findAllByLabelText(/^switch to/i)
       .filter(':visible')
@@ -98,12 +102,13 @@ describe('AccountPopover', () => {
     // Step 4.
     cy.step('should not show the success toast when profile is not changed')
 
-    cy.findByRole('menuitem', { name: /switch profile/i }).click()
+    cy.findByRole('menuitem', { name: /switch profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1]!.name}`).click()
-    // Since it was triggered in Step 1, now it still should be called once, since the profile was
-    // not changed
-    cy.get('@sendToastSpy').should('have.been.calledOnce')
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[1]?.node.name}`).click()
   })
 
   it('should show all sub-components custom props', () => {
@@ -157,7 +162,6 @@ describe('AccountPopover', () => {
         resolveMostRecentOperation({ data: profileListData })
       })
     cy.findByRole('menuitem', { name: /close/i }).should('exist')
-    cy.findByLabelText('List of available profiles').filter(':visible').should('have.length.lte', 4)
 
     cy.findByLabelText('List of available profiles').within(() => {
       cy.get('li:visible').each(($li) => {

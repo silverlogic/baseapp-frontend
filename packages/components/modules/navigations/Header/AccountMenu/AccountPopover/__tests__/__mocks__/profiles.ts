@@ -15,28 +15,34 @@ export const mockProfilesListFactory = (size: number, userProfile: MinimalProfil
   return {
     data: {
       me: {
-        profiles: [
-          {
-            id: userProfile.id,
-            name: userProfile.name,
-            image: {
-              url: userProfile.image,
+        profiles: {
+          edges: [
+            {
+              node: {
+                id: userProfile.id,
+                name: userProfile.name,
+                image: {
+                  url: userProfile.image,
+                },
+                urlPath: {
+                  path: userProfile.urlPath,
+                },
+              },
             },
-            urlPath: {
-              path: userProfile.urlPath,
-            },
-          },
-          ...Array.from({ length: size }).map((_, index) => ({
-            id: `profile-${index}`,
-            name: faker.person.fullName(),
-            image: {
-              url: faker.image.avatar(),
-            },
-            urlPath: {
-              path: faker.internet.url(),
-            },
-          })),
-        ],
+            ...Array.from({ length: size }).map((_, index) => ({
+              node: {
+                id: `profile-${index}`,
+                name: faker.person.fullName(),
+                image: {
+                  url: faker.image.avatar(),
+                },
+                urlPath: {
+                  path: faker.internet.url(),
+                },
+              },
+            })),
+          ],
+        },
       },
     },
   }
