@@ -4,7 +4,6 @@ import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { useCurrentProfile } from '../../../../profiles'
-import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
 import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
@@ -12,9 +11,7 @@ import { MessageItemProps } from './types'
 const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }) => {
   const { profile: currentProfile } = useCurrentProfile()
   const message = useFragment(MessageItemFragment, messageRef)
-
-  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
-  const isOwnMessage = currentProfileData?.id === message?.profile?.id
+  const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   return (
     <MessageItemContainer isOwnMessage={isOwnMessage} isFirstGroupedMessage={isFirstGroupedMessage}>

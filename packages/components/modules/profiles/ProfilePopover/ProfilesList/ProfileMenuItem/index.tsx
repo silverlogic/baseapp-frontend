@@ -18,7 +18,6 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   height = 36,
 }) => {
   const profile = useFragment(ProfileItemFragment, profileRef)
-  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
 
   if (!profile) {
     return null // Safeguard for invalid fragment reference
@@ -26,13 +25,13 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
 
   const profileUrlPath = profile.urlPath?.path
 
-  const isActiveProfile = profile.id === currentProfileData?.id
+  const isActiveProfile = profile.id === currentProfile?.id
 
   return (
     <StyledMenuItem
       tabIndex={0}
       active={isActiveProfile}
-      onClick={() => onProfileChange(profile, profileRef)}
+      onClick={() => onProfileChange(profile)}
       aria-label={`Switch to ${profile.name ?? 'this profile'}`}
     >
       <AvatarWithPlaceholder

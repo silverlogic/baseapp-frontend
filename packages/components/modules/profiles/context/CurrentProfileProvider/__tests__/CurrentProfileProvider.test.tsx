@@ -102,6 +102,7 @@ describe('CurrentProfileProvider', () => {
 
     await waitFor(() => {
       const storedData = JSON.parse(localStorage.getItem(CURRENT_PROFILE_STORAGE_KEY) || '{}')
+      console.log('storedData------', storedData)
       expect(storedData.state).toEqual({})
 
       expect(document.getElementById('profile-id')).toBeNull()

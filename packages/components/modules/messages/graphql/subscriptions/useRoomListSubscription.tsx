@@ -1,10 +1,9 @@
 import { useMemo } from 'react'
 
-import { ConnectionHandler, graphql, useFragment, useSubscription } from 'react-relay'
+import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
 
 import { useCurrentProfile } from '../../../profiles'
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 
 const RoomListSubscription = graphql`
   subscription useRoomListSubscription($profileId: ID!) {
@@ -37,13 +36,12 @@ const RoomListSubscription = graphql`
 // TODO: check if BE subscription is working properly
 const useRoomListSubscription = (nodeId: string) => {
   const { profile } = useCurrentProfile()
-  const profileData = useFragment(ProfileItemFragment, profile)
   const config = useMemo(
     () => ({
       subscription: RoomListSubscription,
       onError: console.error,
       variables: {
-        profileId: profileData?.id,
+        profileId: profile?.id,
       },
       updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
         const node = store.get(nodeId)

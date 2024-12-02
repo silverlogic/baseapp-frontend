@@ -23,7 +23,6 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
 
   const { profile: currentProfile } = useCurrentProfile()
-  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
   const { setChatRoom } = useChatRoom()
 
   return (
@@ -45,10 +44,10 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
         variant="outlined"
         size="small"
         onClick={() => {
-          if (currentProfileData?.id) {
+          if (currentProfile?.id) {
             commit({
               variables: {
-                input: { profileId: currentProfileData.id, participants: [id] },
+                input: { profileId: currentProfile.id, participants: [id] },
               },
               onCompleted: (data) => {
                 setChatRoom({ id: data?.chatRoomCreate?.room?.node?.id })

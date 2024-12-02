@@ -1,15 +1,25 @@
 'use client'
 
-import { FC, PropsWithChildren, createContext, useCallback, useEffect, useRef } from 'react'
+import {
+  FC,
+  PropsWithChildren,
+  createContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 
 import { User, useJWTUser } from '@baseapp-frontend/authentication'
 import { JWTContent, LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
 
-import { Environment, fetchQuery, useRelayEnvironment } from 'react-relay'
+import { Environment, fetchQuery, useFragment, useRelayEnvironment } from 'react-relay'
 import { StoreApi, create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { UserProfileQuery as UserProfileQueryType } from '../../../../__generated__/UserProfileQuery.graphql'
+import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { UserProfileQuery } from '../../graphql/queries/UserProfile'
 import { CURRENT_PROFILE_STORAGE_KEY, INITIAL_CURRENT_PROFILE_STATE } from './constants'
 import { UseCurrentProfile } from './types'
@@ -35,6 +45,9 @@ const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   const { user } = useJWTUser<User & JWTContent>()
   const environment = useRelayEnvironment()
   const storeRef = useRef<StoreApi<UseCurrentProfile>>()
+  const [currentProfile, setCurrentProfile] = useState<ProfileItemFragment$key | null>(null)
+
+  const profileData = useFragment(ProfileItemFragment, currentProfile)
 
   if (!storeRef.current) {
     storeRef.current = create(
@@ -56,7 +69,7 @@ const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
       fetchUserProfile(environment)
         .then((userProfile) => {
           if (userProfile) {
-            storeRef.current?.setState({ profile: userProfile, userId: user.id })
+            setCurrentProfile(userProfile)
           }
         })
         // If the user profile request fails, the current profile state will remain empty.
@@ -83,6 +96,12 @@ const CurrentProfileProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => fetchAndStoreUserProfile(), [fetchAndStoreUserProfile])
+
+  useEffect(() => {
+    if (profileData && user) {
+      storeRef.current?.setState({ profile: profileData, userId: user.id })
+    }
+  }, [profileData, user?.id])
 
   useEffect(() => validateStoredState(), [validateStoredState])
 

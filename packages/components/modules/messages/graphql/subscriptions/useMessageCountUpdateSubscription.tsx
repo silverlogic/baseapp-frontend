@@ -1,9 +1,8 @@
 import { useMemo } from 'react'
 
-import { graphql, useFragment, useSubscription } from 'react-relay'
+import { graphql, useSubscription } from 'react-relay'
 
 import { useCurrentProfile } from '../../../profiles'
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 
 const MessageCountUpdateSubscription = graphql`
   subscription useMessageCountUpdateSubscription($profileId: ID!) {
@@ -29,17 +28,16 @@ const MessageCountUpdateSubscription = graphql`
 
 const useMessageCountUpdate = () => {
   const { profile } = useCurrentProfile()
-  const profileData = useFragment(ProfileItemFragment, profile)
 
   const config = useMemo(
     () => ({
       subscription: MessageCountUpdateSubscription,
       onError: console.error,
       variables: {
-        profileId: profileData?.id,
+        profileId: profile?.id,
       },
     }),
-    [profileData?.id],
+    [profile?.id],
   )
 
   return useSubscription(config)

@@ -6,7 +6,7 @@ import { ChevronIcon } from '@baseapp-frontend/design-system'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
-import { useFragment, useLazyLoadQuery, usePaginationFragment } from 'react-relay'
+import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
 import {
@@ -17,7 +17,6 @@ import { ProfilesListFragment$key } from '../../../../__generated__/ProfilesList
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
 import EmptyState from '../../../notifications/NotificationsList/EmptyState'
 import useCurrentProfile from '../../context/useCurrentProfile'
-import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { ProfilesListFragment, ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
@@ -38,15 +37,10 @@ const ProfilesList: FC<ProfilesListProps> = ({
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
-  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
-
-  const handleProfileChange = (
-    profile: ProfileItemFragment$data,
-    profileKey: ProfileItemFragment$key,
-  ) => {
-    if (currentProfileData?.id !== profile?.id) {
+  const handleProfileChange = (profile: ProfileItemFragment$data) => {
+    if (currentProfile?.id !== profile?.id) {
       setCurrentProfile({
-        profile: profileKey,
+        profile,
       })
       sendToast(`Switched to ${profile?.name}`)
       handleCloseSubmenu()

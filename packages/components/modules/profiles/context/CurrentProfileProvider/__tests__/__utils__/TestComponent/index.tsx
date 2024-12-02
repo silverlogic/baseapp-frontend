@@ -10,11 +10,9 @@ const TestComponent = () => {
     return null
   }
 
-  const profileData = useFragment(ProfileItemFragment, profile)
-
   return (
     <>
-      <span id="profile-id">{profileData?.id}</span>
+      <span id="profile-id">{profile?.id}</span>
     </>
   )
 }

@@ -3,13 +3,12 @@ import { FC, useCallback, useMemo, useRef } from 'react'
 import { LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box } from '@mui/material'
-import { useFragment, usePaginationFragment } from 'react-relay'
+import { usePaginationFragment } from 'react-relay'
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../__generated__/MessagesListFragment.graphql'
 import { useCurrentProfile } from '../../profiles'
-import { ProfileItemFragment } from '../../profiles/graphql/queries/ProfileItem'
 import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
 import { MessagesListFragment } from '../graphql/queries/MessagesList'
 import useMessagesListSubscription from '../graphql/subscriptions/useMessagesListSubscription'
@@ -33,7 +32,6 @@ const MessagesList: FC<MessagesListProps> = ({
     roomRef,
   )
   const { profile } = useCurrentProfile()
-  const profileData = useFragment(ProfileItemFragment, profile)
   const [commitMutation] = useReadMessageMutation()
   const totalNumberOfMessages = room?.allMessages?.totalCount ?? 0
 
@@ -113,7 +111,7 @@ const MessagesList: FC<MessagesListProps> = ({
             variables: {
               input: {
                 roomId: room.id,
-                profileId: profileData?.id as string,
+                profileId: profile?.id as string,
               },
             },
           })

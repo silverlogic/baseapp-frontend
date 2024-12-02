@@ -140,6 +140,8 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
     <Dialog
       open={open}
       onClose={handleClose}
+      aria-labelledby="organization-modal-title"
+      aria-describedby="organization-modal-description"
       PaperProps={{
         sx: {
           borderRadius: { xs: 0, sm: 2 },
@@ -151,9 +153,12 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
         },
       }}
     >
-      <DialogTitle>{addNewProfileLabel}</DialogTitle>
+      <DialogTitle id="organization-modal-title">{addNewProfileLabel}</DialogTitle>
       <Form onSubmit={form.handleSubmit(onSubmit)} sx={{ border: 'none', margin: 0 }}>
-        <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <DialogContent
+          sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+          id="organization-modal-description"
+        >
           <Typography color="text.secondary">{addNewProfileDescription}</Typography>
           <TextField
             label="Name"

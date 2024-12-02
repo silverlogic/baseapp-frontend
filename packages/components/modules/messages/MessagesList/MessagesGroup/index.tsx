@@ -5,10 +5,8 @@ import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
-import { useFragment } from 'react-relay'
 
 import { useCurrentProfile } from '../../../profiles'
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import {
   MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME,
   MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE,
@@ -30,7 +28,6 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   MessageItemProps = {},
 }) => {
   const { profile: currentProfile } = useCurrentProfile()
-  const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
   const theme = useTheme()
 
   const renderDateOnTopOfMessagesGroup = useCallback(
@@ -61,7 +58,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       const currentMessage = allMessages?.[index]
       const hasPreviousMessage = !!previousMessage
       const isFirstUnreadMessage =
-        currentMessage?.profile?.id !== currentProfileData?.id &&
+        currentMessage?.profile?.id !== currentProfile?.id &&
         !currentMessage?.isRead &&
         (!hasPreviousMessage || previousMessage?.isRead)
 
@@ -123,7 +120,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
     return false
   }, [allMessages, allMessagesLastIndex, messageIndex])
 
-  const isOwnMessage = currentProfileData?.id === message?.profile?.id
+  const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   const flexAlignments = isOwnMessage ? 'flex-end' : 'flex-start'
   const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
