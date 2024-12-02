@@ -7,6 +7,7 @@ import type { MemberItemProps } from './MemberItem/types'
 
 export interface MemberListProps {
   MemberItem: FC<MemberItemProps>
+  MemberItemProps?: Partial<MemberItemProps>
   userRef: UserMembersListFragment$key
   LoadingState: FC<LoadingStateProps>
   LoadingStateProps: LoadingStateProps

@@ -11,20 +11,7 @@ import { UserMembersListPaginationQuery } from '../graphql/queries/UserMembersLi
 import DefaultMemberItem from './MemberItem'
 import MembersList from './MembersList'
 import { NUMBER_OF_MEMBERS_ON_FIRST_LOAD } from './constants'
-import { MemberItemSkeleton } from './styled'
 import { UserMembersProps, UserMembersSuspendedProps } from './types'
-
-const DefaultInitialLoadingState: FC = () => (
-  <>
-    {Array.from({ length: NUMBER_OF_MEMBERS_ON_FIRST_LOAD }).map((_, index) => (
-      <MemberItemSkeleton
-        key={index} // eslint-disable-line react/no-array-index-key
-        variant="rectangular"
-        sx={{ mb: 0.5 }}
-      />
-    ))}
-  </>
-)
 
 const Members: FC<UserMembersProps> = ({
   MemberItem,
@@ -58,7 +45,7 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
   MemberItem = DefaultMemberItem,
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
-  InitialLoadingState = DefaultInitialLoadingState,
+  InitialLoadingState = DefaultLoadingState,
   membersContainerHeight = 400,
 }) => (
   <>

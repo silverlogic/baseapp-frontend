@@ -21,6 +21,7 @@ const MemberItem: FC<MemberItemProps> = ({
   avatarHeight = 40,
 }) => {
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
+  const hasStatusAndRole = status && memberRole
   if (!memberProfile) return null
   return (
     <MemberItemContainer>
@@ -39,13 +40,15 @@ const MemberItem: FC<MemberItemProps> = ({
         </Box>
       </MemberPersonalInformation>
 
-      <Box>
-        <Button variant="soft" color="inherit">
-          {status === MemberStatuses.active
-            ? capitalizeFirstLetter(memberRole)
-            : capitalizeFirstLetter(status)}
-        </Button>
-      </Box>
+      {hasStatusAndRole && (
+        <Box>
+          <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
+            {status === MemberStatuses.active
+              ? capitalizeFirstLetter(memberRole)
+              : capitalizeFirstLetter(status)}
+          </Button>
+        </Box>
+      )}
     </MemberItemContainer>
   )
 }

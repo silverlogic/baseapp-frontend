@@ -29,14 +29,7 @@ export const UserMembersListFragment = graphql`
       totalCount
       edges {
         node {
-          id
-          user {
-            profile {
-              ...ProfileItemFragment
-            }
-          }
-          role
-          status
+          ...MemberItemFragment
         }
       }
       pageInfo {

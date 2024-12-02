@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<68687e846777bc425817ef6bdefdb60c>>
+ * @generated SignedSource<<bac09ef9853b0179c59b893d72cb27bd>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -340,16 +340,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '4b1dca117f539126bf6f6bde7a7171d3',
+      cacheID: '1cec1c6fc23db6005c95d0fc9d8a0cd5',
       id: null,
       metadata: {},
       name: 'userMembersListPaginationRefetchable',
       operationKind: 'query',
-      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String = "custom"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        id\n        user {\n          profile {\n            ...ProfileItemFragment\n            id\n          }\n          id\n        }\n        role\n        status\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
+      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String = "custom"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment MemberItemFragment on ProfileUserRole {\n  id\n  user {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n  role\n  status\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        ...MemberItemFragment\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '038f3f85d02ec3d5e31279acd14c0269'
+;(node as any).hash = '48972fa30cfc1866f92aae70b6fc83cb'
 
 export default node
