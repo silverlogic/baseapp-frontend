@@ -152,7 +152,7 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
       }}
     >
       <DialogTitle>{addNewProfileLabel}</DialogTitle>
-      <Form onSubmit={form.handleSubmit(onSubmit)}>
+      <Form onSubmit={form.handleSubmit(onSubmit)} sx={{ border: 'none', margin: 0 }}>
         <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
           <Typography color="text.secondary">{addNewProfileDescription}</Typography>
           <TextField

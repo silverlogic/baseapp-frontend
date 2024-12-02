@@ -8,6 +8,7 @@ import { useFragment } from 'react-relay'
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
 import { useCurrentProfile } from '../../../profiles'
+import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
 import { RoomFragment } from '../../graphql/queries/Room'
 import { StyledChatCard } from './styled'
@@ -31,6 +32,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { profile } = useCurrentProfile()
+  const profileData = useFragment(ProfileItemFragment, profile)
 
   const roomData = {
     title: room.title,
@@ -42,7 +44,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
     room.participants?.totalCount < MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE
   ) {
     const otherParticipant = room.participants.edges.find(
-      (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== profile?.id,
+      (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== profileData?.id,
     )
     roomData.title = otherParticipant?.node?.profile?.name
     roomData.avatarUrl = otherParticipant?.node?.profile?.image?.url

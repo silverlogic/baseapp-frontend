@@ -35,18 +35,20 @@ const ProfilesList: FC<ProfilesListProps> = ({
     fetchPolicy: 'store-and-network',
   })
 
-  console.log('me', me)
   const { sendToast } = useNotification()
   const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const currentProfileData = useFragment(ProfileItemFragment, currentProfile)
 
-  const handleProfileChange = (profile: ProfileItemFragment$data) => {
-    if (currentProfileData?.id !== profile.id) {
-      // Convert profile data to fragment key by adding $fragmentSpreads
-      const profileKey = { ...profile, ' $fragmentSpreads': ProfileItemFragment }
-      setCurrentProfile({ profile: profileKey })
-      sendToast(`Switched to ${profile.name}`)
+  const handleProfileChange = (
+    profile: ProfileItemFragment$data,
+    profileKey: ProfileItemFragment$key,
+  ) => {
+    if (currentProfileData?.id !== profile?.id) {
+      setCurrentProfile({
+        profile: profileKey,
+      })
+      sendToast(`Switched to ${profile?.name}`)
       handleCloseSubmenu()
     }
   }
