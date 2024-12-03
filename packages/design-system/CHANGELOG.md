@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.22
+
+### Patch Changes
+
+- Added Archive and Unread icons
+
 ## 0.0.21
 
 ### Patch Changes
