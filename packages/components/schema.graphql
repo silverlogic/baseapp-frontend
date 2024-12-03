@@ -922,7 +922,17 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
-  members(orderByStatus: String, offset: Int, before: String, after: String, first: Int, last: Int, role: ProfileRoles): ProfileUserRoleConnection
+  members(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    role: ProfileRoles
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection

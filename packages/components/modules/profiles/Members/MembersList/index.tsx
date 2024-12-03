@@ -6,6 +6,7 @@ import { Box, Typography } from '@mui/material'
 import { usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
+import { MemberItemFragment$key } from '../../../../__generated__/MemberItemFragment.graphql'
 import { UserMembersListFragment } from '../../graphql/queries/UserMembersList'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
@@ -42,7 +43,7 @@ const MembersList: FC<MemberListProps> = ({
     )
   }
 
-  const renderMemberItem = (member: any, index: number) => (
+  const renderMemberItem = (member: MemberItemFragment$key, index: number) => (
     <MemberListItem
       member={member}
       data={data}
@@ -72,8 +73,7 @@ const MembersList: FC<MemberListProps> = ({
       <Virtuoso
         style={{ height: membersContainerHeight }}
         data={members}
-        overscan={NUMBER_OF_MEMBERS_TO_LOAD_NEXT}
-        itemContent={(_index, member) => renderMemberItem(member, _index)}
+        itemContent={(_index, member) => member && renderMemberItem(member, _index)}
         components={{
           Footer: renderLoadingState,
         }}

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<582eaebcebe39f8edc4ba01236f43897>>
+ * @generated SignedSource<<7b5d9ac9387460075ed09089a27cd807>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -58,9 +58,9 @@ const node: ReaderFragment = (function () {
         name: 'cursor',
       },
       {
-        defaultValue: 'custom',
+        defaultValue: null,
         kind: 'LocalArgument',
-        name: 'orderByStatus',
+        name: 'orderBy',
       },
     ],
     kind: 'Fragment',
@@ -102,8 +102,8 @@ const node: ReaderFragment = (function () {
         args: [
           {
             kind: 'Variable',
-            name: 'orderByStatus',
-            variableName: 'orderByStatus',
+            name: 'orderBy',
+            variableName: 'orderBy',
           },
         ],
         concreteType: 'ProfileUserRoleConnection',
@@ -200,6 +200,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '48972fa30cfc1866f92aae70b6fc83cb'
+;(node as any).hash = 'b14044279dce0f71bd144a09351f0df2'
 
 export default node

@@ -24,7 +24,7 @@ const Members: FC<UserMembersProps> = ({
   const data = useLazyLoadQuery<IUserMembersListPaginationQuery>(UserMembersListPaginationQuery, {
     profileId: currentProfile?.id || '',
     count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
-    orderByStatus: 'custom',
+    orderBy: 'status',
   })
 
   if (!data.profile) return null

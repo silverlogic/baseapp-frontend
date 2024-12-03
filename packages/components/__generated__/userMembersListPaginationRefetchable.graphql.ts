@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bac09ef9853b0179c59b893d72cb27bd>>
+ * @generated SignedSource<<7fae0b75bc4bce4bae590e668afd8d37>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,7 +15,7 @@ export type userMembersListPaginationRefetchable$variables = {
   count?: number | null | undefined
   cursor?: string | null | undefined
   id: string
-  orderByStatus?: string | null | undefined
+  orderBy?: string | null | undefined
 }
 export type userMembersListPaginationRefetchable$data = {
   readonly node:
@@ -47,9 +47,9 @@ const node: ConcreteRequest = (function () {
       name: 'id',
     },
     v3 = {
-      defaultValue: 'custom',
+      defaultValue: null,
       kind: 'LocalArgument',
-      name: 'orderByStatus',
+      name: 'orderBy',
     },
     v4 = [
       {
@@ -60,8 +60,8 @@ const node: ConcreteRequest = (function () {
     ],
     v5 = {
       kind: 'Variable',
-      name: 'orderByStatus',
-      variableName: 'orderByStatus',
+      name: 'orderBy',
+      variableName: 'orderBy',
     },
     v6 = {
       alias: null,
@@ -324,7 +324,7 @@ const node: ConcreteRequest = (function () {
                 {
                   alias: null,
                   args: v11 /*: any*/,
-                  filters: ['orderByStatus'],
+                  filters: ['orderBy'],
                   handle: 'connection',
                   key: 'UserMembersFragment_members',
                   kind: 'LinkedHandle',
@@ -340,16 +340,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '1cec1c6fc23db6005c95d0fc9d8a0cd5',
+      cacheID: '3f7d21cee41fbf8a15113dc8de609c61',
       id: null,
       metadata: {},
       name: 'userMembersListPaginationRefetchable',
       operationKind: 'query',
-      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderByStatus: String = "custom"\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_Kswkm\n    id\n  }\n}\n\nfragment MemberItemFragment on ProfileUserRole {\n  id\n  user {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n  role\n  status\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_Kswkm on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderByStatus: $orderByStatus) {\n    totalCount\n    edges {\n      node {\n        ...MemberItemFragment\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
+      text: 'query userMembersListPaginationRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $orderBy: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...UserMembersListFragment_32czeo\n    id\n  }\n}\n\nfragment MemberItemFragment on ProfileUserRole {\n  id\n  user {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n  role\n  status\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_32czeo on Profile {\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderBy: $orderBy) {\n    totalCount\n    edges {\n      node {\n        ...MemberItemFragment\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '48972fa30cfc1866f92aae70b6fc83cb'
+;(node as any).hash = 'b14044279dce0f71bd144a09351f0df2'
 
 export default node
