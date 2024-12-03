@@ -25,7 +25,6 @@ import useCommentOptions from './useCommentOptions'
 
 const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
-  profileId,
   currentThreadDepth,
   subscriptionsEnabled,
   onReplyClick,
@@ -173,7 +172,6 @@ const CommentItem: FC<CommentItemProps> = ({
         <CommentsReplies
           key={`replies-of-${comment.id}`}
           target={comment}
-          profileId={profileId}
           currentThreadDepth={currentThreadDepth + 1}
           subscriptionsEnabled={subscriptionsEnabled}
           onReplyClick={onReplyClick}

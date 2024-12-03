@@ -11,7 +11,6 @@ import { CommentsRepliesProps } from './types'
 
 const CommentsReplies: FC<CommentsRepliesProps> = ({
   target: targetRef,
-  profileId,
   currentThreadDepth,
   subscriptionsEnabled,
   onReplyClick,
@@ -34,7 +33,6 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
         target={target}
         key={`comment-reply-${comment.id}`}
         comment={comment}
-        profileId={profileId}
         currentThreadDepth={currentThreadDepth}
         subscriptionsEnabled={subscriptionsEnabled}
         onReplyClick={onReplyClick}

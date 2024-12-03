@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -75,15 +76,10 @@ let nextClientMutationId = 0
  */
 const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
   (
-    {
-      targetObjectId,
-      profileId,
-      autoFocusInput,
-      SocialInput = DefaultSocialInput,
-      SocialInputProps = {},
-    },
+    { targetObjectId, autoFocusInput, SocialInput = DefaultSocialInput, SocialInputProps = {} },
     ref,
   ) => {
+    const { currentProfile } = useCurrentProfile()
     const commentReply = useCommentReply()
     const isReply = !!commentReply.inReplyToId
 
@@ -110,7 +106,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
             body: data.body,
             targetObjectId,
             inReplyToId: commentReply.inReplyToId,
-            profileId,
+            profileId: currentProfile?.id,
             clientMutationId,
           },
           connections: [connectionID],
