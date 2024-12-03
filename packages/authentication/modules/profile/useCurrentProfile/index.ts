@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import {
   LOGOUT_EVENT,
@@ -34,11 +34,18 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
   const [currentProfile, setProfile] = useAtom(profileAtom)
   const isSSR = typeof window === typeof undefined
 
-  const setCurrentProfile = (newProfile: MinimalProfile) => {
-    setProfile(() => {
-      setCookie(CURRENT_PROFILE_KEY, newProfile, { stringfyValue: true })
-      return newProfile
-    })
+  const setCurrentProfile = (newProfile: MinimalProfile | null) => {
+    if (newProfile === null) {
+      setProfile(() => {
+        removeCookie(CURRENT_PROFILE_KEY)
+        return null
+      })
+    } else {
+      setProfile(() => {
+        setCookie(CURRENT_PROFILE_KEY, newProfile, { stringfyValue: true })
+        return newProfile
+      })
+    }
   }
 
   const updateProfileIfActive = (newProfile: MinimalProfile) => {
@@ -47,12 +54,7 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
     }
   }
 
-  const removeCurrentProfile = () => {
-    setProfile(() => {
-      removeCookie(CURRENT_PROFILE_KEY)
-      return null
-    })
-  }
+  const removeCurrentProfile = useCallback(() => setCurrentProfile(null), [])
 
   useEffect(() => {
     eventEmitter.on(LOGOUT_EVENT, removeCurrentProfile)
