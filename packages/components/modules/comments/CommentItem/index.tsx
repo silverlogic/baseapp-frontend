@@ -32,7 +32,7 @@ const CommentItem: FC<CommentItemProps> = ({
   CommentUpdateProps,
   CommentsRepliesProps,
   ActionOverlayProps,
-  enableDelete = true,
+  enableDelete = false,
   Timestamp = DefaultTimestamp,
   CommentUpdate = DefaultCommentUpdate,
   CommentReplyButton = DefaultCommentReplyButton,
@@ -131,7 +131,7 @@ const CommentItem: FC<CommentItemProps> = ({
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
         <ActionsOverlay
           actions={actions}
-          enableDelete={enableDelete && !!comment?.canDelete}
+          enableDelete={enableDelete && comment.canDelete}
           handleDeleteItem={handleDeleteComment}
           isDeletingItem={isDeletingComment}
           title="Comment"
