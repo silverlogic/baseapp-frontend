@@ -1,8 +1,8 @@
 import { useMemo } from 'react'
 
-import { graphql, useSubscription } from 'react-relay'
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
-import { useCurrentProfile } from '../../../profiles'
+import { graphql, useSubscription } from 'react-relay'
 
 const MessageCountUpdateSubscription = graphql`
   subscription useMessageCountUpdateSubscription($profileId: ID!) {

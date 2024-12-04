@@ -2,16 +2,17 @@
 
 import { FC, Suspense } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ChevronIcon } from '@baseapp-frontend/design-system'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
-import { ProfileItemInlineFragment$data } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
+import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
+import { getMinimalProfile } from '../../graphql'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
-import useCurrentProfile, { getMinimalProfile } from '../../useCurrentProfile'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
 import { CancelMenuItem, StyledList } from './styled'
@@ -22,7 +23,7 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
   const { sendToast } = useNotification()
   const { currentProfile, setCurrentProfile } = useCurrentProfile()
 
-  const handleProfileChange = (profile: ProfileItemInlineFragment$data) => {
+  const handleProfileChange = (profile: ProfileItemFragment$data) => {
     if (currentProfile?.id !== profile.id) {
       setCurrentProfile(getMinimalProfile(profile))
       sendToast(`Switched to ${profile.name}`)

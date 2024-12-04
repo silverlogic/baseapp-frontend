@@ -1,5 +1,6 @@
 import { FC, useCallback, useMemo, useRef } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box } from '@mui/material'
@@ -8,7 +9,6 @@ import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../__generated__/MessagesListFragment.graphql'
-import { useCurrentProfile } from '../../profiles'
 import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
 import { MessagesListFragment } from '../graphql/queries/MessagesList'
 import useMessagesListSubscription from '../graphql/subscriptions/useMessagesListSubscription'

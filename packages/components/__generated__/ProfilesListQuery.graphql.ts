@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5f1b4c7974ce16c3ce1eff8e23f1c2a6>>
+ * @generated SignedSource<<a5bca4ae2854e79a70861c3137944321>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,7 +18,7 @@ export type ProfilesListQuery$data = {
         readonly profiles:
           | ReadonlyArray<
               | {
-                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemInlineFragment'>
+                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
                 }
               | null
               | undefined
@@ -36,35 +36,12 @@ export type ProfilesListQuery = {
 
 const node: ConcreteRequest = (function () {
   var v0 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
-    v1 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'name',
-      storageKey: null,
-    },
-    v2 = [
-      {
-        alias: null,
-        args: null,
-        kind: 'ScalarField',
-        name: 'url',
-        storageKey: null,
-      },
-    ],
-    v3 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'path',
-      storageKey: null,
-    }
+    alias: null,
+    args: null,
+    kind: 'ScalarField',
+    name: 'id',
+    storageKey: null,
+  }
   return {
     fragment: {
       argumentDefinitions: [],
@@ -89,51 +66,9 @@ const node: ConcreteRequest = (function () {
               plural: true,
               selections: [
                 {
-                  kind: 'InlineDataFragmentSpread',
-                  name: 'ProfileItemInlineFragment',
-                  selections: [
-                    v0 /*: any*/,
-                    v1 /*: any*/,
-                    {
-                      alias: null,
-                      args: [
-                        {
-                          kind: 'Variable',
-                          name: 'height',
-                          variableName: 'avatarSize',
-                        },
-                        {
-                          kind: 'Variable',
-                          name: 'width',
-                          variableName: 'avatarSize',
-                        },
-                      ],
-                      concreteType: 'File',
-                      kind: 'LinkedField',
-                      name: 'image',
-                      plural: false,
-                      selections: v2 /*: any*/,
-                      storageKey: null,
-                    },
-                    {
-                      alias: null,
-                      args: null,
-                      concreteType: 'URLPath',
-                      kind: 'LinkedField',
-                      name: 'urlPath',
-                      plural: false,
-                      selections: [v3 /*: any*/],
-                      storageKey: null,
-                    },
-                  ],
                   args: null,
-                  argumentDefinitions: [
-                    {
-                      defaultValue: 100,
-                      kind: 'LocalArgument',
-                      name: 'avatarSize',
-                    },
-                  ],
+                  kind: 'FragmentSpread',
+                  name: 'ProfileItemFragment',
                 },
               ],
               storageKey: null,
@@ -168,7 +103,13 @@ const node: ConcreteRequest = (function () {
               plural: true,
               selections: [
                 v0 /*: any*/,
-                v1 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  kind: 'ScalarField',
+                  name: 'name',
+                  storageKey: null,
+                },
                 {
                   alias: null,
                   args: [
@@ -187,7 +128,15 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'image',
                   plural: false,
-                  selections: v2 /*: any*/,
+                  selections: [
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'url',
+                      storageKey: null,
+                    },
+                  ],
                   storageKey: 'image(height:100,width:100)',
                 },
                 {
@@ -197,7 +146,16 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'urlPath',
                   plural: false,
-                  selections: [v3 /*: any*/, v0 /*: any*/],
+                  selections: [
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'path',
+                      storageKey: null,
+                    },
+                    v0 /*: any*/,
+                  ],
                   storageKey: null,
                 },
               ],
@@ -210,16 +168,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '52d75d6be606957b650bc2b8ef5c5abf',
+      cacheID: 'f45449b4beffd5247f8dd3fcb75e43cd',
       id: null,
       metadata: {},
       name: 'ProfilesListQuery',
       operationKind: 'query',
-      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemInlineFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemInlineFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'e33762cabf29142fa4a43f70fa2f0640'
+;(node as any).hash = 'ce9ca315be07ccdb58629abb177bc931'
 
 export default node

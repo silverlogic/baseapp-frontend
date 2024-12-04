@@ -5,7 +5,7 @@ export const UserProfileQuery = graphql`
   query UserProfileQuery {
     me {
       profile {
-        ...ProfileItemInlineFragment
+        ...ProfileItemFragment
       }
     }
   }

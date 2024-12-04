@@ -1,10 +1,9 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
-
-import useCurrentProfile from '../../useCurrentProfile'
 
 const CurrentProfile: FC = () => {
   const profile = useCurrentProfile().currentProfile

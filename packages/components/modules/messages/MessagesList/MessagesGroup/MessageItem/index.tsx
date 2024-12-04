@@ -1,9 +1,10 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
+
 import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { useCurrentProfile } from '../../../../profiles'
 import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'

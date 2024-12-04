@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 
 import {
   LOGOUT_EVENT,
-  MinimalProfile,
   ServerSideRenderingOption,
   eventEmitter,
   getCookie,
@@ -14,19 +13,8 @@ import {
 
 import { atom, useAtom } from 'jotai'
 
-import { ProfileItemInlineFragment$data } from '../../../__generated__/ProfileItemInlineFragment.graphql'
+import { MinimalProfile } from '../../../types/profile'
 import { CURRENT_PROFILE_KEY } from './constants'
-
-export const getMinimalProfile = function (
-  profile: Omit<ProfileItemInlineFragment$data, ' $fragmentType'>,
-): MinimalProfile {
-  return {
-    id: profile.id,
-    name: profile.name ?? null,
-    image: profile.image?.url ?? null,
-    urlPath: profile.urlPath?.path ?? null,
-  }
-}
 
 export const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption = {}) => {
   const settings =

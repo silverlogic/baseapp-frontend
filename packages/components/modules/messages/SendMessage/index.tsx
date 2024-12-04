@@ -2,6 +2,7 @@
 
 import { forwardRef } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -14,7 +15,6 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
 } from '../../__shared__/constants'
 import { SocialUpsertForm } from '../../__shared__/types'
-import { useCurrentProfile } from '../../profiles'
 import { useSendMessageMutation } from '../graphql/mutations/SendMessage'
 import { SendMessageProps } from './types'
 

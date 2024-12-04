@@ -1,4 +1,4 @@
-import { MinimalProfile } from '@baseapp-frontend/utils'
+import { MinimalProfile } from './profile'
 
 export interface User {
   id: number

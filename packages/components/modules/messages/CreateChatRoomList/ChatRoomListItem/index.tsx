@@ -2,13 +2,13 @@
 
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { useCurrentProfile } from '../../../profiles'
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import { useChatRoom } from '../../context'
 import { useCreateChatRoomMutation } from '../../graphql/mutations/CreateChatRoom'

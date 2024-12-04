@@ -1,4 +1,4 @@
-import { MinimalProfile } from '@baseapp-frontend/utils'
+import { MinimalProfile } from '@baseapp-frontend/authentication'
 
 import { faker } from '@faker-js/faker'
 

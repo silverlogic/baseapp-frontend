@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useState } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
 
 import Divider from '@mui/material/Divider'
@@ -11,7 +12,6 @@ import {
   CurrentProfile as DefaultCurrentProfile,
   ProfilesList as DefaultProfilesList,
   SwitchProfileMenu as DefaultSwitchProfileMenu,
-  useCurrentProfile,
 } from '../../../../profiles'
 import DefaultCurrentUser from './CurrentUser'
 import LogoutItem from './LogoutItem'

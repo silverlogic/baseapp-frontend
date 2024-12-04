@@ -67,11 +67,11 @@ describe('AccountPopover', () => {
       })
 
     profileListData.data.me.profiles.forEach((profile) => {
-      cy.contains('li', profile.name).should('exist')
-      cy.contains('li', profile.urlPath.path).should('exist')
+      cy.contains('li', profile.name!).should('exist')
+      cy.contains('li', profile.urlPath.path!).should('exist')
     })
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1]!.name}`).click()
     cy.get('@sendToastSpy').should('have.been.calledOnce')
 
     // Step 2.
@@ -100,7 +100,7 @@ describe('AccountPopover', () => {
 
     cy.findByRole('menuitem', { name: /switch profile/i }).click()
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1]!.name}`).click()
     // Since it was triggered in Step 1, now it still should be called once, since the profile was
     // not changed
     cy.get('@sendToastSpy').should('have.been.calledOnce')

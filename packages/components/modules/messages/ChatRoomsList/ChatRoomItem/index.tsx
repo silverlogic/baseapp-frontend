@@ -1,5 +1,6 @@
 import { FC, SyntheticEvent, useRef } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ArchiveIcon, AvatarWithPlaceholder, UnreadIcon } from '@baseapp-frontend/design-system'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
@@ -7,7 +8,6 @@ import { useFragment } from 'react-relay'
 
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
-import { useCurrentProfile } from '../../../profiles'
 import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
 import { RoomFragment } from '../../graphql/queries/Room'
 import { StyledChatCard } from './styled'

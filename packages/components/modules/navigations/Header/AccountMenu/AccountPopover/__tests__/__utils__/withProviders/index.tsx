@@ -1,26 +1,16 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC } from 'react'
 
+import { InitialProfileProp, InitialProfileProvider } from '@baseapp-frontend/authentication'
 import { ThemeProvider } from '@baseapp-frontend/design-system'
 import { RelayTestProvider } from '@baseapp-frontend/graphql'
-import { MinimalProfile, NotificationProvider } from '@baseapp-frontend/utils'
+import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Provider as JotaiProvider } from 'jotai'
-import { useHydrateAtoms } from 'jotai/utils'
 
-import { profileAtom } from '../../../../../../../profiles'
 import { AccountPopoverProps } from '../../../types'
 import defaultTheme from '../../__mocks__/theme'
 import { WithProvidersOptions } from './types'
-
-type InitialProfileProp = {
-  initialProfile: MinimalProfile | null
-}
-
-const HydrateAtoms: FC<PropsWithChildren & InitialProfileProp> = ({ initialProfile, children }) => {
-  useHydrateAtoms([[profileAtom, initialProfile]])
-  return children
-}
 
 const queryClient = new QueryClient()
 
@@ -32,7 +22,7 @@ const withProviders =
     ...props
   }: WithProvidersOptions & AccountPopoverProps & InitialProfileProp) => (
     <JotaiProvider>
-      <HydrateAtoms initialProfile={initialProfile}>
+      <InitialProfileProvider initialProfile={initialProfile}>
         <QueryClientProvider client={queryClient}>
           <RelayTestProvider environment={environment}>
             <ThemeProvider {...defaultTheme}>
@@ -42,7 +32,7 @@ const withProviders =
             </ThemeProvider>
           </RelayTestProvider>
         </QueryClientProvider>
-      </HydrateAtoms>
+      </InitialProfileProvider>
     </JotaiProvider>
   )
 
