@@ -30,7 +30,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
 
   const chatCardRef = useRef<HTMLDivElement>(null)
 
-  const { profile } = useCurrentProfile()
+  const profile = useCurrentProfile().currentProfile
 
   const roomData = {
     title: room.title,

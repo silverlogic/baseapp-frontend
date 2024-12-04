@@ -14,11 +14,11 @@ import {
 
 import { atom, useAtom } from 'jotai'
 
-import { ProfileItemFragment$data } from '../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemInlineFragment$data } from '../../../__generated__/ProfileItemInlineFragment.graphql'
 import { CURRENT_PROFILE_KEY } from './constants'
 
-export const getMinimalProfile = function <T extends ProfileItemFragment$data>(
-  profile: T,
+export const getMinimalProfile = function (
+  profile: Omit<ProfileItemInlineFragment$data, ' $fragmentType'>,
 ): MinimalProfile {
   return {
     id: profile.id,

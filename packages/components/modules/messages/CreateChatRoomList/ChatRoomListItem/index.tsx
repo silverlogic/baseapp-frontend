@@ -22,7 +22,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
 
-  const { profile: currentProfile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
   const { setChatRoom } = useChatRoom()
 
   return (
