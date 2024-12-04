@@ -18,6 +18,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
   const memberFragment = useFragment(MemberItemFragment, member)
   const nextMemberFragment = useFragment(MemberItemFragment, nextMember)
   const prevMemberFragment = useFragment(MemberItemFragment, prevMember)
+
   const isActiveMember = memberFragment.status === MemberStatuses.active
   const isPreviousMemberInactive = prevMemberFragment?.status !== MemberStatuses.active
   const isPreviousMemberUndefined = !prevMemberFragment?.status
@@ -25,7 +26,9 @@ const MemberListItem: FC<MemberListItemProps> = ({
   const isFirstActiveMember =
     (isActiveMember && isPreviousMemberInactive) || (isActiveMember && isPreviousMemberUndefined)
   const isLastMemberInactive = !isActiveMember && isNextMemberUndefined
+
   if (!memberFragment) return null
+
   if (isFirstActiveMember) {
     return (
       <>
@@ -45,6 +48,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
       </>
     )
   }
+
   if (isLastMemberInactive) {
     return (
       <>
@@ -64,6 +68,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
       </>
     )
   }
+
   return (
     <MemberItemComponent
       member={memberFragment?.user?.profile}

@@ -511,12 +511,6 @@ enum Languages {
   pt
 }
 
-interface MemberInterface {
-  """The ID of the object"""
-  id: ID!
-  member: ProfileUserRole
-}
-
 type Message implements Node {
   """The ID of the object"""
   id: ID!
@@ -1055,13 +1049,12 @@ type ProfileUpdatePayload {
   clientMutationId: String
 }
 
-type ProfileUserRole implements MemberInterface {
+type ProfileUserRole implements Node {
   """The ID of the object"""
   id: ID!
   user: User!
   role: ProfileRoles
   status: ProfileRoleStatus
-  member: ProfileUserRole
   pk: Int!
 }
 
