@@ -184,7 +184,11 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
             sx={{ width: 'auto' }}
             type="submit"
             loading={isMutationInFlight}
-            disabled={isMutationInFlight || Object.keys(form.formState.errors).length > 0}
+            disabled={
+              isMutationInFlight ||
+              Object.keys(form.formState.errors).length > 0 ||
+              !form.formState.isValid
+            }
           >
             {submitLabel}
           </LoadingButton>
