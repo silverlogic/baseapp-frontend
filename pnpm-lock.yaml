@@ -639,7 +639,7 @@ importers:
         specifier: ^7.1.2
         version: 7.1.2(webpack@5.97.1)
       cypress:
-        specifier: ^13.13.3
+        specifier: ^13.16.1
         version: 13.16.1
       cypress-plugin-steps:
         specifier: ^1.1.1

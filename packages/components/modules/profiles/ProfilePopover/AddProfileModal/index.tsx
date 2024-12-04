@@ -35,6 +35,7 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
   onClose,
   open,
   setOpen,
+  userId,
 }) => {
   const form = useForm<OrganizationCreateForm>({
     defaultValues: {
@@ -58,6 +59,8 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
     nextClientMutationId += 1
     const clientMutationId = nextClientMutationId.toString()
 
+    const connections = ConnectionHandler.getConnectionID(userId, 'ProfilesListFragment_profiles')
+
     commitMutation({
       variables: {
         input: {
@@ -65,32 +68,7 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
           urlPath: data.urlPath,
           clientMutationId,
         },
-      },
-      updater: (store) => {
-        const payload = store.getRootField('organizationCreate')
-        if (!payload) {
-          return
-        }
-        const newEdge = payload.getLinkedRecord('profile')
-        const root = store.getRoot()
-        const meRecord = root?.getLinkedRecord('me')
-
-        if (!meRecord) {
-          console.error('Unable to find `me` record in the store')
-          return
-        }
-
-        const connection = ConnectionHandler.getConnection(
-          meRecord,
-          'ProfilesListFragment_profiles',
-        )
-
-        if (!connection) {
-          console.error('Unable to find connection `ProfilesListFragment_profiles` in the store')
-          return
-        }
-
-        ConnectionHandler.insertEdgeBefore(connection, newEdge)
+        connections: [connections],
       },
       onCompleted: (response, errors) => {
         if (errors) {
@@ -184,7 +162,11 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
             sx={{ width: 'auto' }}
             type="submit"
             loading={isMutationInFlight}
-            disabled={isMutationInFlight || Object.keys(form.formState.errors).length > 0}
+            disabled={
+              isMutationInFlight ||
+              Object.keys(form.formState.errors).length > 0 ||
+              !form.formState.isValid
+            }
           >
             {submitLabel}
           </LoadingButton>

@@ -1,11 +1,14 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, Suspense, useState } from 'react'
 
 import { AddIcon } from '@baseapp-frontend/design-system'
 
 import { ButtonBase, MenuItem, Stack } from '@mui/material'
+import { useLazyLoadQuery } from 'react-relay'
 
+import { AddProfilePopoverUserQuery as AddProfilePopoverUserQueryType } from '../../../../__generated__/AddProfilePopoverUserQuery.graphql'
+import { AddProfilePopoverUserQuery } from '../../graphql/queries/AddProfilePopover'
 import AddProfileModal from '../AddProfileModal'
 import { AddProfileMenuItemProps } from './types'
 
@@ -14,6 +17,9 @@ const AddProfileMenuItem: FC<AddProfileMenuItemProps> = ({
   CreateProfileModal = AddProfileModal,
 }) => {
   const [open, setOpen] = useState(false)
+  const { me } = useLazyLoadQuery<AddProfilePopoverUserQueryType>(AddProfilePopoverUserQuery, {})
+
+  if (!me?.canAdd) return null
 
   return (
     <>
@@ -28,9 +34,15 @@ const AddProfileMenuItem: FC<AddProfileMenuItemProps> = ({
           <AddIcon color="action" />
         </MenuItem>
       </Stack>
-      <CreateProfileModal open={open} setOpen={setOpen} />
+      <CreateProfileModal open={open} setOpen={setOpen} userId={me?.id} />
     </>
   )
 }
 
-export default AddProfileMenuItem
+const AddProfileMenuItemSuspended: FC<AddProfileMenuItemProps> = (props) => (
+  <Suspense>
+    <AddProfileMenuItem {...props} />
+  </Suspense>
+)
+
+export default AddProfileMenuItemSuspended

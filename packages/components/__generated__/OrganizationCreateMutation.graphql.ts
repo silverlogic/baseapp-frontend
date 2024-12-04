@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4aff4a7daa3c996f8ce7a66b522ca1bb>>
+ * @generated SignedSource<<10ad363cb9eb54dcb1214025cca561fe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,6 +17,7 @@ export type OrganizationCreateInput = {
   urlPath?: string | null | undefined
 }
 export type OrganizationCreateMutation$variables = {
+  connections: ReadonlyArray<string>
   input: OrganizationCreateInput
 }
 export type OrganizationCreateMutation$data = {
@@ -65,28 +66,31 @@ export type OrganizationCreateMutation = {
 }
 
 const node: ConcreteRequest = (function () {
-  var v0 = [
-      {
-        defaultValue: null,
-        kind: 'LocalArgument',
-        name: 'input',
-      },
-    ],
-    v1 = [
+  var v0 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'connections',
+    },
+    v1 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'input',
+    },
+    v2 = [
       {
         kind: 'Variable',
         name: 'input',
         variableName: 'input',
       },
     ],
-    v2 = {
+    v3 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v3 = {
+    v4 = {
       alias: null,
       args: null,
       concreteType: 'OrganizationEdge',
@@ -101,13 +105,13 @@ const node: ConcreteRequest = (function () {
           kind: 'LinkedField',
           name: 'node',
           plural: false,
-          selections: [v2 /*: any*/],
+          selections: [v3 /*: any*/],
           storageKey: null,
         },
       ],
       storageKey: null,
     },
-    v4 = {
+    v5 = {
       alias: null,
       args: null,
       concreteType: 'ErrorType',
@@ -134,20 +138,20 @@ const node: ConcreteRequest = (function () {
     }
   return {
     fragment: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v0 /*: any*/, v1 /*: any*/],
       kind: 'Fragment',
       metadata: null,
       name: 'OrganizationCreateMutation',
       selections: [
         {
           alias: null,
-          args: v1 /*: any*/,
+          args: v2 /*: any*/,
           concreteType: 'OrganizationCreatePayload',
           kind: 'LinkedField',
           name: 'organizationCreate',
           plural: false,
           selections: [
-            v3 /*: any*/,
+            v4 /*: any*/,
             {
               alias: null,
               args: null,
@@ -175,7 +179,7 @@ const node: ConcreteRequest = (function () {
               ],
               storageKey: null,
             },
-            v4 /*: any*/,
+            v5 /*: any*/,
           ],
           storageKey: null,
         },
@@ -185,19 +189,19 @@ const node: ConcreteRequest = (function () {
     },
     kind: 'Request',
     operation: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v1 /*: any*/, v0 /*: any*/],
       kind: 'Operation',
       name: 'OrganizationCreateMutation',
       selections: [
         {
           alias: null,
-          args: v1 /*: any*/,
+          args: v2 /*: any*/,
           concreteType: 'OrganizationCreatePayload',
           kind: 'LinkedField',
           name: 'organizationCreate',
           plural: false,
           selections: [
-            v3 /*: any*/,
+            v4 /*: any*/,
             {
               alias: null,
               args: null,
@@ -214,7 +218,7 @@ const node: ConcreteRequest = (function () {
                   name: 'node',
                   plural: false,
                   selections: [
-                    v2 /*: any*/,
+                    v3 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -266,7 +270,7 @@ const node: ConcreteRequest = (function () {
                           name: 'path',
                           storageKey: null,
                         },
-                        v2 /*: any*/,
+                        v3 /*: any*/,
                       ],
                       storageKey: null,
                     },
@@ -276,7 +280,23 @@ const node: ConcreteRequest = (function () {
               ],
               storageKey: null,
             },
-            v4 /*: any*/,
+            {
+              alias: null,
+              args: null,
+              filters: null,
+              handle: 'prependEdge',
+              key: '',
+              kind: 'LinkedHandle',
+              name: 'profile',
+              handleArgs: [
+                {
+                  kind: 'Variable',
+                  name: 'connections',
+                  variableName: 'connections',
+                },
+              ],
+            },
+            v5 /*: any*/,
           ],
           storageKey: null,
         },
@@ -293,6 +313,6 @@ const node: ConcreteRequest = (function () {
   }
 })()
 
-;(node as any).hash = '61fbf11e46dfbf921af0e82290abc5eb'
+;(node as any).hash = '555c8c1ef3a4c59a8cd9cf1c8396dc13'
 
 export default node
