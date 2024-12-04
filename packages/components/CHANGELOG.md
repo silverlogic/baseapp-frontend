@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.23
+
+### Patch Changes
+
+- Create a component for listing the members of a profile
+
 ## 0.0.22
 
 ### Patch Changes
