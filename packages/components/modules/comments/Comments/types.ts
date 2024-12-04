@@ -6,7 +6,6 @@ import { CommentsListProps } from '../CommentsList/types'
 
 export interface CommentsProps {
   target: CommentsFragment$key
-  profileId?: string
   subscriptionsEnabled?: boolean
   CommentsList?: FC<CommentsListProps>
   CommentsListProps?: Partial<CommentsListProps>

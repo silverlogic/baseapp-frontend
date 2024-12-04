@@ -7,7 +7,6 @@ import type { CommentItemProps } from '../CommentItem/types'
 
 export interface CommentsListProps {
   target: CommentsList_comments$key
-  profileId?: string
   subscriptionsEnabled: boolean
   onReplyClick?: () => void
   CommentItem?: FC<CommentItemProps>

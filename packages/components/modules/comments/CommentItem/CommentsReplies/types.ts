@@ -7,7 +7,6 @@ import type { CommentItemProps } from '../types'
 
 export interface CommentsRepliesProps {
   target: CommentsList_comments$key
-  profileId?: string
   currentThreadDepth: number
   subscriptionsEnabled: boolean
   onReplyClick?: () => void
