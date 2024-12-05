@@ -35,11 +35,9 @@ import type { UseLoginOptions } from './types'
 const makeImagePathAbsolute = (profileArg: MinimalProfile | null) => {
   const profile = profileArg
   if (profile && profile.image) {
-    try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL.replace('/v1', '')
+    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+    if (baseUrl) {
       profile.image = baseUrl + profile.image
-    } catch (err) {
-      console.log(err)
     }
   }
 }
