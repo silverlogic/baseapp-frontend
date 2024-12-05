@@ -28,9 +28,21 @@ import {
   isLoginMfaResponse,
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { useCurrentProfile } from '../../profile'
+import { MinimalProfile, useCurrentProfile } from '../../profile'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { UseLoginOptions } from './types'
+
+const makeImagePathAbsolute = (profileArg: MinimalProfile | null) => {
+  const profile = profileArg
+  if (profile && profile.image) {
+    try {
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL.replace('/v1', '')
+      profile.image = baseUrl + profile.image
+    } catch (err) {
+      console.log(err)
+    }
+  }
+}
 
 const useLogin = ({
   loginFormOptions = {},
@@ -55,6 +67,7 @@ const useLogin = ({
     }
     const user = decodeJWT<User>(response.access)
     if (user) {
+      makeImagePathAbsolute(user.profile)
       setCurrentProfile(user.profile)
     }
     await setTokenAsync(accessKeyName, response.access, {
