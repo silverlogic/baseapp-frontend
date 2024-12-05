@@ -35,7 +35,7 @@ const RoomListSubscription = graphql`
 
 // TODO: check if BE subscription is working properly
 const useRoomListSubscription = (nodeId: string) => {
-  const profile = useCurrentProfile().currentProfile
+  const { currentProfile: profile } = useCurrentProfile()
   const config = useMemo(
     () => ({
       subscription: RoomListSubscription,

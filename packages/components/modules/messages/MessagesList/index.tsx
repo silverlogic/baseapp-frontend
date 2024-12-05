@@ -31,7 +31,7 @@ const MessagesList: FC<MessagesListProps> = ({
     MessagesListFragment,
     roomRef,
   )
-  const profile = useCurrentProfile().currentProfile
+  const { currentProfile: profile } = useCurrentProfile()
   const [commitMutation] = useReadMessageMutation()
   const totalNumberOfMessages = room?.allMessages?.totalCount ?? 0
 

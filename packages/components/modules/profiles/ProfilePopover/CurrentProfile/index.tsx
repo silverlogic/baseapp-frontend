@@ -6,7 +6,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 import { Box, Typography } from '@mui/material'
 
 const CurrentProfile: FC = () => {
-  const profile = useCurrentProfile().currentProfile
+  const { currentProfile: profile } = useCurrentProfile()
 
   if (!profile) return null
 

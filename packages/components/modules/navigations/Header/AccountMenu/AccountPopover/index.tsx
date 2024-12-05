@@ -33,7 +33,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   AddProfileMenuItemProps = {},
   LogoutItemProps = {},
 }) => {
-  const profile = useCurrentProfile({ noSSR: false }).currentProfile
+  const { currentProfile: profile } = useCurrentProfile({ noSSR: false })
   const popover = usePopover()
 
   const [openProfilesList, setOpenProfilesList] = useState(false)

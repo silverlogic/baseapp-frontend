@@ -27,7 +27,7 @@ const MessageCountUpdateSubscription = graphql`
 `
 
 const useMessageCountUpdate = () => {
-  const profile = useCurrentProfile().currentProfile
+  const { currentProfile: profile } = useCurrentProfile()
 
   const config = useMemo(
     () => ({

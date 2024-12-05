@@ -1,13 +1,14 @@
-import { act, render, waitFor } from '@baseapp-frontend/test'
-import { LOGOUT_EVENT, eventEmitter, removeCookie } from '@baseapp-frontend/utils'
+import { act, renderHook } from '@baseapp-frontend/test'
+import { LOGOUT_EVENT, eventEmitter, removeCookie, setCookie } from '@baseapp-frontend/utils'
 
+import useCurrentProfile from '..'
 import { CURRENT_PROFILE_KEY } from '../constants'
 import { mockUserProfileFactory } from './__mock__/profiles'
-import TestComponentWithProviders from './__utils__/TestComponentWithProvider'
 
 jest.mock('@baseapp-frontend/utils', () => ({
   ...jest.requireActual('@baseapp-frontend/utils'),
   removeCookie: jest.fn(),
+  setCookie: jest.fn(),
 }))
 
 describe('CurrentProfileProvider', () => {
@@ -15,21 +16,27 @@ describe('CurrentProfileProvider', () => {
     jest.clearAllMocks()
   })
 
-  it.only('should erase current profile when user logs out', async () => {
+  it('changes current profile state and sets cookie', () => {
+    const profile1 = mockUserProfileFactory('profile-id-1')
+    const profile2 = mockUserProfileFactory('profile-id-2')
+    const { result } = renderHook(() => useCurrentProfile())
+
+    act(() => result.current.setCurrentProfile(profile1))
+    expect(result.current.currentProfile!.id).toEqual('profile-id-1')
+    expect(setCookie).toHaveBeenCalledWith(CURRENT_PROFILE_KEY, profile1, { stringfyValue: true })
+
+    act(() => result.current.setCurrentProfile(profile2))
+    expect(result.current.currentProfile!.id).toEqual('profile-id-2')
+    expect(setCookie).toHaveBeenCalledWith(CURRENT_PROFILE_KEY, profile1, { stringfyValue: true })
+  })
+
+  it('erases current profile when user logs out', async () => {
     const profile = mockUserProfileFactory('user-profile-1')
-    render(<TestComponentWithProviders initialProfile={profile} />)
+    const { result } = renderHook(() => useCurrentProfile())
+    act(() => result.current.setCurrentProfile(profile))
 
-    await waitFor(() => {
-      expect(document.getElementById('profile-id')).not.toBeNull()
-    })
-
-    act(() => {
-      eventEmitter.emit(LOGOUT_EVENT)
-    })
-
-    await waitFor(() => {
-      expect(document.getElementById('profile-id')).toBeNull()
-    })
+    act(() => eventEmitter.emit(LOGOUT_EVENT))
+    expect(result.current.currentProfile).toEqual(null)
     expect(removeCookie).toHaveBeenCalledWith(CURRENT_PROFILE_KEY)
   })
 })
