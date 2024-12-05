@@ -7,6 +7,7 @@ export const MemberItemFragment = graphql`
       profile {
         ...ProfileItemFragment
       }
+      id
     }
     role
     status

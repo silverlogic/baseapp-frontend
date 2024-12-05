@@ -578,6 +578,7 @@ type Mutation {
   pageEdit(input: PageEditInput!): PageEditPayload
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
+  roleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
 }
 
 """An object with an ID"""
@@ -1338,6 +1339,21 @@ enum ReportTypes {
 
   """Other"""
   OTHER
+}
+
+input RoleUpdateInput {
+  profileId: ID!
+  userId: ID!
+  roleType: ProfileRoles = null
+  clientMutationId: String
+}
+
+type RoleUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
 }
 
 type Subscription {
