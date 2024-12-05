@@ -1,4 +1,5 @@
 import { MockPayloadGenerator, createMockEnvironment } from 'relay-test-utils'
+import { MockResolvers } from 'relay-test-utils/lib/RelayMockPayloadGenerator'
 
 import { ResolveMostRecentOperationParams } from './types'
 
@@ -19,11 +20,38 @@ const createTestEnvironment = () => {
       })
     } catch (e) {
       // eslint-disable-next-line no-console
-      console.log(e)
+      console.error(e)
     }
   }
 
-  return { environment, resolveMostRecentOperation }
+  const rejectMostRecentOperation = (errorMessage: string) => {
+    try {
+      environment.mock.rejectMostRecentOperation(new Error(errorMessage))
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  const queueOperationResolver = (mockResolvers: MockResolvers) => {
+    try {
+      environment.mock.queueOperationResolver((operation) => {
+        // eslint-disable-next-line no-console
+        console.log(`react-relay mock: ${operation.request.node.operation.name}`)
+        return MockPayloadGenerator.generate(operation, mockResolvers)
+      })
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+    }
+  }
+
+  return {
+    environment,
+    resolveMostRecentOperation,
+    rejectMostRecentOperation,
+    queueOperationResolver,
+  }
 }
 
 export default createTestEnvironment

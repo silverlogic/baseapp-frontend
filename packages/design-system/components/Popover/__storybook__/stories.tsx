@@ -9,21 +9,6 @@ import { MenuPopoverProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Popover/Popover',
   component: Popover,
-  argTypes: {
-    open: { control: 'boolean', table: { type: { summary: 'boolean' } } },
-    arrow: {
-      control: 'select',
-      options: ['top-left', 'top-right', 'bottom-left', 'bottom-right', 'left', 'right'],
-      table: { type: { summary: 'string' } },
-    },
-    hiddenArrow: { control: 'boolean' },
-    children: {
-      control: false,
-      description: 'Content to be rendered inside the popover component.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<MenuPopoverProps>
 
 type Story = StoryObj<MenuPopoverProps>

@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Shared/ReactionButton" />
+
+# Component Documentation
+
+## ReactionButton
+
+- **Purpose**: The `ReactionButton` component provides an interactive button for users to react to content (e.g., like or dislike) with options to handle success and error responses. The component also displays the current reaction count and supports Relay for efficient data loading.
+- **Expected Behavior**: When clicked, the button triggers a reaction action and updates the UI to reflect the new state. If the user has already reacted, it shows a "selected" icon. The component should handle loading states and display the total count of reactions.
+
+## Use Cases
+
+- **Current Usage**: This component is currently used within `CommentReactionButton` for `CommentItem`.
+- **Potential Usage**: The `ReactionButton` could also be used for other content types that support reactions, such as posts, images, or articles.
+
+## Props
+
+- **target** (ReactionButton_target$key): The target data for the reaction button. Typically a comment or post, providing data about the current reactions.
+- **reactionType** (string): Specifies the type of reaction, such as "LIKE" or "DISLIKE".
+- **children** (function): Function to render children components with reaction handlers and data. Expected format:
+  `(props: { handleReaction: () => void, isLoading: boolean, target: ReactionButton_target$data }) => ReactElement | null`
+- **handleError** (function): Callback function to handle errors during the reaction process.
+- **handleSuccess** (function): Callback function to handle success, executed after a successful reaction.
+
+## Notes
+
+- **Related Components**: `CommentReactionButton`, `CommentItem`.
+
+## Example Usage
+
+```javascript
+import ReactionButton from '../ReactionButton'
+
+export const DefaultComments = (target) => (
+  <ReactionButton
+    target={target}
+    reactionType="LIKE"
+    handleError={() => console.log('Error handling reaction')}
+    handleSuccess={() => console.log('Successfully handled reaction')}
+  />
+)

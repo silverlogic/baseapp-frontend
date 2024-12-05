@@ -39,6 +39,7 @@ const CommentsList: FC<CommentsListProps> = ({
         currentThreadDepth={1}
         subscriptionsEnabled={subscriptionsEnabled}
         onReplyClick={onReplyClick}
+        enableDelete
         {...CommentItemProps}
       />
     )
@@ -69,7 +70,8 @@ const CommentsList: FC<CommentsListProps> = ({
         <Virtuoso
           useWindowScroll
           data={comments}
-          overscan={NUMBER_OF_COMMENTS_TO_LOAD_NEXT}
+          // TODO: using overscan can cause Maximum call stack size exceeded error
+          // overscan={NUMBER_OF_COMMENTS_TO_LOAD_NEXT}
           itemContent={(_index, comment) => renderCommentItem(comment)}
           components={{
             Header: renderHeader,

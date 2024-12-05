@@ -1,5 +1,12 @@
 # @baseapp-frontend/tsconfig
 
+## 2.1.0
+
+### Patch Changes
+
+- Rename `test.json` to `unit-test.json` and modify config for for better compatibility on jest tests.
+- Remove `nextjs.json` config.
+
 ## 2.0.0
 
 ### Major Changes

@@ -7,7 +7,7 @@ import { Logo, hideScroll, useResponsive } from '@baseapp-frontend/design-system
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
-import { NAV } from '../constants'
+import { NAV_WIDTH } from '../constants'
 import NavToggleButton from '../shared/NavToggleButton'
 import VerticalDrawer from '../shared/VerticalDrawer'
 import NavSectionMini from './NavSectionMini'
@@ -32,7 +32,7 @@ const NavMini: FC<NavMiniProps> = ({
     <Box
       sx={{
         flexShrink: { lg: 0 },
-        width: { lg: NAV.W_MINI },
+        width: { lg: NAV_WIDTH.MINI },
         display: { xs: 'none', lg: 'flex' },
       }}
     >
@@ -42,7 +42,7 @@ const NavMini: FC<NavMiniProps> = ({
           setSettings={setSettings}
           sx={{
             top: 22,
-            left: NAV.W_MINI - 12,
+            left: NAV_WIDTH.MINI - 12,
           }}
         />
       )}
@@ -51,7 +51,7 @@ const NavMini: FC<NavMiniProps> = ({
           pb: 2,
           height: 1,
           position: 'fixed',
-          width: NAV.W_MINI,
+          width: NAV_WIDTH.MINI,
           borderRight: (theme) => `solid 1px ${theme.palette.divider}`,
           ...hideScroll.x,
         }}

@@ -1,6 +1,7 @@
 import ClientCookies from 'js-cookie'
 
 import { getCookie, removeCookie, setCookie } from '..'
+import { SetCookieOptions } from '../types'
 
 jest.mock('js-cookie', () => ({
   get: jest.fn(),
@@ -20,10 +21,10 @@ describe('Cookie Functions in the client side', () => {
     })
 
     it('should be able to parse the cookie if it is a JSON string', () => {
-      const mockCookie = '{"key": "value"}'
+      const mockCookie = JSON.stringify({ key: 'value' })
       ;(ClientCookies.get as jest.Mock).mockReturnValue(mockCookie)
 
-      const result = getCookie('test')
+      const result = getCookie('test', { parseJSON: true })
 
       expect(result).toEqual({ key: 'value' })
     })
@@ -50,9 +51,10 @@ describe('Cookie Functions in the client side', () => {
     it('should set a cookie', () => {
       const key = 'test'
       const value = { data: 'test-data' }
-      const config = { expires: 7 }
+      const config: SetCookieOptions = { expires: 7, stringfyValue: true }
 
       setCookie(key, value, config)
+      delete config.stringfyValue
       expect(ClientCookies.set).toHaveBeenCalledWith(key, JSON.stringify(value), config)
     })
 

@@ -9,28 +9,6 @@ import { SwipeableDrawerProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Drawers/SwipeableDrawer',
   component: SwipeableDrawer,
-  argTypes: {
-    open: { control: 'boolean' },
-    onClose: {
-      action: 'closed',
-      table: {
-        type: { summary: 'VoidFunction' },
-      },
-    },
-    onOpen: {
-      action: 'opened',
-      table: {
-        type: { summary: 'VoidFunction' },
-      },
-    },
-    children: {
-      control: false,
-      description: 'Content to be rendered inside the drawer.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-    globalHeight: { control: 'text', table: { type: { summary: 'string | number' } } },
-  },
-  tags: ['autodocs'],
 } as Meta<SwipeableDrawerProps>
 
 type Story = StoryObj<SwipeableDrawerProps>

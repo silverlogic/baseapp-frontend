@@ -4,8 +4,6 @@ import { FormControl } from '@baseapp-frontend/utils'
 
 import { TextFieldProps } from '../TextField/types'
 
-export type TextAreaProps = Omit<TextFieldProps, 'variant'>
-
 export type SocialTextFieldProps = FormControl &
   TextFieldProps &
   PropsWithChildren & {

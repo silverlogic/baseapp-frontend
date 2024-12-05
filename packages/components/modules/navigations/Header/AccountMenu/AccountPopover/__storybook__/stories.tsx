@@ -1,25 +1,47 @@
+import { User, UserApi } from '@baseapp-frontend/authentication'
+import { createTestEnvironment } from '@baseapp-frontend/graphql'
+
 import { Meta, StoryObj } from '@storybook/react'
 
 import AccountPopover from '..'
 import { withTokenSetup } from '../../../../../../.storybook/decorators'
+import { CURRENT_PROFILE_STORAGE_KEY } from '../../../../../profiles/context/CurrentProfileProvider/constants'
 import { AccountPopoverProps } from '../types'
+import { mockResolvers } from './mockResolvers'
+
+UserApi.getUser = async <TUser extends Partial<User>>() =>
+  ({
+    id: 1,
+    firstName: 'Mocked',
+    lastName: 'User',
+    email: 'mocked.user@example.com',
+  }) as TUser
 
 export default {
   title: '@baseapp-frontend | components/Navigation/AccountPopover',
   component: AccountPopover,
   args: {
-    menuItems: [
-      { label: 'Profile', onClick: () => console.log('Profile clicked') },
-      { label: 'Settings', onClick: () => console.log('Settings clicked') },
-    ],
+    MenuItemsProps: {
+      menuItems: [
+        { label: 'Profile', onClick: () => console.log('Profile clicked') }, // eslint-disable-line no-console
+        { label: 'Settings', onClick: () => console.log('Settings clicked') }, // eslint-disable-line no-console
+      ],
+    },
   },
-  argTypes: {
-    menuItems: { control: 'object' },
-    logoutButtonLabel: { control: 'text' },
-    hideLogoutButton: { control: 'boolean' },
-  },
-  tags: ['autodocs'],
-  decorators: [withTokenSetup],
+  decorators: [
+    withTokenSetup,
+    (Story, context) => {
+      localStorage.removeItem(CURRENT_PROFILE_STORAGE_KEY)
+
+      const { queueOperationResolver } = context.parameters.relayMockEnvironment as ReturnType<
+        typeof createTestEnvironment
+      >
+
+      queueOperationResolver(mockResolvers)
+
+      return <Story />
+    },
+  ],
 } as Meta
 
 type Story = StoryObj<AccountPopoverProps>
@@ -27,11 +49,6 @@ type Story = StoryObj<AccountPopoverProps>
 export const DefaultAccountPopover: Story = {
   parameters: {
     userType: 'valid',
-  },
-  args: {
-    menuItems: [
-      { label: 'Profile', onClick: () => console.log('Profile clicked') },
-      { label: 'Settings', onClick: () => console.log('Settings clicked') },
-    ],
+    mockResolvers,
   },
 }

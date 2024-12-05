@@ -4,21 +4,6 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
-"""An enumeration."""
-enum BaseappNotificationsNotificationLevelChoices {
-  """success"""
-  SUCCESS
-
-  """info"""
-  INFO
-
-  """warning"""
-  WARNING
-
-  """error"""
-  ERROR
-}
-
 type Block implements Node {
   """The ID of the object"""
   id: ID!
@@ -79,7 +64,8 @@ type BlockTogglePayload {
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
-  image: String
+  title: String
+  image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
@@ -207,6 +193,7 @@ interface ChatRoomsInterface {
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -537,6 +524,7 @@ type Message implements Node {
   extraData: JSONString
   pk: Int!
   actionObject: Node
+  isRead(profileId: ID): Boolean
 }
 
 type MessageConnection {
@@ -601,7 +589,7 @@ interface Node {
 type Notification implements Node {
   """The ID of the object"""
   id: ID!
-  level: BaseappNotificationsNotificationLevelChoices!
+  level: NotificationsNotificationLevelChoices!
   recipient: User!
   unread: Boolean!
   actorObjectId: String!
@@ -703,7 +691,7 @@ interface NotificationsInterface {
   """The ID of the object"""
   id: ID!
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: BaseappNotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
 }
@@ -736,6 +724,21 @@ type NotificationsMarkAsReadPayload {
   recipient: NotificationsInterface
   notifications: [Notification]
   clientMutationId: String
+}
+
+"""An enumeration."""
+enum NotificationsNotificationLevelChoices {
+  """success"""
+  SUCCESS
+
+  """info"""
+  INFO
+
+  """warning"""
+  WARNING
+
+  """error"""
+  ERROR
 }
 
 type OnCommentChange {
@@ -910,15 +913,26 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
+  members(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    role: ProfileRoles
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
 
   """
   Determine if the logged in user has a specific permission for this object.
@@ -940,6 +954,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
     profileId: String
+    unreadMessages: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
@@ -985,6 +1000,27 @@ interface ProfileInterface {
 }
 
 """An enumeration."""
+enum ProfileRoles {
+  """admin"""
+  ADMIN
+
+  """manager"""
+  MANAGER
+}
+
+"""An enumeration."""
+enum ProfileRoleStatus {
+  """active"""
+  ACTIVE
+
+  """pending"""
+  PENDING
+
+  """inactive"""
+  INACTIVE
+}
+
+"""An enumeration."""
 enum ProfilesProfileStatusChoices {
   """public"""
   A_1
@@ -1011,6 +1047,34 @@ type ProfileUpdatePayload {
   _debug: DjangoDebug
   profile: Profile
   clientMutationId: String
+}
+
+type ProfileUserRole implements Node {
+  """The ID of the object"""
+  id: ID!
+  user: User!
+  role: ProfileRoles
+  status: ProfileRoleStatus
+  pk: Int!
+}
+
+type ProfileUserRoleConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ProfileUserRoleEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ProfileUserRole` and its cursor."""
+type ProfileUserRoleEdge {
+  """The item at the end of the edge"""
+  node: ProfileUserRole
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type Query {
@@ -1047,7 +1111,17 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Page
-  allProfiles(offset: Int, before: String, after: String, first: Int, last: Int, name: String): ProfileConnection
+  allProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
   profile(
     """The ID of the object"""
     id: ID!
@@ -1295,6 +1369,8 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   passwordChangedDate: DateTime
   newEmail: String
   isNewEmailConfirmed: Boolean
+  firstName: String @deprecated(reason: "Deprecated in favor of fullName and shortName")
+  lastName: String @deprecated(reason: "Deprecated in favor of fullName and shortName")
   phoneNumber: String
 
   """
@@ -1324,7 +1400,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   hasPerm(perm: String!): Boolean
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: BaseappNotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
   urlPath: URLPath

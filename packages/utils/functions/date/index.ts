@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import { DATE_FORMAT } from '../../constants/date'
+import { DATE_FORMAT, TIME_FORMAT } from '../../constants/date'
 import {
   FormatDateFromApiOptions,
   FormatDateOptions,
@@ -57,4 +57,48 @@ export const formatRelativeTime = (
   }
 
   return daysDiff >= 2 ? `${Math.floor(daysDiff)} days ago` : '1 day ago'
+}
+
+export const isToday = (date: string) => {
+  if (!date) return false
+  return DateTime.fromISO(date).hasSame(DateTime.now(), 'day')
+}
+
+export const isYesterday = (date: string) => {
+  if (!date) return false
+  return DateTime.fromISO(date).hasSame(DateTime.now().minus({ days: 1 }), 'day')
+}
+
+export const datesDontHaveSameDay = (date1: string, date2: string) => {
+  if (!date1 || !date2) return true
+
+  const dt1 = DateTime.fromISO(date1)
+  const dt2 = DateTime.fromISO(date2)
+
+  if (!dt1.isValid || !dt2.isValid) return true
+
+  return !dt1.hasSame(dt2, 'day')
+}
+
+export const formatDateWithDiffNow = (date?: string | null) => {
+  if (!date) return ''
+  const dateTime = DateTime.fromISO(date)
+  if (!dateTime.isValid) return ''
+
+  if (isToday(date)) return formatDateFromApi(date, { toFormat: TIME_FORMAT[2] })
+  if (isYesterday(date)) return 'Yesterday'
+
+  const diff = dateTime.diffNow(['years', 'months', 'weeks', 'days']).toObject()
+
+  if (diff.months && Math.abs(diff.months) > 0) {
+    if (Math.abs(diff.months) > 1) return `${Math.abs(diff.months).toFixed(0)} months ago`
+    return '1 month ago'
+  }
+  if (diff.weeks && Math.abs(diff.weeks) > 0) {
+    if (Math.abs(diff.weeks) > 1) return `${Math.abs(diff.weeks).toFixed(0)} weeks ago`
+    return '1 week ago'
+  }
+  if (diff.days && Math.abs(diff.days) > 0) return `${Math.abs(diff.days).toFixed(0)} days ago`
+
+  return formatDateFromApi(date, { toFormat: DATE_FORMAT[2] })
 }

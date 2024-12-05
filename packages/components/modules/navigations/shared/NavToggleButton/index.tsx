@@ -3,7 +3,7 @@ import { ChevronIcon, bgBlur } from '@baseapp-frontend/design-system'
 import IconButton from '@mui/material/IconButton'
 import { useTheme } from '@mui/material/styles'
 
-import { NAV } from '../../constants'
+import { NAV_WIDTH } from '../../constants'
 import { NavToggleButtonProps } from './types'
 
 export default function NavToggleButton({
@@ -24,7 +24,7 @@ export default function NavToggleButton({
         p: 0.5,
         top: 32,
         position: 'fixed',
-        left: NAV.W_VERTICAL - 12,
+        left: NAV_WIDTH.VERTICAL - 12,
         zIndex: theme.zIndex.appBar + 1,
         border: `solid 1px ${theme.palette.divider}`,
         ...bgBlur({ opacity: 0.48, color: theme.palette.background.default }),

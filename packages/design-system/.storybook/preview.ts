@@ -17,6 +17,7 @@ const preview: Preview = {
       // @ts-ignore
       storySort: (a, b) => {
         const order = [
+          'Introduction',
           'Iconography',
           // Avatars
           'AvatarWithPlaceholder',

@@ -6,10 +6,6 @@ import { LoadingStateProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Displays/LoadingState',
   component: LoadingState,
-  argTypes: {
-    CircularProgressProps: { control: 'object' },
-  },
-  tags: ['autodocs'],
 } as Meta<LoadingStateProps>
 
 type Story = StoryObj<LoadingStateProps>

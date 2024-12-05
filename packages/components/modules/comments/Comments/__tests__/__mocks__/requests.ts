@@ -230,7 +230,7 @@ export const commentEditMockData = {
 export const commentDeleteMockData = {
   data: {
     commentDelete: {
-      deletedId: 'new-reply-3',
+      deletedId: 'comment-1',
       target: {
         __typename: 'Page',
         id: 'page-id',

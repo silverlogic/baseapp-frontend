@@ -9,15 +9,6 @@ import { ConfirmDialogProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Dialogs/ConfirmDialog',
   component: ConfirmDialog,
-  argTypes: {
-    open: { control: 'boolean', table: { type: { summary: 'boolean' } } },
-    onClose: { action: 'closed' },
-    title: { control: 'text' },
-    content: { control: 'text' },
-    cancelText: { control: 'text' },
-    action: { control: false },
-  },
-  tags: ['autodocs'],
 } as Meta<ConfirmDialogProps>
 
 type Story = StoryObj<ConfirmDialogProps>

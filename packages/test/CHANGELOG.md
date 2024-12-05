@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.0.4
+
+### Patch Changes
+
+- Making some mocks and configs CommonJS friendly .
+
 ## 2.0.3
 
 ### Patch Changes

@@ -50,6 +50,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
+
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
     if (!notification.unread && notifications[index - 1]?.unread) {
@@ -86,7 +87,8 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <Box sx={{ backgroundColor: 'common.white' }}>
         <Virtuoso
           data={notifications}
-          overscan={NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT}
+          // TODO: using overscan can cause Maximum call stack size exceeded error
+          // overscan={NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT}
           style={{ height: 'calc(100vh - 68px)' }}
           itemContent={(index, notification) => renderNotificationItem(notification, index)}
           components={{
@@ -116,7 +118,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
             <MarkAllAsReadButton refetch={refetchNotifications} />
           )}
           {smDown && (
-            <IconButton onClick={() => setIsDrawerOpened(false)}>
+            <IconButton onClick={() => setIsDrawerOpened(false)} aria-label="close notifications">
               <CloseIcon />
             </IconButton>
           )}

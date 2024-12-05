@@ -8,7 +8,7 @@ import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
 import { usePathname } from 'next/navigation'
 
-import { NAV } from '../../constants'
+import { NAV_WIDTH } from '../../constants'
 import NavSectionVertical from '../NavSectionVertical'
 import { VerticalDrawerProps } from './types'
 
@@ -27,7 +27,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, o
       onClose={onCloseNav}
       PaperProps={{
         sx: {
-          width: NAV.W_VERTICAL,
+          width: NAV_WIDTH.VERTICAL,
         },
       }}
     >

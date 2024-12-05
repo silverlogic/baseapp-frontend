@@ -115,10 +115,10 @@ If you need to install a package version that hasn't been published yet, follow 
 
   ```bash
   # will replace catalogs for utils and authentication packages
-  node replace-catalogs.js utils authentication
+  pnpm replace-catalogs utils authentication
 
   # will replace catalogs for all packages
-  node replace-catalogs.js
+  pnpm replace-catalogs
   ```
 
 2. **Commit and Push**:
@@ -141,13 +141,29 @@ If you need to install a package version that hasn't been published yet, follow 
   "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
   ```
 
-5. **Undo Changes and Merge**:
+5. **Restore Catalog Entries and Merge**:
 
-  Once you’ve finished testing or using the non-published version, undo the commit that removed the catalogs. You can now proceed with merging and publishing the changes.
+  Once you’ve finished testing or using the non-published version, you can restore the catalog entries in one of two ways:
 
-  ```bash
-  git revert <commit-hash>
-  ```
+  - Option 1: Revert the Commit
+
+    Revert the commit that removed the catalogs to restore them to their previous state:
+
+    ```bash
+    git revert <commit-hash>
+    ```
+    This will effectively undo the catalog removal and bring back the original entries.
+
+  - Option 2: Run the `add-catalogs` script
+
+    Run the `add-catalogs` script to reapply catalog entries without reverting the commit:
+
+    ```bash
+    pnpm add-catalogs
+    ```
+    This will update all package.json files to include catalog entries again.
+
+After using either option, proceed with committing and merging the changes
 
 ## Packages Versioning and Publishing
 
@@ -170,3 +186,31 @@ pnpm version-packages
 After running that, you might notice version bumps on the package's `version` and an update on the package's `CHANGELOG.md`.
 
 3. By now, we just need to commit & push those files and, after merging the PR, the `packages updates` will be automatically published :)
+
+## Documentation Guide
+
+To ensure that all pages, components, and utilities are thoroughly documented in Storybook, please follow these steps.
+
+### 1. Write Storybook Stories
+
+Each component and page should have a corresponding Storybook story that showcases its various states and usage scenarios:
+
+- **Include All Possible States**: Each story should cover possible states of the component or page, such as default, disabled, loading, or error configurations.
+- **Use Mocks for Data**: Use MSW (Mock Service Worker) to mock any necessary API requests, ensuring stories are self-contained and reproducible.
+- **Decorators**: Pass any necessary decorators to simulate the environment (e.g., authentication with `withTokenSetup`).
+- **Type Safety**: Ensure correct typings for all props and arguments.
+- **Conciseness**: Be thorough but concise, focusing on the most relevant states and interactions.
+
+**After creating the story**:
+- Add the story name to `storySort` in the `preview.ts` file to ensure it appears in the correct order. If you’re unsure where to add this, please ask a COP member for assistance.
+
+### 2. Add MDX Documentation
+
+In addition to stories, create an MDX file to provide detailed documentation for each page or component:
+
+- **Create an MDX File**: Place the `.mdx` file in the corresponding `__storybook__` folder. The file name should match the component or page name (e.g., `Button.mdx` for the `Button` component).
+- **Use Consistent Titles**: Match the title in the MDX file to the Storybook story for consistency:
+  - **Pages**: `@baseapp-frontend-template / Pages/[PageName]`
+  - **Components**: `@baseapp-frontend-template / [ComponentSection]/[ComponentCategory]/[ComponentName]`
+
+For detailed documentation templates and examples, refer to our [Tettra page](https://app.tettra.co/teams/TSL/pages/frontend-documentation).

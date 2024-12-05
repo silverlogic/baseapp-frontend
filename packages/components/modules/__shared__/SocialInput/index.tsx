@@ -7,6 +7,7 @@ import { SocialTextField as DefaultSocialTextField } from '@baseapp-frontend/des
 import DefaultSocialUpsertActions from '../SocialUpsertActions'
 import { SOCIAL_UPSERT_FORM } from '../constants'
 import DefaultSubmitActions from './SubmitActions'
+import { Form } from './styled'
 import { SocialInputProps } from './types'
 
 /**
@@ -87,11 +88,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
     const isCreateButtonDisabled = isLoading || !form.formState.isValid || !form.formState.isDirty
 
     return (
-      <form
-        id={formId}
-        onSubmit={form.handleSubmit(submit)}
-        className="sticky bottom-0 z-10 bg-common-white pb-4"
-      >
+      <Form id={formId} onSubmit={form.handleSubmit(submit)}>
         <SocialTextField
           inputRef={ref}
           name={SOCIAL_UPSERT_FORM.body}
@@ -111,7 +108,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
             {...SubmitActionsProps}
           />
         </SocialTextField>
-      </form>
+      </Form>
     )
   },
 )

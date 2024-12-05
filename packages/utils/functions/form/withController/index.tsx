@@ -1,15 +1,24 @@
 'use client'
 
-import type { ChangeEventHandler, FC, FocusEventHandler } from 'react'
+import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 
 import { Controller } from 'react-hook-form'
 
-import type { WithControllerProps } from './types'
+import useDebounce from '../../../hooks/useDebounce'
+import type { DebouncedFunction, WithControllerProps } from './types'
 
-function withController<T>(Component: FC<T>) {
+function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceTime = 500 } = {}) {
   return ({ name, control, helperText, ...props }: WithControllerProps<T>) => {
     if (control) {
       const { onChange, onBlur, ...restOfTheProps } = props
+      const onChangeWithFallback = onChange ?? (() => {})
+      const { debouncedFunction: debouncedOnChange } = useDebounce<DebouncedFunction>(
+        onChangeWithFallback,
+        {
+          debounceTime,
+        },
+      )
+
       return (
         <Controller
           name={name}
@@ -19,7 +28,11 @@ function withController<T>(Component: FC<T>) {
               event,
             ) => {
               field.onChange(event)
-              onChange?.(event)
+              if (onChange && shouldDebounce) {
+                debouncedOnChange(event)
+              } else {
+                onChange?.(event)
+              }
             }
             const handleOnBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
               event,

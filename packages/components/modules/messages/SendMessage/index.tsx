@@ -14,6 +14,7 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
 } from '../../__shared__/constants'
 import { SocialUpsertForm } from '../../__shared__/types'
+import { useCurrentProfile } from '../../profiles'
 import { useSendMessageMutation } from '../graphql/mutations/SendMessage'
 import { SendMessageProps } from './types'
 
@@ -73,8 +74,8 @@ let nextClientMutationId = 0
  * ```
  */
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
-  ({ profileId, roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
-    // TODO: Add message reply
+  ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
+    const { profile: currentProfile } = useCurrentProfile()
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -83,7 +84,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
 
     const onSubmit = (data: SocialUpsertForm) => {
-      if (isMutationInFlight) return
+      if (isMutationInFlight || !currentProfile) return
 
       nextClientMutationId += 1
       const clientMutationId = nextClientMutationId.toString()
@@ -94,7 +95,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         variables: {
           input: {
             content: data.body,
-            profileId,
+            profileId: currentProfile?.id,
             roomId,
             clientMutationId,
           },

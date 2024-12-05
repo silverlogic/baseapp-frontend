@@ -5,4 +5,4 @@ global.console = {
   error: jest.fn(),
 }
 
-export {}
+module.exports = {}

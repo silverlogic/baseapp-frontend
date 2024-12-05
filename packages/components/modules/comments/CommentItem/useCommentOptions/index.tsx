@@ -1,22 +1,16 @@
 import { LinkIcon, PenEditIcon, PinIcon } from '@baseapp-frontend/design-system'
 
+import { OverlayAction } from '../../../__shared__/ActionsOverlay/types'
 import useCommentPinMutation from '../../graphql/mutations/CommentPin'
-import { CommentOption } from '../types'
 import { UseCommentOptionsParams } from './types'
 
-const useCommentOptions = ({
-  comment,
-  onLongPressLeave,
-  onEdit,
-}: UseCommentOptionsParams): CommentOption[] => {
+const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): OverlayAction[] => {
   const [pinComment, isPinningComment] = useCommentPinMutation()
   const handlePinComment = () => {
     pinComment({ variables: { id: comment!.id } })
-    onLongPressLeave()
   }
 
   const handleEditComment = () => {
-    onLongPressLeave()
     onEdit()
   }
 
@@ -25,8 +19,9 @@ const useCommentOptions = ({
       disabled: true,
       icon: <LinkIcon />,
       label: 'Share Comment',
-      onClick: onLongPressLeave,
+      onClick: () => {},
       hasPermission: true,
+      closeOnClick: true,
     },
     {
       disabled: isPinningComment,
@@ -34,6 +29,7 @@ const useCommentOptions = ({
       label: `${comment?.isPinned ? 'Unpin' : 'Pin'} Comment`,
       onClick: handlePinComment,
       hasPermission: comment?.canPin,
+      closeOnClick: true,
     },
     {
       disabled: false,
@@ -41,6 +37,7 @@ const useCommentOptions = ({
       label: 'Edit Comment',
       onClick: handleEditComment,
       hasPermission: comment?.canChange,
+      closeOnClick: true,
     },
   ]
 }

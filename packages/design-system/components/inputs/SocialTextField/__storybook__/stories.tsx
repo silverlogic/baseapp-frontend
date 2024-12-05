@@ -6,18 +6,6 @@ import { SocialTextFieldProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Inputs/SocialTextField',
   component: SocialTextField,
-  argTypes: {
-    isReply: { control: 'boolean' },
-    helperText: { control: 'text', table: { type: { summary: 'string' } } },
-    replyTargetName: { control: 'text', table: { type: { summary: 'string' } } },
-    onCancelReply: { action: 'cancel reply' },
-    children: {
-      control: false,
-      description: 'Content to be rendered inside the text field.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<SocialTextFieldProps>
 
 type Story = StoryObj<SocialTextFieldProps>

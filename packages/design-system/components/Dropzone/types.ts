@@ -15,5 +15,6 @@ export interface DropzoneProps {
   onRemove: () => void
   actionText?: string
   subTitle?: string
+  maxFileSize?: number
   DropzoneOptions?: Partial<DropzoneOptions>
 }

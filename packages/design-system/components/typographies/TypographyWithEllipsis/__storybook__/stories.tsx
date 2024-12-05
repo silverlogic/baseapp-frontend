@@ -6,15 +6,6 @@ import { TypographyWithEllipsisProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Typographies/TypographyWithEllipsis',
   component: TypographyWithEllipsis,
-  argTypes: {
-    lineClamp: { control: 'number', table: { type: { summary: 'number' } } },
-    children: {
-      control: 'text',
-      description: 'Text content to be rendered.',
-      table: { type: { summary: 'string' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<TypographyWithEllipsisProps>
 
 type Story = StoryObj<TypographyWithEllipsisProps>

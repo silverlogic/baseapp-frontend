@@ -1,0 +1,19 @@
+{
+  "extends": "@baseapp-frontend/tsconfig/lib.json",
+  "compilerOptions": {
+    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
+    "outDir": "./dist"
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "babel.config.js",
+    ".storybook/**/*",
+    ".storybook/**/*.json"
+  ],
+  "exclude": ["node_modules"]
+}

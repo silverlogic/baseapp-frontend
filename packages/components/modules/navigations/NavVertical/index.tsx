@@ -7,7 +7,7 @@ import { Logo, Scrollbar, useResponsive } from '@baseapp-frontend/design-system'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
-import { NAV } from '../constants'
+import { NAV_WIDTH } from '../constants'
 import NavSectionVertical from '../shared/NavSectionVertical'
 import NavToggleButton from '../shared/NavToggleButton'
 import VerticalDrawer from '../shared/VerticalDrawer'
@@ -32,7 +32,7 @@ const NavVertical: FC<NavVerticalProps> = ({
     <Box
       sx={{
         flexShrink: { lg: 0 },
-        width: { lg: NAV.W_VERTICAL },
+        width: { lg: NAV_WIDTH.VERTICAL },
         display: { xs: 'none', lg: 'flex' },
       }}
     >
@@ -41,7 +41,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         sx={{
           height: 1,
           position: 'fixed',
-          width: NAV.W_VERTICAL,
+          width: NAV_WIDTH.VERTICAL,
           borderRight: (theme) => `solid 1px ${theme.palette.divider}`,
         }}
       >

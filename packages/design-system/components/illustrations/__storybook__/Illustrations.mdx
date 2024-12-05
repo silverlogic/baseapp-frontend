@@ -1,0 +1,27 @@
+import { Meta } from '@storybook/blocks'
+
+import * as AllImages from '..'
+
+<Meta title="@baseapp-frontend | designSystem/Illustrations" />
+
+# Illustrations
+
+<div
+  style={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+    gap: '16px',
+  }}
+>
+  {Object.entries(AllImages).map(([imageName, ImageComponent]) => (
+    <div key={imageName} style={{ textAlign: 'center' }}>
+      <ImageComponent sx={{ width: '100%', height: 'auto' }} />
+      <div>
+        {imageName
+          .replace(/([A-Z])/g, ' $1')
+          .replace('Image', '')
+          .trim()}
+      </div>
+    </div>
+  ))}
+</div>

@@ -6,6 +6,7 @@ import webpackConfig from './webpack.config'
 export default defineConfig({
   component: {
     specPattern: './modules/**/__tests__/*.cy.{js,ts,jsx,tsx}',
+    defaultCommandTimeout: 10000,
     devServer({ cypressConfig, devServerEvents, specs }) {
       return startDevServer({
         webpackConfig: webpackConfig as any,

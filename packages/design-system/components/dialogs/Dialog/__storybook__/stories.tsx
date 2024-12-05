@@ -9,20 +9,6 @@ import { DialogProps } from '../types'
 export default {
   title: '@baseapp-frontend | designSystem/Dialogs/BaseDialog',
   component: Dialog,
-  argTypes: {
-    open: { control: 'boolean' },
-    onClose: { action: 'closed' },
-    customMaxWidth: {
-      control: 'text',
-      table: { type: { summary: 'string | number' } },
-    },
-    children: {
-      control: false,
-      description: 'Content to be rendered inside the dialog.',
-      table: { type: { summary: 'ReactNode' } },
-    },
-  },
-  tags: ['autodocs'],
 } as Meta<DialogProps>
 
 type Story = StoryObj<DialogProps>
