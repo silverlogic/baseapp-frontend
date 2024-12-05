@@ -4,13 +4,12 @@ export const UserMembersListPaginationQuery = graphql`
   query UserMembersListPaginationQuery(
     $count: Int = 10
     $cursor: String
-    $orderByStatus: String
+    $orderBy: String
     $profileId: ID!
   ) {
     profile(id: $profileId) {
       pk
-      ...UserMembersListFragment
-        @arguments(count: $count, cursor: $cursor, orderByStatus: $orderByStatus)
+      ...UserMembersListFragment @arguments(count: $count, cursor: $cursor, orderBy: $orderBy)
     }
   }
 `
@@ -21,24 +20,16 @@ export const UserMembersListFragment = graphql`
   @argumentDefinitions(
     count: { type: "Int", defaultValue: 10 }
     cursor: { type: "String" }
-    orderByStatus: { type: "String", defaultValue: "custom" }
+    orderBy: { type: "String" }
   ) {
     canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")
     ...ProfileItemFragment
-    members(first: $count, after: $cursor, orderByStatus: $orderByStatus)
-      @connection(key: "UserMembersFragment_members", filters: ["orderByStatus"]) {
+    members(first: $count, after: $cursor, orderBy: $orderBy)
+      @connection(key: "UserMembersFragment_members", filters: ["orderBy"]) {
       totalCount
       edges {
         node {
-          id
-          user {
-            profile {
-              ...ProfileItemFragment
-            }
-            id
-          }
-          role
-          status
+          ...MemberItemFragment
         }
       }
       pageInfo {

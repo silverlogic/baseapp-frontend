@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2824d78b4b30fe5e86823ab79ed02827>>
+ * @generated SignedSource<<1ccb4ef3183869c662dc4a70b535479d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,9 +11,6 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type ProfileRoleStatus = 'ACTIVE' | 'INACTIVE' | 'PENDING' | '%future added value'
-export type ProfileRoles = 'ADMIN' | 'MANAGER' | '%future added value'
-
 export type UserMembersListFragment$data = {
   readonly canChangeRole: boolean | null | undefined
   readonly id: string
@@ -23,18 +20,7 @@ export type UserMembersListFragment$data = {
           | {
               readonly node:
                 | {
-                    readonly id: string
-                    readonly role: ProfileRoles | null | undefined
-                    readonly status: ProfileRoleStatus | null | undefined
-                    readonly user: {
-                      readonly id: string
-                      readonly profile:
-                        | {
-                            readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
-                          }
-                        | null
-                        | undefined
-                    }
+                    readonly ' $fragmentSpreads': FragmentRefs<'MemberItemFragment'>
                   }
                 | null
                 | undefined
@@ -59,77 +45,7 @@ export type UserMembersListFragment$key = {
 }
 
 const node: ReaderFragment = (function () {
-  var v0 = ['members'],
-    v1 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
-    v2 = {
-      kind: 'InlineDataFragmentSpread',
-      name: 'ProfileItemFragment',
-      selections: [
-        v1 /*: any*/,
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'name',
-          storageKey: null,
-        },
-        {
-          alias: null,
-          args: [
-            {
-              kind: 'Literal',
-              name: 'height',
-              value: 100,
-            },
-            {
-              kind: 'Literal',
-              name: 'width',
-              value: 100,
-            },
-          ],
-          concreteType: 'File',
-          kind: 'LinkedField',
-          name: 'image',
-          plural: false,
-          selections: [
-            {
-              alias: null,
-              args: null,
-              kind: 'ScalarField',
-              name: 'url',
-              storageKey: null,
-            },
-          ],
-          storageKey: 'image(height:100,width:100)',
-        },
-        {
-          alias: null,
-          args: null,
-          concreteType: 'URLPath',
-          kind: 'LinkedField',
-          name: 'urlPath',
-          plural: false,
-          selections: [
-            {
-              alias: null,
-              args: null,
-              kind: 'ScalarField',
-              name: 'path',
-              storageKey: null,
-            },
-          ],
-          storageKey: null,
-        },
-      ],
-      args: null,
-      argumentDefinitions: [] /*: any*/,
-    }
+  var v0 = ['members']
   return {
     argumentDefinitions: [
       {
@@ -143,9 +59,9 @@ const node: ReaderFragment = (function () {
         name: 'cursor',
       },
       {
-        defaultValue: 'custom',
+        defaultValue: null,
         kind: 'LocalArgument',
-        name: 'orderByStatus',
+        name: 'orderBy',
       },
     ],
     kind: 'Fragment',
@@ -190,14 +106,18 @@ const node: ReaderFragment = (function () {
         name: 'hasPerm',
         storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
       },
-      v2 /*: any*/,
+      {
+        args: null,
+        kind: 'FragmentSpread',
+        name: 'ProfileItemFragment',
+      },
       {
         alias: 'members',
         args: [
           {
             kind: 'Variable',
-            name: 'orderByStatus',
-            variableName: 'orderByStatus',
+            name: 'orderBy',
+            variableName: 'orderBy',
           },
         ],
         concreteType: 'ProfileUserRoleConnection',
@@ -228,42 +148,10 @@ const node: ReaderFragment = (function () {
                 name: 'node',
                 plural: false,
                 selections: [
-                  v1 /*: any*/,
                   {
-                    alias: null,
                     args: null,
-                    concreteType: 'User',
-                    kind: 'LinkedField',
-                    name: 'user',
-                    plural: false,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        concreteType: 'Profile',
-                        kind: 'LinkedField',
-                        name: 'profile',
-                        plural: false,
-                        selections: [v2 /*: any*/],
-                        storageKey: null,
-                      },
-                      v1 /*: any*/,
-                    ],
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'role',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'status',
-                    storageKey: null,
+                    kind: 'FragmentSpread',
+                    name: 'MemberItemFragment',
                   },
                   {
                     alias: null,
@@ -313,13 +201,19 @@ const node: ReaderFragment = (function () {
         ],
         storageKey: null,
       },
-      v1 /*: any*/,
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'id',
+        storageKey: null,
+      },
     ],
     type: 'Profile',
     abstractKey: null,
   }
 })()
 
-;(node as any).hash = 'e907557bac45e8f023628ea32f2dde2e'
+;(node as any).hash = '8337f3f7c24d4eeb8d4c2495429a0d71'
 
 export default node

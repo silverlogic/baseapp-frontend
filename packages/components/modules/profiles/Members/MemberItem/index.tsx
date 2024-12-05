@@ -24,12 +24,19 @@ const MemberItem: FC<MemberItemProps> = ({
   canChangeMember = true,
   userId,
 }) => {
+  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
+
   const { profile: currentProfile } = useCurrentProfile()
+
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
 
-  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
   if (!memberProfile) return null
+
+  const shouldRenderChangeRoleSelect =
+    status === MemberStatuses.active && memberRole !== 'owner' && canChangeMember
+
+  const haveMemberRoleAndStatus = memberRole && status
 
   const changeRole = (roleType: MemberRoles) => {
     if (currentProfile?.id && userId) {
@@ -96,7 +103,7 @@ const MemberItem: FC<MemberItemProps> = ({
         </Box>
       </MemberPersonalInformation>
 
-      {status === MemberStatuses.active && memberRole !== 'owner' && canChangeMember ? (
+      {shouldRenderChangeRoleSelect ? (
         <Box>
           <Select
             value={memberRole}
@@ -116,13 +123,15 @@ const MemberItem: FC<MemberItemProps> = ({
           </Select>
         </Box>
       ) : (
-        <Box>
-          <Button variant="soft" color="inherit">
-            {status === MemberStatuses.active
-              ? capitalizeFirstLetter(memberRole)
-              : capitalizeFirstLetter(status)}
-          </Button>
-        </Box>
+        haveMemberRoleAndStatus && (
+          <Box>
+            <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
+              {status === MemberStatuses.active
+                ? capitalizeFirstLetter(memberRole)
+                : capitalizeFirstLetter(status)}
+            </Button>
+          </Box>
+        )
       )}
     </MemberItemContainer>
   )

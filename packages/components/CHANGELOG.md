@@ -1,5 +1,25 @@
 # @baseapp-frontend/components
 
+## 0.0.23
+
+### Patch Changes
+
+- Create a component for listing the members of a profile
+
+## 0.0.22
+
+### Patch Changes
+
+- Fixed overlay not closing issue by forcing hover state to 'false' when exiting the delete dialog
+
+## 0.0.21
+
+### Patch Changes
+
+- Removed CommentOptions from CommentItem component and refactored into ActionsOverlay. Applied ActionsOverlay to CommentItem and ChatRoomItem components.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.22
+
 ## 0.0.20
 
 ### Patch Changes

@@ -1,22 +1,19 @@
 import type { AvatarProps, BoxProps } from '@mui/material'
 
+import { MemberItemFragment$data } from '../../../../__generated__/MemberItemFragment.graphql'
 import type { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
-import type {
-  ProfileRoleStatus,
-  ProfileRoles,
-} from '../../../../__generated__/UserMembersListFragment.graphql'
 
-export interface IMemberPersonalInformation extends BoxProps {
+export interface MemberPersonalInformationProps extends BoxProps {
   isActive: boolean
 }
 
 export interface MemberItemProps {
   member: ProfileItemFragment$key | null | undefined
-  memberRole: ProfileRoles | 'owner'
-  status: ProfileRoleStatus
-  userId?: string
+  memberRole: MemberItemFragment$data['role'] | 'owner'
+  status: MemberItemFragment$data['status']
   avatarProps?: AvatarProps
   avatarWidth?: number
   avatarHeight?: number
   canChangeMember?: boolean
+  userId?: string
 }
