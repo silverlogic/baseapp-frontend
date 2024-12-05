@@ -5,14 +5,14 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { OrganizationCreateMutation } from '../../../../__generated__/OrganizationCreateMutation.graphql'
 
 export const OrganizationCreateMutationQuery = graphql`
-  mutation OrganizationCreateMutation($input: OrganizationCreateInput!) {
+  mutation OrganizationCreateMutation($input: OrganizationCreateInput!, $connections: [ID!]!) {
     organizationCreate(input: $input) {
       organization {
         node {
           id
         }
       }
-      profile {
+      profile @prependEdge(connections: $connections) {
         node {
           ...ProfileItemFragment
         }

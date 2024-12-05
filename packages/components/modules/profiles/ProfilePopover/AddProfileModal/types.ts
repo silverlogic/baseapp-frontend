@@ -6,6 +6,7 @@ export interface AddProfileModalProps {
   open: boolean
   setOpen: (open: boolean) => void
   submitLabel?: string
+  userId: string
 }
 
 export interface OrganizationCreateForm {
