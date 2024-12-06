@@ -107,6 +107,22 @@ type ChatRoom implements Node {
     verb: Verbs
   ): MessageConnection
   unreadMessagesCount(profileId: ID): Int
+  isArchivedByCurrentProfile: Boolean
+}
+
+input ChatRoomArchiveInput {
+  roomId: ID!
+  profileId: ID!
+  archive: Boolean!
+  clientMutationId: String
+}
+
+type ChatRoomArchivePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  clientMutationId: String
 }
 
 type ChatRoomConnection {
@@ -173,6 +189,7 @@ type ChatRoomParticipant implements Node {
   """
   id: ID!
   profile: Profile
+  hasArchivedRoom: Boolean!
   pk: Int!
 }
 
@@ -261,6 +278,7 @@ interface ChatRoomsInterface {
     orderBy: String
     profileId: String
     unreadMessages: Boolean
+    archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -756,6 +774,7 @@ type Mutation {
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
+  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -1350,6 +1369,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     profileId: String
     unreadMessages: Boolean
+    archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!

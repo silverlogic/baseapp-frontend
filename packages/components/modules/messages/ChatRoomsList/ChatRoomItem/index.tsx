@@ -90,35 +90,39 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           height={48}
           src={roomData.avatarUrl}
         />
-        <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr)">
+        <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
           <Typography variant="subtitle2">{roomData.title}</Typography>
-          <Box display="grid" gridTemplateColumns="1fr min-content" alignItems="center">
-            {lastMessage && lastMessageTime && (
-              <>
-                <Typography variant="caption" color="text.secondary" noWrap>
-                  {formatDate(lastMessageTime)}
-                </Typography>
-                <Box
-                  sx={{
-                    display: 'inline-block',
-                    height: '6px',
-                    width: '6px',
-                    borderRadius: '50%',
-                    backgroundColor: 'text.disabled',
-                    marginX: '8px',
-                  }}
-                />
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  noWrap
-                  sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
-                >
-                  {lastMessage}
-                </Typography>
-              </>
-            )}
-          </Box>
+          {lastMessage && lastMessageTime ? (
+            <Box
+              display="grid"
+              gridTemplateColumns="min-content min-content auto"
+              alignItems="center"
+            >
+              <Typography variant="caption" color="text.secondary" noWrap>
+                {formatDate(lastMessageTime)}
+              </Typography>
+              <Box
+                sx={{
+                  display: 'inline-block',
+                  height: '6px',
+                  width: '6px',
+                  borderRadius: '50%',
+                  backgroundColor: 'text.disabled',
+                  marginX: '8px',
+                }}
+              />
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                noWrap
+                sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+              >
+                {lastMessage}
+              </Typography>
+            </Box>
+          ) : (
+            <div />
+          )}
         </Box>
         <Badge
           sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
