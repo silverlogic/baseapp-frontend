@@ -4,7 +4,11 @@ import * as utilsPackage from '@baseapp-frontend/utils'
 
 import 'cypress-wait-until'
 
-import { mockProfilesListFactory, mockUserProfileData } from './__mocks__/profiles'
+import {
+  mockAddProfileData,
+  mockProfilesListFactory,
+  mockUserProfileData,
+} from './__mocks__/profiles'
 import { userMockData } from './__mocks__/user'
 import AccountPopoverForTesting from './__utils__/AccountPopoverForTesting'
 
@@ -64,15 +68,13 @@ describe('AccountPopover', () => {
     // Step 1.
     cy.step('should be able to switch profile')
 
-    const profilesListLength = 6
-
-    const profileListData = mockProfilesListFactory(
-      profilesListLength,
-      mockUserProfileData.data.me.profile,
-    )
+    const profileListData = mockProfilesListFactory(mockUserProfileData.data.me.profile)
 
     cy.findByRole('menuitem', { name: /switch profile/i })
       .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: mockAddProfileData() })
+      })
       .then(() => {
         resolveMostRecentOperation({ data: profileListData })
       })
@@ -82,9 +84,7 @@ describe('AccountPopover', () => {
       cy.findAllByText(profile.node.urlPath.path).should('exist').scrollIntoView()
     })
 
-    cy.findByLabelText(
-      `Switch to ${profileListData.data.me.profiles.edges[profilesListLength - 1]?.node.name}`,
-    ).click()
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[9]?.node.name}`).click()
     cy.get('@sendToastSpy').should('have.been.calledOnce')
 
     // Step 2.
@@ -166,12 +166,17 @@ describe('AccountPopover', () => {
     // Step 3.
     cy.step('should show profile list customizations')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    const profileListData = mockProfilesListFactory(mockUserProfileData.data.me.profile)
     cy.findByRole('menuitem', { name: /change profile/i })
       .click()
       .then(() => {
+        resolveMostRecentOperation({ data: mockAddProfileData() })
+      })
+      .then(() => {
         resolveMostRecentOperation({ data: profileListData })
       })
+
+    console.log('ITEM1')
     cy.findByRole('menuitem', { name: /close/i }).should('exist')
 
     cy.findByLabelText('List of available profiles').within(() => {
