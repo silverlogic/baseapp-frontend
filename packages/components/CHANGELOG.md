@@ -5,6 +5,8 @@
 ### Patch Changes
 
 - Remove `useCurrentProfile` from the package.
+- Use mocks from `@baseapp-frontend/test`.
+
 - Updated dependencies
   - @baseapp-frontend/authentication@4.0.3
 

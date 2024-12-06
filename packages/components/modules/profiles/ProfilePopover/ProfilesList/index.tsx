@@ -11,7 +11,6 @@ import { useLazyLoadQuery } from 'react-relay'
 
 import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
-import { getMinimalProfile } from '../../graphql'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
@@ -25,7 +24,16 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
     if (currentProfile?.id !== profile.id) {
-      setCurrentProfile(getMinimalProfile(profile))
+      // TODO: handle the absolute image path on the backend
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+      const absoluteImagePath = profile.image ? `${baseUrl}${profile.image?.url}` : null
+
+      setCurrentProfile({
+        id: profile.id,
+        name: profile.name ?? null,
+        image: absoluteImagePath,
+        urlPath: profile.urlPath?.path ?? null,
+      })
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
     }

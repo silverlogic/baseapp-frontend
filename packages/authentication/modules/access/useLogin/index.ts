@@ -28,19 +28,9 @@ import {
   isLoginMfaResponse,
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { MinimalProfile, useCurrentProfile } from '../../profile'
+import { useCurrentProfile } from '../../profile'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { UseLoginOptions } from './types'
-
-const makeImagePathAbsolute = (profileArg: MinimalProfile | null) => {
-  const profile = profileArg
-  if (profile && profile.image) {
-    const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
-    if (baseUrl) {
-      profile.image = baseUrl + profile.image
-    }
-  }
-}
 
 const useLogin = ({
   loginFormOptions = {},
@@ -65,8 +55,13 @@ const useLogin = ({
     }
     const user = decodeJWT<User>(response.access)
     if (user) {
-      makeImagePathAbsolute(user.profile)
-      setCurrentProfile(user.profile)
+      // TODO: handle the absolute image path on the backend
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+      const absoluteImagePath = user.profile.image ? `${baseUrl}${user.profile.image}` : null
+      setCurrentProfile({
+        ...user.profile,
+        image: absoluteImagePath,
+      })
     }
     await setTokenAsync(accessKeyName, response.access, {
       secure: process.env.NODE_ENV === 'production',

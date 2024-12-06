@@ -11,7 +11,7 @@ jest.mock('@baseapp-frontend/utils', () => ({
   setCookie: jest.fn(),
 }))
 
-describe('CurrentProfileProvider', () => {
+describe('useCurrentProfile', () => {
   afterEach(() => {
     jest.clearAllMocks()
   })

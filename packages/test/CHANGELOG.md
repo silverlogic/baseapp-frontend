@@ -1,10 +1,16 @@
 # @baseapp-frontend/test
 
+## 2.0.5
+
+### Patch Changes
+
+- Add additional configuration to `jest.config` file.
+
 ## 2.0.4
 
 ### Patch Changes
 
-- Making some mocks and configs CommonJS friendly .
+- Making some mocks and configs CommonJS friendly.
 
 ## 2.0.3
 
