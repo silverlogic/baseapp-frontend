@@ -2,6 +2,7 @@
 
 import { ChangeEventHandler, FC, useCallback, useMemo, useState, useTransition } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { Searchbar as DefaultSearchbar, LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
@@ -29,6 +30,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   VirtuosoProps = {},
 }) => {
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
+  const { currentProfile } = useCurrentProfile()
 
   const [isRefetchPending, startRefetchTransition] = useTransition()
   const { data, loadNext, isLoadingNext, hasNext, refetch } = useRoomsList(
@@ -62,14 +64,13 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     })
   }
 
-  const { id: selectedRoom, setChatRoom } = useChatRoom()
+  useRoomListSubscription(currentProfile?.id ?? '')
 
+  const { id: selectedRoom, setChatRoom } = useChatRoom()
   const chatRooms = useMemo(
     () => data?.chatRooms?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.chatRooms?.edges],
   )
-
-  useRoomListSubscription(data.id)
 
   const renderItem = useCallback(
     (room: ChatRoomNode) => {
