@@ -27,3 +27,4 @@ export * from './graphql/queries/RoomsList'
 
 export { default as useMessagesListSubscription } from './graphql/subscriptions/useMessagesListSubscription'
 export { default as useMessageCountUpdateSubscription } from './graphql/subscriptions/useMessageCountUpdateSubscription'
+export { default as useRoomListSubscription } from './graphql/subscriptions/useRoomListSubscription'

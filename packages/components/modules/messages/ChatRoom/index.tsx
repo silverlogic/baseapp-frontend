@@ -35,10 +35,10 @@ const ChatRoom: FC<ChatRoomProps> = ({
       fetchKey: roomId,
     },
   )
-  const { currentProfile: profile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
   const [commitMutation] = useReadMessageMutation()
 
-  const prevProfileIdRef = useRef<string | undefined>(profile?.id)
+  const prevProfileIdRef = useRef<string | undefined>(currentProfile?.id)
   const prevRoomIdRef = useRef<string | undefined>(chatRoom?.id)
 
   useEffect(() => {
@@ -57,12 +57,12 @@ const ChatRoom: FC<ChatRoomProps> = ({
       }
     hasRunRef.current = true
     return () => {}
-  }, [profile?.id, chatRoom?.id])
+  }, [currentProfile?.id, chatRoom?.id])
 
   useEffect(() => {
-    prevProfileIdRef.current = profile?.id
+    prevProfileIdRef.current = currentProfile?.id
     prevRoomIdRef.current = chatRoom?.id
-  }, [profile?.id, chatRoom?.id])
+  }, [currentProfile?.id, chatRoom?.id])
 
   // TODO: handle error for chatRoom
   if (!chatRoom) {
