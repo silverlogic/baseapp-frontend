@@ -21,12 +21,12 @@
     "test:unit": "jest --config ./jest.config.ts"
   },
   "dependencies": {
-    "@hookform/resolvers": "catalog:",
-    "@mui/lab": "catalog:material-ui",
-    "@mui/material": "catalog:material-ui",
-    "@mui/system": "catalog:material-ui",
-    "@storybook/react": "catalog:storybook",
-    "@tanstack/react-query": "catalog:",
+    "@hookform/resolvers": "^3.6.0",
+    "@mui/lab": "^5.0.0-alpha.170",
+    "@mui/material": "^5.15.19",
+    "@mui/system": "^5.15.19",
+    "@storybook/react": "^8.2.8",
+    "@tanstack/react-query": "^5.45.1",
     "framer-motion": "^11.5.4",
     "graphql": "catalog:graphql",
     "js-cookie": "catalog:",
@@ -37,21 +37,21 @@
     "react-virtuoso": "catalog:",
     "relay-runtime": "catalog:graphql",
     "use-long-press": "^3.2.0",
-    "zod": "catalog:",
-    "zustand": "catalog:"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
   },
   "peerDependencies": {
-    "@baseapp-frontend/authentication": "workspace:*",
+    "@baseapp-frontend/authentication": "git+https://github.com/silverlogic/baseapp-frontend.git#BA-1786-fe-mfa-setup-fe-library&path:packages/authentication",
     "@baseapp-frontend/design-system": "workspace:*",
     "@baseapp-frontend/graphql": "workspace:*",
-    "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react18",
-    "react-dom": "catalog:react18"
+    "@baseapp-frontend/utils": "git+https://github.com/silverlogic/baseapp-frontend.git#BA-1786-fe-mfa-setup-fe-library&path:packages/utils",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
   },
   "devDependencies": {
-    "@babel/preset-env": "catalog:storybook",
-    "@babel/preset-react": "catalog:storybook",
-    "@babel/preset-typescript": "catalog:storybook",
+    "@babel/preset-env": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/preset-typescript": "^7.24.7",
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
