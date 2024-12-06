@@ -1,5 +1,4 @@
 export * from './modules/access'
-export * from './modules/mfa'
 export * from './modules/user'
 
 export { default as AllAuthApi } from './services/allAuth'
@@ -13,7 +12,6 @@ export * from './services/mfa'
 export { default as UserApi } from './services/user'
 export * from './services/user'
 
-// export type * from './types/allAuth'
+export type * from './types/allAuth'
 export type * from './types/auth'
-export type * from './types/mfa'
 export type * from './types/user'
