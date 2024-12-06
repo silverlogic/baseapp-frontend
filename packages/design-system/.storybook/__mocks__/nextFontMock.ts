@@ -1,10 +1,3 @@
-module.exports = {
-  Public_Sans: () => ({
-    className: 'mock-public-sans',
-    style: {},
-  }),
-  Barlow: () => ({
-    className: 'mock-barlow',
-    style: {},
-  }),
-}
+module.exports = require('@baseapp-frontend/test/__mocks__/nextFontMock.ts')
+
+export {}

@@ -2,9 +2,8 @@
 
 import { FC, useEffect, useState } from 'react'
 
-import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ClickableAvatar, Popover, usePopover } from '@baseapp-frontend/design-system'
-import { JWTContent } from '@baseapp-frontend/utils'
 
 import Divider from '@mui/material/Divider'
 
@@ -13,7 +12,6 @@ import {
   CurrentProfile as DefaultCurrentProfile,
   ProfilesList as DefaultProfilesList,
   SwitchProfileMenu as DefaultSwitchProfileMenu,
-  useCurrentProfile,
 } from '../../../../profiles'
 import DefaultCurrentUser from './CurrentUser'
 import LogoutItem from './LogoutItem'
@@ -35,8 +33,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   AddProfileMenuItemProps = {},
   LogoutItemProps = {},
 }) => {
-  const { user } = useJWTUser<BaseUser & JWTContent>()
-  const { profile } = useCurrentProfile()
+  const { currentProfile: profile } = useCurrentProfile({ noSSR: false })
   const popover = usePopover()
 
   const [openProfilesList, setOpenProfilesList] = useState(false)
@@ -69,7 +66,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     <>
       <ClickableAvatar
         color="secondary"
-        src={profile?.image?.url ?? user?.avatar?.small}
+        src={profile?.image ?? ''}
         alt="User avatar"
         onClick={popover.onOpen}
         isOpen={Boolean(popover.open)}

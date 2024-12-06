@@ -1,5 +1,11 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.5
+
+### Patch Changes
+
+- Use mocks from `@baseapp-frontend/test`.
+
 ## 1.0.4
 
 ### Patch Changes

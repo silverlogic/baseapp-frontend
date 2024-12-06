@@ -5,7 +5,6 @@ import { Meta, StoryObj } from '@storybook/react'
 
 import AccountPopover from '..'
 import { withTokenSetup } from '../../../../../../.storybook/decorators'
-import { CURRENT_PROFILE_STORAGE_KEY } from '../../../../../profiles/context/CurrentProfileProvider/constants'
 import { AccountPopoverProps } from '../types'
 import { mockResolvers } from './mockResolvers'
 
@@ -31,8 +30,6 @@ export default {
   decorators: [
     withTokenSetup,
     (Story, context) => {
-      localStorage.removeItem(CURRENT_PROFILE_STORAGE_KEY)
-
       const { queueOperationResolver } = context.parameters.relayMockEnvironment as ReturnType<
         typeof createTestEnvironment
       >

@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.0.3
+
+### Patch Changes
+
+- Use jotai global state and cookies to keep track of the current profile. CurrentProfileProvider is removed, use "const { currentProfile, setCurrentProfile } = useCurrentProfile()" to read and modify the current profile, respectively.
+
 ## 4.0.2
 
 ### Patch Changes

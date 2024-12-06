@@ -1,9 +1,9 @@
 import { useMemo } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
+
 import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
-
-import { useCurrentProfile } from '../../../profiles'
 
 const RoomListSubscription = graphql`
   subscription useRoomListSubscription($profileId: ID!) {
@@ -35,7 +35,7 @@ const RoomListSubscription = graphql`
 
 // TODO: check if BE subscription is working properly
 const useRoomListSubscription = (nodeId: string) => {
-  const { profile } = useCurrentProfile()
+  const { currentProfile: profile } = useCurrentProfile()
   const config = useMemo(
     () => ({
       subscription: RoomListSubscription,

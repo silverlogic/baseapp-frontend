@@ -10,7 +10,6 @@ import { CommentsProps } from './types'
 
 const Comments: FC<CommentsProps> = ({
   target: targetRef,
-  profileId,
   subscriptionsEnabled = true,
   CommentsList = DefaultCommentsList,
   CommentsListProps,
@@ -48,17 +47,11 @@ const Comments: FC<CommentsProps> = ({
     <div className="grid">
       <CommentsList
         target={target}
-        profileId={profileId}
         subscriptionsEnabled={subscriptionsEnabledBoolean}
         onReplyClick={handleCommentCreateFocus}
         {...CommentsListProps}
       />
-      <CommentCreate
-        ref={commentCreateRef}
-        targetObjectId={target.id}
-        profileId={profileId}
-        {...CommentCreateProps}
-      />
+      <CommentCreate ref={commentCreateRef} targetObjectId={target.id} {...CommentCreateProps} />
     </div>
   )
 }

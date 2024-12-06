@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 0.0.24
+
+### Patch Changes
+
+- Remove `useCurrentProfile` from the package.
+- Use mocks from `@baseapp-frontend/test`.
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.3
+
 ## 0.0.23
 
 ### Patch Changes

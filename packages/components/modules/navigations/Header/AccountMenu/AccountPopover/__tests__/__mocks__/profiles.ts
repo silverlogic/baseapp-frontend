@@ -1,30 +1,31 @@
+import { MinimalProfile } from '@baseapp-frontend/authentication'
+
 import { faker } from '@faker-js/faker'
 
 export const mockUserProfileFactory = (id: string) => {
   return {
-    data: {
-      me: {
-        profile: {
-          id,
-          name: faker.person.fullName(),
-          image: {
-            url: faker.image.avatar(),
-          },
-          urlPath: {
-            path: faker.internet.url(),
-          },
-        },
-      },
-    },
+    id,
+    name: faker.person.fullName(),
+    image: faker.image.avatar(),
+    urlPath: faker.internet.url(),
   }
 }
 
-export const mockProfilesListFactory = (size: number, userProfile: any) => {
+export const mockProfilesListFactory = (size: number, userProfile: MinimalProfile) => {
   return {
     data: {
       me: {
         profiles: [
-          userProfile,
+          {
+            id: userProfile.id,
+            name: userProfile.name,
+            image: {
+              url: userProfile.image,
+            },
+            urlPath: {
+              path: userProfile.urlPath,
+            },
+          },
           ...Array.from({ length: size }).map((_, index) => ({
             id: `profile-${index}`,
             name: faker.person.fullName(),
@@ -43,10 +44,4 @@ export const mockProfilesListFactory = (size: number, userProfile: any) => {
 
 export const mockUserProfileData = mockUserProfileFactory('user-profile-1')
 
-export const emptyMockUserProfileData = {
-  data: {
-    me: {
-      profile: null,
-    },
-  },
-}
+export const emptyMockUserProfileData = null

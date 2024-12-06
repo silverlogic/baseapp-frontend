@@ -2,15 +2,15 @@
 
 import { FC, Suspense } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ChevronIcon } from '@baseapp-frontend/design-system'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
-import { ProfileItemInlineFragment$data } from '../../../../__generated__/ProfileItemInlineFragment.graphql'
+import { ProfileItemFragment$data } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfilesListQuery as ProfilesListQueryType } from '../../../../__generated__/ProfilesListQuery.graphql'
-import useCurrentProfile from '../../context/useCurrentProfile'
 import { ProfilesListQuery } from '../../graphql/queries/ProfilesList'
 import LoadingState from './LoadingState'
 import ProfileMenuItem from './ProfileMenuItem'
@@ -20,11 +20,20 @@ import { ProfilesListProps } from './types'
 const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps }) => {
   const { me } = useLazyLoadQuery<ProfilesListQueryType>(ProfilesListQuery, {})
   const { sendToast } = useNotification()
-  const { profile: currentProfile, setCurrentProfile } = useCurrentProfile()
+  const { currentProfile, setCurrentProfile } = useCurrentProfile()
 
-  const handleProfileChange = (profile: ProfileItemInlineFragment$data) => {
+  const handleProfileChange = (profile: ProfileItemFragment$data) => {
     if (currentProfile?.id !== profile.id) {
-      setCurrentProfile({ profile })
+      // TODO: handle the absolute image path on the backend
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+      const absoluteImagePath = profile.image ? `${baseUrl}${profile.image?.url}` : null
+
+      setCurrentProfile({
+        id: profile.id,
+        name: profile.name ?? null,
+        image: absoluteImagePath,
+        urlPath: profile.urlPath?.path ?? null,
+      })
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
     }
@@ -36,7 +45,6 @@ const ProfilesList: FC<ProfilesListProps> = ({ handleCloseSubmenu, MenuItemProps
       <ProfileMenuItem
         key={index} // eslint-disable-line react/no-array-index-key
         profileRef={profileRef}
-        currentProfile={currentProfile}
         onProfileChange={handleProfileChange}
         {...MenuItemProps}
       />

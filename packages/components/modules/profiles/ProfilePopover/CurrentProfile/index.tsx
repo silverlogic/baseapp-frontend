@@ -1,13 +1,12 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 
-import useCurrentProfile from '../../context/useCurrentProfile'
-
 const CurrentProfile: FC = () => {
-  const { profile } = useCurrentProfile()
+  const { currentProfile: profile } = useCurrentProfile()
 
   if (!profile) return null
 
@@ -16,7 +15,7 @@ const CurrentProfile: FC = () => {
       <AvatarWithPlaceholder
         width={40}
         height={40}
-        src={profile.image?.url ?? ''}
+        src={profile.image ?? ''}
         alt="Current profile avatar"
         color="secondary"
       />
@@ -25,9 +24,9 @@ const CurrentProfile: FC = () => {
           {profile.name}
         </Typography>
 
-        {profile.urlPath?.path && (
+        {profile.urlPath && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {profile.urlPath?.path}
+            {profile.urlPath}
           </Typography>
         )}
       </Box>

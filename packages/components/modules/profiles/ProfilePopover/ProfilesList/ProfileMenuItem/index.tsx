@@ -1,27 +1,24 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder, CheckMarkIcon } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
-import { readInlineData } from 'react-relay'
+import { useFragment } from 'react-relay'
 
-import { ProfileItemInlineFragment$key } from '../../../../../__generated__/ProfileItemInlineFragment.graphql'
-import { ProfileItemInlineFragment } from '../../../graphql/queries/ProfileItemInline'
+import { ProfileItemFragment } from '../../../graphql/queries/ProfileItem'
 import { StyledMenuItem } from './styled'
 import { ProfileMenuItemProps } from './types'
 
 const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   profileRef,
-  currentProfile,
   onProfileChange,
   avatarProps = {},
   width = 36,
   height = 36,
 }) => {
-  const profile = readInlineData<ProfileItemInlineFragment$key>(
-    ProfileItemInlineFragment,
-    profileRef,
-  )
+  const { currentProfile } = useCurrentProfile()
+  const profile = useFragment(ProfileItemFragment, profileRef)
 
   const profileUrlPath = profile.urlPath?.path
   const isActiveProfile = profile.id === currentProfile?.id
