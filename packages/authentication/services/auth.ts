@@ -1,34 +1,8 @@
 import { baseAppFetch } from '@baseapp-frontend/utils'
 
-import type {
-  ChangeExpiredPasswordRequest,
-  ForgotPasswordRequest,
-  LoginRequest,
-  LoginResponse,
-  RegisterRequest,
-  ResetPasswordRequest,
-} from '../types/auth'
+import type { ChangeExpiredPasswordRequest } from '../types/auth'
 
-// TODO: Remove these endpoints from BE and FE.
-// Ensure reset & recover password working with allAuth
-// Refactor changeExpiredPassword to work with allAuth
 export default class AuthApi {
-  static login({ email, password }: LoginRequest): Promise<LoginResponse> {
-    return baseAppFetch(`/auth/login`, { method: 'POST', body: { email, password } })
-  }
-
-  static recoverPassword({ email }: ForgotPasswordRequest): Promise<void> {
-    return baseAppFetch(`/forgot-password`, { method: 'POST', body: { email } })
-  }
-
-  static resetPassword({ newPassword, token }: ResetPasswordRequest): Promise<void> {
-    return baseAppFetch(`/forgot-password/reset`, { method: 'POST', body: { newPassword, token } })
-  }
-
-  static register<TResponse = void>(request: RegisterRequest): Promise<TResponse> {
-    return baseAppFetch(`/register`, { method: 'POST', body: request })
-  }
-
   static changeExpiredPassword({
     currentPassword,
     newPassword,
