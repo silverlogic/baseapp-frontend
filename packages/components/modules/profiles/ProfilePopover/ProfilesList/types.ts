@@ -1,3 +1,5 @@
+import { LoadingStateProps } from '@baseapp-frontend/design-system/components/displays/LoadingState/types'
+
 import type { ProfileMenuItemProps } from './ProfileMenuItem/types'
 
 export interface ProfilesListProps {
@@ -6,4 +8,5 @@ export interface ProfilesListProps {
   cancelLabel?: string
   listMaxHeight?: number
   MenuItemProps?: Partial<ProfileMenuItemProps>
+  LoadingStateProps?: LoadingStateProps
 }
