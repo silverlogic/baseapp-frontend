@@ -6,9 +6,9 @@ import { CreateChatRoomMutation } from '../../../../__generated__/CreateChatRoom
 import { useChatRoom } from '../../context'
 
 export const CreateChatRoomMutationQuery = graphql`
-  mutation CreateChatRoomMutation($input: ChatRoomCreateInput!) {
+  mutation CreateChatRoomMutation($input: ChatRoomCreateInput!, $connections: [ID!]!) {
     chatRoomCreate(input: $input) {
-      room {
+      room @prependEdge(connections: $connections) {
         node {
           id
           participants {
@@ -18,6 +18,7 @@ export const CreateChatRoomMutationQuery = graphql`
               }
             }
           }
+          ...RoomFragment
         }
       }
       errors {
@@ -48,7 +49,7 @@ export const useCreateChatRoomMutation = (): [
         setChatRoom({
           id: response?.chatRoomCreate?.room?.node?.id,
           participants: response?.chatRoomCreate?.room?.node?.participants?.edges?.map(
-            (edge) => edge?.node && edge.node.id,
+            (edge: any) => edge?.node?.id,
           ),
         })
 

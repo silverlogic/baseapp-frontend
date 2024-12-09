@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.25
+
+### Patch Changes
+
+- Fixed RoomListSubscription connection and added CreateChatRoom mutation connection
+- Moved useRoomListSubscription hook to ChatRoom on baseapp-frontend-template
+- Removed unused fields on RoomsListFragment and RoomListSubscription
+
 ## 0.0.24
 
 ### Patch Changes
