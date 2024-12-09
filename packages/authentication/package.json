@@ -22,7 +22,7 @@
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "18.3.1"
+    "react": "catalog:react18"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
