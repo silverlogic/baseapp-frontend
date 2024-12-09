@@ -6,8 +6,11 @@ export const ChatHeaderContainer = styled(Box)(({ theme }) => ({
   borderRadius: 0,
   display: 'grid',
   gap: theme.spacing(1.5),
-  gridTemplateColumns: 'min-content 1fr',
+  gridTemplateColumns: 'min-content min-content 1fr',
   height: '56px',
   padding: `0 ${theme.spacing(2)}`,
   width: '100%',
+  [theme.breakpoints.down('md')]: {
+    borderTop: `1px ${theme.palette.divider} solid`,
+  },
 }))

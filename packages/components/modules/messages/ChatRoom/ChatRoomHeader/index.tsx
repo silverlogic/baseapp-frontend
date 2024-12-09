@@ -1,11 +1,17 @@
 import { FC } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
+import {
+  AvatarWithPlaceholder,
+  IconButton,
+  Iconify,
+  useResponsive,
+} from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ChatRoomHeaderFragment$data } from '../../../../__generated__/ChatRoomHeaderFragment.graphql'
+import { useChatRoom } from '../../context'
 import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
 import useNameAndAvatar from '../../hooks/useNameAndAvatar'
 import { getParticipantCount, isGroupChat } from '../../hooks/utils'
@@ -24,10 +30,25 @@ const getSubtitle = (roomHeader: ChatRoomHeaderFragment$data) => {
 
 const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({ roomHeaderRef }) => {
   const roomHeader = useFragment(ChatRoomHeaderFragment, roomHeaderRef)
+
+  const isUpToMd = useResponsive('up', 'md')
+  const { resetChatRoom } = useChatRoom()
+
   const { title, avatar } = useNameAndAvatar(roomHeaderRef)
   const subtitle = getSubtitle(roomHeader)
   return (
     <ChatHeaderContainer>
+      {isUpToMd ? (
+        <div />
+      ) : (
+        <IconButton
+          aria-label="return to chat room list"
+          onClick={resetChatRoom}
+          sx={{ maxWidth: 'fit-content' }}
+        >
+          <Iconify icon="eva:arrow-ios-back-fill" width={24} />
+        </IconButton>
+      )}
       <AvatarWithPlaceholder
         className="self-start justify-self-center"
         width={32}

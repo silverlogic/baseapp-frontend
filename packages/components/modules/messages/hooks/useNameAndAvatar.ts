@@ -1,13 +1,14 @@
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
+
 import { useFragment } from 'react-relay'
 
 import { ChatRoomHeaderFragment$key } from '../../../__generated__/ChatRoomHeaderFragment.graphql'
-import { useCurrentProfile } from '../../profiles'
 import { ChatRoomHeaderFragment } from '../graphql/queries/ChatRoomHeaderFragment'
 import { getParticipantCount, isGroupChat } from './utils'
 
 const useNameAndAvatar = (roomHeaderRef: ChatRoomHeaderFragment$key) => {
   const roomHeader = useFragment(ChatRoomHeaderFragment, roomHeaderRef)
-  const { profile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
   if (isGroupChat(roomHeader)) {
     return {
       title: roomHeader.title,
@@ -28,7 +29,7 @@ const useNameAndAvatar = (roomHeaderRef: ChatRoomHeaderFragment$key) => {
   }
 
   const otherParticipant = roomHeader.participants.edges.find(
-    (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== profile?.id,
+    (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
   )
   return {
     title: otherParticipant?.node?.profile?.name,
