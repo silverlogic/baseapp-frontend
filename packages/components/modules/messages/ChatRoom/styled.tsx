@@ -1,12 +1,17 @@
 import { Box } from '@mui/material'
 import { alpha, styled } from '@mui/material/styles'
 
-export const ChatRoomContainer = styled(Box)(({ theme }) => ({
+export const ChatRoomContainer = styled(Box)(() => ({
+  display: 'grid',
+  gridTemplateRows: 'min-content 1fr',
+  height: '100%',
+  width: '100%',
+}))
+
+export const ChatBodyContainer = styled(Box)(({ theme }) => ({
   backgroundColor: alpha(theme.palette.grey[500], 0.12),
-  border: `1px solid ${theme.palette.grey[200]}`,
-  borderTopLeftRadius: 0,
-  borderTopRightRadius: theme.spacing(2),
-  borderBottomLeftRadius: 0,
+  borderTop: `1px ${theme.palette.divider} solid`,
+  borderRadius: 0,
   borderBottomRightRadius: theme.spacing(2),
   display: 'grid',
   gap: theme.spacing(2),
@@ -15,7 +20,6 @@ export const ChatRoomContainer = styled(Box)(({ theme }) => ({
   paddingLeft: theme.spacing(2),
   width: '100%',
   [theme.breakpoints.down('md')]: {
-    borderTopRightRadius: 0,
     borderBottomRightRadius: 0,
   },
 }))
