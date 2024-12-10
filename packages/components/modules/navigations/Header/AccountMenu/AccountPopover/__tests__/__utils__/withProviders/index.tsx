@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { InitialProfileProp, InitialProfileProvider } from '@baseapp-frontend/authentication'
+import { InitialProfileProviderForTesting } from '@baseapp-frontend/authentication'
 import { ThemeProvider } from '@baseapp-frontend/design-system'
 import { RelayTestProvider } from '@baseapp-frontend/graphql'
 import { NotificationProvider } from '@baseapp-frontend/utils'
@@ -16,13 +16,9 @@ const queryClient = new QueryClient()
 
 const withProviders =
   (Component: FC<AccountPopoverProps>) =>
-  ({
-    environment,
-    initialProfile,
-    ...props
-  }: WithProvidersOptions & AccountPopoverProps & InitialProfileProp) => (
+  ({ environment, initialProfile, ...props }: WithProvidersOptions & AccountPopoverProps) => (
     <JotaiProvider>
-      <InitialProfileProvider initialProfile={initialProfile}>
+      <InitialProfileProviderForTesting initialProfile={initialProfile}>
         <QueryClientProvider client={queryClient}>
           <RelayTestProvider environment={environment}>
             <ThemeProvider {...defaultTheme}>
@@ -32,7 +28,7 @@ const withProviders =
             </ThemeProvider>
           </RelayTestProvider>
         </QueryClientProvider>
-      </InitialProfileProvider>
+      </InitialProfileProviderForTesting>
     </JotaiProvider>
   )
 
