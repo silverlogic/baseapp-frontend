@@ -1,6 +1,5 @@
 import { FC, useCallback, useMemo, useRef } from 'react'
 
-import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box } from '@mui/material'
@@ -9,7 +8,6 @@ import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../__generated__/MessagesListFragment.graphql'
-import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
 import { MessagesListFragment } from '../graphql/queries/MessagesList'
 import useMessagesListSubscription from '../graphql/subscriptions/useMessagesListSubscription'
 import DefaultMessagesGroup from './MessagesGroup'
@@ -31,8 +29,6 @@ const MessagesList: FC<MessagesListProps> = ({
     MessagesListFragment,
     roomRef,
   )
-  const { currentProfile: profile } = useCurrentProfile()
-  const [commitMutation] = useReadMessageMutation()
   const totalNumberOfMessages = room?.allMessages?.totalCount ?? 0
 
   const virtuosoRef = useRef<VirtuosoHandle>(null)
@@ -103,18 +99,6 @@ const MessagesList: FC<MessagesListProps> = ({
       startReached={() => {
         if (hasNext) {
           loadNext(MESSAGES_TO_LOAD_NEXT)
-        }
-      }}
-      endReached={() => {
-        if (room?.unreadMessagesCount && room?.unreadMessagesCount > 0) {
-          commitMutation({
-            variables: {
-              input: {
-                roomId: room.id,
-                profileId: profile?.id as string,
-              },
-            },
-          })
         }
       }}
       components={{
