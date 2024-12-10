@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.0.4
+
+### Patch Changes
+
+- Make sure the log out listener is loaded only once in useCurrentProfile
+
 ## 4.0.3
 
 ### Patch Changes
