@@ -1,12 +1,12 @@
 import { FC } from 'react'
 
-import { User, useJWTUser } from '@baseapp-frontend/authentication'
-import { JWTContent, joinWithSeparator } from '@baseapp-frontend/utils'
+import { useJWTUser } from '@baseapp-frontend/authentication'
+import { joinWithSeparator } from '@baseapp-frontend/utils'
 
 import { Box, Typography } from '@mui/material'
 
 const CurrentUser: FC = () => {
-  const { user } = useJWTUser<User & JWTContent>()
+  const { user } = useJWTUser()
 
   if (!user) {
     return null

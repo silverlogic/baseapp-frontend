@@ -1,5 +1,14 @@
 # @baseapp-frontend/authentication
 
+## 4.0.4
+
+### Patch Changes
+
+- Make sure the log out listener is loaded only once on `useCurrentProfile`.
+- Fix `useLogin` adding optional chaining to a problematic expression.
+- Move `InitialProfileProviderForTesting` around.
+
+
 ## 4.0.3
 
 ### Patch Changes

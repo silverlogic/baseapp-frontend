@@ -57,7 +57,7 @@ const useLogin = ({
     if (user) {
       // TODO: handle the absolute image path on the backend
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
-      const absoluteImagePath = user.profile.image ? `${baseUrl}${user.profile.image}` : null
+      const absoluteImagePath = user?.profile?.image ? `${baseUrl}${user.profile.image}` : null
       setCurrentProfile({
         ...user.profile,
         image: absoluteImagePath,
