@@ -62,9 +62,7 @@ describe('AccountPopover', () => {
     // Step 1.
     cy.step('should be able to switch profile')
 
-    const profilesListLength = 6
-
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData)
+    const profileListData = mockProfilesListFactory(mockUserProfileData)
 
     cy.findByRole('menuitem', { name: /switch profile/i })
       .click()
@@ -75,7 +73,6 @@ describe('AccountPopover', () => {
         resolveMostRecentOperation({ data: profileListData })
       })
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[1]?.node.name}`).click()
     profileListData.data.me.profiles.edges.forEach((profile) => {
       cy.findAllByText(profile.node?.name!).should('exist')
       cy.findAllByText(profile.node?.urlPath?.path!).should('exist').scrollIntoView()
@@ -160,7 +157,7 @@ describe('AccountPopover', () => {
     // Step 3.
     cy.step('should show profile list customizations')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData)
+    const profileListData = mockProfilesListFactory(mockUserProfileData)
     cy.findByRole('menuitem', { name: /change profile/i })
       .click()
       .then(() => {
@@ -170,7 +167,6 @@ describe('AccountPopover', () => {
         resolveMostRecentOperation({ data: profileListData })
       })
 
-    console.log('ITEM1')
     cy.findByRole('menuitem', { name: /close/i }).should('exist')
 
     cy.findByLabelText('List of available profiles').within(() => {

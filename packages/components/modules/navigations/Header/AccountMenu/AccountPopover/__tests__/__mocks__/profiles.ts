@@ -11,7 +11,7 @@ export const mockUserProfileFactory = (id: string = 'user-profile-1') => {
   }
 }
 
-export const mockProfilesListFactory = (size: number, userProfile: MinimalProfile) => {
+export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
   return {
     data: {
       me: {
