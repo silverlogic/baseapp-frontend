@@ -47,9 +47,13 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
               variables: {
                 input: { profileId: currentProfile.id, participants: [id] },
                 connections: [
-                  // TODO: add filter handling (for now we can default 'unreadMessages' to false)
                   ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
                     unreadMessages: false,
+                    archived: false,
+                  }),
+                  ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
+                    unreadMessages: true,
+                    archived: false,
                   }),
                 ],
               },

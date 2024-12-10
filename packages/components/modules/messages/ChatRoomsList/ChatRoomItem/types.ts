@@ -10,6 +10,8 @@ export interface ChatRoomItemProps {
   handleClick?: () => void
   Badge?: FC<BadgeProps>
   BadgeProps?: Partial<BadgeProps>
+  isInArchivedTab: boolean
+  isInUnreadTab: boolean
 }
 
 export interface StyledChatCardProps extends BoxProps {
