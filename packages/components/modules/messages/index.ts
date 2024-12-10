@@ -19,9 +19,10 @@ export * from './graphql/mutations/SendMessage'
 export * from './graphql/mutations/CreateChatRoom'
 export * from './graphql/mutations/ReadMessages'
 
+export * from './graphql/queries/ChatRoomQuery'
+export * from './graphql/queries/ChatRoomHeaderFragment'
 export * from './graphql/queries/MessageItem'
 export * from './graphql/queries/MessagesList'
-export * from './graphql/queries/ChatRoomQuery'
 export * from './graphql/queries/Room'
 export * from './graphql/queries/RoomsList'
 
