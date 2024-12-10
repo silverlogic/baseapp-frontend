@@ -1,7 +1,5 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
-
 import {
   LOGOUT_EVENT,
   ServerSideRenderingOption,
@@ -26,6 +24,17 @@ export const getProfileFromCookie = ({ noSSR = true }: ServerSideRenderingOption
 const initialProfile = getProfileFromCookie()
 
 export const profileAtom = atom<MinimalProfile | null>(initialProfile)
+
+profileAtom.onMount = (setAtom) => {
+  const removeCurrentProfile = () => {
+    setAtom(null)
+    removeCookie(CURRENT_PROFILE_KEY)
+  }
+  eventEmitter.on(LOGOUT_EVENT, removeCurrentProfile)
+  return () => {
+    eventEmitter.off(LOGOUT_EVENT, removeCurrentProfile)
+  }
+}
 
 /**
  * By using `useCurrentProfile` with the `noSSR` option set to `false`, causes Next.js to dynamically render the affected pages, instead of statically rendering them.
@@ -53,15 +62,6 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
       setCurrentProfile(newProfile)
     }
   }
-
-  const removeCurrentProfile = useCallback(() => setCurrentProfile(null), [])
-
-  useEffect(() => {
-    eventEmitter.on(LOGOUT_EVENT, removeCurrentProfile)
-    return () => {
-      eventEmitter.off(LOGOUT_EVENT, removeCurrentProfile)
-    }
-  }, [])
 
   if (isSSR) {
     return {
