@@ -45,6 +45,7 @@
     "@babel/preset-typescript": "catalog:storybook",
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
+    "@baseapp-frontend/test": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
