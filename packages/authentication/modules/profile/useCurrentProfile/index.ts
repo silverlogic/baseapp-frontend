@@ -1,7 +1,5 @@
 'use client'
 
-import { useCallback, useEffect } from 'react'
-
 import {
   LOGOUT_EVENT,
   ServerSideRenderingOption,
@@ -64,15 +62,6 @@ const useCurrentProfile = ({ noSSR = true }: ServerSideRenderingOption = {}) => 
       setCurrentProfile(newProfile)
     }
   }
-
-  const removeCurrentProfile = useCallback(() => setCurrentProfile(null), [])
-
-  useEffect(() => {
-    eventEmitter.on(LOGOUT_EVENT, removeCurrentProfile)
-    return () => {
-      eventEmitter.off(LOGOUT_EVENT, removeCurrentProfile)
-    }
-  }, [])
 
   if (isSSR) {
     return {
