@@ -103,6 +103,7 @@ type ChatRoom implements Node {
   image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
+  isGroup: Boolean!
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
@@ -138,6 +139,8 @@ type ChatRoomConnection {
 input ChatRoomCreateInput {
   profileId: ID!
   participants: [ID]!
+  isGroup: Boolean = false
+  title: String
   clientMutationId: String
 }
 
@@ -624,6 +627,7 @@ type Metadata {
 }
 
 type Mutation {
+  rateCreate(input: RateCreateInput!): RateCreatePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
@@ -1365,6 +1369,22 @@ type RateConnection {
   edges: [RateEdge]!
   totalCount: Int
   edgeCount: Int
+}
+
+input RateCreateInput {
+  targetObjectId: ID!
+  profileId: ID
+  value: Int!
+  clientMutationId: String
+}
+
+type RateCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  rate: RateEdge
+  target: RatingsInterface
+  clientMutationId: String
 }
 
 """A Relay edge containing a `Rate` and its cursor."""

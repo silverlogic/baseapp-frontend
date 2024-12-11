@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8ee140d8fcda94cbadcfae93ce3159e6>>
+ * @generated SignedSource<<6a243e2f7b132518f7fdbbec8f97663b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -157,6 +157,13 @@ const node: ConcreteRequest = (function () {
               args: null,
               kind: 'ScalarField',
               name: 'title',
+              storageKey: null,
+            },
+            {
+              alias: null,
+              args: null,
+              kind: 'ScalarField',
+              name: 'isGroup',
               storageKey: null,
             },
             {
@@ -386,12 +393,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '1be7817039d0266ae5f5a59e70f3cae3',
+      cacheID: 'c867f738878b04e9eabc322e3ae2f308',
       id: null,
       metadata: {},
       name: 'ChatRoomQuery',
       operationKind: 'query',
-      text: 'query ChatRoomQuery(\n  $roomId: ID!\n) {\n  chatRoom(id: $roomId) {\n    id\n    ...ChatRoomHeaderFragment\n    ...MessagesListFragment\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomQuery(\n  $roomId: ID!\n) {\n  chatRoom(id: $roomId) {\n    id\n    ...ChatRoomHeaderFragment\n    ...MessagesListFragment\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  isGroup\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  isGroup\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
