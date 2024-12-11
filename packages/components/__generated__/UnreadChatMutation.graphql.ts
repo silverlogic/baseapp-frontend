@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<02b8381612f47b357400105930f18b82>>
+ * @generated SignedSource<<5aa83cdec1d1f95ae9653aaf4fe87d36>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -37,8 +37,8 @@ export type UnreadChatMutation$data = {
               readonly id: string
               readonly unreadMessages:
                 | {
-                    readonly count: number | null | undefined
-                    readonly markedUnread: boolean | null | undefined
+                    readonly count: number
+                    readonly markedUnread: boolean
                   }
                 | null
                 | undefined
@@ -64,98 +64,99 @@ const node: ConcreteRequest = (function () {
     ],
     v1 = [
       {
-        alias: null,
-        args: [
-          {
-            kind: 'Variable',
-            name: 'input',
-            variableName: 'input',
-          },
-        ],
-        concreteType: 'ChatRoomUnreadPayload',
-        kind: 'LinkedField',
-        name: 'chatRoomUnread',
-        plural: false,
-        selections: [
-          {
-            alias: null,
-            args: null,
-            concreteType: 'ChatRoom',
-            kind: 'LinkedField',
-            name: 'room',
-            plural: false,
-            selections: [
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'id',
-                storageKey: null,
-              },
-              {
-                alias: null,
-                args: null,
-                concreteType: 'UnreadMessages',
-                kind: 'LinkedField',
-                name: 'unreadMessages',
-                plural: false,
-                selections: [
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'count',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'markedUnread',
-                    storageKey: null,
-                  },
-                ],
-                storageKey: null,
-              },
-            ],
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            concreteType: 'ErrorType',
-            kind: 'LinkedField',
-            name: 'errors',
-            plural: true,
-            selections: [
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'field',
-                storageKey: null,
-              },
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'messages',
-                storageKey: null,
-              },
-            ],
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
+        kind: 'Variable',
+        name: 'input',
+        variableName: 'input',
       },
-    ]
+    ],
+    v2 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    v3 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'count',
+      storageKey: null,
+    },
+    v4 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'markedUnread',
+      storageKey: null,
+    },
+    v5 = {
+      alias: null,
+      args: null,
+      concreteType: 'ErrorType',
+      kind: 'LinkedField',
+      name: 'errors',
+      plural: true,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'field',
+          storageKey: null,
+        },
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'messages',
+          storageKey: null,
+        },
+      ],
+      storageKey: null,
+    }
   return {
     fragment: {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Fragment',
       metadata: null,
       name: 'UnreadChatMutation',
-      selections: v1 /*: any*/,
+      selections: [
+        {
+          alias: null,
+          args: v1 /*: any*/,
+          concreteType: 'ChatRoomUnreadPayload',
+          kind: 'LinkedField',
+          name: 'chatRoomUnread',
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: 'ChatRoom',
+              kind: 'LinkedField',
+              name: 'room',
+              plural: false,
+              selections: [
+                v2 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: 'UnreadMessageCount',
+                  kind: 'LinkedField',
+                  name: 'unreadMessages',
+                  plural: false,
+                  selections: [v3 /*: any*/, v4 /*: any*/],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+            v5 /*: any*/,
+          ],
+          storageKey: null,
+        },
+      ],
       type: 'Mutation',
       abstractKey: null,
     },
@@ -164,15 +165,50 @@ const node: ConcreteRequest = (function () {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Operation',
       name: 'UnreadChatMutation',
-      selections: v1 /*: any*/,
+      selections: [
+        {
+          alias: null,
+          args: v1 /*: any*/,
+          concreteType: 'ChatRoomUnreadPayload',
+          kind: 'LinkedField',
+          name: 'chatRoomUnread',
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: 'ChatRoom',
+              kind: 'LinkedField',
+              name: 'room',
+              plural: false,
+              selections: [
+                v2 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: 'UnreadMessageCount',
+                  kind: 'LinkedField',
+                  name: 'unreadMessages',
+                  plural: false,
+                  selections: [v3 /*: any*/, v4 /*: any*/, v2 /*: any*/],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+            v5 /*: any*/,
+          ],
+          storageKey: null,
+        },
+      ],
     },
     params: {
-      cacheID: '4d9724bd26bcdedc2cc87395d6e1d138',
+      cacheID: 'a95fee2710fb461b830252379ad489f5',
       id: null,
       metadata: {},
       name: 'UnreadChatMutation',
       operationKind: 'mutation',
-      text: 'mutation UnreadChatMutation(\n  $input: ChatRoomUnreadInput!\n) {\n  chatRoomUnread(input: $input) {\n    room {\n      id\n      unreadMessages {\n        count\n        markedUnread\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
+      text: 'mutation UnreadChatMutation(\n  $input: ChatRoomUnreadInput!\n) {\n  chatRoomUnread(input: $input) {\n    room {\n      id\n      unreadMessages {\n        count\n        markedUnread\n        id\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
     },
   }
 })()

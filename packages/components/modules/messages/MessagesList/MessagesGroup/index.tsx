@@ -7,10 +7,7 @@ import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
 
-import {
-  MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME,
-  MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE,
-} from '../../constants'
+import { MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME } from '../../constants'
 import DefaultMessageItem from './MessageItem'
 import Timestamp from './Timestamp'
 import { DateGroupTypography } from './styled'
@@ -23,7 +20,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   hasNext,
   message,
   messageIndex,
-  roomParticipantsCount,
+  isGroup = false,
   MessageItem = DefaultMessageItem,
   MessageItemProps = {},
 }) => {
@@ -125,10 +122,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   const flexAlignments = isOwnMessage ? 'flex-end' : 'flex-start'
   const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
 
-  const canShowName =
-    canShowAvatar &&
-    roomParticipantsCount &&
-    roomParticipantsCount >= MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE
+  const canShowName = canShowAvatar && isGroup
 
   if (!message) return null
 
