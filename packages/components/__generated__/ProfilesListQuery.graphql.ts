@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a5bca4ae2854e79a70861c3137944321>>
+ * @generated SignedSource<<a7db38ea2eeecfda8b2dd37e43b616d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,20 +11,15 @@
 import { ConcreteRequest, Query } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type ProfilesListQuery$variables = Record<PropertyKey, never>
+export type ProfilesListQuery$variables = {
+  count: number
+  cursor?: string | null | undefined
+}
 export type ProfilesListQuery$data = {
   readonly me:
     | {
-        readonly profiles:
-          | ReadonlyArray<
-              | {
-                  readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
-                }
-              | null
-              | undefined
-            >
-          | null
-          | undefined
+        readonly id: string
+        readonly ' $fragmentSpreads': FragmentRefs<'ProfilesListFragment'>
       }
     | null
     | undefined
@@ -35,16 +30,40 @@ export type ProfilesListQuery = {
 }
 
 const node: ConcreteRequest = (function () {
-  var v0 = {
-    alias: null,
-    args: null,
-    kind: 'ScalarField',
-    name: 'id',
-    storageKey: null,
-  }
+  var v0 = [
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'count',
+      },
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'cursor',
+      },
+    ],
+    v1 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    v2 = [
+      {
+        kind: 'Variable',
+        name: 'after',
+        variableName: 'cursor',
+      },
+      {
+        kind: 'Variable',
+        name: 'first',
+        variableName: 'count',
+      },
+    ]
   return {
     fragment: {
-      argumentDefinitions: [],
+      argumentDefinitions: v0 /*: any*/,
       kind: 'Fragment',
       metadata: null,
       name: 'ProfilesListQuery',
@@ -57,21 +76,22 @@ const node: ConcreteRequest = (function () {
           name: 'me',
           plural: false,
           selections: [
+            v1 /*: any*/,
             {
-              alias: null,
-              args: null,
-              concreteType: 'Profile',
-              kind: 'LinkedField',
-              name: 'profiles',
-              plural: true,
-              selections: [
+              args: [
                 {
-                  args: null,
-                  kind: 'FragmentSpread',
-                  name: 'ProfileItemFragment',
+                  kind: 'Variable',
+                  name: 'count',
+                  variableName: 'count',
+                },
+                {
+                  kind: 'Variable',
+                  name: 'cursor',
+                  variableName: 'cursor',
                 },
               ],
-              storageKey: null,
+              kind: 'FragmentSpread',
+              name: 'ProfilesListFragment',
             },
           ],
           storageKey: null,
@@ -82,7 +102,7 @@ const node: ConcreteRequest = (function () {
     },
     kind: 'Request',
     operation: {
-      argumentDefinitions: [],
+      argumentDefinitions: v0 /*: any*/,
       kind: 'Operation',
       name: 'ProfilesListQuery',
       selections: [
@@ -94,90 +114,160 @@ const node: ConcreteRequest = (function () {
           name: 'me',
           plural: false,
           selections: [
+            v1 /*: any*/,
             {
               alias: null,
-              args: null,
-              concreteType: 'Profile',
+              args: v2 /*: any*/,
+              concreteType: 'ProfileConnection',
               kind: 'LinkedField',
               name: 'profiles',
-              plural: true,
+              plural: false,
               selections: [
-                v0 /*: any*/,
                 {
                   alias: null,
                   args: null,
-                  kind: 'ScalarField',
-                  name: 'name',
+                  concreteType: 'ProfileEdge',
+                  kind: 'LinkedField',
+                  name: 'edges',
+                  plural: true,
+                  selections: [
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'cursor',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: 'Profile',
+                      kind: 'LinkedField',
+                      name: 'node',
+                      plural: false,
+                      selections: [
+                        v1 /*: any*/,
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: 'name',
+                          storageKey: null,
+                        },
+                        {
+                          alias: null,
+                          args: [
+                            {
+                              kind: 'Literal',
+                              name: 'height',
+                              value: 100,
+                            },
+                            {
+                              kind: 'Literal',
+                              name: 'width',
+                              value: 100,
+                            },
+                          ],
+                          concreteType: 'File',
+                          kind: 'LinkedField',
+                          name: 'image',
+                          plural: false,
+                          selections: [
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
+                              name: 'url',
+                              storageKey: null,
+                            },
+                          ],
+                          storageKey: 'image(height:100,width:100)',
+                        },
+                        {
+                          alias: null,
+                          args: null,
+                          concreteType: 'URLPath',
+                          kind: 'LinkedField',
+                          name: 'urlPath',
+                          plural: false,
+                          selections: [
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
+                              name: 'path',
+                              storageKey: null,
+                            },
+                            v1 /*: any*/,
+                          ],
+                          storageKey: null,
+                        },
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: '__typename',
+                          storageKey: null,
+                        },
+                      ],
+                      storageKey: null,
+                    },
+                  ],
                   storageKey: null,
                 },
                 {
                   alias: null,
-                  args: [
-                    {
-                      kind: 'Literal',
-                      name: 'height',
-                      value: 100,
-                    },
-                    {
-                      kind: 'Literal',
-                      name: 'width',
-                      value: 100,
-                    },
-                  ],
-                  concreteType: 'File',
-                  kind: 'LinkedField',
-                  name: 'image',
-                  plural: false,
-                  selections: [
-                    {
-                      alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'url',
-                      storageKey: null,
-                    },
-                  ],
-                  storageKey: 'image(height:100,width:100)',
-                },
-                {
-                  alias: null,
                   args: null,
-                  concreteType: 'URLPath',
+                  concreteType: 'PageInfo',
                   kind: 'LinkedField',
-                  name: 'urlPath',
+                  name: 'pageInfo',
                   plural: false,
                   selections: [
                     {
                       alias: null,
                       args: null,
                       kind: 'ScalarField',
-                      name: 'path',
+                      name: 'hasNextPage',
                       storageKey: null,
                     },
-                    v0 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'endCursor',
+                      storageKey: null,
+                    },
                   ],
                   storageKey: null,
                 },
               ],
               storageKey: null,
             },
-            v0 /*: any*/,
+            {
+              alias: null,
+              args: v2 /*: any*/,
+              filters: null,
+              handle: 'connection',
+              key: 'ProfilesListFragment_profiles',
+              kind: 'LinkedHandle',
+              name: 'profiles',
+            },
           ],
           storageKey: null,
         },
       ],
     },
     params: {
-      cacheID: 'f45449b4beffd5247f8dd3fcb75e43cd',
+      cacheID: '4254a9462b2759817c71e9febce50ff8',
       id: null,
       metadata: {},
       name: 'ProfilesListQuery',
       operationKind: 'query',
-      text: 'query ProfilesListQuery {\n  me {\n    profiles {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query ProfilesListQuery(\n  $count: Int!\n  $cursor: String\n) {\n  me {\n    id\n    ...ProfilesListFragment_1G22uz\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment ProfilesListFragment_1G22uz on User {\n  id\n  profiles(first: $count, after: $cursor) {\n    edges {\n      cursor\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'ce9ca315be07ccdb58629abb177bc931'
+;(node as any).hash = 'f29be79e4f4e86911f0532d2c86db263'
 
 export default node

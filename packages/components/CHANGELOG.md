@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.27
+
+### Patch Changes
+
+- Allow users to create new organization profile.
+
 ## 0.0.26
 
 ### Patch Changes

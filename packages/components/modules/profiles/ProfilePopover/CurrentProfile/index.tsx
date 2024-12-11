@@ -15,7 +15,7 @@ const CurrentProfile: FC = () => {
       <AvatarWithPlaceholder
         width={40}
         height={40}
-        src={profile.image ?? ''}
+        src={profile?.image ?? ''}
         alt="Current profile avatar"
         color="secondary"
       />
@@ -24,7 +24,7 @@ const CurrentProfile: FC = () => {
           {profile.name}
         </Typography>
 
-        {profile.urlPath && (
+        {profile?.urlPath && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {profile.urlPath}
           </Typography>
