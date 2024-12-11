@@ -65,7 +65,7 @@ const useRoomListSubscription = (nodeId: string) => {
         return null
       },
     }),
-    [nodeId],
+    [nodeId, profile?.id],
   )
 
   return useSubscription(config)
