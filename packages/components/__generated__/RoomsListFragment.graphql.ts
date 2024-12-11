@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<38e0add85315f14cc90ee08389420fe7>>
+ * @generated SignedSource<<fd47e378297581a2b3072b774db578d4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -54,6 +54,11 @@ const node: ReaderFragment = (function () {
   return {
     argumentDefinitions: [
       {
+        defaultValue: false,
+        kind: 'LocalArgument',
+        name: 'archived',
+      },
+      {
         defaultValue: 5,
         kind: 'LocalArgument',
         name: 'count',
@@ -106,6 +111,11 @@ const node: ReaderFragment = (function () {
       {
         alias: 'chatRooms',
         args: [
+          {
+            kind: 'Variable',
+            name: 'archived',
+            variableName: 'archived',
+          },
           {
             kind: 'Variable',
             name: 'q',
@@ -199,6 +209,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'f7a5e744317c2621d3e82752cdd1459b'
+;(node as any).hash = '7fe57d53d40a4295a9eb2ea600d96f11'
 
 export default node

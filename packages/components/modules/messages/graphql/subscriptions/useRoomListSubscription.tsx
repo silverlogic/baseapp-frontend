@@ -17,12 +17,13 @@ const RoomListSubscriptionQuery = graphql`
 
 const useRoomListSubscription = (profileId: string) => {
   const config = useMemo(() => {
-    // TODO: add filter handling (for now we can default 'unreadMessages' to false)
     const connectionIdActive = ConnectionHandler.getConnectionID(profileId, 'roomsList_chatRooms', {
       unreadMessages: false,
+      archived: false,
     })
     const connectionIdUnread = ConnectionHandler.getConnectionID(profileId, 'roomsList_chatRooms', {
       unreadMessages: true,
+      archived: false,
     })
     return {
       subscription: RoomListSubscriptionQuery,

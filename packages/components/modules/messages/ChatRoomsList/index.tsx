@@ -38,6 +38,9 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
+  const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
+  const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
+
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value || ''
     startTransition(() => {
@@ -56,7 +59,10 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     setTab(newTab as ChatTabValues)
     startRefetchTransition(() => {
       refetch(
-        { unreadMessages: newTab === CHAT_TAB_VALUES.unread },
+        {
+          unreadMessages: newTab === CHAT_TAB_VALUES.unread,
+          archived: newTab === CHAT_TAB_VALUES.archived,
+        },
         { fetchPolicy: 'store-and-network' },
       )
     })
@@ -81,6 +87,8 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
           handleClick={() => {
             setChatRoom({ id: room.id })
           }}
+          isInUnreadTab={isInUnreadTab}
+          isInArchivedTab={isInArchivedTab}
           {...ChatRoomItemProps}
         />
       )
