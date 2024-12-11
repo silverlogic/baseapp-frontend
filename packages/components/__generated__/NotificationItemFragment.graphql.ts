@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<54c65b4705b09eb66456e99dd5901529>>
+ * @generated SignedSource<<c9ddcf15734fdc73a61ee51daa5ba86e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,7 +11,7 @@
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type BaseappNotificationsNotificationLevelChoices =
+export type NotificationsNotificationLevelChoices =
   | 'ERROR'
   | 'INFO'
   | 'SUCCESS'
@@ -43,7 +43,7 @@ export type NotificationItemFragment$data = {
   readonly data: any | null | undefined
   readonly description: string | null | undefined
   readonly id: string
-  readonly level: BaseappNotificationsNotificationLevelChoices
+  readonly level: NotificationsNotificationLevelChoices
   readonly pk: number
   readonly target:
     | {

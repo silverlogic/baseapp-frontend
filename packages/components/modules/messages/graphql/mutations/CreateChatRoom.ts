@@ -11,6 +11,11 @@ export const CreateChatRoomMutationQuery = graphql`
       room {
         node {
           id
+          isGroup
+          title
+          image(width: 144, height: 144) {
+            url
+          }
           participants {
             edges {
               node {

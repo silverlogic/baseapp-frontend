@@ -28,6 +28,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   SearchbarProps = {},
   VirtuosoProps = {},
   setIsInExistingChatRoomsView,
+  setIsInGroupChatCreation,
 }) => {
   const {
     data: { allProfiles },
@@ -121,7 +122,11 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
         />
       </SearchbarContainer>
       {/* TODO: Group chat creation click handler */}
-      <GroupChatContainer onClick={() => {}}>
+      <GroupChatContainer
+        onClick={() => {
+          setIsInGroupChatCreation(true)
+        }}
+      >
         <AvatarWithPlaceholder
           width={48}
           height={48}
