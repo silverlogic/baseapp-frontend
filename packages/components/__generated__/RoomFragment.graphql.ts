@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<94f429c180be507431ab05033c8e28fa>>
+ * @generated SignedSource<<ea0c72ee04b8adb6a2cd960cde22f9d1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,7 @@ export type RoomFragment$data = {
       }
     | null
     | undefined
+  readonly isGroup: boolean
   readonly lastMessage:
     | {
         readonly content: string | null | undefined
@@ -77,35 +78,15 @@ const node: ReaderFragment = (function () {
       name: 'id',
       storageKey: null,
     },
-    v1 = {
-      alias: null,
-      args: [
-        {
-          kind: 'Literal',
-          name: 'height',
-          value: 100,
-        },
-        {
-          kind: 'Literal',
-          name: 'width',
-          value: 100,
-        },
-      ],
-      concreteType: 'File',
-      kind: 'LinkedField',
-      name: 'image',
-      plural: false,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'url',
-          storageKey: null,
-        },
-      ],
-      storageKey: 'image(height:100,width:100)',
-    }
+    v1 = [
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'url',
+        storageKey: null,
+      },
+    ]
   return {
     argumentDefinitions: [],
     kind: 'Fragment',
@@ -120,7 +101,27 @@ const node: ReaderFragment = (function () {
         name: 'unreadMessagesCount',
         storageKey: null,
       },
-      v1 /*: any*/,
+      {
+        alias: null,
+        args: [
+          {
+            kind: 'Literal',
+            name: 'height',
+            value: 144,
+          },
+          {
+            kind: 'Literal',
+            name: 'width',
+            value: 144,
+          },
+        ],
+        concreteType: 'File',
+        kind: 'LinkedField',
+        name: 'image',
+        plural: false,
+        selections: v1 /*: any*/,
+        storageKey: 'image(height:144,width:144)',
+      },
       {
         alias: null,
         args: null,
@@ -152,6 +153,13 @@ const node: ReaderFragment = (function () {
         args: null,
         kind: 'ScalarField',
         name: 'title',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'isGroup',
         storageKey: null,
       },
       {
@@ -209,7 +217,27 @@ const node: ReaderFragment = (function () {
                         name: 'name',
                         storageKey: null,
                       },
-                      v1 /*: any*/,
+                      {
+                        alias: null,
+                        args: [
+                          {
+                            kind: 'Literal',
+                            name: 'height',
+                            value: 100,
+                          },
+                          {
+                            kind: 'Literal',
+                            name: 'width',
+                            value: 100,
+                          },
+                        ],
+                        concreteType: 'File',
+                        kind: 'LinkedField',
+                        name: 'image',
+                        plural: false,
+                        selections: v1 /*: any*/,
+                        storageKey: 'image(height:100,width:100)',
+                      },
                     ],
                     storageKey: null,
                   },
@@ -233,6 +261,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '7a8fa70089ead1942520892d561382ef'
+;(node as any).hash = 'c21fa781af7e720737cfbb5073aa469e'
 
 export default node

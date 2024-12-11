@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0da3b8f334193df5e7fb534994876c50>>
+ * @generated SignedSource<<8d750a7a10bdf742f16f73b825fbcffe>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -120,61 +120,40 @@ const node: ConcreteRequest = (function () {
     ],
     v13 = {
       alias: null,
-      args: [
-        {
-          kind: 'Literal',
-          name: 'height',
-          value: 100,
-        },
-        {
-          kind: 'Literal',
-          name: 'width',
-          value: 100,
-        },
-      ],
-      concreteType: 'File',
-      kind: 'LinkedField',
-      name: 'image',
-      plural: false,
-      selections: v12 /*: any*/,
-      storageKey: 'image(height:100,width:100)',
-    },
-    v14 = {
-      alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'content',
       storageKey: null,
     },
-    v15 = {
+    v14 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'totalCount',
       storageKey: null,
     },
-    v16 = {
+    v15 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'name',
       storageKey: null,
     },
-    v17 = [
+    v16 = [
       {
         kind: 'Literal',
         name: 'first',
         value: 20,
       },
     ],
-    v18 = {
+    v17 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'cursor',
       storageKey: null,
     },
-    v19 = {
+    v18 = {
       alias: null,
       args: null,
       concreteType: 'PageInfo',
@@ -285,7 +264,27 @@ const node: ConcreteRequest = (function () {
                           selections: [
                             v9 /*: any*/,
                             v10 /*: any*/,
-                            v13 /*: any*/,
+                            {
+                              alias: null,
+                              args: [
+                                {
+                                  kind: 'Literal',
+                                  name: 'height',
+                                  value: 144,
+                                },
+                                {
+                                  kind: 'Literal',
+                                  name: 'width',
+                                  value: 144,
+                                },
+                              ],
+                              concreteType: 'File',
+                              kind: 'LinkedField',
+                              name: 'image',
+                              plural: false,
+                              selections: v12 /*: any*/,
+                              storageKey: 'image(height:144,width:144)',
+                            },
                             {
                               alias: null,
                               args: null,
@@ -300,7 +299,7 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'lastMessage',
                               plural: false,
-                              selections: [v9 /*: any*/, v14 /*: any*/],
+                              selections: [v9 /*: any*/, v13 /*: any*/],
                               storageKey: null,
                             },
                             {
@@ -313,12 +312,19 @@ const node: ConcreteRequest = (function () {
                             {
                               alias: null,
                               args: null,
+                              kind: 'ScalarField',
+                              name: 'isGroup',
+                              storageKey: null,
+                            },
+                            {
+                              alias: null,
+                              args: null,
                               concreteType: 'ChatRoomParticipantConnection',
                               kind: 'LinkedField',
                               name: 'participants',
                               plural: false,
                               selections: [
-                                v15 /*: any*/,
+                                v14 /*: any*/,
                                 {
                                   alias: null,
                                   args: null,
@@ -346,8 +352,28 @@ const node: ConcreteRequest = (function () {
                                           selections: [
                                             v9 /*: any*/,
                                             v8 /*: any*/,
-                                            v16 /*: any*/,
-                                            v13 /*: any*/,
+                                            v15 /*: any*/,
+                                            {
+                                              alias: null,
+                                              args: [
+                                                {
+                                                  kind: 'Literal',
+                                                  name: 'height',
+                                                  value: 100,
+                                                },
+                                                {
+                                                  kind: 'Literal',
+                                                  name: 'width',
+                                                  value: 100,
+                                                },
+                                              ],
+                                              concreteType: 'File',
+                                              kind: 'LinkedField',
+                                              name: 'image',
+                                              plural: false,
+                                              selections: v12 /*: any*/,
+                                              storageKey: 'image(height:100,width:100)',
+                                            },
                                           ],
                                           storageKey: null,
                                         },
@@ -362,13 +388,13 @@ const node: ConcreteRequest = (function () {
                             },
                             {
                               alias: null,
-                              args: v17 /*: any*/,
+                              args: v16 /*: any*/,
                               concreteType: 'MessageConnection',
                               kind: 'LinkedField',
                               name: 'allMessages',
                               plural: false,
                               selections: [
-                                v15 /*: any*/,
+                                v14 /*: any*/,
                                 {
                                   alias: null,
                                   args: null,
@@ -402,7 +428,7 @@ const node: ConcreteRequest = (function () {
                                           plural: false,
                                           selections: [
                                             v9 /*: any*/,
-                                            v16 /*: any*/,
+                                            v15 /*: any*/,
                                             {
                                               alias: null,
                                               args: [
@@ -434,7 +460,7 @@ const node: ConcreteRequest = (function () {
                                           name: 'isRead',
                                           storageKey: null,
                                         },
-                                        v14 /*: any*/,
+                                        v13 /*: any*/,
                                         {
                                           alias: null,
                                           args: null,
@@ -470,17 +496,17 @@ const node: ConcreteRequest = (function () {
                                       ],
                                       storageKey: null,
                                     },
-                                    v18 /*: any*/,
+                                    v17 /*: any*/,
                                   ],
                                   storageKey: null,
                                 },
-                                v19 /*: any*/,
+                                v18 /*: any*/,
                               ],
                               storageKey: 'allMessages(first:20)',
                             },
                             {
                               alias: null,
-                              args: v17 /*: any*/,
+                              args: v16 /*: any*/,
                               filters: null,
                               handle: 'connection',
                               key: 'chatRoom_allMessages',
@@ -491,11 +517,11 @@ const node: ConcreteRequest = (function () {
                           ],
                           storageKey: null,
                         },
-                        v18 /*: any*/,
+                        v17 /*: any*/,
                       ],
                       storageKey: null,
                     },
-                    v19 /*: any*/,
+                    v18 /*: any*/,
                   ],
                   storageKey: null,
                 },
@@ -518,12 +544,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '2498718df6928cbf601ebbe7166e32f4',
+      cacheID: 'eacabf69cd14839d79217d2ad89cf31f',
       id: null,
       metadata: {},
       name: 'chatRoomsPaginationQuery',
       operationKind: 'query',
-      text: 'query chatRoomsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n  $unreadMessages: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RoomsListFragment_4kOb3U\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  image(width: 100, height: 100) {\n    url\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  title\n  participants {\n    totalCount\n    edges {\n      node {\n        id\n        profile {\n          id\n          __typename\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n      }\n    }\n  }\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment_4kOb3U on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  id\n  unreadMessagesCount\n  chatRooms(first: $count, after: $cursor, q: $q, unreadMessages: $unreadMessages) {\n    edges {\n      node {\n        id\n        unreadMessagesCount\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query chatRoomsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n  $unreadMessages: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RoomsListFragment_4kOb3U\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  image(width: 144, height: 144) {\n    url\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  title\n  isGroup\n  participants {\n    totalCount\n    edges {\n      node {\n        id\n        profile {\n          id\n          __typename\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n      }\n    }\n  }\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment_4kOb3U on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  id\n  unreadMessagesCount\n  chatRooms(first: $count, after: $cursor, q: $q, unreadMessages: $unreadMessages) {\n    edges {\n      node {\n        id\n        unreadMessagesCount\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()

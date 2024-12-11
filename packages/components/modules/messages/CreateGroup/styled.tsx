@@ -2,11 +2,10 @@ import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const MainContainer = styled(Box)(() => ({
-  display: 'grid',
-  justifySelf: 'center',
+  // display: 'grid',
+  // gridTemplateRows: 'min-content min-content auto',
   height: '100%',
   width: '100%',
-  gridTemplateRows: 'min-content min-content auto',
 }))
 
 export const SearchbarContainer = styled(Box)(({ theme }) => ({

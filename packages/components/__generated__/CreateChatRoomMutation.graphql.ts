@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<80b9f00795a6e46b6a523659be326c47>>
+ * @generated SignedSource<<95c8a7f03531267e7c8ce1c80f13d30c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,8 +12,10 @@ import { ConcreteRequest, Mutation } from 'relay-runtime'
 
 export type ChatRoomCreateInput = {
   clientMutationId?: string | null | undefined
+  isGroup?: boolean | null | undefined
   participants: ReadonlyArray<string | null | undefined>
   profileId: string
+  title?: string | null | undefined
 }
 export type CreateChatRoomMutation$variables = {
   input: ChatRoomCreateInput
@@ -37,6 +39,13 @@ export type CreateChatRoomMutation$data = {
               readonly node:
                 | {
                     readonly id: string
+                    readonly image:
+                      | {
+                          readonly url: string
+                        }
+                      | null
+                      | undefined
+                    readonly isGroup: boolean
                     readonly participants:
                       | {
                           readonly edges: ReadonlyArray<
@@ -54,6 +63,7 @@ export type CreateChatRoomMutation$data = {
                         }
                       | null
                       | undefined
+                    readonly title: string | null | undefined
                   }
                 | null
                 | undefined
@@ -116,6 +126,49 @@ const node: ConcreteRequest = (function () {
                 plural: false,
                 selections: [
                   v1 /*: any*/,
+                  {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: 'isGroup',
+                    storageKey: null,
+                  },
+                  {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: 'title',
+                    storageKey: null,
+                  },
+                  {
+                    alias: null,
+                    args: [
+                      {
+                        kind: 'Literal',
+                        name: 'height',
+                        value: 144,
+                      },
+                      {
+                        kind: 'Literal',
+                        name: 'width',
+                        value: 144,
+                      },
+                    ],
+                    concreteType: 'File',
+                    kind: 'LinkedField',
+                    name: 'image',
+                    plural: false,
+                    selections: [
+                      {
+                        alias: null,
+                        args: null,
+                        kind: 'ScalarField',
+                        name: 'url',
+                        storageKey: null,
+                      },
+                    ],
+                    storageKey: 'image(height:144,width:144)',
+                  },
                   {
                     alias: null,
                     args: null,
@@ -201,16 +254,16 @@ const node: ConcreteRequest = (function () {
       selections: v2 /*: any*/,
     },
     params: {
-      cacheID: 'db74448ff08cffbba38c4f8939cb863f',
+      cacheID: 'd8d24898ea619cfb15ef2a1419b1a422',
       id: null,
       metadata: {},
       name: 'CreateChatRoomMutation',
       operationKind: 'mutation',
-      text: 'mutation CreateChatRoomMutation(\n  $input: ChatRoomCreateInput!\n) {\n  chatRoomCreate(input: $input) {\n    room {\n      node {\n        id\n        participants {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
+      text: 'mutation CreateChatRoomMutation(\n  $input: ChatRoomCreateInput!\n) {\n  chatRoomCreate(input: $input) {\n    room {\n      node {\n        id\n        isGroup\n        title\n        image(width: 144, height: 144) {\n          url\n        }\n        participants {\n          edges {\n            node {\n              id\n            }\n          }\n        }\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '7e43714ac9912309528928e478db1bd2'
+;(node as any).hash = 'f6345ccafee3018b2d5680676d1cdd8c'
 
 export default node
