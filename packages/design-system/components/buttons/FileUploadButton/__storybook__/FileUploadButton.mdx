@@ -1,0 +1,59 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Buttons/FileUploadButton" />
+
+# Component Documentation
+
+## FileUploadButton
+
+- **Purpose**: The `FileUploadButton` component provides a button for file upload functionality with validation and customization options.
+- **Expected Behavior**: When clicked, it opens the file picker dialog, allowing users to select a file. The component validates file size based on the provided `maxSize` prop, displaying a toast notification if the file is too large.
+
+## Use Cases
+
+- **Current Usage**: This component is currently used in the `AccountProfile` component for profile picture uploads.
+- **Potential Usage**: The `FileUploadButton` could also be used in other forms where users need to upload files, such as document upload sections, avatars in user profiles, and attachment uploads in messaging features.
+
+## Props
+
+- **label** (string): The text displayed on the button. Default is `'Upload File'`.
+- **name** (string): The name associated with the file input, used by `react-hook-form` for form control.
+- **control** (object): The form control object from `react-hook-form`, necessary for form validation and submission handling.
+- **setFile** (function): Callback function to set the uploaded file in the form state, provided by the parent component.
+- **accept** (string, optional): Specifies the accepted file types (e.g., `'.jpg, .png, .pdf'`).
+- **maxSize** (number, optional): Maximum file size in bytes. If the file exceeds this size, a toast notification will indicate the error.
+
+## Notes
+
+- **Related Components**: uConsider using this component alongside `FilePreview` or `FileList` components if displaying the uploaded files is necessary.
+
+## Example Usage
+
+```javascript
+import { useForm } from 'react-hook-form'
+
+import FileUploadButton from '../FileUploadButton'
+
+const MyComponent = () => {
+  const { control, setValue } = useForm()
+
+  const setFile = (name, file) => {
+    setValue(name, file, {
+      shouldValidate: false,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+  }
+
+  return (
+    <FileUploadButton
+      label="Upload Profile Picture"
+      name="image"
+      control={control}
+      setFile={setFile}
+      accept="image/png, image/gif, image/jpeg"
+      maxSize={5000000} // 5 MB
+    />
+  )
+}
+```

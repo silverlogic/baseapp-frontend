@@ -8,7 +8,6 @@ import { useFragment } from 'react-relay'
 
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
-import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
 import { RoomFragment } from '../../graphql/queries/Room'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
@@ -37,10 +36,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
     avatarUrl: room.image?.url,
   }
 
-  if (
-    room.participants?.totalCount &&
-    room.participants?.totalCount < MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE
-  ) {
+  if (!room.isGroup && room.participants) {
     const otherParticipant = room.participants.edges.find(
       (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== profile?.id,
     )
