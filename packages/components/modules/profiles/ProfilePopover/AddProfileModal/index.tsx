@@ -38,6 +38,7 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
   userId,
 }) => {
   const form = useForm<OrganizationCreateForm>({
+    mode: 'onChange',
     defaultValues: {
       name: '',
       urlPath: '',
@@ -125,9 +126,6 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
               name="name"
               size="medium"
               control={form.control}
-              onChange={() => {
-                form.trigger('name')
-              }}
               onBlur={() => {
                 if (!form.getValues('urlPath')) {
                   form.setValue('urlPath', slugify(form.getValues('name').toLocaleLowerCase()))
@@ -135,15 +133,7 @@ const AddProfileModal: FC<AddProfileModalProps> = ({
                 }
               }}
             />
-            <TextField
-              label="URL Path"
-              name="urlPath"
-              size="medium"
-              control={form.control}
-              onChange={() => {
-                form.trigger('urlPath')
-              }}
-            />
+            <TextField label="URL Path" name="urlPath" size="medium" control={form.control} />
             <Typography color="text.primary">
               Upon confirming, you agree to our{' '}
               <Link display="inline" href={termsAndConditionsUrl} target="_blank">
