@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2be8361b76383cb89c29eb2821435085>>
+ * @generated SignedSource<<e1cd36af7f82568ce600288d7d85c2bc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -302,7 +302,7 @@ const node: ConcreteRequest = (function () {
             enumValues: ['SUCCESS', 'INFO', 'WARNING', 'ERROR'],
             nullable: false,
             plural: false,
-            type: 'BaseappNotificationsNotificationLevelChoices',
+            type: 'NotificationsNotificationLevelChoices',
           },
           'target.pk': {
             enumValues: null,

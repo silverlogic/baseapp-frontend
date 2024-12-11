@@ -10,6 +10,7 @@ import { ChatRoomListItemProps } from './ChatRoomListItem/types'
 
 type AllProfiles = NonNullable<AllProfilesListFragment$data['allProfiles']>
 type AllProfilesEdges = AllProfiles['edges']
+export type ProfileEdge = AllProfilesEdges[number]
 export type ProfileNode = NonNullable<AllProfilesEdges[number]>['node']
 
 export interface CreateChatRoomListProps extends PropsWithChildren {
