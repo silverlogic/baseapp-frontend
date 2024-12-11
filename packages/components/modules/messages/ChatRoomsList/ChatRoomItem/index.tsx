@@ -1,7 +1,12 @@
 import { FC, SyntheticEvent, useRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { ArchiveIcon, AvatarWithPlaceholder, UnreadIcon } from '@baseapp-frontend/design-system'
+import {
+  ArchiveIcon,
+  AvatarWithPlaceholder,
+  UnarchiveIcon,
+  UnreadIcon,
+} from '@baseapp-frontend/design-system'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { ConnectionHandler, useFragment } from 'react-relay'
@@ -66,8 +71,8 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
       actions={[
         {
           disabled: isMutationInFlight,
-          icon: <ArchiveIcon />,
-          label: 'Archive Chat',
+          icon: !isInArchivedTab ? <ArchiveIcon /> : <UnarchiveIcon />,
+          label: !isInArchivedTab ? 'Archive Chat' : 'Unarchive Chat',
           onClick: () => {
             if (currentProfile?.id) {
               commit({
