@@ -34,7 +34,7 @@ export default {
         typeof createTestEnvironment
       >
 
-      queueOperationResolver(mockResolvers)
+      queueOperationResolver({ mockResolvers })
 
       return <Story />
     },
