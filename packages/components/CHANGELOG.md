@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.33
+
+### Patch Changes
+
+- Added unarchiving chat room UX updates (icon and label change)
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.24
+
 ## 0.0.32
 
 ### Patch Changes
