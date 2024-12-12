@@ -23,7 +23,7 @@ export default class AuthApi {
   }
 
   static register<TResponse = void>(request: RegisterRequest): Promise<TResponse> {
-    return baseAppFetch(`/register`, { method: 'POST', body: request })
+    return baseAppFetch(`/_allauth/app/v1/auth/signup`, { method: 'POST', body: request })
   }
 
   static changeExpiredPassword({
