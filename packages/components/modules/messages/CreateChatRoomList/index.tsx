@@ -2,6 +2,7 @@
 
 import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   AvatarWithPlaceholder,
   Searchbar as DefaultSearchbar,
@@ -18,7 +19,7 @@ import SearchNotFoundState from '../SearchNotFoundState'
 import DefaultChatRoomListItem from './ChatRoomListItem'
 import EmptyProfilesListState from './EmptyProfilesListState'
 import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
-import { CreateChatRoomListProps, ProfileNode } from './types'
+import { CreateChatRoomListProps, ProfileEdge, ProfileNode } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   allProfilesRef,
@@ -39,6 +40,8 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
+  const { currentProfile } = useCurrentProfile()
+
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value || ''
     startTransition(() => {
@@ -54,7 +57,10 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   }
 
   const profiles = useMemo(
-    () => allProfiles?.edges.filter((edge: any) => edge?.node).map((edge: any) => edge?.node) || [],
+    () =>
+      allProfiles?.edges
+        .filter((edge: ProfileEdge) => edge?.node && edge.node.id !== currentProfile?.id)
+        .map((edge: ProfileEdge) => edge?.node) || [],
     [allProfiles],
   )
 

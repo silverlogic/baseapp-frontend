@@ -12,7 +12,6 @@ import { RoomsListFragment$key } from '../../../__generated__/RoomsListFragment.
 import SearchNotFoundState from '../SearchNotFoundState'
 import { useChatRoom } from '../context'
 import { useRoomsList } from '../graphql/queries/RoomsList'
-import useMessageCountUpdate from '../graphql/subscriptions/useMessageCountUpdateSubscription'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
 import DefaultChatRoomItem from './ChatRoomItem'
 import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
@@ -64,14 +63,12 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   }
 
   const { id: selectedRoom, setChatRoom } = useChatRoom()
-
   const chatRooms = useMemo(
     () => data?.chatRooms?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.chatRooms?.edges],
   )
 
   useRoomListSubscription(data.id)
-  useMessageCountUpdate() // TODO: keep this until we fix the chatRoomOnRoomUpdate subscription
 
   const renderItem = useCallback(
     (room: ChatRoomNode) => {
