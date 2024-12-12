@@ -1,10 +1,18 @@
 # @baseapp-frontend/components
 
+## 0.0.30
+
+### Patch Changes
+
+- Adapt Storybook's withProviders to use only `queueOperationResolver`.
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.1.13
+
 ## 0.0.29
 
 ### Patch Changes
 
-- Fixed RoomListSubscription connection and added connection to CreateChatRoom mutation 
+- Fixed RoomListSubscription connection and added connection to CreateChatRoom mutation
 - Moved useRoomListSubscription hook to ChatRoom on baseapp-frontend-template
 - Removed unused fields on RoomsListFragment and RoomListSubscription
 

@@ -17,21 +17,15 @@ const withProviders = (Story: StoryFn, context: StoryContext) => {
   // TODO: registering a few tailwind classess (used by @baseapp-frontend/design-system components), need to figure out why the @baseapp-frontend/components storybook are not including it correctly
   // pb-3 px-3 w-full rounded-md bg-background-neutral px-2 py-1
   const relayMockEnvironment = createTestEnvironment()
-  const { environment, queueOperationResolver, resolveMostRecentOperation } = relayMockEnvironment
+  const { environment, queueOperationResolver } = relayMockEnvironment
 
   context.parameters.relayMockEnvironment = relayMockEnvironment
 
+  const queryName = context.parameters.queryName || undefined
   const mockResolvers = context.parameters.mockResolvers || undefined
   const mockData = context.parameters.mockData || {}
 
-  useEffect(() => {
-    if (!!mockResolvers) {
-      queueOperationResolver(mockResolvers)
-    }
-    if (mockData) {
-      resolveMostRecentOperation({ mockResolvers, data: mockData })
-    }
-  }, [mockData, resolveMostRecentOperation, queueOperationResolver, mockResolvers])
+  queueOperationResolver({ mockResolvers, data: mockData, queryName })
 
   return (
     <JotaiProvider>
