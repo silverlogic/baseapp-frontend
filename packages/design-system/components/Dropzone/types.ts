@@ -1,3 +1,5 @@
+import { InputHTMLAttributes } from 'react'
+
 import { Theme } from '@mui/material/styles'
 import type { Accept, DropzoneOptions } from 'react-dropzone'
 
@@ -17,4 +19,5 @@ export interface DropzoneProps {
   subTitle?: string
   maxFileSize?: number
   DropzoneOptions?: Partial<DropzoneOptions>
+  InputProps?: InputHTMLAttributes<HTMLInputElement>
 }
