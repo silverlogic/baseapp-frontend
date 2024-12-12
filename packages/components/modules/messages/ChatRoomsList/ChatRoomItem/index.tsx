@@ -78,16 +78,18 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
                     archive: !isInArchivedTab,
                   },
                 },
-                updater: (store: RecordSourceSelectorProxy<unknown>) => {
-                  const storyRecord = store.get(currentProfile.id)
-                  if (storyRecord) {
-                    const connectionRecord = ConnectionHandler.getConnection(
-                      storyRecord,
-                      'roomsList_chatRooms',
-                      { unreadMessages: isInUnreadTab, archived: isInArchivedTab },
-                    )
-                    if (connectionRecord) {
-                      ConnectionHandler.deleteNode(connectionRecord, room.id)
+                updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
+                  if (!data?.errors) {
+                    const storyRecord = store.get(currentProfile.id)
+                    if (storyRecord) {
+                      const connectionRecord = ConnectionHandler.getConnection(
+                        storyRecord,
+                        'roomsList_chatRooms',
+                        { unreadMessages: isInUnreadTab, archived: isInArchivedTab },
+                      )
+                      if (connectionRecord) {
+                        ConnectionHandler.deleteNode(connectionRecord, room.id)
+                      }
                     }
                   }
                 },

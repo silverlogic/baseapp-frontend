@@ -5,6 +5,11 @@
 ### Patch Changes
 
 - Added archiving/unarchiving chat rooms functionality
+- Enhanced ChatRoomItem with isInArchivedTab and isInUnreadTab props
+- Updated ChatRoomsList to support archived and unread filters
+- Added new GraphQL mutation for archiving chat rooms
+- Updated RoomsListFragment to support archived status
+- Modified useRoomListSubscription to handle archived rooms
 
 ## 0.0.31
 

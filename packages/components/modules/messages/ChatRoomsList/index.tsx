@@ -93,7 +93,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
         />
       )
     },
-    [selectedRoom, setChatRoom, ChatRoomItemProps, ChatRoomItem],
+    [selectedRoom, setChatRoom, ChatRoomItemProps, ChatRoomItem, isInUnreadTab, isInArchivedTab],
   )
 
   const renderLoadingState = () => {
