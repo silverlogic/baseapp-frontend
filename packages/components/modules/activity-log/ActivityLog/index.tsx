@@ -4,7 +4,6 @@ import { CircularProgress } from '@mui/material'
 
 import LogGroups from '../LogGroups'
 import DefaultLogItem from '../LogItem'
-import { useActivityLogs } from '../hooks/useActivityLogs'
 import { ActivityLogProps } from './types'
 
 const ActivityLog: FC<ActivityLogProps> = ({
