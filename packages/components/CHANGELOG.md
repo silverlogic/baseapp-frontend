@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.32
+
+### Patch Changes
+
+- Added archiving/unarchiving chat rooms functionality
+
 ## 0.0.31
 
 ### Patch Changes
