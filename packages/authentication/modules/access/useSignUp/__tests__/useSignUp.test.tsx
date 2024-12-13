@@ -14,7 +14,7 @@ import useSignUp from '../index'
 import request from './fixtures/request.json'
 
 describe('useSignUp', () => {
-  const registerUrl = '/register'
+  const registerUrl = '/_allauth/app/v1/auth/signup'
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear()
@@ -25,7 +25,14 @@ describe('useSignUp', () => {
       method: 'POST',
       status: 200,
       response: {
-        email: request.email,
+        meta: {
+          access_token: {
+            refresh:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczNDE4OTc2NSwiaWF0IjoxNzM0MTAzMzY1LCJqdGkiOiJiMWQ3ZjVmZTNmY2I0MjMyYjQzMDY5MTQxNWVkNDg3ZSIsInVzZXJfaWQiOjE3LCJpZCI6MTcsInByb2ZpbGUiOnsiaWQiOiJVSEp2Wm1sc1pUb3hOdz09IiwibmFtZSI6IkRheSB3aG8iLCJpbWFnZSI6bnVsbCwidXJsX3BhdGgiOm51bGx9LCJlbWFpbCI6InBzKzk5QHRzbC5pbyIsIm5ld19lbWFpbCI6IiIsImlzX25ld19lbWFpbF9jb25maXJtZWQiOmZhbHNlLCJyZWZlcnJhbF9jb2RlIjoiIiwicGhvbmVfbnVtYmVyIjpudWxsLCJwcmVmZXJyZWRfbGFuZ3VhZ2UiOiJlbiJ9.cASRdO9ge6amlySR4j11FRPRELMztaf5CMLnKvEEQ0o',
+            access:
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzM0MTAzNjY1LCJpYXQiOjE3MzQxMDMzNjUsImp0aSI6Ijg4NjM4YWQ2NTdkODRiMjZiYzA4NDFlNWYyYjgzY2YyIiwidXNlcl9pZCI6MTcsImlkIjoxNywicHJvZmlsZSI6eyJpZCI6IlVISnZabWxzWlRveE53PT0iLCJuYW1lIjoiRGF5IHdobyIsImltYWdlIjpudWxsLCJ1cmxfcGF0aCI6bnVsbH0sImVtYWlsIjoicHMrOTlAdHNsLmlvIiwibmV3X2VtYWlsIjoiIiwiaXNfbmV3X2VtYWlsX2NvbmZpcm1lZCI6ZmFsc2UsInJlZmVycmFsX2NvZGUiOiIiLCJwaG9uZV9udW1iZXIiOm51bGwsInByZWZlcnJlZF9sYW5ndWFnZSI6ImVuIn0.LKMkqKbn24Uqw67tys0ZltIEbMPE2z4hTo3D6ilOASM',
+          },
+        },
       },
     })
 

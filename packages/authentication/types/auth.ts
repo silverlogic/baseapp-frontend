@@ -1,4 +1,5 @@
 import type { MfaMethod } from './mfa'
+import { User } from './user'
 
 export interface LoginRequest {
   email: string
@@ -24,10 +25,30 @@ export interface LoginChangeExpiredPasswordRedirectResponse {
   redirectUrl: string
 }
 
+export interface AllAuthMethod {
+  method: string
+  at: number
+  email: string
+}
+
+export interface AllAuthResponse {
+  status: number
+  data: {
+    user: User
+    methods: AllAuthMethod[]
+  }
+  meta: {
+    isAuthenticated: boolean
+    sessionToken: string
+    accessToken: LoginJWTResponse
+  }
+}
+
 export type LoginResponse =
   | LoginMfaResponse
   | LoginJWTResponse
   | LoginChangeExpiredPasswordRedirectResponse
+  | AllAuthResponse
 
 export interface ForgotPasswordRequest {
   email: string
