@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ed288b4c0f04c6456ad708b22a7b192c>>
+ * @generated SignedSource<<b1e2f25138f178f3e0fc16bf802f9e1b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,25 +9,33 @@
 // @ts-nocheck
 
 import { ConcreteRequest, Query } from 'relay-runtime';
-export type ActivityLogsQuery$variables = Record<PropertyKey, never>;
+export type ActivityLogsQuery$variables = {
+  after?: string | null | undefined;
+  first?: number | null | undefined;
+};
 export type ActivityLogsQuery$data = {
-  readonly activityLogGroups: ReadonlyArray<{
-    readonly intervalStart: any | null | undefined;
-    readonly logs: ReadonlyArray<{
-      readonly createdAt: any;
-      readonly id: string;
-      readonly url: string | null | undefined;
-      readonly user: {
-        readonly avatar: {
-          readonly url: string;
-        } | null | undefined;
-        readonly email: string | null | undefined;
-        readonly fullName: string | null | undefined;
+  readonly activityLogs: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly createdAt: any;
         readonly id: string;
+        readonly url: string | null | undefined;
+        readonly user: {
+          readonly avatar: {
+            readonly url: string;
+          } | null | undefined;
+          readonly email: string | null | undefined;
+          readonly fullName: string | null | undefined;
+          readonly id: string;
+        } | null | undefined;
+        readonly verb: string | null | undefined;
       } | null | undefined;
-      readonly verb: string | null | undefined;
-    } | null | undefined> | null | undefined;
-  } | null | undefined> | null | undefined;
+    } | null | undefined>;
+    readonly pageInfo: {
+      readonly endCursor: string | null | undefined;
+      readonly hasNextPage: boolean;
+    };
+  } | null | undefined;
 };
 export type ActivityLogsQuery = {
   response: ActivityLogsQuery$data;
@@ -36,57 +44,47 @@ export type ActivityLogsQuery = {
 
 const node: ConcreteRequest = (function(){
 var v0 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "after"
+},
+v1 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "first"
+},
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v1 = {
+v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "url",
   "storageKey": null
 },
-v2 = [
+v4 = [
   {
     "alias": null,
-    "args": [
-      {
-        "kind": "Literal",
-        "name": "intervalMinutes",
-        "value": 15
-      }
-    ],
-    "concreteType": "ActivityLogGroupType",
+    "args": null,
+    "concreteType": "ActivityLogEdge",
     "kind": "LinkedField",
-    "name": "activityLogGroups",
+    "name": "edges",
     "plural": true,
     "selections": [
       {
         "alias": null,
         "args": null,
-        "kind": "ScalarField",
-        "name": "intervalStart",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
         "concreteType": "ActivityLog",
         "kind": "LinkedField",
-        "name": "logs",
-        "plural": true,
+        "name": "node",
+        "plural": false,
         "selections": [
-          (v0/*: any*/),
-          {
-            "alias": null,
-            "args": null,
-            "kind": "ScalarField",
-            "name": "verb",
-            "storageKey": null
-          },
+          (v2/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -94,7 +92,14 @@ v2 = [
             "name": "createdAt",
             "storageKey": null
           },
-          (v1/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "verb",
+            "storageKey": null
+          },
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -103,7 +108,7 @@ v2 = [
             "name": "user",
             "plural": false,
             "selections": [
-              (v0/*: any*/),
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -137,48 +142,147 @@ v2 = [
                 "name": "avatar",
                 "plural": false,
                 "selections": [
-                  (v1/*: any*/)
+                  (v3/*: any*/)
                 ],
                 "storageKey": "avatar(height:48,width:48)"
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "__typename",
+            "storageKey": null
           }
         ],
         "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "cursor",
+        "storageKey": null
       }
     ],
-    "storageKey": "activityLogGroups(intervalMinutes:15)"
+    "storageKey": null
+  },
+  {
+    "alias": null,
+    "args": null,
+    "concreteType": "PageInfo",
+    "kind": "LinkedField",
+    "name": "pageInfo",
+    "plural": false,
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "endCursor",
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": null,
+        "kind": "ScalarField",
+        "name": "hasNextPage",
+        "storageKey": null
+      }
+    ],
+    "storageKey": null
+  }
+],
+v5 = [
+  {
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "after"
+  },
+  {
+    "kind": "Variable",
+    "name": "first",
+    "variableName": "first"
   }
 ];
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      (v0/*: any*/),
+      (v1/*: any*/)
+    ],
     "kind": "Fragment",
     "metadata": null,
     "name": "ActivityLogsQuery",
-    "selections": (v2/*: any*/),
+    "selections": [
+      {
+        "alias": "activityLogs",
+        "args": null,
+        "concreteType": "ActivityLogConnection",
+        "kind": "LinkedField",
+        "name": "__ActivityLogs_activityLogs_connection",
+        "plural": false,
+        "selections": (v4/*: any*/),
+        "storageKey": null
+      }
+    ],
     "type": "Query",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": [
+      (v1/*: any*/),
+      (v0/*: any*/)
+    ],
     "kind": "Operation",
     "name": "ActivityLogsQuery",
-    "selections": (v2/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v5/*: any*/),
+        "concreteType": "ActivityLogConnection",
+        "kind": "LinkedField",
+        "name": "activityLogs",
+        "plural": false,
+        "selections": (v4/*: any*/),
+        "storageKey": null
+      },
+      {
+        "alias": null,
+        "args": (v5/*: any*/),
+        "filters": null,
+        "handle": "connection",
+        "key": "ActivityLogs_activityLogs",
+        "kind": "LinkedHandle",
+        "name": "activityLogs"
+      }
+    ]
   },
   "params": {
-    "cacheID": "57adc00d875f06cbb038fd81b7e61b9d",
+    "cacheID": "6ee75200a3ebde6ecfb325887a25e26b",
     "id": null,
-    "metadata": {},
+    "metadata": {
+      "connection": [
+        {
+          "count": "first",
+          "cursor": "after",
+          "direction": "forward",
+          "path": [
+            "activityLogs"
+          ]
+        }
+      ]
+    },
     "name": "ActivityLogsQuery",
     "operationKind": "query",
-    "text": "query ActivityLogsQuery {\n  activityLogGroups(intervalMinutes: 15) {\n    intervalStart\n    logs {\n      id\n      verb\n      createdAt\n      url\n      user {\n        id\n        fullName\n        email\n        avatar(width: 48, height: 48) {\n          url\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query ActivityLogsQuery(\n  $first: Int\n  $after: String\n) {\n  activityLogs(first: $first, after: $after) {\n    edges {\n      node {\n        id\n        createdAt\n        verb\n        url\n        user {\n          id\n          fullName\n          email\n          avatar(width: 48, height: 48) {\n            url\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5cea0086f288cb8a2a07605a5217d81d";
+(node as any).hash = "ce8ef4afe76c0043a20121502b986d50";
 
 export default node;
