@@ -3,10 +3,9 @@ import { FC } from 'react'
 import { Avatar, Box, CircularProgress, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
-import { Log, LogGroup } from '../ActivityLog/types'
 import DefaultLogItem from '../LogItem'
 import { useActivityLogs } from '../hooks/useActivityLogs'
-import { LogGroupsProps } from './types'
+import { Log, LogGroup, LogGroupsProps } from './types'
 
 const LogGroups: FC<LogGroupsProps> = ({
   activityLog: activityLogRef,
@@ -15,11 +14,8 @@ const LogGroups: FC<LogGroupsProps> = ({
   LoadingState = CircularProgress,
   LoadingStateProps,
   VirtuosoProps,
-  hasNext,
-  loadNext,
-  isLoadingNext,
 }) => {
-  const logGroups = useActivityLogs(activityLogRef)
+  const { logGroups, loadNext, hasNext, isLoadingNext } = useActivityLogs(activityLogRef)
   const renderLogItem = (log: any) => {
     if (!log) return null
 
@@ -40,14 +36,25 @@ const LogGroups: FC<LogGroupsProps> = ({
   }
 
   const renderItemContent = (group: LogGroup) => (
-    <Box key={group.lastActivityTimestamp} gap="12px">
-      <Box display="flex" gap="12px">
+    <Box
+      key={group.lastActivityTimestamp}
+      display="flex"
+      flexDirection="column"
+      justifyContent="center"
+      gap="12px"
+      pt="6px"
+      pb="16px"
+      maxWidth="568px"
+    >
+      <Box display="flex" alignItems="center" gap="12px">
         <Avatar
           sizes="small"
           src={group.logs[0]?.user?.avatar?.url ?? ''}
           alt={group.logs[0]?.user?.fullName ?? ''}
         />
-        <Typography variant="subtitle2">{group.logs[0]?.user?.fullName}</Typography>
+        <Typography variant="subtitle2" mb="6px">
+          {group.logs[0]?.user?.fullName}
+        </Typography>
       </Box>
       {group.logs.map((log: Log) => renderLogItem(log))}
       <Typography variant="caption">

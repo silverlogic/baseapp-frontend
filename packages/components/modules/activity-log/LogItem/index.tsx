@@ -2,16 +2,27 @@ import { FC } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import { Log } from '../ActivityLog/types'
+import { Log } from '../LogGroups/types'
 
 interface LogItemProps {
   log: Log
 }
 
+const verbMapping: { [key: string]: string } = {
+  'comments.add_comment': 'Created a comment',
+  'comments.edit_comment': 'Edited a comment',
+  'comments.delete_comment': 'Deleted a comment',
+  'comments.reply_comment': 'Replied to a comment',
+}
+
+const getDisplayText = (verb: string) => {
+  return verbMapping[verb] ?? verb
+}
+
 const LogItem: FC<LogItemProps> = ({ log }) => (
   <Box display="flex" alignItems="center" borderLeft="1px solid #000" marginLeft="20px">
-    <Typography variant="body2">
-      {log.user?.fullName} {log.verb}
+    <Typography ml="30px" variant="body2">
+      {getDisplayText(log.verb)}
     </Typography>
   </Box>
 )

@@ -1,6 +1,3 @@
-export { default as ActivityLog } from './ActivityLog'
-export type * from './ActivityLog/types'
-
 export { default as DateRangeChip } from './DateRangeChip'
 export type * from './DateRangeChip/types'
 
