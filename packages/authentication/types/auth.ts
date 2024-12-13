@@ -55,3 +55,17 @@ export interface ChangeExpiredPasswordRequest {
   newPassword: string
   token: string
 }
+
+export interface AllAuthError {
+  status: number
+  meta: {
+    session_token: string
+    is_authenticated: boolean
+  }
+  data: {
+    flows: {
+      is_pending?: boolean
+      id: string
+    }[]
+  }
+}

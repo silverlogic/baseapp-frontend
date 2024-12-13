@@ -3,7 +3,7 @@ import humps from 'humps'
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
-import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME, SESSION_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
@@ -124,6 +124,12 @@ export const baseAppFetch: BaseAppFetch = async (
   // set Authorization header
   if (authToken && isAuthTokenRequired) {
     fetchOptions.headers!.Authorization = `${tokenType} ${authToken}`
+  }
+
+  // allauth session token
+  const sessionToken = getToken(SESSION_KEY_NAME, { noSSR: false })
+  if (sessionToken) {
+    fetchOptions.headers!['x-session-token'] = sessionToken
   }
 
   // set language header

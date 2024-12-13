@@ -1,13 +1,13 @@
 'use client'
 
-import { setFormApiErrors } from '@baseapp-frontend/utils'
+import { SESSION_KEY_NAME, setFormApiErrors, setTokenAsync } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
-import type { RegisterRequest } from '../../../types/auth'
+import type { AllAuthError, RegisterRequest } from '../../../types/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { UseSignUpOptions } from './types'
 
@@ -26,10 +26,20 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
   })
 
   const mutation = useMutation({
-    mutationFn: (values) => ApiClass.register<TRegisterResponse>(values),
+    mutationFn: (values) => ApiClass.register<TRegisterResponse>(values, options.path),
     ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
-      options?.onError?.(err, variables, context)
+      const error = err as Error
+      if (error?.message) {
+        const errorData: AllAuthError = JSON.parse(error.message)
+        if (errorData.meta.session_token) {
+          setTokenAsync(SESSION_KEY_NAME, errorData.meta.session_token)
+        }
+        options?.onError?.(errorData, variables, context)
+      } else {
+        options?.onError?.(err, variables, context)
+      }
+
       if (enableFormApiErrors) {
         setFormApiErrors(form, err)
       }
