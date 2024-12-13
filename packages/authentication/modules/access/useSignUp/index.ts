@@ -30,16 +30,17 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
     ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       const error = err as Error
-      if (error?.message) {
-        const errorData: AllAuthError = JSON.parse(error.message)
-        if (errorData.meta.session_token) {
-          setTokenAsync(SESSION_KEY_NAME, errorData.meta.session_token)
+      try {
+        if (error?.message) {
+          const errorData: AllAuthError = JSON.parse(error.message)
+          if (errorData.meta.session_token) {
+            setTokenAsync(SESSION_KEY_NAME, errorData.meta.session_token)
+          }
+          options?.onError?.(errorData, variables, context)
         }
-        options?.onError?.(errorData, variables, context)
-      } else {
+      } catch (_) {
         options?.onError?.(err, variables, context)
       }
-
       if (enableFormApiErrors) {
         setFormApiErrors(form, err)
       }

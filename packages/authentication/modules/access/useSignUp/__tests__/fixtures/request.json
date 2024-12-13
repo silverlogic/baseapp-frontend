@@ -1,6 +1,6 @@
 {
-  "first_name": "John",
-  "last_name": "Doe",
+  "firstName": "John",
+  "lastName": "Doe",
   "email": "johndoe@example.com",
   "password": "#F12W7q0jwv525"
 }

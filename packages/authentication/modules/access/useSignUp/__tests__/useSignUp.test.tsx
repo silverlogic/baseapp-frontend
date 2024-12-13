@@ -48,6 +48,7 @@ describe('useSignUp', () => {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
+            path: registerUrl,
           },
         }),
       {
@@ -83,6 +84,9 @@ describe('useSignUp', () => {
           formOptions: {
             defaultValues: customRequest,
           },
+          options: {
+            path: registerUrl,
+          },
         }),
       {
         wrapper: ComponentWithProviders,
@@ -113,6 +117,7 @@ describe('useSignUp', () => {
             onError: () => {
               hasOnErrorRan = true
             },
+            path: registerUrl,
           },
         }),
       {
@@ -157,6 +162,7 @@ describe('useSignUp', () => {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
+            path: registerUrl,
           },
         }),
       {
