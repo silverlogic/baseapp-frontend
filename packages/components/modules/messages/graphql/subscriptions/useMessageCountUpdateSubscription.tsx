@@ -9,7 +9,6 @@ const MessageCountUpdateSubscription = graphql`
     chatRoomOnMessagesCountUpdate(profileId: $profileId) {
       profile {
         id
-        unreadMessagesCount
         chatRooms {
           totalCount
           edges {

@@ -9,6 +9,7 @@ export interface MessagesGroupProps {
   messageIndex: number
   isGroup?: boolean
   allMessagesLastIndex: number
+  firstUnreadMessageId?: string | null
   hasNext: boolean
   MessageItem?: FC<MessageItemProps>
   MessageItemProps?: Partial<MessageItemProps>
