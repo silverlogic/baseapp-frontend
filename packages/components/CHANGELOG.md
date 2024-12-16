@@ -1,12 +1,17 @@
 # @baseapp-frontend/components
 
+## 0.0.39
+
+### Patch Changes
+
+- Improve unread Badge and unread divider behavior
+
 ## 0.0.38
 
 ### Patch Changes
 
 - Add the ability to create new chat groups.
 - Fix a few height bugs on Virtuoso lists.
-
 - Updated dependencies
   - @baseapp-frontend/design-system@0.0.26
 
@@ -32,7 +37,7 @@
 ### Patch Changes
 
 - Updated dependencies
-- @baseapp-frontend/graphql@1.1.14
+  - @baseapp-frontend/graphql@1.1.14
 
 ## 0.0.34
 
