@@ -40,6 +40,7 @@ const useLogin = ({
   accessKeyName = ACCESS_KEY_NAME,
   refreshKeyName = REFRESH_KEY_NAME,
   ApiClass = AuthApi,
+  path,
   enableFormApiErrors = true,
 }: UseLoginOptions = {}) => {
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
@@ -81,7 +82,7 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: LoginRequest) => ApiClass.login(data),
+    mutationFn: (data: LoginRequest) => ApiClass.login(data, path),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)

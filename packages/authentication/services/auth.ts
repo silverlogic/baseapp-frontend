@@ -10,8 +10,11 @@ import type {
 } from '../types/auth'
 
 export default class AuthApi {
-  static login({ email, password }: LoginRequest): Promise<LoginResponse> {
-    return baseAppFetch(`/auth/login`, { method: 'POST', body: { email, password } })
+  static login(
+    { email, password }: LoginRequest,
+    path?: `/${string}` | '',
+  ): Promise<LoginResponse> {
+    return baseAppFetch(`${path ?? '/auth/login'}`, { method: 'POST', body: { email, password } })
   }
 
   static recoverPassword({ email }: ForgotPasswordRequest): Promise<void> {

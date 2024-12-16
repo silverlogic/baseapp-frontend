@@ -1,4 +1,5 @@
 import type {
+  AllAuthResponse,
   LoginChangeExpiredPasswordRedirectResponse,
   LoginMfaResponse,
   LoginResponse,
@@ -13,5 +14,8 @@ export const isLoginChangeExpiredPasswordRedirectResponse = (
   data: LoginResponse,
 ): data is LoginChangeExpiredPasswordRedirectResponse => {
   const redirectUrl: keyof LoginChangeExpiredPasswordRedirectResponse = 'redirectUrl'
-  return redirectUrl in data
+  return (
+    redirectUrl in data ||
+    ((data as AllAuthResponse).data?.user && 'redirectUrl' in (data as AllAuthResponse).data.user)
+  )
 }
