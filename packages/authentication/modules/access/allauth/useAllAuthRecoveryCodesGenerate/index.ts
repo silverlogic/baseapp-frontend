@@ -17,9 +17,7 @@ export const useAllAuthRecoveryCodesGenerate = ({
       mutationOptions?.onError?.(err, variables, context)
     },
     onSuccess: async (response, variables, context) => {
-      // TODO: Test this is good
       queryClient.setQueryData(AllAuthApi.QUERY_KEYS.getRecoveryCodes(), response)
-      // queryClient.invalidateQueries({ queryKey: AllAuthApi.QUERY_KEYS.getRecoveryCodes() })
       mutationOptions?.onSuccess?.(response, variables, context)
     },
   })

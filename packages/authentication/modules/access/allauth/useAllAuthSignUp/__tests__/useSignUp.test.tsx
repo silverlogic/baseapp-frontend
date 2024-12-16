@@ -1,4 +1,4 @@
-// TODO: Update for useAllAuthSignUp
+// TODO: Update for allAuth
 
 // import {
 //   ComponentWithProviders,

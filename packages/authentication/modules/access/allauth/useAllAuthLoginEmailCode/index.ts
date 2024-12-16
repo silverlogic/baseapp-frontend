@@ -16,9 +16,8 @@ export const useAllAuthLoginEmailCode = ({
   mutationOptions = {},
   enableFormApiErrors = true,
 }: UseAllAuthLoginEmailCode) => {
-  async function handleSuccess(sessionInfo: AllAuthTypes.SessionInfo) {
-    console.log(sessionInfo)
-  }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
+  async function handleSuccess(sessionInfo: AllAuthTypes.SessionInfo) {}
 
   const form = useForm({
     defaultValues: DEFAULT_INITIAL_VALUES,

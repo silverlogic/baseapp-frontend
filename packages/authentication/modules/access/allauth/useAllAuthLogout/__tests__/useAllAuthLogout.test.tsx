@@ -1,4 +1,4 @@
-// TODO: Update for useAllAuthLogout
+// TODO: Update for allAuth
 
 // import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
 // import {

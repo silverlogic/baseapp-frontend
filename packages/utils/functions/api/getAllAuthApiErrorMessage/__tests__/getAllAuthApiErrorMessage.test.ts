@@ -1,4 +1,4 @@
-// TODO: Update
+// TODO: Update for allAuth
 
 // import { getApiErrorMessage } from '..'
 
