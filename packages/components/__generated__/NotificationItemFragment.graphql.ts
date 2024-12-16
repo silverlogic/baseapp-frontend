@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c9ddcf15734fdc73a61ee51daa5ba86e>>
+ * @generated SignedSource<<d210d25d31cbb8cf92f5eccd6d2a0e22>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -48,6 +48,7 @@ export type NotificationItemFragment$data = {
   readonly target:
     | {
         readonly __typename: string
+        readonly body?: string | null | undefined
         readonly id: string
       }
     | null
@@ -70,13 +71,30 @@ const node: ReaderFragment = (function () {
       name: 'id',
       storageKey: null,
     },
-    v1 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: '__typename',
-      storageKey: null,
-    }
+    v1 = [
+      v0 /*: any*/,
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: '__typename',
+        storageKey: null,
+      },
+      {
+        kind: 'InlineFragment',
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'body',
+            storageKey: null,
+          },
+        ],
+        type: 'Comment',
+        abstractKey: null,
+      },
+    ]
   return {
     argumentDefinitions: [],
     kind: 'Fragment',
@@ -195,7 +213,7 @@ const node: ReaderFragment = (function () {
         kind: 'LinkedField',
         name: 'target',
         plural: false,
-        selections: [v0 /*: any*/, v1 /*: any*/],
+        selections: v1 /*: any*/,
         storageKey: null,
       },
       {
@@ -205,24 +223,7 @@ const node: ReaderFragment = (function () {
         kind: 'LinkedField',
         name: 'actionObject',
         plural: false,
-        selections: [
-          v0 /*: any*/,
-          v1 /*: any*/,
-          {
-            kind: 'InlineFragment',
-            selections: [
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'body',
-                storageKey: null,
-              },
-            ],
-            type: 'Comment',
-            abstractKey: null,
-          },
-        ],
+        selections: v1 /*: any*/,
         storageKey: null,
       },
     ],
@@ -231,6 +232,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '2a3ba381d2a70ce73014c7d7549c7e66'
+;(node as any).hash = '18973be33a78d4c8acc5affd35b1a004'
 
 export default node
