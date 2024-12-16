@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.32
+
+### Patch Changes
+
+- Improve unread Badge and unread divider behavior
+
 ## 0.0.31
 
 ### Patch Changes

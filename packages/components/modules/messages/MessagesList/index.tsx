@@ -1,5 +1,6 @@
-import { FC, useCallback, useMemo, useRef } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box } from '@mui/material'
@@ -8,6 +9,8 @@ import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../__generated__/MessagesListFragment.graphql'
+import { useChatRoom } from '../context'
+import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
 import { MessagesListFragment } from '../graphql/queries/MessagesList'
 import useMessagesListSubscription from '../graphql/subscriptions/useMessagesListSubscription'
 import DefaultMessagesGroup from './MessagesGroup'
@@ -39,6 +42,38 @@ const MessagesList: FC<MessagesListProps> = ({
   )
   const allMessagesLastIndex = Number(allMessages?.length) - 1
   const firstItemIndex = Math.max(totalNumberOfMessages - allMessages.length, 0)
+
+  const { currentProfile } = useCurrentProfile()
+  const { id: selectedRoom } = useChatRoom()
+  const [commitMutation] = useReadMessageMutation()
+
+  const getFirstUnreadMessageId = () => {
+    if (room?.unreadMessagesCount === 0) return null
+    return allMessages.find((message, index) => {
+      const previousMessage = allMessages?.[index + 1]
+      const hasPreviousMessage = !!previousMessage
+      return (
+        message?.profile?.id !== currentProfile?.id &&
+        !message?.isRead &&
+        (!hasPreviousMessage || previousMessage?.isRead)
+      )
+    })?.id
+  }
+
+  const firstUnreadMessageId = useMemo(getFirstUnreadMessageId, [selectedRoom, currentProfile])
+
+  useEffect(() => {
+    if (room?.unreadMessagesCount !== 0) {
+      commitMutation({
+        variables: {
+          input: {
+            roomId: room?.id as string,
+            profileId: currentProfile?.id as string,
+          },
+        },
+      })
+    }
+  }, [room?.id, room?.unreadMessagesCount, currentProfile])
 
   useMessagesListSubscription(room?.id)
 
@@ -72,6 +107,7 @@ const MessagesList: FC<MessagesListProps> = ({
           messageIndex={messageIndex}
           roomParticipantsCount={room?.participants?.totalCount}
           allMessagesLastIndex={allMessagesLastIndex}
+          firstUnreadMessageId={firstUnreadMessageId}
           hasNext={hasNext}
           {...MessagesGroupProps}
         />
@@ -82,6 +118,7 @@ const MessagesList: FC<MessagesListProps> = ({
       allMessagesLastIndex,
       firstItemIndex,
       hasNext,
+      firstUnreadMessageId,
       room?.participants?.totalCount,
       MessagesGroup,
       MessagesGroupProps,

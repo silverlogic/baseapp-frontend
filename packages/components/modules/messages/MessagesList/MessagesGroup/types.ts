@@ -12,6 +12,7 @@ export interface MessagesGroupProps {
   messageIndex: number
   roomParticipantsCount: Participants['totalCount']
   allMessagesLastIndex: number
+  firstUnreadMessageId?: string | null
   hasNext: boolean
   MessageItem?: FC<MessageItemProps>
   MessageItemProps?: Partial<MessageItemProps>
