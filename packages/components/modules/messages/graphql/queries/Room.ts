@@ -4,7 +4,7 @@ export const RoomFragment = graphql`
   fragment RoomFragment on ChatRoom {
     id
     unreadMessagesCount
-    image(width: 100, height: 100) {
+    image(width: 144, height: 144) {
       url
     }
     lastMessageTime
@@ -13,6 +13,7 @@ export const RoomFragment = graphql`
       content
     }
     title
+    isGroup
     participants {
       totalCount
       edges {

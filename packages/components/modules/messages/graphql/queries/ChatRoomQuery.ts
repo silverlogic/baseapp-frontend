@@ -5,6 +5,7 @@ export const ChatRoomQuery = graphql`
     chatRoom(id: $roomId) {
       id
       unreadMessagesCount
+      isGroup
       participants {
         edges {
           node {
@@ -19,7 +20,6 @@ export const ChatRoomQuery = graphql`
           }
         }
       }
-      unreadMessagesCount
       ...MessagesListFragment
     }
   }

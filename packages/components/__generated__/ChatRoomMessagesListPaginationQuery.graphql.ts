@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dab2b6d7ef084dd3081093aa6468bb4a>>
+ * @generated SignedSource<<316b20e03630b3d72d3102f596750e01>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -152,6 +152,13 @@ const node: ConcreteRequest = (function () {
                   name: 'participants',
                   plural: false,
                   selections: [v4 /*: any*/],
+                  storageKey: null,
+                },
+                {
+                  alias: null,
+                  args: null,
+                  kind: 'ScalarField',
+                  name: 'isGroup',
                   storageKey: null,
                 },
                 {
@@ -348,16 +355,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '49f246acb3d0ddfb7b9b7cc486130a76',
+      cacheID: '8146da1117f77530cad0957d8a51ab5b',
       id: null,
       metadata: {},
       name: 'ChatRoomMessagesListPaginationQuery',
       operationKind: 'query',
-      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  isGroup\n  unreadMessagesCount\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '1eebe2365c138d57d71fb4d1365102b9'
+;(node as any).hash = '624b375cec153372c74b1bd101a210fa'
 
 export default node

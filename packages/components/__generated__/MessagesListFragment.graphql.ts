@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<91b489da3df08f0b62ec9dce25b08a58>>
+ * @generated SignedSource<<40c0b1e6e775fe151b1fccfc3996ef29>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -51,6 +51,7 @@ export type MessagesListFragment$data = {
     | null
     | undefined
   readonly id: string
+  readonly isGroup: boolean
   readonly participants:
     | {
         readonly totalCount: number | null | undefined
@@ -132,6 +133,13 @@ const node: ReaderFragment = (function () {
         name: 'participants',
         plural: false,
         selections: [v2 /*: any*/],
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'isGroup',
         storageKey: null,
       },
       {
@@ -288,6 +296,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '1eebe2365c138d57d71fb4d1365102b9'
+;(node as any).hash = '624b375cec153372c74b1bd101a210fa'
 
 export default node
