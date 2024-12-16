@@ -1,5 +1,6 @@
 import humps from 'humps'
 
+import { SESSION_KEY_NAME } from '../../../constants/allauth'
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
@@ -124,6 +125,12 @@ export const baseAppFetch: BaseAppFetch = async (
   // set Authorization header
   if (authToken && isAuthTokenRequired) {
     fetchOptions.headers!.Authorization = `${tokenType} ${authToken}`
+  }
+
+  // allauth session token
+  const sessionToken = getToken(SESSION_KEY_NAME, { noSSR: false })
+  if (sessionToken) {
+    fetchOptions.headers!['x-session-token'] = sessionToken
   }
 
   // set language header

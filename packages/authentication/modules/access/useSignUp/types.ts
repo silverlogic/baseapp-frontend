@@ -10,6 +10,8 @@ export interface UseSignUpOptions<TRegisterRequest = RegisterRequest, TRegisterR
   formOptions?: UseFormProps<Partial<TRegisterRequest>>
   defaultValues?: TRegisterRequest
   ApiClass?: ApiClass
-  options?: UseMutationOptions<TRegisterResponse, unknown, TRegisterRequest, any>
+  options?: UseMutationOptions<TRegisterResponse, unknown, TRegisterRequest, any> & {
+    path?: `/${string}` | ''
+  }
   enableFormApiErrors?: boolean
 }

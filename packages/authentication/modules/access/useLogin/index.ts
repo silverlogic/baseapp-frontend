@@ -17,6 +17,7 @@ import { useForm } from 'react-hook-form'
 import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
 import type {
+  AllAuthResponse,
   LoginChangeExpiredPasswordRedirectResponse,
   LoginJWTResponse,
   LoginMfaRequest,
@@ -39,6 +40,7 @@ const useLogin = ({
   accessKeyName = ACCESS_KEY_NAME,
   refreshKeyName = REFRESH_KEY_NAME,
   ApiClass = AuthApi,
+  path,
   enableFormApiErrors = true,
 }: UseLoginOptions = {}) => {
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
@@ -48,12 +50,13 @@ const useLogin = ({
    * Handles login success  with the auth token in response
    */
   async function handleLoginSuccess(
-    response: LoginJWTResponse | LoginChangeExpiredPasswordRedirectResponse,
+    response: LoginJWTResponse | LoginChangeExpiredPasswordRedirectResponse | AllAuthResponse,
   ) {
     if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
       return
     }
-    const user = decodeJWT<User>(response.access)
+    const jwtResponse = 'meta' in response ? response.meta.accessToken : response
+    const user = decodeJWT<User>(jwtResponse.access)
     if (user) {
       // TODO: handle the absolute image path on the backend
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
@@ -63,10 +66,10 @@ const useLogin = ({
         image: absoluteImagePath,
       })
     }
-    await setTokenAsync(accessKeyName, response.access, {
+    await setTokenAsync(accessKeyName, jwtResponse.access, {
       secure: process.env.NODE_ENV === 'production',
     })
-    await setTokenAsync(refreshKeyName, response.refresh, {
+    await setTokenAsync(refreshKeyName, jwtResponse.refresh, {
       secure: process.env.NODE_ENV === 'production',
     })
   }
@@ -79,7 +82,7 @@ const useLogin = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: LoginRequest) => ApiClass.login(data),
+    mutationFn: (data: LoginRequest) => ApiClass.login(data, path),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
@@ -120,6 +123,7 @@ const useLogin = ({
   })
 
   return {
+    handleLoginSuccess,
     form: {
       ...form,
       // TODO: refactor types

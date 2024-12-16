@@ -34,6 +34,7 @@ type ExtraHeaders = {
   'Content-Type'?: string
   Authorization?: string
   'Accept-Language'?: string
+  'x-session-token'?: string
 }
 
 export interface RequestOptions extends Omit<RequestInit, 'body' | 'headers'> {

@@ -12,6 +12,7 @@ import type {
 type ApiClass = Pick<typeof AuthApi, 'login'>
 
 export interface UseLoginOptions extends CustomJWTKeyNames {
+  path?: `/${string}` | ''
   loginFormOptions?: UseFormProps<Partial<LoginRequest>>
   loginOptions?: UseMutationOptions<LoginResponse, unknown, LoginRequest, any>
   mfaOptions?: UseMutationOptions<LoginResponse, unknown, LoginMfaRequest, any>
