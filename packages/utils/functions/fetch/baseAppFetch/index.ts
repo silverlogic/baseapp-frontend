@@ -1,9 +1,10 @@
 import humps from 'humps'
 
+import { SESSION_KEY_NAME } from '../../../constants/allauth'
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
-import { ACCESS_KEY_NAME, REFRESH_KEY_NAME, SESSION_KEY_NAME } from '../../../constants/jwt'
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
