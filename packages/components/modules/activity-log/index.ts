@@ -16,4 +16,4 @@ export { default as LogItem } from './LogItem'
 export type * from './LogItem/types'
 
 export * from './graphql/queries/ActivityLogs'
-export * from './hooks/useActivityLogs'
+export * from './graphql/queries/ActivityLogsFragment'
