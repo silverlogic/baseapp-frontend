@@ -5,8 +5,8 @@ import { graphql, usePaginationFragment } from 'react-relay'
 import { ActivityLogsFragment$key } from '../../../__generated__/ActivityLogsFragment.graphql'
 import { Log, LogGroup } from '../LogGroups/types'
 
-export const useActivityLogs = (activityLogRef: ActivityLogsFragment$key) => {
-  const { data, loadNext, hasNext, isLoadingNext } = usePaginationFragment(
+export const useActivityLogs = (activityLogRef: ActivityLogsFragment$key | null) => {
+  const { data, loadNext, hasNext, isLoadingNext, refetch } = usePaginationFragment(
     graphql`
       fragment ActivityLogsFragment on Query
       @refetchable(queryName: "ActivityLogsPaginationQuery")
@@ -75,5 +75,5 @@ export const useActivityLogs = (activityLogRef: ActivityLogsFragment$key) => {
     return result
   }, [data])
 
-  return { logGroups, loadNext, hasNext, isLoadingNext }
+  return { logGroups, loadNext, hasNext, isLoadingNext, refetch }
 }
