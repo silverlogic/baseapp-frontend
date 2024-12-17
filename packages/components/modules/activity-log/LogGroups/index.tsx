@@ -3,23 +3,22 @@ import { FC } from 'react'
 import { Avatar, Box, CircularProgress, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
-import DefaultLogItem from '../LogItem'
-import { useActivityLogs } from '../hooks/useActivityLogs'
+import LogItem from '../LogItem'
 import { Log, LogGroup, LogGroupsProps } from './types'
 
 const LogGroups: FC<LogGroupsProps> = ({
-  activityLog: activityLogRef,
-  LogItem = DefaultLogItem,
-  LogItemProps,
+  logGroups,
   LoadingState = CircularProgress,
   LoadingStateProps,
   VirtuosoProps,
+  loadNext,
+  hasNext,
+  isLoadingNext,
 }) => {
-  const { logGroups, loadNext, hasNext, isLoadingNext } = useActivityLogs(activityLogRef)
   const renderLogItem = (log: any) => {
     if (!log) return null
 
-    return <LogItem key={log.id} log={log} {...LogItemProps} />
+    return <LogItem key={log.id} log={log} />
   }
 
   const renderLoadingState = () => {

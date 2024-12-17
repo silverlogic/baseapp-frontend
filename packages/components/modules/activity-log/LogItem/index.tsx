@@ -15,9 +15,7 @@ const verbMapping: { [key: string]: string } = {
   'comments.reply_comment': 'Replied to a comment',
 }
 
-const getDisplayText = (verb: string) => {
-  return verbMapping[verb] ?? verb
-}
+const getDisplayText = (verb: string) => verbMapping[verb] ?? verb
 
 const LogItem: FC<LogItemProps> = ({ log }) => (
   <Box display="flex" alignItems="center" borderLeft="1px solid #000" marginLeft="20px">
