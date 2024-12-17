@@ -1,6 +1,6 @@
 import { graphql } from 'react-relay'
 
-export const ActivityLogFragment = graphql`
+export const ActivityLogsFragmentQuery = graphql`
   fragment ActivityLogsFragment on Query
   @refetchable(queryName: "ActivityLogsPaginationQuery")
   @argumentDefinitions(count: { type: "Int", defaultValue: 10 }, cursor: { type: "String" }) {
