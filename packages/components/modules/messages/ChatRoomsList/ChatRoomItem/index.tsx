@@ -1,14 +1,21 @@
 import { FC, SyntheticEvent, useRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { ArchiveIcon, AvatarWithPlaceholder, UnreadIcon } from '@baseapp-frontend/design-system'
+import {
+  ArchiveIcon,
+  AvatarWithPlaceholder,
+  UnarchiveIcon,
+  UnreadIcon,
+} from '@baseapp-frontend/design-system'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
-import { useFragment } from 'react-relay'
+import { ConnectionHandler, useFragment } from 'react-relay'
+import { RecordSourceSelectorProxy } from 'relay-runtime'
 
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
 import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
+import { useArchiveChatRoomMutation } from '../../graphql/mutations/ArchiveChatRoom'
 import { RoomFragment } from '../../graphql/queries/Room'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
@@ -20,6 +27,8 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   handleClick,
   Badge = DefaultBadge,
   BadgeProps = {},
+  isInArchivedTab = false,
+  isInUnreadTab = false,
 }) => {
   const room = useFragment<RoomFragment$key>(RoomFragment, roomRef)
 
@@ -30,7 +39,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
 
   const chatCardRef = useRef<HTMLDivElement>(null)
 
-  const { currentProfile: profile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
 
   const roomData = {
     title: room.title,
@@ -42,7 +51,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
     room.participants?.totalCount < MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE
   ) {
     const otherParticipant = room.participants.edges.find(
-      (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== profile?.id,
+      (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
     )
     roomData.title = otherParticipant?.node?.profile?.name
     roomData.avatarUrl = otherParticipant?.node?.profile?.image?.url
@@ -53,16 +62,45 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
 
   const showBadge = room.unreadMessagesCount && room.unreadMessagesCount > 0
 
+  const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
+
   return (
     <ActionsOverlay
       title="Chat"
       offsetTop={-12}
       actions={[
         {
-          disabled: true,
-          icon: <ArchiveIcon />,
-          label: 'Archive Chat',
-          onClick: () => {},
+          disabled: isMutationInFlight,
+          icon: !isInArchivedTab ? <ArchiveIcon /> : <UnarchiveIcon />,
+          label: !isInArchivedTab ? 'Archive Chat' : 'Unarchive Chat',
+          onClick: () => {
+            if (currentProfile?.id) {
+              commit({
+                variables: {
+                  input: {
+                    roomId: room.id,
+                    profileId: currentProfile.id,
+                    archive: !isInArchivedTab,
+                  },
+                },
+                updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
+                  if (!data?.errors) {
+                    const storyRecord = store.get(currentProfile.id)
+                    if (storyRecord) {
+                      const connectionRecord = ConnectionHandler.getConnection(
+                        storyRecord,
+                        'roomsList_chatRooms',
+                        { unreadMessages: isInUnreadTab, archived: isInArchivedTab },
+                      )
+                      if (connectionRecord) {
+                        ConnectionHandler.deleteNode(connectionRecord, room.id)
+                      }
+                    }
+                  }
+                },
+              })
+            }
+          },
           hasPermission: true,
         },
         {

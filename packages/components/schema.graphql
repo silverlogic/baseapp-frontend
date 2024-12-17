@@ -1,17 +1,46 @@
-"""
-Exposes a URL that specifies the behaviour of this scalar.
-"""
+"""Exposes a URL that specifies the behaviour of this scalar."""
 directive @specifiedBy(
-  """
-  The URL that specifies the behaviour of this scalar.
-  """
+  """The URL that specifies the behaviour of this scalar."""
   url: String!
 ) on SCALAR
 
+type ActivityLog implements Node {
+  """The ID of the object"""
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  pk: Int!
+  metadata: GenericScalar
+  events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
+  user: User
+  profile: Profile
+  visibility: VisibilityTypes
+  verb: String
+  ipAddress: String
+  url: String
+}
+
+type ActivityLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivityLogEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ActivityLog` and its cursor."""
+type ActivityLogEdge {
+  """The item at the end of the edge"""
+  node: ActivityLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Block implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -22,38 +51,26 @@ type Block implements Node {
 }
 
 type BlockConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [BlockEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Block` and its cursor.
-"""
+"""A Relay edge containing a `Block` and its cursor."""
 type BlockEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Block
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 interface BlocksInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -69,9 +86,7 @@ input BlockToggleInput {
 }
 
 type BlockTogglePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   block: BlockEdge
@@ -82,32 +97,17 @@ type BlockTogglePayload {
 }
 
 type ChatRoom implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   title: String
   image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
-  participants(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): ChatRoomParticipantConnection
+  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
-  allMessages(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    verb: Verbs
-  ): MessageConnection
+  allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessagesCount(profileId: ID): Int
-  isArchivedByCurrentProfile: Boolean
+  isArchived(profileId: ID): Boolean
 }
 
 input ChatRoomArchiveInput {
@@ -126,14 +126,10 @@ type ChatRoomArchivePayload {
 }
 
 type ChatRoomConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ChatRoomEdge]!
   totalCount: Int
   edgeCount: Int
@@ -146,9 +142,7 @@ input ChatRoomCreateInput {
 }
 
 type ChatRoomCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   room: ChatRoomEdge
@@ -156,18 +150,12 @@ type ChatRoomCreatePayload {
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `ChatRoom` and its cursor.
-"""
+"""A Relay edge containing a `ChatRoom` and its cursor."""
 type ChatRoomEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: ChatRoom
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -184,9 +172,7 @@ type ChatRoomOnRoomUpdate {
 }
 
 type ChatRoomParticipant implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   profile: Profile
   hasArchivedRoom: Boolean!
@@ -194,31 +180,21 @@ type ChatRoomParticipant implements Node {
 }
 
 type ChatRoomParticipantConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ChatRoomParticipantEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `ChatRoomParticipant` and its cursor.
-"""
+"""A Relay edge containing a `ChatRoomParticipant` and its cursor."""
 type ChatRoomParticipantEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: ChatRoomParticipant
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -230,9 +206,7 @@ input ChatRoomReadMessagesInput {
 }
 
 type ChatRoomReadMessagesPayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   room: ChatRoom
@@ -250,9 +224,7 @@ input ChatRoomSendMessageInput {
 }
 
 type ChatRoomSendMessagePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   message: MessageEdge
@@ -260,9 +232,7 @@ type ChatRoomSendMessagePayload {
 }
 
 interface ChatRoomsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   chatRooms(
     offset: Int
@@ -272,9 +242,7 @@ interface ChatRoomsInterface {
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
     profileId: String
     unreadMessages: Boolean
@@ -283,25 +251,21 @@ interface ChatRoomsInterface {
   unreadMessagesCount: Int
 }
 
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface {
+type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
   created: DateTime!
   modified: DateTime!
   user: User
   profile: Profile
   body: String
 
-  """
-  languaged used in the comment
-  """
+  """languaged used in the comment"""
   language: String
   isEdited: Boolean!
   isPinned: Boolean!
   inReplyTo: Comment
   status: CommentStatus
 
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   commentsCount: CommentsCount!
   comments(
@@ -312,21 +276,12 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection
   isCommentsEnabled: Boolean!
   reactionsCount: ReactionsCount
-  reactions(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReactionConnection
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   isReactionsEnabled: Boolean!
   myReaction(profileId: ID): Reaction
 
@@ -334,19 +289,16 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   pk: Int!
   target: CommentsInterface
 }
 
 type CommentConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [CommentEdge]!
   totalCount: Int
   edgeCount: Int
@@ -361,9 +313,7 @@ input CommentCreateInput {
 }
 
 type CommentCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   comment: CommentEdge
@@ -376,9 +326,7 @@ input CommentDeleteInput {
 }
 
 type CommentDeletePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   deletedId: ID
@@ -387,18 +335,12 @@ type CommentDeletePayload {
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `Comment` and its cursor.
-"""
+"""A Relay edge containing a `Comment` and its cursor."""
 type CommentEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Comment
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -408,9 +350,7 @@ input CommentPinInput {
 }
 
 type CommentPinPayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   comment: Comment
@@ -426,9 +366,7 @@ type CommentsCount {
 }
 
 interface CommentsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   commentsCount: CommentsCount!
   comments(
@@ -439,17 +377,13 @@ interface CommentsInterface {
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection
   isCommentsEnabled: Boolean!
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum CommentStatus {
   DELETED
   PUBLISHED
@@ -462,14 +396,19 @@ input CommentUpdateInput {
 }
 
 type CommentUpdatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   comment: Comment
   clientMutationId: String
 }
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
 
 """
 The `DateTime` scalar type represents a DateTime
@@ -478,113 +417,72 @@ value as specified by
 """
 scalar DateTime
 
-"""
-Debugging information for the current query.
-"""
+"""The `Decimal` scalar type represents a python Decimal."""
+scalar Decimal
+
+"""Debugging information for the current query."""
 type DjangoDebug {
-  """
-  Executed SQL queries for this API query.
-  """
+  """Executed SQL queries for this API query."""
   sql: [DjangoDebugSQL]
 
-  """
-  Raise exceptions for this API query.
-  """
+  """Raise exceptions for this API query."""
   exceptions: [DjangoDebugException]
 }
 
-"""
-Represents a single exception raised.
-"""
+"""Represents a single exception raised."""
 type DjangoDebugException {
-  """
-  The class of the exception
-  """
+  """The class of the exception"""
   excType: String!
 
-  """
-  The message of the exception
-  """
+  """The message of the exception"""
   message: String!
 
-  """
-  The stack trace
-  """
+  """The stack trace"""
   stack: String!
 }
 
-"""
-Represents a single database query made to a Django managed DB.
-"""
+"""Represents a single database query made to a Django managed DB."""
 type DjangoDebugSQL {
-  """
-  The type of database being used (e.g. postrgesql, mysql, sqlite).
-  """
+  """The type of database being used (e.g. postrgesql, mysql, sqlite)."""
   vendor: String!
 
-  """
-  The Django database alias (e.g. 'default').
-  """
+  """The Django database alias (e.g. 'default')."""
   alias: String!
 
-  """
-  The actual SQL sent to this database.
-  """
+  """The actual SQL sent to this database."""
   sql: String
 
-  """
-  Duration of this database query in seconds.
-  """
+  """Duration of this database query in seconds."""
   duration: Float!
 
-  """
-  The raw SQL of this query, without params.
-  """
+  """The raw SQL of this query, without params."""
   rawSql: String!
 
-  """
-  JSON encoded database query parameters.
-  """
+  """JSON encoded database query parameters."""
   params: String!
 
-  """
-  Start time of this database query.
-  """
+  """Start time of this database query."""
   startTime: Float!
 
-  """
-  Stop time of this database query.
-  """
+  """Stop time of this database query."""
   stopTime: Float!
 
-  """
-  Whether this database query took more than 10 seconds.
-  """
+  """Whether this database query took more than 10 seconds."""
   isSlow: Boolean!
 
-  """
-  Whether this database query was a SELECT.
-  """
+  """Whether this database query was a SELECT."""
   isSelect: Boolean!
 
-  """
-  Postgres transaction ID if available.
-  """
+  """Postgres transaction ID if available."""
   transId: String
 
-  """
-  Postgres transaction status if available.
-  """
+  """Postgres transaction status if available."""
   transStatus: String
 
-  """
-  Postgres isolation level if available.
-  """
+  """Postgres isolation level if available."""
   isoLevel: String
 
-  """
-  Postgres connection encoding if available.
-  """
+  """Postgres connection encoding if available."""
   encoding: String
 }
 
@@ -598,9 +496,7 @@ type File {
 }
 
 type Follow implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -612,55 +508,29 @@ type Follow implements Node {
 }
 
 type FollowConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [FollowEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Follow` and its cursor.
-"""
+"""A Relay edge containing a `Follow` and its cursor."""
 type FollowEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Follow
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 interface FollowsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
-  followers(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
-  following(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followersCount: Int
   followingCount: Int
   isFollowedByMe(profileId: ID): Boolean
@@ -673,9 +543,7 @@ input FollowToggleInput {
 }
 
 type FollowTogglePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   follow: FollowEdge
@@ -700,9 +568,7 @@ schema (one of the key benefits of GraphQL).
 """
 scalar JSONString
 
-"""
-Languages available
-"""
+"""Languages available"""
 enum Languages {
   en
   es
@@ -710,9 +576,7 @@ enum Languages {
 }
 
 type Message implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   content: String
@@ -728,31 +592,21 @@ type Message implements Node {
 }
 
 type MessageConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [MessageEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Message` and its cursor.
-"""
+"""A Relay edge containing a `Message` and its cursor."""
 type MessageEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Message
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -780,12 +634,8 @@ type Mutation {
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
   reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
-  notificationsMarkAllAsRead(
-    input: NotificationsMarkAllAsReadInput!
-  ): NotificationsMarkAllAsReadPayload
-  notificationSettingToggle(
-    input: NotificationSettingToggleInput!
-  ): NotificationSettingTogglePayload
+  notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
+  notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
@@ -797,20 +647,61 @@ type Mutation {
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
 }
 
-"""
-An object with an ID
-"""
+"""An object with an ID"""
 interface Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
 }
 
+interface NodeActivityLogInterface {
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+}
+
+type NodeLogEvent implements Node {
+  """The user associated with the event."""
+  user: User
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+
+  """The object of the event."""
+  obj: Node
+
+  """The event label."""
+  label: String
+
+  """The raw data of the event."""
+  data: GenericScalar
+
+  """The diff between the previous event of the same label."""
+  diff: GenericScalar
+
+  """When the event was created."""
+  createdAt: DateTime
+}
+
+type NodeLogEventConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [NodeLogEventEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `NodeLogEvent` and its cursor."""
+type NodeLogEventEdge {
+  """The item at the end of the edge"""
+  node: NodeLogEvent
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Notification implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   level: NotificationsNotificationLevelChoices!
   recipient: User!
@@ -831,64 +722,42 @@ type Notification implements Node {
   actionObject: Node
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum NotificationChannelTypes {
-  """
-  All
-  """
+  """All"""
   ALL
 
-  """
-  Email
-  """
+  """Email"""
   EMAIL
 
-  """
-  Push
-  """
+  """Push"""
   PUSH
 
-  """
-  In-App
-  """
+  """In-App"""
   IN_APP
 }
 
 type NotificationConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [NotificationEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Notification` and its cursor.
-"""
+"""A Relay edge containing a `Notification` and its cursor."""
 type NotificationEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Notification
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 type NotificationSetting implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -900,31 +769,21 @@ type NotificationSetting implements Node {
 }
 
 type NotificationSettingConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [NotificationSettingEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `NotificationSetting` and its cursor.
-"""
+"""A Relay edge containing a `NotificationSetting` and its cursor."""
 type NotificationSettingEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: NotificationSetting
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -935,9 +794,7 @@ input NotificationSettingToggleInput {
 }
 
 type NotificationSettingTogglePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   notificationSetting: NotificationSetting
@@ -945,43 +802,22 @@ type NotificationSettingTogglePayload {
 }
 
 interface NotificationsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   notificationsUnreadCount: Int
-  notifications(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    level: NotificationsNotificationLevelChoices
-    unread: Boolean
-    verbs: String
-  ): NotificationConnection
-  notificationSettings(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): NotificationSettingConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
 }
 
 input NotificationsMarkAllAsReadInput {
-  """
-  Mark as read or unread
-  """
+  """Mark as read or unread"""
   read: Boolean!
   clientMutationId: String
 }
 
 type NotificationsMarkAllAsReadPayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   recipient: NotificationsInterface
@@ -989,18 +825,14 @@ type NotificationsMarkAllAsReadPayload {
 }
 
 input NotificationsMarkAsReadInput {
-  """
-  Mark as read or unread
-  """
+  """Mark as read or unread"""
   read: Boolean!
   notificationIds: [ID!]
   clientMutationId: String
 }
 
 type NotificationsMarkAsReadPayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   recipient: NotificationsInterface
@@ -1008,28 +840,18 @@ type NotificationsMarkAsReadPayload {
   clientMutationId: String
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum NotificationsNotificationLevelChoices {
-  """
-  success
-  """
+  """success"""
   SUCCESS
 
-  """
-  info
-  """
+  """info"""
   INFO
 
-  """
-  warning
-  """
+  """warning"""
   WARNING
 
-  """
-  error
-  """
+  """error"""
   ERROR
 }
 
@@ -1045,13 +867,16 @@ type OnNotificationChange {
   deletedNotificationId: ID
 }
 
-type Organization implements Node {
+type Organization implements Node & PermissionsInterface {
   profile: Profile
 
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
   pk: Int!
 }
 
@@ -1062,9 +887,7 @@ input OrganizationCreateInput {
 }
 
 type OrganizationCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   organization: OrganizationEdge
@@ -1072,18 +895,12 @@ type OrganizationCreatePayload {
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `Organization` and its cursor.
-"""
+"""A Relay edge containing a `Organization` and its cursor."""
 type OrganizationEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Organization
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -1093,9 +910,7 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
   user: User
   status: PageStatus
 
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   urlPath: URLPath
   urlPaths: [URLPath]
@@ -1114,9 +929,7 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection
   isCommentsEnabled: Boolean!
@@ -1126,14 +939,10 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
 }
 
 type PageConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [PageEdge]!
   totalCount: Int
   edgeCount: Int
@@ -1148,27 +957,19 @@ input PageCreateInput {
 }
 
 type PageCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   page: PageEdge
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `Page` and its cursor.
-"""
+"""A Relay edge containing a `Page` and its cursor."""
 type PageEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Page
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -1182,9 +983,7 @@ input PageEditInput {
 }
 
 type PageEditPayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   page: Page
@@ -1195,56 +994,38 @@ type PageEditPayload {
 The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
 """
 type PageInfo {
-  """
-  When paginating forwards, are there more items?
-  """
+  """When paginating forwards, are there more items?"""
   hasNextPage: Boolean!
 
-  """
-  When paginating backwards, are there more items?
-  """
+  """When paginating backwards, are there more items?"""
   hasPreviousPage: Boolean!
 
-  """
-  When paginating backwards, the cursor to continue.
-  """
+  """When paginating backwards, the cursor to continue."""
   startCursor: String
 
-  """
-  When paginating forwards, the cursor to continue.
-  """
+  """When paginating forwards, the cursor to continue."""
   endCursor: String
 }
 
 interface PageInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   urlPath: URLPath
   urlPaths: [URLPath]
   metadata: Metadata
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum PageStatus {
-  """
-  Draft
-  """
+  """Draft"""
   DRAFT
 
-  """
-  Published
-  """
+  """Published"""
   PUBLISHED
 }
 
 interface PermissionsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
 
   """
@@ -1254,9 +1035,7 @@ interface PermissionsInterface {
 }
 
 type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -1282,19 +1061,10 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection!
-  reactions(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReactionConnection!
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
   members(
@@ -1305,43 +1075,13 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     last: Int
     role: ProfileRoles
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): ProfileUserRoleConnection
-  chatroomparticipantSet(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    profile_TargetContentType: ID
-  ): ChatRoomParticipantConnection!
-  messageSet(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    verb: Verbs
-  ): MessageConnection!
-  following(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
-  followers(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
+  chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   organization: Organization
@@ -1363,9 +1103,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
     profileId: String
     unreadMessages: Boolean
@@ -1373,18 +1111,15 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   target: ProfileInterface
 }
 
 type ProfileConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ProfileEdge]!
   totalCount: Int
   edgeCount: Int
@@ -1404,9 +1139,7 @@ input ProfileCreateInput {
 }
 
 type ProfileCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   profile: ProfileEdge
@@ -1419,77 +1152,51 @@ input ProfileDeleteInput {
 }
 
 type ProfileDeletePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   deletedId: ID
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `Profile` and its cursor.
-"""
+"""A Relay edge containing a `Profile` and its cursor."""
 type ProfileEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Profile
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 interface ProfileInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   profile: Profile
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfileRoles {
-  """
-  admin
-  """
+  """admin"""
   ADMIN
 
-  """
-  manager
-  """
+  """manager"""
   MANAGER
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfileRoleStatus {
-  """
-  active
-  """
+  """active"""
   ACTIVE
 
-  """
-  pending
-  """
+  """pending"""
   PENDING
 
-  """
-  inactive
-  """
+  """inactive"""
   INACTIVE
 }
 
 interface ProfilesInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   profiles(
     offset: Int
@@ -1497,22 +1204,19 @@ interface ProfilesInterface {
     after: String
     first: Int
     last: Int
-    name: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
   ): ProfileConnection
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ProfilesProfileStatusChoices {
-  """
-  public
-  """
+  """public"""
   A_1
 
-  """
-  private
-  """
+  """private"""
   A_2
 }
 
@@ -1529,9 +1233,7 @@ input ProfileUpdateInput {
 }
 
 type ProfileUpdatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   profile: Profile
@@ -1539,9 +1241,7 @@ type ProfileUpdatePayload {
 }
 
 type ProfileUserRole implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   user: User!
   role: ProfileRoles
@@ -1550,63 +1250,44 @@ type ProfileUserRole implements Node {
 }
 
 type ProfileUserRoleConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ProfileUserRoleEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `ProfileUserRole` and its cursor.
-"""
+"""A Relay edge containing a `ProfileUserRole` and its cursor."""
 type ProfileUserRoleEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: ProfileUserRole
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 type Query {
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   organization(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Organization
   chatRoom(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): ChatRoom
   rate(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Rate
   report(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Report
   comment(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Comment
   allComments(
@@ -1617,24 +1298,13 @@ type Query {
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection
   urlPath(path: String!): URLPath
-  allPages(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    status: PageStatus
-  ): PageConnection
+  allPages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection
   page(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Page
   allProfiles(
@@ -1645,15 +1315,11 @@ type Query {
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): ProfileConnection
   profile(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Profile
   users(
@@ -1664,31 +1330,23 @@ type Query {
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): UserConnection
   user(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): User
   me: User
   node(
-    """
-    The ID of the object
-    """
+    """The ID of the object"""
     id: ID!
   ): Node
   _debug: DjangoDebug
 }
 
 type Rate implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -1700,38 +1358,26 @@ type Rate implements Node {
 }
 
 type RateConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [RateEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Rate` and its cursor.
-"""
+"""A Relay edge containing a `Rate` and its cursor."""
 type RateEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Rate
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
 interface RatingsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   ratingsCount: Int
   ratingsSum: Int
@@ -1742,9 +1388,7 @@ interface RatingsInterface {
 }
 
 type Reaction implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -1755,31 +1399,21 @@ type Reaction implements Node {
 }
 
 type ReactionConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ReactionEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `Reaction` and its cursor.
-"""
+"""A Relay edge containing a `Reaction` and its cursor."""
 type ReactionEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Reaction
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -1790,19 +1424,10 @@ type ReactionsCount {
 }
 
 interface ReactionsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   reactionsCount: ReactionsCount
-  reactions(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReactionConnection
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   isReactionsEnabled: Boolean!
   myReaction(profileId: ID): Reaction
 }
@@ -1815,9 +1440,7 @@ input ReactionToggleInput {
 }
 
 type ReactionTogglePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   reaction: ReactionEdge
@@ -1826,25 +1449,17 @@ type ReactionTogglePayload {
   clientMutationId: String
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ReactionTypes {
-  """
-  like
-  """
+  """like"""
   LIKE
 
-  """
-  dislike
-  """
+  """dislike"""
   DISLIKE
 }
 
 type Report implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -1856,14 +1471,10 @@ type Report implements Node {
 }
 
 type ReportConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [ReportEdge]!
   totalCount: Int
   edgeCount: Int
@@ -1877,9 +1488,7 @@ input ReportCreateInput {
 }
 
 type ReportCreatePayload {
-  """
-  May contain more than one error for same field.
-  """
+  """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
   report: ReportEdge
@@ -1887,18 +1496,12 @@ type ReportCreatePayload {
   clientMutationId: String
 }
 
-"""
-A Relay edge containing a `Report` and its cursor.
-"""
+"""A Relay edge containing a `Report` and its cursor."""
 type ReportEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: Report
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
@@ -1911,44 +1514,25 @@ type ReportsCount {
 }
 
 interface ReportsInterface {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   reportsCount: ReportsCount
-  reports(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReportConnection
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum ReportTypes {
-  """
-  Spam
-  """
+  """Spam"""
   SPAM
 
-  """
-  Inappropriate
-  """
+  """Inappropriate"""
   INAPPROPRIATE
 
-  """
-  Fake
-  """
+  """Fake"""
   FAKE
 
-  """
-  Other
-  """
+  """Other"""
   OTHER
 }
 
@@ -1961,9 +1545,7 @@ type Subscription {
 }
 
 type URLPath implements Node {
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
@@ -1992,14 +1574,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   isActive: Boolean!
   isStaff: Boolean
-  reactions(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    id: ID
-  ): ReactionConnection!
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   comments(
     offset: Int
     before: String
@@ -2008,23 +1583,12 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
     last: Int
     q: String
 
-    """
-    Ordering
-    """
+    """Ordering"""
     orderBy: String
   ): CommentConnection!
-  pages(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    status: PageStatus
-  ): PageConnection!
+  pages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection!
 
-  """
-  The ID of the object
-  """
+  """The ID of the object"""
   id: ID!
 
   """
@@ -2032,23 +1596,8 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   hasPerm(perm: String!): Boolean
   notificationsUnreadCount: Int
-  notifications(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    level: NotificationsNotificationLevelChoices
-    unread: Boolean
-    verbs: String
-  ): NotificationConnection
-  notificationSettings(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-  ): NotificationSettingConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
   urlPath: URLPath
   urlPaths: [URLPath]
@@ -2065,10 +1614,14 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
     after: String
     first: Int
     last: Int
-    name: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
   ): ProfileConnection
   profile: Profile
   pk: Int!
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
   shortName: String
@@ -2076,37 +1629,38 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
 }
 
 type UserConnection {
-  """
-  Pagination data for this connection.
-  """
+  """Pagination data for this connection."""
   pageInfo: PageInfo!
 
-  """
-  Contains the nodes in this connection.
-  """
+  """Contains the nodes in this connection."""
   edges: [UserEdge]!
   totalCount: Int
   edgeCount: Int
 }
 
-"""
-A Relay edge containing a `User` and its cursor.
-"""
+"""A Relay edge containing a `User` and its cursor."""
 type UserEdge {
-  """
-  The item at the end of the edge
-  """
+  """The item at the end of the edge"""
   node: User
 
-  """
-  A cursor for use in pagination
-  """
+  """A cursor for use in pagination"""
   cursor: String!
 }
 
-"""
-An enumeration.
-"""
+"""An enumeration."""
 enum Verbs {
   SENT_MESSAGE
 }
+
+"""An enumeration."""
+enum VisibilityTypes {
+  """public"""
+  PUBLIC
+
+  """private"""
+  PRIVATE
+
+  """internal"""
+  INTERNAL
+}
+
