@@ -1,19 +1,18 @@
 import { FC } from 'react'
 
+import { LoadMoreFn } from 'react-relay'
 import { VirtuosoProps } from 'react-virtuoso'
-
-import { ActivityLogsFragment$key } from '../../../__generated__/ActivityLogsFragment.graphql'
-import { LogItemProps } from '../LogItem/types'
+import { OperationType } from 'relay-runtime'
 
 export interface LogGroupsProps {
-  activityLog: ActivityLogsFragment$key
-  LogItem?: FC<LogItemProps>
-  LogItemProps?: Partial<LogItemProps>
+  logGroups: LogGroup[]
   LoadingState?: FC
   LoadingStateProps?: any
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
+  loadNext: LoadMoreFn<OperationType>
+  hasNext: boolean
+  isLoadingNext: boolean
 }
-
 export interface LogGroup {
   lastActivityTimestamp: string
   logs: Log[]

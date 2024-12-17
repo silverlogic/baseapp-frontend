@@ -1,3 +1,5 @@
+export { default as ActivityLogComponent } from './ActivityLogComponent'
+
 export { default as DateRangeChip } from './DateRangeChip'
 export type * from './DateRangeChip/types'
 
