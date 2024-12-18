@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.34
+
+### Patch Changes
+
+- Implement change role functionality on members section
+
 ## 0.0.33
 
 ### Patch Changes
