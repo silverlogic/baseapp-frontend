@@ -23,6 +23,7 @@ const Dropzone: FC<DropzoneProps> = ({
   maxFileSize = 15,
   subTitle = `Max. File Size: ${maxFileSize}MB`,
   DropzoneOptions,
+  InputProps,
 }) => {
   const [files, setFiles] = useState<string | undefined>(storedImg)
   const { sendToast } = useNotification()
@@ -49,10 +50,12 @@ const Dropzone: FC<DropzoneProps> = ({
   }
 
   const renderContent = () => {
+    const ariaLabel = 'Drag and drop files to upload'
+
     if (files)
       return (
         <>
-          <input {...getInputProps()} />
+          <input {...getInputProps()} aria-label={ariaLabel} {...InputProps} />
           <Card>
             <Box p={2} display="flex" flexDirection="column" alignItems="center">
               <img
@@ -69,7 +72,7 @@ const Dropzone: FC<DropzoneProps> = ({
     return (
       <div className="container w-full max-w-none">
         <InputContainer {...getRootProps({ isFocused, isDragAccept, isDragReject })}>
-          <input {...getInputProps()} />
+          <input {...getInputProps()} aria-label={ariaLabel} {...InputProps} />
           {isDragReject ? (
             <>
               <CancelIcon />

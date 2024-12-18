@@ -1,5 +1,25 @@
 # @baseapp-frontend/authentication
 
+## 4.0.5
+
+### Patch Changes
+
+- Remove `useEffect` hook that queues the logout listener.
+
+## 4.0.4
+
+### Patch Changes
+
+- Make sure the log out listener is loaded only once on `useCurrentProfile`.
+- Fix `useLogin` adding optional chaining to a problematic expression.
+- Move `InitialProfileProviderForTesting` around.
+
+## 4.0.3
+
+### Patch Changes
+
+- Use jotai global state and cookies to keep track of the current profile. CurrentProfileProvider is removed, use "const { currentProfile, setCurrentProfile } = useCurrentProfile()" to read and modify the current profile, respectively.
+
 ## 4.0.2
 
 ### Patch Changes

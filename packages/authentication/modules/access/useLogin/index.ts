@@ -5,6 +5,7 @@ import { useState } from 'react'
 import {
   ACCESS_KEY_NAME,
   REFRESH_KEY_NAME,
+  decodeJWT,
   setFormApiErrors,
   setTokenAsync,
 } from '@baseapp-frontend/utils'
@@ -21,11 +22,13 @@ import type {
   LoginMfaRequest,
   LoginRequest,
 } from '../../../types/auth'
+import { User } from '../../../types/user'
 import {
   isLoginChangeExpiredPasswordRedirectResponse,
   isLoginMfaResponse,
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
+import { useCurrentProfile } from '../../profile'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { UseLoginOptions } from './types'
 
@@ -39,6 +42,7 @@ const useLogin = ({
   enableFormApiErrors = true,
 }: UseLoginOptions = {}) => {
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
+  const { setCurrentProfile } = useCurrentProfile()
 
   /*
    * Handles login success  with the auth token in response
@@ -48,6 +52,16 @@ const useLogin = ({
   ) {
     if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
       return
+    }
+    const user = decodeJWT<User>(response.access)
+    if (user) {
+      // TODO: handle the absolute image path on the backend
+      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+      const absoluteImagePath = user?.profile?.image ? `${baseUrl}${user.profile.image}` : null
+      setCurrentProfile({
+        ...user.profile,
+        image: absoluteImagePath,
+      })
     }
     await setTokenAsync(accessKeyName, response.access, {
       secure: process.env.NODE_ENV === 'production',

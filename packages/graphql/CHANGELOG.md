@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.1.13
+
+### Patch Changes
+
+- Adapt `queueOperationResolver` to deal with resolvers or data mocks.
+
 ## 1.1.12
 
 ### Patch Changes

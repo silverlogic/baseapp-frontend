@@ -1,12 +1,12 @@
 import { FC, useCallback, useMemo } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
 
-import { useCurrentProfile } from '../../../profiles'
 import {
   MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME,
   MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE,
@@ -27,7 +27,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   MessageItem = DefaultMessageItem,
   MessageItemProps = {},
 }) => {
-  const { profile: currentProfile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
   const theme = useTheme()
 
   const renderDateOnTopOfMessagesGroup = useCallback(

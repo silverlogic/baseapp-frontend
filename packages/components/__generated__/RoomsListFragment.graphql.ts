@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d6f06c646cd42a6b8700e1f1364cf831>>
+ * @generated SignedSource<<fd47e378297581a2b3072b774db578d4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,7 +19,6 @@ export type RoomsListFragment$data = {
               readonly node:
                 | {
                     readonly id: string
-                    readonly unreadMessagesCount: number | null | undefined
                     readonly ' $fragmentSpreads': FragmentRefs<'RoomFragment'>
                   }
                 | null
@@ -36,7 +35,6 @@ export type RoomsListFragment$data = {
     | null
     | undefined
   readonly id: string
-  readonly unreadMessagesCount: number | null | undefined
   readonly ' $fragmentType': 'RoomsListFragment'
 }
 export type RoomsListFragment$key = {
@@ -52,16 +50,14 @@ const node: ReaderFragment = (function () {
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
-    },
-    v2 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'unreadMessagesCount',
-      storageKey: null,
     }
   return {
     argumentDefinitions: [
+      {
+        defaultValue: false,
+        kind: 'LocalArgument',
+        name: 'archived',
+      },
       {
         defaultValue: 5,
         kind: 'LocalArgument',
@@ -112,11 +108,14 @@ const node: ReaderFragment = (function () {
     },
     name: 'RoomsListFragment',
     selections: [
-      v1 /*: any*/,
-      v2 /*: any*/,
       {
         alias: 'chatRooms',
         args: [
+          {
+            kind: 'Variable',
+            name: 'archived',
+            variableName: 'archived',
+          },
           {
             kind: 'Variable',
             name: 'q',
@@ -150,7 +149,6 @@ const node: ReaderFragment = (function () {
                 plural: false,
                 selections: [
                   v1 /*: any*/,
-                  v2 /*: any*/,
                   {
                     args: null,
                     kind: 'FragmentSpread',
@@ -204,12 +202,13 @@ const node: ReaderFragment = (function () {
         ],
         storageKey: null,
       },
+      v1 /*: any*/,
     ],
     type: 'ChatRoomsInterface',
     abstractKey: '__isChatRoomsInterface',
   }
 })()
 
-;(node as any).hash = 'cf8dd10e5de039944535e8c431f1adfb'
+;(node as any).hash = '7fe57d53d40a4295a9eb2ea600d96f11'
 
 export default node

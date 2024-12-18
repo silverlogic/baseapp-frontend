@@ -11,7 +11,7 @@ module.exports = {
         tsconfig: './tsconfig.jest.json',
       },
     ],
-    '^.+\\.[t|j]sx?$': 'babel-jest',
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
   },
   setupFilesAfterEnv: ['<rootDir>/__mocks__/consoleMock.ts', '<rootDir>/__mocks__/fetchMock.ts'],
   moduleNameMapper: {
@@ -24,6 +24,8 @@ module.exports = {
   transformIgnorePatterns: [
     '/node_modules/(?!(@testing-library|@baseapp-frontend|expo-secure-store)/)',
   ],
+  modulePathIgnorePatterns: ['<rootDir>/(?!.*\\.(spec|test)\\.(ts|tsx)$).*__mocks__'],
   verbose: true,
   moduleDirectories: ['node_modules', '<rootDir>'],
+  testMatch: ['<rootDir>/**/*.(spec|test).(ts|tsx)'],
 }

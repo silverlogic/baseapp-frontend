@@ -10,16 +10,19 @@ export const RoomsListFragment = graphql`
     count: { type: "Int", defaultValue: 5 }
     q: { type: "String", defaultValue: null }
     unreadMessages: { type: "Boolean", defaultValue: false }
+    archived: { type: "Boolean", defaultValue: false }
   )
   @refetchable(queryName: "chatRoomsPaginationQuery") {
-    id
-    unreadMessagesCount
-    chatRooms(first: $count, after: $cursor, q: $q, unreadMessages: $unreadMessages)
-      @connection(key: "roomsList_chatRooms") {
+    chatRooms(
+      first: $count
+      after: $cursor
+      q: $q
+      unreadMessages: $unreadMessages
+      archived: $archived
+    ) @connection(key: "roomsList_chatRooms") {
       edges {
         node {
           id
-          unreadMessagesCount
           ...RoomFragment
         }
       }

@@ -1,5 +1,17 @@
 # @baseapp-frontend/design-system
 
+## 0.0.24
+
+### Patch Changes
+
+- Added Unarchive icon
+
+## 0.0.23
+
+### Patch Changes
+
+- Add `InputProps` prop and a default `aria-label` to the input.
+
 ## 0.0.22
 
 ### Patch Changes

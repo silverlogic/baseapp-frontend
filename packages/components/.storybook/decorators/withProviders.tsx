@@ -6,8 +6,8 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import type { StoryContext, StoryFn } from '@storybook/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Provider as JotaiProvider } from 'jotai'
 
-import CurrentProfileProvider from '../../modules/profiles/context/CurrentProfileProvider'
 import '../../styles/tailwind/globals.css'
 import defaultTheme from '../__mocks__/theme'
 
@@ -17,36 +17,30 @@ const withProviders = (Story: StoryFn, context: StoryContext) => {
   // TODO: registering a few tailwind classess (used by @baseapp-frontend/design-system components), need to figure out why the @baseapp-frontend/components storybook are not including it correctly
   // pb-3 px-3 w-full rounded-md bg-background-neutral px-2 py-1
   const relayMockEnvironment = createTestEnvironment()
-  const { environment, queueOperationResolver, resolveMostRecentOperation } = relayMockEnvironment
+  const { environment, queueOperationResolver } = relayMockEnvironment
 
   context.parameters.relayMockEnvironment = relayMockEnvironment
 
+  const queryName = context.parameters.queryName || undefined
   const mockResolvers = context.parameters.mockResolvers || undefined
   const mockData = context.parameters.mockData || {}
 
-  useEffect(() => {
-    if (!!mockResolvers) {
-      queueOperationResolver(mockResolvers)
-    }
-    if (mockData) {
-      resolveMostRecentOperation({ mockResolvers, data: mockData })
-    }
-  }, [mockData, resolveMostRecentOperation, queueOperationResolver, mockResolvers])
+  queueOperationResolver({ mockResolvers, data: mockData, queryName })
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <RelayTestProvider environment={environment}>
-        <React.Suspense fallback={<LoadingState />}>
-          <ThemeProvider {...defaultTheme}>
-            <NotificationProvider>
-              <CurrentProfileProvider>
+    <JotaiProvider>
+      <QueryClientProvider client={queryClient}>
+        <RelayTestProvider environment={environment}>
+          <React.Suspense fallback={<LoadingState />}>
+            <ThemeProvider {...defaultTheme}>
+              <NotificationProvider>
                 <Story />
-              </CurrentProfileProvider>
-            </NotificationProvider>
-          </ThemeProvider>
-        </React.Suspense>
-      </RelayTestProvider>
-    </QueryClientProvider>
+              </NotificationProvider>
+            </ThemeProvider>
+          </React.Suspense>
+        </RelayTestProvider>
+      </QueryClientProvider>
+    </JotaiProvider>
   )
 }
 

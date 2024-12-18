@@ -23,7 +23,6 @@ export type CommentOption = {
 export interface CommentItemProps {
   comment: CommentItem_comment$key
   target: CommentItem_target$key
-  profileId?: string
   currentThreadDepth: number
   subscriptionsEnabled: boolean
   onReplyClick?: () => void

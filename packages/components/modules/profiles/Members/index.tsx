@@ -1,12 +1,12 @@
 import { FC, Suspense } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system'
 
 import { Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { UserMembersListPaginationQuery as IUserMembersListPaginationQuery } from '../../../__generated__/UserMembersListPaginationQuery.graphql'
-import useCurrentProfile from '../context/useCurrentProfile'
 import { UserMembersListPaginationQuery } from '../graphql/queries/UserMembersList'
 import DefaultMemberItem from './MemberItem'
 import MembersList from './MembersList'
@@ -19,7 +19,7 @@ const Members: FC<UserMembersProps> = ({
   LoadingStateProps,
   membersContainerHeight,
 }) => {
-  const { profile: currentProfile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
 
   const data = useLazyLoadQuery<IUserMembersListPaginationQuery>(UserMembersListPaginationQuery, {
     profileId: currentProfile?.id || '',

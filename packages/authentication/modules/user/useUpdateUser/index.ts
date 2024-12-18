@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import UserApi, { USER_API_KEY } from '../../../services/user'
 import type { User, UserUpdateParams } from '../../../types/user'
+import { useCurrentProfile } from '../../profile'
 import type { UseUpdateUserOptions } from './types'
 
 const useUpdateUser = <TUser extends Pick<User, 'id'>>({
@@ -13,6 +14,7 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
   ApiClass = UserApi,
 }: UseUpdateUserOptions<TUser> = {}) => {
   const queryClient = useQueryClient()
+  const { setCurrentProfile } = useCurrentProfile()
 
   const mutation = useMutation({
     mutationFn: (params: UserUpdateParams<TUser>) => ApiClass.updateUser<TUser>(params),
@@ -23,6 +25,7 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
       } catch (e) {
         // silently fail
         // eslint-disable-next-line no-console
+        setCurrentProfile(null)
         console.error(e)
       }
       options?.onSettled?.(data, error, variables, context)

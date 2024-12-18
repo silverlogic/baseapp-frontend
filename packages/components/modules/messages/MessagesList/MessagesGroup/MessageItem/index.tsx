@@ -1,17 +1,17 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
+
 import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { useCurrentProfile } from '../../../../profiles'
 import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 
 const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }) => {
-  const { profile: currentProfile } = useCurrentProfile()
+  const { currentProfile } = useCurrentProfile()
   const message = useFragment(MessageItemFragment, messageRef)
-
   const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   return (

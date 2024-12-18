@@ -1,5 +1,81 @@
 # @baseapp-frontend/components
 
+## 0.0.32
+
+### Patch Changes
+
+- Added unarchiving chat room UX updates (icon and label change)
+- Added archiving/unarchiving chat rooms functionality
+- Enhanced ChatRoomItem with isInArchivedTab and isInUnreadTab props
+- Updated ChatRoomsList to support archived filters
+- Added new GraphQL mutation for archiving chat rooms
+- Updated RoomsListFragment to support archived status
+- Modified useRoomListSubscription to handle archived rooms
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.24
+
+## 0.0.31
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.23
+
+## 0.0.30
+
+### Patch Changes
+
+- Adapt Storybook's withProviders to use only `queueOperationResolver`.
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.1.13
+
+## 0.0.29
+
+### Patch Changes
+
+- Fixed RoomListSubscription connection and added connection to CreateChatRoom mutation
+- Moved useRoomListSubscription hook to ChatRoom on baseapp-frontend-template
+- Removed unused fields on RoomsListFragment and RoomListSubscription
+
+## 0.0.28
+
+### Patch Changes
+
+- Move useMessageCountUpdate to be used on chatrooms list instead of being used on the templates
+- update useMessageCountUpdate query
+- Fix unread count badge alignment
+
+## 0.0.27
+
+### Patch Changes
+
+- Allow users to create new organization profile.
+
+## 0.0.26
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.5
+
+## 0.0.25
+
+### Patch Changes
+
+- Use `InitialProfileProviderForTesting`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.4
+
+## 0.0.24
+
+### Patch Changes
+
+- Remove `useCurrentProfile` from the package.
+- Use mocks from `@baseapp-frontend/test`.
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.3
+
 ## 0.0.23
 
 ### Patch Changes

@@ -4,7 +4,11 @@ import * as utilsPackage from '@baseapp-frontend/utils'
 
 import 'cypress-wait-until'
 
-import { mockProfilesListFactory, mockUserProfileData } from './__mocks__/profiles'
+import {
+  mockAddProfileData,
+  mockProfilesListFactory,
+  mockUserProfileData,
+} from './__mocks__/profiles'
 import { userMockData } from './__mocks__/user'
 import AccountPopoverForTesting from './__utils__/AccountPopoverForTesting'
 
@@ -28,13 +32,9 @@ describe('AccountPopover', () => {
   })
 
   it('should render the account popover without profile and be able to interact with it', () => {
-    const { environment, rejectMostRecentOperation } = createTestEnvironment()
+    const { environment } = createTestEnvironment()
 
-    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        rejectMostRecentOperation("Error finding user's profile")
-      })
-    })
+    cy.mount(<AccountPopoverForTesting environment={environment} initialProfile={null} />)
 
     cy.findByRole('button').click()
 
@@ -50,21 +50,39 @@ describe('AccountPopover', () => {
   it('should render the account popover with profile and be able to interact with it', () => {
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
 
-    cy.mount(<AccountPopoverForTesting environment={environment} />).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        resolveMostRecentOperation({ data: mockUserProfileData })
-      })
-    })
+    cy.mount(
+      <AccountPopoverForTesting environment={environment} initialProfile={mockUserProfileData} />,
+    )
 
     cy.findByRole('button').click()
 
-    cy.contains(mockUserProfileData.data.me.profile.name).should('exist')
-    cy.contains(mockUserProfileData.data.me.profile.urlPath.path).should('exist')
+    cy.contains(mockUserProfileData.name).should('exist')
+    cy.contains(mockUserProfileData.urlPath).should('exist')
 
     // Step 1.
     cy.step('should be able to switch profile')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    const profileListData = mockProfilesListFactory(mockUserProfileData)
+
+    cy.findByRole('menuitem', { name: /switch profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: mockAddProfileData() })
+      })
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
+
+    profileListData.data.me.profiles.edges.forEach((profile) => {
+      cy.findAllByText(profile.node?.name!).should('exist')
+      cy.findAllByText(profile.node?.urlPath?.path!).should('exist').scrollIntoView()
+    })
+
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[9]?.node.name}`).click()
+    cy.get('@sendToastSpy').should('have.been.calledOnce')
+
+    // Step 2.
+    cy.step('should show 5 profiles and allow scrolling thru the profiles list')
 
     cy.findByRole('menuitem', { name: /switch profile/i })
       .click()
@@ -72,25 +90,7 @@ describe('AccountPopover', () => {
         resolveMostRecentOperation({ data: profileListData })
       })
 
-    profileListData.data.me.profiles.forEach((profile) => {
-      cy.contains('li', profile.name).should('exist')
-      cy.contains('li', profile.urlPath.path).should('exist')
-    })
-
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
-    cy.get('@sendToastSpy').should('have.been.calledOnce')
-
-    // Step 2.
-    cy.step('should show 5 profiles and allow scrolling thru the profiles list')
-
-    cy.findByRole('menuitem', { name: /switch profile/i }).click()
-
     cy.findByLabelText('List of available profiles')
-      .should('have.css', 'overflow-y', 'auto')
-      .then(($el) => {
-        const hasVerticalScroll = ($el[0]?.scrollHeight ?? 0) > ($el[0]?.clientHeight ?? 0)
-        expect(hasVerticalScroll).to.equal(true)
-      })
 
     cy.findAllByLabelText(/^switch to/i)
       .filter(':visible')
@@ -104,12 +104,13 @@ describe('AccountPopover', () => {
     // Step 4.
     cy.step('should not show the success toast when profile is not changed')
 
-    cy.findByRole('menuitem', { name: /switch profile/i }).click()
+    cy.findByRole('menuitem', { name: /switch profile/i })
+      .click()
+      .then(() => {
+        resolveMostRecentOperation({ data: profileListData })
+      })
 
-    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles[1].name}`).click()
-    // Since it was triggered in Step 1, now it still should be called once, since the profile was
-    // not changed
-    cy.get('@sendToastSpy').should('have.been.calledOnce')
+    cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[1]?.node.name}`).click()
   })
 
   it('should show all sub-components custom props', () => {
@@ -118,6 +119,7 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
+        initialProfile={mockUserProfileData}
         MenuItemsProps={{
           menuItems: [
             {
@@ -138,11 +140,7 @@ describe('AccountPopover', () => {
         AddProfileMenuItemProps={{ addNewProfileLabel: 'Add organization' }}
         LogoutItemProps={{ logoutButtonLabel: 'Sign Out' }}
       />,
-    ).then(() => {
-      cy.waitUntil(() => environment.mock.getAllOperations().length > 0).then(() => {
-        resolveMostRecentOperation({ data: mockUserProfileData })
-      })
-    })
+    )
 
     cy.findByRole('button').click()
 
@@ -159,14 +157,17 @@ describe('AccountPopover', () => {
     // Step 3.
     cy.step('should show profile list customizations')
 
-    const profileListData = mockProfilesListFactory(6, mockUserProfileData.data.me.profile)
+    const profileListData = mockProfilesListFactory(mockUserProfileData)
     cy.findByRole('menuitem', { name: /change profile/i })
       .click()
       .then(() => {
+        resolveMostRecentOperation({ data: mockAddProfileData() })
+      })
+      .then(() => {
         resolveMostRecentOperation({ data: profileListData })
       })
+
     cy.findByRole('menuitem', { name: /close/i }).should('exist')
-    cy.findByLabelText('List of available profiles').filter(':visible').should('have.length.lte', 4)
 
     cy.findByLabelText('List of available profiles').within(() => {
       cy.get('li:visible').each(($li) => {

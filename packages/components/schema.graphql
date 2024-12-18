@@ -4,6 +4,41 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
+type ActivityLog implements Node {
+  """The ID of the object"""
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  pk: Int!
+  metadata: GenericScalar
+  events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
+  user: User
+  profile: Profile
+  visibility: VisibilityTypes
+  verb: String
+  ipAddress: String
+  url: String
+}
+
+type ActivityLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivityLogEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ActivityLog` and its cursor."""
+type ActivityLogEdge {
+  """The item at the end of the edge"""
+  node: ActivityLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Block implements Node {
   """The ID of the object"""
   id: ID!
@@ -72,6 +107,22 @@ type ChatRoom implements Node {
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessagesCount(profileId: ID): Int
+  isArchived(profileId: ID): Boolean
+}
+
+input ChatRoomArchiveInput {
+  roomId: ID!
+  profileId: ID!
+  archive: Boolean!
+  clientMutationId: String
+}
+
+type ChatRoomArchivePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  clientMutationId: String
 }
 
 type ChatRoomConnection {
@@ -124,6 +175,7 @@ type ChatRoomParticipant implements Node {
   """The ID of the object"""
   id: ID!
   profile: Profile
+  hasArchivedRoom: Boolean!
   pk: Int!
 }
 
@@ -194,11 +246,12 @@ interface ChatRoomsInterface {
     orderBy: String
     profileId: String
     unreadMessages: Boolean
+    archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
 
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface {
+type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
   created: DateTime!
   modified: DateTime!
   user: User
@@ -236,6 +289,7 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   pk: Int!
   target: CommentsInterface
 }
@@ -350,11 +404,21 @@ type CommentUpdatePayload {
 }
 
 """
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""
 The `DateTime` scalar type represents a DateTime
 value as specified by
 [iso8601](https://en.wikipedia.org/wiki/ISO_8601).
 """
 scalar DateTime
+
+"""The `Decimal` scalar type represents a python Decimal."""
+scalar Decimal
 
 """Debugging information for the current query."""
 type DjangoDebug {
@@ -560,9 +624,11 @@ type Metadata {
 }
 
 type Mutation {
+  organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
+  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -576,6 +642,7 @@ type Mutation {
   commentDelete(input: CommentDeleteInput!): CommentDeletePayload
   pageCreate(input: PageCreateInput!): PageCreatePayload
   pageEdit(input: PageEditInput!): PageEditPayload
+  profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   roleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
@@ -585,6 +652,53 @@ type Mutation {
 interface Node {
   """The ID of the object"""
   id: ID!
+}
+
+interface NodeActivityLogInterface {
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+}
+
+type NodeLogEvent implements Node {
+  """The user associated with the event."""
+  user: User
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+
+  """The object of the event."""
+  obj: Node
+
+  """The event label."""
+  label: String
+
+  """The raw data of the event."""
+  data: GenericScalar
+
+  """The diff between the previous event of the same label."""
+  diff: GenericScalar
+
+  """When the event was created."""
+  createdAt: DateTime
+}
+
+type NodeLogEventConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [NodeLogEventEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `NodeLogEvent` and its cursor."""
+type NodeLogEventEdge {
+  """The item at the end of the edge"""
+  node: NodeLogEvent
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type Notification implements Node {
@@ -752,6 +866,43 @@ type OnNotificationChange {
   createdNotification: NotificationEdge
   updatedNotification: Notification
   deletedNotificationId: ID
+}
+
+type Organization implements Node & PermissionsInterface {
+  profile: Profile
+
+  """The ID of the object"""
+  id: ID!
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  pk: Int!
+}
+
+input OrganizationCreateInput {
+  name: String!
+  urlPath: String
+  clientMutationId: String
+}
+
+type OrganizationCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  organization: OrganizationEdge
+  profile: ProfileEdge
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `Organization` and its cursor."""
+type OrganizationEdge {
+  """The item at the end of the edge"""
+  node: Organization
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type Page implements Node & PageInterface & PermissionsInterface & CommentsInterface {
@@ -934,6 +1085,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  organization: Organization
 
   """
   Determine if the logged in user has a specific permission for this object.
@@ -956,9 +1108,11 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     profileId: String
     unreadMessages: Boolean
+    archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   target: ProfileInterface
 }
 
@@ -970,6 +1124,27 @@ type ProfileConnection {
   edges: [ProfileEdge]!
   totalCount: Int
   edgeCount: Int
+}
+
+input ProfileCreateInput {
+  owner: String
+  name: String!
+  image: String
+  bannerImage: String
+  biography: String
+  urlPath: String
+  target: String
+  targetContentType: String!
+  targetObjectId: Int!
+  clientMutationId: String
+}
+
+type ProfileCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profile: ProfileEdge
+  clientMutationId: String
 }
 
 input ProfileDeleteInput {
@@ -1019,6 +1194,22 @@ enum ProfileRoleStatus {
 
   """inactive"""
   INACTIVE
+}
+
+interface ProfilesInterface {
+  """The ID of the object"""
+  id: ID!
+  profiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
 }
 
 """An enumeration."""
@@ -1079,6 +1270,11 @@ type ProfileUserRoleEdge {
 }
 
 type Query {
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  organization(
+    """The ID of the object"""
+    id: ID!
+  ): Organization
   chatRoom(
     """The ID of the object"""
     id: ID!
@@ -1376,7 +1572,7 @@ type URLPath implements Node {
   target: PageInterface
 }
 
-type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & UserProfiles & ProfileInterface {
+type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
   lastLogin: DateTime
   isSuperuser: Boolean
   email: String
@@ -1428,9 +1624,20 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection
   isRatingsEnabled: Boolean!
   myRating(profileId: ID): Rate
-  profiles: [Profile]
+  profiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
   profile: Profile
   pk: Int!
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
   shortName: String
@@ -1456,14 +1663,20 @@ type UserEdge {
   cursor: String!
 }
 
-interface UserProfiles {
-  """The ID of the object"""
-  id: ID!
-  profiles: [Profile]
-}
-
 """An enumeration."""
 enum Verbs {
   SENT_MESSAGE
+}
+
+"""An enumeration."""
+enum VisibilityTypes {
+  """public"""
+  PUBLIC
+
+  """private"""
+  PRIVATE
+
+  """internal"""
+  INTERNAL
 }
 

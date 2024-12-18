@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/authentication",
   "description": "Authentication modules.",
-  "version": "4.0.2",
+  "version": "4.0.5",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -15,6 +15,7 @@
   "dependencies": {
     "@hookform/resolvers": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "jotai": "catalog:",
     "js-cookie": "catalog:",
     "react-hook-form": "catalog:",
     "zod": "catalog:"
@@ -28,6 +29,7 @@
     "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
+    "@faker-js/faker": "catalog:test",
     "@testing-library/jest-dom": "catalog:test",
     "@testing-library/react": "catalog:test",
     "@testing-library/user-event": "catalog:test",

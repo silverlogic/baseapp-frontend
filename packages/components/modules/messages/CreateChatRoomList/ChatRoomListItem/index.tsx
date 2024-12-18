@@ -2,15 +2,14 @@
 
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
-import { useFragment } from 'react-relay'
+import { ConnectionHandler, useFragment } from 'react-relay'
 
-import { useCurrentProfile } from '../../../profiles'
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
-import { useChatRoom } from '../../context'
 import { useCreateChatRoomMutation } from '../../graphql/mutations/CreateChatRoom'
 import { MainContainer } from './styled'
 import { ChatRoomListItemProps } from './types'
@@ -22,8 +21,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
 
-  const { profile: currentProfile } = useCurrentProfile()
-  const { setChatRoom } = useChatRoom()
+  const { currentProfile } = useCurrentProfile()
 
   return (
     <MainContainer key={`chat-room-item-${id}`}>
@@ -48,9 +46,18 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
             commit({
               variables: {
                 input: { profileId: currentProfile.id, participants: [id] },
+                connections: [
+                  ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
+                    unreadMessages: false,
+                    archived: false,
+                  }),
+                  ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
+                    unreadMessages: true,
+                    archived: false,
+                  }),
+                ],
               },
-              onCompleted: (data) => {
-                setChatRoom({ id: data?.chatRoomCreate?.room?.node?.id })
+              onCompleted: () => {
                 setIsInExistingChatRoomsView(true)
               },
             })

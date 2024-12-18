@@ -6,6 +6,7 @@ import { StyledChatCardProps } from './types'
 export const StyledChatCard = styled(Box)<StyledChatCardProps>(
   ({ theme, showPointer = false, isCardSelected = false }) => ({
     display: 'grid',
+    alignItems: 'center',
     height: '100%',
     width: '100%',
     maxWidth: '390px',

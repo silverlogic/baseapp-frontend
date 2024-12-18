@@ -13,7 +13,6 @@ import { CommentsListProps } from './types'
 
 const CommentsList: FC<CommentsListProps> = ({
   target: targetRef,
-  profileId,
   subscriptionsEnabled,
   onReplyClick,
   CommentItem = DefaultCommentItem,
@@ -35,7 +34,6 @@ const CommentsList: FC<CommentsListProps> = ({
         target={target}
         key={`comment-${comment.id}`}
         comment={comment}
-        profileId={profileId}
         currentThreadDepth={1}
         subscriptionsEnabled={subscriptionsEnabled}
         onReplyClick={onReplyClick}
