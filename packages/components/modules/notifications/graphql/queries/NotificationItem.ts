@@ -25,6 +25,11 @@ export const NotificationItemFragment = graphql`
     target {
       id
       __typename
+
+      ... on Comment {
+        id
+        body
+      }
     }
 
     actionObject {
