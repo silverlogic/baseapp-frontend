@@ -12,3 +12,12 @@ export interface ChangeExpiredPasswordRequest {
   newPassword: string
   token: string
 }
+
+export interface ForgotPasswordRequest {
+  email: string
+}
+
+export interface TempResetPasswordRequest {
+  newPassword: string
+  token: string
+}

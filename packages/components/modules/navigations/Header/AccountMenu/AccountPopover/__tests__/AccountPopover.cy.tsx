@@ -21,7 +21,7 @@ describe('AccountPopover', () => {
     }))
 
     const logoutSpy = cy.spy().as('logoutSpy')
-    cy.stub(authHooks, 'useLogout').callsFake(() => ({
+    cy.stub(authHooks, 'useAllAuthLogout').callsFake(() => ({
       logout: logoutSpy,
     }))
 

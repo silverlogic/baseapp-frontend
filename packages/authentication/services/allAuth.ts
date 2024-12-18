@@ -6,7 +6,7 @@ import { axiosForAllAuth } from '@baseapp-frontend/utils'
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { clone, get, isString } from 'lodash'
 
-import type * as AllAuthTypes from '../types/allAuth'
+import * as AllAuthTypes from '../types/allAuth'
 import { getCSRFToken } from '../utils/allAuth/django'
 
 // This must be APP to be able to get a jwt or auth token in the final response
