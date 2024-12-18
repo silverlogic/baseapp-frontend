@@ -21,7 +21,7 @@ const MemberItem: FC<MemberItemProps> = ({
   avatarProps = {},
   avatarWidth = 40,
   avatarHeight = 40,
-  canChangeMember = true,
+  canChangeMember = false,
   userId,
 }) => {
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
@@ -69,6 +69,43 @@ const MemberItem: FC<MemberItemProps> = ({
     setOpenConfirmChangeMember(false)
   }
 
+  const renderRoleButton = () => {
+    if (shouldRenderChangeRoleSelect) {
+      return (
+        <Box>
+          <Select
+            value={memberRole}
+            onChange={(event, _) =>
+              handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
+            }
+            displayEmpty
+            variant="filled"
+            size="small"
+            disabled={isChangingUserRole}
+          >
+            {roleOptions.map(({ value, label }) => (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+      )
+    }
+    if (haveMemberRoleAndStatus) {
+      return (
+        <Box>
+          <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
+            {status === MemberStatuses.active
+              ? capitalizeFirstLetter(memberRole)
+              : capitalizeFirstLetter(status)}
+          </Button>
+        </Box>
+      )
+    }
+    return null
+  }
+
   return (
     <MemberItemContainer>
       <ConfirmDialog
@@ -102,37 +139,7 @@ const MemberItem: FC<MemberItemProps> = ({
           <Typography variant="caption">{memberProfile?.urlPath?.path}</Typography>
         </Box>
       </MemberPersonalInformation>
-
-      {shouldRenderChangeRoleSelect ? (
-        <Box>
-          <Select
-            value={memberRole}
-            onChange={(event, _) =>
-              handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
-            }
-            displayEmpty
-            variant="filled"
-            size="small"
-            disabled={isChangingUserRole}
-          >
-            {roleOptions.map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </Select>
-        </Box>
-      ) : (
-        haveMemberRoleAndStatus && (
-          <Box>
-            <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
-              {status === MemberStatuses.active
-                ? capitalizeFirstLetter(memberRole)
-                : capitalizeFirstLetter(status)}
-            </Button>
-          </Box>
-        )
-      )}
+      {renderRoleButton()}
     </MemberItemContainer>
   )
 }
