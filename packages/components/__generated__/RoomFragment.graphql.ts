@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<94f429c180be507431ab05033c8e28fa>>
+ * @generated SignedSource<<3ff677fac515b53b8e1eeddd770cf81d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,12 +13,6 @@ import { FragmentRefs } from 'relay-runtime'
 
 export type RoomFragment$data = {
   readonly id: string
-  readonly image:
-    | {
-        readonly url: string
-      }
-    | null
-    | undefined
   readonly lastMessage:
     | {
         readonly content: string | null | undefined
@@ -27,41 +21,8 @@ export type RoomFragment$data = {
     | null
     | undefined
   readonly lastMessageTime: any | null | undefined
-  readonly participants:
-    | {
-        readonly edges: ReadonlyArray<
-          | {
-              readonly node:
-                | {
-                    readonly id: string
-                    readonly profile:
-                      | {
-                          readonly __typename: 'Profile'
-                          readonly id: string
-                          readonly image:
-                            | {
-                                readonly url: string
-                              }
-                            | null
-                            | undefined
-                          readonly name: string | null | undefined
-                        }
-                      | null
-                      | undefined
-                  }
-                | null
-                | undefined
-            }
-          | null
-          | undefined
-        >
-        readonly totalCount: number | null | undefined
-      }
-    | null
-    | undefined
-  readonly title: string | null | undefined
   readonly unreadMessagesCount: number | null | undefined
-  readonly ' $fragmentSpreads': FragmentRefs<'MessagesListFragment'>
+  readonly ' $fragmentSpreads': FragmentRefs<'ChatRoomHeaderFragment' | 'MessagesListFragment'>
   readonly ' $fragmentType': 'RoomFragment'
 }
 export type RoomFragment$key = {
@@ -71,41 +32,12 @@ export type RoomFragment$key = {
 
 const node: ReaderFragment = (function () {
   var v0 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
-    v1 = {
-      alias: null,
-      args: [
-        {
-          kind: 'Literal',
-          name: 'height',
-          value: 100,
-        },
-        {
-          kind: 'Literal',
-          name: 'width',
-          value: 100,
-        },
-      ],
-      concreteType: 'File',
-      kind: 'LinkedField',
-      name: 'image',
-      plural: false,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          kind: 'ScalarField',
-          name: 'url',
-          storageKey: null,
-        },
-      ],
-      storageKey: 'image(height:100,width:100)',
-    }
+    alias: null,
+    args: null,
+    kind: 'ScalarField',
+    name: 'id',
+    storageKey: null,
+  }
   return {
     argumentDefinitions: [],
     kind: 'Fragment',
@@ -120,7 +52,6 @@ const node: ReaderFragment = (function () {
         name: 'unreadMessagesCount',
         storageKey: null,
       },
-      v1 /*: any*/,
       {
         alias: null,
         args: null,
@@ -148,79 +79,9 @@ const node: ReaderFragment = (function () {
         storageKey: null,
       },
       {
-        alias: null,
         args: null,
-        kind: 'ScalarField',
-        name: 'title',
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
-        concreteType: 'ChatRoomParticipantConnection',
-        kind: 'LinkedField',
-        name: 'participants',
-        plural: false,
-        selections: [
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'totalCount',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            concreteType: 'ChatRoomParticipantEdge',
-            kind: 'LinkedField',
-            name: 'edges',
-            plural: true,
-            selections: [
-              {
-                alias: null,
-                args: null,
-                concreteType: 'ChatRoomParticipant',
-                kind: 'LinkedField',
-                name: 'node',
-                plural: false,
-                selections: [
-                  v0 /*: any*/,
-                  {
-                    alias: null,
-                    args: null,
-                    concreteType: 'Profile',
-                    kind: 'LinkedField',
-                    name: 'profile',
-                    plural: false,
-                    selections: [
-                      v0 /*: any*/,
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: '__typename',
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: null,
-                        kind: 'ScalarField',
-                        name: 'name',
-                        storageKey: null,
-                      },
-                      v1 /*: any*/,
-                    ],
-                    storageKey: null,
-                  },
-                ],
-                storageKey: null,
-              },
-            ],
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
+        kind: 'FragmentSpread',
+        name: 'ChatRoomHeaderFragment',
       },
       {
         args: null,
@@ -233,6 +94,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '7a8fa70089ead1942520892d561382ef'
+;(node as any).hash = '9d4bfcdfca9ea94693b2ebb241c58e9f'
 
 export default node

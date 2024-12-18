@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.33
+
+### Patch Changes
+
+- Introduces a chat header, which displays the profile image and name of the other person in a one-on-one chat and the group picture, group name and member count in a group chat
+
 ## 0.0.32
 
 ### Patch Changes
