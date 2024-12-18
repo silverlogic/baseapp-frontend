@@ -13,7 +13,8 @@ import DefaultMessagesList from '../MessagesList'
 import DefaultSendMessage from '../SendMessage'
 import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
 import { ChatRoomQuery } from '../graphql/queries/ChatRoomQuery'
-import { ChatRoomContainer } from './styled'
+import ChatRoomHeader from './ChatRoomHeader'
+import { ChatBodyContainer, ChatRoomContainer } from './styled'
 import { ChatRoomProps } from './types'
 
 const ChatRoom: FC<ChatRoomProps> = ({
@@ -71,10 +72,13 @@ const ChatRoom: FC<ChatRoomProps> = ({
 
   return (
     <ChatRoomContainer>
-      <MessagesList roomRef={chatRoom} {...MessagesListProps} />
-      <Box paddingRight={2}>
-        <SendMessage roomId={roomId} {...SendMessageProps} />
-      </Box>
+      <ChatRoomHeader roomHeaderRef={chatRoom} />
+      <ChatBodyContainer>
+        <MessagesList roomRef={chatRoom} {...MessagesListProps} />
+        <Box paddingRight={2}>
+          <SendMessage roomId={roomId} {...SendMessageProps} />
+        </Box>
+      </ChatBodyContainer>
     </ChatRoomContainer>
   )
 }

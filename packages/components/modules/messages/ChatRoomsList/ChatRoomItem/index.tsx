@@ -12,11 +12,13 @@ import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { ConnectionHandler, useFragment } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
 
+import { ChatRoomHeaderFragment$key } from '../../../../__generated__/ChatRoomHeaderFragment.graphql'
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
-import { MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE } from '../../constants'
 import { useArchiveChatRoomMutation } from '../../graphql/mutations/ArchiveChatRoom'
+import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
 import { RoomFragment } from '../../graphql/queries/Room'
+import { useNameAndAvatar } from '../../utils'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
 import { formatDate } from './utils'
@@ -41,21 +43,8 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
 
   const { currentProfile } = useCurrentProfile()
 
-  const roomData = {
-    title: room.title,
-    avatarUrl: room.image?.url,
-  }
-
-  if (
-    room.participants?.totalCount &&
-    room.participants?.totalCount < MINIMUM_AMOUNT_OF_PARTICIPANTS_TO_SHOW_ROOM_TITLE
-  ) {
-    const otherParticipant = room.participants.edges.find(
-      (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
-    )
-    roomData.title = otherParticipant?.node?.profile?.name
-    roomData.avatarUrl = otherParticipant?.node?.profile?.image?.url
-  }
+  const header = useFragment<ChatRoomHeaderFragment$key>(ChatRoomHeaderFragment, room)
+  const { title, avatar } = useNameAndAvatar(header)
 
   const lastMessage = room.lastMessage?.content
   const { lastMessageTime } = room
@@ -126,10 +115,10 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           sx={{ alignSelf: 'center', justifySelf: 'center' }}
           width={48}
           height={48}
-          src={roomData.avatarUrl}
+          src={avatar}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
-          <Typography variant="subtitle2">{roomData.title}</Typography>
+          <Typography variant="subtitle2">{title}</Typography>
           {lastMessage && lastMessageTime ? (
             <Box
               display="grid"
