@@ -13,10 +13,13 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@github/webauthn-json": "^2.1.1",
     "@hookform/resolvers": "catalog:",
     "@tanstack/react-query": "catalog:",
+    "axios": "catalog:",
     "jotai": "catalog:",
     "js-cookie": "catalog:",
+    "lodash": "catalog:",
     "react-hook-form": "catalog:",
     "zod": "catalog:"
   },
@@ -35,6 +38,7 @@
     "@testing-library/user-event": "catalog:test",
     "@types/jest": "catalog:test",
     "@types/js-cookie": "catalog:",
+    "@types/lodash": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:react18",
     "@types/react-dom": "catalog:react18",

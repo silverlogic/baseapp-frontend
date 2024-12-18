@@ -37,7 +37,7 @@ const useJWTUser = <TUser extends Partial<User> & JWTContent>({
     enabled: !!token,
     throwOnError: false,
     placeholderData,
-    ...options, // needs to be placed bellow all overridable options
+    ...options, // needs to be placed below all overridable options
   })
 
   useEffect(() => {

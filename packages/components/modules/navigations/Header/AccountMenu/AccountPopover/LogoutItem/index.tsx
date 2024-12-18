@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { useLogout } from '@baseapp-frontend/authentication'
+import { useAllAuthLogout } from '@baseapp-frontend/authentication'
 
 import { Box, ButtonBase, MenuItem } from '@mui/material'
 
@@ -11,7 +11,7 @@ const LogoutItem: FC<LogoutItemProps> = ({
   handlePopoverOnClose,
   logoutButtonLabel = 'Logout',
 }) => {
-  const { logout } = useLogout()
+  const { logout } = useAllAuthLogout()
 
   return (
     <Box margin={1.5} display="flex" flexDirection="column" gap={0.5}>
