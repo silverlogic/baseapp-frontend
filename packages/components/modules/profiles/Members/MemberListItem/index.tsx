@@ -43,6 +43,8 @@ const MemberListItem: FC<MemberListItemProps> = ({
           member={memberFragment?.user?.profile}
           memberRole={memberFragment?.role}
           status={memberFragment?.status}
+          userId={memberFragment?.user?.id}
+          canChangeMember={data?.canChangeRole || false}
           {...memberItemComponentProps}
         />
       </>
@@ -56,6 +58,8 @@ const MemberListItem: FC<MemberListItemProps> = ({
           member={memberFragment?.user?.profile}
           memberRole={memberFragment?.role}
           status={memberFragment?.status}
+          userId={memberFragment?.user?.id}
+          canChangeMember={data?.canChangeRole || false}
           {...memberItemComponentProps}
         />
         <Divider />
@@ -74,6 +78,8 @@ const MemberListItem: FC<MemberListItemProps> = ({
       member={memberFragment?.user?.profile}
       memberRole={memberFragment?.role}
       status={memberFragment?.status}
+      userId={memberFragment?.user?.id}
+      canChangeMember={data?.canChangeRole || false}
       {...memberItemComponentProps}
     />
   )

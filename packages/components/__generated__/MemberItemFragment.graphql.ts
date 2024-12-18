@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<15dc9b53215c47ddbaac982d5c81d426>>
+ * @generated SignedSource<<bab0262fe5fdfee2128f15c60c56df68>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,7 @@ export type MemberItemFragment$data = {
   readonly role: ProfileRoles | null | undefined
   readonly status: ProfileRoleStatus | null | undefined
   readonly user: {
+    readonly id: string
     readonly profile:
       | {
           readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
@@ -33,65 +34,69 @@ export type MemberItemFragment$key = {
   readonly ' $fragmentSpreads': FragmentRefs<'MemberItemFragment'>
 }
 
-const node: ReaderFragment = {
-  argumentDefinitions: [],
-  kind: 'Fragment',
-  metadata: null,
-  name: 'MemberItemFragment',
-  selections: [
-    {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
-    {
-      alias: null,
-      args: null,
-      concreteType: 'User',
-      kind: 'LinkedField',
-      name: 'user',
-      plural: false,
-      selections: [
-        {
-          alias: null,
-          args: null,
-          concreteType: 'Profile',
-          kind: 'LinkedField',
-          name: 'profile',
-          plural: false,
-          selections: [
-            {
-              args: null,
-              kind: 'FragmentSpread',
-              name: 'ProfileItemFragment',
-            },
-          ],
-          storageKey: null,
-        },
-      ],
-      storageKey: null,
-    },
-    {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'role',
-      storageKey: null,
-    },
-    {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'status',
-      storageKey: null,
-    },
-  ],
-  type: 'ProfileUserRole',
-  abstractKey: null,
-}
+const node: ReaderFragment = (function () {
+  var v0 = {
+    alias: null,
+    args: null,
+    kind: 'ScalarField',
+    name: 'id',
+    storageKey: null,
+  }
+  return {
+    argumentDefinitions: [],
+    kind: 'Fragment',
+    metadata: null,
+    name: 'MemberItemFragment',
+    selections: [
+      v0 /*: any*/,
+      {
+        alias: null,
+        args: null,
+        concreteType: 'User',
+        kind: 'LinkedField',
+        name: 'user',
+        plural: false,
+        selections: [
+          {
+            alias: null,
+            args: null,
+            concreteType: 'Profile',
+            kind: 'LinkedField',
+            name: 'profile',
+            plural: false,
+            selections: [
+              {
+                args: null,
+                kind: 'FragmentSpread',
+                name: 'ProfileItemFragment',
+              },
+            ],
+            storageKey: null,
+          },
+          v0 /*: any*/,
+        ],
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'role',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
+        name: 'status',
+        storageKey: null,
+      },
+    ],
+    type: 'ProfileUserRole',
+    abstractKey: null,
+  }
+})()
 
-;(node as any).hash = 'bd85958690e77e1ccd3a6cc89ce44335'
+;(node as any).hash = '18aa448d266fed6b34c6377032e7a213'
 
 export default node
