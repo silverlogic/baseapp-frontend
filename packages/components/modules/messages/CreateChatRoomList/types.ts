@@ -21,4 +21,5 @@ export interface CreateChatRoomListProps extends PropsWithChildren {
   ChatRoomListItemProps?: Partial<ChatRoomListItemProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
   setIsInExistingChatRoomsView: Dispatch<SetStateAction<boolean>>
+  setIsInGroupChatCreation: Dispatch<SetStateAction<boolean>>
 }
