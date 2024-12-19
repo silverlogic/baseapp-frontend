@@ -102,14 +102,7 @@ Cataloging reused dependencies also facilitates easier updates and reduces the c
 
 Make sure to keep [`@baseapp-frontend's catalog`](https://github.com/silverlogic/baseapp-frontend/blob/master/pnpm-workspace.yaml) always up to date.
 
-
-## **Using Package Versions from GitHub**
-
-If you need to install a package version that hasn't been published yet, follow the steps below. We use GitHub as the source for unpublished versions.
-
-### **Steps:**
-
-1. **Remove Catalog Entries**:
+### **Remove Catalog Entries**:
 
   Before using a package from GitHub, remove its catalog entry. This is necessary because pnpm doesn't handle catalogs well when using non-published versions. To remove the catalogs for the desired package, run the following command:
 
@@ -120,6 +113,30 @@ If you need to install a package version that hasn't been published yet, follow 
   # will replace catalogs for all packages
   pnpm replace-catalogs
   ```
+
+### **Restore Catalog Entries**:
+
+  To restore the catalog entries to their original state, run the following command:
+
+  ```bash
+  # will restore catalogs for utils and authentication packages
+  pnpm restore-catalogs utils authentication
+
+  # will restore catalogs for all packages
+  pnpm restore-catalogs
+  ```
+
+  This will update all package.json files to include catalog entries again.
+
+## **Using Package Versions from GitHub**
+
+If you need to install a package version that hasn't been published yet, follow the steps below. We use GitHub as the source for unpublished versions.
+
+### **Steps:**
+
+1. **Remove Catalog Entries**:
+
+  Refer to the (Remove Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#remove-catalog-entries] section above to temporarily remove catalogs for the relevant packages.
 
 2. **Commit and Push**:
 
@@ -135,7 +152,7 @@ If you need to install a package version that hasn't been published yet, follow 
 
 4. **Update Consumer App**:
 
-  In the consumer app (the app that will use the non-published version), update the package entry to point to the GitHub source. Replace `<commit-hash>` with the actual commit hash you copied:
+  In the consumer app (the app that will use the non-published version), update the package entry to the GitHub source. Replace `<commit-hash>` with the actual commit hash you copied:
 
   ```json
   "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
@@ -145,25 +162,19 @@ If you need to install a package version that hasn't been published yet, follow 
 
   Once you’ve finished testing or using the non-published version, you can restore the catalog entries in one of two ways:
 
-  - Option 1: Revert the Commit
+  - Option 1: Run the `restore-catalogs` script
+
+    Refer to the (Restore Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#restore-catalog-entries] section to reapply catalog entries.
+  
+  - Option 2: Revert the Commit
 
     Revert the commit that removed the catalogs to restore them to their previous state:
 
     ```bash
     git revert <commit-hash>
     ```
-    This will effectively undo the catalog removal and bring back the original entries.
 
-  - Option 2: Run the `add-catalogs` script
-
-    Run the `add-catalogs` script to reapply catalog entries without reverting the commit:
-
-    ```bash
-    pnpm add-catalogs
-    ```
-    This will update all package.json files to include catalog entries again.
-
-After using either option, proceed with committing and merging the changes
+  Both options will effectively undo the catalog removal, restore the original entries, and allow you to proceed with committing and merging the changes.
 
 ## Packages Versioning and Publishing
 
