@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<00ac20c2f815695838f6b177bf707f47>>
+ * @generated SignedSource<<05311bb05e2c36ab1ed76caf2054ef2b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,7 @@ export type ChangeUserRoleMutation$variables = {
   input: RoleUpdateInput
 }
 export type ChangeUserRoleMutation$data = {
-  readonly roleUpdate:
+  readonly profileRoleUpdate:
     | {
         readonly errors:
           | ReadonlyArray<
@@ -70,7 +70,7 @@ const node: ConcreteRequest = (function () {
         ],
         concreteType: 'RoleUpdatePayload',
         kind: 'LinkedField',
-        name: 'roleUpdate',
+        name: 'profileRoleUpdate',
         plural: false,
         selections: [
           {
@@ -145,16 +145,16 @@ const node: ConcreteRequest = (function () {
       selections: v1 /*: any*/,
     },
     params: {
-      cacheID: '0812fd0c1b25d6c1e13bf24d1d4ffaaa',
+      cacheID: 'b8717d03953ac3aeaf61e4a3b826c7d1',
       id: null,
       metadata: {},
       name: 'ChangeUserRoleMutation',
       operationKind: 'mutation',
-      text: 'mutation ChangeUserRoleMutation(\n  $input: RoleUpdateInput!\n) {\n  roleUpdate(input: $input) {\n    profileUserRole {\n      id\n      role\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
+      text: 'mutation ChangeUserRoleMutation(\n  $input: RoleUpdateInput!\n) {\n  profileRoleUpdate(input: $input) {\n    profileUserRole {\n      id\n      role\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '28b8a8c1bd07a6fc939f51cf4ccbd758'
+;(node as any).hash = 'e4f28862dc2b186db3b3fb452cf749bb'
 
 export default node

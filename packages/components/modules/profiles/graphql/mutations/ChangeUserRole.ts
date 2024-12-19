@@ -6,7 +6,7 @@ import { ChangeUserRoleMutation } from '../../../../__generated__/ChangeUserRole
 
 export const ChangeUserRoleMutationQuery = graphql`
   mutation ChangeUserRoleMutation($input: RoleUpdateInput!) {
-    roleUpdate(input: $input) {
+    profileRoleUpdate(input: $input) {
       profileUserRole {
         id
         role
