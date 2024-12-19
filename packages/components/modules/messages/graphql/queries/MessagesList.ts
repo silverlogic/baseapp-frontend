@@ -8,7 +8,10 @@ export const MessagesListFragment = graphql`
     participants {
       totalCount
     }
-    unreadMessagesCount
+    unreadMessages {
+      count
+      markedUnread
+    }
     allMessages(first: $count, after: $cursor) @connection(key: "chatRoom_allMessages") {
       totalCount
       edges {

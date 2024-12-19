@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f084cb14d72086688c6f9d22f5caaf82>>
+ * @generated SignedSource<<f2072ee2d74a13c850320cbc07ff184e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -43,7 +43,13 @@ export type useMessageCountUpdateSubscription$data = {
                                   | null
                                   | undefined
                                 readonly id: string
-                                readonly unreadMessagesCount: number | null | undefined
+                                readonly unreadMessages:
+                                  | {
+                                      readonly count: number | null | undefined
+                                      readonly markedUnread: boolean | null | undefined
+                                    }
+                                  | null
+                                  | undefined
                               }
                             | null
                             | undefined
@@ -84,14 +90,7 @@ const node: ConcreteRequest = (function () {
       name: 'id',
       storageKey: null,
     },
-    v2 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'unreadMessagesCount',
-      storageKey: null,
-    },
-    v3 = [
+    v2 = [
       {
         alias: null,
         args: [
@@ -115,7 +114,13 @@ const node: ConcreteRequest = (function () {
             plural: false,
             selections: [
               v1 /*: any*/,
-              v2 /*: any*/,
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'unreadMessagesCount',
+                storageKey: null,
+              },
               {
                 alias: null,
                 args: null,
@@ -148,7 +153,31 @@ const node: ConcreteRequest = (function () {
                         plural: false,
                         selections: [
                           v1 /*: any*/,
-                          v2 /*: any*/,
+                          {
+                            alias: null,
+                            args: null,
+                            concreteType: 'UnreadMessages',
+                            kind: 'LinkedField',
+                            name: 'unreadMessages',
+                            plural: false,
+                            selections: [
+                              {
+                                alias: null,
+                                args: null,
+                                kind: 'ScalarField',
+                                name: 'count',
+                                storageKey: null,
+                              },
+                              {
+                                alias: null,
+                                args: null,
+                                kind: 'ScalarField',
+                                name: 'markedUnread',
+                                storageKey: null,
+                              },
+                            ],
+                            storageKey: null,
+                          },
                           {
                             alias: null,
                             args: null,
@@ -212,7 +241,7 @@ const node: ConcreteRequest = (function () {
       kind: 'Fragment',
       metadata: null,
       name: 'useMessageCountUpdateSubscription',
-      selections: v3 /*: any*/,
+      selections: v2 /*: any*/,
       type: 'Subscription',
       abstractKey: null,
     },
@@ -221,19 +250,19 @@ const node: ConcreteRequest = (function () {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Operation',
       name: 'useMessageCountUpdateSubscription',
-      selections: v3 /*: any*/,
+      selections: v2 /*: any*/,
     },
     params: {
-      cacheID: '1eced1843420ed0b61b7d8845effc2ae',
+      cacheID: '14333857437b14661f927afc905ac42f',
       id: null,
       metadata: {},
       name: 'useMessageCountUpdateSubscription',
       operationKind: 'subscription',
-      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      unreadMessagesCount\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessagesCount\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
+      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      unreadMessagesCount\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessages {\n              count\n              markedUnread\n            }\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '89bba0acb4fe5156ef22a5201005474a'
+;(node as any).hash = '732b81c0387021db798a893ce5a6c449'
 
 export default node

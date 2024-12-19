@@ -15,7 +15,10 @@ const MessageCountUpdateSubscription = graphql`
           edges {
             node {
               id
-              unreadMessagesCount
+              unreadMessages {
+                count
+                markedUnread
+              }
               allMessages {
                 edges {
                   node {
