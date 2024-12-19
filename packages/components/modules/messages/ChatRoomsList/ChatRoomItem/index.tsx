@@ -58,11 +58,11 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
       variables: {
         input: {
           roomId: room.id,
-          profileId: profile?.id as string,
+          profileId: currentProfile?.id as string,
         },
       },
     })
-  }, [room.id, profile])
+  }, [room.id, currentProfile])
 
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
