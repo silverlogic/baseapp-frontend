@@ -14,4 +14,6 @@ export interface MemberItemProps {
   avatarProps?: AvatarProps
   avatarWidth?: number
   avatarHeight?: number
+  canChangeMember?: boolean
+  userId?: string
 }

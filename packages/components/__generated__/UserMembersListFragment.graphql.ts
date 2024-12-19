@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7b5d9ac9387460075ed09089a27cd807>>
+ * @generated SignedSource<<1ccb4ef3183869c662dc4a70b535479d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -12,6 +12,7 @@ import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type UserMembersListFragment$data = {
+  readonly canChangeRole: boolean | null | undefined
   readonly id: string
   readonly members:
     | {
@@ -92,6 +93,19 @@ const node: ReaderFragment = (function () {
     },
     name: 'UserMembersListFragment',
     selections: [
+      {
+        alias: 'canChangeRole',
+        args: [
+          {
+            kind: 'Literal',
+            name: 'perm',
+            value: 'baseapp_profiles.change_profileuserrole',
+          },
+        ],
+        kind: 'ScalarField',
+        name: 'hasPerm',
+        storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
+      },
       {
         args: null,
         kind: 'FragmentSpread',
@@ -200,6 +214,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'b14044279dce0f71bd144a09351f0df2'
+;(node as any).hash = '8337f3f7c24d4eeb8d4c2495429a0d71'
 
 export default node
