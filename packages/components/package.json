@@ -37,6 +37,7 @@
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
+    "numbro": "^2.5.0",
     "react-hook-form": "catalog:",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
