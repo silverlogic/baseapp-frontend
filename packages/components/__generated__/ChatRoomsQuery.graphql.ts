@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<43f91ec4dc055bc7109f9c12c6fa346a>>
+ * @generated SignedSource<<1b323607818160897b0a6ff121fc78ca>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -332,8 +332,26 @@ const node: ConcreteRequest = (function () {
                                 {
                                   alias: null,
                                   args: null,
-                                  kind: 'ScalarField',
-                                  name: 'unreadMessagesCount',
+                                  concreteType: 'UnreadMessages',
+                                  kind: 'LinkedField',
+                                  name: 'unreadMessages',
+                                  plural: false,
+                                  selections: [
+                                    {
+                                      alias: null,
+                                      args: null,
+                                      kind: 'ScalarField',
+                                      name: 'count',
+                                      storageKey: null,
+                                    },
+                                    {
+                                      alias: null,
+                                      args: null,
+                                      kind: 'ScalarField',
+                                      name: 'markedUnread',
+                                      storageKey: null,
+                                    },
+                                  ],
                                   storageKey: null,
                                 },
                                 {
@@ -571,12 +589,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'f8b0b4c3bd559ad17b832e9bdfb3a919',
+      cacheID: '7bbfb495d5690e7598b6716da8589bea',
       id: null,
       metadata: {},
       name: 'ChatRoomsQuery',
       operationKind: 'query',
-      text: 'query ChatRoomsQuery {\n  ...AllProfilesListFragment\n  me {\n    id\n    profile {\n      id\n      ...RoomsListFragment\n    }\n  }\n}\n\nfragment AllProfilesListFragment on Query {\n  allProfiles(first: 5, orderBy: "-created") {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: 5, unreadMessages: false, archived: false) {\n    edges {\n      node {\n        id\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n',
+      text: 'query ChatRoomsQuery {\n  ...AllProfilesListFragment\n  me {\n    id\n    profile {\n      id\n      ...RoomsListFragment\n    }\n  }\n}\n\nfragment AllProfilesListFragment on Query {\n  allProfiles(first: 5, orderBy: "-created") {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessages {\n    count\n    markedUnread\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: 5, unreadMessages: false, archived: false) {\n    edges {\n      node {\n        id\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n',
     },
   }
 })()

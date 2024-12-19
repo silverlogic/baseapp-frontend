@@ -2,18 +2,17 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { ReadMessagesMutation } from '../../../../__generated__/ReadMessagesMutation.graphql'
+import { UnreadChatMutation } from '../../../../__generated__/UnreadChatMutation.graphql'
 
-export const ReadMessagesMutationQuery = graphql`
-  mutation ReadMessagesMutation($input: ChatRoomReadMessagesInput!) {
-    chatRoomReadMessages(input: $input) {
+export const UnreadChatMutationQuery = graphql`
+  mutation UnreadChatMutation($input: ChatRoomUnreadInput!) {
+    chatRoomUnread(input: $input) {
       room {
         id
         unreadMessages {
           count
           markedUnread
         }
-        ...RoomFragment
       }
       errors {
         field
@@ -23,15 +22,15 @@ export const ReadMessagesMutationQuery = graphql`
   }
 `
 
-export const useReadMessageMutation = (): [
-  (config: UseMutationConfig<ReadMessagesMutation>) => Disposable,
+export const useUnreadChatMutation = (): [
+  (config: UseMutationConfig<UnreadChatMutation>) => Disposable,
   boolean,
 ] => {
   const { sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
-    useMutation<ReadMessagesMutation>(ReadMessagesMutationQuery)
+    useMutation<UnreadChatMutation>(UnreadChatMutationQuery)
 
-  const commit = (config: UseMutationConfig<ReadMessagesMutation>) =>
+  const commit = (config: UseMutationConfig<UnreadChatMutation>) =>
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {

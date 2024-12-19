@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9fd5124757fb10a53e1f327d1d2797a3>>
+ * @generated SignedSource<<68537581179b1cf79986f2b2020e3f39>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -306,8 +306,26 @@ const node: ConcreteRequest = (function () {
                             {
                               alias: null,
                               args: null,
-                              kind: 'ScalarField',
-                              name: 'unreadMessagesCount',
+                              concreteType: 'UnreadMessages',
+                              kind: 'LinkedField',
+                              name: 'unreadMessages',
+                              plural: false,
+                              selections: [
+                                {
+                                  alias: null,
+                                  args: null,
+                                  kind: 'ScalarField',
+                                  name: 'count',
+                                  storageKey: null,
+                                },
+                                {
+                                  alias: null,
+                                  args: null,
+                                  kind: 'ScalarField',
+                                  name: 'markedUnread',
+                                  storageKey: null,
+                                },
+                              ],
                               storageKey: null,
                             },
                             {
@@ -538,12 +556,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '3eee045038f7ec74c5ae76014a54399b',
+      cacheID: '01ca33ade8d6eb39325613262fee400f',
       id: null,
       metadata: {},
       name: 'chatRoomsPaginationQuery',
       operationKind: 'query',
-      text: 'query chatRoomsPaginationQuery(\n  $archived: Boolean = false\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n  $unreadMessages: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RoomsListFragment_3I5PKK\n    id\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment_3I5PKK on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: $count, after: $cursor, q: $q, unreadMessages: $unreadMessages, archived: $archived) {\n    edges {\n      node {\n        id\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n',
+      text: 'query chatRoomsPaginationQuery(\n  $archived: Boolean = false\n  $count: Int = 5\n  $cursor: String\n  $q: String = null\n  $unreadMessages: Boolean = false\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...RoomsListFragment_3I5PKK\n    id\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessages {\n    count\n    markedUnread\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment_3I5PKK on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: $count, after: $cursor, q: $q, unreadMessages: $unreadMessages, archived: $archived) {\n    edges {\n      node {\n        id\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n',
     },
   }
 })()

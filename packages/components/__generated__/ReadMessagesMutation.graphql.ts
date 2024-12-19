@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f9246983f2bfd33796f23d8c3b111130>>
+ * @generated SignedSource<<2f9b0ec06977248c81c9044cc03ab7e3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -37,7 +37,13 @@ export type ReadMessagesMutation$data = {
         readonly room:
           | {
               readonly id: string
-              readonly unreadMessagesCount: number | null | undefined
+              readonly unreadMessages:
+                | {
+                    readonly count: number | null | undefined
+                    readonly markedUnread: boolean | null | undefined
+                  }
+                | null
+                | undefined
               readonly ' $fragmentSpreads': FragmentRefs<'RoomFragment'>
             }
           | null
@@ -76,8 +82,26 @@ const node: ConcreteRequest = (function () {
     v3 = {
       alias: null,
       args: null,
-      kind: 'ScalarField',
-      name: 'unreadMessagesCount',
+      concreteType: 'UnreadMessages',
+      kind: 'LinkedField',
+      name: 'unreadMessages',
+      plural: false,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'count',
+          storageKey: null,
+        },
+        {
+          alias: null,
+          args: null,
+          kind: 'ScalarField',
+          name: 'markedUnread',
+          storageKey: null,
+        },
+      ],
       storageKey: null,
     },
     v4 = {
@@ -471,16 +495,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '8a73bdda098595a81d4e8237dc2977b6',
+      cacheID: '16aa5685f87fd675f7dd450bdc29fd04',
       id: null,
       metadata: {},
       name: 'ReadMessagesMutation',
       operationKind: 'mutation',
-      text: 'mutation ReadMessagesMutation(\n  $input: ChatRoomReadMessagesInput!\n) {\n  chatRoomReadMessages(input: $input) {\n    room {\n      id\n      unreadMessagesCount\n      ...RoomFragment\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessagesCount\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessagesCount\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n',
+      text: 'mutation ReadMessagesMutation(\n  $input: ChatRoomReadMessagesInput!\n) {\n  chatRoomReadMessages(input: $input) {\n    room {\n      id\n      unreadMessages {\n        count\n        markedUnread\n      }\n      ...RoomFragment\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  image(width: 100, height: 100) {\n    url\n  }\n  title\n  participants {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  unreadMessages {\n    count\n    markedUnread\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '5e16432139531f48bfb558baf5270f82'
+;(node as any).hash = '74e8ca248a5168c5ce8623b79103f75d'
 
 export default node
