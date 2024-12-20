@@ -1,11 +1,18 @@
 # @baseapp-frontend/components
 
+## 0.0.36
+
+### Patch Changes
+
+- Graphql mutation for unreading chats introduced
+- Graphql field unreadMessagesCount is replaced by a count field on unreadMessages (which also has a markedUnread field)
+
 ## 0.0.35
 
 ### Patch Changes
 
 - Updated dependencies
-  - @baseapp-frontend/graphql@1.1.14
+- @baseapp-frontend/graphql@1.1.14
 
 ## 0.0.34
 

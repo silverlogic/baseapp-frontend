@@ -1,4 +1,4 @@
-import { FC, SyntheticEvent, useRef } from 'react'
+import { FC, SyntheticEvent, useCallback, useRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
@@ -16,6 +16,7 @@ import { ChatRoomHeaderFragment$key } from '../../../../__generated__/ChatRoomHe
 import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
 import { useArchiveChatRoomMutation } from '../../graphql/mutations/ArchiveChatRoom'
+import { useUnreadChatMutation } from '../../graphql/mutations/UnreadChat'
 import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
 import { RoomFragment } from '../../graphql/queries/Room'
 import { useNameAndAvatar } from '../../utils'
@@ -33,6 +34,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   isInUnreadTab = false,
 }) => {
   const room = useFragment<RoomFragment$key>(RoomFragment, roomRef)
+  const [commitMutation] = useUnreadChatMutation()
 
   const handleCardClick = (event: SyntheticEvent) => {
     event.stopPropagation()
@@ -49,7 +51,18 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const lastMessage = room.lastMessage?.content
   const { lastMessageTime } = room
 
-  const showBadge = room.unreadMessagesCount && room.unreadMessagesCount > 0
+  const hasUnreadMessages = room.unreadMessages?.markedUnread || !!room.unreadMessages?.count
+
+  const unreadChat = useCallback(() => {
+    commitMutation({
+      variables: {
+        input: {
+          roomId: room.id,
+          profileId: currentProfile?.id as string,
+        },
+      },
+    })
+  }, [room.id, currentProfile])
 
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
@@ -93,11 +106,12 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           hasPermission: true,
         },
         {
-          disabled: false,
+          disabled: hasUnreadMessages,
           icon: <UnreadIcon />,
           label: 'Mark as Unread',
-          onClick: () => {},
+          onClick: unreadChat,
           hasPermission: true,
+          closeOnClick: true,
         },
       ]}
       enableDelete
@@ -153,10 +167,10 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
         </Box>
         <Badge
           sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
-          badgeContent={room.unreadMessagesCount}
+          badgeContent={room.unreadMessages?.count || ''}
           color="error"
           max={99}
-          invisible={!showBadge}
+          invisible={!hasUnreadMessages}
           {...BadgeProps}
         />
       </StyledChatCard>

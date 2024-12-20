@@ -106,7 +106,7 @@ type ChatRoom implements Node {
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
-  unreadMessagesCount(profileId: ID): Int
+  unreadMessages(profileId: ID): UnreadMessages
   isArchived(profileId: ID): Boolean
 }
 
@@ -249,6 +249,21 @@ interface ChatRoomsInterface {
     archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
+}
+
+input ChatRoomUnreadInput {
+  roomId: ID!
+  profileId: ID!
+  clientMutationId: String
+}
+
+type ChatRoomUnreadPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  profile: Profile
+  clientMutationId: String
 }
 
 type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
@@ -630,6 +645,7 @@ type Mutation {
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
+  chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -1575,6 +1591,11 @@ type Subscription {
   chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
   onNotificationChange: OnNotificationChange
   onCommentChange(targetObjectId: ID): OnCommentChange
+}
+
+type UnreadMessages {
+  count: Int
+  markedUnread: Boolean
 }
 
 type URLPath implements Node {
