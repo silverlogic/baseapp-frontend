@@ -1,5 +1,14 @@
 # @baseapp-frontend/components
 
+## 0.0.41
+
+### Patch Changes
+
+- Added FollowToggle button
+- Moved BlockButtonWithDialog, ProfileComponent and related queries and mutations from baseapp-frontend-template
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.27
+
 ## 0.0.40
 
 ### Patch Changes
@@ -45,6 +54,7 @@
 
 - Updated dependencies
   - @baseapp-frontend/graphql@1.1.14
+
 
 ## 0.0.34
 
