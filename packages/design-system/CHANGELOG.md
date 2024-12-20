@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.27
+
+### Patch Changes
+
+- Moved BlockIcon, UnblockIcon, ThreeDotsIcon and ImageWithFallback from baseapp-frontend-template
+
 ## 0.0.26
 
 ### Patch Changes
