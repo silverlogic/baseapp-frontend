@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.1.14
+
+### Patch Changes
+
+- Add graphql support to Expo/Mobile environment
+
 ## 1.1.13
 
 ### Patch Changes

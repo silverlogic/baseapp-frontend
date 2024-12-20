@@ -65,7 +65,8 @@ export async function httpFetch(
 ): Promise<GraphQLResponse> {
   const fetchOptions = getFetchOptions({ request, variables, uploadables })
   const response = await baseAppFetch('', {
-    baseUrl: process.env.NEXT_PUBLIC_RELAY_ENDPOINT,
+    baseUrl: (process.env.NEXT_PUBLIC_RELAY_ENDPOINT ||
+      process.env.EXPO_PUBLIC_RELAY_ENDPOINT) as string,
     decamelizeRequestBodyKeys: false,
     decamelizeRequestParamsKeys: false,
     camelizeResponseDataKeys: false,
@@ -89,7 +90,8 @@ export async function httpFetch(
 }
 
 const wsClient = createClient({
-  url: process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT as string,
+  url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ||
+    process.env.EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
   connectionParams: () => {
     const Authorization = getToken()
     if (!Authorization) return {}

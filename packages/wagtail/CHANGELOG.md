@@ -1,5 +1,12 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.9
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.1.14
+
 ## 1.0.8
 
 ### Patch Changes
