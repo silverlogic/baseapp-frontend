@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 
 import { ACCESS_KEY_NAME, getToken } from '@baseapp-frontend/utils'
