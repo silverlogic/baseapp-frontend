@@ -9,9 +9,13 @@ export const DEFAULT_VALIDATION_SCHEMA = z.object({
     message: ZOD_MESSAGE.password,
   }),
   email: z.string().min(1, ZOD_MESSAGE.required).email(ZOD_MESSAGE.email),
+  firstName: z.string().min(1, ZOD_MESSAGE.required),
+  lastName: z.string().min(1, ZOD_MESSAGE.required),
 })
 
 export const DEFAULT_INITIAL_VALUES: AllAuthTypes.SignUpRequest = {
   email: '',
   password: '',
+  firstName: '',
+  lastName: '',
 }
