@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<91b489da3df08f0b62ec9dce25b08a58>>
+ * @generated SignedSource<<8340b33c4779ab7d8426e74e1ec2236f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -57,7 +57,13 @@ export type MessagesListFragment$data = {
       }
     | null
     | undefined
-  readonly unreadMessagesCount: number | null | undefined
+  readonly unreadMessages:
+    | {
+        readonly count: number | null | undefined
+        readonly markedUnread: boolean | null | undefined
+      }
+    | null
+    | undefined
   readonly ' $fragmentType': 'MessagesListFragment'
 }
 export type MessagesListFragment$key = {
@@ -137,8 +143,26 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        kind: 'ScalarField',
-        name: 'unreadMessagesCount',
+        concreteType: 'UnreadMessages',
+        kind: 'LinkedField',
+        name: 'unreadMessages',
+        plural: false,
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'count',
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'markedUnread',
+            storageKey: null,
+          },
+        ],
         storageKey: null,
       },
       {
@@ -288,6 +312,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '1eebe2365c138d57d71fb4d1365102b9'
+;(node as any).hash = '8137c492c793a174c334ca5178c5ce22'
 
 export default node

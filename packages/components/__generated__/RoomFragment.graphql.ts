@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3ff677fac515b53b8e1eeddd770cf81d>>
+ * @generated SignedSource<<7c1fd5222de7db808df5694f5b913743>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,13 @@ export type RoomFragment$data = {
     | null
     | undefined
   readonly lastMessageTime: any | null | undefined
-  readonly unreadMessagesCount: number | null | undefined
+  readonly unreadMessages:
+    | {
+        readonly count: number | null | undefined
+        readonly markedUnread: boolean | null | undefined
+      }
+    | null
+    | undefined
   readonly ' $fragmentSpreads': FragmentRefs<'ChatRoomHeaderFragment' | 'MessagesListFragment'>
   readonly ' $fragmentType': 'RoomFragment'
 }
@@ -48,8 +54,26 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        kind: 'ScalarField',
-        name: 'unreadMessagesCount',
+        concreteType: 'UnreadMessages',
+        kind: 'LinkedField',
+        name: 'unreadMessages',
+        plural: false,
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'count',
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'markedUnread',
+            storageKey: null,
+          },
+        ],
         storageKey: null,
       },
       {
@@ -94,6 +118,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '9d4bfcdfca9ea94693b2ebb241c58e9f'
+;(node as any).hash = '07844e29548083b80a887e96cfddd508'
 
 export default node
