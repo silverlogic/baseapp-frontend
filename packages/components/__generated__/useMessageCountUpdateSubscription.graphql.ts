@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f2072ee2d74a13c850320cbc07ff184e>>
+ * @generated SignedSource<<a136991f440bf468f3de8f7f90575daf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -45,8 +45,8 @@ export type useMessageCountUpdateSubscription$data = {
                                 readonly id: string
                                 readonly unreadMessages:
                                   | {
-                                      readonly count: number | null | undefined
-                                      readonly markedUnread: boolean | null | undefined
+                                      readonly count: number
+                                      readonly markedUnread: boolean
                                     }
                                   | null
                                   | undefined
@@ -83,165 +83,167 @@ const node: ConcreteRequest = (function () {
         name: 'profileId',
       },
     ],
-    v1 = {
+    v1 = [
+      {
+        kind: 'Variable',
+        name: 'profileId',
+        variableName: 'profileId',
+      },
+    ],
+    v2 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v2 = [
-      {
-        alias: null,
-        args: [
-          {
-            kind: 'Variable',
-            name: 'profileId',
-            variableName: 'profileId',
-          },
-        ],
-        concreteType: 'ChatRoomOnMessagesCountUpdate',
-        kind: 'LinkedField',
-        name: 'chatRoomOnMessagesCountUpdate',
-        plural: false,
-        selections: [
-          {
-            alias: null,
-            args: null,
-            concreteType: 'Profile',
-            kind: 'LinkedField',
-            name: 'profile',
-            plural: false,
-            selections: [
-              v1 /*: any*/,
-              {
-                alias: null,
-                args: null,
-                kind: 'ScalarField',
-                name: 'unreadMessagesCount',
-                storageKey: null,
-              },
-              {
-                alias: null,
-                args: null,
-                concreteType: 'ChatRoomConnection',
-                kind: 'LinkedField',
-                name: 'chatRooms',
-                plural: false,
-                selections: [
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'totalCount',
-                    storageKey: null,
-                  },
-                  {
-                    alias: null,
-                    args: null,
-                    concreteType: 'ChatRoomEdge',
-                    kind: 'LinkedField',
-                    name: 'edges',
-                    plural: true,
-                    selections: [
-                      {
-                        alias: null,
-                        args: null,
-                        concreteType: 'ChatRoom',
-                        kind: 'LinkedField',
-                        name: 'node',
-                        plural: false,
-                        selections: [
-                          v1 /*: any*/,
-                          {
-                            alias: null,
-                            args: null,
-                            concreteType: 'UnreadMessages',
-                            kind: 'LinkedField',
-                            name: 'unreadMessages',
-                            plural: false,
-                            selections: [
-                              {
-                                alias: null,
-                                args: null,
-                                kind: 'ScalarField',
-                                name: 'count',
-                                storageKey: null,
-                              },
-                              {
-                                alias: null,
-                                args: null,
-                                kind: 'ScalarField',
-                                name: 'markedUnread',
-                                storageKey: null,
-                              },
-                            ],
-                            storageKey: null,
-                          },
-                          {
-                            alias: null,
-                            args: null,
-                            concreteType: 'MessageConnection',
-                            kind: 'LinkedField',
-                            name: 'allMessages',
-                            plural: false,
-                            selections: [
-                              {
-                                alias: null,
-                                args: null,
-                                concreteType: 'MessageEdge',
-                                kind: 'LinkedField',
-                                name: 'edges',
-                                plural: true,
-                                selections: [
-                                  {
-                                    alias: null,
-                                    args: null,
-                                    concreteType: 'Message',
-                                    kind: 'LinkedField',
-                                    name: 'node',
-                                    plural: false,
-                                    selections: [
-                                      v1 /*: any*/,
-                                      {
-                                        alias: null,
-                                        args: null,
-                                        kind: 'ScalarField',
-                                        name: 'isRead',
-                                        storageKey: null,
-                                      },
-                                    ],
-                                    storageKey: null,
-                                  },
-                                ],
-                                storageKey: null,
-                              },
-                            ],
-                            storageKey: null,
-                          },
-                        ],
-                        storageKey: null,
-                      },
-                    ],
-                    storageKey: null,
-                  },
-                ],
-                storageKey: null,
-              },
-            ],
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
-      },
-    ]
+    v3 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'unreadMessagesCount',
+      storageKey: null,
+    },
+    v4 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'totalCount',
+      storageKey: null,
+    },
+    v5 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'count',
+      storageKey: null,
+    },
+    v6 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'markedUnread',
+      storageKey: null,
+    },
+    v7 = {
+      alias: null,
+      args: null,
+      concreteType: 'MessageConnection',
+      kind: 'LinkedField',
+      name: 'allMessages',
+      plural: false,
+      selections: [
+        {
+          alias: null,
+          args: null,
+          concreteType: 'MessageEdge',
+          kind: 'LinkedField',
+          name: 'edges',
+          plural: true,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: 'Message',
+              kind: 'LinkedField',
+              name: 'node',
+              plural: false,
+              selections: [
+                v2 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  kind: 'ScalarField',
+                  name: 'isRead',
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+      ],
+      storageKey: null,
+    }
   return {
     fragment: {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Fragment',
       metadata: null,
       name: 'useMessageCountUpdateSubscription',
-      selections: v2 /*: any*/,
+      selections: [
+        {
+          alias: null,
+          args: v1 /*: any*/,
+          concreteType: 'ChatRoomOnMessagesCountUpdate',
+          kind: 'LinkedField',
+          name: 'chatRoomOnMessagesCountUpdate',
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: 'Profile',
+              kind: 'LinkedField',
+              name: 'profile',
+              plural: false,
+              selections: [
+                v2 /*: any*/,
+                v3 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: 'ChatRoomConnection',
+                  kind: 'LinkedField',
+                  name: 'chatRooms',
+                  plural: false,
+                  selections: [
+                    v4 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: 'ChatRoomEdge',
+                      kind: 'LinkedField',
+                      name: 'edges',
+                      plural: true,
+                      selections: [
+                        {
+                          alias: null,
+                          args: null,
+                          concreteType: 'ChatRoom',
+                          kind: 'LinkedField',
+                          name: 'node',
+                          plural: false,
+                          selections: [
+                            v2 /*: any*/,
+                            {
+                              alias: null,
+                              args: null,
+                              concreteType: 'UnreadMessageCount',
+                              kind: 'LinkedField',
+                              name: 'unreadMessages',
+                              plural: false,
+                              selections: [v5 /*: any*/, v6 /*: any*/],
+                              storageKey: null,
+                            },
+                            v7 /*: any*/,
+                          ],
+                          storageKey: null,
+                        },
+                      ],
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+      ],
       type: 'Subscription',
       abstractKey: null,
     },
@@ -250,15 +252,86 @@ const node: ConcreteRequest = (function () {
       argumentDefinitions: v0 /*: any*/,
       kind: 'Operation',
       name: 'useMessageCountUpdateSubscription',
-      selections: v2 /*: any*/,
+      selections: [
+        {
+          alias: null,
+          args: v1 /*: any*/,
+          concreteType: 'ChatRoomOnMessagesCountUpdate',
+          kind: 'LinkedField',
+          name: 'chatRoomOnMessagesCountUpdate',
+          plural: false,
+          selections: [
+            {
+              alias: null,
+              args: null,
+              concreteType: 'Profile',
+              kind: 'LinkedField',
+              name: 'profile',
+              plural: false,
+              selections: [
+                v2 /*: any*/,
+                v3 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: 'ChatRoomConnection',
+                  kind: 'LinkedField',
+                  name: 'chatRooms',
+                  plural: false,
+                  selections: [
+                    v4 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      concreteType: 'ChatRoomEdge',
+                      kind: 'LinkedField',
+                      name: 'edges',
+                      plural: true,
+                      selections: [
+                        {
+                          alias: null,
+                          args: null,
+                          concreteType: 'ChatRoom',
+                          kind: 'LinkedField',
+                          name: 'node',
+                          plural: false,
+                          selections: [
+                            v2 /*: any*/,
+                            {
+                              alias: null,
+                              args: null,
+                              concreteType: 'UnreadMessageCount',
+                              kind: 'LinkedField',
+                              name: 'unreadMessages',
+                              plural: false,
+                              selections: [v5 /*: any*/, v6 /*: any*/, v2 /*: any*/],
+                              storageKey: null,
+                            },
+                            v7 /*: any*/,
+                          ],
+                          storageKey: null,
+                        },
+                      ],
+                      storageKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+              ],
+              storageKey: null,
+            },
+          ],
+          storageKey: null,
+        },
+      ],
     },
     params: {
-      cacheID: '14333857437b14661f927afc905ac42f',
+      cacheID: '82134f453c19e9fc16ae77d236900477',
       id: null,
       metadata: {},
       name: 'useMessageCountUpdateSubscription',
       operationKind: 'subscription',
-      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      unreadMessagesCount\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessages {\n              count\n              markedUnread\n            }\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
+      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      unreadMessagesCount\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessages {\n              count\n              markedUnread\n              id\n            }\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
     },
   }
 })()

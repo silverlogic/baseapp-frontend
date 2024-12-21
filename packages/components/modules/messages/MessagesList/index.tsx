@@ -70,7 +70,7 @@ const MessagesList: FC<MessagesListProps> = ({
           allMessages={allMessages}
           message={message}
           messageIndex={messageIndex}
-          roomParticipantsCount={room?.participants?.totalCount}
+          isGroup={room?.isGroup}
           allMessagesLastIndex={allMessagesLastIndex}
           hasNext={hasNext}
           {...MessagesGroupProps}
@@ -82,7 +82,7 @@ const MessagesList: FC<MessagesListProps> = ({
       allMessagesLastIndex,
       firstItemIndex,
       hasNext,
-      room?.participants?.totalCount,
+      room?.isGroup,
       MessagesGroup,
       MessagesGroupProps,
     ],

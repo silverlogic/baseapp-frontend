@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7c1fd5222de7db808df5694f5b913743>>
+ * @generated SignedSource<<079ffe5d4b40e76be8d5e7e152e4e441>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,8 +23,8 @@ export type RoomFragment$data = {
   readonly lastMessageTime: any | null | undefined
   readonly unreadMessages:
     | {
-        readonly count: number | null | undefined
-        readonly markedUnread: boolean | null | undefined
+        readonly count: number
+        readonly markedUnread: boolean
       }
     | null
     | undefined
@@ -54,7 +54,7 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        concreteType: 'UnreadMessages',
+        concreteType: 'UnreadMessageCount',
         kind: 'LinkedField',
         name: 'unreadMessages',
         plural: false,

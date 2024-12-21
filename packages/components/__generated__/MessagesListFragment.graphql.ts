@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<8340b33c4779ab7d8426e74e1ec2236f>>
+ * @generated SignedSource<<4f19333933804219c017733361b7245d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -51,6 +51,7 @@ export type MessagesListFragment$data = {
     | null
     | undefined
   readonly id: string
+  readonly isGroup: boolean
   readonly participants:
     | {
         readonly totalCount: number | null | undefined
@@ -59,8 +60,8 @@ export type MessagesListFragment$data = {
     | undefined
   readonly unreadMessages:
     | {
-        readonly count: number | null | undefined
-        readonly markedUnread: boolean | null | undefined
+        readonly count: number
+        readonly markedUnread: boolean
       }
     | null
     | undefined
@@ -143,7 +144,14 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        concreteType: 'UnreadMessages',
+        kind: 'ScalarField',
+        name: 'isGroup',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        concreteType: 'UnreadMessageCount',
         kind: 'LinkedField',
         name: 'unreadMessages',
         plural: false,
@@ -312,6 +320,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '8137c492c793a174c334ca5178c5ce22'
+;(node as any).hash = 'b2b4de64aa6db0164832a66bf93d8992'
 
 export default node
