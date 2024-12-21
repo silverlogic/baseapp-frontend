@@ -8,6 +8,7 @@ export const MessagesListFragment = graphql`
     participants {
       totalCount
     }
+    isGroup
     unreadMessages {
       count
       markedUnread

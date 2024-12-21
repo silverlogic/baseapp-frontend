@@ -2,15 +2,12 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
 import { ChatRoomHeaderFragment$data } from '../../__generated__/ChatRoomHeaderFragment.graphql'
 
-// TODO Update this when a isGroupChat field is added on the BE
-export const isGroupChat = (chatRoom: ChatRoomHeaderFragment$data) => chatRoom.title !== null
-
 export const getParticipantCount = (chatRoom: ChatRoomHeaderFragment$data) =>
   chatRoom.participants?.edges.length
 
 export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
   const { currentProfile } = useCurrentProfile()
-  if (isGroupChat(roomHeader)) {
+  if (roomHeader.isGroup) {
     return {
       title: roomHeader.title,
       avatar: roomHeader.image?.url,

@@ -11,6 +11,11 @@ export const CreateChatRoomMutationQuery = graphql`
       room @prependEdge(connections: $connections) {
         node {
           id
+          isGroup
+          title
+          image(width: 100, height: 100) {
+            url
+          }
           participants {
             edges {
               node {
