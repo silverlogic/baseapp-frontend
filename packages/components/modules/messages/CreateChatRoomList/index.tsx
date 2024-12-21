@@ -15,11 +15,12 @@ import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
 import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
+import EmptyProfilesListState from '../EmptyProfilesListState'
 import SearchNotFoundState from '../SearchNotFoundState'
+import { ProfileEdge, ProfileNode } from '../types'
 import DefaultChatRoomListItem from './ChatRoomListItem'
-import EmptyProfilesListState from './EmptyProfilesListState'
 import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
-import { CreateChatRoomListProps, ProfileEdge, ProfileNode } from './types'
+import { CreateChatRoomListProps } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   allProfilesRef,
@@ -29,6 +30,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   SearchbarProps = {},
   VirtuosoProps = {},
   setIsInExistingChatRoomsView,
+  setIsInGroupChatCreation,
 }) => {
   const {
     data: { allProfiles },
@@ -61,7 +63,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
       allProfiles?.edges
         .filter((edge: ProfileEdge) => edge?.node && edge.node.id !== currentProfile?.id)
         .map((edge: ProfileEdge) => edge?.node) || [],
-    [allProfiles],
+    [allProfiles, currentProfile?.id],
   )
 
   const renderLoadingState = () => {
@@ -127,7 +129,11 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
         />
       </SearchbarContainer>
       {/* TODO: Group chat creation click handler */}
-      <GroupChatContainer onClick={() => {}}>
+      <GroupChatContainer
+        onClick={() => {
+          setIsInGroupChatCreation(true)
+        }}
+      >
         <AvatarWithPlaceholder
           width={48}
           height={48}
