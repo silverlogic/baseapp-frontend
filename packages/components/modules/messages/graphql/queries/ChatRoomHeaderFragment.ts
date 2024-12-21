@@ -6,6 +6,7 @@ export const ChatRoomHeaderFragment = graphql`
       url
     }
     title
+    isGroup
     participants {
       edges {
         node {
