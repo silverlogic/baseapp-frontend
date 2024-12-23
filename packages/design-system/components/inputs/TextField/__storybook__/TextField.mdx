@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/TextField" />
+
+# Component Documentation
+
+## TextField
+
+- **Purpose**: The TextField component provides a customizable input field for text entry.
+- **Expected Behavior**: The TextField responds to users input, displaying the values typed by the user.
+
+## Use Cases
+
+- **Current Usage**:
+  - Login/Registration forms
+  - Search inputs
+  - Data entry forms
+  - Contact forms
+- **Potential Usage**:
+  - Filtering interfaces
+  - In-line editing
+  - Dynamic form generation
+  - Auto-complete fields
+
+## Props
+
+- **value** (string): The controlled value of the input field.
+- **onChange** (function): Callback fired when the input value changes.
+- **label** (string): Text label that appears above the input field.
+- **disabled** (boolean): If true, the input will be disabled.
+- **placeholder** (string): Placeholder text displayed when the input is empty.
+- **type** (string): Type of input field (text, password, email, etc.).
+- **fullWidth** (boolean): If true, the input will take up the full width of its container.
+- **isResponsive** (boolean): If true, the input will be responsive.
+
+## Notes
+
+- **Related Components**:
+  - PureTextField: Used to create the base input field with additional functionality.
+  - InputLabel: For custom label styling
+  - FormHelperText: For custom helper text styling
+
+## Example Usage
+
+```javascript
+import { TextField } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <TextField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  )
+}
+export default MyComponent
+```

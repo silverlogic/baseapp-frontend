@@ -1,0 +1,52 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/Logo" />
+
+# Component Documentation
+
+## Logo
+
+- **Purpose**: The Logo component displays the application's branding mark or logotype. It provides consistent brand representation across the application.
+- **Expected Behavior**: The Logo component renders the brand mark at a specified size while maintaining aspect ratio. It can be clickable when used as a link and supports different variants.
+
+## Use Cases
+
+- **Current Usage**:
+  - Application header/navbar
+  - Login/signup pages
+  - Marketing materials
+  - Footer branding
+- **Potential Usage**:
+  - Email templates
+  - Loading screens
+  - Branded modals
+  - Documentation
+
+## Props
+
+- **disabledLink** (boolean): If true, the logo will not be a link (will not redirect to any page).
+- **children** (ReactNode): The logo icon or text to be displayed.
+
+## Notes
+
+- **Related Components**:
+  - Header: Often contains the Logo component
+  - Navbar: May include Logo as part of navigation
+  - Footer: May display Logo as part of branding
+  - BrandingElements: Other brand-related components
+
+## Example Usage
+
+```javascript
+import { Logo } from '@baseapp-frontend/design-system'
+import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system/icons'
+
+const MyComponent = () => {
+  return (
+    <Logo disabledLink={false}>
+      <BaseAppLogoCondensed />
+    </Logo>
+  )
+}
+export default MyComponent
+```
