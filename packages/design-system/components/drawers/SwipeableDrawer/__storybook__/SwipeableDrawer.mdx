@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Drawers/SwipeableDrawer" />
+
+# Component Documentation
+## SwipeableDrawer
+
+- **Purpose**: A customized MUI SwipeableDrawer component that provides a bottom sliding panel with a puller handle and custom styling.
+- **Expected Behavior**: Renders a bottom-anchored drawer that can be opened and closed programmatically. Features a visual puller handle and custom content container. Disables swipe-to-open functionality but maintains swipe-to-close.
+
+## Use Cases
+
+- **Current Usage**:
+  - Bottom sheet dialogs
+  - Mobile action sheets
+  - Expandable bottom panels
+  - Touch-friendly modal interfaces
+
+## Props
+
+- **children** (ReactNode): Content to be rendered inside the drawer
+- **globalHeight** (string): Height of the drawer paper component (default: `calc(25% - SWIPE_AREA_WIDTH)`)
+- **...MUISwipeableDrawerProps**: All other props are passed to the underlying MUI SwipeableDrawer component
+  - open
+  - onClose
+  - onOpen (defaults to no-op function)
+  - anchor (fixed to "bottom")
+  - disableSwipeToOpen (fixed to true)
+
+## Notes
+
+- **Related Components**:
+  - MUI SwipeableDrawer: Base component providing core functionality
+  - ContentContainer: Styled component for content layout
+  - Puller: Visual handle component
+  - SwipeableContainer: Container for the puller
+
+## Example Usage
+
+```javascript
+import { useState } from 'react'
+
+import { SwipeableDrawer } from '@baseapp-frontend/design-system'
+
+import { Button, Typography } from '@mui/material'
+
+const MyComponent = () => {
+  const [open, setOpen] = useState(false)
+
+  const handleOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+  return (
+    <>
+      <Button variant="outlined" onClick={handleOpen} style={{ width: '250px' }}>
+        Open Swipeable Drawer
+      </Button>
+      <SwipeableDrawer {...args} open={open} onClose={handleClose} onOpen={handleOpen}>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          This is the content of the Swipeable Drawer. You can put any components or content here.
+        </Typography>
+      </SwipeableDrawer>
+    </>
+  )
+}
+export default MyComponent
+```

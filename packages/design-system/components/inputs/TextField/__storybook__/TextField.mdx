@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/TextField" />
+
+# Component Documentation
+
+## TextField
+
+- **Purpose**: A customizable text input field component that wraps MUI's TextField with responsive sizing and form controller functionality.
+- **Expected Behavior**: Renders a text input that automatically adjusts size based on screen width when responsive mode is enabled. The component is wrapped with form controller capabilities by default.
+
+## Use Cases
+
+- **Current Usage**:
+  - Login/Registration forms
+  - Search inputs 
+  - Data entry forms
+  - Contact forms
+- **Potential Usage**:
+  - Filtering interfaces
+  - In-line editing
+  - Dynamic form generation
+  - Auto-complete fields
+
+## Props
+
+- **isResponsive** (boolean): If true, the input will adjust size based on screen width (default: true)
+- **...MUITextFieldProps**: All other props are passed to the underlying MUI TextField component
+  - value
+  - onChange 
+  - label
+  - disabled
+  - placeholder
+  - type
+  - fullWidth (default: true)
+  - etc.
+
+## Notes
+
+- **Related Components**:
+  - MUI TextField: Used as the base input component
+  - withController HOC: Adds form control capabilities
+  - PureTextField: Unwrapped version without form controller
+
+## Example Usage
+```javascript
+import { TextField } from '@baseapp-frontend/design-system'
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <TextField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+    />
+  )
+}
+export default MyComponent
+```
