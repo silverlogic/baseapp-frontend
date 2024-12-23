@@ -1,0 +1,66 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/SocialTextField" />
+
+# Component Documentation
+
+## SocialTextField
+
+- **Purpose**: The SocialTextField component extends the base TextField component to provide specialized input handling for social media handles and usernames. It includes validation and formatting specific to social media inputs.
+- **Expected Behavior**: The component validates and formats social media handles as users type, ensuring proper format (e.g., removing @ symbols if entered, validating allowed characters). It inherits responsive behavior from TextField.
+
+## Use Cases
+
+- **Current Usage**:
+  - Comments
+  - Chat
+  - Social media profile forms
+  - Messages
+  - Replies
+- **Potential Usage**:
+  - Social media integration features
+  - Social sharing components
+  - Contact management systems
+
+## Props
+
+- **value** (string): The controlled value of the input field.
+- **placeholder** (string): Placeholder text displayed when the input is empty.
+- **onChange** (function): Callback fired when the input value changes.
+- **isReply** (boolean): If true, the input will be a reply input.
+- **replyTargetName** (string): The name of the user being replied to.
+- **helperText** (string): Helper text displayed below the input field.
+- **isResponsive** (boolean): If true, the input will be responsive.
+- **onCancelReply** (function): Callback fired when the reply is canceled.
+
+## Notes
+
+- **Related Components**:
+  - TextField: Base component that SocialTextField extends
+  - FormControl: Parent component for form organization
+  - FormHelperText: For validation messages
+
+## Example Usage
+
+```javascript
+import { SocialTextField } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <SocialTextField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      isReply={true}
+      replyTargetName="John Doe"
+      helperText="This is a helper text"
+      isResponsive={true}
+      onCancelReply={() => {}}
+    />
+  )
+}
+export default MyComponent
+```

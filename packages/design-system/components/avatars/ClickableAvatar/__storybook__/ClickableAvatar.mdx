@@ -1,0 +1,61 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/ClickableAvatar" />
+
+# Component Documentation
+
+## ClickableAvatar
+
+- **Purpose**: A clickable avatar component that combines avatar display with interactive functionality, allowing users to trigger actions through clicks or taps.
+- **Expected Behavior**: Displays an avatar image or fallback text, responds to click events, and provides visual feedback for hover/active states. Can be configured with different sizes and styles.
+
+## Use Cases
+
+- **Current Usage**:
+  - User profile pictures in navigation menus
+  - Account settings triggers
+  - User selection interfaces
+  - Contact list avatars
+- **Potential Usage**:
+  - Team member selectors
+  - Chat interface participant avatars
+  - Social media profile links
+  - Quick user switching interfaces
+
+## Props
+
+- **isOpen** (boolean): Whether the avatar is open
+- **width** (number): Width of the avatar
+- **height** (number): Height of the avatar
+- **onClick** (function): Callback function triggered when avatar is clicked
+- **children** (ReactNode): Content to be rendered inside the avatar
+
+## Notes
+
+- **Related Components**:
+  - Avatar: Base avatar component without click functionality
+  - Popover: Often used in conjunction for dropdown menus
+  - Badge: Can be combined to show status indicators
+  - Menu: Commonly triggered by ClickableAvatar
+
+## Example Usage
+
+```javascript
+import { ClickableAvatar } from '@baseapp-frontend/design-system'
+
+import Image from 'next/image'
+
+const MyComponent = () => {
+  return (
+    <ClickableAvatar isOpen={false} width={50} height={50} onClick={() => {}}>
+      <Image
+        src="https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png"
+        alt="Avatar Icon"
+        width={50}
+        height={50}
+      />
+    </ClickableAvatar>
+  )
+}
+export default MyComponent
+```

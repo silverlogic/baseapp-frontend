@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/TypographyWithEllipsis" />
+
+# Component Documentation
+
+## TypographyWithEllipsis
+
+- **Purpose**: A typography component that truncates text with an ellipsis when it exceeds the available space, ensuring clean text overflow handling.
+- **Expected Behavior**: The component displays text normally when it fits within its container. When text overflows, it truncates the content and adds an ellipsis (...) at the end. The full text remains accessible via tooltip on hover.
+
+## Use Cases
+
+- **Current Usage**:
+  - Table cells with limited width
+  - Card titles and descriptions
+  - List items with fixed widths
+  - Navigation items with space constraints
+- **Potential Usage**:
+  - Breadcrumb navigation items
+  - File name displays
+  - Long form labels
+  - Status messages in confined spaces
+
+## Props
+
+- **children** (ReactNode): The text content to be displayed and potentially truncated.
+- **lineClamp** (number): The number of lines to clamp the text to.
+
+## Notes
+
+- **Related Components**:
+  - Typography: Base typography component
+  - Tooltip: Used to show full text on hover
+  - Box: Can be used as a container to control width
+  - Card: Often contains truncated typography elements
+
+## Example Usage
+
+```javascript
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return (
+    <TypographyWithEllipsis lineClamp={2}>
+      This is a long text that should be truncated with an ellipsis.
+    </TypographyWithEllipsis>
+  )
+}
+export default MyComponent
+```

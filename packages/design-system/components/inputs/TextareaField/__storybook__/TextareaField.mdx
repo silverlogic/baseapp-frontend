@@ -1,0 +1,63 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/TextareaField" />
+
+# Component Documentation
+
+## TextareaField
+
+- **Purpose**: The TextareaField component provides a multi-line text input field for longer form content. It extends the base TextField functionality to handle larger text inputs while maintaining consistent styling and behavior.
+- **Expected Behavior**: The TextareaField expands vertically to accommodate multiple lines of text while maintaining responsive width. It supports standard text input features like placeholder text, disabled states, and validation.
+
+## Use Cases
+
+- **Current Usage**:
+  - Long form text inputs
+  - Comment sections
+  - Description fields
+  - Bio sections
+  - Feedback forms
+- **Potential Usage**:
+  - Rich text editing
+  - Code snippet inputs
+  - Message composition
+  - Note-taking interfaces
+
+## Props
+
+- **value** (string): The controlled value of the textarea.
+- **onChange** (function): Callback fired when the textarea value changes.
+- **label** (string): Text label that appears above the textarea.
+- **placeholder** (string): Placeholder text displayed when the textarea is empty.
+- **multiline** (boolean): If true, the textarea will be a multi-line input.
+- **maxRows** (number): Maximum number of rows before scrolling begins.
+
+## Notes
+
+- **Related Components**:
+  - TextField: For single-line text inputs
+  - FormControl: Parent component for form input organization
+  - InputLabel: For custom label styling
+  - FormHelperText: For validation messages and helper text
+
+## Example Usage
+
+```javascript
+import { TextareaField } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <TextareaField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      multiline={true}
+      maxRows={3}
+    />
+  )
+}
+export default MyComponent
+```

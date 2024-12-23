@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Design System/Components/Popover" />
+
+# Component Documentation
+
+## Popover
+
+- **Purpose**: The Popover component provides a floating content container that appears relative to a trigger element. It's commonly used for displaying additional information, menus, or interactive content that doesn't need to be visible at all times.
+- **Expected Behavior**: The Popover appears when triggered (typically by clicking an anchor element) and positions itself automatically around the anchor. It includes a subtle animation and can be dismissed by clicking outside or pressing ESC.
+
+## Use Cases
+
+- **Current Usage**:
+  - Dropdown menus
+  - Context menus
+  - Information tooltips
+  - Action menus
+- **Potential Usage**:
+  - Form field suggestions
+  - Quick action panels
+  - Detail previews
+  - User profile cards
+
+## Props
+
+- **anchorEl** (HTMLElement | null): The DOM element used to set the position of the popover.
+- **open** (boolean): Controls whether the popover is displayed.
+- **onClose** (function): Callback fired when the popover should close.
+- **transformOrigin** (object): Determines the positioning of the popover relative to the anchor.
+- **children** (ReactNode): The content to be displayed inside the popover.
+- **anchorOrigin** (object): Determines the anchor point on the anchor element where the popover will attach.
+  ```ts
+  {
+    vertical: 'top' | 'center' | 'bottom',
+    horizontal: 'left' | 'center' | 'right'
+  }
+  ```
+
+## Notes
+
+- **Related Components**:
+  - Menu: Uses Popover internally for dropdown menus
+  - Tooltip: Similar positioning logic but for simpler hover interactions
+  - Modal: For larger overlay content that should be more prominent
+
+## Example Usage
+
+```javascript
+import { Popover } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget)
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  return (
+    <Popover open={anchorEl} onClose={handleClose}>
+      <div>This is the content of the Popover</div>
+    </Popover>
+  )
+}
+export default MyComponent
+```
