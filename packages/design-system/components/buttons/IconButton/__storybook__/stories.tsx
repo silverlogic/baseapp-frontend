@@ -5,10 +5,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import IconButton from '..'
 import { IconButtonProps } from '../types'
 
-export default {
+const meta: Meta<IconButtonProps> = {
   title: '@baseapp-frontend | designSystem/Buttons/IconButton',
   component: IconButton,
-} as Meta<IconButtonProps>
+}
+
+export default meta
 
 type Story = StoryObj<IconButtonProps>
 

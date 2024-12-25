@@ -1,13 +1,17 @@
+import { ComponentType } from 'react'
+
 import { Meta, StoryObj } from '@storybook/react'
 
 import Logo from '..'
 import { BaseAppLogoCondensed } from '../../icons'
 import { LogoProps } from '../types'
 
-export default {
+const meta: Meta<LogoProps> = {
   title: '@baseapp-frontend | designSystem/General/Logo',
-  component: Logo,
-} as Meta<LogoProps>
+  component: Logo as ComponentType<LogoProps>,
+}
+
+export default meta
 
 type Story = StoryObj<LogoProps>
 

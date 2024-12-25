@@ -6,10 +6,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import SwipeableDrawer from '..'
 import { SwipeableDrawerProps } from '../types'
 
-export default {
+const meta: Meta<SwipeableDrawerProps> = {
   title: '@baseapp-frontend | designSystem/Drawers/SwipeableDrawer',
   component: SwipeableDrawer,
-} as Meta<SwipeableDrawerProps>
+}
+
+export default meta
 
 type Story = StoryObj<SwipeableDrawerProps>
 

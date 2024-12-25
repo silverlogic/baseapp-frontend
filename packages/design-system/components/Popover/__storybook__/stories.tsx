@@ -6,10 +6,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import Popover from '..'
 import { MenuPopoverProps } from '../types'
 
-export default {
+const meta: Meta<MenuPopoverProps> = {
   title: '@baseapp-frontend | designSystem/Popover/Popover',
   component: Popover,
-} as Meta<MenuPopoverProps>
+}
+
+export default meta
 
 type Story = StoryObj<MenuPopoverProps>
 

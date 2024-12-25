@@ -3,10 +3,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import TypographyWithEllipsis from '..'
 import { TypographyWithEllipsisProps } from '../types'
 
-export default {
+const meta: Meta<TypographyWithEllipsisProps> = {
   title: '@baseapp-frontend | designSystem/Typographies/TypographyWithEllipsis',
   component: TypographyWithEllipsis,
-} as Meta<TypographyWithEllipsisProps>
+}
+
+export default meta
 
 type Story = StoryObj<TypographyWithEllipsisProps>
 

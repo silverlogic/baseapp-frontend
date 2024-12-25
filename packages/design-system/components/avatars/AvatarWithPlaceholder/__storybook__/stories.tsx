@@ -4,10 +4,12 @@ import Image from 'next/image'
 import AvatarWithPlaceholder from '..'
 import { AvatarWithPlaceholderProps } from '../types'
 
-export default {
+const meta: Meta<AvatarWithPlaceholderProps> = {
   title: '@baseapp-frontend | designSystem/Avatars/AvatarWithPlaceholder',
   component: AvatarWithPlaceholder,
-} as Meta<AvatarWithPlaceholderProps>
+}
+
+export default meta
 
 type Story = StoryObj<AvatarWithPlaceholderProps>
 

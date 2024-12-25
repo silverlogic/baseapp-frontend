@@ -4,10 +4,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import Scrollbar from '..'
 import { ScrollbarProps } from '../types'
 
-export default {
+const meta: Meta<ScrollbarProps> = {
   title: '@baseapp-frontend | designSystem/General/Scrollbar',
   component: Scrollbar,
-} as Meta<ScrollbarProps>
+}
+
+export default meta
 
 type Story = StoryObj<ScrollbarProps>
 

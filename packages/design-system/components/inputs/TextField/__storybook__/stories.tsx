@@ -3,10 +3,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import TextField from '..'
 import { TextFieldProps } from '../types'
 
-export default {
+const meta: Meta<TextFieldProps> = {
   title: '@baseapp-frontend | designSystem/Inputs/TextField',
   component: TextField,
-} as Meta<TextFieldProps>
+}
+
+export default meta
 
 type Story = StoryObj<TextFieldProps>
 
