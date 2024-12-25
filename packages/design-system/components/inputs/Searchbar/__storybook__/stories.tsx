@@ -1,9 +1,11 @@
+import { WithControllerProps } from '@baseapp-frontend/utils'
+
 import { Meta, StoryObj } from '@storybook/react'
 
 import Searchbar from '..'
 import { SearchbarProps } from '../types'
 
-export default {
+const meta: Meta<WithControllerProps<SearchbarProps>> = {
   title: '@baseapp-frontend | designSystem/Searchbar',
   component: Searchbar,
   tags: ['autodocs'],
@@ -27,7 +29,9 @@ export default {
       },
     },
   },
-} as Meta<SearchbarProps>
+}
+
+export default meta
 
 type Story = StoryObj<SearchbarProps>
 

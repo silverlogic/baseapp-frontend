@@ -6,10 +6,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import Dialog from '..'
 import { DialogProps } from '../types'
 
-export default {
+const meta: Meta<DialogProps> = {
   title: '@baseapp-frontend | designSystem/Dialogs/BaseDialog',
   component: Dialog,
-} as Meta<DialogProps>
+}
+
+export default meta
 
 type Story = StoryObj<DialogProps>
 

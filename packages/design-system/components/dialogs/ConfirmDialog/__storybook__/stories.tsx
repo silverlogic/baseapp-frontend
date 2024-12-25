@@ -6,10 +6,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import ConfirmDialog from '..'
 import { ConfirmDialogProps } from '../types'
 
-export default {
+const meta: Meta<ConfirmDialogProps> = {
   title: '@baseapp-frontend | designSystem/Dialogs/ConfirmDialog',
   component: ConfirmDialog,
-} as Meta<ConfirmDialogProps>
+}
+
+export default meta
 
 type Story = StoryObj<ConfirmDialogProps>
 

@@ -16,7 +16,7 @@ UserApi.getUser = async <TUser extends Partial<User>>() =>
     email: 'mocked.user@example.com',
   }) as TUser
 
-export default {
+const meta: Meta = {
   title: '@baseapp-frontend | components/Navigation/AccountPopover',
   component: AccountPopover,
   args: {
@@ -39,7 +39,9 @@ export default {
       return <Story />
     },
   ],
-} as Meta
+}
+
+export default meta
 
 type Story = StoryObj<AccountPopoverProps>
 

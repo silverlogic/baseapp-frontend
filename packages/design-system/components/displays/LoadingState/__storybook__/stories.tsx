@@ -3,10 +3,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import LoadingState from '..'
 import { LoadingStateProps } from '../types'
 
-export default {
+const meta: Meta<LoadingStateProps> = {
   title: '@baseapp-frontend | designSystem/Displays/LoadingState',
   component: LoadingState,
-} as Meta<LoadingStateProps>
+}
+
+export default meta
 
 type Story = StoryObj<LoadingStateProps>
 

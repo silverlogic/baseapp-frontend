@@ -4,10 +4,12 @@ import Image from 'next/image'
 import ClickableAvatar from '..'
 import { ClickableAvatarProps } from '../types'
 
-export default {
+const meta: Meta<ClickableAvatarProps> = {
   title: '@baseapp-frontend | designSystem/Avatars/ClickableAvatar',
   component: ClickableAvatar,
-} as Meta<ClickableAvatarProps>
+}
+
+export default meta
 
 type Story = StoryObj<ClickableAvatarProps>
 
