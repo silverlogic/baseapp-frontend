@@ -1,0 +1,71 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Navigation/NavigationLayout" />
+
+# Component Documentation
+
+## NavigationLayout
+
+- **Purpose**: A comprehensive layout component that provides the main navigation structure for the application, integrating various navigation elements like headers, sidebars, and account menus.
+- **Expected Behavior**: Renders a full-page layout with configurable navigation elements, adapting to different screen sizes and user preferences. Manages the overall navigation state and UI settings.
+
+## Use Cases
+
+- **Current Usage**: Used as the main layout wrapper for applications requiring a consistent navigation structure.
+- **Potential Usage**: Could be used in:
+  - Enterprise applications
+  - Admin dashboards
+  - Content management systems
+  - Any large-scale application requiring complex navigation
+  - Applications needing consistent layout across multiple pages
+
+## Props
+
+- **navData** (NavigationData): Navigation configuration data containing routes, icons, and menu structure
+- **settings** (UISettings): UI configuration settings for the navigation components
+- **setSettings** (function): Callback to update UI settings
+- **LogoIcon** (React.FC): Optional custom logo component
+- **AccountMenu** (React.FC): Optional custom account menu component
+- **AccountMenuProps** (object): Optional props for the account menu component
+- **ToolbarProps** (MuiToolbarProps): Optional props for the Material-UI Toolbar component
+
+## Notes
+
+- **Related Components**:
+  - NavMini: Compact navigation sidebar
+  - Header: Top navigation bar
+  - AccountMenu: User account management menu
+  - VerticalDrawer: Mobile navigation drawer
+
+## Example Usage
+
+```javascript
+import { NavigationLayout } from '@baseapp-frontend/design-system'
+import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return (
+    <NavigationLayout
+      navData={[
+        {
+          subheader: 'BASEAPP',
+          items: [{ title: 'Home', icon: <MenuIcon /> }],
+        },
+        {
+          subheader: 'BASIC',
+          items: [
+            { title: 'Feature Requests', icon: <MentionIcon /> },
+            { title: 'Flat Pages', icon: <PenEditIcon /> },
+            { title: 'Feedback', icon: <FavoriteIcon /> },
+          ],
+        },
+      ]}
+      settings={defaultTheme.settings}
+      setSettings={() => {}}
+      LogoIcon={BaseAppLogoCondensed}
+    />
+  )
+}
+
+export default MyComponent
+```

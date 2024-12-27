@@ -1,0 +1,43 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Displays/LoadingState" />
+
+# Component Documentation
+
+## LoadingState
+
+- **Purpose**: A reusable loading indicator component that displays a centered circular progress animation to indicate that content is being loaded or processed.
+- **Expected Behavior**: Renders a centered circular progress spinner within its container.
+
+## Use Cases
+
+- **Current Usage**: Used during data fetching, content loading, and processing operations to provide visual feedback to users.
+- **Potential Usage**: Could be used in:
+  - Page loading states
+  - Form submission feedback
+  - Data refresh indicators
+  - Section-specific loading states
+  - Asynchronous operation feedback
+
+## Props
+
+- **CircularProgressProps** (MUI CircularProgress Props): Optional props passed directly to the underlying MUI CircularProgress component.
+
+## Notes
+
+- **Related Components**:
+  - CircularProgress: The base component used internally
+  - Dialog: For loading states in modal contexts
+  - Popover: For loading states in popup contexts
+
+## Example Usage
+
+```javascript
+import { LoadingState } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return <LoadingState CircularProgressProps={{ size: 40 }} />
+}
+
+export default MyComponent
+```
