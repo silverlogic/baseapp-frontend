@@ -1,0 +1,62 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend-template / Components/Navigation/NavVertical" />
+
+# Component Documentation
+
+## NavVertical
+
+- **Purpose**: A vertical navigation component that provides a full-width sidebar menu with expandable sections and clear visual hierarchy.
+- **Expected Behavior**: Displays as a vertical sidebar with collapsible menu sections, icons, and labels. Adapts to mobile views by transforming into a drawer. Supports nested navigation items and highlights active routes.
+
+## Use Cases
+
+- **Current Usage**: Used as the main navigation sidebar in applications requiring a comprehensive vertical menu structure.
+- **Potential Usage**: Could be used in:
+  - Enterprise applications
+  - Complex admin dashboards
+  - Document management systems
+  - Applications with deep navigation hierarchies
+  - Platforms requiring categorized menu sections
+
+## Props
+
+- **navData** (NavigationData): Navigation configuration data containing routes, icons, and menu structure
+- **settings** (UISettings): UI configuration settings for the navigation component
+- **LogoIcon** (React.FC): Optional custom logo component to display at the top
+- **openNav** (boolean): Controls the open/closed state of the navigation drawer
+- **onCloseNav** (function): Callback function when navigation drawer is closed
+- **hideToggleButton** (boolean): Whether to hide the toggle button for the navigation drawer
+
+## Notes
+
+- **Related Components**:
+  - NavMini: Compact alternative to vertical navigation
+  - NavigationLayout: Parent layout component
+  - VerticalDrawer: Mobile navigation drawer
+  - NavSection: Section component for grouped navigation items
+
+## Example Usage
+
+```javascript
+import { NavVertical } from '@baseapp-frontend/design-system'
+import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [openNav, setOpenNav] = useState(false)
+  return (
+    <NavVertical
+      navData={[
+        { title: 'Home', icon: <MenuIcon /> },
+        { title: 'About', icon: <InfoIcon /> },
+        { title: 'Contact', icon: <ContactIcon /> },
+      ]}
+      openNav={openNav}
+      onCloseNav={() => setOpenNav(false)}
+      hideToggleButton={true}
+    />
+  )
+}
+
+export default MyComponent
+```
