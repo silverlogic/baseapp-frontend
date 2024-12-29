@@ -6,10 +6,12 @@ import { useForm } from 'react-hook-form'
 import FileUploadButton from '..'
 import { FileUploadButtonProps } from '../types'
 
-export default {
+const meta: Meta = {
   title: '@baseapp-frontend | designSystem/Buttons/FileUploadButton',
   component: FileUploadButton,
-} as Meta
+}
+
+export default meta
 
 const Template: StoryFn<FileUploadButtonProps> = (args) => {
   const { control, setValue } = useForm()

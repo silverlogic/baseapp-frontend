@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 0.0.38
+
+### Patch Changes
+
+- Add the ability to create new chat groups.
+- Fix a few height bugs on Virtuoso lists.
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.26
+
 ## 0.0.37
 
 ### Patch Changes
