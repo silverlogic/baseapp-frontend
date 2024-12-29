@@ -33,7 +33,12 @@ import {
   DEFAULT_IMAGE_MAX_SIZE,
   FORM_VALUE,
 } from './constants'
-import { HeaderContainer, SearchbarContainer, UploadProfileContainer } from './styled'
+import {
+  HeaderContainer,
+  ProfilesContainer,
+  SearchbarContainer,
+  UploadProfileContainer,
+} from './styled'
 import { CreatGroupUpload, CreateGroupProps } from './types'
 import { getImageUrl } from './utils'
 
@@ -281,7 +286,7 @@ const CreateGroup: FC<CreateGroupProps> = ({
           />
         </Box>
       </Box>
-      <Box height="100%" width="100%" sx={{ overflowY: 'auto', scrollbarWidth: 'none' }}>
+      <ProfilesContainer>
         <SearchbarContainer>
           <Searchbar
             name="search"
@@ -304,7 +309,9 @@ const CreateGroup: FC<CreateGroupProps> = ({
             >
               Members
             </Typography>
-            {participants.map((member) => renderItem(member, true))}
+            <Box maxHeight={250} overflow="auto" sx={{ scrollbarWidth: 'none' }}>
+              {participants.map((member) => renderItem(member, true))}
+            </Box>
           </Box>
           <Box
             role="list"
@@ -329,7 +336,7 @@ const CreateGroup: FC<CreateGroupProps> = ({
             {...ConnectionsListProps}
           />
         </Box>
-      </Box>
+      </ProfilesContainer>
     </>
   )
 }

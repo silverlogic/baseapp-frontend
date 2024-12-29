@@ -45,7 +45,7 @@ const ConnectionsList: FC<ConnectionsListProps> = ({
     <Virtuoso
       data={profiles}
       itemContent={(_index, item) => renderItem(item)}
-      style={{ scrollbarWidth: 'none' }}
+      style={{ scrollbarWidth: 'none', maxHeight: '250px' }}
       components={{
         Footer: renderLoadingState,
       }}

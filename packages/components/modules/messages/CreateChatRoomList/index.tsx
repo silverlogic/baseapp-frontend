@@ -102,7 +102,8 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
       <Virtuoso
         data={profiles}
         itemContent={(_index, item) => renderItem(item)}
-        style={{ scrollbarWidth: 'none' }}
+        // TODO: look for a better way to calculate the height, it doesn't consider different types of headers
+        style={{ scrollbarWidth: 'none', maxHeight: 'calc(100vh - 72px - 57px - 61px - 72px)' }}
         components={{
           Footer: renderLoadingState,
         }}

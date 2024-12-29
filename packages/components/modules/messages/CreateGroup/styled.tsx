@@ -24,3 +24,14 @@ export const UploadProfileContainer = styled(Box)(({ theme }) => ({
   gap: theme.spacing(2),
   padding: theme.spacing(1.5),
 }))
+
+export const ProfilesContainer = styled(Box)(({ theme }) => ({
+  height: '100%',
+  width: '100%',
+  overflowY: 'auto',
+  scrollbarWidth: 'none',
+  [theme.breakpoints.down('sm')]: {
+    // TODO: look for a better way to calculate the height, it doesn't consider different types of headers
+    height: `calc(100vh - 72px - 57px - 305px)`,
+  },
+}))
