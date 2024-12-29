@@ -103,10 +103,11 @@ type ChatRoom implements Node {
   image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
+  isGroup: Boolean!
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
-  unreadMessages(profileId: ID): UnreadMessages
+  unreadMessages(profileId: ID): UnreadMessageCount
   isArchived(profileId: ID): Boolean
 }
 
@@ -138,6 +139,8 @@ type ChatRoomConnection {
 input ChatRoomCreateInput {
   profileId: ID!
   participants: [ID]!
+  isGroup: Boolean = false
+  title: String
   clientMutationId: String
 }
 
@@ -644,8 +647,8 @@ type Mutation {
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
-  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
+  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -1097,6 +1100,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
   ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
@@ -1593,9 +1597,32 @@ type Subscription {
   onCommentChange(targetObjectId: ID): OnCommentChange
 }
 
-type UnreadMessages {
-  count: Int
-  markedUnread: Boolean
+type UnreadMessageCount implements Node {
+  markedUnread: Boolean!
+  count: Int!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
+type UnreadMessageCountConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UnreadMessageCountEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `UnreadMessageCount` and its cursor."""
+type UnreadMessageCountEdge {
+  """The item at the end of the edge"""
+  node: UnreadMessageCount
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 type URLPath implements Node {

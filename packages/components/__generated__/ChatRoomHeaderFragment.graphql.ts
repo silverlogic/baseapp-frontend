@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5e808251434895d9c0aa7fb0d0631353>>
+ * @generated SignedSource<<d8e1692175b0dd31a1e789ed82c935ad>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,6 +18,7 @@ export type ChatRoomHeaderFragment$data = {
       }
     | null
     | undefined
+  readonly isGroup: boolean
   readonly participants:
     | {
         readonly edges: ReadonlyArray<
@@ -102,6 +103,13 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
+        kind: 'ScalarField',
+        name: 'isGroup',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
         concreteType: 'ChatRoomParticipantConnection',
         kind: 'LinkedField',
         name: 'participants',
@@ -164,6 +172,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '7983eaa530f167bdd9363a4aa2eade2d'
+;(node as any).hash = 'f2a6eba3e9bc5d8ca187b1be954d3278'
 
 export default node

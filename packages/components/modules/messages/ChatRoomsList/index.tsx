@@ -111,7 +111,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   const renderTabLabel = (tabValue: ChatTabValues) => (
     <Box display="grid" gap={1} gridTemplateColumns="1fr min-content" alignItems="center">
       <Typography variant="subtitle2" color="text.primary">
-        {CHAT_TAB_LABEL[CHAT_TAB_VALUES[tabValue]]}
+        {CHAT_TAB_LABEL[tabValue]}
       </Typography>
       {isRefetchPending && tab === tabValue && <CircularProgress size={15} />}
     </Box>

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,

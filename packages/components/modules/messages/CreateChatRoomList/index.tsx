@@ -15,11 +15,12 @@ import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
 import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
+import EmptyProfilesListState from '../EmptyProfilesListState'
 import SearchNotFoundState from '../SearchNotFoundState'
+import { ProfileEdge, ProfileNode } from '../types'
 import DefaultChatRoomListItem from './ChatRoomListItem'
-import EmptyProfilesListState from './EmptyProfilesListState'
 import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
-import { CreateChatRoomListProps, ProfileEdge, ProfileNode } from './types'
+import { CreateChatRoomListProps } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   allProfilesRef,
@@ -29,6 +30,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
   SearchbarProps = {},
   VirtuosoProps = {},
   setIsInExistingChatRoomsView,
+  setIsInGroupChatCreation,
 }) => {
   const {
     data: { allProfiles },
@@ -61,7 +63,7 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
       allProfiles?.edges
         .filter((edge: ProfileEdge) => edge?.node && edge.node.id !== currentProfile?.id)
         .map((edge: ProfileEdge) => edge?.node) || [],
-    [allProfiles],
+    [allProfiles, currentProfile?.id],
   )
 
   const renderLoadingState = () => {
@@ -100,7 +102,8 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
       <Virtuoso
         data={profiles}
         itemContent={(_index, item) => renderItem(item)}
-        style={{ scrollbarWidth: 'none' }}
+        // TODO: look for a better way to calculate the height, it doesn't consider different types of headers
+        style={{ scrollbarWidth: 'none', maxHeight: 'calc(100vh - 72px - 57px - 61px - 72px)' }}
         components={{
           Footer: renderLoadingState,
         }}
@@ -127,7 +130,11 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
         />
       </SearchbarContainer>
       {/* TODO: Group chat creation click handler */}
-      <GroupChatContainer onClick={() => {}}>
+      <GroupChatContainer
+        onClick={() => {
+          setIsInGroupChatCreation(true)
+        }}
+      >
         <AvatarWithPlaceholder
           width={48}
           height={48}
