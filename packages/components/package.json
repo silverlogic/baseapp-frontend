@@ -6,8 +6,8 @@
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf dist && tsc --build tsconfig.build.json",
-    "dev": "rm -rf dist && tsc --watch",
+    "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
+    "dev": "rm -rf dist && pnpm relay && tsc --watch",
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay-update-schema": "pnpm relay-download-schema && pnpm relay",

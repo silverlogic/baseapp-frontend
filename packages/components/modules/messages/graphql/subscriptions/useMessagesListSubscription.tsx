@@ -18,7 +18,6 @@ const newMessageSubscription = graphql`
 `
 
 const useMessagesListSubscription = (roomId: string) => {
-  // TODO: use current profile hook when it is available
   const config = useMemo(() => {
     const connectionID = ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages')
     return {
