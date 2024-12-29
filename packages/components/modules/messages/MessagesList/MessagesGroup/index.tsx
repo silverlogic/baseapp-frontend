@@ -21,6 +21,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   message,
   messageIndex,
   isGroup = false,
+  firstUnreadMessageId,
   MessageItem = DefaultMessageItem,
   MessageItemProps = {},
 }) => {
@@ -51,15 +52,9 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
 
   const renderUnreadMessagesDivider = useCallback(
     (index: number) => {
-      const previousMessage = allMessages?.[index + 1]
       const currentMessage = allMessages?.[index]
-      const hasPreviousMessage = !!previousMessage
-      const isFirstUnreadMessage =
-        currentMessage?.profile?.id !== currentProfile?.id &&
-        !currentMessage?.isRead &&
-        (!hasPreviousMessage || previousMessage?.isRead)
 
-      if (!!currentMessage && isFirstUnreadMessage) {
+      if (currentMessage?.id === firstUnreadMessageId) {
         return (
           <Divider
             variant="fullWidth"
@@ -78,7 +73,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
 
       return null
     },
-    [allMessages, currentProfile, theme.palette.error.light],
+    [allMessages, firstUnreadMessageId, theme.palette.error.light],
   )
 
   const renderLastMessageTime = useCallback(
