@@ -9,6 +9,7 @@
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "rm -rf dist && tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "storybook": "echo GraphQL: No storybook found",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {

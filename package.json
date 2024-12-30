@@ -11,6 +11,7 @@
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build && changeset publish",
+    "storybook": "turbo storybook",
     "clean": "turbo clean && git clean -xdf node_modules",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "add-catalogs": "node .scripts/add-catalogs.js",

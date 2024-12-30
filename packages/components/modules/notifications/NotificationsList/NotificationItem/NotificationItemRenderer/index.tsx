@@ -1,9 +1,9 @@
 import { FC } from 'react'
 
-import { NOTIFICATION_VERB } from '../../constants'
-import CommentCreated from '../NotificationItem/CommentCreated'
-import CommentReply from '../NotificationItem/CommentReply'
-import ReactionCreated from '../NotificationItem/ReactionCreated'
+import { NOTIFICATION_VERB } from '../../../constants'
+import CommentCreated from '../CommentCreated'
+import CommentReply from '../CommentReply'
+import ReactionCreated from '../ReactionCreated'
 import { NotificationItemRendererProps } from './types'
 
 const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({ notification }) => {

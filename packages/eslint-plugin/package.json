@@ -10,8 +10,9 @@
   "scripts": {
     "build": "parcel build",
     "dev": "parcel watch",
-    "clean": "rm -rf node_modules dist",
     "test": "ts-node ./rules/**/*.test.ts",
+    "storybook": "echo Eslint Plugin: No storybook found",
+    "clean": "rm -rf node_modules dist",
     "prepare": "pnpm build"
   },
   "dependencies": {

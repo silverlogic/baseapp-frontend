@@ -21,7 +21,6 @@ import useNotificationsSubscription from '../graphql/subscriptions/useNotificati
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
-import DefaultNotificationItemRenderer from './NotificationItemRenderer'
 import { NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT } from './constants'
 import { HeaderContainer } from './styled'
 import { NotificationsListProps } from './types'
@@ -32,7 +31,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
   NotificationItem = DefaultNotificationItem,
-  NotificationItemRenderer = DefaultNotificationItemRenderer,
+  NotificationItemProps = {},
 }) => {
   const smDown = useResponsive('down', 'sm')
 
@@ -62,18 +61,18 @@ const NotificationsList: FC<NotificationsListProps> = ({
             <Typography variant="body2">Older</Typography>
           </Divider>
           <NotificationItem
-            notification={notification}
             key={`notification-${notification.id}`}
-            NotificationItemRenderer={NotificationItemRenderer}
+            notification={notification}
+            {...NotificationItemProps}
           />
         </>
       )
     }
     return (
       <NotificationItem
-        notification={notification}
         key={`notification-${notification.id}`}
-        NotificationItemRenderer={NotificationItemRenderer}
+        notification={notification}
+        {...NotificationItemProps}
       />
     )
   }

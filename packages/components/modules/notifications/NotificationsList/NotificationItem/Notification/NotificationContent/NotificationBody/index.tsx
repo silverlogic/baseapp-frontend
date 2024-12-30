@@ -3,14 +3,14 @@ import { FC } from 'react'
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system'
 
 import { BodyTypographyContainer } from './styled'
-import { NotificationCommentBodyProps } from './types'
+import { NotificationBodyProps } from './types'
 
-const NotificationCommentBody: FC<NotificationCommentBodyProps> = ({ content }) => (
+const NotificationBody: FC<NotificationBodyProps> = ({ content }) => (
   <BodyTypographyContainer>
     <TypographyWithEllipsis variant="body2" maxHeight={64} lineClamp={2}>
-      {content}
+      {content ?? ''}
     </TypographyWithEllipsis>
   </BodyTypographyContainer>
 )
 
-export default NotificationCommentBody
+export default NotificationBody

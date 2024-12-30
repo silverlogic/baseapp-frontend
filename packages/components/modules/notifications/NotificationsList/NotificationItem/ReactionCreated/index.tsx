@@ -13,17 +13,17 @@ const ReactionCreated: FC<GenericItemProps> = ({ notification }) => {
   return (
     <Notification.Root>
       <Notification.Avatar
-        actorAvatar={notification.actor?.avatar?.url ?? ''}
-        actorName={notification.actor?.fullName ?? ''}
+        actorAvatar={notification.actor?.avatar?.url}
+        actorName={notification.actor?.fullName}
       />
       <NotificationContent>
         <NotificationContent.Header
           message={message}
           timestamp={formatRelativeTime(notification.timestamp)}
-          actorName={notification.actor?.fullName ?? ''}
+          actorName={notification.actor?.fullName}
           unread={notification.unread}
         />
-        <NotificationContent.Body content={notification.target?.body ?? ''} />
+        <NotificationContent.Body content={notification.target?.body} />
       </NotificationContent>
     </Notification.Root>
   )

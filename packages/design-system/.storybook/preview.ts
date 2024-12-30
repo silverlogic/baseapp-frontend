@@ -23,6 +23,7 @@ const preview: Preview = {
           'AvatarWithPlaceholder',
           'ClickableAvatar',
           // Buttons
+          'FileUploadButton',
           'IconButton',
           // Dialogs
           'BaseDialog',

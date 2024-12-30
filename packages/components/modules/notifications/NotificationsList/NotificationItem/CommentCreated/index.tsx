@@ -3,7 +3,6 @@ import { FC } from 'react'
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
 import Notification from '../Notification'
-import NotificationContent from '../Notification/NotificationContent'
 import { GenericItemProps } from '../types'
 
 const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
@@ -13,18 +12,18 @@ const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
   return (
     <Notification.Root>
       <Notification.Avatar
-        actorAvatar={notification.actor?.avatar?.url ?? ''}
-        actorName={notification.actor?.fullName ?? ''}
+        actorAvatar={notification.actor?.avatar?.url}
+        actorName={notification.actor?.fullName}
       />
-      <NotificationContent>
-        <NotificationContent.Header
+      <Notification.Content>
+        <Notification.Content.Header
           message={message}
           timestamp={formatRelativeTime(notification.timestamp)}
-          actorName={notification.actor?.fullName ?? ''}
+          actorName={notification.actor?.fullName}
           unread={notification.unread}
         />
-        <NotificationContent.Body content={notification.actionObject?.body ?? ''} />
-      </NotificationContent>
+        <Notification.Content.Body content={notification.actionObject?.body} />
+      </Notification.Content>
     </Notification.Root>
   )
 }

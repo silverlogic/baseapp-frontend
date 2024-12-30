@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e1cd36af7f82568ce600288d7d85c2bc>>
+ * @generated SignedSource<<c630a7e1c9ad0fc00fb01ae8348c00a4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -47,25 +47,43 @@ const node: ConcreteRequest = (function () {
       name: 'id',
       storageKey: null,
     },
-    v3 = {
+    v3 = [
+      v2 /*: any*/,
+      v1 /*: any*/,
+      {
+        kind: 'InlineFragment',
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'body',
+            storageKey: null,
+          },
+        ],
+        type: 'Comment',
+        abstractKey: null,
+      },
+    ],
+    v4 = {
       enumValues: null,
       nullable: true,
       plural: false,
       type: 'Node',
     },
-    v4 = {
+    v5 = {
       enumValues: null,
       nullable: false,
       plural: false,
       type: 'String',
     },
-    v5 = {
+    v6 = {
       enumValues: null,
       nullable: true,
       plural: false,
       type: 'String',
     },
-    v6 = {
+    v7 = {
       enumValues: null,
       nullable: false,
       plural: false,
@@ -229,7 +247,7 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'target',
                   plural: false,
-                  selections: [v2 /*: any*/, v1 /*: any*/],
+                  selections: v3 /*: any*/,
                   storageKey: null,
                 },
                 {
@@ -239,24 +257,7 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'actionObject',
                   plural: false,
-                  selections: [
-                    v2 /*: any*/,
-                    v1 /*: any*/,
-                    {
-                      kind: 'InlineFragment',
-                      selections: [
-                        {
-                          alias: null,
-                          args: null,
-                          kind: 'ScalarField',
-                          name: 'body',
-                          storageKey: null,
-                        },
-                      ],
-                      type: 'Comment',
-                      abstractKey: null,
-                    },
-                  ],
+                  selections: v3 /*: any*/,
                   storageKey: null,
                 },
               ],
@@ -269,35 +270,35 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'd5565b82e75201f15bdef373c501af6d',
+      cacheID: '2a1ab89672542581137a24207ae151e2',
       id: null,
       metadata: {
         relayTestingSelectionTypeInfo: {
-          target: v3 /*: any*/,
-          'target.__typename': v4 /*: any*/,
-          'target.actionObject': v3 /*: any*/,
-          'target.actionObject.__typename': v4 /*: any*/,
-          'target.actionObject.body': v5 /*: any*/,
-          'target.actionObject.id': v6 /*: any*/,
-          'target.actor': v3 /*: any*/,
-          'target.actor.__typename': v4 /*: any*/,
+          target: v4 /*: any*/,
+          'target.__typename': v5 /*: any*/,
+          'target.actionObject': v4 /*: any*/,
+          'target.actionObject.__typename': v5 /*: any*/,
+          'target.actionObject.body': v6 /*: any*/,
+          'target.actionObject.id': v7 /*: any*/,
+          'target.actor': v4 /*: any*/,
+          'target.actor.__typename': v5 /*: any*/,
           'target.actor.avatar': {
             enumValues: null,
             nullable: true,
             plural: false,
             type: 'File',
           },
-          'target.actor.avatar.url': v4 /*: any*/,
-          'target.actor.fullName': v5 /*: any*/,
-          'target.actor.id': v6 /*: any*/,
+          'target.actor.avatar.url': v5 /*: any*/,
+          'target.actor.fullName': v6 /*: any*/,
+          'target.actor.id': v7 /*: any*/,
           'target.data': {
             enumValues: null,
             nullable: true,
             plural: false,
             type: 'GenericScalar',
           },
-          'target.description': v5 /*: any*/,
-          'target.id': v6 /*: any*/,
+          'target.description': v6 /*: any*/,
+          'target.id': v7 /*: any*/,
           'target.level': {
             enumValues: ['SUCCESS', 'INFO', 'WARNING', 'ERROR'],
             nullable: false,
@@ -310,9 +311,10 @@ const node: ConcreteRequest = (function () {
             plural: false,
             type: 'Int',
           },
-          'target.target': v3 /*: any*/,
-          'target.target.__typename': v4 /*: any*/,
-          'target.target.id': v6 /*: any*/,
+          'target.target': v4 /*: any*/,
+          'target.target.__typename': v5 /*: any*/,
+          'target.target.body': v6 /*: any*/,
+          'target.target.id': v7 /*: any*/,
           'target.timestamp': {
             enumValues: null,
             nullable: false,
@@ -325,12 +327,12 @@ const node: ConcreteRequest = (function () {
             plural: false,
             type: 'Boolean',
           },
-          'target.verb': v4 /*: any*/,
+          'target.verb': v5 /*: any*/,
         },
       },
       name: 'NotificationItemWithQuery',
       operationKind: 'query',
-      text: 'query NotificationItemWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...NotificationItemFragment\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n',
+      text: 'query NotificationItemWithQuery {\n  target: node(id: "test-id") {\n    __typename\n    ...NotificationItemFragment\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n',
     },
   }
 })()

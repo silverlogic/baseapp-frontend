@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1dcdcad8858f2d642ffa1fa4866f565a>>
+ * @generated SignedSource<<15b1893b77e04b106ddad384ee4ed089>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -188,41 +188,42 @@ const node: ConcreteRequest = (function () {
       ],
       storageKey: null,
     },
-    v13 = {
+    v13 = [
+      v2 /*: any*/,
+      v11 /*: any*/,
+      {
+        kind: 'InlineFragment',
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'body',
+            storageKey: null,
+          },
+        ],
+        type: 'Comment',
+        abstractKey: null,
+      },
+    ],
+    v14 = {
       alias: null,
       args: null,
       concreteType: null,
       kind: 'LinkedField',
       name: 'target',
       plural: false,
-      selections: [v2 /*: any*/, v11 /*: any*/],
+      selections: v13 /*: any*/,
       storageKey: null,
     },
-    v14 = {
+    v15 = {
       alias: null,
       args: null,
       concreteType: null,
       kind: 'LinkedField',
       name: 'actionObject',
       plural: false,
-      selections: [
-        v2 /*: any*/,
-        v11 /*: any*/,
-        {
-          kind: 'InlineFragment',
-          selections: [
-            {
-              alias: null,
-              args: null,
-              kind: 'ScalarField',
-              name: 'body',
-              storageKey: null,
-            },
-          ],
-          type: 'Comment',
-          abstractKey: null,
-        },
-      ],
+      selections: v13 /*: any*/,
       storageKey: null,
     }
   return {
@@ -337,8 +338,8 @@ const node: ConcreteRequest = (function () {
                     v9 /*: any*/,
                     v10 /*: any*/,
                     v12 /*: any*/,
-                    v13 /*: any*/,
                     v14 /*: any*/,
+                    v15 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -397,8 +398,8 @@ const node: ConcreteRequest = (function () {
                 v9 /*: any*/,
                 v10 /*: any*/,
                 v12 /*: any*/,
-                v13 /*: any*/,
                 v14 /*: any*/,
+                v15 /*: any*/,
               ],
               storageKey: null,
             },
@@ -418,12 +419,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'd95ac6f350fcba9bf2db96551d0ee2df',
+      cacheID: 'dba91e538812ad2152bd5fb5c1284af4',
       id: null,
       metadata: {},
       name: 'useNotificationsSubscription',
       operationKind: 'subscription',
-      text: 'subscription useNotificationsSubscription {\n  onNotificationChange {\n    createdNotification {\n      node {\n        ...NotificationItemFragment\n        recipient {\n          id\n          ...NotificationUserMenuFragment\n        }\n        id\n      }\n    }\n    updatedNotification {\n      id\n      ...NotificationItemFragment\n    }\n    deletedNotificationId\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationUserMenuFragment on User {\n  id\n  notificationsUnreadCount\n}\n',
+      text: 'subscription useNotificationsSubscription {\n  onNotificationChange {\n    createdNotification {\n      node {\n        ...NotificationItemFragment\n        recipient {\n          id\n          ...NotificationUserMenuFragment\n        }\n        id\n      }\n    }\n    updatedNotification {\n      id\n      ...NotificationItemFragment\n    }\n    deletedNotificationId\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationUserMenuFragment on User {\n  id\n  notificationsUnreadCount\n}\n',
     },
   }
 })()

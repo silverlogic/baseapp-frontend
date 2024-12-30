@@ -20,7 +20,7 @@ const NotificationHeader: FC<NotificationHeaderProps> = ({
         gridTemplateColumns="repeat(2, max-content)"
       >
         <Typography variant="body2" sx={{ fontWeight: 700 }}>
-          {actorName}
+          {actorName ?? ''}
         </Typography>
         <Typography variant="body2" display="flex" alignItems="center">
           {message}

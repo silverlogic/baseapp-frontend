@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 0.0.40
+
+### Patch Changes
+
+- Refactors the `notification` module so it is easier to add or modify existing notification types.
+- Implement reaction notification.
+
 ## 0.0.39
 
 ### Patch Changes

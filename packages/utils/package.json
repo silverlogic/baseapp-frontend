@@ -10,6 +10,7 @@
     "dev": "rm -rf dist && tsc --watch",
     "test:unit": "rm -rf dist && jest --config ./jest.config.ts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "storybook": "echo Utils: No storybook found",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {

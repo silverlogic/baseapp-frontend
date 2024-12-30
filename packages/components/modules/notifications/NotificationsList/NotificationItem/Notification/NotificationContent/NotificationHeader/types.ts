@@ -1,9 +1,5 @@
-export interface NotificationCommentBodyProps {
-  content: string
-}
-
 export interface NotificationHeaderProps {
-  actorName: string
+  actorName: string | null | undefined
   message: string
   unread: boolean
   timestamp: string
