@@ -1,0 +1,58 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Comments/Comments" />
+
+# Component Documentation
+
+## Comments
+
+- **Purpose**: The Comments component provides a structured interface for displaying and managing user comments within the application. It handles the rendering, creation, editing and deletion of comments in a threaded discussion format.
+- **Expected Behavior**: The component displays comments in a hierarchical thread structure, allows users to post new comments, reply to existing ones, edit their own comments, and delete them when permitted.
+
+## Use Cases
+
+- **Current Usage**: Currently used in discussion threads, article feedback sections, and collaborative workspaces where users need to exchange thoughts and feedback.
+- **Potential Usage**: Could be integrated into:
+  - Document review systems
+  - Project management tools for task discussions
+  - Social features requiring user interaction
+  - Feedback collection systems
+
+## Props
+
+- **subscriptionsEnabled** (boolean): Enables/disables real-time comment updates
+- **target** (Reference): Reference object for the comment thread target
+- **CommentsList** (Component): Component for rendering the list of comments.
+- **CommentsListProps** (object): Additional props to pass to CommentsList components
+- **CommentCreate** (Component): Component for creating new comments.
+- **CommentCreateProps** (object): Additional props to pass to CommentCreate components
+- **onCommentCreateFocus** (Function): Callback function triggered when a new comment is added. Required.
+
+## Notes
+
+- **Related Components**:
+  - CommentInput: Used for creating new comments
+  - CommentCard: Individual comment display
+  - UserAvatar: Displays user information in comments
+  - LoadingSpinner: Shows loading states
+
+## Example Usage
+
+```javascript
+import { Comments } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const targetRef = useRef(null)
+  const handleCommentCreateFocus = () => {
+    console.log('Comment create focused')
+  }
+  return (
+    <Comments
+      target={targetRef}
+      subscriptionsEnabled={true}
+      onCommentCreateFocus={handleCommentCreateFocus}
+    />
+  )
+}
+export default MyComponent
+```

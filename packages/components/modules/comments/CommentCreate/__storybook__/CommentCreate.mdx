@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Comments/CommentCreate" />
+
+# Component Documentation
+
+## CommentCreate
+
+- **Purpose**: A form component that allows users to create new comments within the application. It provides a text area interface for composing comments.
+- **Expected Behavior**: The component renders a text input area where users can type their comment. Upon submission, it validates the content and triggers the provided callback function with the comment data
+
+## Use Cases
+
+- **Current Usage**: Used in discussion threads, article responses, and feedback sections where users need to add comments.
+- **Potential Usage**: Could be adapted for other text input scenarios like:
+  - Quick note creation
+  - Message composition
+  - Feedback forms
+
+## Props
+
+- **TargetObjectId** (string): The ID of the object that the comment is being created for.
+- **autoFocusInput** (boolean): If true, the input field will be focused when the component is mounted. Optional, defaults to false.
+- **SocialInput** (Component): Form Input Component
+- **SocialInputProps** (object): Additional props to pass to SocialInput components
+
+## Notes
+
+- **Related Components**:
+  - CommentList: Displays a list of existing comments
+  - CommentItem: Renders individual comment entries
+  - RichTextEditor: The base editor component used for comment input
+
+## Example Usage
+
+```javascript
+import { CommentCreate } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const handleSubmit = (comment) => {
+    console.log('Comment submitted:', comment)
+  }
+  return <CommentCreate onSubmit={handleSubmit} targetObjectId="123" autoFocusInput={true} />
+}
+export default MyComponent
+```
