@@ -19,9 +19,9 @@ import { useRouter } from 'next/navigation'
 import numbro from 'numbro'
 import { useFragment } from 'react-relay'
 
-import BlockButtonWithDialog from '../BlockButtonWithDialog'
-import FollowToggleButton from '../FollowToggleButton'
 import { ProfileComponentFragment } from '../graphql/queries/ProfileComponent'
+import BlockButtonWithDialog from './BlockButtonWithDialog'
+import FollowToggleButton from './FollowToggleButton'
 import {
   ProfileContainer,
   ProfileContentContainer,

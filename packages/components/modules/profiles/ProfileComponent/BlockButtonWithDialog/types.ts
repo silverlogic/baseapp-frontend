@@ -1,6 +1,6 @@
 import { ButtonProps } from '@mui/material'
 
-import { BlockToggleFragment$key } from '../../../__generated__/BlockToggleFragment.graphql'
+import { BlockToggleFragment$key } from '../../../../__generated__/BlockToggleFragment.graphql'
 
 export interface ActionButtonProps extends ButtonProps {
   isBlocked?: boolean | null
