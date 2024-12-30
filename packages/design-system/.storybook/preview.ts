@@ -32,6 +32,8 @@ const preview: Preview = {
           'LoadingState',
           // Drawers
           'SwipeableDrawer',
+          // Images
+          'ImageWithFallback',
           // Popover
           'Popover',
           // Form

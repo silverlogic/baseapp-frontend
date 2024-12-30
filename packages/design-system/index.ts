@@ -26,6 +26,7 @@ export * from './components/displays'
 export * from './components/drawers'
 export * from './components/icons'
 export * from './components/illustrations'
+export * from './components/images'
 export * from './components/inputs'
 export * from './components/typographies'
 
