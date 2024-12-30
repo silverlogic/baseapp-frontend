@@ -7,9 +7,9 @@ import { Button } from '@mui/material'
 import { useMutation, useRelayEnvironment } from 'react-relay'
 import { RecordSourceSelectorProxy, commitLocalUpdate } from 'relay-runtime'
 
-import { FollowToggleMutation } from '../../../__generated__/FollowToggleMutation.graphql'
-import { FollowToggleMutationQuery } from '../graphql/mutations/FollowToggle'
-import { FollowToggleUpdatableFragment } from '../graphql/queries/FollowToggleUpdatableFragment'
+import { FollowToggleMutation } from '../../../../__generated__/FollowToggleMutation.graphql'
+import { FollowToggleMutationQuery } from '../../graphql/mutations/FollowToggle'
+import { FollowToggleUpdatableFragment } from '../../graphql/queries/FollowToggleUpdatableFragment'
 import { FollowToggleButtonProps } from './types'
 
 const FollowToggleButton: FC<FollowToggleButtonProps> = ({
