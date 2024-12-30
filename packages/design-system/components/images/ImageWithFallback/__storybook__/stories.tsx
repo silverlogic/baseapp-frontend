@@ -5,10 +5,12 @@ import { Meta, StoryFn, StoryObj } from '@storybook/react'
 import ImageWithFallback from '..'
 import { ImageWithFallbackProps } from '../types'
 
-export default {
+const meta: Meta = {
   title: '@baseapp-frontend-template / Design System/Displays/ImageWithFallback',
   component: ImageWithFallback,
-} as Meta<ImageWithFallbackProps>
+}
+
+export default meta
 
 type Story = StoryObj<ImageWithFallbackProps>
 
