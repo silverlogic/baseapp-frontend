@@ -1,6 +1,6 @@
 import { Meta } from '@storybook/addon-docs';
 
-<Meta title="@baseapp-frontend-template / Components / Notifications" />
+<Meta title="@baseapp-frontend / Components / Notifications" />
 
 # Notifications Documentation
 
@@ -125,9 +125,31 @@ export default Example;
 
 ### Adding a New Notification Type:
 To add a new notification renderer:
-1. Define a new verb in the `NOTIFICATION_VERB` constants.
-2. Create a new component for the notification type (e.g., `CustomNotificationRenderer`).
-3. Create a custom `NotificationItemRenderer` in your project:
+1. Create a new component for the notification type (e.g., `NewNotificationVerb`).
+   When building `NewNotificationVerb`, you can use the existing `Notification` components for structure:
+   ```javascript
+   import Notification from './Notification';
+
+   const NewNotificationVerb = ({ notification }) => (
+     <Notification.Root>
+       <Notification.Avatar
+         actorAvatar={notification.actor?.avatar?.url}
+         actorName={notification.actor?.fullName}
+       />
+       <Notification.Content>
+         <Notification.Content.Header
+           message={`New custom message: ${notification.customField}`}
+           timestamp={notification.timestamp}
+           actorName={notification.actor?.fullName}
+           unread={notification.unread}
+         />
+         <Notification.Content.Body content={notification.customBody} />
+       </Notification.Content>
+     </Notification.Root>
+   );
+   export default NewNotificationVerb;
+   ```
+2. Create a custom `NotificationItemRenderer` in your project:
    ```javascript
    import NewNotificationVerb from './NewNotificationVerb';
 
@@ -141,7 +163,7 @@ To add a new notification renderer:
      }
    };
    ```
-4. Pass the custom renderer through `NotificationsPopover`:
+3. Pass the custom renderer through `NotificationsPopover`:
    ```javascript
    <NotificationsPopover 
      NotificationsListProps={{ 
