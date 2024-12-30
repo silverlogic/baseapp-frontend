@@ -9,8 +9,9 @@
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "rm -rf dist && tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noemit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "test": "echo test"
+    "test": "echo test",
+    "storybook": "echo Test: No storybook found",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
     "@emotion/cache": "catalog:material-ui",

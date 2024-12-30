@@ -13,7 +13,7 @@
     "relay-update-schema": "yarn relay-download-schema && yarn relay",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "storybook": "storybook dev -p 6007",
+    "storybook": "storybook dev -p 6008",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
     "cypress:open": "cypress open --browser chrome"
@@ -38,6 +38,7 @@
     "@babel/preset-react": "catalog:storybook",
     "@babel/preset-typescript": "catalog:storybook",
     "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
     "@cypress/webpack-dev-server": "catalog:test",

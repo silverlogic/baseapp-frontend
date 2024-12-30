@@ -1,0 +1,186 @@
+import { Meta } from '@storybook/addon-docs';
+
+<Meta title="@baseapp-frontend-template / Components / Notifications" />
+
+# Notifications Documentation
+
+## Notifications System
+
+The Notifications system is a modular solution for displaying and interacting with notifications. It includes components to handle lists, individual items, and specific notification types, ensuring consistency and scalability across the application.
+
+---
+
+## Components
+
+### **NotificationsPopover**
+
+- **Purpose:** Acts as the parent component for the notifications system, managing the triggering, rendering, and behavior of the notification drawer.
+- **Expected Behavior:**
+  - Renders a notification bell icon that displays the count of unread notifications.
+  - Opens a drawer containing the notification list when clicked.
+  - Supports responsiveness, adjusting the drawer's position based on screen size.
+
+#### Props:
+| Prop Name              | Type               | Description                                |
+|------------------------|--------------------|--------------------------------------------|
+| `Drawer`               | `Component`        | Custom drawer component.                   |
+| `DrawerProps`          | `Object`           | Additional props for the drawer.           |
+| `Badge`                | `Component`        | Custom badge component for the notification count. |
+| `BadgeProps`           | `Object`           | Additional props for the badge.            |
+| `NotificationBellIcon` | `Component`        | Custom bell icon component.                |
+| `NotificationBellIconProps` | `Object`      | Additional props for the bell icon.        |
+| `NotificationsList`    | `Component`        | Custom list component to render notifications. |
+| `NotificationsListProps` | `Object`         | Additional props for the notification list. |
+
+---
+
+### **NotificationList**
+
+- **Purpose:** Displays a list of notifications with support for virtualization, pagination, and real-time updates via subscriptions.
+- **Expected Behavior:**
+  - Renders all notifications passed to it.
+  - Supports states such as loading, empty, and paginated.
+  - Ensures data freshness with subscription updates.
+
+#### Props:
+| Prop Name          | Type         | Description                                    |
+|--------------------|--------------|------------------------------------------------|
+| `setIsDrawerOpened` | `(boolean) => void` | Function to toggle the notification drawer state. |
+| `EmptyState`       | `Component`  | Custom component for the empty state.         |
+| `LoadingState`     | `Component`  | Custom component for the loading state.       |
+| `NotificationItem` | `Component`  | Custom component for rendering individual items. |
+
+---
+
+### **NotificationItem**
+
+- **Purpose:** Represents a single notification and handles interactions such as marking as read.
+- **Expected Behavior:**
+  - Marks notifications as read when clicked.
+  - Accepts custom rendering logic for notification content.
+
+#### Props:
+| Prop Name              | Type               | Description                                |
+|------------------------|--------------------|--------------------------------------------|
+| `notification`         | `Fragment`         | GraphQL fragment representing a notification. |
+| `NotificationItemRenderer` | `Component`  | Custom renderer for the notification.       |
+
+---
+
+### **Notification**
+
+A compositional component used internally for structuring notifications. Includes:
+- **Root:** Wrapper for the notification structure.
+- **Avatar:** Displays the actor's avatar.
+- **Content:** Handles the layout for the header and body.
+
+#### Props for Notification.Avatar:
+| Prop Name    | Type       | Description                          |
+|--------------|------------|--------------------------------------|
+| `actorAvatar`| `string`   | URL of the actor's avatar.           |
+| `actorName`  | `string`   | Name of the actor for accessibility. |
+
+---
+
+### **NotificationItemRenderer**
+
+- **Purpose:** Dynamically routes notifications to the appropriate renderer based on the verb.
+- **Expected Behavior:**
+  - Handles different notification types such as comments, replies, and reactions.
+  - Returns `null` for unsupported types.
+
+#### Props:
+| Prop Name              | Type               | Description                                |
+|------------------------|--------------------|--------------------------------------------|
+| `notification`         | `Fragment`         | GraphQL fragment representing a notification. |
+
+---
+
+### **CommentCreated, CommentReply, ReactionCreated**
+
+Renderers for specific notification types:
+- **CommentCreated:** Displays a notification when a comment is added.
+- **CommentReply:** Displays a notification when a reply to a comment is added.
+- **ReactionCreated:** Displays a notification when a reaction is added.
+
+#### Shared Props:
+| Prop Name              | Type               | Description                                |
+|------------------------|--------------------|--------------------------------------------|
+| `notification`         | `Fragment`         | GraphQL fragment representing a notification. |
+
+---
+
+## Usage Examples
+
+### **NotificationsPopover with Default Components**
+```javascript
+import { NotificationsPopover } from './NotificationsPopover';
+
+const Example = () => (
+  <NotificationsPopover />
+);
+
+export default Example;
+```
+
+### Adding a New Notification Type:
+To add a new notification renderer:
+1. Define a new verb in the `NOTIFICATION_VERB` constants.
+2. Create a new component for the notification type (e.g., `CustomNotificationRenderer`).
+3. Create a custom `NotificationItemRenderer` in your project:
+   ```javascript
+   import NewNotificationVerb from './NewNotificationVerb';
+
+   const NotificationItemRenderer = ({ notification }) => {
+     switch (notification.verb) {
+       case NOTIFICATION_VERB.customType:
+         return <NewNotificationVerb notification={notification} />;
+       // other cases
+       default:
+         return null;
+     }
+   };
+   ```
+4. Pass the custom renderer through `NotificationsPopover`:
+   ```javascript
+   <NotificationsPopover 
+     NotificationsListProps={{ 
+       NotificationItem: { 
+         NotificationItemRenderer: NotificationItemRenderer 
+       } 
+     }} 
+   />
+   ```
+
+### **Custom Badge and Drawer**
+```javascript
+import { NotificationsPopover } from './NotificationsPopover';
+import CustomBadge from './CustomBadge';
+import CustomDrawer from './CustomDrawer';
+
+const Example = () => (
+  <NotificationsPopover 
+    Badge={CustomBadge} 
+    Drawer={CustomDrawer} 
+    BadgeProps={{ color: 'primary' }}
+    DrawerProps={{ anchor: 'left' }}
+  />
+);
+
+export default Example;
+```
+
+### **Custom NotificationList**
+```javascript
+import { NotificationsPopover } from './NotificationsPopover';
+import CustomNotificationsList from './CustomNotificationsList';
+
+const Example = () => (
+  <NotificationsPopover 
+    NotificationsList={CustomNotificationsList} 
+    NotificationsListProps={{ customProp: 'value' }}
+  />
+);
+
+export default Example;
+```

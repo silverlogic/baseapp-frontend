@@ -98,6 +98,7 @@ const preview: Preview = {
           'NavCentered',
           'NavVertical',
           //Notifications
+          'NotificationsModule',
           'NotificationItem',
           'NotificationsList',
           'NotificationsPopover',

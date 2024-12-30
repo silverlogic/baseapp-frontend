@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<16611dce7648bc5f4c1dc1a4e58e1359>>
+ * @generated SignedSource<<5221e4123978058c8380e80899aa4ff8>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -89,6 +89,24 @@ const node: ConcreteRequest = (function () {
         variableName: 'count',
       },
       v5 /*: any*/,
+    ],
+    v9 = [
+      v7 /*: any*/,
+      v6 /*: any*/,
+      {
+        kind: 'InlineFragment',
+        selections: [
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'body',
+            storageKey: null,
+          },
+        ],
+        type: 'Comment',
+        abstractKey: null,
+      },
     ]
   return {
     fragment: {
@@ -299,7 +317,7 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'target',
                               plural: false,
-                              selections: [v7 /*: any*/, v6 /*: any*/],
+                              selections: v9 /*: any*/,
                               storageKey: null,
                             },
                             {
@@ -309,24 +327,7 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'actionObject',
                               plural: false,
-                              selections: [
-                                v7 /*: any*/,
-                                v6 /*: any*/,
-                                {
-                                  kind: 'InlineFragment',
-                                  selections: [
-                                    {
-                                      alias: null,
-                                      args: null,
-                                      kind: 'ScalarField',
-                                      name: 'body',
-                                      storageKey: null,
-                                    },
-                                  ],
-                                  type: 'Comment',
-                                  abstractKey: null,
-                                },
-                              ],
+                              selections: v9 /*: any*/,
                               storageKey: null,
                             },
                             v6 /*: any*/,
@@ -383,12 +384,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '46c6b7bc56079c11473c0034b604a617',
+      cacheID: 'cb6015305038b797b1e0172988517f82',
       id: null,
       metadata: {},
       name: 'notificationsListRefetchable',
       operationKind: 'query',
-      text: 'query notificationsListRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $verbs: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NotificationsListFragment_LXqp7\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query notificationsListRefetchable(\n  $count: Int = 10\n  $cursor: String\n  $verbs: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...NotificationsListFragment_LXqp7\n    id\n  }\n}\n\nfragment NotificationItemFragment on Notification {\n  id\n  pk\n  unread\n  timestamp\n  level\n  verb\n  description\n  data\n  actor {\n    __typename\n    id\n    ... on User {\n      avatar(width: 48, height: 48) {\n        url\n      }\n      fullName\n    }\n  }\n  target {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n  actionObject {\n    id\n    __typename\n    ... on Comment {\n      id\n      body\n    }\n  }\n}\n\nfragment NotificationsListFragment_LXqp7 on User {\n  id\n  notificationsUnreadCount\n  notifications(first: $count, after: $cursor, verbs: $verbs) {\n    edges {\n      cursor\n      node {\n        id\n        unread\n        ...NotificationItemFragment\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()

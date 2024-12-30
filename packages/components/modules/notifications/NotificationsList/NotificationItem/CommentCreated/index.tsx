@@ -5,7 +5,7 @@ import { formatRelativeTime } from '@baseapp-frontend/utils'
 import Notification from '../Notification'
 import { GenericItemProps } from '../types'
 
-const CommentReply: FC<GenericItemProps> = ({ notification }) => {
+const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
   // eslint-disable-next-line no-underscore-dangle
   const message = `added a comment to your ${notification.target?.__typename.toLowerCase()}`
 
@@ -28,4 +28,4 @@ const CommentReply: FC<GenericItemProps> = ({ notification }) => {
   )
 }
 
-export default CommentReply
+export default CommentCreated

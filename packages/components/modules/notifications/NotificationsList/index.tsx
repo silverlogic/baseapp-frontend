@@ -31,6 +31,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
   NotificationItem = DefaultNotificationItem,
+  NotificationItemProps = {},
 }) => {
   const smDown = useResponsive('down', 'sm')
 
@@ -59,11 +60,21 @@ const NotificationsList: FC<NotificationsListProps> = ({
           <Divider>
             <Typography variant="body2">Older</Typography>
           </Divider>
-          <NotificationItem notification={notification} key={`notification-${notification.id}`} />
+          <NotificationItem
+            key={`notification-${notification.id}`}
+            notification={notification}
+            {...NotificationItemProps}
+          />
         </>
       )
     }
-    return <NotificationItem notification={notification} key={`notification-${notification.id}`} />
+    return (
+      <NotificationItem
+        key={`notification-${notification.id}`}
+        notification={notification}
+        {...NotificationItemProps}
+      />
+    )
   }
 
   const renderVirtuosoHeader = () => <div className="h-2" />

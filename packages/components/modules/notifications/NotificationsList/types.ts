@@ -8,6 +8,7 @@ export interface NotificationsListProps {
   setIsDrawerOpened: Dispatch<SetStateAction<boolean>>
   EmptyState?: FC
   LoadingState?: FC<LoadingStateProps>
-  LoadingStateProps?: LoadingStateProps
+  LoadingStateProps?: Partial<LoadingStateProps>
   NotificationItem?: FC<NotificationItemProps>
+  NotificationItemProps?: Partial<NotificationItemProps>
 }

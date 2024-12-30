@@ -3,16 +3,19 @@ import { FC } from 'react'
 import { Box } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { NOTIFICATION_VERB } from '../../constants'
 import { useNotificationsMarkAsRead } from '../../graphql/mutations/NotificationsMarkAsRead'
 import { NotificationItemFragment } from '../../graphql/queries/NotificationItem'
-import CommentReply from './CommentReply'
+import DefaultNotificationItemRenderer from './NotificationItemRenderer'
 import { NotificationItemProps } from './types'
 
-const NotificationItem: FC<NotificationItemProps> = ({ notification: notificationRef }) => {
+const NotificationItem: FC<NotificationItemProps> = ({
+  notification: notificationRef,
+  NotificationItemRenderer = DefaultNotificationItemRenderer,
+}) => {
   const notification = useFragment(NotificationItemFragment, notificationRef)
 
-  const commitMutation = useNotificationsMarkAsRead()[0]
+  const [commitMutation] = useNotificationsMarkAsRead()
+
   const markAsRead = () => {
     if (notification.unread) {
       commitMutation({
@@ -26,17 +29,6 @@ const NotificationItem: FC<NotificationItemProps> = ({ notification: notificatio
     }
   }
 
-  const renderContent = () => {
-    switch (notification.verb) {
-      case NOTIFICATION_VERB.commentCreated:
-        return <CommentReply notification={notification} />
-      case NOTIFICATION_VERB.commentReplyCreated:
-        return <CommentReply notification={notification} />
-      default:
-        return null
-    }
-  }
-
   return (
     <Box
       onClick={markAsRead}
@@ -44,7 +36,7 @@ const NotificationItem: FC<NotificationItemProps> = ({ notification: notificatio
         cursor: 'pointer',
       }}
     >
-      {renderContent()}
+      <NotificationItemRenderer notification={notification} />
     </Box>
   )
 }
