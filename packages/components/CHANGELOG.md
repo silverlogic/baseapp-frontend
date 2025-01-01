@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.41
+
+### Patch Changes
+
+- Create base activity log components for list page
+
 ## 0.0.40
 
 ### Patch Changes
