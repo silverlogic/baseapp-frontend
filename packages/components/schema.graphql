@@ -1795,6 +1795,7 @@ type Query {
   activityLogs(
     visibility: VisibilityTypes
     first: Int = 10
+    userName: String
     offset: Int
     before: String
     after: String
