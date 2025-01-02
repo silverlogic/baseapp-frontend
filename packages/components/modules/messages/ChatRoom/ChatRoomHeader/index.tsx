@@ -12,7 +12,7 @@ import { useFragment } from 'react-relay'
 
 import { useChatRoom } from '../../context'
 import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
-import { getParticipantCountString, isGroupChat, useNameAndAvatar } from '../../utils'
+import { getParticipantCountString, useNameAndAvatar } from '../../utils'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
 
@@ -27,8 +27,6 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
 
   const { title, avatar } = useNameAndAvatar(roomHeader)
   const members = getParticipantCountString(roomHeader.participants?.totalCount)
-
-  const isGroup = isGroupChat(roomHeader)
 
   return (
     <ChatHeaderContainer>
@@ -46,8 +44,8 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         </BackButtonContainer>
       )}
       <ChatTitleContainer
-        onClick={isGroup ? onDisplayGroupDetailsClicked : undefined}
-        isClickable={isGroup}
+        onClick={roomHeader.isGroup ? onDisplayGroupDetailsClicked : undefined}
+        isClickable={roomHeader.isGroup}
       >
         <AvatarWithPlaceholder
           className="self-start justify-self-center"
@@ -60,7 +58,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
           <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
             {title}
           </Typography>
-          {isGroupChat(roomHeader) && (
+          {roomHeader.isGroup && (
             <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
               {members}
             </Typography>

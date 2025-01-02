@@ -2,8 +2,6 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
 import { ChatRoomHeaderFragment$data } from '../../__generated__/ChatRoomHeaderFragment.graphql'
 
-export const isGroupChat = (chatRoom: ChatRoomHeaderFragment$data) => chatRoom.isGroup
-
 export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
   const { currentProfile } = useCurrentProfile()
   if (roomHeader.isGroup) {
