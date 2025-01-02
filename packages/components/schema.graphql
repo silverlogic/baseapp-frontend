@@ -180,6 +180,7 @@ type ChatRoomParticipant implements Node {
   profile: Profile
   hasArchivedRoom: Boolean!
   pk: Int!
+  role: String
 }
 
 type ChatRoomParticipantConnection {
@@ -266,6 +267,24 @@ type ChatRoomUnreadPayload {
   _debug: DjangoDebug
   room: ChatRoom
   profile: Profile
+  clientMutationId: String
+}
+
+input ChatRoomUpdateInput {
+  roomId: ID!
+  profileId: ID!
+  addParticipants: [ID]
+  deleteImage: Boolean
+  removeParticipants: [ID]
+  title: String
+  clientMutationId: String
+}
+
+type ChatRoomUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoomEdge
   clientMutationId: String
 }
 
@@ -649,6 +668,7 @@ type Mutation {
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
+  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload

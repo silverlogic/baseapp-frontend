@@ -5,9 +5,6 @@ export const MessagesListFragment = graphql`
   @argumentDefinitions(count: { type: "Int", defaultValue: 20 }, cursor: { type: "String" })
   @refetchable(queryName: "ChatRoomMessagesListPaginationQuery") {
     id
-    participants {
-      totalCount
-    }
     isGroup
     unreadMessages {
       count

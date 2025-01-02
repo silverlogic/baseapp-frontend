@@ -16,6 +16,12 @@ export type * from './CreateChatRoomList/types'
 export { default as CreateGroup } from './CreateGroup'
 export type * from './CreateGroup/types'
 
+export { default as EditGroup } from './EditGroup'
+export type * from './EditGroup/types'
+
+export { default as GroupDetails } from './GroupDetails'
+export type * from './GroupDetails/types'
+
 export * from './context'
 
 export * from './graphql/mutations/SendMessage'
