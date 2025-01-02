@@ -2,12 +2,14 @@ import { graphql } from 'react-relay'
 
 export const ChatRoomHeaderFragment = graphql`
   fragment ChatRoomHeaderFragment on ChatRoom {
-    image(width: 100, height: 100) {
+    id
+    image(width: 144, height: 144) {
       url
     }
     title
     isGroup
-    participants {
+    participants(first: 5) {
+      totalCount
       edges {
         node {
           profile {

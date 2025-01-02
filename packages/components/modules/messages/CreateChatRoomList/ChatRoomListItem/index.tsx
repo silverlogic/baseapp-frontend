@@ -14,10 +14,7 @@ import { useCreateChatRoomMutation } from '../../graphql/mutations/CreateChatRoo
 import { MainContainer } from './styled'
 import { ChatRoomListItemProps } from './types'
 
-const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
-  profile: profileRef,
-  setIsInExistingChatRoomsView,
-}) => {
+const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onChatCreation }) => {
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
 
@@ -57,9 +54,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({
                   }),
                 ],
               },
-              onCompleted: () => {
-                setIsInExistingChatRoomsView(true)
-              },
+              onCompleted: onChatCreation,
             })
           }
         }}

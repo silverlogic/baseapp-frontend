@@ -1,15 +1,15 @@
 import { z } from 'zod'
 
-import { CreatGroupUpload } from './types'
+import { CreateGroupUpload } from './types'
 
-export const FORM_VALUE: Record<keyof CreatGroupUpload, keyof CreatGroupUpload> = {
+export const FORM_VALUE: Record<keyof CreateGroupUpload, keyof CreateGroupUpload> = {
   title: 'title',
   participants: 'participants',
   image: 'image',
 }
 
-export const DEFAULT_FORM_VALUES: CreatGroupUpload = {
-  title: '',
+export const DEFAULT_FORM_VALUES: CreateGroupUpload = {
+  title: '', // Why is this not [FORM_VALUE.title]: ''
   participants: [],
   image: '',
 }
@@ -21,8 +21,3 @@ export const DEFAULT_FORM_VALIDATION = z.object({
     .min(1, { message: 'Please select at least one member' }),
   [FORM_VALUE.image]: z.any(),
 })
-
-// .svg is not supported by the backend, so better not use 'image/*'
-export const DEFAULT_IMAGE_FORMATS = 'image/png, image/gif, image/jpeg'
-// use "DEFAULT_IMAGE_MAX_SIZE = undefined" to allow uploads of any size
-export const DEFAULT_IMAGE_MAX_SIZE = 10 * 1024 * 1024

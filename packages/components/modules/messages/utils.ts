@@ -2,8 +2,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
 import { ChatRoomHeaderFragment$data } from '../../__generated__/ChatRoomHeaderFragment.graphql'
 
-export const getParticipantCount = (chatRoom: ChatRoomHeaderFragment$data) =>
-  chatRoom.participants?.edges.length
+export const isGroupChat = (chatRoom: ChatRoomHeaderFragment$data) => chatRoom.isGroup
 
 export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
   const { currentProfile } = useCurrentProfile()
@@ -13,15 +12,9 @@ export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
       avatar: roomHeader.image?.url,
     }
   }
-  const participantCount = getParticipantCount(roomHeader)
-  if (participantCount !== 2) {
-    return {
-      title: 'Error. Cannot generate title',
-    }
-  }
   if (!roomHeader.participants) {
     return {
-      title: 'Error. Chat room has no participants',
+      title: 'Error: No participants',
     }
   }
 
@@ -32,4 +25,11 @@ export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
     title: otherParticipant?.node?.profile?.name,
     avatar: otherParticipant?.node?.profile?.image?.url,
   }
+}
+
+export const getParticipantCountString = (participantCount: number | null | undefined) => {
+  if (participantCount !== undefined && participantCount !== null) {
+    return `${participantCount} member${participantCount !== 1 ? 's' : ''}`
+  }
+  return undefined
 }

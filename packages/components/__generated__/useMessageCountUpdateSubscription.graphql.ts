@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a136991f440bf468f3de8f7f90575daf>>
+ * @generated SignedSource<<8bfa4f42731ce1a16abdbd7f88920027>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -62,7 +62,6 @@ export type useMessageCountUpdateSubscription$data = {
                 | null
                 | undefined
               readonly id: string
-              readonly unreadMessagesCount: number | null | undefined
             }
           | null
           | undefined
@@ -101,31 +100,24 @@ const node: ConcreteRequest = (function () {
       alias: null,
       args: null,
       kind: 'ScalarField',
-      name: 'unreadMessagesCount',
+      name: 'totalCount',
       storageKey: null,
     },
     v4 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
-      name: 'totalCount',
+      name: 'count',
       storageKey: null,
     },
     v5 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
-      name: 'count',
-      storageKey: null,
-    },
-    v6 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
       name: 'markedUnread',
       storageKey: null,
     },
-    v7 = {
+    v6 = {
       alias: null,
       args: null,
       concreteType: 'MessageConnection',
@@ -190,7 +182,6 @@ const node: ConcreteRequest = (function () {
               plural: false,
               selections: [
                 v2 /*: any*/,
-                v3 /*: any*/,
                 {
                   alias: null,
                   args: null,
@@ -199,7 +190,7 @@ const node: ConcreteRequest = (function () {
                   name: 'chatRooms',
                   plural: false,
                   selections: [
-                    v4 /*: any*/,
+                    v3 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -224,10 +215,10 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'unreadMessages',
                               plural: false,
-                              selections: [v5 /*: any*/, v6 /*: any*/],
+                              selections: [v4 /*: any*/, v5 /*: any*/],
                               storageKey: null,
                             },
-                            v7 /*: any*/,
+                            v6 /*: any*/,
                           ],
                           storageKey: null,
                         },
@@ -270,7 +261,6 @@ const node: ConcreteRequest = (function () {
               plural: false,
               selections: [
                 v2 /*: any*/,
-                v3 /*: any*/,
                 {
                   alias: null,
                   args: null,
@@ -279,7 +269,7 @@ const node: ConcreteRequest = (function () {
                   name: 'chatRooms',
                   plural: false,
                   selections: [
-                    v4 /*: any*/,
+                    v3 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -304,10 +294,10 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'unreadMessages',
                               plural: false,
-                              selections: [v5 /*: any*/, v6 /*: any*/, v2 /*: any*/],
+                              selections: [v4 /*: any*/, v5 /*: any*/, v2 /*: any*/],
                               storageKey: null,
                             },
-                            v7 /*: any*/,
+                            v6 /*: any*/,
                           ],
                           storageKey: null,
                         },
@@ -326,16 +316,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '82134f453c19e9fc16ae77d236900477',
+      cacheID: 'ee87a4300f113870813418b0a818d031',
       id: null,
       metadata: {},
       name: 'useMessageCountUpdateSubscription',
       operationKind: 'subscription',
-      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      unreadMessagesCount\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessages {\n              count\n              markedUnread\n              id\n            }\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
+      text: 'subscription useMessageCountUpdateSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnMessagesCountUpdate(profileId: $profileId) {\n    profile {\n      id\n      chatRooms {\n        totalCount\n        edges {\n          node {\n            id\n            unreadMessages {\n              count\n              markedUnread\n              id\n            }\n            allMessages {\n              edges {\n                node {\n                  id\n                  isRead\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '732b81c0387021db798a893ce5a6c449'
+;(node as any).hash = '57b09f90d1cdf7f57abc3956378d6b27'
 
 export default node
