@@ -6,143 +6,16 @@ settings:
 
 catalogs:
   default:
-    '@hookform/resolvers':
-      specifier: 3.6.0
-      version: 3.6.0
-    '@tanstack/react-query':
-      specifier: 5.45.1
-      version: 5.45.1
-    '@types/js-cookie':
-      specifier: 3.0.6
-      version: 3.0.6
-    '@types/lodash':
-      specifier: 4.17.7
-      version: 4.17.7
-    '@types/luxon':
-      specifier: 3.4.2
-      version: 3.4.2
     '@types/node':
       specifier: 22.7.2
       version: 22.7.2
-    axios:
-      specifier: 1.7.2
-      version: 1.7.2
-    jotai:
-      specifier: 2.9.3
-      version: 2.9.3
-    js-cookie:
-      specifier: 3.0.5
-      version: 3.0.5
-    lodash:
-      specifier: 4.17.21
-      version: 4.17.21
-    luxon:
-      specifier: 3.4.4
-      version: 3.4.4
-    next:
-      specifier: 14.3.0-canary.24
-      version: 14.3.0-canary.24
-    react-hook-form:
-      specifier: 7.51.5
-      version: 7.51.5
-    react-virtuoso:
-      specifier: 4.7.11
-      version: 4.7.11
     typescript:
       specifier: 5.4.5
       version: 5.4.5
-    zod:
-      specifier: 3.23.8
-      version: 3.23.8
-    zustand:
-      specifier: 4.5.2
-      version: 4.5.2
-  graphql:
-    '@types/react-relay':
-      specifier: 16.0.6
-      version: 16.0.6
-    '@types/relay-runtime':
-      specifier: 17.0.3
-      version: 17.0.3
-    '@types/relay-test-utils':
-      specifier: 14.1.4
-      version: 14.1.4
-    babel-plugin-relay:
-      specifier: 17.0.0
-      version: 17.0.0
-    get-graphql-schema:
-      specifier: 2.1.2
-      version: 2.1.2
-    graphql:
-      specifier: 16.8.1
-      version: 16.8.1
-    graphql-ws:
-      specifier: 5.16.0
-      version: 5.16.0
-    isomorphic-ws:
-      specifier: 5.0.0
-      version: 5.0.0
-    react-relay:
-      specifier: 16.2.0
-      version: 16.2.0
-    relay-compiler:
-      specifier: 16.2.0
-      version: 16.2.0
-    relay-runtime:
-      specifier: 16.2.0
-      version: 16.2.0
-    relay-test-utils:
-      specifier: 17.0.0
-      version: 17.0.0
   lint:
-    '@emotion/eslint-plugin':
-      specifier: ^11.11.0
-      version: 11.12.0
-    '@next/eslint-plugin-next':
-      specifier: ^13.1.6
-      version: 13.5.8
-    '@trivago/prettier-plugin-sort-imports':
-      specifier: ^4.3.0
-      version: 4.3.0
-    '@types/eslint':
-      specifier: ^9.6.1
-      version: 9.6.1
-    '@typescript-eslint/eslint-plugin':
-      specifier: ^5.59.11
-      version: 5.62.0
-    '@typescript-eslint/parser':
-      specifier: ^5.29.0
-      version: 5.62.0
     eslint:
       specifier: ^8.42.0
       version: 8.57.1
-    eslint-config-airbnb:
-      specifier: ^19.0.4
-      version: 19.0.4
-    eslint-config-airbnb-typescript:
-      specifier: ^17.0.0
-      version: 17.1.0
-    eslint-config-next:
-      specifier: ^13.4.6
-      version: 13.5.8
-    eslint-config-prettier:
-      specifier: ^8.8.0
-      version: 8.10.0
-    eslint-plugin-import:
-      specifier: ^2.26.0
-      version: 2.31.0
-    eslint-plugin-jsx-a11y:
-      specifier: ^6.6.1
-      version: 6.10.2
-    eslint-plugin-react:
-      specifier: ^7.31.11
-      version: 7.37.3
-    eslint-plugin-react-hooks:
-      specifier: ^4.6.0
-      version: 4.6.2
-    eslint-plugin-storybook:
-      specifier: ^0.8.0
-      version: 0.8.0
     husky:
       specifier: ^9.1.6
       version: 9.1.7
@@ -152,185 +25,6 @@ catalogs:
     prettier:
       specifier: ^3.3.3
       version: 3.4.2
-    prettier-plugin-tailwindcss:
-      specifier: ^0.6.3
-      version: 0.6.9
-  material-ui:
-    '@emotion/cache':
-      specifier: 11.11.0
-      version: 11.11.0
-    '@emotion/react':
-      specifier: 11.11.4
-      version: 11.11.4
-    '@emotion/styled':
-      specifier: 11.11.5
-      version: 11.11.5
-    '@mui/icons-material':
-      specifier: 5.15.19
-      version: 5.15.19
-    '@mui/lab':
-      specifier: 5.0.0-alpha.170
-      version: 5.0.0-alpha.170
-    '@mui/material':
-      specifier: 5.15.19
-      version: 5.15.19
-    '@mui/material-nextjs':
-      specifier: 6.1.4
-      version: 6.1.4
-    '@mui/system':
-      specifier: 5.16.12
-      version: 5.16.12
-    '@mui/x-date-pickers':
-      specifier: 7.6.2
-      version: 7.6.2
-  react18:
-    '@types/react':
-      specifier: 18.3.3
-      version: 18.3.3
-    '@types/react-dom':
-      specifier: 18.3.0
-      version: 18.3.0
-    react:
-      specifier: 18.3.1
-      version: 18.3.1
-    react-dom:
-      specifier: 18.3.1
-      version: 18.3.1
-  storybook:
-    '@babel/preset-env':
-      specifier: 7.26.0
-      version: 7.26.0
-    '@babel/preset-react':
-      specifier: 7.25.9
-      version: 7.25.9
-    '@babel/preset-typescript':
-      specifier: 7.26.0
-      version: 7.26.0
-    '@chromatic-com/storybook':
-      specifier: 3.2.3
-      version: 3.2.3
-    '@storybook/addon-docs':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/addon-essentials':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/addon-interactions':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/addon-links':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/addon-styling-webpack':
-      specifier: 1.0.1
-      version: 1.0.1
-    '@storybook/addon-webpack5-compiler-babel':
-      specifier: 3.0.3
-      version: 3.0.3
-    '@storybook/blocks':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/react':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/react-webpack5':
-      specifier: 8.4.7
-      version: 8.4.7
-    '@storybook/test':
-      specifier: 8.4.7
-      version: 8.4.7
-    babel-loader:
-      specifier: 9.2.1
-      version: 9.2.1
-    css-loader:
-      specifier: 7.1.2
-      version: 7.1.2
-    html-webpack-plugin:
-      specifier: 5.6.0
-      version: 5.6.0
-    msw:
-      specifier: 2.6.6
-      version: 2.6.6
-    msw-storybook-addon:
-      specifier: 2.0.4
-      version: 2.0.4
-    postcss-loader:
-      specifier: 8.1.1
-      version: 8.1.1
-    storybook:
-      specifier: 8.4.7
-      version: 8.4.7
-    style-loader:
-      specifier: 4.0.0
-      version: 4.0.0
-    webpack:
-      specifier: 5.93.0
-      version: 5.93.0
-    webpack-cli:
-      specifier: 5.1.4
-      version: 5.1.4
-    webpack-dev-server:
-      specifier: 5.0.4
-      version: 5.0.4
-  tailwind:
-    '@tailwindcss/typography':
-      specifier: 0.5.13
-      version: 0.5.13
-    autoprefixer:
-      specifier: 10.4.19
-      version: 10.4.19
-    postcss:
-      specifier: 8.4.38
-      version: 8.4.38
-    tailwindcss:
-      specifier: 3.4.4
-      version: 3.4.4
-  test:
-    '@cypress/webpack-dev-server':
-      specifier: 3.10.1
-      version: 3.10.1
-    '@faker-js/faker':
-      specifier: ^9.0.3
-      version: 9.3.0
-    '@testing-library/cypress':
-      specifier: 10.0.2
-      version: 10.0.2
-    '@testing-library/jest-dom':
-      specifier: 6.4.6
-      version: 6.4.6
-    '@testing-library/react':
-      specifier: 16.0.0
-      version: 16.0.0
-    '@testing-library/user-event':
-      specifier: 14.5.2
-      version: 14.5.2
-    '@types/jest':
-      specifier: 29.5.12
-      version: 29.5.12
-    babel-jest:
-      specifier: 29.7.0
-      version: 29.7.0
-    cypress:
-      specifier: 13.16.1
-      version: 13.16.1
-    cypress-plugin-steps:
-      specifier: 1.1.1
-      version: 1.1.1
-    cypress-wait-until:
-      specifier: 3.0.2
-      version: 3.0.2
-    jest:
-      specifier: 29.7.0
-      version: 29.7.0
-    jest-environment-jsdom:
-      specifier: 29.7.0
-      version: 29.7.0
-    ts-jest:
-      specifier: 29.1.4
-      version: 29.1.4
-    ts-node:
-      specifier: 10.9.2
-      version: 10.9.2
 
 overrides:
   wrap-ansi: 7.0.0
@@ -380,25 +74,25 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@hookform/resolvers':
-        specifier: 'catalog:'
+        specifier: 3.6.0
         version: 3.6.0(react-hook-form@7.51.5(react@18.3.1))
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.9.3
         version: 2.9.3(@types/react@18.3.3)(react@18.3.1)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: 3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.51.5
         version: 7.51.5(react@18.3.1)
       zod:
-        specifier: 'catalog:'
+        specifier: 3.23.8
         version: 3.23.8
     devDependencies:
       '@baseapp-frontend/config':
@@ -414,49 +108,49 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@faker-js/faker':
-        specifier: catalog:test
+        specifier: ^9.0.3
         version: 9.3.0
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: 6.4.6
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: catalog:test
+        specifier: 29.5.12
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 22.7.2
         version: 22.7.2
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       babel-jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: 29.1.4
         version: 29.1.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))(typescript@5.4.5)
       ts-node:
-        specifier: catalog:test
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/components:
@@ -474,70 +168,70 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@emotion/cache':
-        specifier: catalog:material-ui
+        specifier: 11.11.0
         version: 11.11.0
       '@emotion/react':
-        specifier: catalog:material-ui
+        specifier: 11.11.4
         version: 11.11.4(@types/react@18.3.3)(react@18.3.1)
       '@emotion/styled':
-        specifier: catalog:material-ui
+        specifier: 11.11.5
         version: 11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@hookform/resolvers':
-        specifier: 'catalog:'
+        specifier: 3.6.0
         version: 3.6.0(react-hook-form@7.51.5(react@18.3.1))
       '@mui/icons-material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@mui/lab':
-        specifier: catalog:material-ui
+        specifier: 5.0.0-alpha.170
         version: 5.0.0-alpha.170(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/system':
-        specifier: catalog:material-ui
+        specifier: 5.16.12
         version: 5.16.12(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@mui/x-date-pickers':
-        specifier: catalog:material-ui
+        specifier: 7.6.2
         version: 7.6.2(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(dayjs@1.11.13)(luxon@3.4.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/react':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
       framer-motion:
         specifier: ^11.5.4
         version: 11.15.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       graphql:
-        specifier: catalog:graphql
+        specifier: 16.8.1
         version: 16.8.1
       js-cookie:
-        specifier: 'catalog:'
+        specifier: 3.0.5
         version: 3.0.5
       luxon:
-        specifier: 'catalog:'
+        specifier: 3.4.4
         version: 3.4.4
       next:
-        specifier: 'catalog:'
+        specifier: 14.3.0-canary.24
         version: 14.3.0-canary.24(@babel/core@7.26.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.51.5
         version: 7.51.5(react@18.3.1)
       react-relay:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0(react@18.3.1)
       react-virtuoso:
-        specifier: 'catalog:'
+        specifier: 4.7.11
         version: 4.7.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       relay-runtime:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0
       slugify:
         specifier: ^1.6.6
@@ -546,20 +240,20 @@ importers:
         specifier: ^3.2.0
         version: 3.2.0(react@18.3.1)
       zod:
-        specifier: 'catalog:'
+        specifier: 3.23.8
         version: 3.23.8
       zustand:
-        specifier: 'catalog:'
+        specifier: 4.5.2
         version: 4.5.2(@types/react@18.3.3)(react@18.3.1)
     devDependencies:
       '@babel/preset-env':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@babel/preset-react':
-        specifier: catalog:storybook
+        specifier: 7.25.9
         version: 7.25.9(@babel/core@7.26.0)
       '@babel/preset-typescript':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -571,103 +265,103 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: catalog:storybook
+        specifier: 3.2.3
         version: 3.2.3(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@cypress/webpack-dev-server':
-        specifier: catalog:test
+        specifier: 3.10.1
         version: 3.10.1(webpack-cli@5.1.4)(webpack@5.93.0)
       '@faker-js/faker':
-        specifier: catalog:test
+        specifier: ^9.0.3
         version: 9.3.0
       '@storybook/addon-docs':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@types/react@18.3.3)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-essentials':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@types/react@18.3.3)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-interactions':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-links':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-styling-webpack':
-        specifier: catalog:storybook
+        specifier: 1.0.1
         version: 1.0.1(storybook@8.4.7(prettier@3.4.2))(webpack@5.93.0)
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: catalog:storybook
+        specifier: 3.0.3
         version: 3.0.3(webpack@5.93.0)
       '@storybook/blocks':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react-webpack5':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(esbuild@0.24.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/test':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@tailwindcss/typography':
-        specifier: catalog:tailwind
+        specifier: 0.5.13
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)))
       '@testing-library/cypress':
-        specifier: catalog:test
+        specifier: 10.0.2
         version: 10.0.2(cypress@13.16.1)
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: 6.4.6
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.10.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)))
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: catalog:test
+        specifier: 29.5.12
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/luxon':
-        specifier: 'catalog:'
+        specifier: 3.4.2
         version: 3.4.2
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       '@types/react-relay':
-        specifier: catalog:graphql
+        specifier: 16.0.6
         version: 16.0.6
       '@types/relay-runtime':
-        specifier: catalog:graphql
+        specifier: 17.0.3
         version: 17.0.3
       '@types/relay-test-utils':
-        specifier: catalog:graphql
+        specifier: 14.1.4
         version: 14.1.4
       autoprefixer:
-        specifier: catalog:tailwind
+        specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
       babel-jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       babel-loader:
-        specifier: catalog:storybook
+        specifier: 9.2.1
         version: 9.2.1(@babel/core@7.26.0)(webpack@5.93.0)
       babel-plugin-relay:
-        specifier: catalog:graphql
+        specifier: 17.0.0
         version: 17.0.0
       css-loader:
-        specifier: catalog:storybook
+        specifier: 7.1.2
         version: 7.1.2(webpack@5.93.0)
       cypress:
-        specifier: catalog:test
+        specifier: 13.16.1
         version: 13.16.1
       cypress-plugin-steps:
-        specifier: catalog:test
+        specifier: 1.1.1
         version: 1.1.1(cypress@13.16.1)
       cypress-wait-until:
-        specifier: catalog:test
+        specifier: 3.0.2
         version: 3.0.2
       dotenv:
         specifier: ^16.4.5
@@ -676,67 +370,67 @@ importers:
         specifier: ^7.4.2
         version: 7.4.4
       eslint-plugin-storybook:
-        specifier: catalog:lint
+        specifier: ^0.8.0
         version: 0.8.0(eslint@8.57.1)(typescript@5.4.5)
       get-graphql-schema:
-        specifier: catalog:graphql
+        specifier: 2.1.2
         version: 2.1.2
       html-webpack-plugin:
-        specifier: catalog:storybook
+        specifier: 5.6.0
         version: 5.6.0(webpack@5.93.0)
       jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@types/node@22.10.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.9.3
         version: 2.9.3(@types/react@18.3.3)(react@18.3.1)
       msw:
-        specifier: catalog:storybook
+        specifier: 2.6.6
         version: 2.6.6(@types/node@22.10.2)(typescript@5.4.5)
       msw-storybook-addon:
-        specifier: catalog:storybook
+        specifier: 2.0.4
         version: 2.0.4(msw@2.6.6(@types/node@22.10.2)(typescript@5.4.5))
       postcss:
-        specifier: catalog:tailwind
+        specifier: 8.4.38
         version: 8.4.38
       postcss-loader:
-        specifier: catalog:storybook
+        specifier: 8.1.1
         version: 8.1.1(postcss@8.4.38)(typescript@5.4.5)(webpack@5.93.0)
       relay-compiler:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0
       relay-test-utils:
-        specifier: catalog:graphql
+        specifier: 17.0.0
         version: 17.0.0
       storybook:
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(prettier@3.4.2)
       style-loader:
-        specifier: catalog:storybook
+        specifier: 4.0.0
         version: 4.0.0(webpack@5.93.0)
       tailwindcss:
-        specifier: catalog:tailwind
+        specifier: 3.4.4
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5))
       ts-jest:
-        specifier: catalog:test
+        specifier: 29.1.4
         version: 29.1.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.10.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)))(typescript@5.4.5)
       ts-node:
-        specifier: catalog:test
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
       webpack:
-        specifier: catalog:storybook
+        specifier: 5.93.0
         version: 5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15))(esbuild@0.24.2)(webpack-cli@5.1.4)
       webpack-cli:
-        specifier: catalog:storybook
+        specifier: 5.1.4
         version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
       webpack-dev-server:
-        specifier: catalog:storybook
+        specifier: 5.0.4
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.93.0)
 
   packages/config:
@@ -745,52 +439,52 @@ importers:
         specifier: workspace:*
         version: link:../eslint-plugin
       '@emotion/eslint-plugin':
-        specifier: catalog:lint
+        specifier: ^11.11.0
         version: 11.12.0(eslint@8.57.1)(typescript@5.4.5)
       '@next/eslint-plugin-next':
-        specifier: catalog:lint
+        specifier: ^13.1.6
         version: 13.5.8
       '@trivago/prettier-plugin-sort-imports':
-        specifier: catalog:lint
+        specifier: ^4.3.0
         version: 4.3.0(prettier@3.4.2)
       '@typescript-eslint/eslint-plugin':
-        specifier: catalog:lint
+        specifier: ^5.59.11
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5)
       '@typescript-eslint/parser':
-        specifier: catalog:lint
+        specifier: ^5.29.0
         version: 5.62.0(eslint@8.57.1)(typescript@5.4.5)
       eslint:
-        specifier: catalog:lint
+        specifier: ^8.42.0
         version: 8.57.1
       eslint-config-airbnb:
-        specifier: catalog:lint
-        version: 19.0.4(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.3(eslint@8.57.1))(eslint@8.57.1)
+        specifier: ^19.0.4
+        version: 19.0.4(eslint-plugin-import@2.31.0)(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.3(eslint@8.57.1))(eslint@8.57.1)
       eslint-config-airbnb-typescript:
-        specifier: catalog:lint
-        version: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1)
+        specifier: ^17.0.0
+        version: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-plugin-import@2.31.0)(eslint@8.57.1)
       eslint-config-next:
-        specifier: catalog:lint
+        specifier: ^13.4.6
         version: 13.5.8(eslint@8.57.1)(typescript@5.4.5)
       eslint-config-prettier:
-        specifier: catalog:lint
+        specifier: ^8.8.0
         version: 8.10.0(eslint@8.57.1)
       eslint-plugin-import:
-        specifier: catalog:lint
-        version: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+        specifier: ^2.26.0
+        version: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
       eslint-plugin-jsx-a11y:
-        specifier: catalog:lint
+        specifier: ^6.6.1
         version: 6.10.2(eslint@8.57.1)
       eslint-plugin-react:
-        specifier: catalog:lint
+        specifier: ^7.31.11
         version: 7.37.3(eslint@8.57.1)
       eslint-plugin-react-hooks:
-        specifier: catalog:lint
+        specifier: ^4.6.0
         version: 4.6.2(eslint@8.57.1)
       prettier:
-        specifier: catalog:lint
+        specifier: ^3.3.3
         version: 3.4.2
       prettier-plugin-tailwindcss:
-        specifier: catalog:lint
+        specifier: ^0.6.3
         version: 0.6.9(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.4.2))(prettier@3.4.2)
 
   packages/design-system:
@@ -799,61 +493,61 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@emotion/cache':
-        specifier: catalog:material-ui
+        specifier: 11.11.0
         version: 11.11.0
       '@emotion/react':
-        specifier: catalog:material-ui
+        specifier: 11.11.4
         version: 11.11.4(@types/react@18.3.3)(react@18.3.1)
       '@emotion/styled':
-        specifier: catalog:material-ui
+        specifier: 11.11.5
         version: 11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@iconify/react':
         specifier: ^5.0.1
         version: 5.1.0(react@18.3.1)
       '@mui/icons-material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@mui/lab':
-        specifier: catalog:material-ui
+        specifier: 5.0.0-alpha.170
         version: 5.0.0-alpha.170(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/material-nextjs':
-        specifier: catalog:material-ui
+        specifier: 6.1.4
         version: 6.1.4(@emotion/cache@11.11.0)(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(next@14.3.0-canary.24(@babel/core@7.26.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@mui/system':
-        specifier: catalog:material-ui
+        specifier: 5.16.12
         version: 5.16.12(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@mui/x-date-pickers':
-        specifier: catalog:material-ui
+        specifier: 7.6.2
         version: 7.6.2(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@mui/material@5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@types/react@18.3.3)(dayjs@1.11.13)(luxon@3.4.4)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@storybook/react':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       framer-motion:
         specifier: ^11.2.10
         version: 11.15.0(@emotion/is-prop-valid@1.3.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       jotai:
-        specifier: 'catalog:'
+        specifier: 2.9.3
         version: 2.9.3(@types/react@18.3.3)(react@18.3.1)
       lodash:
-        specifier: 'catalog:'
+        specifier: 4.17.21
         version: 4.17.21
       next:
-        specifier: 'catalog:'
+        specifier: 14.3.0-canary.24
         version: 14.3.0-canary.24(@babel/core@7.26.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-dom:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1(react@18.3.1)
       react-dropzone:
         specifier: ^14.2.3
         version: 14.3.5(react@18.3.1)
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.51.5
         version: 7.51.5(react@18.3.1)
       react-lazy-load-image-component:
         specifier: ^1.6.2
@@ -863,13 +557,13 @@ importers:
         version: 3.3.0(react@18.3.1)
     devDependencies:
       '@babel/preset-env':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@babel/preset-react':
-        specifier: catalog:storybook
+        specifier: 7.25.9
         version: 7.25.9(@babel/core@7.26.0)
       '@babel/preset-typescript':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -881,98 +575,98 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: catalog:storybook
+        specifier: 3.2.3
         version: 3.2.3(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-docs':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@types/react@18.3.3)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-essentials':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@types/react@18.3.3)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-interactions':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-links':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-styling-webpack':
-        specifier: catalog:storybook
+        specifier: 1.0.1
         version: 1.0.1(storybook@8.4.7(prettier@3.4.2))(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: catalog:storybook
+        specifier: 3.0.3
         version: 3.0.3(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
       '@storybook/blocks':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react-webpack5':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/test':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@tailwindcss/typography':
-        specifier: catalog:tailwind
+        specifier: 0.5.13
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)))
       '@types/lodash':
-        specifier: 'catalog:'
+        specifier: 4.17.7
         version: 4.17.7
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       autoprefixer:
-        specifier: catalog:tailwind
+        specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
       css-loader:
-        specifier: catalog:storybook
+        specifier: 7.1.2
         version: 7.1.2(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
       eslint-plugin-storybook:
-        specifier: catalog:lint
+        specifier: ^0.8.0
         version: 0.8.0(eslint@8.57.1)(typescript@5.4.5)
       postcss:
-        specifier: catalog:tailwind
+        specifier: 8.4.38
         version: 8.4.38
       postcss-loader:
-        specifier: catalog:storybook
+        specifier: 8.1.1
         version: 8.1.1(postcss@8.4.38)(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
       storybook:
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(prettier@3.4.2)
       style-loader:
-        specifier: catalog:storybook
+        specifier: 4.0.0
         version: 4.0.0(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
       tailwindcss:
-        specifier: catalog:tailwind
+        specifier: 3.4.4
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5))
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/eslint-plugin:
     dependencies:
       eslint:
-        specifier: catalog:lint
+        specifier: ^8.42.0
         version: 8.57.1
     devDependencies:
       '@baseapp-frontend/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/eslint':
-        specifier: catalog:lint
+        specifier: ^9.6.1
         version: 9.6.1
       '@types/jest':
-        specifier: catalog:test
+        specifier: 29.5.12
         version: 29.5.12
       parcel:
         specifier: ^2.12.0
         version: 2.13.3(@swc/helpers@0.5.15)(postcss@8.4.49)(relateurl@0.2.7)(terser@5.37.0)(typescript@5.4.5)
       ts-node:
-        specifier: catalog:test
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/graphql:
@@ -981,28 +675,28 @@ importers:
         specifier: workspace:*
         version: link:../utils
       graphql:
-        specifier: catalog:graphql
+        specifier: 16.8.1
         version: 16.8.1
       graphql-ws:
-        specifier: catalog:graphql
+        specifier: 5.16.0
         version: 5.16.0(graphql@16.8.1)
       isomorphic-ws:
-        specifier: catalog:graphql
+        specifier: 5.0.0
         version: 5.0.0(ws@8.18.0)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: 3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-relay:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0(react@18.3.1)
       relay-runtime:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0
       relay-test-utils:
-        specifier: catalog:graphql
+        specifier: 17.0.0
         version: 17.0.0
     devDependencies:
       '@baseapp-frontend/config':
@@ -1012,28 +706,28 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       '@types/react-relay':
-        specifier: catalog:graphql
+        specifier: 16.0.6
         version: 16.0.6
       '@types/relay-runtime':
-        specifier: catalog:graphql
+        specifier: 17.0.3
         version: 17.0.3
       '@types/relay-test-utils':
-        specifier: catalog:graphql
+        specifier: 14.1.4
         version: 14.1.4
       relay-compiler:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/provider:
@@ -1042,13 +736,13 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
       lodash:
-        specifier: 'catalog:'
+        specifier: 4.17.21
         version: 4.17.21
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
     devDependencies:
       '@baseapp-frontend/config':
@@ -1058,37 +752,37 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/lodash':
-        specifier: 'catalog:'
+        specifier: 4.17.7
         version: 4.17.7
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/test:
     dependencies:
       '@emotion/cache':
-        specifier: catalog:material-ui
+        specifier: 11.11.0
         version: 11.11.0
       '@emotion/react':
-        specifier: catalog:material-ui
+        specifier: 11.11.4
         version: 11.11.4(@types/react@18.3.3)(react@18.3.1)
       '@mui/material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@tanstack/react-query':
-        specifier: 'catalog:'
+        specifier: 5.45.1
         version: 5.45.1(react@18.3.1)
       axios-mock-adapter:
         specifier: ^1.22.0
         version: 1.22.0(axios@1.7.2)
       js-cookie:
-        specifier: 'catalog:'
+        specifier: 3.0.5
         version: 3.0.5
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
     devDependencies:
       '@baseapp-frontend/config':
@@ -1098,46 +792,46 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: 6.4.6
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: catalog:test
+        specifier: 29.5.12
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 22.7.2
         version: 22.7.2
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       babel-jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: 29.1.4
         version: 29.1.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))(typescript@5.4.5)
       ts-node:
-        specifier: catalog:test
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/tsconfig: {}
@@ -1145,7 +839,7 @@ importers:
   packages/utils:
     dependencies:
       axios:
-        specifier: 'catalog:'
+        specifier: 1.7.2
         version: 1.7.2
       events:
         specifier: ^3.3.0
@@ -1157,34 +851,34 @@ importers:
         specifier: ^2.0.1
         version: 2.0.1
       js-cookie:
-        specifier: 'catalog:'
+        specifier: 3.0.5
         version: 3.0.5
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
       lodash:
-        specifier: 'catalog:'
+        specifier: 4.17.21
         version: 4.17.21
       luxon:
-        specifier: 'catalog:'
+        specifier: 3.4.4
         version: 3.4.4
       next:
-        specifier: 'catalog:'
+        specifier: 14.3.0-canary.24
         version: 14.3.0-canary.24(@babel/core@7.26.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       qs:
         specifier: ^6.12.1
         version: 6.13.1
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-hook-form:
-        specifier: 'catalog:'
+        specifier: 7.51.5
         version: 7.51.5(react@18.3.1)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
       zustand:
-        specifier: 'catalog:'
+        specifier: 4.5.2
         version: 4.5.2(@types/react@18.3.3)(react@18.3.1)
     devDependencies:
       '@baseapp-frontend/config':
@@ -1197,58 +891,58 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: catalog:test
+        specifier: 6.4.6
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))
       '@testing-library/react':
-        specifier: catalog:test
+        specifier: 16.0.0
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@18.3.0)(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@testing-library/user-event':
-        specifier: catalog:test
+        specifier: 14.5.2
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/humps':
         specifier: ^2.0.6
         version: 2.0.6
       '@types/jest':
-        specifier: catalog:test
+        specifier: 29.5.12
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/lodash':
-        specifier: 'catalog:'
+        specifier: 4.17.7
         version: 4.17.7
       '@types/luxon':
-        specifier: 'catalog:'
+        specifier: 3.4.2
         version: 3.4.2
       '@types/node':
-        specifier: 'catalog:'
+        specifier: 22.7.2
         version: 22.7.2
       '@types/qs':
         specifier: ^6.9.7
         version: 6.9.17
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       babel-jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@babel/core@7.26.0)
       jest:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5))
       jest-environment-jsdom:
-        specifier: catalog:test
+        specifier: 29.7.0
         version: 29.7.0
       ts-jest:
-        specifier: catalog:test
+        specifier: 29.1.4
         version: 29.1.4(@babel/core@7.26.0)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.26.0))(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)))(typescript@5.4.5)
       ts-node:
-        specifier: catalog:test
+        specifier: 10.9.2
         version: 10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.7.2)(typescript@5.4.5)
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
 
   packages/wagtail:
@@ -1263,38 +957,38 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@mui/material':
-        specifier: catalog:material-ui
+        specifier: 5.15.19
         version: 5.15.19(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mui/system':
-        specifier: catalog:material-ui
+        specifier: 5.16.12
         version: 5.16.12(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)
       '@storybook/react':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       axios:
-        specifier: 'catalog:'
+        specifier: 1.7.2
         version: 1.7.2
       graphql:
-        specifier: catalog:graphql
+        specifier: 16.8.1
         version: 16.8.1
       next:
-        specifier: 'catalog:'
+        specifier: 14.3.0-canary.24
         version: 14.3.0-canary.24(@babel/core@7.26.0)(babel-plugin-macros@3.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react:
-        specifier: catalog:react18
+        specifier: 18.3.1
         version: 18.3.1
       react-relay:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0(react@18.3.1)
     devDependencies:
       '@babel/preset-env':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@babel/preset-react':
-        specifier: catalog:storybook
+        specifier: 7.25.9
         version: 7.25.9(@babel/core@7.26.0)
       '@babel/preset-typescript':
-        specifier: catalog:storybook
+        specifier: 7.26.0
         version: 7.26.0(@babel/core@7.26.0)
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -1303,76 +997,76 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: catalog:storybook
+        specifier: 3.2.3
         version: 3.2.3(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@cypress/webpack-dev-server':
-        specifier: catalog:test
+        specifier: 3.10.1
         version: 3.10.1(webpack-cli@5.1.4)(webpack@5.93.0)
       '@storybook/addon-essentials':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@types/react@18.3.3)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-interactions':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-links':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/addon-styling-webpack':
-        specifier: catalog:storybook
+        specifier: 1.0.1
         version: 1.0.1(storybook@8.4.7(prettier@3.4.2))(webpack@5.93.0)
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: catalog:storybook
+        specifier: 3.0.3
         version: 3.0.3(webpack@5.93.0)
       '@storybook/blocks':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react-webpack5':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/test':
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@tailwindcss/typography':
-        specifier: catalog:tailwind
+        specifier: 0.5.13
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5)))
       '@testing-library/cypress':
-        specifier: catalog:test
+        specifier: 10.0.2
         version: 10.0.2(cypress@13.16.1)
       '@types/js-cookie':
-        specifier: 'catalog:'
+        specifier: 3.0.6
         version: 3.0.6
       '@types/luxon':
-        specifier: 'catalog:'
+        specifier: 3.4.2
         version: 3.4.2
       '@types/react':
-        specifier: catalog:react18
+        specifier: 18.3.3
         version: 18.3.3
       '@types/react-dom':
-        specifier: catalog:react18
+        specifier: 18.3.0
         version: 18.3.0
       '@types/react-relay':
-        specifier: catalog:graphql
+        specifier: 16.0.6
         version: 16.0.6
       '@types/relay-test-utils':
-        specifier: catalog:graphql
+        specifier: 14.1.4
         version: 14.1.4
       autoprefixer:
-        specifier: catalog:tailwind
+        specifier: 10.4.19
         version: 10.4.19(postcss@8.4.38)
       babel-loader:
-        specifier: catalog:storybook
+        specifier: 9.2.1
         version: 9.2.1(@babel/core@7.26.0)(webpack@5.93.0)
       babel-plugin-relay:
-        specifier: catalog:graphql
+        specifier: 17.0.0
         version: 17.0.0
       css-loader:
-        specifier: catalog:storybook
+        specifier: 7.1.2
         version: 7.1.2(webpack@5.93.0)
       cypress:
-        specifier: catalog:test
+        specifier: 13.16.1
         version: 13.16.1
       cypress-plugin-steps:
-        specifier: catalog:test
+        specifier: 1.1.1
         version: 1.1.1(cypress@13.16.1)
       dotenv:
         specifier: ^16.4.5
@@ -1381,52 +1075,52 @@ importers:
         specifier: ^7.4.2
         version: 7.4.4
       eslint-plugin-storybook:
-        specifier: catalog:lint
+        specifier: ^0.8.0
         version: 0.8.0(eslint@8.57.1)(typescript@5.4.5)
       get-graphql-schema:
-        specifier: catalog:graphql
+        specifier: 2.1.2
         version: 2.1.2
       html-webpack-plugin:
-        specifier: catalog:storybook
+        specifier: 5.6.0
         version: 5.6.0(webpack@5.93.0)
       msw:
-        specifier: catalog:storybook
+        specifier: 2.6.6
         version: 2.6.6(@types/node@22.10.2)(typescript@5.4.5)
       msw-storybook-addon:
-        specifier: catalog:storybook
+        specifier: 2.0.4
         version: 2.0.4(msw@2.6.6(@types/node@22.10.2)(typescript@5.4.5))
       postcss:
-        specifier: catalog:tailwind
+        specifier: 8.4.38
         version: 8.4.38
       postcss-loader:
-        specifier: catalog:storybook
+        specifier: 8.1.1
         version: 8.1.1(postcss@8.4.38)(typescript@5.4.5)(webpack@5.93.0)
       relay-compiler:
-        specifier: catalog:graphql
+        specifier: 16.2.0
         version: 16.2.0
       relay-test-utils:
-        specifier: catalog:graphql
+        specifier: 17.0.0
         version: 17.0.0
       storybook:
-        specifier: catalog:storybook
+        specifier: 8.4.7
         version: 8.4.7(prettier@3.4.2)
       style-loader:
-        specifier: catalog:storybook
+        specifier: 4.0.0
         version: 4.0.0(webpack@5.93.0)
       tailwindcss:
-        specifier: catalog:tailwind
+        specifier: 3.4.4
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.10.1(@swc/helpers@0.5.15))(@types/node@22.10.2)(typescript@5.4.5))
       typescript:
-        specifier: 'catalog:'
+        specifier: 5.4.5
         version: 5.4.5
       webpack:
-        specifier: catalog:storybook
+        specifier: 5.93.0
         version: 5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15))(webpack-cli@5.1.4)
       webpack-cli:
-        specifier: catalog:storybook
+        specifier: 5.1.4
         version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
       webpack-dev-server:
-        specifier: catalog:storybook
+        specifier: 5.0.4
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.93.0)
 
 packages:
@@ -2149,12 +1843,6 @@ packages:
 
   '@babel/preset-react@7.25.9':
     resolution: {integrity: sha512-D3to0uSPiWE7rBrdIICCd0tJSIGpLaaGptna2+w7Pft5xMqLpA1sz99DK5TZ1TjGbdQ/VI1eCSZ06dv3lT4JOw==}
-    engines: {node: '>=6.9.0'}
-    peerDependencies:
-      '@babel/core': ^7.0.0-0
-
-  '@babel/preset-react@7.26.3':
-    resolution: {integrity: sha512-Nl03d6T9ky516DGK2YMxrTqvnpUW63TnJMOMonj+Zae0JiPC5BC9xPMSL6L8fiSpA5vP88qfygavVQvnLp+6Cw==}
     engines: {node: '>=6.9.0'}
     peerDependencies:
       '@babel/core': ^7.0.0-0
@@ -10270,7 +9958,7 @@ snapshots:
 
   '@babel/generator@7.17.7':
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.26.3
       jsesc: 2.5.2
       source-map: 0.5.7
 
@@ -11106,18 +10794,6 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@babel/preset-react@7.26.3(@babel/core@7.26.0)':
-    dependencies:
-      '@babel/core': 7.26.0
-      '@babel/helper-plugin-utils': 7.25.9
-      '@babel/helper-validator-option': 7.25.9
-      '@babel/plugin-transform-react-display-name': 7.25.9(@babel/core@7.26.0)
-      '@babel/plugin-transform-react-jsx': 7.25.9(@babel/core@7.26.0)
-      '@babel/plugin-transform-react-jsx-development': 7.25.9(@babel/core@7.26.0)
-      '@babel/plugin-transform-react-pure-annotations': 7.25.9(@babel/core@7.26.0)
-    transitivePeerDependencies:
-      - supports-color
-
   '@babel/preset-typescript@7.26.0(@babel/core@7.26.0)':
     dependencies:
       '@babel/core': 7.26.0
@@ -11826,7 +11502,7 @@ snapshots:
       jsc-safe-url: 0.2.4
       lightningcss: 1.27.0
       minimatch: 3.1.2
-      postcss: 8.4.49
+      postcss: 8.4.38
       resolve-from: 5.0.0
     transitivePeerDependencies:
       - supports-color
@@ -13636,7 +13312,7 @@ snapshots:
   '@storybook/builder-webpack5@8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(esbuild@0.24.2)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)':
     dependencies:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       browser-assert: 1.2.1
       case-sensitive-paths-webpack-plugin: 2.4.0
@@ -13673,7 +13349,7 @@ snapshots:
   '@storybook/builder-webpack5@8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)':
     dependencies:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       browser-assert: 1.2.1
       case-sensitive-paths-webpack-plugin: 2.4.0
@@ -13710,7 +13386,7 @@ snapshots:
   '@storybook/builder-webpack5@8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)':
     dependencies:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       browser-assert: 1.2.1
       case-sensitive-paths-webpack-plugin: 2.4.0
@@ -13750,7 +13426,7 @@ snapshots:
 
   '@storybook/core-webpack@8.4.7(storybook@8.4.7(prettier@3.4.2))':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       storybook: 8.4.7(prettier@3.4.2)
       ts-dedent: 2.2.0
 
@@ -13813,7 +13489,7 @@ snapshots:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(typescript@5.4.5)(webpack@5.93.0)
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       find-up: 5.0.0
       magic-string: 0.30.17
@@ -13840,7 +13516,7 @@ snapshots:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(typescript@5.4.5)(webpack@5.93.0(@swc/core@1.10.1(@swc/helpers@0.5.15)))
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       find-up: 5.0.0
       magic-string: 0.30.17
@@ -13867,7 +13543,7 @@ snapshots:
       '@storybook/core-webpack': 8.4.7(storybook@8.4.7(prettier@3.4.2))
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/react-docgen-typescript-plugin': 1.0.6--canary.9.0c3f3b7.0(typescript@5.4.5)(webpack@5.93.0)
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/semver': 7.5.8
       find-up: 5.0.0
       magic-string: 0.30.17
@@ -13932,7 +13608,7 @@ snapshots:
       '@storybook/builder-webpack5': 8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(esbuild@0.24.2)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/preset-react-webpack': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(esbuild@0.24.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       storybook: 8.4.7(prettier@3.4.2)
@@ -13952,7 +13628,7 @@ snapshots:
       '@storybook/builder-webpack5': 8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/preset-react-webpack': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       storybook: 8.4.7(prettier@3.4.2)
@@ -13972,7 +13648,7 @@ snapshots:
       '@storybook/builder-webpack5': 8.4.7(@swc/core@1.10.1(@swc/helpers@0.5.15))(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/preset-react-webpack': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(@swc/core@1.10.1(@swc/helpers@0.5.15))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)(webpack-cli@5.1.4)
       '@storybook/react': 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.4.2)))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)(storybook@8.4.7(prettier@3.4.2))(typescript@5.4.5)
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
       storybook: 8.4.7(prettier@3.4.2)
@@ -14213,20 +13889,20 @@ snapshots:
   '@types/body-parser@1.19.5':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/bonjour@3.5.13':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/connect-history-api-fallback@1.5.4':
     dependencies:
       '@types/express-serve-static-core': 5.0.2
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/cookie@0.6.0': {}
 
@@ -14246,14 +13922,14 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.6':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
 
   '@types/express-serve-static-core@5.0.2':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/qs': 6.9.17
       '@types/range-parser': 1.2.7
       '@types/send': 0.17.4
@@ -14277,7 +13953,7 @@ snapshots:
 
   '@types/http-proxy@1.17.15':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/humps@2.0.6': {}
 
@@ -14318,7 +13994,7 @@ snapshots:
 
   '@types/node-forge@1.3.11':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/node@12.20.55': {}
 
@@ -14375,7 +14051,7 @@ snapshots:
   '@types/send@0.17.4':
     dependencies:
       '@types/mime': 1.3.5
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/serve-index@1.9.4':
     dependencies:
@@ -14384,7 +14060,7 @@ snapshots:
   '@types/serve-static@1.15.7':
     dependencies:
       '@types/http-errors': 2.0.4
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/send': 0.17.4
 
   '@types/sinonjs__fake-timers@8.1.1': {}
@@ -14393,7 +14069,7 @@ snapshots:
 
   '@types/sockjs@0.3.36':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/source-list-map@0.1.6': {}
 
@@ -14413,13 +14089,13 @@ snapshots:
 
   '@types/webpack-sources@3.2.3':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/source-list-map': 0.1.6
       source-map: 0.7.4
 
   '@types/webpack@4.41.40':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       '@types/tapable': 1.0.12
       '@types/uglify-js': 3.17.5
       '@types/webpack-sources': 3.2.3
@@ -14428,7 +14104,7 @@ snapshots:
 
   '@types/ws@8.5.13':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
 
   '@types/yargs-parser@21.0.3': {}
 
@@ -14438,7 +14114,7 @@ snapshots:
 
   '@types/yauzl@2.10.3':
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
     optional: true
 
   '@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5)':
@@ -15078,7 +14754,7 @@ snapshots:
       '@babel/plugin-transform-export-namespace-from': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-object-rest-spread': 7.25.9(@babel/core@7.26.0)
       '@babel/plugin-transform-parameters': 7.25.9(@babel/core@7.26.0)
-      '@babel/preset-react': 7.26.3(@babel/core@7.26.0)
+      '@babel/preset-react': 7.25.9(@babel/core@7.26.0)
       '@babel/preset-typescript': 7.26.0(@babel/core@7.26.0)
       '@react-native/babel-preset': 0.76.5(@babel/core@7.26.0)(@babel/preset-env@7.26.0(@babel/core@7.26.0))
       babel-plugin-react-native-web: 0.19.13
@@ -15341,7 +15017,7 @@ snapshots:
 
   chrome-launcher@0.15.2:
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -15352,7 +15028,7 @@ snapshots:
 
   chromium-edge-launcher@0.2.0:
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -16215,28 +15891,28 @@ snapshots:
     optionalDependencies:
       source-map: 0.6.1
 
-  eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-config-airbnb-base@15.0.0(eslint-plugin-import@2.31.0)(eslint@8.57.1):
     dependencies:
       confusing-browser-globals: 1.0.11
       eslint: 8.57.1
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
       object.assign: 4.1.7
       object.entries: 1.1.8
       semver: 6.3.1
 
-  eslint-config-airbnb-typescript@17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-config-airbnb-typescript@17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-plugin-import@2.31.0)(eslint@8.57.1):
     dependencies:
       '@typescript-eslint/eslint-plugin': 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1)(typescript@5.4.5)
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
-      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
 
-  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.3(eslint@8.57.1))(eslint@8.57.1):
+  eslint-config-airbnb@19.0.4(eslint-plugin-import@2.31.0)(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.3(eslint@8.57.1))(eslint@8.57.1):
     dependencies:
       eslint: 8.57.1
-      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-config-airbnb-base: 15.0.0(eslint-plugin-import@2.31.0)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.3(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -16250,8 +15926,8 @@ snapshots:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1)
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.7.0(eslint-plugin-import@2.31.0)(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
       eslint-plugin-jsx-a11y: 6.10.2(eslint@8.57.1)
       eslint-plugin-react: 7.37.3(eslint@8.57.1)
       eslint-plugin-react-hooks: 4.6.2(eslint@8.57.1)
@@ -16274,7 +15950,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0)(eslint@8.57.1):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.0(supports-color@8.1.1)
@@ -16286,22 +15962,22 @@ snapshots:
       is-glob: 4.0.3
       stable-hash: 0.0.4
     optionalDependencies:
-      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-plugin-import: 2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1):
     dependencies:
       debug: 3.2.7(supports-color@8.1.1)
     optionalDependencies:
       '@typescript-eslint/parser': 5.62.0(eslint@8.57.1)(typescript@5.4.5)
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-import-resolver-typescript: 3.7.0(eslint-plugin-import@2.31.0)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1):
+  eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.8
@@ -16312,7 +15988,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 8.57.1
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint@8.57.1))(eslint@8.57.1))(eslint@8.57.1)
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.4.5))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@8.57.1)
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3
@@ -18074,7 +17750,7 @@ snapshots:
 
   jest-worker@27.5.1:
     dependencies:
-      '@types/node': 22.10.2
+      '@types/node': 22.7.2
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
@@ -19459,6 +19135,7 @@ snapshots:
       nanoid: 3.3.8
       picocolors: 1.1.1
       source-map-js: 1.2.1
+    optional: true
 
   posthtml-parser@0.11.0:
     dependencies:
