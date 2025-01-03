@@ -1,0 +1,275 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend / Components / Comments" />
+
+# Comments Documentation
+
+## Comments System
+
+The Comments system is a modular solution for displaying and interacting with comments. It includes components to handle lists, individual items, and specific comment types, ensuring consistency and scalability across the application.
+
+---
+
+## Components
+
+## Comments
+
+- **Purpose**: The Comments component provides a structured interface for displaying and managing user comments within the application. It handles the rendering, creation, editing and deletion of comments in a threaded discussion format.
+- **Expected Behavior**: The component displays comments in a hierarchical thread structure, allows users to post new comments, reply to existing ones, edit their own comments, and delete them when permitted.
+
+## Use Cases
+
+- **Current Usage**: Currently used in discussion threads, article feedback sections, and collaborative workspaces where users need to exchange thoughts and feedback.
+- **Potential Usage**: Could be integrated into:
+  - Document review systems
+  - Project management tools for task discussions
+  - Social features requiring user interaction
+  - Feedback collection systems
+
+## Props
+
+- **subscriptionsEnabled** (boolean): Enables/disables real-time comment updates
+- **target** (Reference): Reference object for the comment thread target
+- **CommentsList** (Component): Component for rendering the list of comments.
+- **CommentsListProps** (object): Additional props to pass to CommentsList components
+- **CommentCreate** (Component): Component for creating new comments.
+- **CommentCreateProps** (object): Additional props to pass to CommentCreate components
+- **onCommentCreateFocus** (Function): Callback function triggered when a new comment is added. Required.
+
+## Notes
+
+- **Related Components**:
+  - CommentInput: Used for creating new comments
+  - CommentCard: Individual comment display
+  - UserAvatar: Displays user information in comments
+  - LoadingSpinner: Shows loading states
+
+## Example Usage
+
+```javascript
+import { Comments } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const targetRef = useRef(null)
+  const handleCommentCreateFocus = () => {
+    console.log('Comment create focused')
+  }
+  return (
+    <Comments
+      target={targetRef}
+      subscriptionsEnabled={true}
+      onCommentCreateFocus={handleCommentCreateFocus}
+    />
+  )
+}
+export default MyComponent
+```
+
+## CommentsList
+
+- **Purpose**: A virtualized list component for displaying and managing comments, supporting infinite scroll and real-time updates through subscriptions.
+- **Expected Behavior**: Renders a scrollable list of comments with support for nested replies, lazy loading of additional comments, and real-time updates when subscriptions are enabled.
+
+## Use Cases
+
+- **Current Usage**: Used in discussion threads, feedback sections, and any area requiring threaded comments with real-time updates.
+- **Potential Usage**: Could be used in:
+  - Social media feeds
+  - Documentation systems with comments
+  - Collaborative platforms
+  - Review systems
+  - Live chat interfaces
+  - Forum applications
+
+## Props
+
+- **target** (Reference): Reference object for the comment thread target
+- **subscriptionsEnabled** (boolean): Enables/disables real-time comment updates
+- **onReplyClick** (function): Callback function triggered when reply button is clicked
+- **CommentItem** (Component): Optional custom comment item component (defaults to DefaultCommentItem)
+- **CommentItemProps** (object): Additional props to pass to CommentItem components
+- **VirtuosoProps** (object): Props to customize the underlying Virtuoso list component
+
+## Notes
+
+- **Related Components**:
+  - CommentItem: Individual comment display component
+  - CommentsSubscription: Handles real-time updates
+  - LoadingState: Displays loading status during data fetching
+
+## Example Usage
+
+```javascript
+import { CommentsList } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const targetRef = useRef(null)
+  const handleReplyClick = (commentId: string) => {
+    console.log('Reply clicked for comment:', commentId)
+  }
+  return <CommentsList target={targetRef} subscriptionsEnabled={true} onReplyClick={handleReplyClick} />
+}
+export default MyComponent
+```
+
+## CommentItem
+
+- **Purpose**: A component that renders an individual comment with user information, content, reactions, and reply functionality. It handles both top-level comments and nested replies.
+- **Expected Behavior**: Displays comment content with the author's avatar and name, allows editing and deleting (if permitted), supports reactions and replies, and can expand/collapse nested replies.
+
+## Use Cases
+
+- **Current Usage**: Used within comment threads and discussion sections to display individual comments and their replies.
+- **Potential Usage**: Could be adapted for review systems, feedback forms, or any nested discussion interface.
+
+## Props
+
+- **comment** (CommentItem_comment$key): Relay fragment reference for the comment data.
+- **target** (Object): The target object for the comment.
+- **currentThreadDepth** (number): Current nesting level of the comment thread.
+- **subscriptionsEnabled** (boolean): Enables real-time updates for the comment thread.
+- **onReplyClick** (function): Callback triggered when reply button is clicked.
+- **enableDelete** (boolean): Enables delete functionality. Defaults to false.
+- **ActionOverlayProps** (object): Props for customizing the actions overlay.
+- **CommentUpdate** (component): Custom comment update component. Defaults to DefaultCommentUpdate.
+- **CommentUpdateProps** (object): Props passed to the CommentUpdate component.
+- **CommentRepliesProps** (object): Props passed to the CommentsReplies component.
+- **CommentReactionButton** (component): Custom reaction button component. Defaults to DefaultCommentReactionButton.
+- **CommentReplyButton** (component): Custom reply button component. Defaults to DefaultCommentReplyButton.
+- **CommentPinnedBadge** (component): Custom pinned badge component. Defaults to DefaultCommentPinnedBadge.
+- **Timestamp** (component): Custom timestamp component. Defaults to DefaultTimestamp.
+- **CommentsRepliesProps** (object): Props passed to the CommentsReplies component.
+- **CommentUpdate** (component): Custom comment update component. Defaults to DefaultCommentUpdate.
+
+## Notes
+
+- **Related Components**:
+  - CommentUpdate
+  - CommentsReplies
+  - CommentReplyButton
+  - CommentPinnedBadge
+  - CommentReactionButton
+  - ActionsOverlay
+  - AvatarWithPlaceholder
+
+## Example Usage
+
+```javascript
+import { CommentItem } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const comment = {
+    id: '123',
+    body: 'This is a comment',
+  }
+  const target = {
+    id: '456',
+    name: 'Target Object',
+  }
+  return (
+    <CommentItem
+      comment={comment}
+      target={target}
+      currentThreadDepth={0}
+      subscriptionsEnabled={true}
+      onReplyClick={() => {}}
+      enableDelete={false}
+      ActionOverlayProps={{
+        onDelete: () => {
+          console.log('Delete clicked')
+        },
+      }}
+      CommentUpdate={CommentUpdate}
+      CommentUpdateProps={{
+        onCancel: () => {
+          console.log('Cancel clicked')
+        },
+      }}
+    />
+  )
+}
+export default MyComponent
+```
+
+## CommentCreate
+
+- **Purpose**: A form component that allows users to create new comments within the application. It provides a text area interface for composing comments.
+- **Expected Behavior**: The component renders a text input area where users can type their comment. Upon submission, it validates the content and triggers the provided callback function with the comment data
+
+## Use Cases
+
+- **Current Usage**: Used in discussion threads, article responses, and feedback sections where users need to add comments.
+- **Potential Usage**: Could be adapted for other text input scenarios like:
+  - Quick note creation
+  - Message composition
+  - Feedback forms
+
+## Props
+
+- **TargetObjectId** (string): The ID of the object that the comment is being created for.
+- **autoFocusInput** (boolean): If true, the input field will be focused when the component is mounted. Optional, defaults to false.
+- **SocialInput** (Component): Form Input Component
+- **SocialInputProps** (object): Additional props to pass to SocialInput components
+
+## Notes
+
+- **Related Components**:
+  - CommentList: Displays a list of existing comments
+  - CommentItem: Renders individual comment entries
+  - RichTextEditor: The base editor component used for comment input
+
+## Example Usage
+
+```javascript
+import { CommentCreate } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const handleSubmit = (comment) => {
+    console.log('Comment submitted:', comment)
+  }
+  return <CommentCreate onSubmit={handleSubmit} targetObjectId="123" autoFocusInput={true} />
+}
+export default MyComponent
+```
+
+## CommentUpdate
+
+- **Purpose**: A component that enables users to edit and update existing comments within the application.
+- **Expected Behavior**: When triggered, displays an editable text area with the current comment content. Users can modify the text and submit changes. The component handles validation and submission of the updated comment.
+
+## Use Cases
+
+- **Current Usage**: Used in comment threads and discussion sections where users need to edit their previously posted comments.
+- **Potential Usage**: Could be adapted for inline editing of other text content, such as notes, descriptions, or user-generated content.
+
+## Props
+
+- **comment** (object): The comment object containing the comment data structure.
+- **onCancel** (function): Callback function triggered when update is cancelled
+- **SocialInput** (Component): Form Input Component
+- **SocialInputProps** (object): Additional props to pass to SocialInput components
+
+## Notes
+
+- **Related Components**:
+  - CommentCreate - For creating new comments
+  - CommentList - For displaying comments
+  - CommentDelete - For removing comments
+
+## Example Usage
+
+```javascript
+import { CommentUpdate } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const comment = {
+    id: '123',
+    body: 'This is a comment',
+  }
+  const handleCancel = () => {
+    console.log('Comment update cancelled')
+  }
+  return <CommentUpdate comment={comment} onCancel={handleCancel} />
+}
+export default MyComponent
+```
