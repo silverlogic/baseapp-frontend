@@ -63,7 +63,7 @@ const MessagesList: FC<MessagesListProps> = ({
   const firstUnreadMessageId = useMemo(getFirstUnreadMessageId, [selectedRoom, currentProfile])
 
   useEffect(() => {
-    if (room?.unreadMessages?.count !== 0) {
+    if (room?.unreadMessages?.count !== 0 || room?.unreadMessages.markedUnread) {
       commitMutation({
         variables: {
           input: {

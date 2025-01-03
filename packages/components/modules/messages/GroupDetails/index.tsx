@@ -56,7 +56,14 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   const renderItem = (item: GroupMembersEdge) => {
     const profile = item?.node?.profile
     if (profile) {
-      return <ProfileCard role={item?.node?.role} profile={profile} {...ProfileCardProps} />
+      return (
+        <ProfileCard
+          role={item?.node?.role}
+          profile={profile}
+          hasAdminPermissions={isAdmin}
+          {...ProfileCardProps}
+        />
+      )
     }
     return null
   }
