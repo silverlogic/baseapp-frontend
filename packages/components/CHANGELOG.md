@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 0.0.40
+
+### Patch Changes
+
+- Group details and group edit pages added
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.6
+  - @baseapp-frontend/authentication@4.0.7
+  - @baseapp-frontend/design-system@0.0.27
+  - @baseapp-frontend/graphql@1.1.16
+
 ## 0.0.39
 
 ### Patch Changes
