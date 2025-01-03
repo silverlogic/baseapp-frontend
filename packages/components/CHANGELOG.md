@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.41
+
+### Patch Changes
+
+- Implement admin options menu on group details page
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.28
+
 ## 0.0.40
 
 ### Patch Changes
