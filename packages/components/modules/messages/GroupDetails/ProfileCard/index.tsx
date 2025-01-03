@@ -2,19 +2,29 @@
 
 import { FC } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
+import {
+  AvatarWithPlaceholder,
+  Popover,
+  ThreeDotsIcon,
+  usePopover,
+} from '@baseapp-frontend/design-system'
 
-import { Box, Typography } from '@mui/material'
+import { Box, IconButton, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
+import AdminOptionsMenu from './AdminOptionsMenu'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
-const ProfileCard: FC<ProfileCardProps> = ({ profile: profileRef, role }) => {
+const ProfileCard: FC<ProfileCardProps> = ({ hasAdminPermissions, profile: profileRef, role }) => {
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
-  const showPath = !!urlPath?.path
-  const showAdmin = role === 'ADMIN'
+  const showUrlPath = !!urlPath?.path
+  const showAdminLabel = role === 'ADMIN'
+  const showMenu = hasAdminPermissions
+
+  const popover = usePopover()
+
   return (
     <MainContainer key={`profile-${id}`}>
       <AvatarWithPlaceholder
@@ -33,9 +43,9 @@ const ProfileCard: FC<ProfileCardProps> = ({ profile: profileRef, role }) => {
           }}
         >
           <Typography variant="caption" color="text.secondary">
-            {showPath && `@${urlPath.path}`}
+            {showUrlPath && `@${urlPath.path}`}
           </Typography>
-          {showAdmin && showPath && (
+          {showAdminLabel && showUrlPath && (
             <Box
               sx={{
                 display: 'inline-block',
@@ -48,10 +58,25 @@ const ProfileCard: FC<ProfileCardProps> = ({ profile: profileRef, role }) => {
             />
           )}
           <Typography variant="caption" color="primary.light">
-            {showAdmin && 'Admin'}
+            {showAdminLabel && 'Admin'}
           </Typography>
         </Box>
       </Box>
+      {showMenu ? (
+        <Box>
+          <IconButton onClick={popover.onOpen} aria-label="Show admin options">
+            <ThreeDotsIcon sx={{ fontSize: '24px' }} />
+          </IconButton>
+          <Popover open={popover.open} onClose={popover.onClose}>
+            <AdminOptionsMenu
+              onMakeAdminClicked={popover.onClose /* TODO: Add functionality */}
+              onRemoveClicked={popover.onClose /* TODO: Add functionality */}
+            />
+          </Popover>
+        </Box>
+      ) : (
+        <Box />
+      )}
     </MainContainer>
   )
 }
