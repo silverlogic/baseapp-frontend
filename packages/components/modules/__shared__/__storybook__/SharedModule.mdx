@@ -1,0 +1,147 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend / Components / Shared" />
+
+# Shared Documentation
+
+## Shared System
+
+## Components
+
+### SocialInput
+
+- **Purpose**: A flexible form input component used for creating or replying to messages, comments, or other text-based inputs. Integrates with react-hook-form for form handling and validation.
+- **Expected Behavior**: Provides a text input field with optional reply functionality, submit actions, and social upsert actions. Handles form submission via Enter key (without Shift) and validates input before enabling submission.
+
+### Use Cases
+
+- **Current Usage**: Used in messaging interfaces, comment sections, and other social interaction features requiring text input with validation.
+- **Potential Usage**: Could be used in chat applications, feedback forms, or any interface requiring rich text input with customizable actions.
+
+### Props
+
+- **isLoading** (boolean): Loading state that disables submit button.
+- **isReply** (boolean, optional): Whether the input is for a reply. Defaults to false.
+- **replyTargetName** (string, optional): Name of the entity being replied to.
+- **placeholder** (string, optional): Input field placeholder text. Defaults to "Message...".
+- **autoFocusInput** (boolean, optional): Whether to automatically focus the input field.
+- **SocialTextField** (Component, optional): Custom text field component. Defaults to DefaultSocialTextField.
+- **SocialTextFieldProps** (object, optional): Additional props passed to SocialTextField.
+- **SocialUpsertActions** (Component, optional): Custom actions component. Defaults to DefaultSocialUpsertActions.
+- **SubmitActions** (Component, optional): Custom submit actions component. Defaults to DefaultSubmitActions.
+- **SubmitActionsProps** (object, optional): Additional props passed to SubmitActions.
+- **formId** (string, optional): Form identifier. Defaults to 'text-field-form'.
+- **submit** (function): Form submission handler.
+- **onCancelReply** (function, optional): Handler for canceling a reply.
+- **form** (UseFormReturn): react-hook-form form instance.
+
+### Notes
+
+- **Related Components**:
+  - SocialTextField - Handles the main input functionality
+  - SocialUpsertActions - Provides additional input actions
+  - SubmitActions - Handles submission controls
+
+### Example Usage
+
+```javascript
+import { SocialInput } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const useForm = () => ({
+    register: () => ({}),
+    handleSubmit: () => ({}),
+    formState: { errors: {} },
+  })
+
+  return (
+    <SocialInput
+      isLoading={false}
+      isReply={false}
+      replyTargetName={''}
+      placeholder={'Message...'}
+      autoFocusInput={false}
+      SocialTextFieldProps={{}}
+      SubmitActionsProps={{}}
+      formId={'text-field-form'}
+      submit={() => {}}
+      onCancelReply={() => {}}
+      form={useForm()}
+    />
+  )
+}
+export default MyComponent
+```
+
+---
+
+### Timestamp
+
+- **Purpose**: A component that displays formatted time information from an ISO date string, commonly used to show timestamps in a consistent format throughout the application.
+- **Expected Behavior**: Takes an ISO date string as input and renders it in a standardized time format using the Typography component. The time is displayed in a subtle, secondary text color.
+
+### Use Cases
+
+- **Current Usage**: Used in message groups to display message timestamps and in other areas where time information needs to be displayed consistently.
+- **Potential Usage**: Could be used in any context where formatted time display is needed, such as activity logs, notification timestamps, or event schedules.
+
+### Props
+
+- **date** (string): An ISO format date string that will be converted and displayed. Example: "2024-07-17T11:42:55.508653+00:00"
+
+### Notes
+
+- **Related Components**:
+  - Typography - Used for consistent text styling
+  - Uses luxon's DateTime for date parsing and formatting
+  - Integrates with the application's TIME_FORMAT constants for consistent time display
+
+### Example Usage
+
+```javascript
+import { Timestamp } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return <Timestamp date="2024-07-17T11:42:55.508653+00:00" />
+}
+export default MyComponent
+```
+---
+
+### SocialUpsertActions
+
+- **Purpose**: A component that provides additional action buttons for social interactions, such as attachments and mentions, typically used within input fields or message composers.
+- **Expected Behavior**: Renders a horizontal grid of icon buttons for different social actions. Currently displays disabled attachment and mention buttons.
+
+### Use Cases
+
+- **Current Usage**: Used within the SocialInput component to provide additional interaction options for message composition.
+- **Potential Usage**: Could be extended to support file uploads, emoji selectors, or other social media-style interaction features in messaging or comment interfaces.
+
+### Props
+
+Currently, this component does not accept any props as it renders a fixed set of disabled buttons. Future implementations may include:
+
+- **onAttachmentClick** (function): Handler for attachment button clicks
+- **onMentionClick** (function): Handler for mention button clicks
+- **disabled** (boolean): To control the disabled state of buttons
+
+### Notes
+
+- **Related Components**:
+  - SocialInput - Parent component that typically implements this component
+  - IconButton - Used for the action buttons
+  - AttachmentIcon - Icon for file attachments
+  - MentionIcon - Icon for user mentions
+
+### Example Usage
+
+```javascript
+import { SocialUpsertActions } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return <SocialUpsertActions />
+}
+export default MyComponent
+```
+
