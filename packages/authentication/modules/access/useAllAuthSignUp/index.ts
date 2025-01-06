@@ -27,13 +27,21 @@ const useAllAuthSignUp = ({
     mutationFn: (data: AllAuthTypes.SignUpRequest) => AllAuthApi.signUp(data),
     ...mutationOptions, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
-      mutationOptions?.onError?.(err, variables, context)
+      mutationOptions?.onError?.(
+        err,
+        { ...variables, email: form.getValues('email') as string },
+        context,
+      )
       if (enableFormApiErrors) {
         setFormAllAuthApiErrors(form, err)
       }
     },
     onSuccess: async (response, variables, context) => {
-      mutationOptions?.onSuccess?.(response, variables, context)
+      mutationOptions?.onSuccess?.(
+        response,
+        { ...variables, email: form.getValues('email') as string },
+        context,
+      )
     },
   })
 
