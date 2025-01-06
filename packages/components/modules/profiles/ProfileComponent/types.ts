@@ -2,4 +2,5 @@ import { ProfileComponentFragment$key } from '../../../__generated__/ProfileComp
 
 export interface ProfileComponentProps {
   profile?: ProfileComponentFragment$key | null
+  currentProfileId?: string
 }

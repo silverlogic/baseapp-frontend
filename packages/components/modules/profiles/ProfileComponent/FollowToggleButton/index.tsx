@@ -24,7 +24,7 @@ const FollowToggleButton: FC<FollowToggleButtonProps> = ({
   const environment = useRelayEnvironment()
 
   const toggleFollow = () => {
-    if (isMutationInFlight || !currentProfileId) {
+    if (isMutationInFlight || !currentProfileId || !targetId) {
       return
     }
 

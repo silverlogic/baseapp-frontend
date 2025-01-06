@@ -2,7 +2,6 @@
 
 import { FC, useState } from 'react'
 
-import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   AvatarWithPlaceholder,
   ImageWithFallback,
@@ -31,12 +30,11 @@ import {
 } from './styled'
 import { ProfileComponentProps } from './types'
 
-const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef }) => {
+const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, currentProfileId }) => {
   const profile = useFragment(ProfileComponentFragment, profileRef)
   const smDown = useResponsive('down', 'sm')
   const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const { currentProfile } = useCurrentProfile()
 
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -69,42 +67,39 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef }) =>
   }
 
   const renderProfileUpdatesButtons = () => {
-    if (profile && currentProfile) {
-      if (profile.id === currentProfile.id) {
-        return (
-          <Button
-            variant="soft"
-            size="medium"
-            color="inherit"
-            startIcon={<OutlinedEditIcon />}
-            sx={{ maxWidth: smDown ? '100%' : 'fit-content' }}
-            onClick={() => router.push('/user/settings')}
-          >
-            Edit Profile
-          </Button>
-        )
-      }
+    if (currentProfileId === profile?.id) {
       return (
-        <div className="flex flex-row gap-2">
-          {!profile?.isBlockedByMe && (
-            <FollowToggleButton
-              targetId={profile?.id}
-              isFollowedByMe={profile?.isFollowedByMe}
-              currentProfileId={currentProfile?.id}
-              profileRef={profile}
-            />
-          )}
-          {profile?.isBlockedByMe && (
-            <BlockButtonWithDialog
-              target={profile}
-              handleCloseMenu={handleClose}
-              currentProfileId={currentProfile?.id}
-            />
-          )}
-        </div>
+        <Button
+          variant="soft"
+          size="medium"
+          color="inherit"
+          startIcon={<OutlinedEditIcon />}
+          sx={{ maxWidth: smDown ? '100%' : 'fit-content' }}
+          onClick={() => router.push('/user/settings')}
+        >
+          Edit Profile
+        </Button>
       )
     }
-    return <div />
+    return (
+      <div className="flex flex-row gap-2">
+        {!profile?.isBlockedByMe && (
+          <FollowToggleButton
+            targetId={profile?.id}
+            isFollowedByMe={profile?.isFollowedByMe}
+            currentProfileId={currentProfileId}
+            profileRef={profile}
+          />
+        )}
+        {profile?.isBlockedByMe && (
+          <BlockButtonWithDialog
+            target={profile}
+            handleCloseMenu={handleClose}
+            currentProfileId={currentProfileId}
+          />
+        )}
+      </div>
+    )
   }
 
   return (
@@ -180,7 +175,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef }) =>
                   <BlockButtonWithDialog
                     target={profile}
                     handleCloseMenu={handleClose}
-                    currentProfileId={currentProfile?.id}
+                    currentProfileId={currentProfileId}
                     isMenu
                   />
                 )}
@@ -196,7 +191,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef }) =>
                   <BlockButtonWithDialog
                     target={profile}
                     handleCloseMenu={handleClose}
-                    currentProfileId={currentProfile?.id}
+                    currentProfileId={currentProfileId}
                     isMenu
                   />
                 )}
