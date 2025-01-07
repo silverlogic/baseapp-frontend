@@ -39,7 +39,11 @@ const useAllAuthLogin = ({
     mutationFn: (data: AllAuthTypes.LoginRequest) => AllAuthApi.login(data),
     ...mutationOptions, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
-      mutationOptions?.onError?.(err, variables, context)
+      mutationOptions?.onError?.(
+        err,
+        { ...variables, email: form.getValues('email') as string },
+        context,
+      )
       if (enableFormApiErrors) {
         setFormAllAuthApiErrors(form, err)
       }
@@ -69,7 +73,11 @@ const useAllAuthLogin = ({
           secure: process.env.NODE_ENV === 'production',
         })
 
-        mutationOptions?.onSuccess?.(response, variables, context)
+        mutationOptions?.onSuccess?.(
+          response,
+          { ...variables, email: form.getValues('email') as string },
+          context,
+        )
       }
     },
   })
