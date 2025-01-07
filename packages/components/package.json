@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "0.0.40",
+  "version": "0.0.41",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -37,6 +37,7 @@
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
+    "numbro": "^2.5.0",
     "react-hook-form": "catalog:",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
