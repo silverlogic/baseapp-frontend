@@ -1,0 +1,62 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/SocialTextField" />
+
+# Component Documentation
+
+## SocialTextField
+
+- **Purpose**: A TextField component made specifically for comments creation, with support for replies and additional social features.
+- **Expected Behavior**: Renders a textarea field with optional reply functionality showing who is being replied to, and a container for additional actions/children.
+
+## Use Cases
+
+- **Current Usage**:
+  - Comments sections
+  - Reply threads
+  - Social interactions
+- **Potential Usage**:
+  - Discussion forums
+  - Messaging interfaces
+  - Any social commenting system
+
+## Props
+
+- **children** (ReactNode): Content rendered below the textarea, typically action buttons
+- **isReply** (boolean): If true, shows the reply interface with target user's name
+- **replyTargetName** (string): Name of the user being replied to, shown when isReply is true
+- **onCancelReply** (function): Callback fired when clicking the cancel reply button
+- **...TextareaFieldProps**: All other props are passed to the underlying TextareaField component
+
+## Notes
+
+- **Related Components**:
+  - TextareaField: Used as the base input component
+  - IconButton: Used for the cancel reply action
+  - Typography/TypographyWithEllipsis: Used for reply text display
+  - CommentReplyIcon/CloseIcon: Icons used in the reply interface
+
+## Example Usage
+
+```javascript
+import { SocialTextField } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <SocialTextField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      isReply={true}
+      replyTargetName="John Doe"
+      helperText="This is a helper text"
+      isResponsive={true}
+      onCancelReply={() => {}}
+    />
+  )
+}
+export default MyComponent
+```

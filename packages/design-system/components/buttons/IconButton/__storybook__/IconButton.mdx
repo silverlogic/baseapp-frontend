@@ -1,0 +1,63 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Buttons/IconButton" />
+
+# Component Documentation
+
+## IconButton
+
+- **Purpose**: The IconButton component provides a clickable button that displays an icon.
+- **Expected Behavior**: The IconButton renders as a circular button containing an icon. It responds to hover and click states with visual feedback, and can be disabled when needed.
+
+## Use Cases
+
+- **Current Usage**:
+  - Navigation menus
+  - Toolbars
+  - Action buttons in tables/lists
+  - Close buttons for modals/dialogs
+  - Toggle buttons for expandable content
+- **Potential Usage**:
+  - Social media sharing buttons
+  - Media player controls
+  - Form field actions (clear, show/hide password)
+  - Mini floating action buttons
+
+## Props
+
+- **children** (ReactNode): The icon element to be displayed inside the button.
+- **color** (string): The color of the button.
+- **disabled** (boolean): If true, the button will be disabled.
+- **isLoading** (boolean): If true, the button will be in a loading state.
+- **onClick** (function): The function to be called when the button is clicked.
+- **hasTooltip** (boolean): If true, the button will have a tooltip.
+
+## Notes
+
+- **Related Components**:
+  - Button: Standard button component for text-based actions
+  - Tooltip: Often wraps IconButton to provide additional context
+  - Menu: Can be triggered by IconButton
+  - Icons: Provides the visual elements used within IconButton
+
+## Example Usage
+
+```javascript
+import { IconButton } from '@baseapp-frontend/design-system'
+import { CloseIcon } from '@baseapp-frontend/design-system/icons'
+
+const MyComponent = () => {
+  return (
+    <IconButton
+      hasTooltip={true}
+      isLoading={false}
+      disabled={false}
+      color="primary"
+      onClick={() => {}}
+    >
+      <CloseIcon />
+    </IconButton>
+  )
+}
+export default MyComponent
+```
