@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.0
+
+### Major Changes
+
+- MDX documentation files added for several components
+
 ## 0.0.27
 
 ### Patch Changes
