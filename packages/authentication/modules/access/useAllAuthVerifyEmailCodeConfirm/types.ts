@@ -5,6 +5,7 @@ import * as AllAuthTypes from '../../../types/allAuth'
 import type { CustomJWTKeyNames } from '../../../types/auth'
 
 export interface UseAllAuthVerifyEmailCodeConfirm extends CustomJWTKeyNames {
+  resendCode?: boolean
   formOptions?: UseFormProps<Partial<AllAuthTypes.VerifyEmailRequest>>
   mutationOptions?: UseMutationOptions<
     AllAuthTypes.SessionInfo,
