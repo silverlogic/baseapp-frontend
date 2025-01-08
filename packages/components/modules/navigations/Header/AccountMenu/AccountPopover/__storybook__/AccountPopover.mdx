@@ -1,0 +1,77 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Navigation/AccountPopover" />
+
+# Component Documentation
+
+## AccountPopover
+
+- **Purpose**: A popover menu component that displays user account-related options and actions.
+- **Expected Behavior**: Opens on click of the account trigger button, displaying a menu with user profile information and navigation options. Closes when clicking outside or selecting a menu item.
+
+## Use Cases
+
+- **Current Usage**: Used in the main application header for user account management and navigation.
+- **Potential Usage**: Could be used in:
+  - User profile sections
+  - Settings panels
+  - Account management interfaces
+  - Navigation drawers
+  - Dashboard headers
+
+## Props
+
+- **MenuItems** (MenuItem[]): Array of menu items containing label and onClick handlers for each action
+- **PopoverStyles** (object): Styles for the popover component
+- **CurrentUser** (object): The current user object containing profile information
+- **SwitchProfileMenu** (object): The switch profile menu object containing label and onClick handlers for each action
+- **SwitchProfileMenuProps** (object): The switch profile menu props object containing label and onClick handlers for each action
+- **ProfilesList** (object): The profiles list object containing label and onClick handlers for each action
+- **ProfilesListProps** (object): The profiles list props object containing label and onClick handlers for each action
+- **AddProfileMenuItem** (object): The add profile menu item object containing label and onClick handlers for each action
+- **AddProfileMenuItemProps** (object): The add profile menu item props object containing label and onClick handlers for each action
+- **LogoutItemProps** (object): The logout menu item props object containing label and onClick handlers for each action
+
+## Notes
+
+- **Related Components**:
+  - Header: Parent component that contains the AccountPopover
+  - Popover: Base component used for the popup interface
+  - MenuItem: Used for individual menu options
+  - AccountMenu: Wrapper component that manages the popover state
+
+## Example Usage
+
+```javascript
+import { AccountPopover } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return (
+    <AccountPopover
+      MenuItemsProps={{
+        menuItems: [
+          { label: 'Profile', onClick: () => console.log('Profile clicked') },
+          { label: 'Settings', onClick: () => console.log('Settings clicked') },
+        ],
+      }}
+      SwitchProfileMenuProps={{
+        label: 'Switch Profile',
+        onClick: () => console.log('Switch Profile clicked'),
+      }}
+      ProfilesListProps={{
+        label: 'Profiles List',
+        onClick: () => console.log('Profiles List clicked'),
+      }}
+      AddProfileMenuItemProps={{
+        label: 'Add Profile',
+        onClick: () => console.log('Add Profile clicked'),
+      }}
+      LogoutItemProps={{
+        label: 'Logout',
+        onClick: () => console.log('Logout clicked'),
+      }}
+    />
+  )
+}
+export default MyComponent
+```
