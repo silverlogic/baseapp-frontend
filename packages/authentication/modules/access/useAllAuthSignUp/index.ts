@@ -15,6 +15,7 @@ const useAllAuthSignUp = ({
   formOptions = {},
   mutationOptions = {},
   enableFormApiErrors = true,
+  referralCode,
 }: UseAllAuthSignUp) => {
   const form = useForm({
     defaultValues: DEFAULT_INITIAL_VALUES,
@@ -22,9 +23,8 @@ const useAllAuthSignUp = ({
     mode: 'onChange',
     ...formOptions,
   })
-
   const mutation = useMutation({
-    mutationFn: (data: AllAuthTypes.SignUpRequest) => AllAuthApi.signUp(data),
+    mutationFn: (data: AllAuthTypes.SignUpRequest) => AllAuthApi.signUp({ ...data, referralCode }),
     ...mutationOptions, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       mutationOptions?.onError?.(

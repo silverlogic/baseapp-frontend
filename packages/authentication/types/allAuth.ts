@@ -336,6 +336,7 @@ export interface SignUpRequest {
   password: string
   firstName: string
   lastName: string
+  referralCode?: string
 }
 
 export interface GetVerifyEmailInfoRequest {

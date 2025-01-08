@@ -6,6 +6,7 @@ import type { CustomJWTKeyNames } from '../../../types/auth'
 
 export interface UseAllAuthSignUp extends CustomJWTKeyNames {
   formOptions?: UseFormProps<Partial<AllAuthTypes.SignUpRequest>>
+  referralCode?: string
   mutationOptions?: UseMutationOptions<
     AllAuthTypes.SessionInfo,
     unknown,
