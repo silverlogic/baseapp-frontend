@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.0.7
+
+### Patch Changes
+
+- Update `zod` from 3.23.8 to 3.24.1
+
 ## 4.0.6
 
 ### Patch Changes

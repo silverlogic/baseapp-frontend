@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.42
+
+### Patch Changes
+
+- Update `zod` from 3.23.8 to 3.24.1
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.7
+
 ## 0.0.41
 
 ### Patch Changes
@@ -54,7 +62,6 @@
 
 - Updated dependencies
   - @baseapp-frontend/graphql@1.1.14
-
 
 ## 0.0.34
 
