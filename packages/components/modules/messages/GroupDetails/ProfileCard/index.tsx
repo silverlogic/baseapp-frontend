@@ -14,14 +14,14 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import AdminOptionsMenu from './AdminOptionsMenu'
-import { ChatRoomParticipantRoles } from './constants'
+import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
 const ProfileCard: FC<ProfileCardProps> = ({ hasAdminPermissions, profile: profileRef, role }) => {
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
   const showUrlPath = !!urlPath?.path
-  const showAdminLabel = role === ChatRoomParticipantRoles.Admin
+  const showAdminLabel = role === CHAT_ROOM_PARTICIPANT_ROLES.admin
   const showMenu = hasAdminPermissions
 
   const popover = usePopover()
