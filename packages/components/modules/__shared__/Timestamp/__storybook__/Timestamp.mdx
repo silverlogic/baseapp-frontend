@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Shared/Timestamp" />
+
+# Component Documentation
+
+## Timestamp
+
+- **Purpose**: A component that displays formatted time information from an ISO date string, commonly used to show timestamps in a consistent format throughout the application.
+- **Expected Behavior**: Takes an ISO date string as input and renders it in a standardized time format using the Typography component. The time is displayed in a subtle, secondary text color.
+
+## Use Cases
+
+- **Current Usage**: Used in message groups to display message timestamps and in other areas where time information needs to be displayed consistently.
+- **Potential Usage**: Could be used in any context where formatted time display is needed, such as activity logs, notification timestamps, or event schedules.
+
+## Props
+
+- **date** (string): An ISO format date string that will be converted and displayed. Example: "2024-07-17T11:42:55.508653+00:00"
+
+## Notes
+
+- **Related Components**:
+  - Typography - Used for consistent text styling
+  - Uses luxon's DateTime for date parsing and formatting
+  - Integrates with the application's TIME_FORMAT constants for consistent time display
+
+## Example Usage
+
+```javascript
+import { Timestamp } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return <Timestamp date="2024-07-17T11:42:55.508653+00:00" />
+}
+export default MyComponent
+```

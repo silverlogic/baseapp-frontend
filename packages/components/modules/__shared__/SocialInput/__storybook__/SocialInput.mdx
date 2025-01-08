@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Shared/SocialInput" />
+
+# Component Documentation
+
+## SocialInput
+
+- **Purpose**: A flexible form input component used for creating or replying to messages, comments, or other text-based inputs. Integrates with react-hook-form for form handling and validation.
+- **Expected Behavior**: Provides a text input field with optional reply functionality, submit actions, and social upsert actions. Handles form submission via Enter key (without Shift) and validates input before enabling submission.
+
+## Use Cases
+
+- **Current Usage**: Used in messaging interfaces, comment sections, and other social interaction features requiring text input with validation.
+- **Potential Usage**: Could be used in chat applications, feedback forms, or any interface requiring rich text input with customizable actions.
+
+## Props
+
+- **isLoading** (boolean): Loading state that disables submit button.
+- **isReply** (boolean, optional): Whether the input is for a reply. Defaults to false.
+- **replyTargetName** (string, optional): Name of the entity being replied to.
+- **placeholder** (string, optional): Input field placeholder text. Defaults to "Message...".
+- **autoFocusInput** (boolean, optional): Whether to automatically focus the input field.
+- **SocialTextField** (Component, optional): Custom text field component. Defaults to DefaultSocialTextField.
+- **SocialTextFieldProps** (object, optional): Additional props passed to SocialTextField.
+- **SocialUpsertActions** (Component, optional): Custom actions component. Defaults to DefaultSocialUpsertActions.
+- **SubmitActions** (Component, optional): Custom submit actions component. Defaults to DefaultSubmitActions.
+- **SubmitActionsProps** (object, optional): Additional props passed to SubmitActions.
+- **formId** (string, optional): Form identifier. Defaults to 'text-field-form'.
+- **submit** (function): Form submission handler.
+- **onCancelReply** (function, optional): Handler for canceling a reply.
+- **form** (UseFormReturn): react-hook-form form instance.
+
+## Notes
+
+- **Related Components**:
+  - SocialTextField - Handles the main input functionality
+  - SocialUpsertActions - Provides additional input actions
+  - SubmitActions - Handles submission controls
+
+## Example Usage
+
+```javascript
+import { SocialInput } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const useForm = () => ({
+    register: () => ({}),
+    handleSubmit: () => ({}),
+    formState: { errors: {} },
+  })
+
+  return (
+    <SocialInput
+      isLoading={false}
+      isReply={false}
+      replyTargetName={''}
+      placeholder={'Message...'}
+      autoFocusInput={false}
+      SocialTextFieldProps={{}}
+      SubmitActionsProps={{}}
+      formId={'text-field-form'}
+      submit={() => {}}
+      onCancelReply={() => {}}
+      form={useForm()}
+    />
+  )
+}
+export default MyComponent
+```

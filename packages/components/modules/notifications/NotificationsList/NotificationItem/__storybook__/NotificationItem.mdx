@@ -1,0 +1,50 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Notifications/NotificationItem" />
+
+# Component Documentation
+
+## NotificationItem
+
+- **Purpose**: A component that renders individual notification items within a notifications list, handling both the display and read/unread state management of notifications.
+- **Expected Behavior**: When clicked, marks unread notifications as read via a mutation. Renders notification content using a provided renderer component.
+
+## Use Cases
+
+- **Current Usage**: Used within the NotificationsList component to display individual notification items in the notifications drawer/popover.
+- **Potential Usage**: Could be used in any context where individual notifications need to be displayed with read/unread state management.
+
+## Props
+
+- **notification** (NotificationItemFragment): The notification data reference to be rendered. Contains notification content and metadata.
+- **NotificationItemRenderer** (FC, optional): Custom renderer component for notification content. Defaults to DefaultNotificationItemRenderer.
+
+## Notes
+
+- **Related Components**:
+  - NotificationsList - Parent component that manages the list of notifications
+  - NotificationItemRenderer - Handles the actual rendering of notification content
+  - NotificationsPopover - Higher level component that contains the notifications drawer
+
+## Example Usage
+
+```javascript
+import { NotificationItem } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  const notification = {
+    id: '123',
+    title: 'Notification Title',
+    body: 'Notification Body',
+    read: false,
+  }
+  const NotificationItemRenderer = () => <div>Notification Item Renderer</div>
+  return (
+    <NotificationItem
+      notification={notification}
+      NotificationItemRenderer={NotificationItemRenderer}
+    />
+  )
+}
+export default MyComponent
+```

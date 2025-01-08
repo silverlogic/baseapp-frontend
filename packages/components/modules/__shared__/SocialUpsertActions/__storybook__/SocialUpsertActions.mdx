@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Shared/SocialUpsertActions" />
+
+# Component Documentation
+
+## SocialUpsertActions
+
+- **Purpose**: A component that provides additional action buttons for social interactions, such as attachments and mentions, typically used within input fields or message composers.
+- **Expected Behavior**: Renders a horizontal grid of icon buttons for different social actions. Currently displays disabled attachment and mention buttons.
+
+## Use Cases
+
+- **Current Usage**: Used within the SocialInput component to provide additional interaction options for message composition.
+- **Potential Usage**: Could be extended to support file uploads, emoji selectors, or other social media-style interaction features in messaging or comment interfaces.
+
+## Props
+
+Currently, this component does not accept any props as it renders a fixed set of disabled buttons. Future implementations may include:
+
+- **onAttachmentClick** (function): Handler for attachment button clicks
+- **onMentionClick** (function): Handler for mention button clicks
+- **disabled** (boolean): To control the disabled state of buttons
+
+## Notes
+
+- **Related Components**:
+  - SocialInput - Parent component that typically implements this component
+  - IconButton - Used for the action buttons
+  - AttachmentIcon - Icon for file attachments
+  - MentionIcon - Icon for user mentions
+
+## Example Usage
+
+```javascript
+import { SocialUpsertActions } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return <SocialUpsertActions />
+}
+export default MyComponent
+```
