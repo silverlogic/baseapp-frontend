@@ -16,6 +16,7 @@ import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
 import { MembersListFragment } from '../graphql/queries/MembersList'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
+import { ChatRoomParticipantRoles } from './ProfileCard/constants'
 import { GroupHeaderContainer, GroupTitleContainer } from './styled'
 import { GroupDetailsProps, GroupMembersEdge } from './types'
 
@@ -39,7 +40,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   const me = members?.edges.find(
     (edge) => currentProfile?.id && edge?.node?.profile?.id === currentProfile?.id,
   )
-  const isAdmin = me?.node?.role === 'ADMIN'
+  const isAdmin = me?.node?.role === ChatRoomParticipantRoles.Admin
 
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
