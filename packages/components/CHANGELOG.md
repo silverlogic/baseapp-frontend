@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 0.0.45
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.1
+
 ## 0.0.44
 
 ### Patch Changes
