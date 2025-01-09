@@ -6,6 +6,7 @@ import { getItem } from 'expo-secure-store'
 import { getToken } from '..'
 import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
 import { getCookie } from '../../../cookie'
+import { isMobilePlatform } from '../../../os'
 
 const serverCookieValue = 'server-value'
 
@@ -17,12 +18,16 @@ jest.mock('../../../cookie', () => ({
   getCookie: jest.fn(),
 }))
 
+jest.mock('../../../os', () => ({
+  isMobilePlatform: jest.fn(),
+}))
+
 describe('getToken function on the server', () => {
   const accessKeyName = ACCESS_KEY_NAME
 
   beforeEach(() => {
     jest.clearAllMocks()
-    process.env.EXPO_PUBLIC_PLATFORM = undefined // Ensure the platform is non-mobile to simulate server environment
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
   })
 
   it('retrieves a server-side cookie using getCookie', () => {

@@ -1,5 +1,16 @@
 # @baseapp-frontend/authentication
 
+## 4.1.0
+
+### Minor Changes
+
+- Adapt `useLogin` to use `isMobilePlatform` to omit current profile logic from mobile platforms.
+- Replace `process.env.EXPO_PUBLIC_API_BASE_URL` usage with `getExpoConstant`.
+- Adapt `getUser` and `getUserAsync` tests to mock `getToken` and `getTokenAsync`.
+- Add `expo` and `react-native` mock files.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.0.6
+
 ## 4.0.7
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 0.0.44
+
+### Patch Changes
+
+- Add `expo` and `react-native` mock files.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.0.7
+  - @baseapp-frontend/graphql@1.2.0
+  - @baseapp-frontend/utils@3.1.0
+  - @baseapp-frontend/design-system@0.0.28
+
 ## 0.0.43
 
 ### Patch Changes

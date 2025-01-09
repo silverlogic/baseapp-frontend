@@ -21,6 +21,8 @@ describe('getAccessToken', () => {
   })
 
   it('should call fetch with the correct URL and headers', async () => {
+    process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
+
     const refreshToken = 'test-refresh-token'
     const expectedUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
     mockFetchResponse({ access: 'test-access-token' })

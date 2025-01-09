@@ -1,3 +1,4 @@
+import { getExpoConstant } from '@baseapp-frontend/utils'
 import type { JWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 const preAuthenticateJWT = async (token?: string) => {
@@ -6,8 +7,9 @@ const preAuthenticateJWT = async (token?: string) => {
       throw new Error('No token provided.')
     }
 
+    const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.EXPO_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? EXPO_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`,
       {
         method: 'POST',
         body: JSON.stringify({ token }),

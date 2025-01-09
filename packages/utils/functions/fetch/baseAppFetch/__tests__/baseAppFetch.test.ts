@@ -215,7 +215,7 @@ describe('baseAppFetch', () => {
       expect.any(String),
       expect.objectContaining({
         headers: expect.objectContaining({
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         }),
       }),
     )
@@ -225,7 +225,7 @@ describe('baseAppFetch', () => {
       expect.any(String),
       expect.objectContaining({
         headers: expect.objectContaining({
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         }),
       }),
     )
@@ -235,7 +235,7 @@ describe('baseAppFetch', () => {
       expect.any(String),
       expect.objectContaining({
         headers: expect.objectContaining({
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         }),
       }),
     )
@@ -245,7 +245,7 @@ describe('baseAppFetch', () => {
       expect.any(String),
       expect.not.objectContaining({
         headers: expect.objectContaining({
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json; charset=utf-8',
         }),
       }),
     )

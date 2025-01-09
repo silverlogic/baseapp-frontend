@@ -1,10 +1,11 @@
 import { deleteItemAsync } from 'expo-secure-store'
 
 import { removeCookie } from '../../cookie'
+import { isMobilePlatform } from '../../os'
 
 export const removeTokenAsync = async (key: string) => {
   try {
-    if (process.env.EXPO_PUBLIC_PLATFORM === 'mobile') {
+    if (isMobilePlatform()) {
       await deleteItemAsync(key)
     } else {
       removeCookie(key)

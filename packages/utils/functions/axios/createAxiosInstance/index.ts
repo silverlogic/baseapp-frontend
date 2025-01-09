@@ -7,8 +7,11 @@ import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
+import { getExpoConstant } from '../../expo'
 import { buildQueryString } from '../../string'
-import { decodeJWT, isUserTokenValid } from '../../token'
+import { getTokenAsync } from '../../token'
+import { decodeJWT } from '../../token/decodeJWT'
+import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
 
 export const createAxiosInstance = ({
@@ -21,23 +24,32 @@ export const createAxiosInstance = ({
   useFormData = true,
   refreshToken = true,
   tokenType = 'Bearer',
+  decamelizeRequestBodyKeys = true,
+  decamelizeRequestParamsKeys = true,
+  camelizeResponseDataKeys = true,
+  stringifyBody = true,
+  setContentType = true,
+  baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
 } = {}) => {
+  const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
+
   const instance = _axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    baseURL: baseUrl ?? EXPO_PUBLIC_API_BASE_URL,
     paramsSerializer(params: Record<string, any>) {
       return buildQueryString(params)
     },
   })
 
-  const contentType = file ? 'multipart/form-data' : 'application/json'
-
-  instance.defaults.headers.post['Content-Type'] = contentType
-  instance.defaults.headers.patch['Content-Type'] = contentType
-  instance.defaults.headers.put['Content-Type'] = contentType
+  if (setContentType) {
+    const contentType = file ? 'multipart/form-data' : 'application/json'
+    instance.defaults.headers.post['Content-Type'] = contentType
+    instance.defaults.headers.patch['Content-Type'] = contentType
+    instance.defaults.headers.put['Content-Type'] = contentType
+  }
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
     const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
-    let authToken = Cookies.get(accessKeyName)
+    let authToken = await getTokenAsync(accessKeyName, { noSSR: false })
 
     if (authToken && isAuthTokenRequired && refreshToken) {
       const isTokenValid = isUserTokenValid(decodeJWT(authToken))
@@ -62,26 +74,35 @@ export const createAxiosInstance = ({
       request.headers['Accept-Language'] = language
     }
 
-    if (request.data && !file) {
-      request.data = JSON.stringify(humps.decamelizeKeys(request.data))
-    }
-    if (request.data && file && useFormData) {
-      const formData = new FormData()
-      Object.entries(request.data).forEach(([key, value]) => {
-        const decamelizedKey = humps.decamelize(key)
-        if (!value) return
-        if (value instanceof File) {
-          formData.append(decamelizedKey, value)
-        } else if (typeof value === 'object') {
-          formData.append(decamelizedKey, JSON.stringify(value))
-        } else {
-          formData.append(decamelizedKey, value?.toString())
+    if (request.data) {
+      if (!file || !useFormData) {
+        if (stringifyBody) {
+          if (decamelizeRequestBodyKeys) {
+            request.data = JSON.stringify(humps.decamelizeKeys(request.data))
+          } else {
+            request.data = JSON.stringify(request.data)
+          }
+        } else if (decamelizeRequestBodyKeys) {
+          request.data = humps.decamelizeKeys(request.data)
         }
-      })
-      request.data = formData
+      } else if (file && useFormData) {
+        const formData = new FormData()
+        Object.entries(request.data).forEach(([key, value]) => {
+          const decamelizedKey = humps.decamelize(key)
+          if (!value) return
+          if (value instanceof File) {
+            formData.append(decamelizedKey, value)
+          } else if (typeof value === 'object') {
+            formData.append(decamelizedKey, JSON.stringify(value))
+          } else {
+            formData.append(decamelizedKey, value.toString())
+          }
+        })
+        request.data = formData
+      }
     }
 
-    if (request.params) {
+    if (request.params && decamelizeRequestParamsKeys) {
       request.params = humps.decamelizeKeys(request.params)
     }
 
@@ -90,21 +111,27 @@ export const createAxiosInstance = ({
 
   const responseInterceptorId = instance.interceptors.response.use(
     (response) => {
-      if (response.data && response.headers?.['content-type'] === 'application/json') {
+      const contentTypeHeader = response.headers?.['content-type'] || ''
+      const isJsonResponse = contentTypeHeader.includes('application/json')
+
+      if (isJsonResponse && response.data && camelizeResponseDataKeys) {
         response.data = humps.camelizeKeys(response.data)
       }
       return returnData && response.data ? response.data : response
     },
-    async (error) => {
-      if (
-        error.response?.data &&
-        error.response?.headers?.['content-type'] === 'application/json'
-      ) {
+    (error) => {
+      const contentTypeHeader = error.response?.headers?.['content-type'] || ''
+      const isJsonError = contentTypeHeader.includes('application/json')
+
+      if (isJsonError && error.response?.data) {
         const newError = { response: { data: {} } }
-        newError.response.data = humps.camelizeKeys(error.response.data)
+        newError.response.data = camelizeResponseDataKeys
+          ? humps.camelizeKeys(error.response.data)
+          : error.response.data
 
         return Promise.reject(newError)
       }
+
       return Promise.reject(error)
     },
   )
@@ -112,7 +139,6 @@ export const createAxiosInstance = ({
   return { axios: instance, requestInterceptorId, responseInterceptorId }
 }
 
-// we export the interceptors ids so it can easily ejected if needed
 export const { axios, requestInterceptorId, responseInterceptorId } = createAxiosInstance()
 
 export const {

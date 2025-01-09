@@ -5,6 +5,7 @@ import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
+import { getExpoConstant } from '../../expo'
 import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
 import { decodeJWT, getToken, isUserTokenValid, refreshAccessToken } from '../../token'
@@ -70,7 +71,7 @@ export const baseAppFetch: BaseAppFetch = async (
     accessKeyName = ACCESS_KEY_NAME,
     refreshKeyName = REFRESH_KEY_NAME,
     languageCookieName = LANGUAGE_COOKIE_NAME,
-    baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.EXPO_PUBLIC_API_BASE_URL,
+    baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
     servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
     params = {},
     decamelizeRequestBodyKeys = true,
@@ -84,13 +85,15 @@ export const baseAppFetch: BaseAppFetch = async (
     ...options
   } = {},
 ) => {
-  const url = `${baseUrl}${path}`
+  const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
+
+  const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
   const fetchOptions: RequestOptions = {
     ...options,
     headers: {
-      Accept: 'application/json',
+      Accept: 'application/json, text/plain, */*',
       ...options.headers,
     },
   }
@@ -135,7 +138,7 @@ export const baseAppFetch: BaseAppFetch = async (
   // set content-type header
   const methodsToSetContentType = ['POST', 'PUT', 'PATCH']
   if (setContentType && methodsToSetContentType.includes(fetchOptions.method || '')) {
-    fetchOptions.headers!['Content-Type'] = 'application/json'
+    fetchOptions.headers!['Content-Type'] = 'application/json; charset=utf-8'
   }
 
   let fetchUrl = url

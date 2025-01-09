@@ -38,12 +38,8 @@ const createTestEnvironment = () => {
     queryName,
   }: QueueOperationResolverParams) => {
     try {
-      console.log('queueOperationResolver', mockResolvers, data, queryName)
       environment.mock.queueOperationResolver((operationToResolve) => {
-        console.log('AOPS', operationToResolve)
         if (mockResolvers) {
-          console.log('mockResolvers', mockResolvers)
-
           return MockPayloadGenerator.generate(operationToResolve, mockResolvers)
         }
 
@@ -56,6 +52,7 @@ const createTestEnvironment = () => {
         }
 
         console.warn('The operation was not mocked.')
+
         return null
       })
     } catch (e) {

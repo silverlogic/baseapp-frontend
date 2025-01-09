@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.0.6
+
+### Patch Changes
+
+- Add `expo` and `react-native` mock files.
+
 ## 2.0.5
 
 ### Patch Changes

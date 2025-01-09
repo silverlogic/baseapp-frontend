@@ -19,7 +19,8 @@ module.exports = {
       '<rootDir>/__mocks__/fileMock.ts',
     '\\.(css|less)$': '<rootDir>/__mocks__/styleMock.ts',
     'next/font/google': '<rootDir>/__mocks__/nextFontMock.ts',
-    'expo-secure-store': '<rootDir>/__mocks__/expoSecureStoreMock.ts',
+    '^expo.*$': '<rootDir>/__mocks__/expo.ts',
+    'react-native': '<rootDir>/__mocks__/react-native.ts',
   },
   transformIgnorePatterns: [
     '/node_modules/(?!(@testing-library|@baseapp-frontend|expo-secure-store)/)',

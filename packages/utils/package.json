@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -16,7 +16,8 @@
   "dependencies": {
     "axios": "catalog:",
     "events": "^3.3.0",
-    "expo-secure-store": "^13.0.2",
+    "expo-constants": "catalog:react-native-core",
+    "expo-secure-store": "catalog:react-native-core",
     "humps": "^2.0.1",
     "js-cookie": "catalog:",
     "jwt-decode": "^4.0.0",
@@ -25,6 +26,7 @@
     "next": "catalog:",
     "qs": "^6.12.1",
     "react-hook-form": "catalog:",
+    "react-native": "catalog:react-native-core",
     "server-only": "^0.0.1",
     "zustand": "catalog:"
   },

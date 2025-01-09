@@ -6,6 +6,7 @@ import { getItemAsync } from 'expo-secure-store'
 import { getTokenAsync } from '..'
 import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
 import { getCookieAsync } from '../../../cookie'
+import { isMobilePlatform } from '../../../os'
 
 const serverCookieValue = 'server-value'
 
@@ -17,12 +18,16 @@ jest.mock('../../../cookie', () => ({
   getCookieAsync: jest.fn(),
 }))
 
+jest.mock('../../../os', () => ({
+  isMobilePlatform: jest.fn(),
+}))
+
 describe('getTokenAsync function on the server', () => {
   const accessKeyName = ACCESS_KEY_NAME
 
   beforeEach(() => {
     jest.clearAllMocks()
-    process.env.EXPO_PUBLIC_PLATFORM = undefined // Ensure we're not in a mobile environment
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false) // Simulate server environment
   })
 
   it('retrieves a server-side cookie using getCookieAsync', async () => {

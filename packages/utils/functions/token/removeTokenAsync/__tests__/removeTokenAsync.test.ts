@@ -2,6 +2,7 @@ import { deleteItemAsync } from 'expo-secure-store'
 
 import { removeTokenAsync } from '..'
 import { removeCookie } from '../../../cookie'
+import { isMobilePlatform } from '../../../os'
 
 jest.mock('expo-secure-store', () => ({
   deleteItemAsync: jest.fn(),
@@ -9,6 +10,10 @@ jest.mock('expo-secure-store', () => ({
 
 jest.mock('../../../cookie', () => ({
   removeCookie: jest.fn(),
+}))
+
+jest.mock('../../../os', () => ({
+  isMobilePlatform: jest.fn(),
 }))
 
 describe('removeTokenAsync', () => {
@@ -19,7 +24,7 @@ describe('removeTokenAsync', () => {
   })
 
   it('should call deleteItemAsync on mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'mobile'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
 
     await removeTokenAsync(mockKey)
 
@@ -29,7 +34,7 @@ describe('removeTokenAsync', () => {
   })
 
   it('should call removeCookie on non-mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
 
     await removeTokenAsync(mockKey)
 
@@ -39,7 +44,7 @@ describe('removeTokenAsync', () => {
   })
 
   it('should not throw error when deleteItemAsync fails on mobile', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'mobile'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
     ;(deleteItemAsync as jest.Mock).mockImplementationOnce(async () => {
       throw new Error('SecureStore Error')
     })
@@ -51,7 +56,7 @@ describe('removeTokenAsync', () => {
   })
 
   it('should not throw error when removeCookie fails on non-mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     ;(removeCookie as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Cookie Error')
     })
