@@ -2,8 +2,6 @@
 
 import { useMemo } from 'react'
 
-import { useNotification } from '@baseapp-frontend/utils'
-
 import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
 
@@ -47,10 +45,10 @@ const useRoomListSubscription = ({
 }: {
   connections: string[]
   profileId: string
-  onRemoval?: () => void
+  onRemoval?: VoidFunction
+  isRemoval?: boolean
 }) => {
   const { id: selectedRoom, resetChatRoom } = useChatRoom()
-  const { sendToast } = useNotification()
 
   const config = useMemo(() => {
     const wasRemovedFromChatRoom = (data: useRoomListSubscription$data | null | undefined) =>
@@ -94,9 +92,6 @@ const useRoomListSubscription = ({
             resetChatRoom()
           }
           onRemoval?.()
-          sendToast(`You were removed from ${data?.chatRoomOnRoomUpdate?.room?.node?.title}`, {
-            type: 'info',
-          })
         }
       },
     }
