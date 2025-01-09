@@ -16,6 +16,7 @@ import { useFragment } from 'react-relay'
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import AdminOptionsMenu from './AdminOptionsMenu'
+import MemberOptionsMenu from './MemeberOptionsMenu'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
@@ -34,10 +35,41 @@ const ProfileCard: FC<ProfileCardProps> = ({
   const showMenu = hasAdminPermissions
   const { currentProfile } = useCurrentProfile()
   const popover = usePopover()
+  const isMe = currentProfile?.id === id
 
   const handleRemoveClicked = () => {
     popover.onClose()
     initiateRemoval(id, name)
+  }
+
+  const renderMenuItems = () => {
+    if (isMe) {
+      return (
+        <MemberOptionsMenu
+          isMe={isMe}
+          onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
+          onRemoveClicked={handleRemoveClicked}
+        />
+      )
+    }
+
+    if (!isMe && hasAdminPermissions) {
+      return (
+        <AdminOptionsMenu
+          onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
+          onToggleAdminClicked={popover.onClose /* TODO: Add functionality */}
+          onRemoveClicked={handleRemoveClicked}
+        />
+      )
+    }
+
+    return (
+      <MemberOptionsMenu
+        isMe={isMe}
+        onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
+        onRemoveClicked={handleRemoveClicked}
+      />
+    )
   }
 
   return (
@@ -83,12 +115,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
             <ThreeDotsIcon sx={{ fontSize: '24px' }} />
           </IconButton>
           <Popover open={popover.open} onClose={popover.onClose}>
-            <AdminOptionsMenu
-              isAdmin={showAdminLabel}
-              isMe={id === currentProfile?.id}
-              onToggleAdminClicked={popover.onClose /* TODO: Add functionality */}
-              onRemoveClicked={handleRemoveClicked}
-            />
+            {renderMenuItems()}
           </Popover>
         </Box>
       ) : (

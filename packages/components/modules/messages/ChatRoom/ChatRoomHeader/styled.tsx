@@ -22,7 +22,7 @@ export const ChatTitleContainer = styled(Box)<ChatTitleContainerProps>(
     alignItems: 'center',
     display: 'grid',
     gap: theme.spacing(1.5),
-    gridTemplateColumns: 'min-content 1fr',
+    gridTemplateColumns: 'min-content 1fr min-content',
     height: '56px',
     padding: 0,
     width: '100%',
