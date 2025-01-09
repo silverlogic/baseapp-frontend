@@ -329,6 +329,7 @@ export interface GetPasswordResetResponse {
 export interface ResetPasswordRequest {
   key: string
   password: string
+  passwordConfirmation: string
 }
 
 export interface SignUpRequest {

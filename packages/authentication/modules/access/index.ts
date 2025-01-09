@@ -57,3 +57,9 @@ export type * from './useRecoverPassword/types'
 
 export { default as useResetPassword } from './useResetPassword'
 export type * from './useResetPassword/types'
+
+export { default as useAllAuthRequestPassword } from './useAllAuthRequestPassword'
+export type * from './useAllAuthRequestPassword/types'
+
+export { default as useAllAuthResetPassword } from './useAllAuthResetPassword'
+export type * from './useAllAuthResetPassword/types'
