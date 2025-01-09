@@ -1,5 +1,5 @@
 export interface GroupDetailsHeaderProps {
-  onBackButtonClicked: () => void
-  onEditButtonClicked?: () => void
+  onBackButtonClicked: VoidFunction
+  onEditButtonClicked?: VoidFunction
   shouldDisplayEditButton: boolean
 }

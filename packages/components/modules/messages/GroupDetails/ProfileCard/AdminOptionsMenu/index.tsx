@@ -5,16 +5,18 @@ import { MenuItem, MenuList, Typography } from '@mui/material'
 import { AdminOptionsProps } from './types'
 
 const AdminOptionsMenu: FC<AdminOptionsProps> = ({
-  isAdmin,
-  isMe,
+  onViewProfileClicked,
   onToggleAdminClicked,
   onRemoveClicked,
 }) => (
   <MenuList>
-    <MenuItem onClick={onToggleAdminClicked} disabled={isMe}>
-      <Typography variant="body2">{isAdmin ? 'Make normal user' : 'Make Admin'}</Typography>
+    <MenuItem onClick={onViewProfileClicked}>
+      <Typography variant="body2">View Profile</Typography>
     </MenuItem>
-    <MenuItem onClick={onRemoveClicked} disabled={isMe}>
+    <MenuItem onClick={onToggleAdminClicked}>
+      <Typography variant="body2">Make Admin</Typography>
+    </MenuItem>
+    <MenuItem onClick={onRemoveClicked}>
       <Typography variant="body2" color="error">
         Remove
       </Typography>
