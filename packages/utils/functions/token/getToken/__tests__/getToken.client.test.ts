@@ -3,6 +3,7 @@ import { getItem } from 'expo-secure-store'
 import { getToken } from '..'
 import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
 import { getCookie } from '../../../cookie'
+import { isMobilePlatform } from '../../../os'
 
 const clientCookieValue = 'client-value'
 const mobileTokenValue = 'mobile-token-value'
@@ -15,6 +16,10 @@ jest.mock('../../../cookie', () => ({
   getCookie: jest.fn(),
 }))
 
+jest.mock('../../../os', () => ({
+  isMobilePlatform: jest.fn(),
+}))
+
 describe('getToken', () => {
   const accessKeyName = ACCESS_KEY_NAME
 
@@ -23,7 +28,7 @@ describe('getToken', () => {
   })
 
   it('should retrieve the token from SecureStore on mobile platform', () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'mobile'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
     ;(getItem as jest.Mock).mockReturnValue(mobileTokenValue)
 
     const result = getToken(accessKeyName)
@@ -34,7 +39,7 @@ describe('getToken', () => {
   })
 
   it('should retrieve the token using getCookie on non-mobile platform', () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     ;(getCookie as jest.Mock).mockReturnValue(clientCookieValue)
 
     const result = getToken(accessKeyName)
@@ -45,7 +50,7 @@ describe('getToken', () => {
   })
 
   it('should retrieve a client-side cookie using getCookie with noSSR option set to true', () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     ;(getCookie as jest.Mock).mockReturnValue(clientCookieValue)
 
     const result = getToken(accessKeyName, { noSSR: true })

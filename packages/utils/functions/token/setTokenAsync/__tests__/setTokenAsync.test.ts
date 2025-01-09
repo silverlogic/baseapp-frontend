@@ -2,6 +2,7 @@ import { setItemAsync } from 'expo-secure-store'
 
 import { setTokenAsync } from '..'
 import { setCookie } from '../../../cookie'
+import { isMobilePlatform } from '../../../os'
 
 jest.mock('expo-secure-store', () => ({
   setItemAsync: jest.fn(),
@@ -9,6 +10,10 @@ jest.mock('expo-secure-store', () => ({
 
 jest.mock('../../../cookie', () => ({
   setCookie: jest.fn(),
+}))
+
+jest.mock('../../../os', () => ({
+  isMobilePlatform: jest.fn(),
 }))
 
 describe('setTokenAsync', () => {
@@ -20,7 +25,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should call setItemAsync on mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'mobile'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
 
     await setTokenAsync(mockKey, mockValue)
 
@@ -31,7 +36,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should call setCookie on non-mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
 
     await setTokenAsync(mockKey, mockValue)
 
@@ -42,7 +47,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should not throw error when setItemAsync fails on mobile', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'mobile'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
     ;(setItemAsync as jest.Mock).mockImplementationOnce(async () => {
       throw new Error('SecureStore Error')
     })
@@ -54,7 +59,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should not throw error when setCookie fails on non-mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = undefined
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     ;(setCookie as jest.Mock).mockImplementationOnce(() => {
       throw new Error('Cookie Error')
     })
@@ -66,7 +71,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should call setCookie with the configuration object on non-mobile platform', async () => {
-    process.env.EXPO_PUBLIC_PLATFORM = 'web'
+    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     const mockConfig = { secure: true }
 
     await setTokenAsync(mockKey, mockValue, mockConfig)

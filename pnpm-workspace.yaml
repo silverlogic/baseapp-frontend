@@ -127,3 +127,7 @@ catalogs:
     prettier-plugin-tailwindcss: ^0.6.3
     prettier: ^3.3.3
 
+  react-native-core:
+    expo-constants: ~17.0.3
+    expo-secure-store: ~14.0.0
+    react-native: 0.76.3

@@ -1,5 +1,6 @@
 import { ACCESS_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
-import { decodeJWT, getTokenAsync } from '@baseapp-frontend/utils/functions/token'
+import { decodeJWT } from '@baseapp-frontend/utils/functions/token/decodeJWT'
+import { getTokenAsync } from '@baseapp-frontend/utils/functions/token/getTokenAsync'
 import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
 import type { User } from '../../../types/user'

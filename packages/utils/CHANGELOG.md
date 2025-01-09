@@ -1,5 +1,15 @@
 # @baseapp-frontend/utils
 
+## 3.1.0
+
+### Minor Changes
+
+- Update `createAxiosInstance` to achieve feature parity with `baseAppFetch` adding `decamelizeRequestBodyKeys`, `decamelizeRequestParamsKeys`, `camelizeResponseDataKeys`, `stringifyBody`, `setContentType`, `baseUrl` optional params.
+- `baseAppFetch` accept `text/plain, */*` by default, like axios do.
+- Replace `process.env.EXPO_PUBLIC_API_BASE_URL` usage with `getExpoConstant`.
+- Replace `process.env.EXPO_PUBLIC_PLATFORM` usage with `isMobilePlatform`.
+- Add `expo` and `react-native` mock files.
+
 ## 3.0.5
 
 ### Patch Changes

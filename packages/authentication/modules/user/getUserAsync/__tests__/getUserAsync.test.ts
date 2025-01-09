@@ -1,13 +1,16 @@
-import type { CookiesGetByNameFn } from '@baseapp-frontend/test'
-
-import Cookies from 'js-cookie'
+import { getTokenAsync } from '@baseapp-frontend/utils/functions/token/getTokenAsync'
 
 import getUserAsync from '../index'
 import jwt from './fixtures/jwt.json'
 
+jest.mock('@baseapp-frontend/utils/functions/token/getTokenAsync', () => ({
+  getTokenAsync: jest.fn(),
+}))
+
 describe('getUserAsync', () => {
-  it('should return the user from the JWT cookie', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => jwt.token)
+  it('should return the user from the JWT token', async () => {
+    ;(getTokenAsync as jest.Mock).mockReturnValue(jwt.token)
+
     const user = await getUserAsync()
 
     expect(user?.email).toBe('user@company.com')
@@ -15,8 +18,9 @@ describe('getUserAsync', () => {
     expect(user?.lastName).toBe('Doe')
   })
 
-  it('should return null if the JWT cookie is not set', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => undefined)
+  it('should return null if no token is set', async () => {
+    ;(getTokenAsync as jest.Mock).mockReturnValue(undefined)
+
     const user = await getUserAsync()
 
     expect(user).toBeNull()

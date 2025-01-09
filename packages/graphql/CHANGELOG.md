@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.2.0
+
+### Minor Changes
+
+- Replace `process.env.EXPO_PUBLIC_API_BASE_URL` and `EXPO_PUBLIC_WS_RELAY_ENDPOINT` usage with `getExpoConstant`.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.0
+
 ## 1.1.15
 
 ### Patch Changes

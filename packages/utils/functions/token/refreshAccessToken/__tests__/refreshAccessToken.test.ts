@@ -1,65 +1,77 @@
-import Cookies from 'js-cookie'
-
 import { refreshAccessToken } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../../constants/jwt'
-import { getAccessToken } from '../../getAccessToken'
-import { getToken } from '../../getToken'
-import { setTokenAsync } from '../../setTokenAsync'
 
-jest.mock('../../getAccessToken')
-jest.mock('../../getToken')
+jest.mock('../../getAccessToken', () => ({
+  getAccessToken: jest.fn(),
+}))
+
+jest.mock('../../getToken', () => ({
+  getToken: jest.fn(),
+}))
+
+jest.mock('../../setTokenAsync', () => ({
+  setTokenAsync: jest.fn(),
+}))
+
+jest.mock('../../removeTokenAsync', () => ({
+  removeTokenAsync: jest.fn(),
+}))
+
 jest.mock('js-cookie', () => ({
   set: jest.fn(),
   remove: jest.fn(),
 }))
 
-jest.mock('../../setTokenAsync')
-
 describe('refreshAccessToken', () => {
+  const mockGetAccessToken = require('../../getAccessToken').getAccessToken
+  const mockGetToken = require('../../getToken').getToken
+  const mockSetTokenAsync = require('../../setTokenAsync').setTokenAsync
+  const mockRemoveTokenAsync = require('../../removeTokenAsync').removeTokenAsync
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
   it('should refresh the access token and set it in cookies', async () => {
     const refreshToken = 'valid-refresh-token'
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue(refreshToken)
-
     const newAccessToken = 'new-access-token'
-    const getAccessTokenMock = getAccessToken as jest.Mock
-    getAccessTokenMock.mockResolvedValue(newAccessToken)
+
+    mockGetToken.mockReturnValue(refreshToken)
+    mockGetAccessToken.mockResolvedValue(newAccessToken)
 
     await refreshAccessToken()
 
-    expect(getToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
-    expect(getAccessToken).toHaveBeenCalledWith(refreshToken)
-    expect(setTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME, newAccessToken, {
+    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(mockSetTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME, newAccessToken, {
       secure: false,
     })
+    expect(mockRemoveTokenAsync).not.toHaveBeenCalled()
   })
 
   it('should remove tokens if refreshing the access token fails', async () => {
     const refreshToken = 'valid-refresh-token'
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue(refreshToken)
 
-    const getAccessTokenMock = getAccessToken as jest.Mock
-    getAccessTokenMock.mockRejectedValue(new Error('Failed to refresh token'))
+    mockGetToken.mockReturnValue(refreshToken)
+    mockGetAccessToken.mockRejectedValue(new Error('Failed to refresh token'))
 
     await expect(refreshAccessToken()).rejects.toThrow('Failed to refresh token')
-    expect(getToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
-    expect(getAccessToken).toHaveBeenCalledWith(refreshToken)
-    expect(Cookies.remove).toHaveBeenCalledWith(ACCESS_KEY_NAME)
-    expect(Cookies.remove).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+
+    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
+    expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(mockSetTokenAsync).not.toHaveBeenCalled()
   })
 
   it('should remove tokens if no refresh token is available', async () => {
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('')
+    mockGetToken.mockReturnValue('')
 
     await expect(refreshAccessToken()).rejects.toThrow()
-    expect(getToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
-    expect(Cookies.remove).toHaveBeenCalledWith(ACCESS_KEY_NAME)
-    expect(Cookies.remove).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+
+    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
+    expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(mockSetTokenAsync).not.toHaveBeenCalled()
   })
 })

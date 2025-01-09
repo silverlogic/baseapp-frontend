@@ -1,4 +1,5 @@
 import { type JWTResponse } from '../../../types/jwt'
+import { getExpoConstant } from '../../expo'
 
 export const getAccessToken = async (refreshToken: string) => {
   if (!refreshToken) {
@@ -6,8 +7,10 @@ export const getAccessToken = async (refreshToken: string) => {
   }
 
   try {
+    const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
+
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? process.env.EXPO_PUBLIC_API_BASE_URL}/auth/refresh`,
+      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? EXPO_PUBLIC_API_BASE_URL}/auth/refresh`,
       {
         method: 'POST',
         body: JSON.stringify({ refresh: refreshToken }),

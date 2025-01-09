@@ -1,24 +1,24 @@
-import type { CookiesGetByNameFn } from '@baseapp-frontend/test'
-
-import Cookies from 'js-cookie'
+import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
 import getUser from '../index'
 import jwt from './fixtures/jwt.json'
 
-describe('getUser', () => {
-  it('should return the user from the JWT cookie', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => jwt.token)
-    const user = getUser()
+jest.mock('@baseapp-frontend/utils/functions/token/getToken', () => ({
+  getToken: jest.fn(),
+}))
 
+describe('getUser', () => {
+  it('should return the user from the JWT token', () => {
+    ;(getToken as jest.Mock).mockReturnValue(jwt.token)
+    const user = getUser()
     expect(user?.email).toBe('user@company.com')
     expect(user?.firstName).toBe('John')
     expect(user?.lastName).toBe('Doe')
   })
 
-  it('should return null if the JWT cookie is not set', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => undefined)
+  it('should return null if no token is set', () => {
+    ;(getToken as jest.Mock).mockReturnValue(undefined)
     const user = getUser()
-
     expect(user).toBeNull()
   })
 })

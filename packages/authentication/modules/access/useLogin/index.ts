@@ -9,6 +9,7 @@ import {
   setFormApiErrors,
   setTokenAsync,
 } from '@baseapp-frontend/utils'
+import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
@@ -53,16 +54,21 @@ const useLogin = ({
     if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
       return
     }
-    const user = decodeJWT<User>(response.access)
-    if (user) {
-      // TODO: handle the absolute image path on the backend
-      const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
-      const absoluteImagePath = user?.profile?.image ? `${baseUrl}${user.profile.image}` : null
-      setCurrentProfile({
-        ...user.profile,
-        image: absoluteImagePath,
-      })
+
+    // TODO: adapt this flow to work with mobile
+    if (!isMobilePlatform()) {
+      const user = decodeJWT<User>(response.access)
+      if (user) {
+        // TODO: handle the absolute image path on the backend
+        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
+        const absoluteImagePath = user?.profile?.image ? `${baseUrl}${user.profile.image}` : null
+        setCurrentProfile({
+          ...user.profile,
+          image: absoluteImagePath,
+        })
+      }
     }
+
     await setTokenAsync(accessKeyName, response.access, {
       secure: process.env.NODE_ENV === 'production',
     })
@@ -91,8 +97,9 @@ const useLogin = ({
       if (isLoginMfaResponse(response)) {
         setMfaEphemeralToken(response.ephemeralToken)
       } else {
-        handleLoginSuccess(response)
+        await handleLoginSuccess(response)
       }
+      // onSuccess should only run after we successfully await the handleLoginSuccess (that sets the auth tokens asynchonously)
       loginOptions?.onSuccess?.(response, variables, context)
     },
   })

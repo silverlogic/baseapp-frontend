@@ -1,8 +1,15 @@
 # @baseapp-frontend/design-system
 
+## 0.0.29
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.0
+
 ## 0.0.28
 
-### Major Changes
+### Patch Changes
 
 - MDX documentation files added for several components
 
