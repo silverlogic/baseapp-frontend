@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.1.1
+
+### Patch Changes
+
+- Remove `getExpoConstant` from `preAuthenticateJWT` since it is being used on the web app middleware.
+
 ## 4.1.0
 
 ### Minor Changes
