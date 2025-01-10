@@ -11,7 +11,7 @@ export interface EditGroupTitleAndImageProps {
   watch: UseFormWatch<TitleAndImage>
 }
 
-interface TitleAndImage {
+export interface TitleAndImage {
   title: string
   image?: string | File | Blob | null
 }

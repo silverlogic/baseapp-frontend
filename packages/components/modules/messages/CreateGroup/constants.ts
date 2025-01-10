@@ -1,15 +1,17 @@
 import { z } from 'zod'
 
+import { TitleAndImage } from '../__shared__'
 import { CreateGroupUpload } from './types'
 
-export const FORM_VALUE: Record<keyof CreateGroupUpload, keyof CreateGroupUpload> = {
+export const FORM_VALUE: Record<keyof CreateGroupUpload, keyof CreateGroupUpload> &
+  Record<keyof TitleAndImage, keyof TitleAndImage> = {
   title: 'title',
   participants: 'participants',
   image: 'image',
 }
 
 export const DEFAULT_FORM_VALUES: CreateGroupUpload = {
-  title: '', // Why is this not [FORM_VALUE.title]: ''
+  title: '',
   participants: [],
   image: '',
 }

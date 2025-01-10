@@ -41,9 +41,6 @@ export const useCreateChatRoomMutation = (): [
         })
         setChatRoom({
           id: response?.chatRoomCreate?.room?.node?.id,
-          participants: response?.chatRoomCreate?.room?.node?.participants?.edges?.map(
-            (edge: any) => edge?.node?.id,
-          ),
         })
 
         config?.onCompleted?.(response, errors)

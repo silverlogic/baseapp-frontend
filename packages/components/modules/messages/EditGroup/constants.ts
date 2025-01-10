@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
+import { TitleAndImage } from '../__shared__'
 import { EditGroupUpload } from './types'
 
-export const FORM_VALUE: Record<keyof EditGroupUpload, keyof EditGroupUpload> = {
+export const FORM_VALUE: Record<keyof EditGroupUpload, keyof EditGroupUpload> &
+  Record<keyof TitleAndImage, keyof TitleAndImage> = {
   title: 'title',
   addParticipants: 'addParticipants',
   removeParticipants: 'removeParticipants',

@@ -120,7 +120,6 @@ const MessagesList: FC<MessagesListProps> = ({
       hasNext,
       room?.isGroup,
       firstUnreadMessageId,
-      room?.participants?.totalCount,
       MessagesGroup,
       MessagesGroupProps,
     ],

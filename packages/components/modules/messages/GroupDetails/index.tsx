@@ -87,7 +87,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
         <GroupHeaderContainer>
-          <CircledAvatar src={group?.image?.url} width={144} height={144} />
+          <CircledAvatar src={group?.image?.url} width={144} height={144} hasError={false} />
           <GroupTitleContainer>
             <Typography variant="subtitle1" color="text.primary">
               {group?.title}
