@@ -12,49 +12,59 @@ import { useFragment } from 'react-relay'
 
 import { useChatRoom } from '../../context'
 import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
-import { useNameAndAvatar } from '../../utils'
-import { ChatHeaderContainer } from './styled'
+import { getParticipantCountString, useNameAndAvatar } from '../../utils'
+import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
-import { getSubtitle } from './utils'
 
-const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({ roomHeaderRef }) => {
+const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
+  roomHeaderRef,
+  onDisplayGroupDetailsClicked,
+}) => {
   const roomHeader = useFragment(ChatRoomHeaderFragment, roomHeaderRef)
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
   const { title, avatar } = useNameAndAvatar(roomHeader)
-  const subtitle = getSubtitle(roomHeader)
+  const members = getParticipantCountString(roomHeader.participants?.totalCount)
+
   return (
     <ChatHeaderContainer>
       {isUpToMd ? (
         <div />
       ) : (
-        <IconButton
-          aria-label="return to chat room list"
-          onClick={resetChatRoom}
-          sx={{ maxWidth: 'fit-content' }}
-        >
-          <Iconify icon="eva:arrow-ios-back-fill" width={24} />
-        </IconButton>
+        <BackButtonContainer>
+          <IconButton
+            aria-label="return to chat room list"
+            onClick={resetChatRoom}
+            sx={{ maxWidth: 'fit-content' }}
+          >
+            <Iconify icon="eva:arrow-ios-back-fill" width={24} />
+          </IconButton>
+        </BackButtonContainer>
       )}
-      <AvatarWithPlaceholder
-        className="self-start justify-self-center"
-        width={32}
-        height={32}
-        src={avatar}
-        sx={{ border: 'none', alignSelf: 'center' }}
-      />
-      <Box>
-        <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
-          {title}
-        </Typography>
-        {subtitle && (
-          <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
-            {subtitle}
+      <ChatTitleContainer
+        onClick={roomHeader.isGroup ? onDisplayGroupDetailsClicked : undefined}
+        isClickable={roomHeader.isGroup}
+      >
+        <AvatarWithPlaceholder
+          className="self-start justify-self-center"
+          width={32}
+          height={32}
+          src={avatar}
+          sx={{ border: 'none', alignSelf: 'center' }}
+        />
+        <Box>
+          <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
+            {title}
           </Typography>
-        )}
-      </Box>
+          {roomHeader.isGroup && (
+            <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
+              {members}
+            </Typography>
+          )}
+        </Box>
+      </ChatTitleContainer>
     </ChatHeaderContainer>
   )
 }

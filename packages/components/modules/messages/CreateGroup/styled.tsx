@@ -17,14 +17,6 @@ export const HeaderContainer = styled(Box)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
 }))
 
-export const UploadProfileContainer = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateRows: '1fr min-content',
-  justifyContent: 'center',
-  gap: theme.spacing(2),
-  padding: theme.spacing(1.5),
-}))
-
 export const ProfilesContainer = styled(Box)(({ theme }) => ({
   height: '100%',
   width: '100%',

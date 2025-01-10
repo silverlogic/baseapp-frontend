@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<132c9b893bebbdd1686a37cce9ee0d0f>>
+ * @generated SignedSource<<4538f21a2c43f1393fe96f42f844c6a0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,30 +11,22 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type MessagesListFragment$data = {
-  readonly allMessages:
+export type MembersListFragment$data = {
+  readonly id: string
+  readonly participants:
     | {
         readonly edges: ReadonlyArray<
           | {
               readonly node:
                 | {
-                    readonly created: any
-                    readonly id: string
-                    readonly isRead: boolean | null | undefined
                     readonly profile:
                       | {
                           readonly id: string
-                          readonly image:
-                            | {
-                                readonly url: string
-                              }
-                            | null
-                            | undefined
-                          readonly name: string | null | undefined
+                          readonly ' $fragmentSpreads': FragmentRefs<'ProfileItemFragment'>
                         }
                       | null
                       | undefined
-                    readonly ' $fragmentSpreads': FragmentRefs<'MessageItemFragment'>
+                    readonly role: string | null | undefined
                   }
                 | null
                 | undefined
@@ -50,24 +42,15 @@ export type MessagesListFragment$data = {
       }
     | null
     | undefined
-  readonly id: string
-  readonly isGroup: boolean
-  readonly unreadMessages:
-    | {
-        readonly count: number
-        readonly markedUnread: boolean
-      }
-    | null
-    | undefined
-  readonly ' $fragmentType': 'MessagesListFragment'
+  readonly ' $fragmentType': 'MembersListFragment'
 }
-export type MessagesListFragment$key = {
-  readonly ' $data'?: MessagesListFragment$data
-  readonly ' $fragmentSpreads': FragmentRefs<'MessagesListFragment'>
+export type MembersListFragment$key = {
+  readonly ' $data'?: MembersListFragment$data
+  readonly ' $fragmentSpreads': FragmentRefs<'MembersListFragment'>
 }
 
 const node: ReaderFragment = (function () {
-  var v0 = ['allMessages'],
+  var v0 = ['participants'],
     v1 = {
       alias: null,
       args: null,
@@ -78,7 +61,7 @@ const node: ReaderFragment = (function () {
   return {
     argumentDefinitions: [
       {
-        defaultValue: 20,
+        defaultValue: 5,
         kind: 'LocalArgument',
         name: 'count',
       },
@@ -108,67 +91,28 @@ const node: ReaderFragment = (function () {
           path: v0 /*: any*/,
         },
         fragmentPathInResult: ['node'],
-        operation: require('./ChatRoomMessagesListPaginationQuery.graphql'),
+        operation: require('./ChatRoomParticipantsPaginationQuery.graphql'),
         identifierInfo: {
           identifierField: 'id',
           identifierQueryVariableName: 'id',
         },
       },
     },
-    name: 'MessagesListFragment',
+    name: 'MembersListFragment',
     selections: [
       v1 /*: any*/,
       {
-        alias: null,
+        alias: 'participants',
         args: null,
-        kind: 'ScalarField',
-        name: 'isGroup',
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
-        concreteType: 'UnreadMessageCount',
+        concreteType: 'ChatRoomParticipantConnection',
         kind: 'LinkedField',
-        name: 'unreadMessages',
+        name: '__ChatRoom_participants_connection',
         plural: false,
         selections: [
           {
             alias: null,
             args: null,
-            kind: 'ScalarField',
-            name: 'count',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'markedUnread',
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
-      },
-      {
-        alias: 'allMessages',
-        args: null,
-        concreteType: 'MessageConnection',
-        kind: 'LinkedField',
-        name: '__chatRoom_allMessages_connection',
-        plural: false,
-        selections: [
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'totalCount',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            concreteType: 'MessageEdge',
+            concreteType: 'ChatRoomParticipantEdge',
             kind: 'LinkedField',
             name: 'edges',
             plural: true,
@@ -176,19 +120,11 @@ const node: ReaderFragment = (function () {
               {
                 alias: null,
                 args: null,
-                concreteType: 'Message',
+                concreteType: 'ChatRoomParticipant',
                 kind: 'LinkedField',
                 name: 'node',
                 plural: false,
                 selections: [
-                  v1 /*: any*/,
-                  {
-                    alias: null,
-                    args: null,
-                    kind: 'ScalarField',
-                    name: 'created',
-                    storageKey: null,
-                  },
                   {
                     alias: null,
                     args: null,
@@ -199,40 +135,9 @@ const node: ReaderFragment = (function () {
                     selections: [
                       v1 /*: any*/,
                       {
-                        alias: null,
                         args: null,
-                        kind: 'ScalarField',
-                        name: 'name',
-                        storageKey: null,
-                      },
-                      {
-                        alias: null,
-                        args: [
-                          {
-                            kind: 'Literal',
-                            name: 'height',
-                            value: 32,
-                          },
-                          {
-                            kind: 'Literal',
-                            name: 'width',
-                            value: 32,
-                          },
-                        ],
-                        concreteType: 'File',
-                        kind: 'LinkedField',
-                        name: 'image',
-                        plural: false,
-                        selections: [
-                          {
-                            alias: null,
-                            args: null,
-                            kind: 'ScalarField',
-                            name: 'url',
-                            storageKey: null,
-                          },
-                        ],
-                        storageKey: 'image(height:32,width:32)',
+                        kind: 'FragmentSpread',
+                        name: 'ProfileItemFragment',
                       },
                     ],
                     storageKey: null,
@@ -241,13 +146,8 @@ const node: ReaderFragment = (function () {
                     alias: null,
                     args: null,
                     kind: 'ScalarField',
-                    name: 'isRead',
+                    name: 'role',
                     storageKey: null,
-                  },
-                  {
-                    args: null,
-                    kind: 'FragmentSpread',
-                    name: 'MessageItemFragment',
                   },
                   {
                     alias: null,
@@ -294,6 +194,13 @@ const node: ReaderFragment = (function () {
             ],
             storageKey: null,
           },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'totalCount',
+            storageKey: null,
+          },
         ],
         storageKey: null,
       },
@@ -303,6 +210,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '2101646ad6b90d900738f9b290616d98'
+;(node as any).hash = '4aad0edd43aec1e87daea42f647a59d3'
 
 export default node

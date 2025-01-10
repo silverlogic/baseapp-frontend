@@ -21,7 +21,7 @@ export const setFormRelayErrors = <T extends FieldValues>(
   if (errors?.length) {
     errors.forEach((error) => {
       const errorField = error?.field as Path<T> | undefined
-      if (errorField && !!form.getValues(errorField)) {
+      if (errorField && form.getValues(errorField) !== undefined) {
         form.setError(errorField, {
           type: 'custom',
           message: error?.messages.join(', '),

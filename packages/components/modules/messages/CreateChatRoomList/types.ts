@@ -1,4 +1,4 @@
-import { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 import { SearchbarProps } from '@baseapp-frontend/design-system'
 
@@ -14,6 +14,6 @@ export interface CreateChatRoomListProps extends PropsWithChildren {
   ChatRoomListItem?: FC<ChatRoomListItemProps>
   ChatRoomListItemProps?: Partial<ChatRoomListItemProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
-  setIsInExistingChatRoomsView: Dispatch<SetStateAction<boolean>>
-  setIsInGroupChatCreation: Dispatch<SetStateAction<boolean>>
+  onChatCreation: () => void
+  onGroupChatCreationButtonClicked: () => void
 }

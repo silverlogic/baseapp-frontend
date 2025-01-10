@@ -5,42 +5,27 @@ import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   CheckMarkIcon,
-  CircledAvatar,
   CloseIcon,
   Searchbar as DefaultSearchbar,
-  FileUploadButton,
   IconButton,
-  TextField,
 } from '@baseapp-frontend/design-system'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'relay-runtime'
 
 import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
+import { EditGroupTitleAndImage } from '../__shared__'
 import { useChatRoom } from '../context'
 import { useCreateChatRoomMutation } from '../graphql/mutations/CreateChatRoom'
 import { ProfileNode } from '../types'
 import DefaultConnectionsList from './ConnectionsList'
 import DefaultProfileCard from './ProfileCard'
-import {
-  DEFAULT_FORM_VALIDATION,
-  DEFAULT_FORM_VALUES,
-  DEFAULT_IMAGE_FORMATS,
-  DEFAULT_IMAGE_MAX_SIZE,
-  FORM_VALUE,
-} from './constants'
-import {
-  HeaderContainer,
-  ProfilesContainer,
-  SearchbarContainer,
-  UploadProfileContainer,
-} from './styled'
-import { CreatGroupUpload, CreateGroupProps } from './types'
-import { getImageUrl } from './utils'
+import { DEFAULT_FORM_VALIDATION, DEFAULT_FORM_VALUES, FORM_VALUE } from './constants'
+import { HeaderContainer, ProfilesContainer, SearchbarContainer } from './styled'
+import { CreateGroupProps, CreateGroupUpload } from './types'
 
 const CreateGroup: FC<CreateGroupProps> = ({
   allProfilesRef,
@@ -50,8 +35,8 @@ const CreateGroup: FC<CreateGroupProps> = ({
   SearchbarProps = {},
   ConnectionsList = DefaultConnectionsList,
   ConnectionsListProps = {},
-  setIsInGroupChatCreation,
-  setIsInExistingChatRoomsView,
+  onValidSubmission,
+  onBackButtonClicked,
 }) => {
   const theme = useTheme()
   const { sendToast } = useNotification()
@@ -81,7 +66,6 @@ const CreateGroup: FC<CreateGroupProps> = ({
     watch,
     getFieldState,
     clearErrors,
-    reset,
     handleSubmit,
     formState: { isValid, isDirty, dirtyFields },
     trigger,
@@ -92,15 +76,14 @@ const CreateGroup: FC<CreateGroupProps> = ({
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
   const { setChatRoom } = useChatRoom()
 
-  const onSubmit = handleSubmit((data: CreatGroupUpload) => {
+  const onSubmit = handleSubmit((data: CreateGroupUpload) => {
     const dirtyValues = filterDirtyValues({ values: data, dirtyFields })
     const { title, participants, image } = data
-    const participantsIds = participants.map((member) => member.id)
+    const participantsIds = (participants || []).map((member) => member.id)
     const uploadables: { image?: File | Blob } = {}
-    if ('image' in dirtyValues && image && typeof image !== 'string') {
+    if (FORM_VALUE.image in dirtyValues && image && typeof image !== 'string') {
       uploadables.image = image
     }
-
     commit({
       variables: {
         input: {
@@ -124,17 +107,11 @@ const CreateGroup: FC<CreateGroupProps> = ({
           setFormRelayErrors(formReturn, errors)
         } else {
           setChatRoom({ id: response?.chatRoomCreate?.room?.node?.id })
-          setIsInExistingChatRoomsView(true)
+          onValidSubmission()
         }
       },
     })
-    reset({}, { keepValues: true })
-    setIsInGroupChatCreation(false)
   })
-  const watchImage = watch(FORM_VALUE.image)
-  const imageUrl = getImageUrl(watchImage)
-  const remotePatternsHostName = process.env.NEXT_PUBLIC_REMOTE_PATTERNS_HOSTNAME || '' // To get this working in staging/prod, change NEXT_PUBLIC_REMOTE_PATTERNS_HOSTNAME to the media host being used (e.g.: digitalocean, aws, etc)
-  const hasUploadedImage = remotePatternsHostName && imageUrl.includes(remotePatternsHostName)
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value || ''
@@ -198,10 +175,10 @@ const CreateGroup: FC<CreateGroupProps> = ({
     )
   }
 
-  const handleRemoveImage = (type: keyof CreatGroupUpload) => {
-    clearErrors(type)
-    setValue(type, null, {
-      shouldValidate: false,
+  const handleRemoveImage = () => {
+    clearErrors(FORM_VALUE.image)
+    setValue(FORM_VALUE.image, null, {
+      shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
     })
@@ -213,12 +190,7 @@ const CreateGroup: FC<CreateGroupProps> = ({
     <>
       <Box>
         <HeaderContainer>
-          <IconButton
-            onClick={() => {
-              setIsInGroupChatCreation(false)
-            }}
-            aria-label="cancel group creation"
-          >
+          <IconButton onClick={onBackButtonClicked} aria-label="cancel group creation">
             <CloseIcon sx={{ fontSize: '24px' }} />
           </IconButton>
           <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
@@ -234,57 +206,16 @@ const CreateGroup: FC<CreateGroupProps> = ({
             <CheckMarkIcon sx={{ fontSize: '24px' }} />
           </IconButton>
         </HeaderContainer>
-        <Box
-          sx={{
-            display: 'grid',
-            gap: theme.spacing(1.5),
-            padding: theme.spacing(2),
-          }}
-        >
-          <UploadProfileContainer>
-            <CircledAvatar
-              src={imageUrl}
-              width={144}
-              height={144}
-              hasError={!!getFieldState('image').error}
-            />
-            {getFieldState('image').error && (
-              <div className="text-center">
-                <Typography color="error.main" variant="caption">
-                  {getFieldState('image').error!.message}
-                </Typography>
-              </div>
-            )}
-            <FileUploadButton
-              control={control}
-              name={FORM_VALUE.image}
-              setFile={setValue}
-              accept={DEFAULT_IMAGE_FORMATS}
-              maxSize={DEFAULT_IMAGE_MAX_SIZE}
-              label={hasUploadedImage ? 'Change Avatar' : 'Upload Avatar'}
-            />
-            {watchImage && (
-              <LoadingButton
-                variant="text"
-                color="error"
-                loading={isMutationInFlight}
-                disabled={isMutationInFlight}
-                onClick={() => handleRemoveImage(FORM_VALUE.image)}
-              >
-                Remove
-              </LoadingButton>
-            )}
-          </UploadProfileContainer>
-          <TextField
-            label="Group Name"
-            control={control}
-            name={FORM_VALUE.title}
-            className="h-[min-content]"
-            onKeyUp={() => {
-              trigger(FORM_VALUE.title)
-            }}
-          />
-        </Box>
+        <EditGroupTitleAndImage
+          control={control}
+          FORM_VALUE={FORM_VALUE}
+          handleRemoveImage={handleRemoveImage}
+          imageError={getFieldState(FORM_VALUE.image).error}
+          isMutationInFlight={isMutationInFlight}
+          setValue={setValue}
+          trigger={trigger}
+          watch={watch}
+        />
       </Box>
       <ProfilesContainer>
         <SearchbarContainer>

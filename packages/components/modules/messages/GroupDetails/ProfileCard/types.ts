@@ -1,6 +1,6 @@
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 
-export interface ChatRoomListItemProps {
+export interface ProfileCardProps {
   profile: ProfileItemFragment$key
-  onChatCreation: () => void
+  role: string | null | undefined
 }
