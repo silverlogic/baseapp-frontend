@@ -14,7 +14,7 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import AdminOptionsMenu from './AdminOptionsMenu'
-import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
+import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
@@ -59,7 +59,7 @@ const ProfileCard: FC<ProfileCardProps> = ({ hasAdminPermissions, profile: profi
             />
           )}
           <Typography variant="caption" color="primary.light">
-            {showAdminLabel && 'Admin'}
+            {showAdminLabel && ADMIN_LABEL}
           </Typography>
         </Box>
       </Box>

@@ -6,3 +6,5 @@ export const CHAT_ROOM_PARTICIPANT_ROLES = {
 } as const
 
 export type ChatRoomParticipantRoles = ValueOf<typeof CHAT_ROOM_PARTICIPANT_ROLES>
+
+export const ADMIN_LABEL = 'Admin'
