@@ -9,7 +9,7 @@ import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
 import { RoomsListFragment$key } from '../../../__generated__/RoomsListFragment.graphql'
-import SearchNotFoundState from '../SearchNotFoundState'
+import SearchNotFoundState from '../../__shared__/SearchNotFoundState'
 import { useChatRoom } from '../context'
 import { useRoomsList } from '../graphql/queries/RoomsList'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
