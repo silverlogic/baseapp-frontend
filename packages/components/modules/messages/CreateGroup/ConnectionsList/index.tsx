@@ -7,8 +7,8 @@ import { LoadingState } from '@baseapp-frontend/design-system'
 import { Box } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
+import DefaultSearchNotFoundState from '../../../__shared__/SearchNotFoundState'
 import DefaultEmptyProfilesListState from '../../EmptyProfilesListState'
-import DefaultSearchNotFoundState from '../../SearchNotFoundState'
 import { ConnectionsListProps } from './types'
 
 const ConnectionsList: FC<ConnectionsListProps> = ({
