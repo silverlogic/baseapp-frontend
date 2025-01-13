@@ -1,4 +1,4 @@
-import { Dispatch, FC, PropsWithChildren, SetStateAction } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 import { SearchbarProps } from '@baseapp-frontend/design-system'
 
@@ -14,12 +14,12 @@ export interface CreateGroupProps extends PropsWithChildren {
   ProfileCardProps?: Partial<ProfileCardProps>
   ConnectionsList?: FC<ConnectionsListProps>
   ConnectionsListProps?: Partial<ConnectionsListProps>
-  setIsInGroupChatCreation: Dispatch<SetStateAction<boolean>>
-  setIsInExistingChatRoomsView: Dispatch<SetStateAction<boolean>>
+  onValidSubmission: () => void
+  onBackButtonClicked: () => void
 }
 
-export interface CreatGroupUpload {
+export interface CreateGroupUpload {
   title: string
-  participants: any[]
+  participants?: any[]
   image?: string | File | Blob | null
 }

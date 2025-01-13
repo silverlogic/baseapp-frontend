@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4f19333933804219c017733361b7245d>>
+ * @generated SignedSource<<132c9b893bebbdd1686a37cce9ee0d0f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -52,12 +52,6 @@ export type MessagesListFragment$data = {
     | undefined
   readonly id: string
   readonly isGroup: boolean
-  readonly participants:
-    | {
-        readonly totalCount: number | null | undefined
-      }
-    | null
-    | undefined
   readonly unreadMessages:
     | {
         readonly count: number
@@ -79,13 +73,6 @@ const node: ReaderFragment = (function () {
       args: null,
       kind: 'ScalarField',
       name: 'id',
-      storageKey: null,
-    },
-    v2 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'totalCount',
       storageKey: null,
     }
   return {
@@ -134,16 +121,6 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
-        concreteType: 'ChatRoomParticipantConnection',
-        kind: 'LinkedField',
-        name: 'participants',
-        plural: false,
-        selections: [v2 /*: any*/],
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
         kind: 'ScalarField',
         name: 'isGroup',
         storageKey: null,
@@ -181,7 +158,13 @@ const node: ReaderFragment = (function () {
         name: '__chatRoom_allMessages_connection',
         plural: false,
         selections: [
-          v2 /*: any*/,
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'totalCount',
+            storageKey: null,
+          },
           {
             alias: null,
             args: null,
@@ -320,6 +303,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'b2b4de64aa6db0164832a66bf93d8992'
+;(node as any).hash = '2101646ad6b90d900738f9b290616d98'
 
 export default node

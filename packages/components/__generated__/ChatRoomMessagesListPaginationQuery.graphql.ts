@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bf96fcc9924a895878f2a68c4bc4188f>>
+ * @generated SignedSource<<dfe70f3899f37531693d6de2bedb5f5e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -68,14 +68,7 @@ const node: ConcreteRequest = (function () {
       name: 'id',
       storageKey: null,
     },
-    v4 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'totalCount',
-      storageKey: null,
-    },
-    v5 = [
+    v4 = [
       {
         kind: 'Variable',
         name: 'after',
@@ -147,16 +140,6 @@ const node: ConcreteRequest = (function () {
                 {
                   alias: null,
                   args: null,
-                  concreteType: 'ChatRoomParticipantConnection',
-                  kind: 'LinkedField',
-                  name: 'participants',
-                  plural: false,
-                  selections: [v4 /*: any*/],
-                  storageKey: null,
-                },
-                {
-                  alias: null,
-                  args: null,
                   kind: 'ScalarField',
                   name: 'isGroup',
                   storageKey: null,
@@ -189,13 +172,19 @@ const node: ConcreteRequest = (function () {
                 },
                 {
                   alias: null,
-                  args: v5 /*: any*/,
+                  args: v4 /*: any*/,
                   concreteType: 'MessageConnection',
                   kind: 'LinkedField',
                   name: 'allMessages',
                   plural: false,
                   selections: [
-                    v4 /*: any*/,
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'totalCount',
+                      storageKey: null,
+                    },
                     {
                       alias: null,
                       args: null,
@@ -357,7 +346,7 @@ const node: ConcreteRequest = (function () {
                 },
                 {
                   alias: null,
-                  args: v5 /*: any*/,
+                  args: v4 /*: any*/,
                   filters: null,
                   handle: 'connection',
                   key: 'chatRoom_allMessages',
@@ -374,16 +363,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '61e5e98a44d6c67b835e618645d03db0',
+      cacheID: 'f296a259a1d80db1209eb995234dcfed',
       id: null,
       metadata: {},
       name: 'ChatRoomMessagesListPaginationQuery',
       operationKind: 'query',
-      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  participants {\n    totalCount\n  }\n  isGroup\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  isGroup\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'b2b4de64aa6db0164832a66bf93d8992'
+;(node as any).hash = '2101646ad6b90d900738f9b290616d98'
 
 export default node

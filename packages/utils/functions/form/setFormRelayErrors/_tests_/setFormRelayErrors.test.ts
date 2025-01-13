@@ -11,7 +11,9 @@ describe('setFormRelayErrors', () => {
           ({
             name: 'John',
             age: 20,
-          }[fieldKey]),
+            image: null,
+            bio: '',
+          })[fieldKey],
       ),
       setError: jest.fn(),
     }
@@ -32,6 +34,23 @@ describe('setFormRelayErrors', () => {
     expect(mockForm.setError).toHaveBeenCalledWith('age', {
       type: 'custom',
       message: 'Age should be a number',
+    })
+  })
+
+  it('should set errors also for null or blank fields', () => {
+    mockErrors = [
+      { field: 'image', messages: ['Image is required'] },
+      { field: 'bio', messages: ['Bio may not be blank'] },
+    ]
+    setFormRelayErrors(mockForm, mockErrors)
+
+    expect(mockForm.setError).toHaveBeenCalledWith('image', {
+      type: 'custom',
+      message: 'Image is required',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('bio', {
+      type: 'custom',
+      message: 'Bio may not be blank',
     })
   })
 
