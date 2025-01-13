@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.1
+
+### Patch Changes
+
+- Display form relay errors also on null and blank fields
+
 ## 3.1.0
 
 ### Minor Changes

@@ -11,18 +11,6 @@ export const CreateChatRoomMutationQuery = graphql`
       room @prependEdge(connections: $connections) {
         node {
           id
-          isGroup
-          title
-          image(width: 100, height: 100) {
-            url
-          }
-          participants {
-            edges {
-              node {
-                id
-              }
-            }
-          }
           ...RoomFragment
         }
       }
@@ -53,9 +41,6 @@ export const useCreateChatRoomMutation = (): [
         })
         setChatRoom({
           id: response?.chatRoomCreate?.room?.node?.id,
-          participants: response?.chatRoomCreate?.room?.node?.participants?.edges?.map(
-            (edge: any) => edge?.node?.id,
-          ),
         })
 
         config?.onCompleted?.(response, errors)
