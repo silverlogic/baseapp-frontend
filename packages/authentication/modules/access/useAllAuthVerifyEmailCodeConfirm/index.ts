@@ -22,6 +22,7 @@ const useAllAuthVerifyEmailCodeConfirm = ({
   accessKeyName = ACCESS_KEY_NAME,
   refreshKeyName = REFRESH_KEY_NAME,
   enableFormApiErrors = true,
+  resendCode = false,
 }: UseAllAuthVerifyEmailCodeConfirm) => {
   async function handleSuccess(sessionInfo: AllAuthTypes.SessionInfo) {
     if (sessionInfo.response.status === 200 && sessionInfo.response.data.meta.isAuthenticated) {
@@ -43,7 +44,12 @@ const useAllAuthVerifyEmailCodeConfirm = ({
   })
 
   const mutation = useMutation({
-    mutationFn: (data: AllAuthTypes.VerifyEmailRequest) => AllAuthApi.verifyEmail(data),
+    mutationFn: (data: AllAuthTypes.VerifyEmailRequest) => {
+      if (resendCode) {
+        return AllAuthApi.confirmLoginEmailCode({ code: data.key })
+      }
+      return AllAuthApi.verifyEmail(data)
+    },
     ...mutationOptions, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       mutationOptions?.onError?.(err, variables, context)

@@ -9,39 +9,32 @@ import { useForm } from 'react-hook-form'
 import AllAuthApi from '../../../services/allAuth'
 import * as AllAuthTypes from '../../../types/allAuth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import type { UseAllAuthSignUp } from './types'
+import type { UseAllAuthRequestPassword } from './types'
 
-const useAllAuthSignUp = ({
+const useAllAuthRequestPassword = ({
   formOptions = {},
   mutationOptions = {},
   enableFormApiErrors = true,
-  referralCode,
-}: UseAllAuthSignUp) => {
+}: UseAllAuthRequestPassword) => {
   const form = useForm({
     defaultValues: DEFAULT_INITIAL_VALUES,
     resolver: zodResolver(DEFAULT_VALIDATION_SCHEMA),
     mode: 'onChange',
     ...formOptions,
   })
+
   const mutation = useMutation({
-    mutationFn: (data: AllAuthTypes.SignUpRequest) => AllAuthApi.signUp({ ...data, referralCode }),
+    mutationFn: (data: AllAuthTypes.RequestPasswordResetRequest) =>
+      AllAuthApi.requestPasswordReset(data),
     ...mutationOptions, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
-      mutationOptions?.onError?.(
-        err,
-        { ...variables, email: form.getValues('email') as string },
-        context,
-      )
+      mutationOptions?.onError?.(err, variables, context)
       if (enableFormApiErrors) {
         setFormAllAuthApiErrors(form, err)
       }
     },
     onSuccess: async (response, variables, context) => {
-      mutationOptions?.onSuccess?.(
-        response,
-        { ...variables, email: form.getValues('email') as string },
-        context,
-      )
+      mutationOptions?.onSuccess?.(response, variables, context)
     },
   })
 
@@ -49,11 +42,11 @@ const useAllAuthSignUp = ({
     form: {
       ...form,
       handleSubmit: form.handleSubmit(async (values) => {
-        await mutation.mutateAsync(values as AllAuthTypes.SignUpRequest)
+        await mutation.mutateAsync(values as AllAuthTypes.RequestPasswordResetRequest)
       }) as any,
     },
     mutation,
   }
 }
 
-export default useAllAuthSignUp
+export default useAllAuthRequestPassword

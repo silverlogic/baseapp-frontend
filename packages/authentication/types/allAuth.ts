@@ -329,11 +329,15 @@ export interface GetPasswordResetResponse {
 export interface ResetPasswordRequest {
   key: string
   password: string
+  passwordConfirmation: string
 }
 
 export interface SignUpRequest {
   email: string
   password: string
+  firstName: string
+  lastName: string
+  referralCode?: string
 }
 
 export interface GetVerifyEmailInfoRequest {
