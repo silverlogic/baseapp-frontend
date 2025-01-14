@@ -18,7 +18,9 @@ import {
   UploadableMap,
   Variables,
 } from 'relay-runtime'
-import RelayDefaultHandlerProvider from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
+import RelayDefaultHandlerProvider, {
+  HandlerProvider,
+} from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
 const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
 
@@ -158,7 +160,7 @@ function handlerProvider(handle: string) {
     case 'connection':
       return ConnectionHandler
     default:
-      return RelayDefaultHandlerProvider(handle)
+      return (RelayDefaultHandlerProvider as unknown as HandlerProvider)(handle)
   }
 }
 

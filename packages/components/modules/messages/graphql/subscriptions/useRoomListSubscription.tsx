@@ -15,7 +15,7 @@ import { useChatRoom } from '../../context'
 import { getChatRoomConnections } from '../../utils'
 
 // isArchived is needed to bump the chatRoom up in the correct connection
-// title is used to toast room name is user was removed, without having to read in a fragment
+// title is used to toast room name if user was removed, without having to read in a fragment
 export const RoomListSubscriptionQuery = graphql`
   subscription useRoomListSubscription($profileId: ID!, $connections: [ID!]!) {
     chatRoomOnRoomUpdate(profileId: $profileId) {
