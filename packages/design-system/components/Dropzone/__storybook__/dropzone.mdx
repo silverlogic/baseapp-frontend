@@ -1,0 +1,82 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Dropzone/Dropzone" />
+
+# Component Documentation
+
+## Dropzone
+
+- **Purpose**: The Dropzone component is designed for uploading files, supporting drag-and-drop functionality with visual feedback for accepted and rejected files.
+- **Expected Behavior**: The component should accept files based on the `accept` prop, enforce file size limits via `maxFileSize`, and trigger callbacks such as `onSelect` for file selection, `onRemove` for file removal.
+
+## Use Cases
+
+- **Current Usage**:
+
+  - Used in the theme configuration to update the application logo.
+
+- **Potential Usage**:
+  - Can be integrated into a dashboard for bulk file uploads.
+  - Useful in applications requiring real-time file validations or preview.
+
+## Props
+
+- **accept** (object): Specifies the types of files allowed (e.g., `{ "image/svg+xml": [".svg"] }`).
+
+- **storedImg** (string): URL of a preloaded image to display as a preview.
+
+  - Default: `undefined`
+
+- **onSelect** (function): Callback triggered when a file is successfully selected.
+
+  - Parameters: `(imgString: string)`
+
+- **onRemove** (function): Callback triggered when a file is removed.
+
+  - Parameters: `()`
+
+- **actionText** (string): Text displayed on the upload button.
+
+  - Default: `'Upload Image'`
+
+- **maxFileSize** (number): Maximum allowed file size in MB.
+
+  - Default: `15`
+
+- **subTitle** (string): Subtext displayed within the Dropzone for additional information.
+
+  - Default: `'Max. File Size: 15MB'`
+
+- **InputProps** (object): Additional props passed to the `<input>` element.
+
+  - Default: `undefined`
+
+- **DropzoneOptions** (object): Configuration options for the Dropzone behavior. Full details of the available options can be found in the [react-dropzone documentation](https://react-dropzone.js.org/#src).
+  - Default: `{}`
+
+## Example Usage
+
+```javascript
+import Dropzone from './Dropzone'
+
+const MyDropzone = () => (
+  <Dropzone
+    accept={{ 'image/svg+xml': ['.svg'] }}
+    maxFileSize={15}
+    subTitle="Max. File Size: 15MB"
+    onSelect={(img) => console.log('Selected image:', img)}
+    onRemove={() => console.log('Image removed')}
+    actionText="Upload SVG"
+    DropzoneOptions={{
+      maxFiles: 3,
+      noDrag: false,
+      disabled: false,
+    }}
+    InputProps={{
+      'aria-label': 'Default logo dropzone',
+    }}
+  />
+)
+
+export default MyDropzone
+```
