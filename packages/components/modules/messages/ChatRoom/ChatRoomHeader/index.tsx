@@ -11,22 +11,23 @@ import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { useChatRoom } from '../../context'
-import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
+import { TitleFragment } from '../../graphql/fragments/Title'
 import { getParticipantCountString, useNameAndAvatar } from '../../utils'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
 
 const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
-  roomHeaderRef,
+  participantsCount,
+  roomTitleRef,
   onDisplayGroupDetailsClicked,
 }) => {
-  const roomHeader = useFragment(ChatRoomHeaderFragment, roomHeaderRef)
+  const roomHeader = useFragment(TitleFragment, roomTitleRef)
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
   const { title, avatar } = useNameAndAvatar(roomHeader)
-  const members = getParticipantCountString(roomHeader.participants?.totalCount)
+  const members = getParticipantCountString(participantsCount)
 
   return (
     <ChatHeaderContainer>

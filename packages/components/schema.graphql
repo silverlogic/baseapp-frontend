@@ -103,6 +103,7 @@ type ChatRoom implements Node {
   image(width: Int!, height: Int!): File
   lastMessage: Message
   lastMessageTime: DateTime
+  participantsCount: Int!
   isGroup: Boolean!
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
@@ -172,15 +173,16 @@ type ChatRoomOnNewMessage {
 
 type ChatRoomOnRoomUpdate {
   room: ChatRoomEdge
+  removedParticipants: [ChatRoomParticipant]
 }
 
 type ChatRoomParticipant implements Node {
   """The ID of the object"""
   id: ID!
   profile: Profile
+  role: ChatRoomParticipantRoles
   hasArchivedRoom: Boolean!
   pk: Int!
-  role: String
 }
 
 type ChatRoomParticipantConnection {
@@ -200,6 +202,15 @@ type ChatRoomParticipantEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""An enumeration."""
+enum ChatRoomParticipantRoles {
+  """member"""
+  MEMBER
+
+  """admin"""
+  ADMIN
 }
 
 input ChatRoomReadMessagesInput {
@@ -273,10 +284,10 @@ type ChatRoomUnreadPayload {
 input ChatRoomUpdateInput {
   roomId: ID!
   profileId: ID!
-  addParticipants: [ID]
-  deleteImage: Boolean
-  removeParticipants: [ID]
   title: String
+  deleteImage: Boolean = false
+  addParticipants: [ID] = []
+  removeParticipants: [ID] = []
   clientMutationId: String
 }
 
@@ -285,6 +296,7 @@ type ChatRoomUpdatePayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   room: ChatRoomEdge
+  removedParticipants: [ChatRoomParticipant]
   clientMutationId: String
 }
 
@@ -664,11 +676,11 @@ type Mutation {
   rateCreate(input: RateCreateInput!): RateCreatePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
+  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
-  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<079ffe5d4b40e76be8d5e7e152e4e441>>
+ * @generated SignedSource<<8af33bd4cbd98a8efc5eb4bdfbc354d1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,22 +13,11 @@ import { FragmentRefs } from 'relay-runtime'
 
 export type RoomFragment$data = {
   readonly id: string
-  readonly lastMessage:
-    | {
-        readonly content: string | null | undefined
-        readonly id: string
-      }
-    | null
-    | undefined
-  readonly lastMessageTime: any | null | undefined
-  readonly unreadMessages:
-    | {
-        readonly count: number
-        readonly markedUnread: boolean
-      }
-    | null
-    | undefined
-  readonly ' $fragmentSpreads': FragmentRefs<'ChatRoomHeaderFragment' | 'MessagesListFragment'>
+  readonly isGroup: boolean
+  readonly participantsCount: number
+  readonly ' $fragmentSpreads': FragmentRefs<
+    'LastMessageFragment' | 'MessagesListFragment' | 'TitleFragment' | 'UnreadMessagesCountFragment'
+  >
   readonly ' $fragmentType': 'RoomFragment'
 }
 export type RoomFragment$key = {
@@ -36,88 +25,58 @@ export type RoomFragment$key = {
   readonly ' $fragmentSpreads': FragmentRefs<'RoomFragment'>
 }
 
-const node: ReaderFragment = (function () {
-  var v0 = {
-    alias: null,
-    args: null,
-    kind: 'ScalarField',
-    name: 'id',
-    storageKey: null,
-  }
-  return {
-    argumentDefinitions: [],
-    kind: 'Fragment',
-    metadata: null,
-    name: 'RoomFragment',
-    selections: [
-      v0 /*: any*/,
-      {
-        alias: null,
-        args: null,
-        concreteType: 'UnreadMessageCount',
-        kind: 'LinkedField',
-        name: 'unreadMessages',
-        plural: false,
-        selections: [
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'count',
-            storageKey: null,
-          },
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'markedUnread',
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
-        kind: 'ScalarField',
-        name: 'lastMessageTime',
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
-        concreteType: 'Message',
-        kind: 'LinkedField',
-        name: 'lastMessage',
-        plural: false,
-        selections: [
-          v0 /*: any*/,
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'content',
-            storageKey: null,
-          },
-        ],
-        storageKey: null,
-      },
-      {
-        args: null,
-        kind: 'FragmentSpread',
-        name: 'ChatRoomHeaderFragment',
-      },
-      {
-        args: null,
-        kind: 'FragmentSpread',
-        name: 'MessagesListFragment',
-      },
-    ],
-    type: 'ChatRoom',
-    abstractKey: null,
-  }
-})()
+const node: ReaderFragment = {
+  argumentDefinitions: [],
+  kind: 'Fragment',
+  metadata: null,
+  name: 'RoomFragment',
+  selections: [
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'isGroup',
+      storageKey: null,
+    },
+    {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'participantsCount',
+      storageKey: null,
+    },
+    {
+      args: null,
+      kind: 'FragmentSpread',
+      name: 'LastMessageFragment',
+    },
+    {
+      args: null,
+      kind: 'FragmentSpread',
+      name: 'MessagesListFragment',
+    },
+    {
+      args: null,
+      kind: 'FragmentSpread',
+      name: 'TitleFragment',
+    },
+    {
+      args: null,
+      kind: 'FragmentSpread',
+      name: 'UnreadMessagesCountFragment',
+    },
+  ],
+  type: 'ChatRoom',
+  abstractKey: null,
+}
 
-;(node as any).hash = '07844e29548083b80a887e96cfddd508'
+;(node as any).hash = 'eaa59457c134fb1f7bad4797532926da'
 
 export default node

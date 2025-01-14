@@ -43,7 +43,8 @@ const ChatRoom: FC<ChatRoomProps> = ({
   return (
     <ChatRoomContainer>
       <ChatRoomHeader
-        roomHeaderRef={chatRoom}
+        participantsCount={chatRoom.participantsCount}
+        roomTitleRef={chatRoom}
         onDisplayGroupDetailsClicked={onDisplayGroupDetailsClicked}
       />
       <ChatBodyContainer>

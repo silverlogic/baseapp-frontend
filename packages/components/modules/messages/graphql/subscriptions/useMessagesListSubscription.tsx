@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 
-const newMessageSubscription = graphql`
+export const newMessageSubscription = graphql`
   subscription useMessagesListSubscription($roomId: ID!, $connections: [ID!]!) {
     chatRoomOnNewMessage(roomId: $roomId) {
       message @prependEdge(connections: $connections) {

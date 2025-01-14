@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5aa83cdec1d1f95ae9653aaf4fe87d36>>
+ * @generated SignedSource<<f3c79191ebfebbde0933c64f098645a7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 /* eslint-disable */
 // @ts-nocheck
 import { ConcreteRequest, Mutation } from 'relay-runtime'
+import { FragmentRefs } from 'relay-runtime'
 
 export type ChatRoomUnreadInput = {
   clientMutationId?: string | null | undefined
@@ -35,13 +36,7 @@ export type UnreadChatMutation$data = {
         readonly room:
           | {
               readonly id: string
-              readonly unreadMessages:
-                | {
-                    readonly count: number
-                    readonly markedUnread: boolean
-                  }
-                | null
-                | undefined
+              readonly ' $fragmentSpreads': FragmentRefs<'UnreadMessagesCountFragment'>
             }
           | null
           | undefined
@@ -77,20 +72,6 @@ const node: ConcreteRequest = (function () {
       storageKey: null,
     },
     v3 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'count',
-      storageKey: null,
-    },
-    v4 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'markedUnread',
-      storageKey: null,
-    },
-    v5 = {
       alias: null,
       args: null,
       concreteType: 'ErrorType',
@@ -140,19 +121,14 @@ const node: ConcreteRequest = (function () {
               selections: [
                 v2 /*: any*/,
                 {
-                  alias: null,
                   args: null,
-                  concreteType: 'UnreadMessageCount',
-                  kind: 'LinkedField',
-                  name: 'unreadMessages',
-                  plural: false,
-                  selections: [v3 /*: any*/, v4 /*: any*/],
-                  storageKey: null,
+                  kind: 'FragmentSpread',
+                  name: 'UnreadMessagesCountFragment',
                 },
               ],
               storageKey: null,
             },
-            v5 /*: any*/,
+            v3 /*: any*/,
           ],
           storageKey: null,
         },
@@ -190,29 +166,45 @@ const node: ConcreteRequest = (function () {
                   kind: 'LinkedField',
                   name: 'unreadMessages',
                   plural: false,
-                  selections: [v3 /*: any*/, v4 /*: any*/, v2 /*: any*/],
+                  selections: [
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'count',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'markedUnread',
+                      storageKey: null,
+                    },
+                    v2 /*: any*/,
+                  ],
                   storageKey: null,
                 },
               ],
               storageKey: null,
             },
-            v5 /*: any*/,
+            v3 /*: any*/,
           ],
           storageKey: null,
         },
       ],
     },
     params: {
-      cacheID: 'a95fee2710fb461b830252379ad489f5',
+      cacheID: 'b5c9682f04c174e181c522db06feb0a5',
       id: null,
       metadata: {},
       name: 'UnreadChatMutation',
       operationKind: 'mutation',
-      text: 'mutation UnreadChatMutation(\n  $input: ChatRoomUnreadInput!\n) {\n  chatRoomUnread(input: $input) {\n    room {\n      id\n      unreadMessages {\n        count\n        markedUnread\n        id\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n',
+      text: 'mutation UnreadChatMutation(\n  $input: ChatRoomUnreadInput!\n) {\n  chatRoomUnread(input: $input) {\n    room {\n      id\n      ...UnreadMessagesCountFragment\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment UnreadMessagesCountFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '82a5073d544e44997f36bec7b9547edc'
+;(node as any).hash = 'fb95629ed4c89ffb9689a72b91d6cefa'
 
 export default node

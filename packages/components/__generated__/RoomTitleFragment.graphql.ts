@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bf5092d967f02ebc32b57a55983ba6cb>>
+ * @generated SignedSource<<2cd670197e6d509befc2130de4f31474>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,15 +11,8 @@
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type ChatRoomHeaderFragment$data = {
+export type RoomTitleFragment$data = {
   readonly id: string
-  readonly image:
-    | {
-        readonly url: string
-      }
-    | null
-    | undefined
-  readonly isGroup: boolean
   readonly participants:
     | {
         readonly edges: ReadonlyArray<
@@ -46,40 +39,29 @@ export type ChatRoomHeaderFragment$data = {
           | null
           | undefined
         >
-        readonly totalCount: number | null | undefined
       }
     | null
     | undefined
-  readonly title: string | null | undefined
-  readonly ' $fragmentType': 'ChatRoomHeaderFragment'
+  readonly ' $fragmentType': 'RoomTitleFragment'
 }
-export type ChatRoomHeaderFragment$key = {
-  readonly ' $data'?: ChatRoomHeaderFragment$data
-  readonly ' $fragmentSpreads': FragmentRefs<'ChatRoomHeaderFragment'>
+export type RoomTitleFragment$key = {
+  readonly ' $data'?: RoomTitleFragment$data
+  readonly ' $fragmentSpreads': FragmentRefs<'RoomTitleFragment'>
 }
 
 const node: ReaderFragment = (function () {
   var v0 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
-    v1 = [
-      {
-        alias: null,
-        args: null,
-        kind: 'ScalarField',
-        name: 'url',
-        storageKey: null,
-      },
-    ]
+    alias: null,
+    args: null,
+    kind: 'ScalarField',
+    name: 'id',
+    storageKey: null,
+  }
   return {
     argumentDefinitions: [],
     kind: 'Fragment',
     metadata: null,
-    name: 'ChatRoomHeaderFragment',
+    name: 'RoomTitleFragment',
     selections: [
       v0 /*: any*/,
       {
@@ -87,43 +69,8 @@ const node: ReaderFragment = (function () {
         args: [
           {
             kind: 'Literal',
-            name: 'height',
-            value: 144,
-          },
-          {
-            kind: 'Literal',
-            name: 'width',
-            value: 144,
-          },
-        ],
-        concreteType: 'File',
-        kind: 'LinkedField',
-        name: 'image',
-        plural: false,
-        selections: v1 /*: any*/,
-        storageKey: 'image(height:144,width:144)',
-      },
-      {
-        alias: null,
-        args: null,
-        kind: 'ScalarField',
-        name: 'title',
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: null,
-        kind: 'ScalarField',
-        name: 'isGroup',
-        storageKey: null,
-      },
-      {
-        alias: null,
-        args: [
-          {
-            kind: 'Literal',
             name: 'first',
-            value: 5,
+            value: 2,
           },
         ],
         concreteType: 'ChatRoomParticipantConnection',
@@ -131,13 +78,6 @@ const node: ReaderFragment = (function () {
         name: 'participants',
         plural: false,
         selections: [
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'totalCount',
-            storageKey: null,
-          },
           {
             alias: null,
             args: null,
@@ -188,7 +128,15 @@ const node: ReaderFragment = (function () {
                         kind: 'LinkedField',
                         name: 'image',
                         plural: false,
-                        selections: v1 /*: any*/,
+                        selections: [
+                          {
+                            alias: null,
+                            args: null,
+                            kind: 'ScalarField',
+                            name: 'url',
+                            storageKey: null,
+                          },
+                        ],
                         storageKey: 'image(height:100,width:100)',
                       },
                     ],
@@ -201,7 +149,7 @@ const node: ReaderFragment = (function () {
             storageKey: null,
           },
         ],
-        storageKey: 'participants(first:5)',
+        storageKey: 'participants(first:2)',
       },
     ],
     type: 'ChatRoom',
@@ -209,6 +157,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'aefc48a15953094b0593795e3ce5ba37'
+;(node as any).hash = '89160f172288e6c8c11de9207b13170b'
 
 export default node

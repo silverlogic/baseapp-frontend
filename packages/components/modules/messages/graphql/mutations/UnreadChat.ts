@@ -9,10 +9,7 @@ export const UnreadChatMutationQuery = graphql`
     chatRoomUnread(input: $input) {
       room {
         id
-        unreadMessages {
-          count
-          markedUnread
-        }
+        ...UnreadMessagesCountFragment
       }
       errors {
         field

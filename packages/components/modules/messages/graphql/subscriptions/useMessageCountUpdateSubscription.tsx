@@ -4,6 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
 import { graphql, useSubscription } from 'react-relay'
 
+// TODO: check if this is used and delete
 const MessageCountUpdateSubscription = graphql`
   subscription useMessageCountUpdateSubscription($profileId: ID!) {
     chatRoomOnMessagesCountUpdate(profileId: $profileId) {

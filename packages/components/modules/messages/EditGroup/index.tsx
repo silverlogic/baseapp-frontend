@@ -15,16 +15,27 @@ import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated
 import { EditGroupTitleAndImage } from '../__shared__'
 import { useUpdateChatRoomMutation } from '../graphql/mutations/UpdateChatRoom'
 import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
+import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
+import { useGroupNameAndAvatar } from '../utils'
 import { DEFAULT_FORM_VALIDATION, FORM_VALUE, getDefaultFormValues } from './constants'
 import { HeaderContainer } from './styled'
 import { EditGroupProps } from './types'
 
-const EditGroup: FC<EditGroupProps> = ({ queryRef, roomId, onValidSubmission, onCancellation }) => {
+const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
+  profileId,
+  queryRef,
+  roomId,
+  onCancellation,
+  onRemovalFromGroup,
+  onValidSubmission,
+}) => {
   const { sendToast } = useNotification()
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
+  const { avatar, title } = useGroupNameAndAvatar(group)
+  useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
 
   const formReturn = useForm({
-    defaultValues: getDefaultFormValues(group?.title ? group.title : '', group?.image?.url),
+    defaultValues: getDefaultFormValues(title || '', avatar),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -39,8 +50,6 @@ const EditGroup: FC<EditGroupProps> = ({ queryRef, roomId, onValidSubmission, on
     handleSubmit,
     formState: { isValid, isDirty, dirtyFields },
   } = formReturn
-
-  const { currentProfile } = useCurrentProfile()
 
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
 
@@ -63,9 +72,10 @@ const EditGroup: FC<EditGroupProps> = ({ queryRef, roomId, onValidSubmission, on
       variables: {
         input: {
           roomId,
-          profileId: currentProfile?.id as string,
+          profileId,
           ...dirtyValues,
         },
+        connections: [],
       },
       uploadables,
       onCompleted: (response) => {
@@ -125,4 +135,12 @@ const EditGroup: FC<EditGroupProps> = ({ queryRef, roomId, onValidSubmission, on
   )
 }
 
-export default EditGroup
+const WrappedEditGroup: FC<EditGroupProps> = (props) => {
+  const { currentProfile } = useCurrentProfile()
+  if (!currentProfile?.id) {
+    return null
+  }
+  return <EditGroup profileId={currentProfile.id} {...props} />
+}
+
+export default WrappedEditGroup

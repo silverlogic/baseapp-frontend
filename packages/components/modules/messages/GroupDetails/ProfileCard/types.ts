@@ -1,7 +1,11 @@
-import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { MembersListFragment$data } from '../../../../__generated__/MembersListFragment.graphql'
+
+type GroupMembers = NonNullable<MembersListFragment$data['participants']>
+export type GroupMembersEdge = NonNullable<GroupMembers['edges'][number]>
+export type GroupMembersNode = NonNullable<GroupMembersEdge['node']>
 
 export interface ProfileCardProps {
+  groupMember: GroupMembersNode
   hasAdminPermissions: boolean
-  profile: ProfileItemFragment$key
-  role: string | null | undefined
+  initiateRemoval: (id: string, name: string | null | undefined) => void
 }

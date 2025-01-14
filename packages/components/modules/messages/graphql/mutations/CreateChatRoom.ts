@@ -5,13 +5,16 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { CreateChatRoomMutation } from '../../../../__generated__/CreateChatRoomMutation.graphql'
 import { useChatRoom } from '../../context'
 
+// node should be same as in RoomsList
 export const CreateChatRoomMutationQuery = graphql`
   mutation CreateChatRoomMutation($input: ChatRoomCreateInput!, $connections: [ID!]!) {
     chatRoomCreate(input: $input) {
       room @prependEdge(connections: $connections) {
         node {
           id
-          ...RoomFragment
+          ...LastMessageFragment
+          ...TitleFragment
+          ...UnreadMessagesCountFragment
         }
       }
       errors {

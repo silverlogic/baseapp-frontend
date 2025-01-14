@@ -5,7 +5,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
+import { MessageItemFragment } from '../../../graphql/fragments/MessageItem'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 

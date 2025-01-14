@@ -11,7 +11,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { RoomsListFragment$key } from '../../../__generated__/RoomsListFragment.graphql'
 import SearchNotFoundState from '../../__shared__/SearchNotFoundState'
 import { useChatRoom } from '../context'
-import { useRoomsList } from '../graphql/queries/RoomsList'
+import { useRoomsList } from '../graphql/fragments/RoomsList'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
 import DefaultChatRoomItem from './ChatRoomItem'
 import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
@@ -38,7 +38,6 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
-  const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -74,7 +73,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     [data?.chatRooms?.edges],
   )
 
-  useRoomListSubscription(data.id)
+  useRoomListSubscription({ profileId: data.id, connections: [] })
 
   const renderItem = useCallback(
     (room: ChatRoomNode) => {
@@ -87,13 +86,12 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
           handleClick={() => {
             setChatRoom({ id: room.id })
           }}
-          isInUnreadTab={isInUnreadTab}
           isInArchivedTab={isInArchivedTab}
           {...ChatRoomItemProps}
         />
       )
     },
-    [selectedRoom, setChatRoom, ChatRoomItemProps, ChatRoomItem, isInUnreadTab, isInArchivedTab],
+    [selectedRoom, setChatRoom, ChatRoomItemProps, ChatRoomItem, isInArchivedTab],
   )
 
   const renderLoadingState = () => {

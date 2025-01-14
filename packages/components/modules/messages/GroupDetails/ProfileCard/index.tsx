@@ -2,6 +2,7 @@
 
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   AvatarWithPlaceholder,
   Popover,
@@ -12,19 +13,32 @@ import {
 import { Box, IconButton, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import AdminOptionsMenu from './AdminOptionsMenu'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
-const ProfileCard: FC<ProfileCardProps> = ({ hasAdminPermissions, profile: profileRef, role }) => {
-  const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
+const ProfileCard: FC<ProfileCardProps> = ({
+  hasAdminPermissions,
+  groupMember,
+  initiateRemoval,
+}) => {
+  const { id, image, name, urlPath } = useFragment<ProfileItemFragment$key>(
+    ProfileItemFragment,
+    groupMember.profile!,
+  )
   const showUrlPath = !!urlPath?.path
-  const showAdminLabel = role === CHAT_ROOM_PARTICIPANT_ROLES.admin
+  const showAdminLabel = groupMember?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
   const showMenu = hasAdminPermissions
-
+  const { currentProfile } = useCurrentProfile()
   const popover = usePopover()
+
+  const handleRemoveClicked = () => {
+    popover.onClose()
+    initiateRemoval(id, name)
+  }
 
   return (
     <MainContainer key={`profile-${id}`}>
@@ -70,8 +84,10 @@ const ProfileCard: FC<ProfileCardProps> = ({ hasAdminPermissions, profile: profi
           </IconButton>
           <Popover open={popover.open} onClose={popover.onClose}>
             <AdminOptionsMenu
-              onMakeAdminClicked={popover.onClose /* TODO: Add functionality */}
-              onRemoveClicked={popover.onClose /* TODO: Add functionality */}
+              isAdmin={showAdminLabel}
+              isMe={id === currentProfile?.id}
+              onToggleAdminClicked={popover.onClose /* TODO: Add functionality */}
+              onRemoveClicked={handleRemoveClicked}
             />
           </Popover>
         </Box>

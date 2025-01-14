@@ -4,14 +4,20 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 
 import { UpdateChatRoomMutation } from '../../../../__generated__/UpdateChatRoomMutation.graphql'
 
+// node should be the same as in RoomsList
 export const UpdateChatRoomMutationQuery = graphql`
-  mutation UpdateChatRoomMutation($input: ChatRoomUpdateInput!) {
+  mutation UpdateChatRoomMutation($input: ChatRoomUpdateInput!, $connections: [ID!]!) {
     chatRoomUpdate(input: $input) {
       room {
         node {
           id
-          ...RoomFragment
+          ...LastMessageFragment
+          ...TitleFragment
+          ...UnreadMessagesCountFragment
         }
+      }
+      removedParticipants {
+        id @deleteEdge(connections: $connections)
       }
       errors {
         field

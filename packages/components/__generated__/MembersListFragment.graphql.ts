@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4538f21a2c43f1393fe96f42f844c6a0>>
+ * @generated SignedSource<<7f07ba9c3e069b0f8d6d3e0c80d4963f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,6 +11,8 @@
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
+export type ChatRoomParticipantRoles = 'ADMIN' | 'MEMBER' | '%future added value'
+
 export type MembersListFragment$data = {
   readonly id: string
   readonly participants:
@@ -19,6 +21,7 @@ export type MembersListFragment$data = {
           | {
               readonly node:
                 | {
+                    readonly id: string
                     readonly profile:
                       | {
                           readonly id: string
@@ -26,7 +29,7 @@ export type MembersListFragment$data = {
                         }
                       | null
                       | undefined
-                    readonly role: string | null | undefined
+                    readonly role: ChatRoomParticipantRoles | null | undefined
                   }
                 | null
                 | undefined
@@ -38,7 +41,6 @@ export type MembersListFragment$data = {
           readonly endCursor: string | null | undefined
           readonly hasNextPage: boolean
         }
-        readonly totalCount: number | null | undefined
       }
     | null
     | undefined
@@ -125,6 +127,7 @@ const node: ReaderFragment = (function () {
                 name: 'node',
                 plural: false,
                 selections: [
+                  v1 /*: any*/,
                   {
                     alias: null,
                     args: null,
@@ -194,13 +197,6 @@ const node: ReaderFragment = (function () {
             ],
             storageKey: null,
           },
-          {
-            alias: null,
-            args: null,
-            kind: 'ScalarField',
-            name: 'totalCount',
-            storageKey: null,
-          },
         ],
         storageKey: null,
       },
@@ -210,6 +206,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '4aad0edd43aec1e87daea42f647a59d3'
+;(node as any).hash = '49f7bb8685111dd9a1075b9147c84abb'
 
 export default node

@@ -18,6 +18,7 @@
     "isomorphic-ws": "catalog:graphql",
     "js-cookie": "catalog:",
     "react-relay": "catalog:graphql",
+    "relay-connection-handler-plus": "^0.1.2",
     "relay-runtime": "catalog:graphql",
     "relay-test-utils": "catalog:graphql"
   },
