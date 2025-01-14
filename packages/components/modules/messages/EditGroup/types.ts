@@ -8,8 +8,9 @@ export interface EditGroupProps extends PropsWithChildren {
   queryRef: PreloadedQuery<GroupDetailsQueryType>
   remotePatternsHostName?: string
   roomId: string | undefined
-  onValidSubmission: () => void
   onCancellation: () => void
+  onRemovalFromGroup: () => void
+  onValidSubmission: () => void
 }
 
 export interface EditGroupUpload {
