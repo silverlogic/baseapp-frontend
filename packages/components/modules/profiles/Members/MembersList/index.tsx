@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system'
 
@@ -20,11 +20,16 @@ const MembersList: FC<MemberListProps> = ({
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
   membersContainerHeight = 400,
+  searchQuery,
 }) => {
-  const { data, loadNext, hasNext, isLoadingNext } = usePaginationFragment(
+  const { data, loadNext, hasNext, isLoadingNext , refetch} = usePaginationFragment(
     UserMembersListFragment,
     userRef,
   )
+
+  useEffect(() => {
+    refetch({ q: searchQuery })
+  }, [searchQuery])
 
   const members = useMemo(
     () => data?.members?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
