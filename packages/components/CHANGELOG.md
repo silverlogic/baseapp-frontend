@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.48
+
+### Patch Changes
+
+- Chatroom search fixed
+
 ## 0.0.47
 
 ### Patch Changes
