@@ -19,7 +19,12 @@ import {
   useChatRoom,
   useNameAndAvatar,
 } from '../../../common'
+import { RoomTitleFragment$key } from '../../../../__generated__/RoomTitleFragment.graphql'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
+import { useChatRoom } from '../../context'
+import { RoomTitleFragment } from '../../graphql/fragments/RoomTitle'
+import { TitleFragment } from '../../graphql/fragments/Title'
+import { getParticipantCountString, useCheckIsAdmin, useNameAndAvatar } from '../../utils'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
@@ -33,15 +38,17 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
 }) => {
   const roomHeader = useFragment(TitleFragment, roomTitleRef)
   const [open, setOpen] = useState(false)
+  const { currentProfile } = useCurrentProfile()
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
   const { isGroup } = roomHeader
   const { title, avatar } = useNameAndAvatar(roomHeader)
+  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
+  const { isSoleAdmin } = useCheckIsAdmin(participants)
   const members = getParticipantCountString(participantsCount)
   const popover = usePopover()
-  const { currentProfile } = useCurrentProfile()
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
   const toggleArchiveChatroom = () => {
@@ -69,8 +76,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
       <LeaveGroupDialog
         open={open}
         onClose={() => setOpen(false)}
-        profileId={currentProfile?.id}
+        profileId={currentProfile?.id ?? ''}
         roomId={roomId}
+        removingParticipantId={currentProfile?.id ?? ''}
+        isSoleAdmin={isSoleAdmin}
       />
       <ChatHeaderContainer>
         {isUpToMd ? (

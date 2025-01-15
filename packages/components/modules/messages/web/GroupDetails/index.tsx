@@ -21,9 +21,12 @@ import {
   useRoomListSubscription,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
+import { MembersListFragment } from '../graphql/fragments/MembersList'
+import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
+import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
+import { getParticipantCountString, useCheckIsAdmin, useGroupNameAndAvatar } from '../utils'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
-import { CHAT_ROOM_PARTICIPANT_ROLES } from './ProfileCard/constants'
 import { GroupMembersEdge } from './ProfileCard/types'
 import { GroupHeaderContainer, GroupTitleContainer } from './styled'
 import { GroupDetailsProps } from './types'
@@ -57,9 +60,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const me = members?.edges.find((edge) => profileId && edge?.node?.profile?.id === profileId)
-  const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
-
+  const { isAdmin, isSoleAdmin } = useCheckIsAdmin(members)
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
 
@@ -123,19 +124,9 @@ const GroupDetails: FC<GroupDetailsProps> = ({
         profileId={profileId}
         roomId={group?.id}
         open={!!removingParticipantId}
-        removingParticipantId={removingParticipantId}
-        removingParticipantName={removingParticipantName.current}
+        removingParticipantId={removingParticipantId ?? ''}
         onClose={handleRemoveDialogClose}
-        title={
-          profileId === removingParticipantId
-            ? undefined
-            : `Remove ${removingParticipantName.current}?`
-        }
-        content={
-          profileId === removingParticipantId
-            ? undefined
-            : `Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`
-        }
+        isSoleAdmin={isSoleAdmin}
       />
       <GroupDetailsHeader
         onBackButtonClicked={onBackButtonClicked}
