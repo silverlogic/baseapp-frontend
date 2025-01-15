@@ -3,26 +3,50 @@
 import { FC } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system'
-import { useNotification } from '@baseapp-frontend/utils'
+import { ValueOf, useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
 import { ConnectionHandler } from 'react-relay'
 
 import { useUpdateChatRoomMutation } from '../../graphql/mutations/UpdateChatRoom'
+import {
+  LEAVE_GROUP_DIALOG_TEXT_COPY,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS,
+} from './constants'
 import { LeaveGroupDialogProps } from './types'
 
 const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
-  title = 'Leave group chat?',
-  content = 'You will stop receiving messages from this conversation and people will see that you left.',
+  customTitle,
+  customContent,
   onClose,
   open,
   profileId,
   removingParticipantId,
-  removingParticipantName,
   roomId,
+  isSoleAdmin = false,
 }) => {
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
   const { sendToast } = useNotification()
+
+  const getLeaveGroupDialogTextCopy = (
+    type: ValueOf<typeof LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS>,
+  ) => {
+    if (profileId === removingParticipantId) {
+      if (isSoleAdmin) {
+        return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
+          LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
+        ][type]
+      }
+      return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
+        LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.MEMBER
+      ][type]
+    }
+    return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_REMOVING][
+      LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
+    ][type]
+  }
 
   const onRemoveConfirmed = () => {
     if (!roomId || !profileId) return
@@ -31,7 +55,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
         input: {
           roomId,
           profileId,
-          removeParticipants: [removingParticipantId ?? profileId],
+          removeParticipants: [removingParticipantId],
         },
         connections: [ConnectionHandler.getConnectionID(roomId, 'ChatRoom_participants')],
       },
@@ -41,7 +65,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           removingParticipantId !== profileId &&
           !response?.chatRoomUpdate?.errors
         ) {
-          sendToast(`${removingParticipantName} was successfully removed`)
+          sendToast('Member was successfully removed')
         }
         onClose()
       },
@@ -53,8 +77,12 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
 
   return (
     <ConfirmDialog
-      title={title}
-      content={content}
+      title={
+        customTitle ?? getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE)
+      }
+      content={
+        customContent ?? getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)
+      }
       action={
         <LoadingButton
           color="error"
