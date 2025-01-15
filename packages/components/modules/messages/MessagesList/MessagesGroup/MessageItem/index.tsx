@@ -6,6 +6,7 @@ import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
+import { parseAndSanitize } from '../../../utils'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 
@@ -19,9 +20,14 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
       <Typography
         variant="body2"
         color={isOwnMessage ? 'text.primary' : 'primary.contrastText'}
-        sx={{ maxWidth: '100%', wordWrap: 'break-word' }}
+        sx={{
+          maxWidth: '100%',
+          whiteSpace: 'pre-wrap',
+          wordBreak: 'normal',
+          overflowWrap: 'anywhere',
+        }}
       >
-        {message?.content}
+        {message?.content && parseAndSanitize(message.content)}
       </Typography>
     </MessageItemContainer>
   )

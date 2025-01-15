@@ -1,0 +1,17 @@
+.ql-container,
+.ql-toolbar,
+.ql-editor,
+.ql-tooltip {
+  border: none !important;
+}
+
+.ql-editor {
+  @apply prose-body2 text-text-primary;
+  max-height: calc(1.5rem * 8);
+  overflow-y: auto;
+}
+
+.ql-bubble .ql-tooltip {
+  @apply bg-grey-900;
+  z-index: 9999;
+}

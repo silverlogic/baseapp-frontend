@@ -3,13 +3,15 @@
 import { FC } from 'react'
 
 import { Typography } from '@mui/material'
+import dynamic from 'next/dynamic'
 
 import { IconButton } from '../../buttons'
 import { CloseIcon, CommentReplyIcon } from '../../icons'
 import { TypographyWithEllipsis } from '../../typographies'
-import TextareaField from '../TextareaField'
 import { Container, OutsideReplyContainer, ReplyContainer } from './styled'
 import { SocialTextFieldProps } from './types'
+
+const RichTextEditor = dynamic(() => import('../QuillRichTextField'), { ssr: false })
 
 /**
  * This is a TextField component made for comments creation.
@@ -26,6 +28,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
   isReply,
   replyTargetName,
   onCancelReply,
+  TextField = RichTextEditor,
   ...props
 }) => (
   <Container>
@@ -47,7 +50,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
         </div>
       </OutsideReplyContainer>
     )}
-    <TextareaField {...props} />
+    <TextField {...props} />
     <div className="flex justify-between px-3 pb-3">{children}</div>
   </Container>
 )

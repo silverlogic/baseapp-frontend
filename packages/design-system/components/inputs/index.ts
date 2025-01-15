@@ -9,3 +9,6 @@ export { default as TextareaField } from './TextareaField'
 export { default as TextField } from './TextField'
 export * from './TextField'
 export type * from './TextField/types'
+
+export { default as QuillRichTextField } from './QuillRichTextField'
+export * from './QuillRichTextField/types'

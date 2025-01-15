@@ -3,6 +3,7 @@
 import { forwardRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { TextareaField } from '@baseapp-frontend/design-system'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -151,6 +152,9 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         onCancelReply={commentReply.resetCommentReply}
         SubmitActionsProps={{
           ariaLabel: 'create comment',
+        }}
+        SocialTextFieldProps={{
+          TextField: TextareaField,
         }}
         {...SocialInputProps}
       />

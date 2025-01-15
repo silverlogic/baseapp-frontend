@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<079ffe5d4b40e76be8d5e7e152e4e441>>
+ * @generated SignedSource<<e3a97717a5107aadae2e83006c85d953>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,7 @@ export type RoomFragment$data = {
   readonly lastMessage:
     | {
         readonly content: string | null | undefined
+        readonly contentPlainText: string | null | undefined
         readonly id: string
       }
     | null
@@ -99,6 +100,13 @@ const node: ReaderFragment = (function () {
             name: 'content',
             storageKey: null,
           },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'contentPlainText',
+            storageKey: null,
+          },
         ],
         storageKey: null,
       },
@@ -118,6 +126,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '07844e29548083b80a887e96cfddd508'
+;(node as any).hash = '8373f2e93afaf59aae879e71a2a0ba7b'
 
 export default node

@@ -48,7 +48,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const header = useFragment<ChatRoomHeaderFragment$key>(ChatRoomHeaderFragment, room)
   const { title, avatar } = useNameAndAvatar(header)
 
-  const lastMessage = room.lastMessage?.content
+  const lastMessage = room.lastMessage?.contentPlainText
   const { lastMessageTime } = room
 
   const hasUnreadMessages = room.unreadMessages?.markedUnread || !!room.unreadMessages?.count

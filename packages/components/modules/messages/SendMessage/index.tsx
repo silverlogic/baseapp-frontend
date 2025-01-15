@@ -124,6 +124,9 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         form={form}
         submit={onSubmit}
         isLoading={isMutationInFlight}
+        SocialTextFieldProps={{
+          key: roomId,
+        }}
         {...SocialInputProps}
       />
     )
