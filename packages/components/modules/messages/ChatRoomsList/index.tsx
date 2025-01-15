@@ -1,6 +1,15 @@
 'use client'
 
-import { ChangeEventHandler, FC, useCallback, useMemo, useState, useTransition } from 'react'
+import {
+  ChangeEventHandler,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react'
 
 import { Searchbar as DefaultSearchbar, LoadingState } from '@baseapp-frontend/design-system'
 
@@ -37,6 +46,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
 
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
+  const cursor = useRef<string | null | undefined>(null)
 
   const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
@@ -64,6 +74,12 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
     })
   }
 
+  useEffect(() => {
+    if (data?.chatRooms?.pageInfo?.endCursor) {
+      cursor.current = data.chatRooms.pageInfo.endCursor
+    }
+  }, [data?.chatRooms?.pageInfo?.endCursor])
+
   const handleChange = (event: React.SyntheticEvent, newTab: string) => {
     setTab(newTab as ChatTabValues)
     startRefetchTransition(() => {
@@ -72,6 +88,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
+          cursor: cursor.current,
         },
         { fetchPolicy: 'store-and-network' },
       )
