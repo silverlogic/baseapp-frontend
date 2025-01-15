@@ -11,6 +11,7 @@ export const RoomFragment = graphql`
     lastMessage {
       id
       content
+      contentPlainText
     }
     ...ChatRoomHeaderFragment
     ...MessagesListFragment

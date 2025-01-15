@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useRef } from 'react'
 
+import { TextareaField } from '@baseapp-frontend/design-system'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -142,6 +143,10 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         handleEditCancel,
         formId: 'comment-update',
         disabled: isMutationInFlight,
+      }}
+      SocialTextFieldProps={{
+        key: comment.id,
+        TextField: TextareaField,
       }}
       {...SocialInputProps}
     />

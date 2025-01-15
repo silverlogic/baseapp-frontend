@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4538f21a2c43f1393fe96f42f844c6a0>>
+ * @generated SignedSource<<f605021787a8820c58ac783cf41bd1f1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,8 @@
 // @ts-nocheck
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
+export type ChatRoomParticipantRoles = 'ADMIN' | 'MEMBER' | '%future added value'
 
 export type MembersListFragment$data = {
   readonly id: string
@@ -26,7 +28,7 @@ export type MembersListFragment$data = {
                         }
                       | null
                       | undefined
-                    readonly role: string | null | undefined
+                    readonly role: ChatRoomParticipantRoles | null | undefined
                   }
                 | null
                 | undefined

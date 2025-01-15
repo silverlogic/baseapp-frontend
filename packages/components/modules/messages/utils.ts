@@ -1,5 +1,8 @@
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
+import parse from 'html-react-parser'
+import DOMPurify from 'isomorphic-dompurify'
+
 import { ChatRoomHeaderFragment$data } from '../../__generated__/ChatRoomHeaderFragment.graphql'
 
 export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
@@ -23,6 +26,11 @@ export const useNameAndAvatar = (roomHeader: ChatRoomHeaderFragment$data) => {
     title: otherParticipant?.node?.profile?.name,
     avatar: otherParticipant?.node?.profile?.image?.url,
   }
+}
+
+export const parseAndSanitize = (html: string) => {
+  if (!html) return null
+  return parse(DOMPurify.sanitize(html, { USE_PROFILES: { html: true } }))
 }
 
 export const getParticipantCountString = (participantCount: number | null | undefined) => {

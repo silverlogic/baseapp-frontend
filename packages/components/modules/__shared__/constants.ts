@@ -15,5 +15,6 @@ export const SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA = z.object({
     .string()
     .trim()
     .min(1, { message: 'Must have at least one character' })
-    .max(1000, { message: 'Must have at most 1000 characters' }),
+    .max(1000, { message: 'Must have at most 1000 characters' })
+    .refine((value) => value !== '<p><br></p>' && value !== '', 'Must have at least one character'),
 })
