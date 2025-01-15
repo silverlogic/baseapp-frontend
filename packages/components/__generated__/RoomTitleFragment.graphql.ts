@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2cd670197e6d509befc2130de4f31474>>
+ * @generated SignedSource<<e7823541540a6846adb1bc1a5ce0c5a7>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,6 +10,8 @@
 // @ts-nocheck
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
+export type ChatRoomParticipantRoles = 'ADMIN' | 'MEMBER' | '%future added value'
 
 export type RoomTitleFragment$data = {
   readonly id: string
@@ -32,6 +34,7 @@ export type RoomTitleFragment$data = {
                         }
                       | null
                       | undefined
+                    readonly role: ChatRoomParticipantRoles | null | undefined
                   }
                 | null
                 | undefined
@@ -142,6 +145,13 @@ const node: ReaderFragment = (function () {
                     ],
                     storageKey: null,
                   },
+                  {
+                    alias: null,
+                    args: null,
+                    kind: 'ScalarField',
+                    name: 'role',
+                    storageKey: null,
+                  },
                 ],
                 storageKey: null,
               },
@@ -157,6 +167,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '89160f172288e6c8c11de9207b13170b'
+;(node as any).hash = '85a5bc01dc7b0a178da79ab086920f79'
 
 export default node

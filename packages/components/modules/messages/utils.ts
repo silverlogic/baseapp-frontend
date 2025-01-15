@@ -7,11 +7,17 @@ import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime
 import { GroupTitleFragment$key } from '../../__generated__/GroupTitleFragment.graphql'
 import { RoomTitleFragment$key } from '../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$data } from '../../__generated__/TitleFragment.graphql'
+import { CHAT_ROOM_PARTICIPANT_ROLES } from './__shared__/constants'
 import { GroupTitleFragment } from './graphql/fragments/GroupTitle'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 
-export const useGroupNameAndAvatar = (headerRef: GroupTitleFragment$key | null | undefined) => {
-  const header = useFragment<GroupTitleFragment$key>(GroupTitleFragment, headerRef)
+export const useGroupNameAndAvatar = (
+  headerRef: GroupTitleFragment$key | RoomTitleFragment$key | null | undefined,
+) => {
+  const header = useFragment<GroupTitleFragment$key>(
+    GroupTitleFragment,
+    headerRef as GroupTitleFragment$key,
+  )
   return {
     title: header?.title,
     avatar: header?.image?.url,
@@ -26,6 +32,7 @@ const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefine
       title: 'Error: No participants',
     }
   }
+
   const otherParticipant = header.participants.edges.find(
     (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
   )
@@ -59,4 +66,18 @@ export const getChatRoomConnections: (
     return ConnectionHandler.getConnections(storyRecord, 'roomsList_chatRooms', filter)
   }
   return []
+}
+
+export const useCheckIsAdmin = (participants: any) => {
+  const { currentProfile } = useCurrentProfile()
+  const me = participants?.edges?.find(
+    (edge: any) => edge?.node?.profile?.id === currentProfile?.id,
+  )
+  const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
+  const isSoleAdmin =
+    isAdmin &&
+    participants?.edges?.filter(
+      (edge: any) => edge?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin,
+    ).length === 1
+  return { isAdmin, isSoleAdmin }
 }

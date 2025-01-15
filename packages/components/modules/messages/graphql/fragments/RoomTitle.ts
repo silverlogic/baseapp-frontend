@@ -14,6 +14,7 @@ export const RoomTitleFragment = graphql`
               url
             }
           }
+          role
         }
       }
     }
