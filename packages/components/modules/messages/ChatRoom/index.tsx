@@ -46,6 +46,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
         participantsCount={chatRoom.participantsCount}
         roomTitleRef={chatRoom}
         onDisplayGroupDetailsClicked={onDisplayGroupDetailsClicked}
+        roomId={roomId}
       />
       <ChatBodyContainer>
         <MessagesList roomRef={chatRoom} {...MessagesListProps} />
