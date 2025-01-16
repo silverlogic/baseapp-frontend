@@ -15,11 +15,26 @@ type ActivityLog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+<<<<<<< HEAD
   user: User
   ipAddress: String
   verb: String
   visibility: VisibilityTypes
   url: String
+  pk: Int!
+  metadata: GenericScalar
+  events(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    createdFrom: Date
+    createdTo: Date
+    userPk: Decimal
+  ): NodeLogEventConnection
+  profile: Profile
+=======
   pk: Int!
   metadata: GenericScalar
   events(
