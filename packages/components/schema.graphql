@@ -9,6 +9,7 @@ type ActivityLog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+<<<<<<< HEAD
   user: User
   ipAddress: String
   verb: String
@@ -18,6 +19,17 @@ type ActivityLog implements Node {
   metadata: GenericScalar
   events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
   profile: Profile
+=======
+  pk: Int!
+  metadata: GenericScalar
+  events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
+  user: User
+  profile: Profile
+  visibility: VisibilityTypes
+  verb: String
+  ipAddress: String
+  url: String
+>>>>>>> 80b648a (fix: PR fixes)
 }
 
 type ActivityLogConnection {
@@ -352,7 +364,11 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+<<<<<<< HEAD
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+=======
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+>>>>>>> 80b648a (fix: PR fixes)
   pk: Int!
   target: CommentsInterface
 }
@@ -729,7 +745,11 @@ interface Node {
 }
 
 interface NodeActivityLogInterface {
+<<<<<<< HEAD
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+=======
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+>>>>>>> 80b648a (fix: PR fixes)
 }
 
 type NodeLogEvent implements Node {
@@ -1142,7 +1162,10 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
+<<<<<<< HEAD
   activitylogSet(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
+=======
+>>>>>>> 80b648a (fix: PR fixes)
   members(
     offset: Int
     before: String
@@ -1191,7 +1214,11 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
+<<<<<<< HEAD
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+=======
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+>>>>>>> 80b648a (fix: PR fixes)
   target: ProfileInterface
 }
 
