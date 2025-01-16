@@ -36,13 +36,14 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   const { currentProfile } = useCurrentProfile()
   const { avatar, title } = useGroupNameAndAvatar(group)
   const theme = useTheme()
+  const profileId = currentProfile?.id ?? ''
 
   const connections = group?.id
     ? [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')]
     : []
   // TODO: Is there a safer way to ensure the current profile id is not undefined?
   useRoomListSubscription({
-    profileId: currentProfile?.id!,
+    profileId,
     connections,
     onRemoval: onBackButtonClicked,
   })
@@ -52,9 +53,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const me = members?.edges.find(
-    (edge) => currentProfile?.id && edge?.node?.profile?.id === currentProfile?.id,
-  )
+  const me = members?.edges.find((edge) => profileId && edge?.node?.profile?.id === profileId)
   const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
 
   const renderLoadingState = () => {
@@ -81,45 +80,6 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     setRemovingParticipantId(undefined)
     removingParticipantName.current = undefined
   }
-
-  const onRemoveConfirmed = () => {
-    if (!group?.id || !currentProfile?.id) return
-    commit({
-      variables: {
-        input: {
-          roomId: group.id,
-          profileId: currentProfile?.id,
-          removeParticipants: [removingParticipantId],
-        },
-        connections: [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')],
-      },
-      onCompleted: (response) => {
-        if (!response?.chatRoomUpdate?.errors) {
-          sendToast(`${removingParticipantName.current} was successfully removed`)
-        }
-        handleRemoveDialogClose()
-      },
-    })
-  }
-
-  const renderDeleteDialog = () => (
-    <ConfirmDialog
-      title={`Remove ${removingParticipantName.current}?`}
-      content={`Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`}
-      action={
-        <LoadingButton
-          color="error"
-          onClick={onRemoveConfirmed}
-          disabled={isMutationInFlight}
-          loading={isMutationInFlight}
-        >
-          Remove
-        </LoadingButton>
-      }
-      onClose={handleRemoveDialogClose}
-      open={removingParticipantId !== undefined}
-    />
-  )
 
   const renderItem = (item: GroupMembersEdge) => {
     if (item.node) {
