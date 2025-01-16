@@ -88,10 +88,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             )}
           </Box>
           <Box>
-            <IconButton
-              onClick={(e) => onChatRoomOptionsClicked(e)}
-              aria-label="Show chatroom options"
-            >
+            <IconButton onClick={onChatRoomOptionsClicked} aria-label="Show chatroom options">
               <ThreeDotsIcon sx={{ fontSize: '24px' }} />
             </IconButton>
             <Popover
@@ -104,7 +101,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
               <ChatRoomOptions
                 onArchiveClicked={() => {}}
                 onDetailsClicked={() =>
-                  roomHeader.isGroup ? onDisplayGroupDetailsClicked : undefined
+                  roomHeader.isGroup ? onDisplayGroupDetailsClicked() : undefined
                 }
                 onLeaveClicked={() => setOpen(true)}
               />
