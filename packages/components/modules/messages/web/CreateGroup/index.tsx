@@ -1,39 +1,37 @@
 'use client'
 
-import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
+import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'relay-runtime'
 
 import { ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import { useChatRoom, useCreateChatRoomMutation } from '../../common'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
-import DefaultConnectionsList from './ConnectionsList'
-import DefaultProfileCard from './ProfileCard'
-import { DEFAULT_FORM_VALIDATION, DEFAULT_FORM_VALUES, FORM_VALUE } from './constants'
-import { HeaderContainer, ProfilesContainer, SearchbarContainer } from './styled'
-import { CreateGroupProps, CreateGroupUpload } from './types'
+import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
+import {
+  DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
+  DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
+  CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
+} from '../__shared__/constants'
+import { CreateOrEditGroup } from '../__shared__/types'
+import { HeaderContainer, ProfilesContainer } from './styled'
+import { CreateGroupProps } from './types'
 
 const CreateGroup: FC<CreateGroupProps> = ({
   allProfilesRef,
-  ProfileCard = DefaultProfileCard,
-  ProfileCardProps = {},
-  Searchbar = DefaultSearchbar,
-  SearchbarProps = {},
-  ConnectionsList = DefaultConnectionsList,
-  ConnectionsListProps = {},
+  GroupChatMembersList = DefaultGroupChatMembersList,
+  GroupChatMembersListProps = {},
   onValidSubmission,
   onBackButtonClicked,
 }) => {
-  const theme = useTheme()
   const { sendToast } = useNotification()
   const {
     data: { allProfiles },
@@ -42,12 +40,6 @@ const CreateGroup: FC<CreateGroupProps> = ({
     hasNext,
     refetch,
   } = useAllProfilesList(allProfilesRef)
-  const [isPending, startTransition] = useTransition()
-  const {
-    control: searchControl,
-    reset: searchReset,
-    watch: searchWatch,
-  } = useForm({ defaultValues: { search: '' } })
 
   const formReturn = useForm({
     defaultValues: DEFAULT_FORM_VALUES,
@@ -71,10 +63,10 @@ const CreateGroup: FC<CreateGroupProps> = ({
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
   const { setChatRoom } = useChatRoom()
 
-  const onSubmit = handleSubmit((data: CreateGroupUpload) => {
+  const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     const dirtyValues = filterDirtyValues({ values: data, dirtyFields })
     const { title, participants, image } = data
-    const participantsIds = (participants || []).map((member) => member.id)
+    const participantsIds = (participants || []).map((member: ProfileNode) => member?.id)
     const uploadables: { image?: File | Blob } = {}
     if (FORM_VALUE.image in dirtyValues && image && typeof image !== 'string') {
       uploadables.image = image
@@ -110,20 +102,6 @@ const CreateGroup: FC<CreateGroupProps> = ({
     })
   })
 
-  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value || ''
-    startTransition(() => {
-      refetch({ q: value })
-    })
-  }
-
-  const handleSearchClear = () => {
-    startTransition(() => {
-      searchReset()
-      refetch({ q: '' })
-    })
-  }
-
   const participants = watch(FORM_VALUE.participants) as ProfileNode[]
 
   const profiles = useMemo(
@@ -133,44 +111,11 @@ const CreateGroup: FC<CreateGroupProps> = ({
           (edge) =>
             edge?.node &&
             edge?.node.id !== currentProfile?.id &&
-            !participants.some((member) => member?.id === edge?.node?.id),
+            !participants.some((member: ProfileNode) => member?.id === edge?.node?.id),
         )
         .map((edge) => edge?.node) || [],
     [allProfiles, participants, currentProfile?.id],
   )
-
-  const handleAddMember = (profile: ProfileNode) => {
-    setValue(FORM_VALUE.participants, [...participants, profile], {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    })
-  }
-
-  const handleRemoveMember = (profile: ProfileNode) => {
-    setValue(
-      FORM_VALUE.participants,
-      participants.filter((member) => member?.id !== profile?.id),
-      {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true,
-      },
-    )
-  }
-
-  const renderItem = (profile: ProfileNode, isMember = false) => {
-    if (!profile) return null
-    return (
-      <ProfileCard
-        profile={profile}
-        handleAddMember={handleAddMember}
-        handleRemoveMember={handleRemoveMember}
-        isMember={isMember}
-        {...ProfileCardProps}
-      />
-    )
-  }
 
   const handleRemoveImage = () => {
     clearErrors(FORM_VALUE.image)
@@ -214,57 +159,19 @@ const CreateGroup: FC<CreateGroupProps> = ({
           watch={watch}
         />
       </Box>
-      <ProfilesContainer>
-        <SearchbarContainer>
-          <Searchbar
-            name="search"
-            onChange={handleSearchChange}
-            onClear={handleSearchClear}
-            control={searchControl}
-            isPending={isPending}
-            {...SearchbarProps}
-          />
-        </SearchbarContainer>
-        <Box height="100%" width="100%">
-          <Box role="list" aria-label="Selected group members">
-            <Typography
-              variant="subtitle2"
-              color="text.primary"
-              sx={{
-                padding: theme.spacing(2),
-                borderBottom: `1px solid ${theme.palette.divider}`,
-              }}
-            >
-              Members
-            </Typography>
-            <Box maxHeight={250} overflow="auto" sx={{ scrollbarWidth: 'none' }}>
-              {participants.map((member) => renderItem(member, true))}
-            </Box>
-          </Box>
-          <Box
-            role="list"
-            aria-label="Available contacts"
-            sx={{
-              padding: theme.spacing(2),
-              borderBottom: `1px solid ${theme.palette.divider}`,
-            }}
-          >
-            <Typography variant="subtitle2" color="text.primary">
-              Connections
-            </Typography>
-          </Box>
-          <ConnectionsList
-            profiles={profiles}
-            renderItem={renderItem}
-            loadNext={loadNext}
-            hasNext={hasNext}
-            isLoadingNext={isLoadingNext}
-            isPending={isPending}
-            searchValue={searchWatch('search')}
-            {...ConnectionsListProps}
-          />
-        </Box>
-      </ProfilesContainer>
+      <GroupChatMembersList
+        FORM_VALUE={FORM_VALUE}
+        setValue={setValue}
+        watch={watch}
+        currentParticipants={participants}
+        connections={profiles}
+        refetch={refetch}
+        connectionsLoadNext={loadNext}
+        connectionsHasNext={hasNext}
+        connectionsIsLoadingNext={isLoadingNext}
+        ProfilesContainer={ProfilesContainer}
+        {...GroupChatMembersListProps}
+      />
     </>
   )
 }

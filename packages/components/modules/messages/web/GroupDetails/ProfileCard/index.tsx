@@ -13,9 +13,9 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../../../profiles/common'
+import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import AdminOptionsMenu from './AdminOptionsMenu'
 import MemberOptionsMenu from './MemberOptionsMenu'
-import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
