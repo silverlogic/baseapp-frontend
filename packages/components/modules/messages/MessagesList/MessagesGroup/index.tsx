@@ -7,8 +7,9 @@ import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 import { Box, Divider, Typography, useTheme } from '@mui/material'
 import { DateTime } from 'luxon'
 
-import { MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME } from '../../constants'
+import { MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME, MESSAGE_TYPE } from '../../constants'
 import DefaultMessageItem from './MessageItem'
+import SystemMessage from './SystemMessage'
 import Timestamp from './Timestamp'
 import { DateGroupTypography } from './styled'
 import { MessagesGroupProps } from './types'
@@ -125,41 +126,47 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
     <Box display="flex" flexDirection="column" sx={{ paddingTop: 1 / 2, paddingRight: 2 }}>
       {renderUnreadMessagesDivider(messageIndex)}
       {renderDateOnTopOfMessagesGroup(messageIndex)}
-      <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}>
-        {canShowAvatar && (
-          <Box paddingRight="12px">
-            <AvatarWithPlaceholder
-              className="self-start justify-self-center"
-              width={32}
-              height={32}
-              src={message?.profile?.image?.url}
-              sx={{ border: 'none' }}
-            />
-          </Box>
-        )}
+      {message.messageType === MESSAGE_TYPE.system ? (
+        <SystemMessage messageRef={message} />
+      ) : (
         <Box
-          sx={{
-            display: 'flex',
-            ml: isFirstGroupedMessage ? 0 : 5.5,
-            alignSelf: flexAlignments,
-            alignItems: flexAlignments,
-            flexDirection: 'column',
-            width: '100%',
-          }}
+          sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}
         >
-          {canShowName && (
-            <Typography variant="subtitle2" color="text.primary" marginBottom={1 / 2}>
-              {message?.profile?.name}
-            </Typography>
+          {canShowAvatar && (
+            <Box paddingRight="12px">
+              <AvatarWithPlaceholder
+                className="self-start justify-self-center"
+                width={32}
+                height={32}
+                src={message?.profile?.image?.url}
+                sx={{ border: 'none' }}
+              />
+            </Box>
           )}
-          <MessageItem
-            messageRef={message}
-            isFirstGroupedMessage={isFirstGroupedMessage}
-            {...MessageItemProps}
-          />
-          {renderLastMessageTime(messageIndex)}
+          <Box
+            sx={{
+              display: 'flex',
+              ml: isFirstGroupedMessage ? 0 : 5.5,
+              alignSelf: flexAlignments,
+              alignItems: flexAlignments,
+              flexDirection: 'column',
+              width: '100%',
+            }}
+          >
+            {canShowName && (
+              <Typography variant="subtitle2" color="text.primary" marginBottom={1 / 2}>
+                {message?.profile?.name}
+              </Typography>
+            )}
+            <MessageItem
+              messageRef={message}
+              isFirstGroupedMessage={isFirstGroupedMessage}
+              {...MessageItemProps}
+            />
+            {renderLastMessageTime(messageIndex)}
+          </Box>
         </Box>
-      </Box>
+      )}
     </Box>
   )
 }

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<02cc7cf8caa3d796e42f687781773bfc>>
+ * @generated SignedSource<<38a54330692c084cec166fda35d8799d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -200,6 +200,25 @@ const node: ConcreteRequest = (function () {
                     {
                       alias: null,
                       args: null,
+                      concreteType: 'Profile',
+                      kind: 'LinkedField',
+                      name: 'contentLinkedProfile',
+                      plural: false,
+                      selections: [
+                        v3 /*: any*/,
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: 'name',
+                          storageKey: null,
+                        },
+                      ],
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
                       kind: 'ScalarField',
                       name: 'created',
                       storageKey: null,
@@ -226,6 +245,13 @@ const node: ConcreteRequest = (function () {
                       args: null,
                       kind: 'ScalarField',
                       name: 'isRead',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'messageType',
                       storageKey: null,
                     },
                     {
@@ -281,12 +307,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '1d655e68797f0439e7ca317168d662ce',
+      cacheID: '40d469e5ad4e3fb1eb6f27cb30834f69',
       id: null,
       metadata: {},
       name: 'SendMessageMutation',
       operationKind: 'mutation',
-      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
+      text: 'mutation SendMessageMutation(\n  $input: ChatRoomSendMessageInput!\n) {\n  chatRoomSendMessage(input: $input) {\n    message {\n      node {\n        id\n        ...MessageItemFragment\n      }\n    }\n    errors {\n      field\n      messages\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  contentLinkedProfile {\n    id\n    name\n  }\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  messageType\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
     },
   }
 })()

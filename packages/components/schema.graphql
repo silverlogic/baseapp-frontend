@@ -178,9 +178,9 @@ type ChatRoomParticipant implements Node {
   """The ID of the object"""
   id: ID!
   profile: Profile
+  role: ChatRoomParticipantRoles
   hasArchivedRoom: Boolean!
   pk: Int!
-  role: String
 }
 
 type ChatRoomParticipantConnection {
@@ -200,6 +200,15 @@ type ChatRoomParticipantEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""An enumeration."""
+enum ChatRoomParticipantRoles {
+  """member"""
+  MEMBER
+
+  """admin"""
+  ADMIN
 }
 
 input ChatRoomReadMessagesInput {
@@ -273,10 +282,10 @@ type ChatRoomUnreadPayload {
 input ChatRoomUpdateInput {
   roomId: ID!
   profileId: ID!
-  addParticipants: [ID]
-  deleteImage: Boolean
-  removeParticipants: [ID]
   title: String
+  deleteImage: Boolean = false
+  addParticipants: [ID] = []
+  removeParticipants: [ID] = []
   clientMutationId: String
 }
 
@@ -617,8 +626,10 @@ type Message implements Node {
   id: ID!
   created: DateTime!
   content: String
+  contentLinkedProfile: Profile
   user: User
   profile: Profile
+  messageType: MessageType
   verb: Verbs
   room: ChatRoom
   inReplyTo: Message
@@ -647,6 +658,12 @@ type MessageEdge {
   cursor: String!
 }
 
+"""An enumeration."""
+enum MessageType {
+  USER_MESSAGE
+  SYSTEM_GENERATED
+}
+
 type Metadata {
   created: DateTime!
   modified: DateTime!
@@ -664,11 +681,11 @@ type Mutation {
   rateCreate(input: RateCreateInput!): RateCreatePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
+  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
-  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -1121,6 +1138,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
+  messageActingSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection

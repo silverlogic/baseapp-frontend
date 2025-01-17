@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<98457f1eacc573a4e2f55afe1a4060e0>>
+ * @generated SignedSource<<5fbff560ed25767e5be5d09f30e82110>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,10 +11,18 @@
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
+export type MessageType = 'SYSTEM_GENERATED' | 'USER_MESSAGE' | '%future added value'
 export type Verbs = 'SENT_MESSAGE' | '%future added value'
 
 export type MessageItemFragment$data = {
   readonly content: string | null | undefined
+  readonly contentLinkedProfile:
+    | {
+        readonly id: string
+        readonly name: string | null | undefined
+      }
+    | null
+    | undefined
   readonly created: any
   readonly extraData: any | null | undefined
   readonly id: string
@@ -25,6 +33,7 @@ export type MessageItemFragment$data = {
     | null
     | undefined
   readonly isRead: boolean | null | undefined
+  readonly messageType: MessageType | null | undefined
   readonly pk: number
   readonly profile:
     | {
@@ -66,6 +75,25 @@ const node: ReaderFragment = (function () {
       {
         alias: null,
         args: null,
+        concreteType: 'Profile',
+        kind: 'LinkedField',
+        name: 'contentLinkedProfile',
+        plural: false,
+        selections: [
+          v0 /*: any*/,
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'name',
+            storageKey: null,
+          },
+        ],
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
         kind: 'ScalarField',
         name: 'created',
         storageKey: null,
@@ -98,6 +126,13 @@ const node: ReaderFragment = (function () {
         alias: null,
         args: null,
         kind: 'ScalarField',
+        name: 'messageType',
+        storageKey: null,
+      },
+      {
+        alias: null,
+        args: null,
+        kind: 'ScalarField',
         name: 'pk',
         storageKey: null,
       },
@@ -124,6 +159,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'c4f28d75734c65a3d4e80722daecfd7e'
+;(node as any).hash = '15fd370025a34dea25c2e0e58a9cfdcd'
 
 export default node
