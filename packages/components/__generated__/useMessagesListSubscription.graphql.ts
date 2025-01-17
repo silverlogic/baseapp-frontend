@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b369959e47b460afa09bf7fbc3844e9e>>
+ * @generated SignedSource<<b7a668277df9dc12a48bc6cb1e76ca5d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -170,6 +170,25 @@ const node: ConcreteRequest = (function () {
                     {
                       alias: null,
                       args: null,
+                      concreteType: 'Profile',
+                      kind: 'LinkedField',
+                      name: 'contentLinkedProfile',
+                      plural: false,
+                      selections: [
+                        v3 /*: any*/,
+                        {
+                          alias: null,
+                          args: null,
+                          kind: 'ScalarField',
+                          name: 'name',
+                          storageKey: null,
+                        },
+                      ],
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
                       kind: 'ScalarField',
                       name: 'created',
                       storageKey: null,
@@ -196,6 +215,13 @@ const node: ConcreteRequest = (function () {
                       args: null,
                       kind: 'ScalarField',
                       name: 'isRead',
+                      storageKey: null,
+                    },
+                    {
+                      alias: null,
+                      args: null,
+                      kind: 'ScalarField',
+                      name: 'messageType',
                       storageKey: null,
                     },
                     {
@@ -269,12 +295,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '883bb43d76a5fc883f45f30697fd86db',
+      cacheID: 'b8cbfd2553478be02e80ed5057fd4d2a',
       id: null,
       metadata: {},
       name: 'useMessagesListSubscription',
       operationKind: 'subscription',
-      text: 'subscription useMessagesListSubscription(\n  $roomId: ID!\n) {\n  chatRoomOnNewMessage(roomId: $roomId) {\n    message {\n      node {\n        ...MessageItemFragment\n        actionObject {\n          __typename\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
+      text: 'subscription useMessagesListSubscription(\n  $roomId: ID!\n) {\n  chatRoomOnNewMessage(roomId: $roomId) {\n    message {\n      node {\n        ...MessageItemFragment\n        actionObject {\n          __typename\n          id\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  contentLinkedProfile {\n    id\n    name\n  }\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  messageType\n  pk\n  profile {\n    id\n  }\n  verb\n}\n',
     },
   }
 })()

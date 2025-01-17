@@ -19,7 +19,7 @@ import { useArchiveChatRoomMutation } from '../../graphql/mutations/ArchiveChatR
 import { useUnreadChatMutation } from '../../graphql/mutations/UnreadChat'
 import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
 import { RoomFragment } from '../../graphql/queries/Room'
-import { useNameAndAvatar } from '../../utils'
+import { useNameAndAvatar, useParsedMessageContent } from '../../utils'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
 import { formatDate } from './utils'
@@ -48,7 +48,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const header = useFragment<ChatRoomHeaderFragment$key>(ChatRoomHeaderFragment, room)
   const { title, avatar } = useNameAndAvatar(header)
 
-  const lastMessage = room.lastMessage?.content
+  const lastMessage = useParsedMessageContent(room.lastMessage)
   const { lastMessageTime } = room
 
   const hasUnreadMessages = room.unreadMessages?.markedUnread || !!room.unreadMessages?.count

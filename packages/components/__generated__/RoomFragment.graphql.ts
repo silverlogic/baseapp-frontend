@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<079ffe5d4b40e76be8d5e7e152e4e441>>
+ * @generated SignedSource<<5cd657261c34b0e735a3f16d75f34bed>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,12 +11,22 @@
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
+export type MessageType = 'SYSTEM_GENERATED' | 'USER_MESSAGE' | '%future added value'
+
 export type RoomFragment$data = {
   readonly id: string
   readonly lastMessage:
     | {
         readonly content: string | null | undefined
+        readonly contentLinkedProfile:
+          | {
+              readonly id: string
+              readonly name: string | null | undefined
+            }
+          | null
+          | undefined
         readonly id: string
+        readonly messageType: MessageType | null | undefined
       }
     | null
     | undefined
@@ -99,6 +109,32 @@ const node: ReaderFragment = (function () {
             name: 'content',
             storageKey: null,
           },
+          {
+            alias: null,
+            args: null,
+            concreteType: 'Profile',
+            kind: 'LinkedField',
+            name: 'contentLinkedProfile',
+            plural: false,
+            selections: [
+              v0 /*: any*/,
+              {
+                alias: null,
+                args: null,
+                kind: 'ScalarField',
+                name: 'name',
+                storageKey: null,
+              },
+            ],
+            storageKey: null,
+          },
+          {
+            alias: null,
+            args: null,
+            kind: 'ScalarField',
+            name: 'messageType',
+            storageKey: null,
+          },
         ],
         storageKey: null,
       },
@@ -118,6 +154,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '07844e29548083b80a887e96cfddd508'
+;(node as any).hash = '621e8540e7d232cb2e8887de1eb9d897'
 
 export default node
