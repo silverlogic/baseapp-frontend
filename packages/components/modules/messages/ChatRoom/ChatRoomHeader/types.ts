@@ -1,9 +1,10 @@
 import { BoxProps } from '@mui/material'
 
-import { ChatRoomHeaderFragment$key } from '../../../../__generated__/ChatRoomHeaderFragment.graphql'
+import { TitleFragment$key } from '../../../../__generated__/TitleFragment.graphql'
 
 export interface ChatRoomHeaderProps {
-  roomHeaderRef: ChatRoomHeaderFragment$key
+  participantsCount: number
+  roomTitleRef: TitleFragment$key
   onDisplayGroupDetailsClicked: () => void
 }
 

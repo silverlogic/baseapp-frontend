@@ -1,4 +1,6 @@
 export interface AdminOptionsProps {
-  onMakeAdminClicked: () => void
+  isAdmin: boolean
+  isMe: boolean
+  onToggleAdminClicked: () => void
   onRemoveClicked: () => void
 }

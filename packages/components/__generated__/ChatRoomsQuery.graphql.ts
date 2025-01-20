@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5c7c8b48fa68485c737bbcfbb826aafd>>
+ * @generated SignedSource<<8ef0beddf36004152e35b57685261dd0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -57,13 +57,6 @@ const node: ConcreteRequest = (function () {
     v3 = {
       alias: null,
       args: null,
-      kind: 'ScalarField',
-      name: 'totalCount',
-      storageKey: null,
-    },
-    v4 = {
-      alias: null,
-      args: null,
       concreteType: 'PageInfo',
       kind: 'LinkedField',
       name: 'pageInfo',
@@ -86,14 +79,14 @@ const node: ConcreteRequest = (function () {
       ],
       storageKey: null,
     },
-    v5 = {
+    v4 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'name',
       storageKey: null,
     },
-    v6 = [
+    v5 = [
       {
         alias: null,
         args: null,
@@ -102,7 +95,7 @@ const node: ConcreteRequest = (function () {
         storageKey: null,
       },
     ],
-    v7 = {
+    v6 = {
       alias: null,
       args: [
         {
@@ -120,24 +113,24 @@ const node: ConcreteRequest = (function () {
       kind: 'LinkedField',
       name: 'image',
       plural: false,
-      selections: v6 /*: any*/,
+      selections: v5 /*: any*/,
       storageKey: 'image(height:100,width:100)',
     },
-    v8 = {
+    v7 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: '__typename',
       storageKey: null,
     },
-    v9 = {
+    v8 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'cursor',
       storageKey: null,
     },
-    v10 = [
+    v9 = [
       {
         kind: 'Literal',
         name: 'archived',
@@ -146,22 +139,13 @@ const node: ConcreteRequest = (function () {
       v1 /*: any*/,
       {
         kind: 'Literal',
-        name: 'unreadMessages',
-        value: false,
+        name: 'q',
+        value: '',
       },
-    ],
-    v11 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'content',
-      storageKey: null,
-    },
-    v12 = [
       {
         kind: 'Literal',
-        name: 'first',
-        value: 20,
+        name: 'unreadMessages',
+        value: false,
       },
     ]
   return {
@@ -223,8 +207,14 @@ const node: ConcreteRequest = (function () {
           name: 'allProfiles',
           plural: false,
           selections: [
+            {
+              alias: null,
+              args: null,
+              kind: 'ScalarField',
+              name: 'totalCount',
+              storageKey: null,
+            },
             v3 /*: any*/,
-            v4 /*: any*/,
             {
               alias: null,
               args: null,
@@ -242,8 +232,8 @@ const node: ConcreteRequest = (function () {
                   plural: false,
                   selections: [
                     v0 /*: any*/,
-                    v5 /*: any*/,
-                    v7 /*: any*/,
+                    v4 /*: any*/,
+                    v6 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -263,11 +253,11 @@ const node: ConcreteRequest = (function () {
                       ],
                       storageKey: null,
                     },
-                    v8 /*: any*/,
+                    v7 /*: any*/,
                   ],
                   storageKey: null,
                 },
-                v9 /*: any*/,
+                v8 /*: any*/,
               ],
               storageKey: null,
             },
@@ -306,7 +296,7 @@ const node: ConcreteRequest = (function () {
                   selections: [
                     {
                       alias: null,
-                      args: v10 /*: any*/,
+                      args: v9 /*: any*/,
                       concreteType: 'ChatRoomConnection',
                       kind: 'LinkedField',
                       name: 'chatRooms',
@@ -329,6 +319,121 @@ const node: ConcreteRequest = (function () {
                               plural: false,
                               selections: [
                                 v0 /*: any*/,
+                                {
+                                  alias: null,
+                                  args: null,
+                                  kind: 'ScalarField',
+                                  name: 'lastMessageTime',
+                                  storageKey: null,
+                                },
+                                {
+                                  alias: null,
+                                  args: null,
+                                  concreteType: 'Message',
+                                  kind: 'LinkedField',
+                                  name: 'lastMessage',
+                                  plural: false,
+                                  selections: [
+                                    v0 /*: any*/,
+                                    {
+                                      alias: null,
+                                      args: null,
+                                      kind: 'ScalarField',
+                                      name: 'content',
+                                      storageKey: null,
+                                    },
+                                  ],
+                                  storageKey: null,
+                                },
+                                {
+                                  alias: null,
+                                  args: null,
+                                  kind: 'ScalarField',
+                                  name: 'isGroup',
+                                  storageKey: null,
+                                },
+                                {
+                                  alias: null,
+                                  args: [
+                                    {
+                                      kind: 'Literal',
+                                      name: 'first',
+                                      value: 2,
+                                    },
+                                  ],
+                                  concreteType: 'ChatRoomParticipantConnection',
+                                  kind: 'LinkedField',
+                                  name: 'participants',
+                                  plural: false,
+                                  selections: [
+                                    {
+                                      alias: null,
+                                      args: null,
+                                      concreteType: 'ChatRoomParticipantEdge',
+                                      kind: 'LinkedField',
+                                      name: 'edges',
+                                      plural: true,
+                                      selections: [
+                                        {
+                                          alias: null,
+                                          args: null,
+                                          concreteType: 'ChatRoomParticipant',
+                                          kind: 'LinkedField',
+                                          name: 'node',
+                                          plural: false,
+                                          selections: [
+                                            {
+                                              alias: null,
+                                              args: null,
+                                              concreteType: 'Profile',
+                                              kind: 'LinkedField',
+                                              name: 'profile',
+                                              plural: false,
+                                              selections: [
+                                                v0 /*: any*/,
+                                                v4 /*: any*/,
+                                                v6 /*: any*/,
+                                              ],
+                                              storageKey: null,
+                                            },
+                                            v0 /*: any*/,
+                                          ],
+                                          storageKey: null,
+                                        },
+                                      ],
+                                      storageKey: null,
+                                    },
+                                  ],
+                                  storageKey: 'participants(first:2)',
+                                },
+                                {
+                                  alias: null,
+                                  args: [
+                                    {
+                                      kind: 'Literal',
+                                      name: 'height',
+                                      value: 144,
+                                    },
+                                    {
+                                      kind: 'Literal',
+                                      name: 'width',
+                                      value: 144,
+                                    },
+                                  ],
+                                  concreteType: 'File',
+                                  kind: 'LinkedField',
+                                  name: 'image',
+                                  plural: false,
+                                  selections: v5 /*: any*/,
+                                  storageKey: 'image(height:144,width:144)',
+                                },
+                                {
+                                  alias: null,
+                                  args: null,
+                                  kind: 'ScalarField',
+                                  name: 'title',
+                                  storageKey: null,
+                                },
                                 {
                                   alias: null,
                                   args: null,
@@ -355,249 +460,21 @@ const node: ConcreteRequest = (function () {
                                   ],
                                   storageKey: null,
                                 },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'lastMessageTime',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  concreteType: 'Message',
-                                  kind: 'LinkedField',
-                                  name: 'lastMessage',
-                                  plural: false,
-                                  selections: [v0 /*: any*/, v11 /*: any*/],
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: [
-                                    {
-                                      kind: 'Literal',
-                                      name: 'height',
-                                      value: 144,
-                                    },
-                                    {
-                                      kind: 'Literal',
-                                      name: 'width',
-                                      value: 144,
-                                    },
-                                  ],
-                                  concreteType: 'File',
-                                  kind: 'LinkedField',
-                                  name: 'image',
-                                  plural: false,
-                                  selections: v6 /*: any*/,
-                                  storageKey: 'image(height:144,width:144)',
-                                },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'title',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: null,
-                                  kind: 'ScalarField',
-                                  name: 'isGroup',
-                                  storageKey: null,
-                                },
-                                {
-                                  alias: null,
-                                  args: [v1 /*: any*/],
-                                  concreteType: 'ChatRoomParticipantConnection',
-                                  kind: 'LinkedField',
-                                  name: 'participants',
-                                  plural: false,
-                                  selections: [
-                                    v3 /*: any*/,
-                                    {
-                                      alias: null,
-                                      args: null,
-                                      concreteType: 'ChatRoomParticipantEdge',
-                                      kind: 'LinkedField',
-                                      name: 'edges',
-                                      plural: true,
-                                      selections: [
-                                        {
-                                          alias: null,
-                                          args: null,
-                                          concreteType: 'ChatRoomParticipant',
-                                          kind: 'LinkedField',
-                                          name: 'node',
-                                          plural: false,
-                                          selections: [
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              concreteType: 'Profile',
-                                              kind: 'LinkedField',
-                                              name: 'profile',
-                                              plural: false,
-                                              selections: [
-                                                v0 /*: any*/,
-                                                v5 /*: any*/,
-                                                v7 /*: any*/,
-                                              ],
-                                              storageKey: null,
-                                            },
-                                            v0 /*: any*/,
-                                          ],
-                                          storageKey: null,
-                                        },
-                                      ],
-                                      storageKey: null,
-                                    },
-                                  ],
-                                  storageKey: 'participants(first:5)',
-                                },
-                                {
-                                  alias: null,
-                                  args: v12 /*: any*/,
-                                  concreteType: 'MessageConnection',
-                                  kind: 'LinkedField',
-                                  name: 'allMessages',
-                                  plural: false,
-                                  selections: [
-                                    v3 /*: any*/,
-                                    {
-                                      alias: null,
-                                      args: null,
-                                      concreteType: 'MessageEdge',
-                                      kind: 'LinkedField',
-                                      name: 'edges',
-                                      plural: true,
-                                      selections: [
-                                        {
-                                          alias: null,
-                                          args: null,
-                                          concreteType: 'Message',
-                                          kind: 'LinkedField',
-                                          name: 'node',
-                                          plural: false,
-                                          selections: [
-                                            v0 /*: any*/,
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'created',
-                                              storageKey: null,
-                                            },
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              concreteType: 'Profile',
-                                              kind: 'LinkedField',
-                                              name: 'profile',
-                                              plural: false,
-                                              selections: [
-                                                v0 /*: any*/,
-                                                v5 /*: any*/,
-                                                {
-                                                  alias: null,
-                                                  args: [
-                                                    {
-                                                      kind: 'Literal',
-                                                      name: 'height',
-                                                      value: 32,
-                                                    },
-                                                    {
-                                                      kind: 'Literal',
-                                                      name: 'width',
-                                                      value: 32,
-                                                    },
-                                                  ],
-                                                  concreteType: 'File',
-                                                  kind: 'LinkedField',
-                                                  name: 'image',
-                                                  plural: false,
-                                                  selections: v6 /*: any*/,
-                                                  storageKey: 'image(height:32,width:32)',
-                                                },
-                                              ],
-                                              storageKey: null,
-                                            },
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'isRead',
-                                              storageKey: null,
-                                            },
-                                            v11 /*: any*/,
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'extraData',
-                                              storageKey: null,
-                                            },
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              concreteType: 'Message',
-                                              kind: 'LinkedField',
-                                              name: 'inReplyTo',
-                                              plural: false,
-                                              selections: [v0 /*: any*/],
-                                              storageKey: null,
-                                            },
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'pk',
-                                              storageKey: null,
-                                            },
-                                            {
-                                              alias: null,
-                                              args: null,
-                                              kind: 'ScalarField',
-                                              name: 'verb',
-                                              storageKey: null,
-                                            },
-                                            v8 /*: any*/,
-                                          ],
-                                          storageKey: null,
-                                        },
-                                        v9 /*: any*/,
-                                      ],
-                                      storageKey: null,
-                                    },
-                                    v4 /*: any*/,
-                                  ],
-                                  storageKey: 'allMessages(first:20)',
-                                },
-                                {
-                                  alias: null,
-                                  args: v12 /*: any*/,
-                                  filters: null,
-                                  handle: 'connection',
-                                  key: 'chatRoom_allMessages',
-                                  kind: 'LinkedHandle',
-                                  name: 'allMessages',
-                                },
-                                v8 /*: any*/,
+                                v7 /*: any*/,
                               ],
                               storageKey: null,
                             },
-                            v9 /*: any*/,
+                            v8 /*: any*/,
                           ],
                           storageKey: null,
                         },
-                        v4 /*: any*/,
+                        v3 /*: any*/,
                       ],
-                      storageKey: 'chatRooms(archived:false,first:5,unreadMessages:false)',
+                      storageKey: 'chatRooms(archived:false,first:5,q:"",unreadMessages:false)',
                     },
                     {
                       alias: null,
-                      args: v10 /*: any*/,
+                      args: v9 /*: any*/,
                       filters: ['q', 'unreadMessages', 'archived'],
                       handle: 'connection',
                       key: 'roomsList_chatRooms',
@@ -617,12 +494,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '5bf319d6b9c8e3e09069eb00258d1e21',
+      cacheID: 'b7aec8f21dba53c91ee4320c81d17a52',
       id: null,
       metadata: {},
       name: 'ChatRoomsQuery',
       operationKind: 'query',
-      text: 'query ChatRoomsQuery {\n  ...AllProfilesListFragment\n  me {\n    id\n    profile {\n      id\n      ...RoomsListFragment\n    }\n  }\n}\n\nfragment AllProfilesListFragment on Query {\n  allProfiles(first: 5, orderBy: "-created") {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment ChatRoomHeaderFragment on ChatRoom {\n  id\n  image(width: 144, height: 144) {\n    url\n  }\n  title\n  isGroup\n  participants(first: 5) {\n    totalCount\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment on ChatRoom {\n  id\n  isGroup\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  allMessages(first: 20) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment RoomFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n  ...ChatRoomHeaderFragment\n  ...MessagesListFragment\n}\n\nfragment RoomsListFragment on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: 5, unreadMessages: false, archived: false) {\n    edges {\n      node {\n        id\n        ...RoomFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n',
+      text: 'query ChatRoomsQuery {\n  ...AllProfilesListFragment\n  me {\n    id\n    profile {\n      id\n      ...RoomsListFragment\n    }\n  }\n}\n\nfragment AllProfilesListFragment on Query {\n  allProfiles(first: 5, orderBy: "-created") {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment GroupTitleFragment on ChatRoom {\n  id\n  image(width: 144, height: 144) {\n    url\n  }\n  title\n}\n\nfragment LastMessageFragment on ChatRoom {\n  id\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment RoomTitleFragment on ChatRoom {\n  id\n  participants(first: 2) {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment RoomsListFragment on ChatRoomsInterface {\n  __isChatRoomsInterface: __typename\n  chatRooms(first: 5, q: "", unreadMessages: false, archived: false) {\n    edges {\n      node {\n        id\n        ...LastMessageFragment\n        ...TitleFragment\n        ...UnreadMessagesCountFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n  id\n}\n\nfragment TitleFragment on ChatRoom {\n  id\n  isGroup\n  ...RoomTitleFragment\n  ...GroupTitleFragment\n}\n\nfragment UnreadMessagesCountFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n}\n',
     },
   }
 })()

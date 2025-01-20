@@ -12,14 +12,16 @@ import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { ConnectionHandler, useFragment } from 'react-relay'
 import { RecordSourceSelectorProxy } from 'relay-runtime'
 
-import { ChatRoomHeaderFragment$key } from '../../../../__generated__/ChatRoomHeaderFragment.graphql'
-import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
+import { LastMessageFragment$key } from '../../../../__generated__/LastMessageFragment.graphql'
+import { TitleFragment$key } from '../../../../__generated__/TitleFragment.graphql'
+import { UnreadMessagesCountFragment$key } from '../../../../__generated__/UnreadMessagesCountFragment.graphql'
 import ActionsOverlay from '../../../__shared__/ActionsOverlay'
+import { LastMessageFragment } from '../../graphql/fragments/LastMessage'
+import { TitleFragment } from '../../graphql/fragments/Title'
+import { UnreadMessagesCountFragment } from '../../graphql/fragments/UnreadMessagesCount'
 import { useArchiveChatRoomMutation } from '../../graphql/mutations/ArchiveChatRoom'
 import { useUnreadChatMutation } from '../../graphql/mutations/UnreadChat'
-import { ChatRoomHeaderFragment } from '../../graphql/queries/ChatRoomHeaderFragment'
-import { RoomFragment } from '../../graphql/queries/Room'
-import { useNameAndAvatar } from '../../utils'
+import { getChatRoomConnections, useNameAndAvatar } from '../../utils'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
 import { formatDate } from './utils'
@@ -31,9 +33,13 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   Badge = DefaultBadge,
   BadgeProps = {},
   isInArchivedTab = false,
-  isInUnreadTab = false,
 }) => {
-  const room = useFragment<RoomFragment$key>(RoomFragment, roomRef)
+  const lastMessageFragment = useFragment<LastMessageFragment$key>(LastMessageFragment, roomRef)
+  const headerFragment = useFragment<TitleFragment$key>(TitleFragment, roomRef)
+  const unreadMessagesCountFragment = useFragment<UnreadMessagesCountFragment$key>(
+    UnreadMessagesCountFragment,
+    roomRef,
+  )
   const [commitMutation] = useUnreadChatMutation()
 
   const handleCardClick = (event: SyntheticEvent) => {
@@ -44,25 +50,25 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { currentProfile } = useCurrentProfile()
+  const { title, avatar } = useNameAndAvatar(headerFragment)
 
-  const header = useFragment<ChatRoomHeaderFragment$key>(ChatRoomHeaderFragment, room)
-  const { title, avatar } = useNameAndAvatar(header)
+  const { lastMessageTime } = lastMessageFragment
+  const lastMessage = lastMessageFragment.lastMessage?.content
 
-  const lastMessage = room.lastMessage?.content
-  const { lastMessageTime } = room
-
-  const hasUnreadMessages = room.unreadMessages?.markedUnread || !!room.unreadMessages?.count
+  const hasUnreadMessages =
+    unreadMessagesCountFragment.unreadMessages?.markedUnread ||
+    !!unreadMessagesCountFragment.unreadMessages?.count
 
   const unreadChat = useCallback(() => {
     commitMutation({
       variables: {
         input: {
-          roomId: room.id,
+          roomId: roomRef.id,
           profileId: currentProfile?.id as string,
         },
       },
     })
-  }, [room.id, currentProfile])
+  }, [roomRef.id, currentProfile])
 
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
@@ -80,24 +86,16 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
               commit({
                 variables: {
                   input: {
-                    roomId: room.id,
+                    roomId: roomRef.id,
                     profileId: currentProfile.id,
                     archive: !isInArchivedTab,
                   },
                 },
                 updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
                   if (!data?.errors) {
-                    const storyRecord = store.get(currentProfile.id)
-                    if (storyRecord) {
-                      const connectionRecord = ConnectionHandler.getConnection(
-                        storyRecord,
-                        'roomsList_chatRooms',
-                        { unreadMessages: isInUnreadTab, archived: isInArchivedTab },
-                      )
-                      if (connectionRecord) {
-                        ConnectionHandler.deleteNode(connectionRecord, room.id)
-                      }
-                    }
+                    getChatRoomConnections(store, currentProfile.id).forEach((connectionRecord) =>
+                      ConnectionHandler.deleteNode(connectionRecord, roomRef.id),
+                    )
                   }
                 },
               })
@@ -120,7 +118,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
       ref={chatCardRef}
     >
       <StyledChatCard
-        key={`room-${room.id}`}
+        key={`room-${roomRef.id}`}
         onClick={handleCardClick}
         isCardSelected={isCardSelected}
         showPointer={!!handleClick}
@@ -167,7 +165,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
         </Box>
         <Badge
           sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
-          badgeContent={room.unreadMessages?.count || ''}
+          badgeContent={unreadMessagesCountFragment.unreadMessages?.count || ''}
           color="error"
           max={99}
           invisible={!hasUnreadMessages}
