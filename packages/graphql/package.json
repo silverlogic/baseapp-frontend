@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/graphql",
   "description": "GraphQL configurations and utilities",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -18,6 +18,7 @@
     "isomorphic-ws": "catalog:graphql",
     "js-cookie": "catalog:",
     "react-relay": "catalog:graphql",
+    "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
     "relay-test-utils": "catalog:graphql"
   },

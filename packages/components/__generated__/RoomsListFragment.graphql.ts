@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fd47e378297581a2b3072b774db578d4>>
+ * @generated SignedSource<<e9a630c23bdd71b5e893eab332a42c32>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,7 +19,9 @@ export type RoomsListFragment$data = {
               readonly node:
                 | {
                     readonly id: string
-                    readonly ' $fragmentSpreads': FragmentRefs<'RoomFragment'>
+                    readonly ' $fragmentSpreads': FragmentRefs<
+                      'LastMessageFragment' | 'TitleFragment' | 'UnreadMessagesCountFragment'
+                    >
                   }
                 | null
                 | undefined
@@ -69,7 +71,7 @@ const node: ReaderFragment = (function () {
         name: 'cursor',
       },
       {
-        defaultValue: null,
+        defaultValue: '',
         kind: 'LocalArgument',
         name: 'q',
       },
@@ -152,7 +154,17 @@ const node: ReaderFragment = (function () {
                   {
                     args: null,
                     kind: 'FragmentSpread',
-                    name: 'RoomFragment',
+                    name: 'LastMessageFragment',
+                  },
+                  {
+                    args: null,
+                    kind: 'FragmentSpread',
+                    name: 'TitleFragment',
+                  },
+                  {
+                    args: null,
+                    kind: 'FragmentSpread',
+                    name: 'UnreadMessagesCountFragment',
                   },
                   {
                     alias: null,
@@ -209,6 +221,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '7fe57d53d40a4295a9eb2ea600d96f11'
+;(node as any).hash = '3a66898cb96bbf4ce999aa5ad9822ca0'
 
 export default node

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "0.0.48",
+  "version": "0.0.49",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -41,6 +41,7 @@
     "react-hook-form": "catalog:",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
+    "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
     "slugify": "^1.6.6",
     "use-long-press": "^3.2.0",

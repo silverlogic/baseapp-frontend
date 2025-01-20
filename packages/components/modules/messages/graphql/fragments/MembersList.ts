@@ -8,6 +8,7 @@ export const MembersListFragment = graphql`
     participants(first: $count, after: $cursor) @connection(key: "ChatRoom_participants") {
       edges {
         node {
+          id
           profile {
             id
             ...ProfileItemFragment
@@ -19,7 +20,6 @@ export const MembersListFragment = graphql`
         hasNextPage
         endCursor
       }
-      totalCount
     }
   }
 `

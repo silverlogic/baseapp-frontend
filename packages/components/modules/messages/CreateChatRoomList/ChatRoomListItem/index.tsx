@@ -47,10 +47,12 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onCh
                   ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
                     unreadMessages: false,
                     archived: false,
+                    q: '',
                   }),
                   ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
                     unreadMessages: true,
                     archived: false,
+                    q: '',
                   }),
                 ],
               },

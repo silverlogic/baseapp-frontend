@@ -1,15 +1,10 @@
 import { graphql } from 'react-relay'
 
-export const ChatRoomHeaderFragment = graphql`
-  fragment ChatRoomHeaderFragment on ChatRoom {
+// non-group chat rooms have the avatar and name of the other participant as title
+export const RoomTitleFragment = graphql`
+  fragment RoomTitleFragment on ChatRoom {
     id
-    image(width: 144, height: 144) {
-      url
-    }
-    title
-    isGroup
-    participants(first: 5) {
-      totalCount
+    participants(first: 2) {
       edges {
         node {
           profile {

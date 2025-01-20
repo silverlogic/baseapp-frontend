@@ -8,7 +8,7 @@ export const RoomsListFragment = graphql`
   @argumentDefinitions(
     cursor: { type: "String" }
     count: { type: "Int", defaultValue: 5 }
-    q: { type: "String", defaultValue: null }
+    q: { type: "String", defaultValue: "" }
     unreadMessages: { type: "Boolean", defaultValue: false }
     archived: { type: "Boolean", defaultValue: false }
   )
@@ -23,7 +23,9 @@ export const RoomsListFragment = graphql`
       edges {
         node {
           id
-          ...RoomFragment
+          ...LastMessageFragment
+          ...TitleFragment
+          ...UnreadMessagesCountFragment
         }
       }
       pageInfo {

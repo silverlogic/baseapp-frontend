@@ -9,11 +9,7 @@ export const ReadMessagesMutationQuery = graphql`
     chatRoomReadMessages(input: $input) {
       room {
         id
-        unreadMessages {
-          count
-          markedUnread
-        }
-        ...RoomFragment
+        ...UnreadMessagesCountFragment
       }
       errors {
         field

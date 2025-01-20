@@ -2,16 +2,19 @@ import { FC } from 'react'
 
 import type { BadgeProps, BoxProps } from '@mui/material'
 
-import { RoomFragment$key } from '../../../../__generated__/RoomFragment.graphql'
+import { LastMessageFragment$key } from '../../../../__generated__/LastMessageFragment.graphql'
+import { TitleFragment$key } from '../../../../__generated__/TitleFragment.graphql'
+import { UnreadMessagesCountFragment$key } from '../../../../__generated__/UnreadMessagesCountFragment.graphql'
 
 export interface ChatRoomItemProps {
-  roomRef: RoomFragment$key
+  roomRef: { readonly id: string } & LastMessageFragment$key &
+    TitleFragment$key &
+    UnreadMessagesCountFragment$key
   isCardSelected?: boolean
   handleClick?: () => void
   Badge?: FC<BadgeProps>
   BadgeProps?: Partial<BadgeProps>
   isInArchivedTab: boolean
-  isInUnreadTab: boolean
 }
 
 export interface StyledChatCardProps extends BoxProps {
