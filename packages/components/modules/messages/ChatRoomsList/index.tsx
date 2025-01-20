@@ -39,6 +39,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
 
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
+  const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
   const searchValue = watch('search')
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
