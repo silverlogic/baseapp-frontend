@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.2.3
+
+### Patch Changes
+
+- Update mock files.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.2
+
 ## 1.2.2
 
 ### Patch Changes

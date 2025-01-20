@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.10
+
+### Patch Changes
+
+- Update mock files.
+
 ## 2.1.9
 
 ### Patch Changes
