@@ -16,4 +16,5 @@ export interface MemberItemProps {
   avatarHeight?: number
   canChangeMember?: boolean
   userId?: string
+  searchQuery?: string
 }
