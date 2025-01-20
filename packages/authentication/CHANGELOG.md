@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 4.1.3
+
+### Patch Changes
+
+- Update mock files.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.2
+
 ## 4.1.2
 
 ### Patch Changes

@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 0.0.50
+
+### Patch Changes
+
+- Update mock files.
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.3
+  - @baseapp-frontend/design-system@0.0.31
+  - @baseapp-frontend/graphql@1.2.3
+  - @baseapp-frontend/utils@3.1.2
+
 ## 0.0.49
 
 ### Patch Changes
