@@ -1,8 +1,9 @@
-import { ArchiveIcon } from '@baseapp-frontend/design-system'
+import { ArchiveIcon, PenEditIcon } from '@baseapp-frontend/design-system'
 
 import type { Meta, StoryObj } from '@storybook/react'
 
 import ActionsOverlay from '..'
+import { HOVER_OVERLAY_MODES } from '../constants'
 import ActionsOverlayOnButton from './ActionsOverlayOnButton'
 
 const meta: Meta<typeof ActionsOverlay> = {
@@ -29,6 +30,29 @@ export const DefaultActionsOverlay: Story = {
       {
         label: 'Archive',
         icon: <ArchiveIcon />,
+        onClick: () => {},
+        hasPermission: true,
+        closeOnClick: true,
+      },
+    ],
+  },
+}
+
+export const ActionsOverlayWithThreeDotsMenu: Story = {
+  name: 'ActionsOverlay with ThreeDotsMenu',
+  args: {
+    title: 'Button',
+    enableDelete: true,
+    isDeletingItem: false,
+    handleDeleteItem: () => {},
+    ContainerProps: {
+      flexDirection: 'row-reverse',
+    },
+    hoverOverlayMode: HOVER_OVERLAY_MODES.THREE_DOTS_MENU,
+    actions: [
+      {
+        label: 'Edit',
+        icon: <PenEditIcon />,
         onClick: () => {},
         hasPermission: true,
         closeOnClick: true,
