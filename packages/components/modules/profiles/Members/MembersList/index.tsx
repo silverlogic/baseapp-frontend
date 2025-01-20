@@ -1,11 +1,12 @@
-import { FC, useEffect, useMemo } from 'react'
+import { FC, useMemo, useTransition } from 'react'
 
-import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system'
+import { LoadingState as DefaultLoadingState, Searchbar } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 import { usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
+import { useForm } from 'react-hook-form'
 import { MemberItemFragment$key } from '../../../../__generated__/MemberItemFragment.graphql'
 import { UserMembersListFragment } from '../../graphql/queries/UserMembersList'
 import DefaultMemberItem from '../MemberItem'
@@ -20,16 +21,26 @@ const MembersList: FC<MemberListProps> = ({
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
   membersContainerHeight = 400,
-  searchQuery,
 }) => {
+  const [isPending, startTransition] = useTransition()
+  const { control, reset } = useForm({ defaultValues: { search: '' } })
   const { data, loadNext, hasNext, isLoadingNext , refetch} = usePaginationFragment(
     UserMembersListFragment,
     userRef,
   )
 
-  useEffect(() => {
-    refetch({ q: searchQuery })
-  }, [searchQuery])
+  const handleSearch = (value: string) => {
+    startTransition(() => {
+      refetch({ q: value })
+    })
+  }
+
+  const handleSearchClear = () => {
+    startTransition(() => {
+      reset()
+      handleSearch('')
+    })
+  }
 
   const members = useMemo(
     () => data?.members?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
@@ -62,6 +73,16 @@ const MembersList: FC<MemberListProps> = ({
   if (members.length === 0) {
     return (
       <>
+        <Searchbar 
+          variant="outlined" 
+          size="small" 
+          isPending={isPending} 
+          onChange={(e) => handleSearch(e.target.value)} 
+          onClear={() => handleSearchClear()} 
+          name="search"
+          control={control}
+          sx={{ mb: 4 }} 
+        />
         <Typography variant="subtitle2" mb={4}>
           1 member
         </Typography>
@@ -72,6 +93,16 @@ const MembersList: FC<MemberListProps> = ({
 
   return (
     <>
+      <Searchbar 
+          variant="outlined" 
+          size="small" 
+          isPending={isPending} 
+          onChange={(e) => handleSearch(e.target.value)} 
+          onClear={() => handleSearchClear()} 
+          name="search"
+          control={control}
+          sx={{ mb: 4 }} 
+        />
       <Typography variant="subtitle2" mb={4}>
         {(data.members?.totalCount ?? 0) + 1} members
       </Typography>
