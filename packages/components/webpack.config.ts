@@ -15,11 +15,13 @@ const config: Configuration = {
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
     fallback: {
-      events: require.resolve('./__mocks__/eventEmitterMock.ts'),
+      events: require.resolve('./__mocks__/events.ts'),
     },
     alias: {
-      'expo-secure-store': false,
-      'react-native': false,
+      'expo-constants': require.resolve('./__mocks__/expo-constants.ts'),
+      'expo-modules-core': require.resolve('./__mocks__/expo-modules-core.ts'),
+      'expo-secure-store': require.resolve('./__mocks__/expo-secure-store.ts'),
+      'react-native': require.resolve('./__mocks__/react-native.ts'),
     },
   },
   module: {
@@ -53,7 +55,7 @@ const config: Configuration = {
   plugins: [
     new webpack.NormalModuleReplacementPlugin(
       /next\/font\/google/,
-      path.resolve(__dirname, './cypress/__mocks__/nextFontMock.ts'),
+      path.resolve(__dirname, './__mocks__/next-font.ts'),
     ),
     new webpack.DefinePlugin({
       'process.env': JSON.stringify({
