@@ -1,7 +1,7 @@
-  import { FC, Suspense, useState } from 'react'
+  import { FC, Suspense } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { LoadingState as DefaultLoadingState, Searchbar } from '@baseapp-frontend/design-system'
+import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system'
 
 import { Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
@@ -18,7 +18,6 @@ const Members: FC<UserMembersProps> = ({
   LoadingState,
   LoadingStateProps,
   membersContainerHeight,
-  searchQuery,
 }) => {
   const { currentProfile } = useCurrentProfile()
 
@@ -36,7 +35,6 @@ const Members: FC<UserMembersProps> = ({
       LoadingState={LoadingState}
       LoadingStateProps={LoadingStateProps}
       membersContainerHeight={membersContainerHeight}
-      searchQuery={searchQuery}
     />
   )
 }
@@ -49,9 +47,7 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
   LoadingStateProps = {},
   InitialLoadingState = DefaultLoadingState,
   membersContainerHeight = 400,
-}) => {
-  const [searchQuery, setSearchQuery] = useState<string>('')
-  return (
+}) => (
     <>
     <Typography component="h4" variant="h4" mb={1}>
       {title}
@@ -59,18 +55,8 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
     <Typography component="p" variant="body2" color="text.secondary" mb={4}>
       {subtitle}
     </Typography>
-    <Searchbar 
-      variant="outlined" 
-      size="small" 
-      isPending={false} 
-      onChange={(e) => setSearchQuery(e.target.value)} 
-      onClear={() => setSearchQuery('')} 
-      value={searchQuery} 
-      sx={{ mb: 4 }} 
-    />
     <Suspense fallback={<InitialLoadingState />}>
       <Members
-        searchQuery={searchQuery}
         MemberItem={MemberItem}
         LoadingState={LoadingState}
         LoadingStateProps={LoadingStateProps}
@@ -79,6 +65,5 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
     </Suspense>
   </>
   )
-}
 
 export default MembersSuspended

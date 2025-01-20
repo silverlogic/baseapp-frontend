@@ -12,7 +12,6 @@ export interface MemberListProps {
   LoadingState: FC<LoadingStateProps>
   LoadingStateProps: LoadingStateProps
   membersContainerHeight?: number
-  searchQuery?: string
 }
 
 export interface UserMembersSuspendedProps {
@@ -26,5 +25,4 @@ export interface UserMembersSuspendedProps {
 }
 
 export interface UserMembersProps extends Omit<MemberListProps, 'userRef'> {
-  searchQuery?: string
 }
