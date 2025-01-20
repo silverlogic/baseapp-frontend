@@ -3,13 +3,14 @@ import { FC, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder, ConfirmDialog } from '@baseapp-frontend/design-system'
 
-import { Box, Button, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { useChangeUserRoleMutation } from '../../graphql/mutations/ChangeUserRole'
+import { useRemoveProfileMemberMutation } from '../../graphql/mutations/RemoveProfileMember'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
-import { MemberRoles, MemberStatuses, roleOptions } from '../constants'
+import { MemberActions, MemberRoles, MemberStatuses, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
@@ -25,12 +26,15 @@ const MemberItem: FC<MemberItemProps> = ({
   userId,
   searchQuery,
 }) => {
+  const theme = useTheme()
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
 
   const { currentProfile } = useCurrentProfile()
 
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
+  const [removeMember, isRemovingMember] = useRemoveProfileMemberMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
+  const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
 
   if (!memberProfile) return null
 
@@ -47,6 +51,21 @@ const MemberItem: FC<MemberItemProps> = ({
         },
       })
     }
+  }
+
+  const removeProfileMember = () => {
+    if (currentProfile?.id && userId) {
+      removeMember({
+        variables: { input: { profileId: currentProfile.id, userId } },
+      })
+    }
+  }
+
+  const confirmRemoveProfileMember = () => {
+    if (currentProfile?.id && userId) {
+      removeProfileMember()
+    }
+    setOpenConfirmRemoveMember(false)
   }
 
   const handleRoleChange = (event: SelectChangeEvent<{ value: MemberRoles }>) => {
@@ -70,22 +89,37 @@ const MemberItem: FC<MemberItemProps> = ({
     setOpenConfirmChangeMember(false)
   }
 
+  const handleRemoveMemberDialog = () => {
+    setOpenConfirmRemoveMember(!openConfirmRemoveMember)
+  }
+
   const renderRoleButton = () => {
     if (shouldRenderChangeRoleSelect) {
       return (
         <Box>
           <Select
             value={memberRole}
-            onChange={(event, _) =>
-              handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
-            }
+            onChange={(event, _) => {
+              const { value } = event.target
+              if (value === MemberActions.remove) {
+                handleRemoveMemberDialog()
+              } else {
+                handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
+              }
+            }}
             displayEmpty
             variant="filled"
             size="small"
-            disabled={isChangingUserRole}
+            disabled={isChangingUserRole || isRemovingMember}
           >
             {roleOptions.map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
+              <MenuItem
+                key={value}
+                value={value}
+                sx={{
+                  color: value === MemberActions.remove ? theme.palette.error.main : 'inherit',
+                }}
+              >
                 {label}
               </MenuItem>
             ))}
@@ -129,6 +163,23 @@ const MemberItem: FC<MemberItemProps> = ({
           </Typography>
         }
         cancelText="Back"
+      />
+      <ConfirmDialog
+        title="Remove member"
+        open={openConfirmRemoveMember}
+        onClose={handleRemoveMemberDialog}
+        content={
+          <Typography variant="body1">
+            Are you sure you want to remove this member? This action will revoke their access to the
+            organization profile.
+          </Typography>
+        }
+        cancelText="Back"
+        action={
+          <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
+            Remove
+          </Button>
+        }
       />
       <MemberPersonalInformation isActive={status === MemberStatuses.active || false}>
         <AvatarWithPlaceholder

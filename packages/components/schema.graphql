@@ -720,6 +720,7 @@ type Mutation {
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
+  removeFromProfile(input: RemoveFromProfileInput!): RemoveFromProfilePayload
 }
 
 """An object with an ID"""
@@ -1552,6 +1553,20 @@ enum ReactionTypes {
 
   """dislike"""
   DISLIKE
+}
+
+input RemoveFromProfileInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type RemoveFromProfilePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
 }
 
 type Report implements Node {
