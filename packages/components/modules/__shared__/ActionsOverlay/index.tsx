@@ -4,11 +4,14 @@ import {
   ConfirmDialog,
   SwipeableDrawer as DefaultSwipeableDrawer,
   IconButton,
+  Popover,
+  ThreeDotsIcon,
   TrashCanIcon,
+  usePopover,
 } from '@baseapp-frontend/design-system'
 
 import { LoadingButton } from '@mui/lab'
-import { Box, Divider, Typography } from '@mui/material'
+import { Box, Divider, MenuItem, MenuList, Typography } from '@mui/material'
 import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
 import { ActionOverlayTooltipContainer, IconButtonContentContainer } from './styled'
@@ -28,6 +31,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       ContainerProps = {},
       SwipeableDrawerProps = {},
       SwipeableDrawer = DefaultSwipeableDrawer,
+      useTreedotsMenuOverlay = false,
     },
     ref,
   ) => {
@@ -37,6 +41,13 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       isLongPressingItem: false,
       shouldOpenItemOptions: false,
     })
+
+    const popover = usePopover()
+
+    const handleClosePopover = () => {
+      setIsHoveringItem(false)
+      popover.onClose()
+    }
 
     const longPressHandlers = useLongPress<HTMLDivElement>(
       (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
@@ -70,6 +81,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
     const handleDeleteDialogClose = () => {
       setIsDeleteDialogOpen(false)
       setIsHoveringItem(false)
+      popover.onClose()
     }
 
     const deviceHasHover =
@@ -80,6 +92,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       handleDeleteItem?.()
       handleLongPressItemOptionsClose()
       setIsHoveringItem(false)
+      popover.onClose()
     }
 
     const renderDeleteDialog = () => (
@@ -139,7 +152,9 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                       <Box display="grid" justifySelf="center" height="min-content">
                         {icon}
                       </Box>
-                      <Typography variant="body2">{label}</Typography>
+                      <Typography variant="body2" color="text.primary">
+                        {label}
+                      </Typography>
                     </IconButtonContentContainer>
                   </IconButton>
                 )
@@ -175,8 +190,18 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
             offsetRight={offsetRight}
             offsetTop={offsetTop}
             aria-label="actions overlay"
+            {...(useTreedotsMenuOverlay
+              ? {
+                  sx: {
+                    position: 'unset',
+                    marginX: '4px',
+                    borderRadius: '500px',
+                    alignSelf: 'baseline',
+                  },
+                }
+              : {})}
           >
-            {enableDelete && (
+            {!useTreedotsMenuOverlay && enableDelete && (
               <IconButton
                 onClick={handleDeleteDialogOpen}
                 disabled={isDeletingItem}
@@ -185,27 +210,66 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                 <TrashCanIcon />
               </IconButton>
             )}
-            {actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
-              if (!hasPermission) return null
+            {!useTreedotsMenuOverlay &&
+              actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
+                if (!hasPermission) return null
 
-              const handleClick = () => {
-                onClick?.()
-                if (closeOnClick) {
-                  handleLongPressItemOptionsClose()
+                const handleClick = () => {
+                  onClick?.()
+                  if (closeOnClick) {
+                    handleLongPressItemOptionsClose()
+                  }
                 }
-              }
 
-              return (
-                <IconButton
-                  key={label}
-                  onClick={handleClick}
-                  disabled={disabled}
-                  aria-label={label}
-                >
-                  {icon}
+                return (
+                  <IconButton
+                    key={label}
+                    onClick={handleClick}
+                    disabled={disabled}
+                    aria-label={label}
+                  >
+                    {icon}
+                  </IconButton>
+                )
+              })}
+            {useTreedotsMenuOverlay && (
+              <>
+                <IconButton onClick={popover.onOpen} aria-label="Show menu options">
+                  <ThreeDotsIcon sx={{ fontSize: '18px' }} />
                 </IconButton>
-              )
-            })}
+                <Popover open={popover.open} onClose={handleClosePopover}>
+                  <MenuList>
+                    {actions?.map(({ label, icon, onClick, disabled, hasPermission }) => {
+                      if (!hasPermission) return null
+
+                      return (
+                        <MenuItem
+                          key={label}
+                          onClick={() => {
+                            onClick?.()
+                            handleClosePopover()
+                          }}
+                          disabled={disabled}
+                        >
+                          {icon}
+                          <Typography variant="body2" color="text.primary">
+                            {label}
+                          </Typography>
+                        </MenuItem>
+                      )
+                    })}
+                    {enableDelete && (
+                      <MenuItem onClick={handleDeleteDialogOpen}>
+                        <TrashCanIcon />
+                        <Typography variant="body2" color="error">
+                          Delete
+                        </Typography>
+                      </MenuItem>
+                    )}
+                  </MenuList>
+                </Popover>
+              </>
+            )}
           </ActionOverlayTooltipContainer>
         )
       }
@@ -216,7 +280,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       <Box
         ref={ref}
         onMouseEnter={() => setIsHoveringItem(true)}
-        onMouseLeave={() => setIsHoveringItem(false)}
+        onMouseLeave={handleClosePopover}
         position="relative"
         {...longPressHandlers()}
         {...ContainerProps}

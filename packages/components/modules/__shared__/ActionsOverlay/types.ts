@@ -27,6 +27,7 @@ export interface ActionOverlayProps extends ActionOverlayTooltipContainerProps {
   ContainerProps?: Partial<BoxProps>
   SwipeableDrawer?: FC<SwipeableDrawerProps>
   SwipeableDrawerProps?: Partial<SwipeableDrawerProps>
+  useTreedotsMenuOverlay?: boolean
 }
 
 export interface ActionOverlayTooltipContainerProps extends BoxProps {

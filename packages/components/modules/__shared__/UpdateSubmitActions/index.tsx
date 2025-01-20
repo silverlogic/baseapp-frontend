@@ -2,16 +2,17 @@ import React, { FC } from 'react'
 
 import { CheckMarkIcon, CloseIcon, IconButton } from '@baseapp-frontend/design-system'
 
-import { CommentUpdateSubmitActionsProps } from './types'
+import { UpdateSubmitActionsProps } from './types'
 
-const CommentUpdateSubmitActions: FC<CommentUpdateSubmitActionsProps> = ({
+const UpdateSubmitActions: FC<UpdateSubmitActionsProps> = ({
   formId,
   disabled = false,
   ariaLabel = 'save comment edit',
+  cancelAriaLabel = 'cancel comment edit',
   handleEditCancel = () => {},
 }) => (
   <div className="grid grid-cols-[max-content_max-content] gap-2">
-    <IconButton onClick={handleEditCancel} aria-label="cancel comment edit">
+    <IconButton onClick={handleEditCancel} aria-label={cancelAriaLabel}>
       <CloseIcon />
     </IconButton>
     <IconButton type="submit" form={formId} aria-label={ariaLabel} disabled={disabled}>
@@ -20,4 +21,4 @@ const CommentUpdateSubmitActions: FC<CommentUpdateSubmitActionsProps> = ({
   </div>
 )
 
-export default CommentUpdateSubmitActions
+export default UpdateSubmitActions
