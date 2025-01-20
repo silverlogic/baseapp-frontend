@@ -9,8 +9,13 @@ import { LogGroup } from '../../ActivityLogComponent/LogGroups/types'
 export const ActivityLogsFragmentQuery = graphql`
   fragment ActivityLogsFragment on Query
   @refetchable(queryName: "ActivityLogsPaginationQuery")
-  @argumentDefinitions(count: { type: "Int", defaultValue: 10 }, cursor: { type: "String" }) {
-    activityLogs(first: $count, after: $cursor) @connection(key: "ActivityLogs_activityLogs") {
+  @argumentDefinitions(
+    count: { type: "Int", defaultValue: 10 }
+    cursor: { type: "String" }
+    userName: { type: "String", defaultValue: null }
+  ) {
+    activityLogs(first: $count, after: $cursor, userName: $userName)
+      @connection(key: "ActivityLogs_activityLogs", filters: ["userName"]) {
       edges {
         node {
           id
