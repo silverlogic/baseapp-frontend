@@ -14,6 +14,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
   nextMember,
   MemberItemComponent,
   memberItemComponentProps,
+  searchQuery,
 }) => {
   const memberFragment = useFragment(MemberItemFragment, member)
   const nextMemberFragment = useFragment(MemberItemFragment, nextMember)
@@ -37,6 +38,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
           member={data}
           memberRole="owner"
           status={MemberStatuses.active}
+          searchQuery={searchQuery}
           {...memberItemComponentProps}
         />
         <MemberItemComponent
@@ -67,6 +69,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
           member={data}
           memberRole="owner"
           status={MemberStatuses.active}
+          searchQuery={searchQuery}
           {...memberItemComponentProps}
         />
       </>
