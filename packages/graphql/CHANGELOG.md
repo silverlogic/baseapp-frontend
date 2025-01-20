@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.2.2
+
+### Patch Changes
+
+- Use package relay-connection-handler-plus
+
 ## 1.2.1
 
 ### Patch Changes

@@ -88,6 +88,9 @@ catalogs:
     relay-compiler:
       specifier: 16.2.0
       version: 16.2.0
+    relay-connection-handler-plus:
+      specifier: 0.1.2
+      version: 0.1.2
     relay-runtime:
       specifier: 16.2.0
       version: 16.2.0
@@ -550,7 +553,7 @@ importers:
         specifier: 'catalog:'
         version: 4.7.11(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       relay-connection-handler-plus:
-        specifier: ^0.1.2
+        specifier: catalog:graphql
         version: 0.1.2(relay-runtime@16.2.0)
       relay-runtime:
         specifier: catalog:graphql
@@ -1015,7 +1018,7 @@ importers:
         specifier: catalog:graphql
         version: 16.2.0(react@18.3.1)
       relay-connection-handler-plus:
-        specifier: ^0.1.2
+        specifier: catalog:graphql
         version: 0.1.2(relay-runtime@16.2.0)
       relay-runtime:
         specifier: catalog:graphql

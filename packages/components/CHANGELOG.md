@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 0.0.49
+
+### Patch Changes
+
+- Removing chat room members
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.2.2
+
 ## 0.0.48
 
 ### Patch Changes
