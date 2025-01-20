@@ -721,6 +721,7 @@ type Mutation {
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
   removeFromProfile(input: RemoveFromProfileInput!): RemoveFromProfilePayload
+  removeProfileMember(input: RemoveProfileMemberInput!): RemoveProfileMemberPayload
 }
 
 """An object with an ID"""
@@ -1566,6 +1567,20 @@ type RemoveFromProfilePayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   profileUserRole: ProfileUserRole
+  clientMutationId: String
+}
+
+input RemoveProfileMemberInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type RemoveProfileMemberPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
   clientMutationId: String
 }
 

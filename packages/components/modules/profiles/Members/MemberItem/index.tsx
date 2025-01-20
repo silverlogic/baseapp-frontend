@@ -8,7 +8,7 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { useChangeUserRoleMutation } from '../../graphql/mutations/ChangeUserRole'
-import { useRemoveProfileMemberMutation } from '../../graphql/mutations/RemoveProfileMember'
+import { useRemoveMemberMutation } from '../../graphql/mutations/RemoveMember'
 import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { MemberActions, MemberRoles, MemberStatuses, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
@@ -32,7 +32,8 @@ const MemberItem: FC<MemberItemProps> = ({
   const { currentProfile } = useCurrentProfile()
 
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
-  const [removeMember, isRemovingMember] = useRemoveProfileMemberMutation()
+  const [hideMember, setHideMember] = useState(false)
+  const [removeMember, isRemovingMember] = useRemoveMemberMutation(setHideMember)
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
 
@@ -144,6 +145,7 @@ const MemberItem: FC<MemberItemProps> = ({
   if (searchQuery && !memberProfile?.name?.toLowerCase().includes(searchQuery.toLowerCase())) {
     return null
   }
+  if (hideMember) return null
 
   return (
     <MemberItemContainer>
