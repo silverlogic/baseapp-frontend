@@ -26,30 +26,37 @@ import { GroupMembersEdge } from './ProfileCard/types'
 import { GroupHeaderContainer, GroupTitleContainer } from './styled'
 import { GroupDetailsProps } from './types'
 
-const GroupDetails: FC<GroupDetailsProps & { profileId: string }> = ({
+const GroupDetails: FC<GroupDetailsProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
-  profileId,
   queryRef,
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
   VirtuosoProps = {},
 }) => {
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
+  const { currentProfile } = useCurrentProfile()
   const { avatar, title } = useGroupNameAndAvatar(group)
   const theme = useTheme()
 
   const connections = group?.id
     ? [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')]
     : []
-  useRoomListSubscription({ profileId, connections, onRemoval: onBackButtonClicked })
+  // TODO: Is there a safer way to ensure the current profile id is not undefined?
+  useRoomListSubscription({
+    profileId: currentProfile?.id!,
+    connections,
+    onRemoval: onBackButtonClicked,
+  })
 
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     ChatRoomParticipantsPaginationQuery,
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const me = members?.edges.find((edge) => edge?.node?.profile?.id === profileId)
+  const me = members?.edges.find(
+    (edge) => currentProfile?.id && edge?.node?.profile?.id === currentProfile?.id,
+  )
   const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
 
   const renderLoadingState = () => {
@@ -80,12 +87,12 @@ const GroupDetails: FC<GroupDetailsProps & { profileId: string }> = ({
   }
 
   const onRemoveConfirmed = () => {
-    if (!group?.id) return
+    if (!group?.id || !currentProfile?.id) return
     commit({
       variables: {
         input: {
           roomId: group.id,
-          profileId,
+          profileId: currentProfile?.id,
           removeParticipants: [removingParticipantId],
         },
         connections: [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')],
@@ -191,32 +198,22 @@ const GroupDetails: FC<GroupDetailsProps & { profileId: string }> = ({
   )
 }
 
-const WrappedGroupDetails: FC<GroupDetailsProps> = ({ onBackButtonClicked, ...props }) => {
+const SuspendedGroupDetails: FC<GroupDetailsProps> = ({ onBackButtonClicked, ...props }) => (
   // Displays a 'preliminary' header and a spinner below
   // Header has "Group Details" label and back button, but no edit button (appears if the group details are loaded and current user has admin permissions)
-  const { currentProfile } = useCurrentProfile()
-  if (!currentProfile?.id) {
-    return null
-  }
-  return (
-    <Suspense
-      fallback={
-        <>
-          <GroupDetailsHeader
-            onBackButtonClicked={onBackButtonClicked}
-            shouldDisplayEditButton={false}
-          />
-          <LoadingState />
-        </>
-      }
-    >
-      <GroupDetails
-        onBackButtonClicked={onBackButtonClicked}
-        profileId={currentProfile.id}
-        {...props}
-      />
-    </Suspense>
-  )
-}
+  <Suspense
+    fallback={
+      <>
+        <GroupDetailsHeader
+          onBackButtonClicked={onBackButtonClicked}
+          shouldDisplayEditButton={false}
+        />
+        <LoadingState />
+      </>
+    }
+  >
+    <GroupDetails onBackButtonClicked={onBackButtonClicked} {...props} />
+  </Suspense>
+)
 
-export default WrappedGroupDetails
+export default SuspendedGroupDetails
