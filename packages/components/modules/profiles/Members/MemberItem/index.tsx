@@ -107,7 +107,7 @@ const MemberItem: FC<MemberItemProps> = ({
     return null
   }
 
-  if (searchQuery && !memberProfile?.name?.includes(searchQuery)) {
+  if (searchQuery && !memberProfile?.name?.toLowerCase().includes(searchQuery.toLowerCase())) {
     return null
   }
 
