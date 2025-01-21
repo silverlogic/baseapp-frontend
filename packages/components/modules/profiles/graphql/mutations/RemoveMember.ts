@@ -4,30 +4,28 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 
 import { RemoveMemberMutation } from '../../../../__generated__/RemoveMemberMutation.graphql'
 
-export const RemoveMemberMutationQuery = graphql`
-  mutation RemoveMemberMutation($input: RemoveProfileMemberInput!) {
-    removeProfileMember(input: $input) {
+export const ProfileRemoveMemberMutationQuery = graphql`
+  mutation RemoveMemberMutation($id: ID!) {
+    profileRemoveMember(input: { id: $id }) {
       deletedId @deleteRecord
     }
   }
 `
 
 export const useRemoveMemberMutation = (
-  setHideMember: (hideMember: boolean) => void,
+  setHideMember: (hide: boolean) => void,
 ): [(config: UseMutationConfig<RemoveMemberMutation>) => Disposable, boolean] => {
-  const [commitMutation, isMutationInFlight] =
-    useMutation<RemoveMemberMutation>(RemoveMemberMutationQuery)
   const { sendToast } = useNotification()
+  const [commitDelete, isMutationInFlight] = useMutation<RemoveMemberMutation>(
+    ProfileRemoveMemberMutationQuery,
+  )
 
   const commit = (config: UseMutationConfig<RemoveMemberMutation>) =>
-    commitMutation({
+    commitDelete({
       ...config,
       onCompleted: (response, errors) => {
         sendToast('Member removed successfully', { type: 'success' })
         setHideMember(true)
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

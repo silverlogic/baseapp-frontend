@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<bb1d958d5fafce6ac6319f500e832e5c>>
+ * @generated SignedSource<<e73bab53daca71582ec271b6ddf0abae>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,16 +10,11 @@
 // @ts-nocheck
 import { ConcreteRequest, Mutation } from 'relay-runtime'
 
-export type RemoveProfileMemberInput = {
-  clientMutationId?: string | null | undefined
-  profileId: string
-  userId: string
-}
 export type RemoveMemberMutation$variables = {
-  input: RemoveProfileMemberInput
+  id: string
 }
 export type RemoveMemberMutation$data = {
-  readonly removeProfileMember:
+  readonly profileRemoveMember:
     | {
         readonly deletedId: string | null | undefined
       }
@@ -36,14 +31,20 @@ const node: ConcreteRequest = (function () {
       {
         defaultValue: null,
         kind: 'LocalArgument',
-        name: 'input',
+        name: 'id',
       },
     ],
     v1 = [
       {
-        kind: 'Variable',
+        fields: [
+          {
+            kind: 'Variable',
+            name: 'id',
+            variableName: 'id',
+          },
+        ],
+        kind: 'ObjectValue',
         name: 'input',
-        variableName: 'input',
       },
     ],
     v2 = {
@@ -63,9 +64,9 @@ const node: ConcreteRequest = (function () {
         {
           alias: null,
           args: v1 /*: any*/,
-          concreteType: 'RemoveProfileMemberPayload',
+          concreteType: 'ProfileRemoveMemberPayload',
           kind: 'LinkedField',
-          name: 'removeProfileMember',
+          name: 'profileRemoveMember',
           plural: false,
           selections: [v2 /*: any*/],
           storageKey: null,
@@ -83,9 +84,9 @@ const node: ConcreteRequest = (function () {
         {
           alias: null,
           args: v1 /*: any*/,
-          concreteType: 'RemoveProfileMemberPayload',
+          concreteType: 'ProfileRemoveMemberPayload',
           kind: 'LinkedField',
-          name: 'removeProfileMember',
+          name: 'profileRemoveMember',
           plural: false,
           selections: [
             v2 /*: any*/,
@@ -104,16 +105,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'd07a458f8f2b5da249f43e482db25d92',
+      cacheID: 'b4b97c3dc8c75ccc8ca32251e7227882',
       id: null,
       metadata: {},
       name: 'RemoveMemberMutation',
       operationKind: 'mutation',
-      text: 'mutation RemoveMemberMutation(\n  $input: RemoveProfileMemberInput!\n) {\n  removeProfileMember(input: $input) {\n    deletedId\n  }\n}\n',
+      text: 'mutation RemoveMemberMutation(\n  $id: ID!\n) {\n  profileRemoveMember(input: {id: $id}) {\n    deletedId\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'a88f1b07f50559b62b9a2ab49301719b'
+;(node as any).hash = '53fc47d54ac67db976b6996a1eba1b8f'
 
 export default node

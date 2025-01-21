@@ -34,6 +34,7 @@ const MemberItem: FC<MemberItemProps> = ({
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
   const [hideMember, setHideMember] = useState(false)
   const [removeMember, isRemovingMember] = useRemoveMemberMutation(setHideMember)
+
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
 
@@ -57,7 +58,7 @@ const MemberItem: FC<MemberItemProps> = ({
   const removeProfileMember = () => {
     if (currentProfile?.id && userId) {
       removeMember({
-        variables: { input: { profileId: currentProfile.id, userId } },
+        variables: { id: memberProfile.id },
       })
     }
   }
