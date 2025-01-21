@@ -1,8 +1,11 @@
 import { FC } from 'react'
 
 import type { SwipeableDrawerProps } from '@baseapp-frontend/design-system'
+import { ValueOf } from '@baseapp-frontend/utils'
 
 import { BoxProps } from '@mui/material'
+
+import { HOVER_OVERLAY_MODES } from './constants'
 
 export type OverlayAction = {
   label: string
@@ -27,6 +30,7 @@ export interface ActionOverlayProps extends ActionOverlayTooltipContainerProps {
   ContainerProps?: Partial<BoxProps>
   SwipeableDrawer?: FC<SwipeableDrawerProps>
   SwipeableDrawerProps?: Partial<SwipeableDrawerProps>
+  hoverOverlayMode?: ValueOf<typeof HOVER_OVERLAY_MODES>
 }
 
 export interface ActionOverlayTooltipContainerProps extends BoxProps {

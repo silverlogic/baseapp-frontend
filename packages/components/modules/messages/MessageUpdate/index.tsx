@@ -7,27 +7,27 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
+import { UpdateSubmitActions } from '../../__shared__'
 import DefaultSocialInput from '../../__shared__/SocialInput'
-import UpdateSubmitActions from '../../__shared__/UpdateSubmitActions'
 import {
   SOCIAL_UPSERT_FORM,
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
 } from '../../__shared__/constants'
 import { SocialUpsertForm } from '../../__shared__/types'
-import { useCommentUpdateMutation } from '../graphql/mutations/CommentUpdate'
-import { CommentUpdateProps } from './types'
+import { useMessageUpdateMutation } from '../graphql/mutations/MessageUpdate'
+import { MessageUpdateProps } from './types'
 
 /**
- * ### CommentUpdate Component
+ * ### MessageUpdate Component
  *
  * @description
  * This is a **BaseApp** feature.
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  *
- * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and `form` setup to handle comment updates.
+ * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and `form` setup to handle message updates.
  *
- * It leverages the `useCommentUpdateMutation` mutation for updating comments and integrates form validation using
+ * It leverages the `useMessageUpdateMutation` mutation for updating messages and integrates form validation using
  * `react-hook-form` and Zod for schema validation.
  *
  * ### Extending the Component
@@ -42,16 +42,16 @@ import { CommentUpdateProps } from './types'
  * import { useMyCustomUpdateMutation } from './myCustomMutation';
  * import SocialInput from './SocialInput';
  *
- * const MyCustomCommentUpdate = ({ comment, onCancel }) => {
+ * const MyCustomMessageUpdate = ({ message, onCancel }) => {
  *   const form = useForm({
  *     resolver: zodResolver(myCustomSchema),
- *     defaultValues: { body: comment.body ?? '' },
+ *     defaultValues: { body: message.content ?? '' },
  *   });
  *   const [commitUpdate, isMutationInFlight] = useMyCustomUpdateMutation();
  *
  *   const onSubmit = (data) => {
  *     commitUpdate({
- *       variables: { input: { id: comment.id, body: data.body } },
+ *       variables: { input: { id: message.id, content: data.body } },
  *       onCompleted: (response) => {
  *         // handle response
  *         form.reset();
@@ -72,8 +72,8 @@ import { CommentUpdateProps } from './types'
  * };
  * ```
  */
-const CommentUpdate: FC<CommentUpdateProps> = ({
-  comment,
+const MessageUpdate: FC<MessageUpdateProps> = ({
+  message,
   onCancel,
   SocialInput = DefaultSocialInput,
   SocialInputProps = {},
@@ -81,11 +81,11 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   const inputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<SocialUpsertForm>({
-    defaultValues: { body: comment.body ?? '' },
+    defaultValues: { body: message.content ?? '' },
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
 
-  const [commitUpdate, isMutationInFlight] = useCommentUpdateMutation()
+  const [commitUpdate, isMutationInFlight] = useMessageUpdateMutation()
 
   const onSubmit = async (data: SocialUpsertForm) => {
     if (isMutationInFlight) return
@@ -93,8 +93,8 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
     commitUpdate({
       variables: {
         input: {
-          id: comment.id,
-          body: data?.body,
+          id: message.id,
+          content: data?.body,
         },
       },
       onCompleted: (response, errors) => {
@@ -103,7 +103,7 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
           console.error(errors)
           return
         }
-        const mutationErrors = response?.commentUpdate?.errors
+        const mutationErrors = response?.chatRoomEditMessage?.errors
         setFormRelayErrors(form, mutationErrors)
 
         if (!mutationErrors?.length) {
@@ -118,7 +118,7 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
 
   const handleEditCancel = () => {
     onCancel()
-    form.setValue(SOCIAL_UPSERT_FORM.body, comment.body ?? '')
+    form.setValue(SOCIAL_UPSERT_FORM.body, message.content ?? '')
   }
 
   useEffect(() => {
@@ -135,17 +135,19 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
       submit={onSubmit}
       isLoading={isMutationInFlight}
       form={form}
-      formId="comment-update"
+      formId="message-update"
       autoFocusInput
       SubmitActions={UpdateSubmitActions}
       SubmitActionsProps={{
         handleEditCancel,
-        formId: 'comment-update',
+        formId: 'message-update',
         disabled: isMutationInFlight,
+        ariaLabel: 'save message edit',
+        cancelAriaLabel: 'cancel message edit',
       }}
       {...SocialInputProps}
     />
   )
 }
 
-export default CommentUpdate
+export default MessageUpdate
