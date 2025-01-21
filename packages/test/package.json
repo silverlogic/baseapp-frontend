@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/test",
   "description": "Test utils that extends React Testing Library.",
-  "version": "2.0.6",
+  "version": "2.1.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,

@@ -1,24 +1,30 @@
 'use client'
 
-import { FC, Suspense } from 'react'
+import { FC, Suspense, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { CircledAvatar, LoadingState } from '@baseapp-frontend/design-system'
+import { CircledAvatar, ConfirmDialog, LoadingState } from '@baseapp-frontend/design-system'
+import { useNotification } from '@baseapp-frontend/utils'
 
+import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
-import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
+import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
 import { ChatRoomParticipantsPaginationQuery } from '../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../__generated__/MembersListFragment.graphql'
+import { MembersListFragment } from '../graphql/fragments/MembersList'
+import { useUpdateChatRoomMutation } from '../graphql/mutations/UpdateChatRoom'
 import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
-import { MembersListFragment } from '../graphql/queries/MembersList'
+import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
+import { getParticipantCountString, useGroupNameAndAvatar } from '../utils'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
 import { CHAT_ROOM_PARTICIPANT_ROLES } from './ProfileCard/constants'
+import { GroupMembersEdge } from './ProfileCard/types'
 import { GroupHeaderContainer, GroupTitleContainer } from './styled'
-import { GroupDetailsProps, GroupMembersEdge } from './types'
+import { GroupDetailsProps } from './types'
 
 const GroupDetails: FC<GroupDetailsProps> = ({
   onBackButtonClicked,
@@ -28,9 +34,20 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   ProfileCardProps = {},
   VirtuosoProps = {},
 }) => {
-  const theme = useTheme()
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { currentProfile } = useCurrentProfile()
+  const { avatar, title } = useGroupNameAndAvatar(group)
+  const theme = useTheme()
+
+  const connections = group?.id
+    ? [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')]
+    : []
+  // TODO: Is there a safer way to ensure the current profile id is not undefined?
+  useRoomListSubscription({
+    profileId: currentProfile?.id!,
+    connections,
+    onRemoval: onBackButtonClicked,
+  })
 
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     ChatRoomParticipantsPaginationQuery,
@@ -54,13 +71,66 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     )
   }
 
+  const [removingParticipantId, setRemovingParticipantId] = useState<string | undefined>(undefined)
+  const removingParticipantName = useRef<string | null | undefined>(undefined)
+  const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
+  const { sendToast } = useNotification()
+
+  const initiateRemoval = (id: string, name: string | null | undefined) => {
+    setRemovingParticipantId(id)
+    removingParticipantName.current = name
+  }
+
+  const handleRemoveDialogClose = () => {
+    setRemovingParticipantId(undefined)
+    removingParticipantName.current = undefined
+  }
+
+  const onRemoveConfirmed = () => {
+    if (!group?.id || !currentProfile?.id) return
+    commit({
+      variables: {
+        input: {
+          roomId: group.id,
+          profileId: currentProfile?.id,
+          removeParticipants: [removingParticipantId],
+        },
+        connections: [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')],
+      },
+      onCompleted: (response) => {
+        if (!response?.chatRoomUpdate?.errors) {
+          sendToast(`${removingParticipantName.current} was successfully removed`)
+        }
+        handleRemoveDialogClose()
+      },
+    })
+  }
+
+  const renderDeleteDialog = () => (
+    <ConfirmDialog
+      title={`Remove ${removingParticipantName.current}?`}
+      content={`Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`}
+      action={
+        <LoadingButton
+          color="error"
+          onClick={onRemoveConfirmed}
+          disabled={isMutationInFlight}
+          loading={isMutationInFlight}
+        >
+          Remove
+        </LoadingButton>
+      }
+      onClose={handleRemoveDialogClose}
+      open={removingParticipantId !== undefined}
+    />
+  )
+
   const renderItem = (item: GroupMembersEdge) => {
-    const profile = item?.node?.profile
-    if (profile) {
+    if (item.node) {
       return (
         <ProfileCard
-          role={item?.node?.role}
-          profile={profile}
+          groupMember={item.node}
+          initiateRemoval={initiateRemoval}
           hasAdminPermissions={isAdmin}
           {...ProfileCardProps}
         />
@@ -88,6 +158,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
 
   return (
     <>
+      {renderDeleteDialog()}
       <GroupDetailsHeader
         onBackButtonClicked={onBackButtonClicked}
         onEditButtonClicked={onEditButtonClicked}
@@ -95,13 +166,13 @@ const GroupDetails: FC<GroupDetailsProps> = ({
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
         <GroupHeaderContainer>
-          <CircledAvatar src={group?.image?.url} width={144} height={144} hasError={false} />
+          <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
           <GroupTitleContainer>
             <Typography variant="subtitle1" color="text.primary">
-              {group?.title}
+              {title}
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              {members?.totalCount} member{members?.totalCount !== 1 ? 's' : ''}
+              {getParticipantCountString(group?.participantsCount)}
             </Typography>
           </GroupTitleContainer>
         </GroupHeaderContainer>

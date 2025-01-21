@@ -22,26 +22,26 @@ In order to use this package you will need to:
 
 - create `__mocks__` folder at the root level and add these three files inside it:
 
-  - consoleMock.ts
+  - console.ts
 
     ```ts
-    module.exports = require('@baseapp-frontend/test/__mocks__/consoleMock.ts')
+    module.exports = require('@baseapp-frontend/test/__mocks__/console.ts')
 
     export {}
     ```
 
-  - fileMock.ts
+  - file.ts
 
     ```ts
-    module.exports = require('@baseapp-frontend/test/__mocks__/fileMock.ts')
+    module.exports = require('@baseapp-frontend/test/__mocks__/file.ts')
 
     export {}
     ```
 
-  - styleMock.ts
+  - style.ts
 
     ```ts
-    module.exports = require('@baseapp-frontend/test/__mocks__/styleMock.ts')
+    module.exports = require('@baseapp-frontend/test/__mocks__/style.ts')
 
     export {}
     ```

@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.2
+
+### Patch Changes
+
+- Update mock files.
+
 ## 3.1.1
 
 ### Patch Changes

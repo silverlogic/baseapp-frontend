@@ -96,6 +96,8 @@ const CreateGroup: FC<CreateGroupProps> = ({
           // TODO: add filter handling (for now we can default 'unreadMessages' to false)
           ConnectionHandler.getConnectionID(currentProfile?.id as string, 'roomsList_chatRooms', {
             unreadMessages: false,
+            archived: false,
+            q: '',
           }),
         ],
       },

@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 0.0.31
+
+### Patch Changes
+
+- Update mock files.
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.2
+
 ## 0.0.30
 
 ### Patch Changes

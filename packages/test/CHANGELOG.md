@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.1.0
+
+### Minor Changes
+
+- Update mock files.
+
 ## 2.0.6
 
 ### Patch Changes

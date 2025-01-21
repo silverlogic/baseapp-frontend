@@ -40,6 +40,7 @@ catalogs:
     isomorphic-ws: 5.0.0
     react-relay: 16.2.0
     relay-compiler: 16.2.0
+    relay-connection-handler-plus: 0.1.2
     relay-runtime: 16.2.0
     relay-test-utils: 17.0.0
 

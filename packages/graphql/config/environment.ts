@@ -4,6 +4,7 @@ import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
+import ConnectionHandler from 'relay-connection-handler-plus'
 import {
   CacheConfig,
   Environment,
@@ -17,6 +18,9 @@ import {
   UploadableMap,
   Variables,
 } from 'relay-runtime'
+import RelayDefaultHandlerProvider, {
+  HandlerProvider,
+} from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
 const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
 
@@ -151,12 +155,22 @@ function createQueryCache() {
 
 const responseCacheByEnvironment = new WeakMap<Environment, QueryResponseCache>()
 
+function handlerProvider(handle: string) {
+  switch (handle) {
+    case 'connection':
+      return ConnectionHandler
+    default:
+      return (RelayDefaultHandlerProvider as unknown as HandlerProvider)(handle)
+  }
+}
+
 export function createEnvironment() {
   const cache = createQueryCache()
   const network = createNetwork(cache)
   const store = new Store(RecordSource.create())
 
   const environment = new Environment({
+    handlerProvider,
     network,
     store,
     isServer: typeof window === typeof undefined,

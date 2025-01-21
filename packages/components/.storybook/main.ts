@@ -68,11 +68,13 @@ const config: StorybookConfig = {
     if (config.resolve) {
       config.resolve.alias = {
         ...config.resolve.alias,
-        events: require.resolve('../__mocks__/eventEmitterMock.ts'),
-        'expo-secure-store': false,
-        'react-native': false,
-        'next/font/google': resolve(__dirname, './__mocks__/nextFontMock.ts'),
-        'next/image': resolve(__dirname, './__mocks__/NextImageMock.tsx'),
+        'expo-constants': resolve(__dirname, '../__mocks__/expo-constants.ts'),
+        'expo-modules-core': resolve(__dirname, '../__mocks__/expo-modules-core.ts'),
+        'expo-secure-store': resolve(__dirname, '../__mocks__/expo-secure-store.ts'),
+        'next/font/google': resolve(__dirname, '../__mocks__/next-font.ts'),
+        'next/image': resolve(__dirname, './__mocks__/NextImage.tsx'),
+        'react-native': resolve(__dirname, '../__mocks__/react-native.ts'),
+        events: resolve(__dirname, '../__mocks__/events.ts'),
       }
       config.resolve.modules = [resolve(__dirname, 'node_modules'), 'node_modules']
     }

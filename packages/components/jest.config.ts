@@ -4,6 +4,6 @@ module.exports = {
   ...jestConfigs,
   setupFilesAfterEnv: [
     ...(jestConfigs.setupFilesAfterEnv ?? []),
-    '<rootDir>/jest/__mocks__/graphqlWsMock.ts',
+    '<rootDir>/jest/__mocks__/graphql-ws.ts',
   ],
 }

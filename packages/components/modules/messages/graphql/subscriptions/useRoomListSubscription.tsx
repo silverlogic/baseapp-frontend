@@ -1,41 +1,108 @@
+'use-client'
+
 import { useMemo } from 'react'
 
-import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
+import { useNotification } from '@baseapp-frontend/utils'
 
-const RoomListSubscriptionQuery = graphql`
+import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
+import { RecordSourceSelectorProxy } from 'relay-runtime'
+
+import {
+  useRoomListSubscription$data,
+  useRoomListSubscription as useRoomListSubscriptionType,
+} from '../../../../__generated__/useRoomListSubscription.graphql'
+import { useChatRoom } from '../../context'
+import { getChatRoomConnections } from '../../utils'
+
+// isArchived is needed to bump the chatRoom up in the correct connection
+// title is used to toast room name if user was removed, without having to read in a fragment
+export const RoomListSubscriptionQuery = graphql`
   subscription useRoomListSubscription($profileId: ID!, $connections: [ID!]!) {
     chatRoomOnRoomUpdate(profileId: $profileId) {
-      room @prependEdge(connections: $connections) {
+      room {
         node {
           id
-          ...RoomFragment
+          isArchived
+          participantsCount
+          title
+          ...LastMessageFragment
+          ...TitleFragment
+          ...UnreadMessagesCountFragment
+        }
+      }
+      removedParticipants {
+        id @deleteEdge(connections: $connections)
+        profile {
+          id
         }
       }
     }
   }
 `
 
-const useRoomListSubscription = (profileId: string) => {
+const useRoomListSubscription = ({
+  connections,
+  profileId,
+  onRemoval,
+}: {
+  connections: string[]
+  profileId: string
+  onRemoval?: () => void
+}) => {
+  const { id: selectedRoom, resetChatRoom } = useChatRoom()
+  const { sendToast } = useNotification()
+
   const config = useMemo(() => {
-    const connectionIdActive = ConnectionHandler.getConnectionID(profileId, 'roomsList_chatRooms', {
-      unreadMessages: false,
-      archived: false,
-    })
-    const connectionIdUnread = ConnectionHandler.getConnectionID(profileId, 'roomsList_chatRooms', {
-      unreadMessages: true,
-      archived: false,
-    })
+    const wasRemovedFromChatRoom = (data: useRoomListSubscription$data | null | undefined) =>
+      data?.chatRoomOnRoomUpdate?.removedParticipants?.some(
+        (node) => node?.profile?.id === profileId,
+      )
+
     return {
       subscription: RoomListSubscriptionQuery,
       onError: console.error,
-      variables: {
-        profileId,
-        connections: [connectionIdActive, connectionIdUnread],
+      variables: { profileId, connections },
+      updater: (
+        store: RecordSourceSelectorProxy<unknown>,
+        data: useRoomListSubscription$data | null | undefined,
+      ) => {
+        const roomId = data?.chatRoomOnRoomUpdate?.room?.node?.id
+        if (!roomId) return
+        if (wasRemovedFromChatRoom(data)) {
+          getChatRoomConnections(store, profileId).forEach((connectionRecord) =>
+            ConnectionHandler.deleteNode(connectionRecord, roomId),
+          )
+        } else {
+          const isArchived = data?.chatRoomOnRoomUpdate?.room?.node?.isArchived
+          getChatRoomConnections(
+            store,
+            profileId,
+            ({ q, archived }) => q === '' && archived === isArchived,
+          ).forEach((connectionRecord) => {
+            ConnectionHandler.deleteNode(connectionRecord, roomId)
+            const serverEdge = store.getRootField('chatRoomOnRoomUpdate')?.getLinkedRecord('room')
+            const edge = ConnectionHandler.buildConnectionEdge(store, connectionRecord, serverEdge)
+            if (edge) {
+              ConnectionHandler.insertEdgeBefore(connectionRecord, edge)
+            }
+          })
+        }
+      },
+      onNext: (data: useRoomListSubscription$data | null | undefined) => {
+        if (wasRemovedFromChatRoom(data)) {
+          if (selectedRoom && data?.chatRoomOnRoomUpdate?.room?.node?.id === selectedRoom) {
+            resetChatRoom()
+          }
+          onRemoval?.()
+          sendToast(`You were removed from ${data?.chatRoomOnRoomUpdate?.room?.node?.title}`, {
+            type: 'info',
+          })
+        }
       },
     }
-  }, [profileId])
+  }, [profileId, connections, onRemoval, selectedRoom, resetChatRoom])
 
-  return useSubscription(config)
+  return useSubscription<useRoomListSubscriptionType>(config)
 }
 
 export default useRoomListSubscription

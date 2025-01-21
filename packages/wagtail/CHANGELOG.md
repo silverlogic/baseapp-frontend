@@ -1,5 +1,22 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.17
+
+### Patch Changes
+
+- Update mock files.
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.31
+  - @baseapp-frontend/graphql@1.2.3
+  - @baseapp-frontend/utils@3.1.2
+
+## 1.0.16
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.2.2
+
 ## 1.0.15
 
 ### Patch Changes

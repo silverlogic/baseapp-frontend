@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cba84f59464f3dadd929acc641345550>>
+ * @generated SignedSource<<bb785e4d9772b5c931f812256622c873>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -161,6 +161,7 @@ const node: ConcreteRequest = (function () {
                           name: 'node',
                           plural: false,
                           selections: [
+                            v3 /*: any*/,
                             {
                               alias: null,
                               args: null,
@@ -235,7 +236,6 @@ const node: ConcreteRequest = (function () {
                               name: 'role',
                               storageKey: null,
                             },
-                            v3 /*: any*/,
                             v2 /*: any*/,
                           ],
                           storageKey: null,
@@ -275,13 +275,6 @@ const node: ConcreteRequest = (function () {
                       ],
                       storageKey: null,
                     },
-                    {
-                      alias: null,
-                      args: null,
-                      kind: 'ScalarField',
-                      name: 'totalCount',
-                      storageKey: null,
-                    },
                   ],
                   storageKey: null,
                 },
@@ -304,16 +297,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '8962f61a90250e6d4d8d42f1dc7cc320',
+      cacheID: '8cb8f1bdc2aa4700b94a7e47557c0da4',
       id: null,
       metadata: {},
       name: 'ChatRoomParticipantsPaginationQuery',
       operationKind: 'query',
-      text: 'query ChatRoomParticipantsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MembersListFragment_1G22uz\n    id\n  }\n}\n\nfragment MembersListFragment_1G22uz on ChatRoom {\n  id\n  participants(first: $count, after: $cursor) {\n    edges {\n      node {\n        profile {\n          id\n          ...ProfileItemFragment\n        }\n        role\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    totalCount\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query ChatRoomParticipantsPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MembersListFragment_1G22uz\n    id\n  }\n}\n\nfragment MembersListFragment_1G22uz on ChatRoom {\n  id\n  participants(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        profile {\n          id\n          ...ProfileItemFragment\n        }\n        role\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '4aad0edd43aec1e87daea42f647a59d3'
+;(node as any).hash = '49f7bb8685111dd9a1075b9147c84abb'
 
 export default node
