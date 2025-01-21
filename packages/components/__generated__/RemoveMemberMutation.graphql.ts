@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e73bab53daca71582ec271b6ddf0abae>>
+ * @generated SignedSource<<75b6ee0b9ad6bcd307634d310129e71b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,8 +10,13 @@
 // @ts-nocheck
 import { ConcreteRequest, Mutation } from 'relay-runtime'
 
+export type ProfileRemoveMemberInput = {
+  clientMutationId?: string | null | undefined
+  profileId: string
+  userId: string
+}
 export type RemoveMemberMutation$variables = {
-  id: string
+  input: ProfileRemoveMemberInput
 }
 export type RemoveMemberMutation$data = {
   readonly profileRemoveMember:
@@ -31,20 +36,14 @@ const node: ConcreteRequest = (function () {
       {
         defaultValue: null,
         kind: 'LocalArgument',
-        name: 'id',
+        name: 'input',
       },
     ],
     v1 = [
       {
-        fields: [
-          {
-            kind: 'Variable',
-            name: 'id',
-            variableName: 'id',
-          },
-        ],
-        kind: 'ObjectValue',
+        kind: 'Variable',
         name: 'input',
+        variableName: 'input',
       },
     ],
     v2 = {
@@ -105,16 +104,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'b4b97c3dc8c75ccc8ca32251e7227882',
+      cacheID: '7ede42a17cf2d60398c7a5019de5f013',
       id: null,
       metadata: {},
       name: 'RemoveMemberMutation',
       operationKind: 'mutation',
-      text: 'mutation RemoveMemberMutation(\n  $id: ID!\n) {\n  profileRemoveMember(input: {id: $id}) {\n    deletedId\n  }\n}\n',
+      text: 'mutation RemoveMemberMutation(\n  $input: ProfileRemoveMemberInput!\n) {\n  profileRemoveMember(input: $input) {\n    deletedId\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '53fc47d54ac67db976b6996a1eba1b8f'
+;(node as any).hash = '4426831487fa708c1e351d2c7608e1f8'
 
 export default node

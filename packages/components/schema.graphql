@@ -1256,7 +1256,8 @@ interface ProfileInterface {
 }
 
 input ProfileRemoveMemberInput {
-  id: ID!
+  profileId: ID!
+  userId: ID!
   clientMutationId: String
 }
 

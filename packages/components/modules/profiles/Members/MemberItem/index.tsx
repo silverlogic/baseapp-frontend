@@ -58,7 +58,7 @@ const MemberItem: FC<MemberItemProps> = ({
   const removeProfileMember = () => {
     if (currentProfile?.id && userId) {
       removeMember({
-        variables: { id: memberProfile.id },
+        variables: { input: { profileId: currentProfile.id, userId } },
       })
     }
   }
