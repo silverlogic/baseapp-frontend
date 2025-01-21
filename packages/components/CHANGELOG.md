@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 0.0.52
+
+### Patch Changes
+
+- Added a popover menu for action options in the ActionsOverlay component.
+- Introduced message update functionality with edit mode.
+- Implemented hover overlay modes for enhanced action display.
+- Introduced new DefaultHoverOverlay and ThreeDotsMenuHoverOverlay components for action overlays.
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.32
+
 ## 0.0.51
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.32
+
+### Patch Changes
+
+- Added new icons: Copy and Download.
+
 ## 0.0.31
 
 ### Patch Changes
