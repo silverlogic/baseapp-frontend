@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.51
+
+### Patch Changes
+
+- Added search bar to members list. User can search for members by first name, last name and email.
+
 ## 0.0.50
 
 ### Patch Changes
