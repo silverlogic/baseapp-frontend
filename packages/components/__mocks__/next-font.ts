@@ -1,3 +1,1 @@
-module.exports = require('@baseapp-frontend/test/__mocks__/next-font.ts')
-
-export {}
+export * from '@baseapp-frontend/test/__mocks__/next-font'
