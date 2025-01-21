@@ -7,7 +7,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
 import { Box, Button, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
+import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 

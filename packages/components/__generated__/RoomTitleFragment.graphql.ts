@@ -10,11 +10,8 @@
 // @ts-nocheck
 import { Fragment, ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
-<<<<<<< HEAD
-=======
 
 export type ChatRoomParticipantRoles = 'ADMIN' | 'MEMBER' | '%future added value'
->>>>>>> ca42a63 (feat: leave chatroom as admin)
 
 export type RoomTitleFragment$data = {
   readonly id: string
@@ -37,10 +34,7 @@ export type RoomTitleFragment$data = {
                         }
                       | null
                       | undefined
-<<<<<<< HEAD
-=======
                     readonly role: ChatRoomParticipantRoles | null | undefined
->>>>>>> ca42a63 (feat: leave chatroom as admin)
                   }
                 | null
                 | undefined
@@ -151,8 +145,6 @@ const node: ReaderFragment = (function () {
                     ],
                     storageKey: null,
                   },
-<<<<<<< HEAD
-=======
                   {
                     alias: null,
                     args: null,
@@ -160,7 +152,6 @@ const node: ReaderFragment = (function () {
                     name: 'role',
                     storageKey: null,
                   },
->>>>>>> ca42a63 (feat: leave chatroom as admin)
                 ],
                 storageKey: null,
               },
@@ -176,10 +167,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-<<<<<<< HEAD
-;(node as any).hash = '89160f172288e6c8c11de9207b13170b'
-=======
 ;(node as any).hash = '85a5bc01dc7b0a178da79ab086920f79'
->>>>>>> ca42a63 (feat: leave chatroom as admin)
 
 export default node

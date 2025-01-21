@@ -335,8 +335,6 @@ const node: ConcreteRequest = (function () {
                                   ],
                                   storageKey: null,
                                 },
-<<<<<<< HEAD
-=======
                                 {
                                   alias: null,
                                   args: null,
@@ -344,7 +342,6 @@ const node: ConcreteRequest = (function () {
                                   name: 'role',
                                   storageKey: null,
                                 },
->>>>>>> ca42a63 (feat: leave chatroom as admin)
                                 v3 /*: any*/,
                               ],
                               storageKey: null,
@@ -443,20 +440,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-<<<<<<< HEAD
-      cacheID: 'b33e570c1e964cbbf0ebdbe2cf54b30b',
-=======
       cacheID: 'a2260a231117b56bb0af9b5197dd5198',
->>>>>>> ca42a63 (feat: leave chatroom as admin)
       id: null,
       metadata: {},
       name: 'useRoomListSubscription',
       operationKind: 'subscription',
-<<<<<<< HEAD
-      text: 'subscription useRoomListSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnRoomUpdate(profileId: $profileId) {\n    room {\n      node {\n        id\n        isArchived\n        participantsCount\n        title\n        ...LastMessageFragment\n        ...TitleFragment\n        ...UnreadMessagesCountFragment\n      }\n    }\n    removedParticipants {\n      id\n      profile {\n        id\n      }\n    }\n  }\n}\n\nfragment GroupTitleFragment on ChatRoom {\n  id\n  image(width: 144, height: 144) {\n    url\n  }\n  title\n}\n\nfragment LastMessageFragment on ChatRoom {\n  id\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n}\n\nfragment RoomTitleFragment on ChatRoom {\n  id\n  participants(first: 2) {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        id\n      }\n    }\n  }\n}\n\nfragment TitleFragment on ChatRoom {\n  id\n  isGroup\n  ...RoomTitleFragment\n  ...GroupTitleFragment\n}\n\nfragment UnreadMessagesCountFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n}\n',
-=======
       text: 'subscription useRoomListSubscription(\n  $profileId: ID!\n) {\n  chatRoomOnRoomUpdate(profileId: $profileId) {\n    room {\n      node {\n        id\n        isArchived\n        participantsCount\n        title\n        ...LastMessageFragment\n        ...TitleFragment\n        ...UnreadMessagesCountFragment\n      }\n    }\n    removedParticipants {\n      id\n      profile {\n        id\n      }\n    }\n  }\n}\n\nfragment GroupTitleFragment on ChatRoom {\n  id\n  image(width: 144, height: 144) {\n    url\n  }\n  title\n}\n\nfragment LastMessageFragment on ChatRoom {\n  id\n  lastMessageTime\n  lastMessage {\n    id\n    content\n  }\n}\n\nfragment RoomTitleFragment on ChatRoom {\n  id\n  participants(first: 2) {\n    edges {\n      node {\n        profile {\n          id\n          name\n          image(width: 100, height: 100) {\n            url\n          }\n        }\n        role\n        id\n      }\n    }\n  }\n}\n\nfragment TitleFragment on ChatRoom {\n  id\n  isGroup\n  ...RoomTitleFragment\n  ...GroupTitleFragment\n}\n\nfragment UnreadMessagesCountFragment on ChatRoom {\n  id\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n}\n',
->>>>>>> ca42a63 (feat: leave chatroom as admin)
     },
   }
 })()
