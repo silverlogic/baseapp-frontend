@@ -624,6 +624,7 @@ type Metadata {
 }
 
 type Mutation {
+  rateCreate(input: RateCreateInput!): RateCreatePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
@@ -1269,6 +1270,7 @@ type ProfileUserRoleEdge {
 }
 
 type Query {
+  allUserDevices(offset: Int, before: String, after: String, first: Int, last: Int): UserDeviceTypeConnection
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
   organization(
     """The ID of the object"""
@@ -1365,6 +1367,22 @@ type RateConnection {
   edges: [RateEdge]!
   totalCount: Int
   edgeCount: Int
+}
+
+input RateCreateInput {
+  targetObjectId: ID!
+  profileId: ID
+  value: Int!
+  clientMutationId: String
+}
+
+type RateCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  rate: RateEdge
+  target: RatingsInterface
+  clientMutationId: String
 }
 
 """A Relay edge containing a `Rate` and its cursor."""
@@ -1636,6 +1654,41 @@ type UserConnection {
   edges: [UserEdge]!
   totalCount: Int
   edgeCount: Int
+}
+
+type UserDeviceType implements Node {
+  """The ID of the object"""
+  id: ID!
+  user: User!
+  ipAddress: String!
+  lastLogin: DateTime
+  createdAt: DateTime!
+  address: String
+  osFamily: String
+  osVersion: String
+  browserFamily: String
+  browserVersion: String
+  deviceFamily: String
+  isMobile: Boolean
+  isTablet: Boolean
+  isPc: Boolean
+}
+
+type UserDeviceTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UserDeviceTypeEdge]!
+}
+
+"""A Relay edge containing a `UserDeviceType` and its cursor."""
+type UserDeviceTypeEdge {
+  """The item at the end of the edge"""
+  node: UserDeviceType
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 """A Relay edge containing a `User` and its cursor."""
