@@ -15,7 +15,6 @@ type ActivityLog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
-<<<<<<< HEAD
   user: User
   ipAddress: String
   verb: String

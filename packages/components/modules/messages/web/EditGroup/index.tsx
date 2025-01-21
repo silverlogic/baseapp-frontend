@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
@@ -10,7 +10,7 @@ import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { usePreloadedQuery } from 'react-relay'
+import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import {
@@ -28,6 +28,12 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   profileId,
   queryRef,
   roomId,
+  ProfileCard = DefaultProfileCard,
+  ProfileCardProps = {},
+  Searchbar = DefaultSearchbar,
+  SearchbarProps = {},
+  MembersList = DefaultProfilesList,
+  MembersListProps = {},
   onCancellation,
   onRemovalFromGroup,
   onValidSubmission,
@@ -36,6 +42,25 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
+
+  const {
+    data: membersList,
+    loadNext,
+    isLoadingNext,
+    hasNext,
+    refetch,
+  } = usePaginationFragment<ChatRoomParticipantsPaginationQuery, MembersListFragment$key>(
+    MembersListFragment,
+    group,
+  )
+
+  const participants = useMemo(
+    () =>
+      membersList?.participants?.edges?.map(
+        (edge: any) => edge?.node?.profile && edge.node.profile,
+      ) as ProfileNode[],
+    [membersList],
+  )
 
   const formReturn = useForm({
     defaultValues: getDefaultFormValues(title || '', avatar),
@@ -133,6 +158,22 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
         setValue={setValue}
         trigger={trigger}
         watch={watch}
+      />
+      <GroupChatMembersList
+        FORM_VALUE={FORM_VALUE}
+        setValue={setValue}
+        watch={watch}
+        currentParticipants={participants}
+        refetch={refetch}
+        membersLoadNext={loadNext}
+        membersHasNext={hasNext}
+        membersIsLoadingNext={isLoadingNext}
+        Searchbar={Searchbar}
+        SearchbarProps={SearchbarProps}
+        ProfileCard={ProfileCard}
+        ProfileCardProps={ProfileCardProps}
+        MembersList={MembersList}
+        MembersListProps={MembersListProps}
       />
     </Box>
   )
