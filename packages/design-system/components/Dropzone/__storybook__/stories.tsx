@@ -3,10 +3,12 @@ import { Meta, StoryObj } from '@storybook/react'
 import Dropzone from '..'
 import { DropzoneProps } from '../types'
 
-export default {
+const meta: Meta<DropzoneProps> = {
   title: '@baseapp-frontend | designSystem/Dropzone/Dropzone',
   component: Dropzone,
-} as Meta<DropzoneProps>
+}
+
+export default meta
 
 type Story = StoryObj<DropzoneProps>
 
