@@ -24,6 +24,7 @@ export const MessagesListFragment = graphql`
             }
           }
           isRead
+          messageType
           ...MessageItemFragment
         }
       }

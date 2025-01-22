@@ -6,10 +6,10 @@ import { CopyIcon, DownloadIcon, PenEditIcon } from '@baseapp-frontend/design-sy
 import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import ActionsOverlay from '../../../../__shared__/ActionsOverlay'
-import { HOVER_OVERLAY_MODES } from '../../../../__shared__/ActionsOverlay/constants'
-import MessageUpdate from '../../../MessageUpdate'
-import { MessageItemFragment } from '../../../graphql/fragments/MessageItem'
+import ActionsOverlay from '../../../../../__shared__/ActionsOverlay'
+import { HOVER_OVERLAY_MODES } from '../../../../../__shared__/ActionsOverlay/constants'
+import MessageUpdate from '../../../../MessageUpdate'
+import { MessageItemFragment } from '../../../../graphql/fragments/MessageItem'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 

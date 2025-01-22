@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<132c9b893bebbdd1686a37cce9ee0d0f>>
+ * @generated SignedSource<<89d17b7a6ecad5b65bc1bfa05cf71913>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -9,6 +9,7 @@
 // @ts-nocheck
 
 import { ReaderFragment, RefetchableFragment } from 'relay-runtime';
+export type MessageType = "SYSTEM_GENERATED" | "USER_MESSAGE" | "%future added value";
 import { FragmentRefs } from "relay-runtime";
 export type MessagesListFragment$data = {
   readonly allMessages: {
@@ -17,6 +18,7 @@ export type MessagesListFragment$data = {
         readonly created: any;
         readonly id: string;
         readonly isRead: boolean | null | undefined;
+        readonly messageType: MessageType | null | undefined;
         readonly profile: {
           readonly id: string;
           readonly image: {
@@ -229,6 +231,13 @@ return {
                   "storageKey": null
                 },
                 {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "messageType",
+                  "storageKey": null
+                },
+                {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "MessageItemFragment"
@@ -287,6 +296,6 @@ return {
 };
 })();
 
-(node as any).hash = "2101646ad6b90d900738f9b290616d98";
+(node as any).hash = "9a3c1fd2e9507a24075ab2654972c7cf";
 
 export default node;
