@@ -9,6 +9,7 @@ import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../__generated__/MessagesListFragment.graphql'
+import { MESSAGE_TYPE } from '../constants'
 import { useChatRoom } from '../context'
 import { MessagesListFragment } from '../graphql/fragments/MessagesList'
 import { useReadMessageMutation } from '../graphql/mutations/ReadMessages'
@@ -48,9 +49,10 @@ const MessagesList: FC<MessagesListProps> = ({
   const [commitMutation] = useReadMessageMutation()
 
   const getFirstUnreadMessageId = () => {
-    if (room?.unreadMessages?.count === 0) return null
-    return allMessages.find((message, index) => {
-      const previousMessage = allMessages?.[index + 1]
+    if (!room?.unreadMessages?.count) return null
+    const userMessages = allMessages.filter((message) => message?.messageType === MESSAGE_TYPE.user)
+    return userMessages.find((message, index) => {
+      const previousMessage = userMessages?.[index + 1]
       const hasPreviousMessage = !!previousMessage
       return (
         message?.profile?.id !== currentProfile?.id &&

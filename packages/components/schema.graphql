@@ -642,9 +642,10 @@ type Message implements Node {
   """The ID of the object"""
   id: ID!
   created: DateTime!
-  content: String
+  content(profileId: ID): String
   user: User
   profile: Profile
+  messageType: MessageType
   verb: Verbs
   room: ChatRoom
   inReplyTo: Message
@@ -671,6 +672,12 @@ type MessageEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+"""An enumeration."""
+enum MessageType {
+  USER_MESSAGE
+  SYSTEM_GENERATED
 }
 
 type Metadata {
@@ -1149,6 +1156,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
+  linkedOnContentCapitalSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  linkedOnContentSmallSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection

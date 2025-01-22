@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.53
+
+### Patch Changes
+
+- Implement system messages
+
 ## 0.0.52
 
 ### Patch Changes
