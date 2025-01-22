@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { useFragment } from 'react-relay'
 
-import { MessageItemFragment } from '../../../graphql/queries/MessageItem'
+import { MessageItemFragment } from '../../../graphql/fragments/MessageItem'
 import { SystemMessageTypography } from './styled'
 import { SystemMessageProps } from './types'
 
