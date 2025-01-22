@@ -1,4 +1,4 @@
-  import { FC, Suspense } from 'react'
+import { FC, Suspense } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system'
@@ -48,7 +48,7 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
   InitialLoadingState = DefaultLoadingState,
   membersContainerHeight = 400,
 }) => (
-    <>
+  <>
     <Typography component="h4" variant="h4" mb={1}>
       {title}
     </Typography>
@@ -64,6 +64,6 @@ const MembersSuspended: FC<UserMembersSuspendedProps> = ({
       />
     </Suspense>
   </>
-  )
+)
 
 export default MembersSuspended

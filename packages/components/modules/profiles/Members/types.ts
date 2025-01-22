@@ -24,5 +24,4 @@ export interface UserMembersSuspendedProps {
   membersContainerHeight?: number
 }
 
-export interface UserMembersProps extends Omit<MemberListProps, 'userRef'> {
-}
+export interface UserMembersProps extends Omit<MemberListProps, 'userRef'> {}

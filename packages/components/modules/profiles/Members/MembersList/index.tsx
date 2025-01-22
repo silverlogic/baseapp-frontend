@@ -3,18 +3,18 @@ import { FC, useMemo, useTransition } from 'react'
 import { LoadingState as DefaultLoadingState, Searchbar } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
+import { useForm } from 'react-hook-form'
 import { useFragment, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
-import { useForm } from 'react-hook-form'
 import { MemberItemFragment$key } from '../../../../__generated__/MemberItemFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
 import { UserMembersListFragment } from '../../graphql/queries/UserMembersList'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MemberStatuses, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
 import { MemberListProps } from '../types'
-import { ProfileItemFragment } from '../../graphql/queries/ProfileItem'
-import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 
 const MembersList: FC<MemberListProps> = ({
   userRef,
@@ -26,7 +26,7 @@ const MembersList: FC<MemberListProps> = ({
 }) => {
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
-  const { data, loadNext, hasNext, isLoadingNext , refetch} = usePaginationFragment(
+  const { data, loadNext, hasNext, isLoadingNext, refetch } = usePaginationFragment(
     UserMembersListFragment,
     userRef,
   )
@@ -81,36 +81,41 @@ const MembersList: FC<MemberListProps> = ({
   if (members.length === 0) {
     return (
       <>
-        <Searchbar 
-          variant="outlined" 
-          size="small" 
-          isPending={isPending} 
-          onChange={(e) => handleSearch(e.target.value)} 
-          onClear={() => handleSearchClear()} 
+        <Searchbar
+          variant="outlined"
+          size="small"
+          isPending={isPending}
+          onChange={(e) => handleSearch(e.target.value)}
+          onClear={() => handleSearchClear()}
           name="search"
           control={control}
-          sx={{ mb: 4 }} 
+          sx={{ mb: 4 }}
         />
         <Typography variant="subtitle2" mb={4}>
           {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
         </Typography>
-        <MemberItem member={data} memberRole="owner" status={MemberStatuses.active} searchQuery={watch('search')} />
+        <MemberItem
+          member={data}
+          memberRole="owner"
+          status={MemberStatuses.active}
+          searchQuery={watch('search')}
+        />
       </>
     )
   }
 
   return (
     <>
-      <Searchbar 
-          variant="outlined" 
-          size="small" 
-          isPending={isPending} 
-          onChange={(e) => handleSearch(e.target.value)} 
-          onClear={() => handleSearchClear()} 
-          name="search"
-          control={control}
-          sx={{ mb: 4 }} 
-        />
+      <Searchbar
+        variant="outlined"
+        size="small"
+        isPending={isPending}
+        onChange={(e) => handleSearch(e.target.value)}
+        onClear={() => handleSearchClear()}
+        name="search"
+        control={control}
+        sx={{ mb: 4 }}
+      />
       <Typography variant="subtitle2" mb={4}>
         {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
       </Typography>

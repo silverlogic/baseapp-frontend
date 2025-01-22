@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.33
+
+### Patch Changes
+
+- create dropzone storybook
+
 ## 0.0.32
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 0.0.54
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@0.0.33
+
 ## 0.0.53
 
 ### Patch Changes
