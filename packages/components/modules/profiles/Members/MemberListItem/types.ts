@@ -11,4 +11,5 @@ export interface MemberListItemProps {
   nextMember: MemberItemFragment$key | null | undefined
   MemberItemComponent: FC<MemberItemProps>
   memberItemComponentProps?: Partial<MemberItemProps>
+  searchQuery?: string
 }

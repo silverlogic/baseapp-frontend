@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dfe70f3899f37531693d6de2bedb5f5e>>
+ * @generated SignedSource<<39f8d49d41c823e22d2be2830169f552>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -268,6 +268,13 @@ const node: ConcreteRequest = (function () {
                               alias: null,
                               args: null,
                               kind: 'ScalarField',
+                              name: 'messageType',
+                              storageKey: null,
+                            },
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
                               name: 'content',
                               storageKey: null,
                             },
@@ -363,16 +370,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'f296a259a1d80db1209eb995234dcfed',
+      cacheID: '9ddf1824c13a8a7892f2f6d07274bc3b',
       id: null,
       metadata: {},
       name: 'ChatRoomMessagesListPaginationQuery',
       operationKind: 'query',
-      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  isGroup\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
+      text: 'query ChatRoomMessagesListPaginationQuery(\n  $count: Int = 20\n  $cursor: String\n  $id: ID!\n) {\n  node(id: $id) {\n    __typename\n    ...MessagesListFragment_1G22uz\n    id\n  }\n}\n\nfragment MessageItemFragment on Message {\n  id\n  content\n  created\n  extraData\n  inReplyTo {\n    id\n  }\n  isRead\n  pk\n  profile {\n    id\n  }\n  verb\n}\n\nfragment MessagesListFragment_1G22uz on ChatRoom {\n  id\n  isGroup\n  unreadMessages {\n    count\n    markedUnread\n    id\n  }\n  allMessages(first: $count, after: $cursor) {\n    totalCount\n    edges {\n      node {\n        id\n        created\n        profile {\n          id\n          name\n          image(height: 32, width: 32) {\n            url\n          }\n        }\n        isRead\n        messageType\n        ...MessageItemFragment\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '2101646ad6b90d900738f9b290616d98'
+;(node as any).hash = '9a3c1fd2e9507a24075ab2654972c7cf'
 
 export default node

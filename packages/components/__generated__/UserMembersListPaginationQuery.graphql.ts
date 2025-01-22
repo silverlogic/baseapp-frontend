@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0460ee653a305690604a858c7e8b8e59>>
+ * @generated SignedSource<<8af0ed87aaf7bcb1f2d2c88c2a39acb6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,7 @@ export type UserMembersListPaginationQuery$variables = {
   cursor?: string | null | undefined
   orderBy?: string | null | undefined
   profileId: string
+  q?: string | null | undefined
 }
 export type UserMembersListPaginationQuery$data = {
   readonly profile:
@@ -53,6 +54,11 @@ const node: ConcreteRequest = (function () {
         kind: 'LocalArgument',
         name: 'profileId',
       },
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'q',
+      },
     ],
     v1 = [
       {
@@ -74,20 +80,25 @@ const node: ConcreteRequest = (function () {
       variableName: 'orderBy',
     },
     v4 = {
+      kind: 'Variable',
+      name: 'q',
+      variableName: 'q',
+    },
+    v5 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v5 = {
+    v6 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'name',
       storageKey: null,
     },
-    v6 = {
+    v7 = {
       alias: null,
       args: [
         {
@@ -116,7 +127,7 @@ const node: ConcreteRequest = (function () {
       ],
       storageKey: 'image(height:100,width:100)',
     },
-    v7 = {
+    v8 = {
       alias: null,
       args: null,
       concreteType: 'URLPath',
@@ -131,11 +142,11 @@ const node: ConcreteRequest = (function () {
           name: 'path',
           storageKey: null,
         },
-        v4 /*: any*/,
+        v5 /*: any*/,
       ],
       storageKey: null,
     },
-    v8 = [
+    v9 = [
       {
         kind: 'Variable',
         name: 'after',
@@ -147,6 +158,7 @@ const node: ConcreteRequest = (function () {
         variableName: 'count',
       },
       v3 /*: any*/,
+      v4 /*: any*/,
     ]
   return {
     fragment: {
@@ -177,6 +189,7 @@ const node: ConcreteRequest = (function () {
                   variableName: 'cursor',
                 },
                 v3 /*: any*/,
+                v4 /*: any*/,
               ],
               kind: 'FragmentSpread',
               name: 'UserMembersListFragment',
@@ -216,13 +229,13 @@ const node: ConcreteRequest = (function () {
               name: 'hasPerm',
               storageKey: 'hasPerm(perm:"baseapp_profiles.change_profileuserrole")',
             },
-            v4 /*: any*/,
             v5 /*: any*/,
             v6 /*: any*/,
             v7 /*: any*/,
+            v8 /*: any*/,
             {
               alias: null,
-              args: v8 /*: any*/,
+              args: v9 /*: any*/,
               concreteType: 'ProfileUserRoleConnection',
               kind: 'LinkedField',
               name: 'members',
@@ -251,7 +264,7 @@ const node: ConcreteRequest = (function () {
                       name: 'node',
                       plural: false,
                       selections: [
-                        v4 /*: any*/,
+                        v5 /*: any*/,
                         {
                           alias: null,
                           args: null,
@@ -267,10 +280,10 @@ const node: ConcreteRequest = (function () {
                               kind: 'LinkedField',
                               name: 'profile',
                               plural: false,
-                              selections: [v4 /*: any*/, v5 /*: any*/, v6 /*: any*/, v7 /*: any*/],
+                              selections: [v5 /*: any*/, v6 /*: any*/, v7 /*: any*/, v8 /*: any*/],
                               storageKey: null,
                             },
-                            v4 /*: any*/,
+                            v5 /*: any*/,
                           ],
                           storageKey: null,
                         },
@@ -338,8 +351,8 @@ const node: ConcreteRequest = (function () {
             },
             {
               alias: null,
-              args: v8 /*: any*/,
-              filters: ['orderBy'],
+              args: v9 /*: any*/,
+              filters: ['orderBy', 'q'],
               handle: 'connection',
               key: 'UserMembersFragment_members',
               kind: 'LinkedHandle',
@@ -351,16 +364,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: 'fc604a63cecf6efc1ec2d8381adf066b',
+      cacheID: '4c26b6c390f8f6f6311b61783c7aa5ba',
       id: null,
       metadata: {},
       name: 'UserMembersListPaginationQuery',
       operationKind: 'query',
-      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderBy: String\n  $profileId: ID!\n) {\n  profile(id: $profileId) {\n    pk\n    ...UserMembersListFragment_32czeo\n    id\n  }\n}\n\nfragment MemberItemFragment on ProfileUserRole {\n  id\n  user {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n  role\n  status\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_32czeo on Profile {\n  canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderBy: $orderBy) {\n    totalCount\n    edges {\n      node {\n        ...MemberItemFragment\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
+      text: 'query UserMembersListPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $orderBy: String\n  $profileId: ID!\n  $q: String\n) {\n  profile(id: $profileId) {\n    pk\n    ...UserMembersListFragment_40Ewnb\n    id\n  }\n}\n\nfragment MemberItemFragment on ProfileUserRole {\n  id\n  user {\n    profile {\n      ...ProfileItemFragment\n      id\n    }\n    id\n  }\n  role\n  status\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n\nfragment UserMembersListFragment_40Ewnb on Profile {\n  canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")\n  ...ProfileItemFragment\n  members(first: $count, after: $cursor, orderBy: $orderBy, q: $q) {\n    totalCount\n    edges {\n      node {\n        ...MemberItemFragment\n        id\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n  id\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'bc02b9d42e6f3e087d064c23c98c1a16'
+;(node as any).hash = '86d1da775d16041c78aa054204fed0cd'
 
 export default node

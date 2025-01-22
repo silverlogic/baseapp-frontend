@@ -163,6 +163,20 @@ type ChatRoomEdge {
   cursor: String!
 }
 
+input ChatRoomEditMessageInput {
+  id: ID!
+  content: String!
+  clientMutationId: String
+}
+
+type ChatRoomEditMessagePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  message: MessageEdge
+  clientMutationId: String
+}
+
 type ChatRoomOnMessagesCountUpdate {
   profile: Profile
 }
@@ -628,9 +642,10 @@ type Message implements Node {
   """The ID of the object"""
   id: ID!
   created: DateTime!
-  content: String
+  content(profileId: ID): String
   user: User
   profile: Profile
+  messageType: MessageType
   verb: Verbs
   room: ChatRoom
   inReplyTo: Message
@@ -659,6 +674,12 @@ type MessageEdge {
   cursor: String!
 }
 
+"""An enumeration."""
+enum MessageType {
+  USER_MESSAGE
+  SYSTEM_GENERATED
+}
+
 type Metadata {
   created: DateTime!
   modified: DateTime!
@@ -678,6 +699,7 @@ type Mutation {
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
+  chatRoomEditMessage(input: ChatRoomEditMessageInput!): ChatRoomEditMessagePayload
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
@@ -1130,9 +1152,12 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
 
     """Ordering"""
     orderBy: String
+    q: String
   ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
+  linkedOnContentCapitalSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  linkedOnContentSmallSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection

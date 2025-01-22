@@ -23,6 +23,7 @@ const MemberItem: FC<MemberItemProps> = ({
   avatarHeight = 40,
   canChangeMember = false,
   userId,
+  searchQuery,
 }) => {
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
 
@@ -103,6 +104,10 @@ const MemberItem: FC<MemberItemProps> = ({
         </Box>
       )
     }
+    return null
+  }
+
+  if (searchQuery && !memberProfile?.name?.toLowerCase().includes(searchQuery.toLowerCase())) {
     return null
   }
 

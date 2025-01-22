@@ -1,7 +1,8 @@
 import { FC } from 'react'
 
 import { MessageNode } from '../../types'
-import { MessageItemProps } from './MessageItem/types'
+import { SystemMessageProps } from './SystemMessage/types'
+import { UserMessageProps } from './UserMessage/types'
 
 export interface MessagesGroupProps {
   allMessages: MessageNode[]
@@ -11,6 +12,8 @@ export interface MessagesGroupProps {
   allMessagesLastIndex: number
   firstUnreadMessageId?: string | null
   hasNext: boolean
-  MessageItem?: FC<MessageItemProps>
-  MessageItemProps?: Partial<MessageItemProps>
+  SystemMessage?: FC<SystemMessageProps>
+  SystemMessageProps?: Partial<SystemMessageProps>
+  UserMessage?: FC<UserMessageProps>
+  UserMessageProps?: Partial<UserMessageProps>
 }

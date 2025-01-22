@@ -8,3 +8,6 @@ export type * from './ReactionButton/types'
 
 export { default as Timestamp } from './Timestamp'
 export type * from './Timestamp/types'
+
+export { default as UpdateSubmitActions } from './UpdateSubmitActions'
+export type * from './UpdateSubmitActions/types'
