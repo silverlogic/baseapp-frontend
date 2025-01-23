@@ -1,0 +1,54 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/Searchbar" />
+
+# Component Documentation
+
+## Searchbar
+
+- **Purpose**: The `Searchbar` component provides a text input field specifically designed for search functionality, with optional loading and clear actions.
+- **Expected Behavior**: Renders a text input field with a search icon, optional loading indicator, and a clear button when there is input. It should handle input changes and clear actions.
+
+## Use Cases
+
+- **Current Usage**: Used in search interfaces within the application.
+- **Potential Usage**: Could be used in any form or interface requiring search functionality, such as filtering lists, searching databases, or querying APIs.
+
+## Props
+
+- **value** (string, required): The current value of the input field.
+- **placeholder** (string, optional): The placeholder text for the input field.
+- **onClear** (function, optional): Callback fired when the clear button is clicked. `(event: React.MouseEvent<HTMLButtonElement>) => void`
+- **onChange** (function, required): Callback fired when the input value changes. `(event: React.ChangeEvent<HTMLInputElement>) => void`
+- **isPending** (boolean, optional): If true, shows a loading indicator. Defaults to false.
+- **sx** (object, optional): MUI system props for custom styling.
+- **InputProps** (object, optional): Additional props passed to the underlying `PureTextField` component.
+- **variant** (string, optional): The variant of the text field. Defaults to 'filled'.
+
+## Notes
+
+- **Related Components**:
+  - PureTextField: The base text field component used internally.
+  - IconButton: Used for the clear button.
+  - CircularProgress: Used for the loading indicator.
+
+## Example Usage
+
+```javascript
+import Searchbar from '../Searchbar'
+
+const MyComponent = () => {
+  const [searchValue, setSearchValue] = useState('')
+
+  return (
+    <Searchbar
+      placeholder="Search"
+      value={searchValue}
+      onChange={(e) => setSearchValue(e.target.value)}
+      onClear={() => setSearchValue('')}
+      isPending={false}
+    />
+  )
+}
+export default MyComponent
+```

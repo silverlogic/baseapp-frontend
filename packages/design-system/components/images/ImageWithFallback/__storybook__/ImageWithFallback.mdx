@@ -1,0 +1,47 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Images/ImageWithFallback" />
+
+# Component Documentation
+
+## ImageWithFallback
+
+- **Purpose**: The `ImageWithFallback` component provides an image field component with a fallback image src. It is designed to add an alternate fallback in case the original src fails to load.
+- **Expected Behavior**: The component renders an image field. It uses `src` by default but the fallback `fallbackSrc` case src fails to load.
+
+## Use Cases
+
+- **Current Usage**: This component is intended for any image.
+- **Potential Usage**: The `ImageWithFallback` could be used for fallback images to support multiple browsers like loading webp for modern browsers and png for browsers that doesn't support it.
+
+## Props
+
+- **src** (string): source of the image.
+- **fallbackSrc** (string): fallback source image.
+- **type** (string, optional): type of the src image (default 'image/webp')
+- **fallbackType** (string, optional): type of the fallback image (default 'image/png')
+- **alt** (string): An alternate text for the image
+- **width** (number): Width of the image
+- **height** (number): Height of the image
+
+## Notes
+
+- **Related Components**:
+  - `Image`: Used to render the image in case src fails to load.
+
+## Example Usage
+
+```javascript
+import ImageWithFallback from '../ImageWithFallback'
+
+const MyComponent = () => (
+  <ImageWithFallback
+    src="/webp/home-banner.webp"
+    fallbackSrc="/webp/home-banner.png"
+    alt="Home Banner"
+    width={300}
+    height={400}
+  />
+)
+export default MyComponent
+```
