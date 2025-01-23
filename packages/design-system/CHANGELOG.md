@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 0.0.34
+
+### Patch Changes
+
+- Add documentation and fix stories for ImageWithFallback and Searchbar components
+
 ## 0.0.33
 
 ### Patch Changes
