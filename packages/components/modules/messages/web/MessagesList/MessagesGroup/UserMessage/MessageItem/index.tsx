@@ -6,6 +6,7 @@ import {
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdowns'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
@@ -42,7 +43,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
           overflowWrap: 'anywhere',
         }}
       >
-        {message?.content}
+        <Markdown>{message?.content}</Markdown>
       </Typography>
     )
   }
