@@ -1,5 +1,8 @@
 'use client'
 
+export { default as MarkdownEditor } from './MarkdownEditor'
+export type * from './MarkdownEditor/types'
+
 export { default as Searchbar } from './Searchbar'
 export type * from './Searchbar/types'
 export { default as SocialTextField } from './SocialTextField'

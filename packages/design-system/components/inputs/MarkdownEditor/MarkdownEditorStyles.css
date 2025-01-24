@@ -1,0 +1,5 @@
+/* Remove borders and paddings from the editor */
+.container {
+  border: 1px solid transparent;
+  padding-bottom: 5px;
+}

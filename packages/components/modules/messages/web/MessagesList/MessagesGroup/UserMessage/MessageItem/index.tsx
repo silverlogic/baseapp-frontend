@@ -4,6 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   CopyIcon,
   DownloadIcon,
+  Markdown,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 import { useNotification } from '@baseapp-frontend/utils'
@@ -42,7 +43,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
           overflowWrap: 'anywhere',
         }}
       >
-        {message?.content}
+        <Markdown>{message?.content}</Markdown>
       </Typography>
     )
   }
