@@ -1,5 +1,7 @@
 'use client'
 
+export { default as MarkdownEditor } from './MarkdownEditor'
+export type * from './MarkdownEditor/types'
 export { default as PhoneNumberField } from './PhoneNumberField'
 export type * from './PhoneNumberField/types'
 export { default as Searchbar } from './Searchbar'
