@@ -20,11 +20,13 @@ const DeviceContent: FC<DeviceContentProps> = ({ device }) => {
           sx={{ width: 'fit-content' }}
         />
       )}
-      <Typography variant="subtitle2">{device?.osFamily}</Typography>
+      <Typography variant="subtitle2">
+        {device?.deviceFamily} | {device?.osFamily} {device?.osVersion}
+      </Typography>
       <Typography variant="body2">
         {device?.browserFamily} {device?.browserVersion}
         <Typography variant="caption" color="text.secondary" display="inline">
-          {' '}
+          {'  '}
           {formatRelativeTime(device?.lastLogin)}
         </Typography>
       </Typography>
