@@ -9,15 +9,15 @@ type ActivityLog implements Node {
   id: ID!
   createdAt: DateTime!
   updatedAt: DateTime!
+  user: User
+  ipAddress: String
+  verb: String
+  visibility: VisibilityTypes
+  url: String
   pk: Int!
   metadata: GenericScalar
   events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
-  user: User
   profile: Profile
-  visibility: VisibilityTypes
-  verb: String
-  ipAddress: String
-  url: String
 }
 
 type ActivityLogConnection {
@@ -352,7 +352,7 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
-  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   pk: Int!
   target: CommentsInterface
 }
@@ -729,7 +729,7 @@ interface Node {
 }
 
 interface NodeActivityLogInterface {
-  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
 }
 
 type NodeLogEvent implements Node {
@@ -1142,6 +1142,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
   ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
   user: User
+  activitylogSet(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
   members(
     offset: Int
     before: String
@@ -1156,8 +1157,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ProfileUserRoleConnection
   chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
-  linkedOnContentCapitalSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
-  linkedOnContentSmallSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  linkedAsContentActorSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  linkedAsContentTargetSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
@@ -1190,7 +1191,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   pk: Int!
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
 }
 
@@ -1348,7 +1349,7 @@ type ProfileUserRoleEdge {
 }
 
 type Query {
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   organization(
     """The ID of the object"""
     id: ID!
@@ -1759,7 +1760,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   ): ProfileConnection
   profile: Profile
   pk: Int!
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal): ActivityLogConnection
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
   shortName: String

@@ -3,10 +3,8 @@
 import { FC, Suspense, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { CircledAvatar, ConfirmDialog, LoadingState } from '@baseapp-frontend/design-system'
-import { useNotification } from '@baseapp-frontend/utils'
+import { CircledAvatar, LoadingState } from '@baseapp-frontend/design-system'
 
-import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
@@ -14,8 +12,8 @@ import { Virtuoso } from 'react-virtuoso'
 import { ChatRoomParticipantsPaginationQuery } from '../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../__generated__/MembersListFragment.graphql'
+import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
 import { MembersListFragment } from '../graphql/fragments/MembersList'
-import { useUpdateChatRoomMutation } from '../graphql/mutations/UpdateChatRoom'
 import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
 import { getParticipantCountString, useGroupNameAndAvatar } from '../utils'
@@ -38,13 +36,14 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   const { currentProfile } = useCurrentProfile()
   const { avatar, title } = useGroupNameAndAvatar(group)
   const theme = useTheme()
+  const profileId = currentProfile?.id ?? ''
 
   const connections = group?.id
     ? [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')]
     : []
   // TODO: Is there a safer way to ensure the current profile id is not undefined?
   useRoomListSubscription({
-    profileId: currentProfile?.id!,
+    profileId,
     connections,
     onRemoval: onBackButtonClicked,
   })
@@ -54,9 +53,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const me = members?.edges.find(
-    (edge) => currentProfile?.id && edge?.node?.profile?.id === currentProfile?.id,
-  )
+  const me = members?.edges.find((edge) => profileId && edge?.node?.profile?.id === profileId)
   const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
 
   const renderLoadingState = () => {
@@ -73,8 +70,6 @@ const GroupDetails: FC<GroupDetailsProps> = ({
 
   const [removingParticipantId, setRemovingParticipantId] = useState<string | undefined>(undefined)
   const removingParticipantName = useRef<string | null | undefined>(undefined)
-  const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
-  const { sendToast } = useNotification()
 
   const initiateRemoval = (id: string, name: string | null | undefined) => {
     setRemovingParticipantId(id)
@@ -85,45 +80,6 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     setRemovingParticipantId(undefined)
     removingParticipantName.current = undefined
   }
-
-  const onRemoveConfirmed = () => {
-    if (!group?.id || !currentProfile?.id) return
-    commit({
-      variables: {
-        input: {
-          roomId: group.id,
-          profileId: currentProfile?.id,
-          removeParticipants: [removingParticipantId],
-        },
-        connections: [ConnectionHandler.getConnectionID(group.id, 'ChatRoom_participants')],
-      },
-      onCompleted: (response) => {
-        if (!response?.chatRoomUpdate?.errors) {
-          sendToast(`${removingParticipantName.current} was successfully removed`)
-        }
-        handleRemoveDialogClose()
-      },
-    })
-  }
-
-  const renderDeleteDialog = () => (
-    <ConfirmDialog
-      title={`Remove ${removingParticipantName.current}?`}
-      content={`Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`}
-      action={
-        <LoadingButton
-          color="error"
-          onClick={onRemoveConfirmed}
-          disabled={isMutationInFlight}
-          loading={isMutationInFlight}
-        >
-          Remove
-        </LoadingButton>
-      }
-      onClose={handleRemoveDialogClose}
-      open={removingParticipantId !== undefined}
-    />
-  )
 
   const renderItem = (item: GroupMembersEdge) => {
     if (item.node) {
@@ -158,7 +114,25 @@ const GroupDetails: FC<GroupDetailsProps> = ({
 
   return (
     <>
-      {renderDeleteDialog()}
+      {/* TODO: Deal with sole admin removal (will be done in another story) */}
+      <LeaveGroupDialog
+        profileId={profileId}
+        roomId={group?.id}
+        open={!!removingParticipantId}
+        removingParticipantId={removingParticipantId}
+        removingParticipantName={removingParticipantName.current}
+        onClose={handleRemoveDialogClose}
+        title={
+          profileId === removingParticipantId
+            ? undefined
+            : `Remove ${removingParticipantName.current}?`
+        }
+        content={
+          profileId === removingParticipantId
+            ? undefined
+            : `Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`
+        }
+      />
       <GroupDetailsHeader
         onBackButtonClicked={onBackButtonClicked}
         onEditButtonClicked={onEditButtonClicked}

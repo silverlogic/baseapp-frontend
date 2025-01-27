@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 0.0.57
+
+### Patch Changes
+
+- add filter by user name
+
+## 0.0.56
+
+### Patch Changes
+
+- Added leave group chat feature
+
 ## 0.0.55
 
 ### Patch Changes
