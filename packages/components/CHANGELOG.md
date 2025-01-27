@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.57
+
+### Patch Changes
+
+- add filter by user name
+
 ## 0.0.56
 
 ### Patch Changes
