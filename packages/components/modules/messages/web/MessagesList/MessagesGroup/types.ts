@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { MessageNode } from '../../../common'
+import { MessageNode } from '../../__shared__/../common'
 import { SystemMessageProps } from './SystemMessage/types'
 import { UserMessageProps } from './UserMessage/types'
 

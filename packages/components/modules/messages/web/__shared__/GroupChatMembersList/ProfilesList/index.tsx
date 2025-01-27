@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { LoadingState } from '@baseapp-frontend/design-system'
+import { AvatarButton, LoadingState } from '@baseapp-frontend/design-system'
 
 import { Box, Typography, useTheme } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
@@ -21,10 +21,14 @@ const ProfilesList: FC<ProfilesListProps> = ({
   loadNext,
   renderItem,
   VirtuosoProps = {},
+  NormalListProps = {},
   label = 'Available connections',
   title = 'Connections',
   EmptyProfilesListState = DefaultEmptyProfilesListState,
   SearchNotFoundState = DefaultSearchNotFoundState,
+  allowAddMember = false,
+  onAddMemberClick = () => {},
+  removeTitle = false,
 }) => {
   const theme = useTheme()
   const renderLoadingState = () => {
@@ -48,17 +52,26 @@ const ProfilesList: FC<ProfilesListProps> = ({
   return (
     <>
       <menu aria-label={label}>
-        <Typography
-          variant="subtitle2"
-          color="text.primary"
-          sx={{
-            padding: theme.spacing(2),
-            borderBottom: `1px solid ${theme.palette.divider}`,
-          }}
-        >
-          {title}
-        </Typography>
+        {!removeTitle && (
+          <Typography
+            variant="subtitle2"
+            color="text.primary"
+            sx={{
+              padding: title === '' ? 0 : theme.spacing(2),
+              borderBottom: `1px solid ${theme.palette.divider}`,
+            }}
+          >
+            {title}
+          </Typography>
+        )}
       </menu>
+      {allowAddMember && (
+        <AvatarButton
+          onClick={onAddMemberClick}
+          caption="Add Member"
+          imageString="/svg/avatar-add-member.svg"
+        />
+      )}
       {isPaginated ? (
         <Virtuoso
           data={profiles}
@@ -75,7 +88,7 @@ const ProfilesList: FC<ProfilesListProps> = ({
           {...VirtuosoProps}
         />
       ) : (
-        <Box maxHeight={250} overflow="auto" sx={{ scrollbarWidth: 'none' }}>
+        <Box maxHeight={250} overflow="auto" sx={{ scrollbarWidth: 'none' }} {...NormalListProps}>
           {profiles.map((member: ProfileNode) => renderItem(member, true))}
         </Box>
       )}
