@@ -1,6 +1,7 @@
 'use client'
 
-import { ChangeEventHandler, FC, useState, useTransition } from 'react'
+import { FC, useState, useTransition } from 'react'
+import type { ChangeEvent } from 'react'
 
 import { Searchbar } from '@baseapp-frontend/design-system'
 
@@ -19,14 +20,27 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
   LogGroupsProps,
 }) => {
   const [selectedFilters, setSelectedFilters] = useState<EventFilterOption[]>(['All'])
-  const [isPending] = useTransition()
-  const { control, watch } = useForm({ defaultValues: { search: '' } })
+  const [isPending, startTransition] = useTransition()
+  const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
   const searchValue = watch('search')
-  const { logGroups, loadNext, hasNext, isLoadingNext } = useActivityLogs(queryRef)
-  // TODO: use startTransition from useTransition when triggering a refetch
-  const handleSearchChange: ChangeEventHandler<HTMLInputElement> = () => {}
-  const handleSearchClear = () => {}
+
+  const { logGroups, loadNext, hasNext, isLoadingNext, refetch } = useActivityLogs(queryRef)
+
+  const handleSearchClear = () => {
+    startTransition(() => {
+      reset()
+      refetch({ userName: '' })
+    })
+  }
+  const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value || ''
+    startTransition(() => {
+      refetch({ userName: value, count: 10, cursor: null }, { fetchPolicy: 'store-and-network' })
+    })
+  }
+
   const emptyLogsList = logGroups.length === 0
+
   return (
     <Box p={2} justifyContent="center" minWidth="100%" display="flex" alignItems="center">
       <Box justifyContent="center" maxWidth={600} width="100%" mx="auto">

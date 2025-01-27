@@ -14,6 +14,7 @@ import { FragmentRefs } from 'relay-runtime'
 export type ActivityLogsPaginationQuery$variables = {
   count?: number | null | undefined
   cursor?: string | null | undefined
+  userName?: string | null | undefined
 }
 export type ActivityLogsPaginationQuery$data = {
   readonly ' $fragmentSpreads': FragmentRefs<'ActivityLogsFragment'>
