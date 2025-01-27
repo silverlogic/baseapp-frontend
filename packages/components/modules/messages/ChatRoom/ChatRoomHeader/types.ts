@@ -5,7 +5,8 @@ import { TitleFragment$key } from '../../../../__generated__/TitleFragment.graph
 export interface ChatRoomHeaderProps {
   participantsCount: number
   roomTitleRef: TitleFragment$key
-  onDisplayGroupDetailsClicked: () => void
+  onDisplayGroupDetailsClicked: VoidFunction
+  roomId?: string
 }
 
 export interface ChatTitleContainerProps extends BoxProps {
