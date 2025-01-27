@@ -14,7 +14,6 @@ import {
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, MenuItem, Typography } from '@mui/material'
-// import { useRouter } from 'next/navigation'
 import numbro from 'numbro'
 import { useFragment } from 'react-relay'
 
@@ -33,7 +32,6 @@ import { ProfileComponentProps } from './types'
 const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, currentProfileId }) => {
   const profile = useFragment(ProfileComponentFragment, profileRef)
   const smDown = useResponsive('down', 'sm')
-  // const router = useRouter()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
 
   const open = Boolean(anchorEl)
@@ -75,7 +73,6 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
           color="inherit"
           startIcon={<OutlinedEditIcon />}
           sx={{ maxWidth: smDown ? '100%' : 'fit-content' }}
-          // onClick={() => router.push('/user/settings')}
           href="/user/settings"
         >
           Edit Profile
