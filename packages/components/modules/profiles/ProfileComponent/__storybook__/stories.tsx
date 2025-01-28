@@ -14,7 +14,7 @@ const meta: Meta<typeof ProfileComponentWithQuery> = {
         onKeyDown={(e) => {
           if (e.key === 'Enter' || e.key === ' ') {
             const target = e.target as HTMLElement
-            if ((e.target as HTMLElement).tagName === 'A') {
+            if ((e.target as HTMLElement).tagName === 'A' || target.closest('a')) {
               e.preventDefault()
             }
             if (target && target.innerText === 'Share profile') {
@@ -24,7 +24,7 @@ const meta: Meta<typeof ProfileComponentWithQuery> = {
         }}
         onClick={(e) => {
           const target = e.target as HTMLElement
-          if ((e.target as HTMLElement).tagName === 'A') {
+          if ((e.target as HTMLElement).tagName === 'A' || target.closest('a')) {
             e.preventDefault()
           }
           if (target && target.innerText === 'Share profile') {
