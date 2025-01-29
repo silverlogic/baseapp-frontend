@@ -22,7 +22,11 @@ export const ActivityLogsFragmentQuery = graphql`
       userName: $userName
       createdFrom: $createdFrom
       createdTo: $createdTo
-    ) @connection(key: "ActivityLogs_activityLogs", filters: ["userName"]) {
+    )
+      @connection(
+        key: "ActivityLogs_activityLogs"
+        filters: ["userName", "createdFrom", "createdTo"]
+      ) {
       edges {
         node {
           id
