@@ -20,6 +20,7 @@ const BlockButtonWithDialogWithQuery = () => {
     <BlockButtonWithDialog
       target={data.target as BlockToggleFragment$key}
       currentProfileId="current-user-id"
+      isMenu
     />
   )
 }
