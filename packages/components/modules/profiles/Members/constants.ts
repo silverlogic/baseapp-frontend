@@ -13,6 +13,10 @@ export enum MemberRoles {
   manager = 'MANAGER',
 }
 
+export enum MemberActions {
+  remove = 'REMOVE',
+}
+
 export const roleOptions = [
   {
     value: MemberRoles.admin,
@@ -21,5 +25,9 @@ export const roleOptions = [
   {
     value: MemberRoles.manager,
     label: capitalizeFirstLetter(MemberRoles.manager.toLowerCase()),
+  },
+  {
+    value: MemberActions.remove,
+    label: capitalizeFirstLetter(MemberActions.remove.toLowerCase()),
   },
 ]
