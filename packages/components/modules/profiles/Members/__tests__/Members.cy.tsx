@@ -20,7 +20,7 @@ describe('Members', () => {
       resolveMostRecentOperation({ data: allRolesMembersListMockData })
     })
 
-    cy.step('renders pending member correctly (Name, Role, Status, Avatar)')
+    cy.step('Pending Profile')
     cy.findByText('Pending Profile').should('exist')
     cy.findByText('Pending').should('exist')
     cy.findByText('Pending Profile').parent().parent().should('have.css', 'opacity', '0.6')
@@ -28,7 +28,7 @@ describe('Members', () => {
       'exist',
     )
 
-    cy.step('renders inactive member correctly (Name, Role, Status, Avatar)')
+    cy.step('Inactive Profile')
     cy.findByText('Inactive Profile').should('exist')
     cy.findByText('Inactive').should('exist')
     cy.findByText('Inactive Profile').parent().parent().should('have.css', 'opacity', '0.6')
@@ -36,7 +36,7 @@ describe('Members', () => {
       'img[src="https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/javascript.svg"]',
     ).should('exist')
 
-    cy.step('renders profile owner correctly (Name, Role, Status, Avatar)')
+    cy.step('Owner Profile')
     cy.findByText('Owner Profile').should('exist')
     cy.findByText('Owner').should('exist')
     cy.findByText('Owner Profile').parent().parent().should('have.css', 'opacity', '1')
@@ -44,7 +44,7 @@ describe('Members', () => {
       'exist',
     )
 
-    cy.step('renders active member correctly (Name, Role, Status, Avatar)')
+    cy.step('Active Profile')
     cy.findByText('Manager Profile').should('exist')
     cy.findByText('Manager').should('exist')
     cy.findByText('Manager Profile').parent().parent().should('have.css', 'opacity', '1')
