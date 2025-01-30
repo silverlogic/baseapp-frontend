@@ -20,7 +20,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
   const nextMemberFragment = useFragment(MemberItemFragment, nextMember)
   const prevMemberFragment = useFragment(MemberItemFragment, prevMember)
 
-  const isActiveMember = memberFragment.status === MemberStatuses.active
+  const isActiveMember = memberFragment?.status === MemberStatuses.active
   const isPreviousMemberInactive = prevMemberFragment?.status !== MemberStatuses.active
   const isPreviousMemberUndefined = !prevMemberFragment?.status
   const isNextMemberUndefined = !nextMemberFragment?.status
