@@ -110,7 +110,7 @@ export const fullMembersListMockData = {
       },
       urlPath: null,
       members: {
-        totalCount: 3,
+        totalCount: 6,
         edges: [
           createNodeProfile(1, 'ACTIVE', 'Manager', undefined, true),
           createNodeProfile(2, 'ACTIVE', 'Manager', undefined, true),
@@ -140,7 +140,7 @@ export const fullMembersListNextPageMockData = {
       },
       urlPath: null,
       members: {
-        totalCount: 3,
+        totalCount: 9,
         edges: [
           createNodeProfile(7, 'ACTIVE', 'Manager', undefined, true),
           createNodeProfile(8, 'ACTIVE', 'Manager', undefined, true),

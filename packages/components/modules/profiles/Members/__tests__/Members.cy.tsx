@@ -101,13 +101,11 @@ describe('Members', () => {
 
     cy.step("it opens the role's dropdown")
     cy.findByText('Manager Profile').should('exist')
-    cy.findByText('Manager').should('exist')
-    cy.findByText('Manager').click()
+    cy.findByText('Manager').should('exist').click()
 
     cy.step('it shows the role options and clicks on admin option')
     cy.findByRole('option', { name: /manager/i }).should('exist')
-    cy.findByRole('option', { name: /admin/i }).should('exist')
-    cy.findByRole('option', { name: /admin/i }).click()
+    cy.findByRole('option', { name: /admin/i }).should('exist').click()
 
     cy.step('it shows the confirm dialog')
     cy.findByText(/change user permissions?/i).should('exist')
