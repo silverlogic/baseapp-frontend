@@ -7,7 +7,7 @@ export const mockResolvers = {
     me: {
       profile: {
         id: 'profile-1',
-        name: 'Profile 1',
+        name: 'Owner Profile',
         image: {
           url: Profile1Img,
         },
@@ -18,7 +18,7 @@ export const mockResolvers = {
       profiles: [
         {
           id: 'profile-2',
-          name: 'Profile 2',
+          name: 'Manager Profile',
           image: {
             url: Profile2Img,
           },
@@ -28,7 +28,7 @@ export const mockResolvers = {
         },
         {
           id: 'profile-3',
-          name: 'Profile 3',
+          name: 'Inactive Profile',
           image: {
             url: Profile3Img,
           },
