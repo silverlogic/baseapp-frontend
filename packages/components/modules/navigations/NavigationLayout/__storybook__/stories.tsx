@@ -43,12 +43,16 @@ export const ValidUser: Story = {
   args: {
     ...InvalidUser.args,
     AccountMenuProps: {
-      menuItems: [
-        {
-          label: 'Settings',
-          onClick: () => console.log('Settings clicked'),
+      AccountPopoverProps: {
+        MenuItemsProps: {
+          menuItems: [
+            {
+              label: 'Settings',
+              onClick: () => console.log('Settings clicked'),
+            },
+          ],
         },
-      ],
+      },
     },
   },
 }
