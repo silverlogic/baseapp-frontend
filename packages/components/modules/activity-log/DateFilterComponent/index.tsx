@@ -17,12 +17,8 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   onApply,
   onClearFilter,
 }) => {
-  const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(
-    typeof createdFrom === 'string' ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null,
-  )
-  const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(
-    typeof createdTo === 'string' ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null,
-  )
+  const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(createdFrom ?? null)
+  const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(createdTo ?? null)
 
   const [error, setError] = useState<DateValidationError | null>(null)
 

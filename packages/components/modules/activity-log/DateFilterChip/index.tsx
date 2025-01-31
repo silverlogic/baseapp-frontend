@@ -4,6 +4,7 @@ import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { Box, Chip, Menu, Theme, useMediaQuery } from '@mui/material'
+import { DateTime } from 'luxon'
 
 import MobileDrawer from '../../__shared__/MobileDrawer'
 import DateFilterComponent from '../DateFilterComponent'
@@ -58,8 +59,8 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
 
       <MobileDrawer open={drawerOpen} onClose={handleDrawerClose} title="Period">
         <DateFilterComponent
-          createdFrom={createdFrom ? formatDate(createdFrom) : null}
-          createdTo={createdTo ? formatDate(createdTo) : null}
+          createdFrom={createdFrom ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null}
+          createdTo={createdTo ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null}
           executeRefetch={executeRefetch}
           onApply={handleDrawerClose}
           onClearFilter={handleDrawerClose}
@@ -69,8 +70,8 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         <Box padding={2}>
           <DateFilterComponent
-            createdFrom={createdFrom ? formatDate(createdFrom) : null}
-            createdTo={createdTo ? formatDate(createdTo) : null}
+            createdFrom={createdFrom ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null}
+            createdTo={createdTo ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null}
             executeRefetch={executeRefetch}
             onApply={handleMenuClose}
             onClearFilter={handleMenuClose}
