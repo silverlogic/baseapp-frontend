@@ -1,4 +1,4 @@
-import { Dayjs } from 'dayjs'
+import { DateTime } from 'luxon'
 
 export interface IFetchParameters {
   createdFrom: string | null
@@ -9,8 +9,8 @@ export interface IFetchParameters {
 }
 
 export interface DateFilterComponentProps {
-  createdFrom: Dayjs | null
-  createdTo: Dayjs | null
+  createdFrom: DateTime | null
+  createdTo: DateTime | null
   executeRefetch: (params: Partial<IFetchParameters>) => void
   onApply?: () => void
   onClearFilter?: () => void

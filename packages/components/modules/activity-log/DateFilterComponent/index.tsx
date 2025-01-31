@@ -18,11 +18,12 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   onClearFilter,
 }) => {
   const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(
-    createdFrom ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null,
+    typeof createdFrom === 'string' ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null,
   )
   const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(
-    createdTo ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null,
+    typeof createdTo === 'string' ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null,
   )
+
   const [error, setError] = useState<DateValidationError | null>(null)
 
   const errorMessage = React.useMemo(() => {
