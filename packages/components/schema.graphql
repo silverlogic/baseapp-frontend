@@ -479,6 +479,58 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
+type ContentPost implements Node {
+  author: User
+  content: String!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+  contentImages: [ContentPostImage]
+}
+
+type ContentPostConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentPostEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input ContentPostCreateInput {
+  content: String!
+  images: [String]
+  clientMutationId: String
+}
+
+type ContentPostCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `ContentPost` and its cursor."""
+type ContentPostEdge {
+  """The item at the end of the edge"""
+  node: ContentPost
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentPostImage implements Node {
+  image: String
+  post: ContentPost!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
 """
 The `Date` scalar type represents a Date
 value as specified by
@@ -725,6 +777,8 @@ type Mutation {
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
+  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
@@ -1381,6 +1435,7 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Report
+  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
   comment(
     """The ID of the object"""
     id: ID!
@@ -1818,3 +1873,45 @@ enum VisibilityTypes {
   INTERNAL
 }
 
+type ContentPost implements Node {
+  author: User
+  content: String!
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+  contentImages: [ContentPostImage]
+}
+type ContentPostConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+  """Contains the nodes in this connection."""
+  edges: [ContentPostEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+input ContentPostCreateInput {
+  content: String!
+  images: [String]
+  clientMutationId: String
+}
+type ContentPostCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
+}
+"""A Relay edge containing a `ContentPost` and its cursor."""
+type ContentPostEdge {
+  """The item at the end of the edge"""
+  node: ContentPost
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+type ContentPostImage implements Node {
+  image: String
+  post: ContentPost!
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
