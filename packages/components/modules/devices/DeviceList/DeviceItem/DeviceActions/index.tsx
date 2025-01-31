@@ -13,7 +13,7 @@ const DeviceActions: FC<DeviceActionsProps> = ({ device }) => {
   const { sendApiErrorToast, sendToast } = useNotification()
   const {mutate: logoutDevice} = useLogoutDevice({
     onSuccess: () => {
-      sendToast('Device signed out successfully')
+      sendToast('You have successfully logged out from this device.')
       environment.commitUpdate(store => {
         store.delete(device.id)
       })
