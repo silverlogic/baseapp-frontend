@@ -1,8 +1,9 @@
 import { FC, useState } from 'react'
 
+import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
+
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import { Box, Chip, Menu, Theme, useMediaQuery } from '@mui/material'
-import dayjs from 'dayjs'
 
 import MobileDrawer from '../../__shared__/MobileDrawer'
 import DateFilterComponent from '../DateFilterComponent'
@@ -13,30 +14,22 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true)
-  }
-
-  const handleDrawerClose = () => {
-    setDrawerOpen(false)
-  }
-
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
+  const handleDrawerOpen = () => setDrawerOpen(true)
+  const handleDrawerClose = () => setDrawerOpen(false)
+  const handleMenuClose = () => setAnchorEl(null)
 
   const { createdFrom, createdTo } = fetchParameters
   const hasDateSelected = createdFrom || createdTo
 
   const labelRender = () => {
     if (createdFrom && createdTo) {
-      return `${dayjs(createdFrom).format('DD MMM YYYY')} - ${dayjs(createdTo).format('DD MMM YYYY')}`
+      return `${formatDate(createdFrom, { toFormat: DATE_FORMAT[3] })} - ${formatDate(createdTo, { toFormat: DATE_FORMAT[3] })}`
     }
     if (createdFrom) {
-      return `From ${dayjs(createdFrom).format('DD MMM YYYY')}`
+      return `From ${formatDate(createdFrom, { toFormat: DATE_FORMAT[3] })}`
     }
     if (createdTo) {
-      return `Until ${dayjs(createdTo).format('DD MMM YYYY')}`
+      return `Until ${formatDate(createdTo, { toFormat: DATE_FORMAT[3] })}`
     }
     return 'Period'
   }
@@ -65,8 +58,8 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
 
       <MobileDrawer open={drawerOpen} onClose={handleDrawerClose} title="Period">
         <DateFilterComponent
-          createdFrom={fetchParameters.createdFrom ? dayjs(fetchParameters.createdFrom) : null}
-          createdTo={fetchParameters.createdTo ? dayjs(fetchParameters.createdTo) : null}
+          createdFrom={createdFrom ? formatDate(createdFrom) : null}
+          createdTo={createdTo ? formatDate(createdTo) : null}
           executeRefetch={executeRefetch}
           onApply={handleDrawerClose}
           onClearFilter={handleDrawerClose}
@@ -76,8 +69,8 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
         <Box padding={2}>
           <DateFilterComponent
-            createdFrom={fetchParameters.createdFrom ? dayjs(fetchParameters.createdFrom) : null}
-            createdTo={fetchParameters.createdTo ? dayjs(fetchParameters.createdTo) : null}
+            createdFrom={createdFrom ? formatDate(createdFrom) : null}
+            createdTo={createdTo ? formatDate(createdTo) : null}
             executeRefetch={executeRefetch}
             onApply={handleMenuClose}
             onClearFilter={handleMenuClose}

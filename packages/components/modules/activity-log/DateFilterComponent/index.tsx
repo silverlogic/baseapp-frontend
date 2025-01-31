@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react'
 
+import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
+
 import { Box, Button } from '@mui/material'
 import { DateValidationError, LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { Dayjs } from 'dayjs'
+import { DateTime } from 'luxon'
 
 import { DateFilterComponentProps } from './types'
 
@@ -14,44 +16,44 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   executeRefetch,
   onApply,
   onClearFilter,
-
 }) => {
-  const [tempCreatedFrom, setTempCreatedFrom] = useState<Dayjs | null>(createdFrom)
-  const [tempCreatedTo, setTempCreatedTo] = useState<Dayjs | null>(createdTo)
-  const [error, setError] = React.useState<DateValidationError | null>(null)
+  const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(
+    createdFrom ? DateTime.fromFormat(createdFrom, DATE_FORMAT[0]) : null,
+  )
+  const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(
+    createdTo ? DateTime.fromFormat(createdTo, DATE_FORMAT[0]) : null,
+  )
+  const [error, setError] = useState<DateValidationError | null>(null)
 
   const errorMessage = React.useMemo(() => {
     switch (error) {
-      case 'minDate': {
+      case 'minDate':
         return 'End date cannot be earlier than start date.'
-      }
-      case 'invalidDate': {
+      case 'invalidDate':
         return 'Your date is not valid'
-      }
-
-      default: {
+      default:
         return ''
-      }
     }
   }, [error])
 
   const handleApply = () => {
-    if (tempCreatedTo && tempCreatedFrom && tempCreatedTo.isBefore(tempCreatedFrom)) {
+    if (tempCreatedTo && tempCreatedFrom && tempCreatedTo < tempCreatedFrom) {
       setError('minDate')
       return
     }
 
     setError(null)
     executeRefetch({
-      createdFrom: tempCreatedFrom?.format('YYYY-MM-DD') || null,
-      createdTo: tempCreatedTo?.format('YYYY-MM-DD') || null,
+      createdFrom: tempCreatedFrom
+        ? formatDate(tempCreatedFrom, { toFormat: DATE_FORMAT.api })
+        : null,
+      createdTo: tempCreatedTo ? formatDate(tempCreatedTo, { toFormat: DATE_FORMAT.api }) : null,
     })
     onApply?.()
   }
 
   const handleClear = () => {
     if (createdFrom || createdTo) {
-
       executeRefetch({
         createdFrom: null,
         createdTo: null,
@@ -60,22 +62,20 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
     setTempCreatedFrom(null)
     setTempCreatedTo(null)
     onClearFilter?.()
-
   }
 
   return (
     <Box display="flex" gap={2} flexDirection="column">
       <Box display="flex" gap={2} flexDirection="column">
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider dateAdapter={AdapterLuxon}>
           <DatePicker
             label="Start date"
-            value={tempCreatedFrom}
             onChange={(newValue) => setTempCreatedFrom(newValue)}
             disableFuture
+            value={tempCreatedFrom}
           />
           <DatePicker
             label="End date"
-            defaultValue={null}
             value={tempCreatedTo}
             onChange={(newValue) => setTempCreatedTo(newValue)}
             onError={(newError) => setError(newError)}
