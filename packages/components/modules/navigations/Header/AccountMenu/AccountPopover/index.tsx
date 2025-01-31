@@ -59,8 +59,8 @@ const AccountPopover: FC<AccountPopoverProps> = ({
     [timeoutId],
   )
 
-  const loadCurrentProfile = Boolean(CurrentProfile) && Boolean(profile)
-  const loadCurrentUser = !loadCurrentProfile && Boolean(CurrentUser)
+  const loadCurrentProfile = !!CurrentProfile && !!profile
+  const loadCurrentUser = !loadCurrentProfile && !!CurrentUser
 
   return (
     <>
@@ -69,7 +69,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
         src={profile?.image ?? ''}
         alt="User avatar"
         onClick={popover.onOpen}
-        isOpen={Boolean(popover.open)}
+        isOpen={!!popover.open}
       />
 
       <Popover
@@ -77,7 +77,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
         onClose={handlePopoverOnClose}
         sx={{ ...DefaultPopoverStyles, ...PopoverStyles }}
       >
-        {openProfilesList ? (
+        {!!ProfilesList && openProfilesList ? (
           <ProfilesList
             openSubmenu={openProfilesList}
             handleCloseSubmenu={() => setOpenProfilesList(false)}
@@ -89,16 +89,16 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
             {loadCurrentUser && <CurrentUser />}
 
-            {loadCurrentProfile && Boolean(SwitchProfileMenu) && (
+            {loadCurrentProfile && !!SwitchProfileMenu && (
               <SwitchProfileMenu
                 openProfilesList={() => setOpenProfilesList(true)}
                 {...SwitchProfileMenuProps}
               />
             )}
 
-            {Boolean(MenuItemsProps?.menuItems?.length) && (
+            {!!MenuItems && !!MenuItemsProps?.menuItems?.length && (
               <>
-                {Boolean(loadCurrentProfile || loadCurrentUser || Boolean(SwitchProfileMenu)) && (
+                {!!(loadCurrentProfile || loadCurrentUser || !!SwitchProfileMenu) && (
                   <Divider sx={{ borderStyle: 'solid' }} />
                 )}
 
@@ -108,10 +108,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
           </>
         )}
 
-        {Boolean(LogoutItem) && <Divider sx={{ borderStyle: 'solid' }} />}
+        {!!LogoutItem && <Divider sx={{ borderStyle: 'solid' }} />}
 
         <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps}>
-          {openProfilesList && Boolean(AddProfileMenuItem) && (
+          {openProfilesList && !!AddProfileMenuItem && (
             <AddProfileMenuItem {...AddProfileMenuItemProps} />
           )}
         </LogoutItem>

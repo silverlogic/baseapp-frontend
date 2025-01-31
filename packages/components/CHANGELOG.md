@@ -5,6 +5,7 @@
 ### Patch Changes
 
 - Add missing `AccountPopoverProps` to the `AccountMenu` component.
+- Making sure conditonal render works on the `AccountMenu` component.
 
 ## 0.0.57
 

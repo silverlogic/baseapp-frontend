@@ -10,15 +10,15 @@ import type { MenuItemsProps } from './MenuItems/types'
 
 export interface AccountPopoverProps {
   PopoverStyles?: CSSProperties
-  CurrentUser?: FC
-  CurrentProfile?: FC
-  MenuItems?: FC<MenuItemsProps>
+  CurrentUser?: FC | null
+  CurrentProfile?: FC | null
+  MenuItems?: FC<MenuItemsProps> | null
   MenuItemsProps?: Partial<MenuItemsProps>
-  SwitchProfileMenu?: FC<SwitchProfileMenuProps>
+  SwitchProfileMenu?: FC<SwitchProfileMenuProps> | null
   SwitchProfileMenuProps?: Partial<SwitchProfileMenuProps>
-  ProfilesList?: FC<ProfilesListProps>
+  ProfilesList?: FC<ProfilesListProps> | null
   ProfilesListProps?: Partial<ProfilesListProps>
-  AddProfileMenuItem?: FC<AddProfileMenuItemProps>
+  AddProfileMenuItem?: FC<AddProfileMenuItemProps> | null
   AddProfileMenuItemProps?: Partial<AddProfileMenuItemProps>
   LogoutItemProps?: Partial<LogoutItemProps>
 }
