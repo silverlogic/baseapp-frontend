@@ -42,12 +42,16 @@ export const ValidUserHeader: Story = {
   args: {
     ...InvalidUserHeader.args,
     AccountMenuProps: {
-      menuItems: [
-        {
-          label: 'Settings',
-          onClick: () => console.log('Settings clicked'),
+      AccountPopoverProps: {
+        MenuItemsProps: {
+          menuItems: [
+            {
+              label: 'Settings',
+              onClick: () => console.log('Settings clicked'),
+            },
+          ],
         },
-      ],
+      },
     },
   },
 }

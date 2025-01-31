@@ -69,3 +69,34 @@ const MyComponent = () => {
 
 export default MyComponent
 ```
+
+## Conditional Rendering
+
+To avoid rendering `additionalComponent`, `MenuItems`, `SwitchProfileMenu`, `CurrentUser`, `CurrentProfile`, `ProfilesList`, and `AddProfileMenuItem`, pass `null` or `undefined` to them.
+
+Alternatively, you can provide a custom component that follows the same prop typing as the original one:
+
+```javascript
+return (
+  <BaseNavigationLayout
+    navData={navData}
+    settings={settings}
+    setSettings={setSettings}
+    LogoIcon={!isSSR && logos?.square ? CustomLogoCondensed : BaseAppLogoCondensed}
+    AccountMenuProps={{
+      onRegisterClick: () => router.push('/signup'),
+      onLoginClick: () => router.push('/login'),
+      AccountPopoverProps: {
+        MenuItems: null, // Alternatively, you can add a custom `MenuItems` component (e.g. `MenuItems: CustomMenuItems`) 
+        SwitchProfileMenu: null,
+        CurrentUser: null,
+        CurrentProfile: null,
+        ProfilesList: null,
+        AddProfileMenuItem: null,
+      },
+      additionalComponent: null,
+    }}
+  >
+    {children}
+  </BaseNavigationLayout>
+)

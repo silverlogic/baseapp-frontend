@@ -2,6 +2,8 @@ import { PropsWithChildren } from 'react'
 
 import { ButtonProps } from '@mui/material'
 
+import { AccountPopoverProps } from './AccountPopover/types'
+
 export interface MenuItemProps {
   onClick: () => void
   label: string
@@ -14,6 +16,6 @@ export interface AccountMenuProps extends PropsWithChildren {
   loginButtonLabel?: string
   registerButtonProps?: ButtonProps
   loginButtonProps?: ButtonProps
-  menuItems?: MenuItemProps[]
+  AccountPopoverProps?: Partial<AccountPopoverProps>
   additionalComponent?: React.ReactNode
 }
