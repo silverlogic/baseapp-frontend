@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.58
+
+### Patch Changes
+
+- Add missing `AccountPopoverProps` to the `AccountMenu` component.
+
 ## 0.0.57
 
 ### Patch Changes

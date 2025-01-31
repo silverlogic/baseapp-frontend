@@ -11,15 +11,15 @@ import AccountPopover from './AccountPopover'
 import { AccountMenuProps } from './types'
 
 const AccountMenu: FC<AccountMenuProps> = ({
-  children,
-  onRegisterClick,
-  onLoginClick,
-  registerButtonLabel = 'Register',
-  loginButtonLabel = 'Login',
-  registerButtonProps,
-  loginButtonProps,
-  menuItems,
+  AccountPopoverProps = {},
   additionalComponent,
+  children,
+  loginButtonLabel = 'Login',
+  loginButtonProps,
+  onLoginClick,
+  onRegisterClick,
+  registerButtonLabel = 'Register',
+  registerButtonProps,
 }) => {
   const user = getUser<BaseUser & JWTContent>({ noSSR: false })
 
@@ -61,7 +61,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
     <div className="grid w-full grid-cols-[1fr_40px_40px] items-center justify-center gap-1 min-lg:gap-2">
       {renderHeaderContent()}
       {renderAdditionalComponent()}
-      <AccountPopover MenuItemsProps={{ menuItems }} />
+      <AccountPopover {...AccountPopoverProps} />
     </div>
   )
 }
