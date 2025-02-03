@@ -13,9 +13,20 @@ export const ActivityLogsFragmentQuery = graphql`
     count: { type: "Int", defaultValue: 10 }
     cursor: { type: "String" }
     userName: { type: "String", defaultValue: null }
+    createdFrom: { type: "Date", defaultValue: null }
+    createdTo: { type: "Date", defaultValue: null }
   ) {
-    activityLogs(first: $count, after: $cursor, userName: $userName)
-      @connection(key: "ActivityLogs_activityLogs", filters: ["userName"]) {
+    activityLogs(
+      first: $count
+      after: $cursor
+      userName: $userName
+      createdFrom: $createdFrom
+      createdTo: $createdTo
+    )
+      @connection(
+        key: "ActivityLogs_activityLogs"
+        filters: ["userName", "createdFrom", "createdTo"]
+      ) {
       edges {
         node {
           id
