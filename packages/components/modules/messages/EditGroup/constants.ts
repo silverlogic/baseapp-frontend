@@ -1,3 +1,9 @@
+import z from 'zod'
+
+import {
+  CREATE_OR_EDIT_GROUP_FORM_VALUE,
+  DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION,
+} from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
 
 export const getDefaultFormValues = (
@@ -8,4 +14,9 @@ export const getDefaultFormValues = (
   addParticipants: [],
   removeParticipants: [],
   image,
+})
+
+export const DEFAULT_FORM_VALIDATION = z.object({
+  ...DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION.shape,
+  [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any(),
 })

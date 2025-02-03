@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import { ProfileNode } from '../types'
 import DefaultProfileCard from './ProfileCard'
 import DefaultProfilesList from './ProfilesList'
-import { ProfilesContainer, SearchbarContainer } from './styled'
+import { SearchbarContainer as DefaultSearchbarContainer, ProfilesContainer } from './styled'
 import { GroupChatMembersListProps } from './types'
 
 const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
@@ -29,6 +29,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   ProfileCardProps = {},
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
+  SearchbarContainer = DefaultSearchbarContainer,
   ConnectionsList = DefaultProfilesList,
   ConnectionsListProps = {},
   MembersList = DefaultProfilesList,
@@ -103,7 +104,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
       <Box height="100%" width="100%">
         <MembersList
           profiles={currentParticipants}
-          renderItem={(profile) => renderItem(profile)}
+          renderItem={(profile) => renderItem(profile, true)}
           loadNext={membersLoadNext}
           hasNext={membersHasNext}
           isLoadingNext={membersIsLoadingNext}
@@ -114,7 +115,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
         {connections && (
           <ConnectionsList
             profiles={connections}
-            renderItem={(profile) => renderItem(profile, false)}
+            renderItem={(profile) => renderItem(profile)}
             loadNext={connectionsLoadNext}
             hasNext={connectionsHasNext}
             isLoadingNext={connectionsIsLoadingNext}

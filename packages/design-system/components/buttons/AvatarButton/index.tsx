@@ -19,7 +19,12 @@ import { AvatarButtonProps } from './types'
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  */
-const AvatarButton: FC<AvatarButtonProps> = ({ onClick, imageString, caption }) => (
+const AvatarButton: FC<AvatarButtonProps> = ({
+  onClick,
+  imageString,
+  caption,
+  alt = 'Avatar Button',
+}) => (
   <AvatarButtonContainer onClick={onClick}>
     <AvatarWithPlaceholder
       width={48}
@@ -30,7 +35,7 @@ const AvatarButton: FC<AvatarButtonProps> = ({ onClick, imageString, caption }) 
         justifySelf: 'center',
       }}
     >
-      {imageString && <Image src={imageString} alt="Avatar Button" width={24} height={24} />}
+      {imageString && <Image src={imageString} alt={alt} width={24} height={24} />}
     </AvatarWithPlaceholder>
     {caption && (
       <Typography component="span" variant="subtitle2" sx={{ alignSelf: 'center' }}>

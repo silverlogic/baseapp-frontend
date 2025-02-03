@@ -1,3 +1,6 @@
+export { default as AvatarButton } from './AvatarButton'
+export type * from './AvatarButton/types'
+
 export { default as IconButton } from './IconButton'
 export type * from './IconButton/types'
 

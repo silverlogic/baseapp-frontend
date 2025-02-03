@@ -4,11 +4,13 @@ import { SearchbarProps } from '@baseapp-frontend/design-system'
 
 import { PreloadedQuery } from 'react-relay'
 
+import { ChatRoomsQuery$data } from '../../../__generated__/ChatRoomsQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated__/GroupDetailsQuery.graphql'
 import { ProfileCardProps } from '../__shared__/GroupChatMembersList/ProfileCard/types'
 import { ProfilesListProps } from '../__shared__/GroupChatMembersList/ProfilesList/types'
 
 export interface EditGroupProps extends PropsWithChildren {
+  allProfilesRef: ChatRoomsQuery$data
   queryRef: PreloadedQuery<GroupDetailsQueryType>
   roomId: string | undefined
   onCancellation: () => void

@@ -1,0 +1,17 @@
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 115, 129, 0.48); /* #637381 color with opacity */
+  border-radius: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; /* Hide the scrollbar track */
+}
+
+::-webkit-scrollbar-button {
+  display: none; /* Hide the scrollbar buttons */
+}

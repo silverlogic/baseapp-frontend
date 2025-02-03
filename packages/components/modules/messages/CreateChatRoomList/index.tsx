@@ -4,13 +4,12 @@ import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
-  AvatarWithPlaceholder,
+  AvatarButton,
   Searchbar as DefaultSearchbar,
   LoadingState,
 } from '@baseapp-frontend/design-system'
 
-import { Box, Typography } from '@mui/material'
-import Image from 'next/image'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -19,7 +18,7 @@ import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesLi
 import EmptyProfilesListState from '../EmptyProfilesListState'
 import { ProfileEdge, ProfileNode } from '../__shared__/types'
 import DefaultChatRoomListItem from './ChatRoomListItem'
-import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
+import { MainContainer, SearchbarContainer } from './styled'
 import { CreateChatRoomListProps } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
@@ -129,27 +128,13 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
           {...SearchbarProps}
         />
       </SearchbarContainer>
-      <GroupChatContainer onClick={onGroupChatCreationButtonClicked}>
-        <AvatarWithPlaceholder
-          width={48}
-          height={48}
-          sx={{
-            bgcolor: 'primary.main',
-            alignSelf: 'flex-start',
-            justifySelf: 'center',
-          }}
-        >
-          <Image
-            src="/svg/avatar-group-chat.svg"
-            alt="Avatar Group Fallback"
-            width={24}
-            height={24}
-          />
-        </AvatarWithPlaceholder>
-        <Typography component="span" variant="subtitle2" sx={{ alignSelf: 'center' }}>
-          New Group
-        </Typography>
-      </GroupChatContainer>
+
+      <AvatarButton
+        onClick={onGroupChatCreationButtonClicked}
+        caption="New Group"
+        imageString="/svg/avatar-group-chat.svg"
+        alt="Avatar Group Fallback"
+      />
       {renderListContent()}
     </MainContainer>
   )

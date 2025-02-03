@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo } from 'react'
+import { FC, useMemo, useState, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
@@ -23,22 +23,21 @@ import { EditGroupTitleAndImage } from '../__shared__'
 import GroupChatMembersList from '../__shared__/GroupChatMembersList'
 import DefaultProfileCard from '../__shared__/GroupChatMembersList/ProfileCard'
 import DefaultProfilesList from '../__shared__/GroupChatMembersList/ProfilesList'
-import {
-  DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
-  CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
-} from '../__shared__/constants'
+import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
 import { ProfileNode } from '../__shared__/types'
 import { MembersListFragment } from '../graphql/fragments/MembersList'
 import { useUpdateChatRoomMutation } from '../graphql/mutations/UpdateChatRoom'
 import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
 import { useGroupNameAndAvatar } from '../utils'
-import { getDefaultFormValues } from './constants'
+import AddMembersDialog from './AddMembersDialog'
+import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
 import { HeaderContainer } from './styled'
 import { EditGroupProps } from './types'
 
 const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   profileId,
+  allProfilesRef,
   queryRef,
   roomId,
   ProfileCard = DefaultProfileCard,
@@ -52,6 +51,7 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   onValidSubmission,
 }) => {
   const { sendToast } = useNotification()
+  const [open, setOpen] = useState(false)
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
@@ -108,6 +108,7 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
       }
       delete dirtyValues.image
     }
+    delete dirtyValues.participants
 
     commit({
       variables: {
@@ -141,9 +142,24 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   }
 
   const isEditButtonDisabled = !isValid || !isDirty
+  const [isPending, startTransition] = useTransition()
+  const handleAddMemberSuccess = () => {
+    startTransition(() => {
+      setOpen(false)
+      refetch?.({})
+    })
+  }
 
   return (
     <Box>
+      <AddMembersDialog
+        open={open}
+        allProfilesRef={allProfilesRef}
+        onClose={handleAddMemberSuccess}
+        profileId={profileId}
+        roomId={roomId}
+        isPending={isPending}
+      />
       <HeaderContainer>
         <IconButton onClick={onCancellation} aria-label="cancel editing group">
           <CloseIcon sx={{ fontSize: '24px' }} />
@@ -186,7 +202,11 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
         ProfileCard={ProfileCard}
         ProfileCardProps={ProfileCardProps}
         MembersList={MembersList}
-        MembersListProps={MembersListProps}
+        MembersListProps={{
+          allowAddMember: true,
+          onAddMemberClick: () => setOpen(true),
+          ...MembersListProps,
+        }}
       />
     </Box>
   )

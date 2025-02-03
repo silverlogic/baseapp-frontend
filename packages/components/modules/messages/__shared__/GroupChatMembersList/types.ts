@@ -3,6 +3,7 @@ import { FC, PropsWithChildren } from 'react'
 import { SearchbarProps } from '@baseapp-frontend/design-system'
 import { WithControllerProps } from '@baseapp-frontend/utils'
 
+import { BoxProps } from '@mui/material'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { LoadMoreFn, RefetchFnDynamic } from 'react-relay'
 
@@ -25,6 +26,7 @@ export interface GroupChatMembersListProps extends PropsWithChildren {
   membersIsLoadingNext?: boolean
   Searchbar?: FC<SearchbarProps> | ((props: WithControllerProps<SearchbarProps>) => JSX.Element)
   SearchbarProps?: Partial<SearchbarProps>
+  SearchbarContainer?: FC<BoxProps>
   ProfileCard?: FC<ProfileCardProps>
   ProfileCardProps?: Partial<ProfileCardProps>
   ConnectionsList?: FC<ProfilesListProps>
