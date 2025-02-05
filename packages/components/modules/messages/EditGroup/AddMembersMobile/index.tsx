@@ -2,11 +2,11 @@
 
 import { FC, useMemo } from 'react'
 
-import { ConfirmDialog } from '@baseapp-frontend/design-system'
+import { CheckMarkIcon, IconButton, Iconify } from '@baseapp-frontend/design-system'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { LoadingButton } from '@mui/lab'
+import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 import { useAllProfilesList } from '../../../profiles/graphql/queries/AllProfilesList'
@@ -19,15 +19,14 @@ import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
 import { useUpdateChatRoomMutation } from '../../graphql/mutations/UpdateChatRoom'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
-import './VirtuosoStyles.css'
+import { HeaderContainer } from '../styled'
 import { DEFAULT_FORM_VALIDATION } from './constants'
 import { SearchbarContainer } from './styled'
-import { AddMembersDialogProps } from './types'
+import { AddMembersMobileProps } from './types'
 
-const AddMembersDialog: FC<AddMembersDialogProps> = ({
+const AddMembersMobile: FC<AddMembersMobileProps> = ({
   allProfilesRef,
   onClose,
-  open,
   profileId,
   roomId,
   isPending,
@@ -122,77 +121,75 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   const emptyParticipantsList = participants.length === 0
 
   return (
-    <ConfirmDialog
-      title="Add Members"
-      customMaxWidth={480}
-      DialogContentProps={{
-        sx: {
-          padding: 0,
-          typography: 'body1',
-          color: 'text.primary',
-        },
-      }}
-      content={
-        <GroupChatMembersList
-          FORM_VALUE={FORM_VALUE}
-          setValue={setValue}
-          watch={watch}
-          currentParticipants={participants}
-          connections={profiles}
-          refetch={refetchProfiles}
-          SearchbarContainer={SearchbarContainer}
-          connectionsLoadNext={loadNext}
-          connectionsHasNext={hasNext}
-          connectionsIsLoadingNext={isLoadingNext}
-          ConnectionsListProps={{
-            VirtuosoProps: {
-              style: {
-                height: '100vh',
-                maxHeight: '500px',
-              },
-            },
-            title: '',
-            removeTitle: emptyParticipantsList,
-            renderItem: (profile) => {
-              if (!profile) return null
-              return (
-                <AddMemberCard
-                  profile={profile}
-                  handleAddMember={handleAddMember}
-                  handleRemoveMember={handleRemoveMember}
-                  isMember={participants.some((member) => member?.id === profile?.id)}
-                />
-              )
-            },
+    <Box>
+      <HeaderContainer>
+        <IconButton onClick={onClose} aria-label="cancel adding member">
+          <Iconify icon="eva:arrow-ios-back-fill" width={24} />
+        </IconButton>
+        <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
+          Add Member
+        </Typography>
+        <IconButton
+          aria-label="Add Member"
+          disabled={isEditButtonDisabled || isPending}
+          isLoading={isMutationInFlight || isPending}
+          onClick={() => {
+            onSubmit()
           }}
-          MembersListProps={{
-            removeTitle: emptyParticipantsList,
-            title: '',
-            NormalListProps: {
-              sx: {
-                display: 'flex',
-                justifyContent: 'start',
-                alignItems: 'center',
-                padding: emptyParticipantsList ? 0 : '12px',
-              },
-            },
-          }}
-          ProfileCard={AddedMemberCard}
-        />
-      }
-      action={
-        <LoadingButton
-          onClick={() => onSubmit()}
-          disabled={isMutationInFlight || isEditButtonDisabled}
-          loading={isMutationInFlight || isPending}
         >
-          Confirm
-        </LoadingButton>
-      }
-      onClose={onClose}
-      open={open}
-    />
+          <CheckMarkIcon sx={{ fontSize: '24px' }} />
+        </IconButton>
+      </HeaderContainer>
+      <GroupChatMembersList
+        FORM_VALUE={FORM_VALUE}
+        setValue={setValue}
+        watch={watch}
+        currentParticipants={participants}
+        connections={profiles}
+        refetch={refetchProfiles}
+        SearchbarContainer={SearchbarContainer}
+        connectionsLoadNext={loadNext}
+        connectionsHasNext={hasNext}
+        connectionsIsLoadingNext={isLoadingNext}
+        ConnectionsListProps={{
+          VirtuosoProps: {
+            style: {
+              height: '100%',
+              maxHeight: emptyParticipantsList
+                ? 'calc(100vh - 72px - 57px - 57px)'
+                : 'calc(100vh - 72px - 57px - 57px - 130px)',
+            },
+          },
+          title: '',
+          removeTitle: emptyParticipantsList,
+          renderItem: (profile) => {
+            if (!profile) return null
+            return (
+              <AddMemberCard
+                profile={profile}
+                handleAddMember={handleAddMember}
+                handleRemoveMember={handleRemoveMember}
+                isMember={participants.some((member) => member?.id === profile?.id)}
+              />
+            )
+          },
+        }}
+        MembersListProps={{
+          removeTitle: emptyParticipantsList,
+          title: '',
+          NormalListProps: {
+            sx: {
+              display: 'flex',
+              justifyContent: 'start',
+              alignItems: 'center',
+              padding: emptyParticipantsList ? 0 : '12px',
+            },
+          },
+        }}
+        ProfileCard={AddedMemberCard}
+      />
+    </Box>
   )
 }
 
-export default AddMembersDialog
+export default AddMembersMobile

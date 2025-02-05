@@ -7,7 +7,7 @@ import { AvatarWithPlaceholder, FilledCloseIcon, IconButton } from '@baseapp-fro
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
+import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
 import { MainContainer } from './styled'
 import { AddedMemberCardProps } from './types'
 

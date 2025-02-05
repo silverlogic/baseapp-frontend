@@ -1,4 +1,4 @@
-import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 
 export interface AddedMemberCardProps {
   profile: ProfileItemFragment$key

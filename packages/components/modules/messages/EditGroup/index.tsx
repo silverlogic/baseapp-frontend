@@ -8,6 +8,7 @@ import {
   CloseIcon,
   Searchbar as DefaultSearchbar,
   IconButton,
+  useResponsive,
 } from '@baseapp-frontend/design-system'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
@@ -31,6 +32,7 @@ import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
 import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
 import { useGroupNameAndAvatar } from '../utils'
 import AddMembersDialog from './AddMembersDialog'
+import AddMembersMobile from './AddMembersMobile'
 import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
 import { HeaderContainer } from './styled'
 import { EditGroupProps } from './types'
@@ -52,6 +54,7 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
+  const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
@@ -149,6 +152,17 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
       refetch?.({})
     })
   }
+
+  if (smDown && open)
+    return (
+      <AddMembersMobile
+        allProfilesRef={allProfilesRef}
+        onClose={handleAddMemberSuccess}
+        profileId={profileId}
+        roomId={roomId}
+        isPending={isPending}
+      />
+    )
 
   return (
     <Box>
