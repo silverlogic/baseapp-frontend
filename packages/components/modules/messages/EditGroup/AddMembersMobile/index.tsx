@@ -10,7 +10,7 @@ import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 import { useAllProfilesList } from '../../../profiles/graphql/queries/AllProfilesList'
-import GroupChatMembersList from '../../__shared__/GroupChatMembersList'
+import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
@@ -27,9 +27,12 @@ import { AddMembersMobileProps } from './types'
 const AddMembersMobile: FC<AddMembersMobileProps> = ({
   allProfilesRef,
   onClose,
+  handleSubmitSuccess,
   profileId,
   roomId,
   isPending,
+  GroupChatMembersList = DefaultGroupChatMembersList,
+  GroupChatMembersListProps = {},
 }) => {
   const { sendToast } = useNotification()
 
@@ -79,7 +82,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
           sendToast('Something went wrong', { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
-          onClose()
+          handleSubmitSuccess()
           reset()
         }
       },
@@ -156,8 +159,8 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
             style: {
               height: '100%',
               maxHeight: emptyParticipantsList
-                ? 'calc(100vh - 72px - 57px - 57px)'
-                : 'calc(100vh - 72px - 57px - 57px - 130px)',
+                ? 'calc(100vh - 72px - 57px - 69px)'
+                : 'calc(100vh - 72px - 57px - 69px - 130px)',
             },
           },
           title: '',
@@ -173,6 +176,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
               />
             )
           },
+          ...(GroupChatMembersListProps?.ConnectionsListProps ?? {}),
         }}
         MembersListProps={{
           removeTitle: emptyParticipantsList,
@@ -185,8 +189,10 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
               padding: emptyParticipantsList ? 0 : '12px',
             },
           },
+          ...(GroupChatMembersListProps?.MembersListProps ?? {}),
         }}
         ProfileCard={AddedMemberCard}
+        {...GroupChatMembersListProps}
       />
     </Box>
   )

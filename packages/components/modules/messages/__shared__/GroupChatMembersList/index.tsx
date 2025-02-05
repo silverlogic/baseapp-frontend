@@ -10,7 +10,10 @@ import { useForm } from 'react-hook-form'
 import { ProfileNode } from '../types'
 import DefaultProfileCard from './ProfileCard'
 import DefaultProfilesList from './ProfilesList'
-import { SearchbarContainer as DefaultSearchbarContainer, ProfilesContainer } from './styled'
+import {
+  ProfilesContainer as DefaultProfilesContainer,
+  SearchbarContainer as DefaultSearchbarContainer,
+} from './styled'
 import { GroupChatMembersListProps } from './types'
 
 const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
@@ -25,6 +28,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   membersLoadNext,
   membersHasNext,
   membersIsLoadingNext,
+  ProfilesContainer = DefaultProfilesContainer,
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
   Searchbar = DefaultSearchbar,

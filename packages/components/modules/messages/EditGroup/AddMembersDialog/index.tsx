@@ -10,7 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { useForm } from 'react-hook-form'
 
 import { useAllProfilesList } from '../../../profiles/graphql/queries/AllProfilesList'
-import GroupChatMembersList from '../../__shared__/GroupChatMembersList'
+import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
@@ -27,10 +27,13 @@ import { AddMembersDialogProps } from './types'
 const AddMembersDialog: FC<AddMembersDialogProps> = ({
   allProfilesRef,
   onClose,
+  handleSubmitSuccess,
   open,
   profileId,
   roomId,
   isPending,
+  GroupChatMembersList = DefaultGroupChatMembersList,
+  GroupChatMembersListProps = {},
 }) => {
   const { sendToast } = useNotification()
 
@@ -80,7 +83,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           sendToast('Something went wrong', { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
-          onClose()
+          handleSubmitSuccess()
           reset()
         }
       },
@@ -117,6 +120,11 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
         shouldTouch: true,
       },
     )
+  }
+
+  const handleClose = () => {
+    onClose()
+    reset()
   }
 
   const emptyParticipantsList = participants.length === 0
@@ -164,6 +172,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
                 />
               )
             },
+            ...(GroupChatMembersListProps?.ConnectionsListProps ?? {}),
           }}
           MembersListProps={{
             removeTitle: emptyParticipantsList,
@@ -176,8 +185,10 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
                 padding: emptyParticipantsList ? 0 : '12px',
               },
             },
+            ...(GroupChatMembersListProps?.MembersListProps ?? {}),
           }}
           ProfileCard={AddedMemberCard}
+          {...GroupChatMembersListProps}
         />
       }
       action={
@@ -189,7 +200,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           Confirm
         </LoadingButton>
       }
-      onClose={onClose}
+      onClose={handleClose}
       open={open}
     />
   )

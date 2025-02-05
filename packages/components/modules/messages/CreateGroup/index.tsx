@@ -3,12 +3,7 @@
 import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import {
-  CheckMarkIcon,
-  CloseIcon,
-  Searchbar as DefaultSearchbar,
-  IconButton,
-} from '@baseapp-frontend/design-system'
+import { CheckMarkIcon, CloseIcon, IconButton } from '@baseapp-frontend/design-system'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,9 +13,7 @@ import { ConnectionHandler } from 'relay-runtime'
 
 import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
 import { EditGroupTitleAndImage } from '../__shared__'
-import GroupChatMembersList from '../__shared__/GroupChatMembersList'
-import DefaultProfileCard from '../__shared__/GroupChatMembersList/ProfileCard'
-import DefaultProfilesList from '../__shared__/GroupChatMembersList/ProfilesList'
+import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
@@ -29,19 +22,13 @@ import {
 import { CreateOrEditGroup, ProfileNode } from '../__shared__/types'
 import { useChatRoom } from '../context'
 import { useCreateChatRoomMutation } from '../graphql/mutations/CreateChatRoom'
-import { HeaderContainer } from './styled'
+import { HeaderContainer, ProfilesContainer } from './styled'
 import { CreateGroupProps } from './types'
 
 const CreateGroup: FC<CreateGroupProps> = ({
   allProfilesRef,
-  ProfileCard = DefaultProfileCard,
-  ProfileCardProps = {},
-  Searchbar = DefaultSearchbar,
-  SearchbarProps = {},
-  ConnectionsList = DefaultProfilesList,
-  ConnectionsListProps = {},
-  MembersList = DefaultProfilesList,
-  MembersListProps = {},
+  GroupChatMembersList = DefaultGroupChatMembersList,
+  GroupChatMembersListProps = {},
   onValidSubmission,
   onBackButtonClicked,
 }) => {
@@ -182,14 +169,8 @@ const CreateGroup: FC<CreateGroupProps> = ({
         connectionsLoadNext={loadNext}
         connectionsHasNext={hasNext}
         connectionsIsLoadingNext={isLoadingNext}
-        Searchbar={Searchbar}
-        SearchbarProps={SearchbarProps}
-        ProfileCard={ProfileCard}
-        ProfileCardProps={ProfileCardProps}
-        ConnectionsList={ConnectionsList}
-        ConnectionsListProps={ConnectionsListProps}
-        MembersList={MembersList}
-        MembersListProps={MembersListProps}
+        ProfilesContainer={ProfilesContainer}
+        {...GroupChatMembersListProps}
       />
     </>
   )

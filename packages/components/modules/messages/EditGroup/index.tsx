@@ -6,7 +6,6 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   CheckMarkIcon,
   CloseIcon,
-  Searchbar as DefaultSearchbar,
   IconButton,
   useResponsive,
 } from '@baseapp-frontend/design-system'
@@ -21,9 +20,7 @@ import { ChatRoomParticipantsPaginationQuery } from '../../../__generated__/Chat
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../__generated__/MembersListFragment.graphql'
 import { EditGroupTitleAndImage } from '../__shared__'
-import GroupChatMembersList from '../__shared__/GroupChatMembersList'
-import DefaultProfileCard from '../__shared__/GroupChatMembersList/ProfileCard'
-import DefaultProfilesList from '../__shared__/GroupChatMembersList/ProfilesList'
+import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
 import { ProfileNode } from '../__shared__/types'
 import { MembersListFragment } from '../graphql/fragments/MembersList'
@@ -42,12 +39,8 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   allProfilesRef,
   queryRef,
   roomId,
-  ProfileCard = DefaultProfileCard,
-  ProfileCardProps = {},
-  Searchbar = DefaultSearchbar,
-  SearchbarProps = {},
-  MembersList = DefaultProfilesList,
-  MembersListProps = {},
+  GroupChatMembersList = DefaultGroupChatMembersList,
+  GroupChatMembersListProps = {},
   onCancellation,
   onRemovalFromGroup,
   onValidSubmission,
@@ -147,8 +140,8 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
   const isEditButtonDisabled = !isValid || !isDirty
   const [isPending, startTransition] = useTransition()
   const handleAddMemberSuccess = () => {
+    setOpen(false)
     startTransition(() => {
-      setOpen(false)
       refetch?.({})
     })
   }
@@ -157,7 +150,8 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
     return (
       <AddMembersMobile
         allProfilesRef={allProfilesRef}
-        onClose={handleAddMemberSuccess}
+        onClose={() => setOpen(false)}
+        handleSubmitSuccess={handleAddMemberSuccess}
         profileId={profileId}
         roomId={roomId}
         isPending={isPending}
@@ -169,7 +163,8 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
       <AddMembersDialog
         open={open}
         allProfilesRef={allProfilesRef}
-        onClose={handleAddMemberSuccess}
+        onClose={() => setOpen(false)}
+        handleSubmitSuccess={handleAddMemberSuccess}
         profileId={profileId}
         roomId={roomId}
         isPending={isPending}
@@ -211,16 +206,12 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
         membersLoadNext={loadNext}
         membersHasNext={hasNext}
         membersIsLoadingNext={isLoadingNext}
-        Searchbar={Searchbar}
-        SearchbarProps={SearchbarProps}
-        ProfileCard={ProfileCard}
-        ProfileCardProps={ProfileCardProps}
-        MembersList={MembersList}
         MembersListProps={{
           allowAddMember: true,
           onAddMemberClick: () => setOpen(true),
-          ...MembersListProps,
+          ...(GroupChatMembersListProps?.MembersListProps ?? {}),
         }}
+        {...GroupChatMembersListProps}
       />
     </Box>
   )

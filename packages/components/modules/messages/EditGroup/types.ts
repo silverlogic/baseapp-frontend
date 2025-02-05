@@ -1,13 +1,10 @@
 import { FC, PropsWithChildren } from 'react'
 
-import { SearchbarProps } from '@baseapp-frontend/design-system'
-
 import { PreloadedQuery } from 'react-relay'
 
 import { ChatRoomsQuery$data } from '../../../__generated__/ChatRoomsQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../__generated__/GroupDetailsQuery.graphql'
-import { ProfileCardProps } from '../__shared__/GroupChatMembersList/ProfileCard/types'
-import { ProfilesListProps } from '../__shared__/GroupChatMembersList/ProfilesList/types'
+import { GroupChatMembersListProps } from '../__shared__/GroupChatMembersList/types'
 
 export interface EditGroupProps extends PropsWithChildren {
   allProfilesRef: ChatRoomsQuery$data
@@ -16,11 +13,7 @@ export interface EditGroupProps extends PropsWithChildren {
   onCancellation: () => void
   onRemovalFromGroup: () => void
   onValidSubmission: () => void
-  Searchbar?: FC<SearchbarProps>
-  SearchbarProps?: Partial<SearchbarProps>
-  ProfileCard?: FC<ProfileCardProps>
-  ProfileCardProps?: Partial<ProfileCardProps>
-  MembersList?: FC<ProfilesListProps>
-  MembersListProps?: Partial<ProfilesListProps>
+  GroupChatMembersList?: FC<GroupChatMembersListProps>
+  GroupChatMembersListProps?: Partial<GroupChatMembersListProps>
   remotePatternsHostName?: string
 }

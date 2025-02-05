@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<24f2c4202c29cd58a90fc8b782d50cdc>>
+ * @generated SignedSource<<e985171f013693b79772548d963d730f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -56,7 +56,7 @@ const node: ReaderFragment = (function () {
         name: 'cursor',
       },
       {
-        defaultValue: '-created',
+        defaultValue: 'name',
         kind: 'LocalArgument',
         name: 'orderBy',
       },
@@ -199,6 +199,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = '145d7609bc0dcee3b0940096fa289337'
+;(node as any).hash = 'ccca7694a4c35464dcc25d0d1752d100'
 
 export default node

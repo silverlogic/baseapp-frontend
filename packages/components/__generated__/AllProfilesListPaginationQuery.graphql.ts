@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<55c88f2688f5b804fbf33dbcd243bab6>>
+ * @generated SignedSource<<aaa3c8691f12f7e1716fa4ee64e4e301>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -38,7 +38,7 @@ const node: ConcreteRequest = (function () {
         name: 'cursor',
       },
       {
-        defaultValue: '-created',
+        defaultValue: 'name',
         kind: 'LocalArgument',
         name: 'orderBy',
       },
@@ -261,16 +261,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '14ee435dd3957e0c7247d383714e53f4',
+      cacheID: '204256845a14dd3565928a505a949408',
       id: null,
       metadata: {},
       name: 'AllProfilesListPaginationQuery',
       operationKind: 'query',
-      text: 'query AllProfilesListPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $orderBy: String = "-created"\n  $q: String = null\n) {\n  ...AllProfilesListFragment_40Ewnb\n}\n\nfragment AllProfilesListFragment_40Ewnb on Query {\n  allProfiles(after: $cursor, first: $count, orderBy: $orderBy, q: $q) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
+      text: 'query AllProfilesListPaginationQuery(\n  $count: Int = 5\n  $cursor: String\n  $orderBy: String = "name"\n  $q: String = null\n) {\n  ...AllProfilesListFragment_40Ewnb\n}\n\nfragment AllProfilesListFragment_40Ewnb on Query {\n  allProfiles(after: $cursor, first: $count, orderBy: $orderBy, q: $q) {\n    totalCount\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n    edges {\n      node {\n        id\n        ...ProfileItemFragment\n        __typename\n      }\n      cursor\n    }\n  }\n}\n\nfragment ProfileItemFragment on Profile {\n  id\n  name\n  image(width: 100, height: 100) {\n    url\n  }\n  urlPath {\n    path\n    id\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = '145d7609bc0dcee3b0940096fa289337'
+;(node as any).hash = 'ccca7694a4c35464dcc25d0d1752d100'
 
 export default node
