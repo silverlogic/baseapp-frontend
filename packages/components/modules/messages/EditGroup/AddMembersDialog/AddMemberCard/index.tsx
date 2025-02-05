@@ -9,9 +9,9 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
 import { MainContainer } from './styled'
-import { AddMembersCardProps } from './types'
+import { AddMemberCardProps } from './types'
 
-const AddMembersCard: FC<AddMembersCardProps> = ({
+const AddMemberCard: FC<AddMemberCardProps> = ({
   profile: profileRef,
   handleAddMember,
   handleRemoveMember,
@@ -47,4 +47,4 @@ const AddMembersCard: FC<AddMembersCardProps> = ({
   )
 }
 
-export default AddMembersCard
+export default AddMemberCard

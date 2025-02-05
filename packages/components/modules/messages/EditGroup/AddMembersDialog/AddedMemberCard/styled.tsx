@@ -9,6 +9,5 @@ export const MainContainer = styled(Box)(({ theme }) => ({
   gridTemplateRows: 'auto auto',
   gridTemplateColumns: 'min-content',
   gap: theme.spacing(0.5),
-  // padding: theme.spacing(1),
   margin: theme.spacing(1),
 }))

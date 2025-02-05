@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<19973e03f96279570ada8d066a149d0b>>
+ * @generated SignedSource<<5833d573f5c20fd393b05a3178d5cab1>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -231,7 +231,7 @@ const node: ConcreteRequest = (function () {
         {
           alias: null,
           args: v2 /*: any*/,
-          filters: null,
+          filters: ['userName'],
           handle: 'connection',
           key: 'ActivityLogs_activityLogs',
           kind: 'LinkedHandle',

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9b6fd566697e49370aeb48f13f3d18ef>>
+ * @generated SignedSource<<f05424845c3864410d6ea954a0215236>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -85,6 +85,11 @@ const node: ReaderFragment = (function () {
         kind: 'LocalArgument',
         name: 'cursor',
       },
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'userName',
+      },
     ],
     kind: 'Fragment',
     metadata: {
@@ -113,7 +118,13 @@ const node: ReaderFragment = (function () {
     selections: [
       {
         alias: 'activityLogs',
-        args: null,
+        args: [
+          {
+            kind: 'Variable',
+            name: 'userName',
+            variableName: 'userName',
+          },
+        ],
         concreteType: 'ActivityLogConnection',
         kind: 'LinkedField',
         name: '__ActivityLogs_activityLogs_connection',
@@ -252,6 +263,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'ba76e757af14e0dbe50c2ee788f01632'
+;(node as any).hash = '89365a3b6109a48bbc293c75f9d7174a'
 
 export default node

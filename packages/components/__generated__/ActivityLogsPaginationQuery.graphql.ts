@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7e37dbc54f4e804a1f8393e08030b101>>
+ * @generated SignedSource<<a4cbca51dd8a19245a2aedab4b6d42cc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -36,8 +36,18 @@ const node: ConcreteRequest = (function () {
         kind: 'LocalArgument',
         name: 'cursor',
       },
+      {
+        defaultValue: null,
+        kind: 'LocalArgument',
+        name: 'userName',
+      },
     ],
-    v1 = [
+    v1 = {
+      kind: 'Variable',
+      name: 'userName',
+      variableName: 'userName',
+    },
+    v2 = [
       {
         kind: 'Variable',
         name: 'after',
@@ -48,15 +58,16 @@ const node: ConcreteRequest = (function () {
         name: 'first',
         variableName: 'count',
       },
+      v1 /*: any*/,
     ],
-    v2 = {
+    v3 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'id',
       storageKey: null,
     },
-    v3 = {
+    v4 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
@@ -82,6 +93,7 @@ const node: ConcreteRequest = (function () {
               name: 'cursor',
               variableName: 'cursor',
             },
+            v1 /*: any*/,
           ],
           kind: 'FragmentSpread',
           name: 'ActivityLogsFragment',
@@ -98,7 +110,7 @@ const node: ConcreteRequest = (function () {
       selections: [
         {
           alias: null,
-          args: v1 /*: any*/,
+          args: v2 /*: any*/,
           concreteType: 'ActivityLogConnection',
           kind: 'LinkedField',
           name: 'activityLogs',
@@ -120,7 +132,7 @@ const node: ConcreteRequest = (function () {
                   name: 'node',
                   plural: false,
                   selections: [
-                    v2 /*: any*/,
+                    v3 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -135,7 +147,7 @@ const node: ConcreteRequest = (function () {
                       name: 'verb',
                       storageKey: null,
                     },
-                    v3 /*: any*/,
+                    v4 /*: any*/,
                     {
                       alias: null,
                       args: null,
@@ -144,7 +156,7 @@ const node: ConcreteRequest = (function () {
                       name: 'user',
                       plural: false,
                       selections: [
-                        v2 /*: any*/,
+                        v3 /*: any*/,
                         {
                           alias: null,
                           args: null,
@@ -177,7 +189,7 @@ const node: ConcreteRequest = (function () {
                           kind: 'LinkedField',
                           name: 'avatar',
                           plural: false,
-                          selections: [v3 /*: any*/],
+                          selections: [v4 /*: any*/],
                           storageKey: 'avatar(height:48,width:48)',
                         },
                       ],
@@ -233,8 +245,8 @@ const node: ConcreteRequest = (function () {
         },
         {
           alias: null,
-          args: v1 /*: any*/,
-          filters: null,
+          args: v2 /*: any*/,
+          filters: ['userName'],
           handle: 'connection',
           key: 'ActivityLogs_activityLogs',
           kind: 'LinkedHandle',
@@ -243,16 +255,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '79c66245f518478d20204207fd2aa732',
+      cacheID: 'e0144e7ded781597d8d6bb739897328d',
       id: null,
       metadata: {},
       name: 'ActivityLogsPaginationQuery',
       operationKind: 'query',
-      text: 'query ActivityLogsPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n) {\n  ...ActivityLogsFragment_1G22uz\n}\n\nfragment ActivityLogsFragment_1G22uz on Query {\n  activityLogs(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        createdAt\n        verb\n        url\n        user {\n          id\n          fullName\n          email\n          avatar(width: 48, height: 48) {\n            url\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n',
+      text: 'query ActivityLogsPaginationQuery(\n  $count: Int = 10\n  $cursor: String\n  $userName: String = null\n) {\n  ...ActivityLogsFragment_1nuDWg\n}\n\nfragment ActivityLogsFragment_1nuDWg on Query {\n  activityLogs(first: $count, after: $cursor, userName: $userName) {\n    edges {\n      node {\n        id\n        createdAt\n        verb\n        url\n        user {\n          id\n          fullName\n          email\n          avatar(width: 48, height: 48) {\n            url\n          }\n        }\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'ba76e757af14e0dbe50c2ee788f01632'
+;(node as any).hash = '89365a3b6109a48bbc293c75f9d7174a'
 
 export default node

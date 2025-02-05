@@ -9,16 +9,6 @@ import { AvatarWithPlaceholder } from '../../avatars'
 import { AvatarButtonContainer } from './styled'
 import { AvatarButtonProps } from './types'
 
-/**
- * This is a IconButton component.
- *
- * @description
- * This is a **BaseApp** feature.
- *
- * Developers can freely edit this to suit the project's needs.
- *
- * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
- */
 const AvatarButton: FC<AvatarButtonProps> = ({
   onClick,
   imageString,

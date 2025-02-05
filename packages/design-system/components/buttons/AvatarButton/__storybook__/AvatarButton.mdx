@@ -1,0 +1,51 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Buttons/AvatarButton" />
+
+# Component Documentation
+
+## AvatarButton
+
+- **Purpose**: The `AvatarButton` component provides a clickable button that displays an avatar and an optional caption.
+- **Expected Behavior**: The `AvatarButton` renders as a button containing an avatar image and an optional caption. It responds to hover and click states with visual feedback.
+
+## Use Cases
+
+- **Current Usage**:
+  - User profile actions
+  - Adding members to a group
+  - Displaying user avatars with actions
+- **Potential Usage**:
+  - Social media profile actions
+  - Contact list actions
+  - Team management interfaces
+
+## Props
+
+- **onClick** (function): The function to be called when the button is clicked.
+- **imageString** (string, optional): The URL of the avatar image.
+- **caption** (string, optional): The caption text to be displayed next to the avatar.
+- **alt** (string, optional): The alt text for the avatar image. Defaults to "Avatar Button".
+
+## Notes
+
+- **Related Components**:
+  - `Button`: Standard button component for text-based actions
+  - `Avatar`: Component for displaying user avatars
+  - `Tooltip`: Can be used to provide additional context for the `AvatarButton`
+
+## Example Usage
+
+```javascript
+import { AvatarButton } from '@baseapp-frontend/design-system'
+
+const MyComponent = () => {
+  return (
+    <AvatarButton
+      onClick={() => console.log('clicked')}
+      imageString="/path/to/avatar.jpg"
+      caption="Add Member"
+    />
+  )
+}
+export default MyComponent

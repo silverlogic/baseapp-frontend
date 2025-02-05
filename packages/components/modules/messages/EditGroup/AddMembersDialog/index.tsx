@@ -17,8 +17,8 @@ import {
 } from '../../__shared__/constants'
 import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
 import { useUpdateChatRoomMutation } from '../../graphql/mutations/UpdateChatRoom'
-import AddMembersCard from './AddMembersCard'
-import AddedMembersCard from './AddedMembersCard'
+import AddMemberCard from './AddMemberCard'
+import AddedMemberCard from './AddedMemberCard'
 import './VirtuosoStyles.css'
 import { DEFAULT_FORM_VALIDATION } from './constants'
 import { SearchbarContainer } from './styled'
@@ -151,10 +151,10 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
             },
             title: '',
             removeTitle: participants.length === 0,
-            renderItem: (profile, _isMember) => {
+            renderItem: (profile) => {
               if (!profile) return null
               return (
-                <AddMembersCard
+                <AddMemberCard
                   profile={profile}
                   handleAddMember={handleAddMember}
                   handleRemoveMember={handleRemoveMember}
@@ -175,7 +175,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
               },
             },
           }}
-          ProfileCard={AddedMembersCard}
+          ProfileCard={AddedMemberCard}
         />
       }
       action={

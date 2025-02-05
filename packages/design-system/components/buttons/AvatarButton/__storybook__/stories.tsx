@@ -18,9 +18,24 @@ export const Default: Story = {
   },
 }
 
-export const Caption: Story = {
+export const WithCaption: Story = {
   args: {
     onClick: () => console.log('clicked'),
+    caption: 'Add Member',
+  },
+}
+
+export const WithImage: Story = {
+  args: {
+    onClick: () => console.log('clicked'),
+    imageString: '/path/to/avatar.jpg',
+  },
+}
+
+export const WithImageAndCaption: Story = {
+  args: {
+    onClick: () => console.log('clicked'),
+    imageString: '/path/to/avatar.jpg',
     caption: 'Add Member',
   },
 }
