@@ -187,6 +187,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
               justifyContent: 'start',
               alignItems: 'center',
               padding: emptyParticipantsList ? 0 : '12px',
+              scrollbarWidth: 'none',
             },
           },
           ...(GroupChatMembersListProps?.MembersListProps ?? {}),

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo } from 'react'
+import { FC, MouseEventHandler, useMemo, useRef } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
@@ -36,6 +36,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   GroupChatMembersListProps = {},
 }) => {
   const { sendToast } = useNotification()
+  const boxRef = useRef<HTMLDivElement>(null)
 
   const {
     data: { allProfiles },
@@ -127,6 +128,37 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
     reset()
   }
 
+  const handleMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
+    const box = boxRef.current
+    if (!box) return
+
+    box.style.cursor = 'grabbing'
+    box.style.userSelect = 'none'
+
+    const startX = e.pageX - box.offsetLeft
+    const { scrollLeft } = box
+
+    const handleMouseMove = (ev: MouseEvent) => {
+      const x = ev.pageX - box.offsetLeft
+      const walk = x - startX
+      boxRef.current?.scrollTo({
+        left: scrollLeft - walk,
+        behavior: 'auto',
+      })
+    }
+
+    const handleMouseUp = () => {
+      box.style.cursor = 'grab'
+      box.style.removeProperty('user-select')
+
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+  }
+
   const emptyParticipantsList = participants.length === 0
 
   return (
@@ -183,7 +215,10 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
                 justifyContent: 'start',
                 alignItems: 'center',
                 padding: emptyParticipantsList ? 0 : '12px',
+                scrollbarWidth: 'none',
               },
+              ref: boxRef,
+              onMouseDown: handleMouseDown,
             },
             ...(GroupChatMembersListProps?.MembersListProps ?? {}),
           }}
