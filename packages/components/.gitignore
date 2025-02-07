@@ -60,6 +60,9 @@ cypress/downloads
 # editorconfig
 .editorconfig
 
+# relay
+/__generated__
+
 # babel & tsc
 /tmp-babel
 /tmp-dts
