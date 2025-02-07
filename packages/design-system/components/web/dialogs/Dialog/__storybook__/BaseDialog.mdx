@@ -1,0 +1,50 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Dialogs/BaseDialog" />
+
+# Component Documentation
+
+## Base Dialog
+
+- **Purpose**: A Dialog component that provides a modal window for displaying content that requires user attention or interaction. It creates a focused environment by overlaying the main content and dimming the background.
+- **Expected Behavior**: Opens as a modal overlay centered on the screen. Can be closed via a close button, clicking outside (if enabled), or pressing ESC key (if enabled). Should trap focus within the dialog when open for accessibility.
+
+## Use Cases
+
+- **Current Usage**: Used in confirmation flows, detailed information display, form submissions, and important user notifications.
+- **Potential Usage**: Could be used for:
+  - User preferences or settings panels
+  - Detailed item previews
+  - Multi-step forms
+  - Error or success messages requiring acknowledgment
+
+## Props
+
+- **children** (ReactNode): The content to be displayed inside the dialog.
+- **open** (boolean): Controls whether the dialog is visible.
+- **onClose** ((event: {}, reason: "backdropClick" | "escapeKeyDown") => void): Callback fired when the dialog requests to be closed.
+
+## Notes
+
+- **Related Components**:
+  - ConfirmDialog: A specialized version for confirmation actions
+  - SwipeableDrawer: An alternative for mobile-focused interfaces
+  - Popover: For less formal or contextual overlays
+
+## Example Usage
+
+```javascript
+import { Dialog } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <Dialog open={open} onClose={() => setOpen(false)}>
+      <div>Dialog content</div>
+    </Dialog>
+  )
+}
+export default MyComponent
+```
+

@@ -1,5 +1,11 @@
 # @baseapp-frontend/tsconfig
 
+## 2.1.1
+
+### Patch Changes
+
+- Change `module` and `moduleResolution` on `lib.json` config.
+
 ## 2.1.0
 
 ### Patch Changes

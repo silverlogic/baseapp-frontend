@@ -1,4 +1,21 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "**/*.test.ts", "**/*.test.tsx", "**/*.cy.tsx"]
+  "compilerOptions": {
+    "incremental": false,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "composite": false,
+    "outDir": "tmp-dts",
+    "target": "es2022"
+  },
+  "include": ["components", "hooks", "layouts", "providers", "styles", "utils"],
+  "exclude": [
+    "node_modules",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.cy.tsx",
+    "**/__tests__/**",
+    "**/__storybook__/**"
+  ]
 }

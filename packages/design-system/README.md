@@ -4,8 +4,36 @@
 
 This package defines our design system configuration (e.g. color pallete, typography, spacings, etc). It also shares reusable components that make up the design system as a whole.
 
-## **What should be added here?**
+## **What is in here?**
 
-In order to add any new feature inside the `design-system` package, we need to ask ourselves some questions:
+This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, navigate to the package folder and run the following command:
 
-- Is that feature part of the design system configuration or is it a reusable design component?
+```bash
+# at root level
+
+pnpm storybook --filter design-system
+```
+
+## **Build Process**
+
+We use a hybrid build pipeline combining `tsup`, and `TypeScript Compiler` to balance type accuracy and modern bundling:
+
+1. **Source Code:** Original TypeScript/React files with Relay GraphQL queries.
+
+2. **tsup Bundling:**
+
+    * Bundling tool (using esbuild) consumes the `components`, `hooks`, `layouts`, `providers`, `styles` and `utils` modules.
+
+    * Generates ESM and CJS bundles in `dist`.
+
+3. **TypeScript Compiler (tsc):**
+
+    * Runs in parallel to generate .d.ts type declarations.
+
+    * Outputs declarations to `tmp-dts`.
+
+4. **Merge Outputs:**
+
+    * Copies type declarations from `tmp-dts` to `dist`.
+
+    * Final `dist` contains both runtime bundles and accurate type definitions.

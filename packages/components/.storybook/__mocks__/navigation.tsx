@@ -1,4 +1,9 @@
-import { FavoriteIcon, MentionIcon, MenuIcon, PenEditIcon } from '@baseapp-frontend/design-system'
+import {
+  FavoriteIcon,
+  MentionIcon,
+  MenuIcon,
+  PenEditIcon,
+} from '@baseapp-frontend/design-system/components/web/icons'
 
 export const navDataMock = [
   {

@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.11
+
+### Patch Changes
+
+- Add `.eslintrc-with-restricted-paths` eslint file to be able to restric imports from certain folders.
+
 ## 2.1.10
 
 ### Patch Changes

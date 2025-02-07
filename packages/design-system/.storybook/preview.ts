@@ -1,7 +1,7 @@
 import type { Preview } from '@storybook/react'
 
-import '../styles/material/globals.css'
-import '../styles/tailwind/globals.css'
+import '../styles/web/material/globals.css'
+import '../styles/web/tailwind/globals.css'
 import { withProviders } from './decorators'
 
 const preview: Preview = {

@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Notifications/NotificationsList" />
+
+# Component Documentation
+
+### NotificationsList
+
+- **Purpose**: A component that displays a scrollable list of notifications with virtualization support. It handles both read and unread notifications, with visual separation between them.
+- **Expected Behavior**:
+  - Displays notifications in a virtualized list for performance
+  - Shows a divider between read and unread notifications
+  - Supports infinite scrolling to load more notifications
+  - Includes a header with title and optional "Mark all as read" button
+  - Responsive design with drawer close button on mobile
+  - Shows loading states during data fetching
+  - Shows empty state when no notifications exist
+
+## Use Cases
+
+- **Current Usage**: Used in the main notifications drawer/panel of the application to display user notifications
+- **Potential Usage**:
+  - Could be adapted for displaying activity feeds
+  - Could be used in email-like interfaces
+  - Suitable for any chronological list of items requiring read/unread states
+
+## Props
+
+- **setIsDrawerOpened** (function): Callback to control the drawer's open state
+- **EmptyState** (component): Custom component to show when there are no notifications. Defaults to DefaultEmptyState
+- **LoadingState** (component): Custom loading component. Defaults to DefaultLoadingState
+- **LoadingStateProps** (object): Props to pass to the LoadingState component. Defaults to {}
+- **NotificationItem** (component): Custom notification item component. Defaults to DefaultNotificationItem
+- **NotificationItemProps** (object): Props to pass to each NotificationItem. Defaults to {}
+
+## Notes
+
+- **Related Components**:
+  - NotificationItem: Individual notification display component
+  - EmptyState: Component shown when no notifications exist
+  - MarkAllAsReadButton: Button to mark all notifications as read
+  - HeaderContainer: Styled container for the notifications header
+
+## Example Usage
+
+```javascript
+import { NotificationsList } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  const [isDrawerOpened, setIsDrawerOpened] = useState(false)
+  const EmptyState = () => <div>No notifications</div>
+  const LoadingState = () => <div>Loading...</div>
+  const NotificationItem = () => <div>Notification Item</div>
+
+  return (
+    <NotificationsList
+      setIsDrawerOpened={setIsDrawerOpened}
+      EmptyState={EmptyState}
+      LoadingState={LoadingState}
+      LoadingStateProps={{}}
+      NotificationItem={NotificationItem}
+      NotificationItemProps={{}}
+    />
+  )
+}
+export default MyComponent
+```
