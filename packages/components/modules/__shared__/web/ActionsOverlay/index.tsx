@@ -172,9 +172,16 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                   >
                     <IconButtonContentContainer>
                       <Box display="grid" justifySelf="center" height="min-content">
-                        <TrashCanIcon />
+                        <TrashCanIcon
+                          sx={{ color: disableDeleteButton ? 'text.disabled' : 'error.main' }}
+                        />
                       </Box>
-                      <Typography variant="body2">Delete</Typography>
+                      <Typography
+                        variant="body2"
+                        color={disableDeleteButton ? 'text.disabled' : 'error.main'}
+                      >
+                        Delete
+                      </Typography>
                     </IconButtonContentContainer>
                   </IconButton>
                 </>
