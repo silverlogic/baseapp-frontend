@@ -2,23 +2,14 @@ import type { FC } from 'react'
 
 import type { CSSProperties } from '@mui/material/styles/createMixins'
 
-import type {
-  AddProfileMenuItemProps,
-  ProfilesListProps,
-  SwitchProfileMenuProps,
-} from '../../../../../profiles/web'
+import type { AddProfileMenuItemProps, ProfilesListProps } from '../../../../../profiles/web'
+import { CurrentProfileMenuProps } from './CurrentProfileMenu/types'
 import type { LogoutItemProps } from './LogoutItem/types'
-import type { MenuItemsProps } from './MenuItems/types'
 
-export interface AccountPopoverProps {
+export interface AccountPopoverProps
+  extends Omit<CurrentProfileMenuProps, 'handlePopoverOnClose' | 'setOpenProfilesList'> {
   PopoverStyles?: CSSProperties
-  CurrentUser?: FC | null
-  CurrentProfile?: FC | null
-  MenuItems?: FC<MenuItemsProps> | null
-  MenuItemsProps?: Partial<MenuItemsProps>
-  SwitchProfileMenu?: FC<SwitchProfileMenuProps> | null
-  SwitchProfileMenuProps?: Partial<SwitchProfileMenuProps>
-  ProfilesList?: FC<ProfilesListProps> | null
+  ProfilesList?: FC<ProfilesListProps>
   ProfilesListProps?: Partial<ProfilesListProps>
   AddProfileMenuItem?: FC<AddProfileMenuItemProps> | null
   AddProfileMenuItemProps?: Partial<AddProfileMenuItemProps>
