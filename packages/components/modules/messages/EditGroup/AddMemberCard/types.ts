@@ -5,5 +5,6 @@ export interface AddMemberCardProps {
   // TODO: type this better
   handleAddMember: (profile: any) => void
   handleRemoveMember: (profile: any) => void
-  isMember?: boolean
+  isBeingAdded: boolean
+  isExistingMember: boolean
 }

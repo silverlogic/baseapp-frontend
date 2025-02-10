@@ -15,7 +15,8 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
   profile: profileRef,
   handleAddMember,
   handleRemoveMember,
-  isMember = false,
+  isBeingAdded = false,
+  isExistingMember = false,
 }) => {
   const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
 
@@ -28,6 +29,16 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
     }
   }
 
+  const getCaptionText = () => {
+    if (isExistingMember) {
+      return 'Already added to the group'
+    }
+    if (urlPath?.path) {
+      return `@${urlPath.path}`
+    }
+    return ''
+  }
+
   return (
     <MainContainer key={`chat-room-item-${id}`}>
       <AvatarWithPlaceholder
@@ -37,12 +48,21 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
         sx={{ alignSelf: 'center', justifySelf: 'center' }}
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
-        <Typography variant="subtitle2">{name}</Typography>
-        <Typography variant="caption" color="text.secondary">
-          {urlPath?.path && `@${urlPath.path}`}
+        <Typography
+          variant="subtitle2"
+          color={!isExistingMember ? 'text.primary' : 'text.disabled'}
+        >
+          {name}
+        </Typography>
+        <Typography
+          variant="caption"
+          color={!isExistingMember ? 'text.secondary' : 'text.disabled'}
+          sx={{ fontStyle: !isExistingMember ? 'normal' : 'italic' }}
+        >
+          {getCaptionText()}
         </Typography>
       </Box>
-      <Checkbox checked={isMember} onChange={handleCheckboxChange} />
+      {!isExistingMember && <Checkbox checked={isBeingAdded} onChange={handleCheckboxChange} />}
     </MainContainer>
   )
 }

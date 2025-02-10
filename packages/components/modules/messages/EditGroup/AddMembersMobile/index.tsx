@@ -33,6 +33,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
   isPending,
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
+  existingMembers = [],
 }) => {
   const { sendToast } = useNotification()
 
@@ -172,7 +173,8 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
                 profile={profile}
                 handleAddMember={handleAddMember}
                 handleRemoveMember={handleRemoveMember}
-                isMember={participants.some((member) => member?.id === profile?.id)}
+                isBeingAdded={participants.some((member) => member?.id === profile?.id)}
+                isExistingMember={existingMembers.some((member) => member?.id === profile?.id)}
               />
             )
           },

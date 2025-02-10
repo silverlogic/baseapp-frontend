@@ -155,6 +155,7 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
         profileId={profileId}
         roomId={roomId}
         isPending={isPending}
+        existingMembers={participants}
       />
     )
 
@@ -168,6 +169,7 @@ const EditGroup: FC<EditGroupProps & { profileId: string }> = ({
         profileId={profileId}
         roomId={roomId}
         isPending={isPending}
+        existingMembers={participants}
       />
       <HeaderContainer>
         <IconButton onClick={onCancellation} aria-label="cancel editing group">
