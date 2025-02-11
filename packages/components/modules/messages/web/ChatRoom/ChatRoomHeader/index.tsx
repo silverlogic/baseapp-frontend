@@ -15,6 +15,7 @@ import { useFragment } from 'react-relay'
 import {
   TitleFragment,
   getParticipantCountString,
+  useArchiveChatRoomMutation,
   useChatRoom,
   useNameAndAvatar,
 } from '../../../common'
@@ -24,6 +25,7 @@ import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './
 import { ChatRoomHeaderProps } from './types'
 
 const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
+  isArchived,
   participantsCount,
   roomTitleRef,
   onDisplayGroupDetailsClicked,
@@ -35,10 +37,27 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
+  const { isGroup } = roomHeader
   const { title, avatar } = useNameAndAvatar(roomHeader)
   const members = getParticipantCountString(participantsCount)
   const popover = usePopover()
   const { currentProfile } = useCurrentProfile()
+  const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
+
+  const toggleArchiveChatroom = () => {
+    popover.onClose()
+    if (currentProfile?.id && roomId) {
+      commit({
+        variables: {
+          input: {
+            roomId,
+            profileId: currentProfile.id,
+            archive: !isArchived,
+          },
+        },
+      })
+    }
+  }
 
   const onChatRoomOptionsClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation()
@@ -68,8 +87,8 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
           </BackButtonContainer>
         )}
         <ChatTitleContainer
-          onClick={roomHeader.isGroup ? onDisplayGroupDetailsClicked : undefined}
-          isClickable={roomHeader.isGroup}
+          onClick={isGroup ? onDisplayGroupDetailsClicked : undefined}
+          isClickable={isGroup}
         >
           <AvatarWithPlaceholder
             className="self-start justify-self-center"
@@ -82,7 +101,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
               {title}
             </Typography>
-            {roomHeader.isGroup && (
+            {isGroup && (
               <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
                 {members}
               </Typography>
@@ -100,11 +119,18 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
               }}
             >
               <ChatRoomOptions
-                onArchiveClicked={() => {}}
-                onDetailsClicked={() =>
-                  roomHeader.isGroup ? onDisplayGroupDetailsClicked() : undefined
-                }
-                onLeaveClicked={() => setOpen(true)}
+                isArchived={isArchived}
+                isArchiveMutationInFlight={isMutationInFlight}
+                isGroup={isGroup}
+                onArchiveClicked={toggleArchiveChatroom}
+                onDetailsClicked={() => {
+                  popover.onClose()
+                  onDisplayGroupDetailsClicked()
+                }}
+                onLeaveClicked={() => {
+                  popover.onClose()
+                  setOpen(true)
+                }}
               />
             </Popover>
           </Box>

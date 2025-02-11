@@ -9,9 +9,7 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
-import { ConnectionHandler, useFragment } from 'react-relay'
-import { RecordSourceSelectorProxy } from 'relay-runtime'
-
+import { useFragment } from 'react-relay'
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../__generated__/UnreadMessagesCountFragment.graphql'
@@ -20,7 +18,6 @@ import {
   LastMessageFragment,
   TitleFragment,
   UnreadMessagesCountFragment,
-  getChatRoomConnections,
   useArchiveChatRoomMutation,
   useNameAndAvatar,
   useUnreadChatMutation,
@@ -93,13 +90,6 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
                     profileId: currentProfile.id,
                     archive: !isInArchivedTab,
                   },
-                },
-                updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
-                  if (!data?.errors) {
-                    getChatRoomConnections(store, currentProfile.id).forEach((connectionRecord) =>
-                      ConnectionHandler.deleteNode(connectionRecord, roomRef.id),
-                    )
-                  }
                 },
               })
             }
