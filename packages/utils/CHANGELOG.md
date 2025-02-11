@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.4
+
+### Patch Changes
+
+- setFormApiErrors also handles Error objects
+
 ## 3.1.3
 
 ### Patch Changes
