@@ -33,7 +33,7 @@
       "cache": false
     },
     "lint": {
-      "dependsOn": ["^lint"],
+      "dependsOn": ["^build", "^lint"],
       "outputs": []
     },
     "storybook": {
