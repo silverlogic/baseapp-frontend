@@ -4,7 +4,7 @@ import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 
 export const newMessageSubscription = graphql`
   subscription useMessagesListSubscription($roomId: ID!, $connections: [ID!]!) {
-    chatRoomOnNewMessage(roomId: $roomId) {
+    chatRoomOnMessage(roomId: $roomId) {
       message @prependEdge(connections: $connections) {
         node {
           ...MessageItemFragment

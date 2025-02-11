@@ -24,11 +24,13 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       title = 'Item',
       enableDelete = false,
       isDeletingItem = false,
+      disableDelete = false,
       handleDeleteItem = () => {},
       offsetTop = 0,
       offsetRight = 0,
       ContainerProps = {},
       SwipeableDrawerProps = {},
+      DeleteDialogProps = {},
       SwipeableDrawer = DefaultSwipeableDrawer,
       hoverOverlayMode = HOVER_OVERLAY_MODES.default,
     },
@@ -110,6 +112,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
         }
         onClose={handleDeleteDialogClose}
         open={isDeleteDialogOpen}
+        {...DeleteDialogProps}
       />
     )
 
@@ -128,7 +131,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
             aria-label="actions overlay"
             {...SwipeableDrawerProps}
           >
-            <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1}>
+            <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1} width="100%">
               {actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
                 if (!hasPermission) return null
 
@@ -163,7 +166,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                   <Divider />
                   <IconButton
                     onClick={handleDeleteDialogOpen}
-                    disabled={isDeletingItem}
+                    disabled={isDeletingItem || disableDelete}
                     sx={{ width: 'fit-content' }}
                     aria-label="delete item"
                   >
@@ -172,7 +175,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                         <TrashCanIcon />
                       </Box>
                       <Typography variant="body2" color="error.main">
-                        {`Delete ${title}`}
+                        Delete
                       </Typography>
                     </IconButtonContentContainer>
                   </IconButton>
