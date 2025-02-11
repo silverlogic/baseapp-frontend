@@ -1,0 +1,57 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/TextareaField" />
+
+# Component Documentation
+
+## TextareaField
+
+- **Purpose**: A simple textarea component that extends TextField with multiline support and consistent styling. It wraps the base component with form controller functionality.
+- **Expected Behavior**: Renders a multiline text input field with a maximum of 3 rows before scrolling begins. The border is hidden by default.
+
+## Use Cases
+
+- **Current Usage**:
+  - Comment sections
+  - Description fields
+  - Any multiline text input needs
+- **Potential Usage**:
+  - Form text areas
+  - Message composition
+  - Note inputs
+
+## Props
+
+- Inherits all props from TextField component
+- **multiline**: Always true (hardcoded)
+- **maxRows**: Set to 3 (hardcoded)
+- **hideBorder**: Always true (hardcoded)
+
+## Notes
+
+- **Related Components**:
+  - TextField: Base component that provides core functionality
+  - withController: HOC that adds form control capabilities
+  - Textarea: Styled component for visual presentation
+
+## Example Usage
+
+```javascript
+import { TextareaField } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  const [value, setValue] = useState < string > ''
+
+  return (
+    <TextareaField
+      label="Default Label"
+      placeholder="Type something..."
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      multiline={true}
+      maxRows={3}
+    />
+  )
+}
+export default MyComponent
+```

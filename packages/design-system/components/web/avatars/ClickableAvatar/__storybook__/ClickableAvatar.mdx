@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Avatars/ClickableAvatar" />
+
+# Component Documentation
+## ClickableAvatar
+
+- **Purpose**: An enhanced avatar component that adds click interactivity and hover animations using Framer Motion. Built on top of AvatarWithPlaceholder to provide a clickable interface with visual feedback.
+- **Expected Behavior**: Renders a clickable avatar that scales up slightly on hover and provides tap animation feedback. Can display images or text content with consistent sizing.
+
+## Use Cases
+
+- **Current Usage**:
+  - Interactive user avatars
+  - Profile picture buttons
+  - Avatar menu triggers
+  - Clickable user representations
+
+## Props
+
+- **onClick** (function): Handler function called when avatar is clicked
+- **isOpen** (boolean): Controls the open state of the avatar (default: false)
+- **width** (number): Width of the avatar in pixels (default: 36)
+- **height** (number): Height of the avatar in pixels (default: 36) 
+- **children** (ReactNode): Content to be displayed within the avatar
+- **...props**: Additional props are passed through to the underlying AvatarWithPlaceholder component
+
+## Notes
+
+- **Related Components**:
+  - AvatarWithPlaceholder: Base component providing avatar display functionality
+  - IconButtonStyled: Styled button wrapper providing click interaction
+  - MUI IconButton: Base component for click functionality
+
+## Example Usage
+
+```javascript
+import { ClickableAvatar } from '@baseapp-frontend/design-system/web'
+
+import Image from 'next/image'
+
+const MyComponent = () => {
+  return (
+    <ClickableAvatar isOpen={false} width={50} height={50} onClick={() => {}}>
+      <Image
+        src="https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png"
+        alt="Avatar Icon"
+        width={50}
+        height={50}
+      />
+    </ClickableAvatar>
+  )
+}
+export default MyComponent
+```

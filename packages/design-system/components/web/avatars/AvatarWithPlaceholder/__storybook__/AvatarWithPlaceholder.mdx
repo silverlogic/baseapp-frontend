@@ -1,0 +1,53 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Avatars/AvatarWithPlaceholder" />
+
+# Components Documentation
+
+## AvatarWithPlaceholder
+
+- **Purpose**: A flexible avatar component that displays either an image, text content, or a placeholder when no content is provided. It handles various content types gracefully while maintaining consistent sizing and styling.
+- **Expected Behavior**: Renders an avatar with the provided content (image or text), and falls back to a placeholder when no content is available.
+
+## Use Cases
+
+- **Current Usage**:
+  - User profile avatars throughout the application
+  - Team member displays
+  - Contact lists
+  - Comment sections
+- **Potential Usage**:
+  - Group chat avatars
+  - Organization logos
+  - Project thumbnails
+  - Social media integrations
+
+## Props
+
+- **width** (number): Width of the avatar in pixels. Default is 36.
+- **height** (number): Height of the avatar in pixels. Default is 36.
+- **children** (ReactNode): Content to be displayed within the avatar - can be an image component or text.
+- **...props** (AvatarProps): Additional props are passed through to the underlying MUI Avatar component.
+
+## Notes
+
+- **Related Components**:
+  - ClickableAvatar: Extends this component with click functionality
+  - Avatar: MUI's base avatar component
+  - Badge: Can be used to add status indicators
+  - AvatarGroup: For displaying multiple avatars together
+
+## Example Usage
+
+```javascript
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  return (
+    <AvatarWithPlaceholder width={50} height={50}>
+      "AA"
+    </AvatarWithPlaceholder>
+  )
+}
+export default MyComponent
+```

@@ -1,29 +1,75 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "0.0.57",
-  "main": "./index.ts",
-  "types": "dist/index.d.ts",
+  "version": "1.0.2",
   "sideEffects": false,
   "scripts": {
-    "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
-    "dev": "rm -rf dist && pnpm relay && tsc --watch",
+    "babel:bundle": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",
+    "tsup:bundle": "tsup tmp-babel --tsconfig tsconfig.build.json",
+    "tsc:declaration": "tsc -p tsconfig.build.json --emitDeclarationOnly",
+    "copy:dts": "node ../../.scripts/copy-dts.js",
+    "clean:tmp": "rm -rf tmp-babel tmp-dts",
+    "build": "rm -rf dist && pnpm relay && pnpm babel:bundle && pnpm tsup:bundle && pnpm tsc:declaration && pnpm copy:dts && pnpm clean:tmp",
+    "dev": "pnpm relay && tsup --watch",
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay-update-schema": "pnpm relay-download-schema && pnpm relay",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "pnpm relay && eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "prettier": "prettier --write .",
     "storybook": "pnpm relay && storybook dev -p 6007",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
     "cypress:open": "cypress open --browser chrome",
     "test:component": "cypress run --component --browser chrome --headed",
-    "test:unit": "jest --config ./jest.config.ts"
+    "test:unit": "jest --config ./jest.config.ts",
+    "prepublishOnly": "pnpm run build"
   },
+  "exports": {
+    "./shared/*": {
+      "types": "./dist/__shared__/*/index.d.ts",
+      "import": "./dist/__shared__/*/index.mjs",
+      "require": "./dist/__shared__/*/index.js"
+    },
+    "./activity-log/*": {
+      "types": "./dist/activity-log/*/index.d.ts",
+      "import": "./dist/activity-log/*/index.mjs",
+      "require": "./dist/activity-log/*/index.js"
+    },
+    "./comments/*": {
+      "types": "./dist/comments/*/index.d.ts",
+      "import": "./dist/comments/*/index.mjs",
+      "require": "./dist/comments/*/index.js"
+    },
+    "./messages/*": {
+      "types": "./dist/messages/*/index.d.ts",
+      "import": "./dist/messages/*/index.mjs",
+      "require": "./dist/messages/*/index.js"
+    },
+    "./navigations/*": {
+      "types": "./dist/navigations/*/index.d.ts",
+      "import": "./dist/navigations/*/index.mjs",
+      "require": "./dist/navigations/*/index.js"
+    },
+    "./notifications/*": {
+      "types": "./dist/notifications/*/index.d.ts",
+      "import": "./dist/notifications/*/index.mjs",
+      "require": "./dist/notifications/*/index.js"
+    },
+    "./profiles/*": {
+      "types": "./dist/profiles/*/index.d.ts",
+      "import": "./dist/profiles/*/index.mjs",
+      "require": "./dist/profiles/*/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@emotion/cache": "catalog:material-ui",
     "@emotion/react": "catalog:material-ui",
     "@emotion/styled": "catalog:material-ui",
+    "@gorhom/bottom-sheet": "catalog:react-native-core",
     "@hookform/resolvers": "catalog:",
     "@mui/icons-material": "catalog:material-ui",
     "@mui/lab": "catalog:material-ui",
@@ -32,6 +78,9 @@
     "@mui/x-date-pickers": "catalog:material-ui",
     "@storybook/react": "catalog:storybook",
     "@tanstack/react-query": "catalog:",
+    "expo-file-system": "catalog:react-native-core",
+    "expo-image-picker": "catalog:react-native-core",
+    "expo-router": "catalog:react-native-core",
     "framer-motion": "^11.5.4",
     "graphql": "catalog:graphql",
     "js-cookie": "catalog:",
@@ -39,6 +88,8 @@
     "next": "catalog:",
     "numbro": "^2.5.0",
     "react-hook-form": "catalog:",
+    "react-native": "catalog:react-native-core",
+    "react-native-gesture-handler": "catalog:react-native-core",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",
@@ -57,6 +108,7 @@
     "react-dom": "catalog:react18"
   },
   "devDependencies": {
+    "@babel/cli": "^7.26.4",
     "@babel/preset-env": "catalog:storybook",
     "@babel/preset-react": "catalog:storybook",
     "@babel/preset-typescript": "catalog:storybook",
@@ -115,6 +167,7 @@
     "tailwindcss": "catalog:tailwind",
     "ts-jest": "catalog:test",
     "ts-node": "catalog:test",
+    "tsup": "catalog:",
     "typescript": "catalog:",
     "webpack": "catalog:storybook",
     "webpack-cli": "catalog:storybook",

@@ -1,5 +1,15 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.20
+
+### Patch Changes
+
+- Fix lint errors.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.0
+  - @baseapp-frontend/utils@3.1.3
+  - @baseapp-frontend/graphql@1.2.4
+
 ## 1.0.19
 
 ### Patch Changes

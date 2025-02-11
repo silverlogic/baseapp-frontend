@@ -1,10 +1,12 @@
 'use client'
 
-import { Box, styled } from '@mui/material'
+import { ComponentType } from 'react'
+
+import { Box, BoxProps, styled } from '@mui/material'
 
 import { ContainerProps } from './types'
 
-export const BannerContainer = styled(Box, {
+export const BannerContainer: ComponentType<ContainerProps> = styled(Box, {
   shouldForwardProp: (prop) => prop !== 'imagePosition',
 })<ContainerProps>(({ theme, imagePosition }) => ({
   flexDirection: 'column-reverse',
@@ -17,7 +19,7 @@ export const BannerContainer = styled(Box, {
   },
 }))
 
-export const ContentContainer = styled(Box)(({ theme }) => ({
+export const ContentContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   padding: theme.spacing(3.5),
   display: 'flex',
   flexDirection: 'column',
@@ -27,13 +29,13 @@ export const ContentContainer = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const TextContainer = styled(Box)(({ theme }) => ({
+export const TextContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(1),
 }))
 
-export const ImageContainer = styled(Box)(({ theme }) => ({
+export const ImageContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   position: 'relative',
   height: '215px',
   [theme.breakpoints.up('md')]: {

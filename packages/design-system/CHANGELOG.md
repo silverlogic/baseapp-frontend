@@ -1,5 +1,30 @@
 # @baseapp-frontend/design-system
 
+## 1.0.2
+
+### Patch Changes
+
+- Fix release with catalogs.
+
+## 1.0.1
+
+### Patch Changes
+
+- Fix `changeset` auto release.
+
+## 1.0.0
+
+### Major Changes
+
+- Rearrange the code inside `components`, `hooks`, `layouts`, `providers`, `styles` and `utils` into folders, `common` for multi-platform code, `native` for native code and `web` for web code.
+- Transpile and bundle the package code using `tsup` and `tsc`.
+- Migrate native `design-sytem` components from the template into this package.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.3
+
 ## 0.0.34
 
 ### Patch Changes

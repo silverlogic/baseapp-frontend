@@ -1,5 +1,40 @@
 # @baseapp-frontend/components
 
+## 1.0.2
+
+### Patch Changes
+
+- Fix release with catalogs.
+
+## 1.0.1
+
+### Patch Changes
+
+- Fix `changeset` auto release.
+
+## 1.0.0
+
+### Major Changes
+
+- Rearrange each `module` code into folders, `common` for multi-platform code, `native` for native code and `web` for web code.
+- Transpile and bundle the package code using `babel`, `tsup` and `tsc`.
+- Migrate native `profile` components from the template into this package.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.0
+  - @baseapp-frontend/utils@3.1.3
+  - @baseapp-frontend/authentication@4.1.4
+  - @baseapp-frontend/graphql@1.2.4
+
+## 0.0.58
+
+### Patch Changes
+
+- Add missing `AccountPopoverProps` to the `AccountMenu` component.
+- Making sure conditonal render works on the `AccountMenu` component.
+
 ## 0.0.57
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.1.1
+
+### Patch Changes
+
+- Fix lint errors.
+
 ## 2.1.0
 
 ### Minor Changes
