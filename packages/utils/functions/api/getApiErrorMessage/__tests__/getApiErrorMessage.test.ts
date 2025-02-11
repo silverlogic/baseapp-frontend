@@ -34,7 +34,7 @@ describe('getApiErrorMessage', () => {
     expect(result).toBe('Detailed error message.')
   })
 
-  it('should return default message when error.message is invalid JSON', () => {
+  it('should return error message when error.message is invalid JSON', () => {
     const errorMessage = 'Invalid JSON string'
     const defaultMessage = 'Something went wrong.'
     const error = { message: errorMessage }

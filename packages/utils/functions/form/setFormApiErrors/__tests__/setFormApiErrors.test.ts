@@ -11,7 +11,9 @@ describe('setFormApiErrors', () => {
           ({
             name: 'John',
             age: 20,
-          }[fieldKey]),
+            bio: '',
+            image: null,
+          })[fieldKey],
       ),
       setError: jest.fn(),
     }
@@ -73,6 +75,42 @@ describe('setFormApiErrors', () => {
     expect(mockForm.setError).not.toHaveBeenCalledWith('address', {
       type: 'manual',
       message: 'Address is required',
+    })
+  })
+
+  it('should set errors for null or blank fields', () => {
+    mockError.response.data = {
+      image: ['Image is required'],
+      bio: ['Bio may not be blank'],
+    }
+    setFormApiErrors(mockForm, mockError)
+
+    expect(mockForm.setError).toHaveBeenCalledWith('image', {
+      type: 'manual',
+      message: 'Image is required',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('bio', {
+      type: 'manual',
+      message: 'Bio may not be blank',
+    })
+  })
+
+  it('should also handle Error objects', () => {
+    mockError = new Error(
+      JSON.stringify({
+        name: ['Name is required'],
+        age: ['Age should be a number'],
+      }),
+    )
+    setFormApiErrors(mockForm, mockError)
+
+    expect(mockForm.setError).toHaveBeenCalledWith('name', {
+      type: 'manual',
+      message: 'Name is required',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('age', {
+      type: 'manual',
+      message: 'Age should be a number',
     })
   })
 })
