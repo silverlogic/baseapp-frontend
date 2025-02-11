@@ -9,8 +9,9 @@ import { DefaultHoverOverlayProps } from './types'
 const DefaultHoverOverlay: FC<DefaultHoverOverlayProps> = ({
   offsetRight,
   offsetTop,
-  enableDelete,
+  showDeleteButton,
   isDeletingItem,
+  disableDeleteButton,
   handleDeleteDialogOpen,
   actions = [],
   handleLongPressItemOptionsClose,
@@ -20,10 +21,10 @@ const DefaultHoverOverlay: FC<DefaultHoverOverlayProps> = ({
     offsetTop={offsetTop}
     aria-label="actions overlay"
   >
-    {enableDelete && (
+    {showDeleteButton && (
       <IconButton
         onClick={handleDeleteDialogOpen}
-        disabled={isDeletingItem}
+        disabled={isDeletingItem || disableDeleteButton}
         aria-label="delete item"
       >
         <TrashCanIcon />

@@ -107,7 +107,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           closeOnClick: true,
         },
       ]}
-      enableDelete
+      showDeleteButton
       handleDeleteItem={() => {}}
       isDeletingItem={false}
       ref={chatCardRef}
