@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, SyntheticEvent, useRef } from 'react'
+import { FC, SyntheticEvent, useEffect, useRef } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -24,6 +24,24 @@ const SnackbarProvider: FC<SnackbarProviderProps> = ({ children, ...props }) => 
     if (timeoutID.current) clearTimeout(timeoutID.current)
   }
 
+  useEffect(() => {
+    // MUI has no option to just ignore user interactions with a snackbar.
+    // It always pauses its timer and restarts it at a (customizable fixed) value.
+    // Therefore, if we show a 'progress bar', we explicitly set the timeout for closing the snackbar ourselves.
+    if (shouldShowProgress && open && !timeoutID.current) {
+      timeoutID.current = setTimeout(() => {
+        timeoutID.current = null
+        handleClose()
+      }, HIDE_DURATION)
+    }
+    return () => {
+      if (timeoutID.current) {
+        clearTimeout(timeoutID.current)
+        timeoutID.current = null
+      }
+    }
+  }, [open, shouldShowProgress])
+
   if (!shouldShowProgress) {
     return (
       <>
@@ -43,14 +61,6 @@ const SnackbarProvider: FC<SnackbarProviderProps> = ({ children, ...props }) => 
         </Snackbar>
       </>
     )
-  }
-
-  if (!timeoutID.current && open) {
-    timeoutID.current = setTimeout(() => {
-      timeoutID.current = null
-      handleClose()
-    }, HIDE_DURATION) // MUI would resume with different remaining time after user interaction
-    // so we explicitly set this timeout ourselves to make sure that the progress bar is right
   }
 
   return (
