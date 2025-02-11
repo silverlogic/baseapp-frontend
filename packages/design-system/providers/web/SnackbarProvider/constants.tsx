@@ -1,5 +1,5 @@
-import Iconify from '../../components/Iconify'
-import ErrorIcon from '../../components/icons/ErrorIcon'
+import { ErrorIcon } from '../../../components/web/icons'
+import { Iconify } from '../../../components/web/images'
 
 export const HIDE_DURATION = 3000
 export const OUTLINED_ALERT_ICONS = {
