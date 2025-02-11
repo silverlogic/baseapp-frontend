@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.2
+
+### Patch Changes
+
+- Fix release with catalogs.
+
 ## 1.0.1
 
 ### Patch Changes
