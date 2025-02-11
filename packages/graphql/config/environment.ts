@@ -1,5 +1,7 @@
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '@baseapp-frontend/utils'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
+import { removeTokenAsync } from '@baseapp-frontend/utils/functions/token/removeTokenAsync'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
@@ -78,11 +80,17 @@ export async function httpFetch(
   // property of the response. If any exceptions occurred when processing the request,
   // throw an error to indicate to the developer what went wrong.
   if (Array.isArray(response.errors)) {
-    throw new Error(
-      `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
-        variables,
-      )}': ${JSON.stringify(response.errors)}`,
-    )
+    if (response.errors.some((error: any) => error.message.includes('token_not_valid'))) {
+      await removeTokenAsync(ACCESS_KEY_NAME)
+      await removeTokenAsync(REFRESH_KEY_NAME)
+      window.location.href = '/login'
+    } else {
+      throw new Error(
+        `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
+          variables,
+        )}': ${JSON.stringify(response.errors)}`,
+      )
+    }
   }
 
   return response

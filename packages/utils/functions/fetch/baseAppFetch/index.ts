@@ -7,7 +7,13 @@ import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
-import { decodeJWT, getToken, isUserTokenValid, refreshAccessToken } from '../../token'
+import {
+  decodeJWT,
+  getToken,
+  isUserTokenValid,
+  refreshAccessToken,
+  removeTokenAsync,
+} from '../../token'
 import { BaseAppFetch, RequestOptions } from './types'
 
 /**
@@ -168,6 +174,11 @@ export const baseAppFetch: BaseAppFetch = async (
 
     return response
   } catch (error) {
+    if (error instanceof Error && error.message.includes('token_not_valid')) {
+      await removeTokenAsync(ACCESS_KEY_NAME)
+      await removeTokenAsync(REFRESH_KEY_NAME)
+      window.location.href = '/login'
+    }
     return Promise.reject(error)
   }
 }
