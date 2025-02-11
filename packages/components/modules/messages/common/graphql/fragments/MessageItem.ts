@@ -5,6 +5,7 @@ export const MessageItemFragment = graphql`
     id
     content
     created
+    deleted
     extraData
     inReplyTo {
       id

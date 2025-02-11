@@ -19,7 +19,7 @@ export const DefaultActionsOverlay: Story = {
   name: 'ActionsOverlay',
   args: {
     title: 'Button',
-    enableDelete: true,
+    showDeleteButton: true,
     handleDeleteItem: () => {},
     offsetRight: 0,
     offsetTop: 0,
@@ -42,7 +42,7 @@ export const ActionsOverlayWithThreeDotsMenu: Story = {
   name: 'ActionsOverlay with ThreeDotsMenu',
   args: {
     title: 'Button',
-    enableDelete: true,
+    showDeleteButton: true,
     isDeletingItem: false,
     handleDeleteItem: () => {},
     ContainerProps: {

@@ -5,6 +5,7 @@ import { MessageItemFragment$key } from '../../../../../../../__generated__/Mess
 export interface MessageItemProps {
   messageRef: MessageItemFragment$key
   isFirstGroupedMessage?: boolean
+  isGroup?: boolean
 }
 
 export interface MessageItemContainerProps extends BoxProps {
