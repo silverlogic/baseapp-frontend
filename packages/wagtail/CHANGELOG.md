@@ -1,6 +1,6 @@
 # @baseapp-frontend/wagtail
 
-## 2.0.0
+## 1.0.20
 
 ### Patch Changes
 
