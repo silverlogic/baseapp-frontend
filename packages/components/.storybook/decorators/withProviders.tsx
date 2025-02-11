@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { LoadingState, ThemeProvider } from '@baseapp-frontend/design-system'
+import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { ThemeProvider } from '@baseapp-frontend/design-system/providers/web'
 import { RelayTestProvider, createTestEnvironment } from '@baseapp-frontend/graphql'
 import { NotificationProvider } from '@baseapp-frontend/utils'
 

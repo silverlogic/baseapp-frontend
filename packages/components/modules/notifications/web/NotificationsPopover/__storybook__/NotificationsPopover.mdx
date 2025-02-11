@@ -1,0 +1,139 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Notifications/NotificationsPopover" />
+
+# Component Documentation
+
+## NotificationsPopover
+
+- **Purpose**: A component that provides a notification system interface, displaying a bell icon with an unread count badge that opens a drawer containing notifications when clicked.
+- **Expected Behavior**: Shows a notification bell icon with a badge indicating unread notifications count. When clicked, opens a drawer (from right on desktop, bottom on mobile) containing a scrollable list of notifications. The drawer can be closed via an X button or clicking outside.
+
+## Use Cases
+
+- **Current Usage**: Used in the main application header/navigation to provide users access to their notifications.
+- **Potential Usage**: Could be used in any context where a notification system needs to be implemented, such as admin panels, social platforms, or communication tools.
+
+## Props
+
+- **Drawer** (Component, optional): Custom drawer component. Defaults to MUI Drawer.
+- **DrawerProps** (object, optional): Props passed to the Drawer component.
+- **Badge** (Component, optional): Custom badge component. Defaults to MUI Badge.
+- **BadgeProps** (object, optional): Props passed to the Badge component.
+- **NotificationBellIcon** (Component, optional): Custom notification bell icon component.
+- **NotificationBellIconProps** (object, optional): Props passed to the NotificationBellIcon component.
+- **NotificationsList** (Component, optional): Custom notifications list component.
+- **NotificationsListProps** (object, optional): Props passed to the NotificationsList component.
+
+## Notes
+
+- **Related Components**:
+  - NotificationsList - Renders the list of notifications in the drawer
+  - NotificationItem - Individual notification items within the list
+  - NotificationBellIcon - The bell icon component
+
+## Example Usage
+
+## Usage Examples
+
+### **NotificationsPopover with Default Components**
+
+```javascript
+import { NotificationsPopover } from './NotificationsPopover'
+
+const Example = () => <NotificationsPopover />
+
+export default Example
+```
+
+### Adding a New Notification Type:
+
+To add a new notification renderer:
+
+1. Create a new component for the notification type (e.g., `NewNotificationVerb`).
+   When building `NewNotificationVerb`, you can use the existing `Notification` components for structure:
+
+   ```javascript
+   import Notification from './Notification'
+
+   const NewNotificationVerb = ({ notification }) => (
+     <Notification.Root>
+       <Notification.Avatar
+         actorAvatar={notification.actor?.avatar?.url}
+         actorName={notification.actor?.fullName}
+       />
+       <Notification.Content>
+         <Notification.Content.Header
+           message={`New custom message: ${notification.customField}`}
+           timestamp={notification.timestamp}
+           actorName={notification.actor?.fullName}
+           unread={notification.unread}
+         />
+         <Notification.Content.Body content={notification.customBody} />
+       </Notification.Content>
+     </Notification.Root>
+   )
+   export default NewNotificationVerb
+   ```
+
+2. Create a custom `NotificationItemRenderer` in your project:
+
+   ```javascript
+   import NewNotificationVerb from './NewNotificationVerb'
+
+   const NotificationItemRenderer = ({ notification }) => {
+     switch (notification.verb) {
+       case NOTIFICATION_VERB.customType:
+         return <NewNotificationVerb notification={notification} />
+       // other cases
+       default:
+         return null
+     }
+   }
+   ```
+
+3. Pass the custom renderer through `NotificationsPopover`:
+   ```javascript
+   <NotificationsPopover
+     NotificationsListProps={{
+       NotificationItem: {
+         NotificationItemRenderer: NotificationItemRenderer,
+       },
+     }}
+   />
+   ```
+
+### **Custom Badge and Drawer**
+
+```javascript
+import CustomBadge from './CustomBadge'
+import CustomDrawer from './CustomDrawer'
+import { NotificationsPopover } from './NotificationsPopover'
+
+const Example = () => (
+  <NotificationsPopover
+    Badge={CustomBadge}
+    Drawer={CustomDrawer}
+    BadgeProps={{ color: 'primary' }}
+    DrawerProps={{ anchor: 'left' }}
+  />
+)
+
+export default Example
+```
+
+### **Custom NotificationList**
+
+```javascript
+import CustomNotificationsList from './CustomNotificationsList'
+import { NotificationsPopover } from './NotificationsPopover'
+
+const Example = () => (
+  <NotificationsPopover
+    NotificationsList={CustomNotificationsList}
+    NotificationsListProps={{ customProp: 'value' }}
+  />
+)
+
+export default Example
+```

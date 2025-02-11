@@ -19,6 +19,7 @@
     ".eslintrc.js",
     "*.ts",
     "*.tsx",
+    "./baseapp-frontend-imports.d.ts",
     "babel.config.js",
     "cypress.config.ts",
     "webpack.config.ts",

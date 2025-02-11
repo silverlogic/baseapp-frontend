@@ -1,8 +1,10 @@
 'use client'
 
-import { Box, alpha, styled } from '@mui/material'
+import { ComponentType } from 'react'
 
-export const RichTextBlockWrapper = styled(Box)(({ theme }) => ({
+import { Box, BoxProps, alpha, styled } from '@mui/material'
+
+export const RichTextBlockWrapper: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   '& > *:not(:last-child)': {
     paddingBottom: theme.spacing(2),
   },

@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.3
+
+### Patch Changes
+
+- Fix lint errors.
+
 ## 3.1.2
 
 ### Patch Changes

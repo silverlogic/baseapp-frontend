@@ -1,0 +1,84 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Comments/CommentItem" />
+
+# Component Documentation
+
+## CommentItem
+
+- **Purpose**: A component that renders an individual comment with user information, content, reactions, and reply functionality. It handles both top-level comments and nested replies.
+- **Expected Behavior**: Displays comment content with the author's avatar and name, allows editing and deleting (if permitted), supports reactions and replies, and can expand/collapse nested replies.
+
+## Use Cases
+
+- **Current Usage**: Used within comment threads and discussion sections to display individual comments and their replies.
+- **Potential Usage**: Could be adapted for review systems, feedback forms, or any nested discussion interface.
+
+## Props
+
+- **comment** (CommentItem_comment$key): Relay fragment reference for the comment data.
+- **target** (Object): The target object for the comment.
+- **currentThreadDepth** (number): Current nesting level of the comment thread.
+- **subscriptionsEnabled** (boolean): Enables real-time updates for the comment thread.
+- **onReplyClick** (function): Callback triggered when reply button is clicked.
+- **enableDelete** (boolean): Enables delete functionality. Defaults to false.
+- **ActionOverlayProps** (object): Props for customizing the actions overlay.
+- **CommentUpdate** (component): Custom comment update component. Defaults to DefaultCommentUpdate.
+- **CommentUpdateProps** (object): Props passed to the CommentUpdate component.
+- **CommentRepliesProps** (object): Props passed to the CommentsReplies component.
+- **CommentReactionButton** (component): Custom reaction button component. Defaults to DefaultCommentReactionButton.
+- **CommentReplyButton** (component): Custom reply button component. Defaults to DefaultCommentReplyButton.
+- **CommentPinnedBadge** (component): Custom pinned badge component. Defaults to DefaultCommentPinnedBadge.
+- **Timestamp** (component): Custom timestamp component. Defaults to DefaultTimestamp.
+- **CommentsRepliesProps** (object): Props passed to the CommentsReplies component.
+- **CommentUpdate** (component): Custom comment update component. Defaults to DefaultCommentUpdate.
+
+## Notes
+
+- **Related Components**:
+  - CommentUpdate
+  - CommentsReplies
+  - CommentReplyButton
+  - CommentPinnedBadge
+  - CommentReactionButton
+  - ActionsOverlay
+  - AvatarWithPlaceholder
+
+## Example Usage
+
+```javascript
+import { CommentItem } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  const comment = {
+    id: '123',
+    body: 'This is a comment',
+  }
+  const target = {
+    id: '456',
+    name: 'Target Object',
+  }
+  return (
+    <CommentItem
+      comment={comment}
+      target={target}
+      currentThreadDepth={0}
+      subscriptionsEnabled={true}
+      onReplyClick={() => {}}
+      enableDelete={false}
+      ActionOverlayProps={{
+        onDelete: () => {
+          console.log('Delete clicked')
+        },
+      }}
+      CommentUpdate={CommentUpdate}
+      CommentUpdateProps={{
+        onCancel: () => {
+          console.log('Cancel clicked')
+        },
+      }}
+    />
+  )
+}
+export default MyComponent
+```
