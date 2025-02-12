@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.4
+
+### Patch Changes
+
+- Enabled chat room messages deletion
+
 ## 1.0.3
 
 ### Patch Changes
