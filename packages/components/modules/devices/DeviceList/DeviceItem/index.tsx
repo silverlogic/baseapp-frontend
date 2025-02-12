@@ -15,7 +15,7 @@ const DeviceItem: FC<DeviceItemProps> = ({ device }) => {
     <Device.Root>
       <Device.Icon device={deviceInfo} />
       <Device.Content device={deviceInfo} />
-      <Device.Actions />
+      <Device.Actions device={deviceInfo} />
     </Device.Root>
   )
 }

@@ -15,5 +15,6 @@ export const DeviceItemFragment = graphql`
     isMobile
     isTablet
     isPc
+    deviceId
   }
 `
