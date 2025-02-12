@@ -2315,7 +2315,7 @@ type RoleUpdatePayload {
 }
 
 type Subscription {
-  chatRoomOnNewMessage(roomId: ID!): ChatRoomOnNewMessage
+  chatRoomOnNewMessage(profileId: ID!, roomId: ID!): ChatRoomOnNewMessage
   chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
   chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
   onNotificationChange: OnNotificationChange
