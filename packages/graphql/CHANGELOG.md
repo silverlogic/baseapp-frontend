@@ -1,5 +1,12 @@
 # @baseapp-frontend/graphql
 
+## 1.2.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.5
+
 ## 1.2.5
 
 ### Patch Changes

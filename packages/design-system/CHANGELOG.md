@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.0.4
+
+### Patch Changes
+
+- Implement a snackbar component with a 'progress bar' indicating the remaining time before it automatically disappears
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.5
+
 ## 1.0.3
 
 ### Patch Changes
