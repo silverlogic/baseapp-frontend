@@ -25,6 +25,7 @@ export { default as useDjangoOrderBy } from './hooks/useDjangoOrderBy'
 export { default as useEventSubscription } from './hooks/useEventSubscription'
 export { default as useNotification } from './hooks/useNotification'
 export { NotificationProvider } from './hooks/useNotification'
+export type * from './hooks/useNotification/types'
 export { default as useSSR } from './hooks/useSSR'
 export { default as useBoolean } from './hooks/useBoolean'
 

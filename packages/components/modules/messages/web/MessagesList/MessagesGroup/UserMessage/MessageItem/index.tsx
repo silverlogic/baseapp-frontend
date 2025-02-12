@@ -6,6 +6,7 @@ import {
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
@@ -21,6 +22,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
   const message = useFragment(MessageItemFragment, messageRef)
   const isOwnMessage = currentProfile?.id === message?.profile?.id
   const messageCardRef = useRef<HTMLDivElement>(null)
+  const { sendToast } = useNotification()
 
   const [isEditMode, setIsEditMode] = useState(false)
 
@@ -53,7 +55,10 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
           disabled: false,
           icon: <CopyIcon />,
           label: 'Copy',
-          onClick: () => {}, // TODO: Implement copy message
+          onClick: () => {
+            navigator.clipboard.writeText(message?.content || '')
+            sendToast('Message copied to clipboard.', { type: 'info', shouldShowProgress: true })
+          },
           hasPermission: true,
         },
         {

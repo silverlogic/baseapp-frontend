@@ -13,7 +13,9 @@ const config: StorybookConfig = {
   stories: [
     './*.mdx',
     '../components/**/__storybook__/*.mdx',
+    '../providers/**/__storybook__/*.mdx',
     '../components/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
+    '../providers/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),
