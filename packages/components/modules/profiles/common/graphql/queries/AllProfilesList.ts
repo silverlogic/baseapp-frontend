@@ -9,7 +9,7 @@ export const fragmentQuery = graphql`
   @argumentDefinitions(
     cursor: { type: "String" }
     count: { type: "Int", defaultValue: 5 }
-    orderBy: { type: "String", defaultValue: "-created" }
+    orderBy: { type: "String", defaultValue: "name" }
     q: { type: "String", defaultValue: null }
   ) {
     allProfiles(after: $cursor, first: $count, orderBy: $orderBy, q: $q)
