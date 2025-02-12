@@ -22,7 +22,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
   const message = useFragment(MessageItemFragment, messageRef)
   const isOwnMessage = currentProfile?.id === message?.profile?.id
   const messageCardRef = useRef<HTMLDivElement>(null)
-  const { sendSnack } = useNotification()
+  const { sendToast } = useNotification()
 
   const [isEditMode, setIsEditMode] = useState(false)
 
@@ -57,7 +57,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef, isFirstGroupedMessage }
           label: 'Copy',
           onClick: () => {
             navigator.clipboard.writeText(message?.content || '')
-            sendSnack('Message copied to clipboard.', { type: 'info' })
+            sendToast('Message copied to clipboard.', { type: 'info', shouldShowProgress: true })
           },
           hasPermission: true,
         },

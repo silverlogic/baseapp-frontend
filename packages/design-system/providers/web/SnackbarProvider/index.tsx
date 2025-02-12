@@ -11,10 +11,22 @@ import { HIDE_DURATION, OUTLINED_ALERT_ICONS } from './constants'
 import { SnackbarContentContainer } from './styled'
 import { SnackbarProviderProps } from './types'
 
-const SnackbarProvider: FC<SnackbarProviderProps> = ({ children, ...props }) => {
-  const { closeToast, open, shouldShowProgress, message, type } = useNotification()
+const SnackbarProvider: FC<SnackbarProviderProps> = ({
+  children,
+  shouldShowProgress: shouldShowProgressProvider,
+  ...props
+}) => {
+  const {
+    closeToast,
+    open,
+    shouldShowProgress: shouldShowProgressToast,
+    message,
+    type,
+  } = useNotification()
   const timeoutID = useRef<NodeJS.Timeout | null>(null)
   const theme = useTheme()
+
+  const shouldShowProgress = shouldShowProgressToast ?? shouldShowProgressProvider
 
   const handleClose = (_event?: SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

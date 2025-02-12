@@ -12,6 +12,7 @@ import { Meta } from '@storybook/addon-docs'
 ## Props
 
 - **children** (ReactNode): The content wrapped by the SnackbarProvider. Any components in this wrapped content can make use of 'useNotification' to display messages
+- **shouldShowProgress** (Boolean): The default for showing the progress bar, indicating the time left before the snackbar disappears. Will be overwritten by the 'shouldShowProgress' option of sendToast, if it is set.
 - **...other**: All other props are passed to the snackbar
 
 ## Example Usage
@@ -21,14 +22,14 @@ import { SnackbarProvider } from '@baseapp-frontend/design-system/web'
 import { useNotification } from '@baseapp-frontend/utils'
 
 const MessageEmitter = () => {
-  const { sendToast, sendSnack } = useNotification()
+  const { sendToast } = useNotification()
 
   return (
     <>
       <Button onClick={() => sendToast("Button 1 was clicked", {type: "info"})}>
         Click this button to display a message without progress bar.
       </Button>
-      <Button onClick={() => sendSnack("Button 2 was clicked", {type: "info"})}>
+      <Button onClick={() => sendToast("Button 2 was clicked", {type: "info", shouldShowProgress: true})}>
         Click this button to display a message with progress bar.
       </Button>
     < />

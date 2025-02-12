@@ -11,16 +11,14 @@ import type { UseNotification } from './types'
 const createNotificationStore = () =>
   createStore<UseNotification>((set) => ({
     ...INITIAL_NOTIFICATION_STATE,
-    sendSnack: (message, { type = 'success' } = {}) =>
-      set({ message, type, open: true, shouldShowProgress: true }),
-    sendToast: (message, { type = 'success' } = {}) =>
-      set({ message, type, open: true, shouldShowProgress: false }),
-    sendApiErrorToast: (error) =>
+    sendToast: (message, { type = 'success', shouldShowProgress } = {}) =>
+      set({ message, type, open: true, shouldShowProgress }),
+    sendApiErrorToast: (error, { shouldShowProgress } = {}) =>
       set({
         message: getApiErrorMessage(error),
         type: 'error',
         open: true,
-        shouldShowProgress: false,
+        shouldShowProgress,
       }),
     closeToast: () => set({ open: false }),
   }))

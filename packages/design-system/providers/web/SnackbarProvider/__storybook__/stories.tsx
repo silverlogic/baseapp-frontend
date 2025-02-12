@@ -14,11 +14,10 @@ interface SnackbarProps {
 }
 
 const SnackbarWrapper: FC<SnackbarProps> = ({ message, shouldShowProgress, type }) => {
-  const { sendToast, sendSnack } = useNotification()
-  const send = shouldShowProgress ? sendSnack : sendToast
+  const { sendToast } = useNotification()
   return (
     <SnackbarProvider>
-      <Button onClick={() => send(message, { type })}>Post message</Button>
+      <Button onClick={() => sendToast(message, { type, shouldShowProgress })}>Post message</Button>
     </SnackbarProvider>
   )
 }
