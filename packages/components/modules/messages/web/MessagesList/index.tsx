@@ -79,7 +79,7 @@ const MessagesList: FC<MessagesListProps> = ({
     }
   }, [room?.id, room?.unreadMessages?.count, currentProfile])
 
-  useMessagesListSubscription(room?.id)
+  useMessagesListSubscription(room.id, currentProfile!.id)
 
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ height: 50 }} />
