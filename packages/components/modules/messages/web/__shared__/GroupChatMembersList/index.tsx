@@ -2,7 +2,7 @@
 
 import { ChangeEventHandler, FC, useTransition } from 'react'
 
-import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system'
+import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'

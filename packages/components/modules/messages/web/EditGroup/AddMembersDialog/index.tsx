@@ -2,24 +2,24 @@
 
 import { FC, MouseEventHandler, useMemo, useRef } from 'react'
 
-import { ConfirmDialog } from '@baseapp-frontend/design-system'
+import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton } from '@mui/lab'
 import { useForm } from 'react-hook-form'
 
-import { useAllProfilesList } from '../../../profiles/graphql/queries/AllProfilesList'
+import { useAllProfilesList } from '../../../../profiles/common'
+import { useUpdateChatRoomMutation } from '../../../common'
 import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../../__shared__/constants'
 import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
-import { useUpdateChatRoomMutation } from '../../graphql/mutations/UpdateChatRoom'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
-import './VirtuosoStyles.css'
+import './ScrollBarCustomStyle.css'
 import { DEFAULT_FORM_VALIDATION } from './constants'
 import { SearchbarContainer } from './styled'
 import { AddMembersDialogProps } from './types'

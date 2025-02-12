@@ -2,14 +2,16 @@
 
 import { FC } from 'react'
 
-import { AvatarWithPlaceholder, FilledCloseIcon, IconButton } from '@baseapp-frontend/design-system'
 
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
+import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+import { FilledCloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { MainContainer } from './styled'
 import { AddedMemberCardProps } from './types'
+import { ProfileItemFragment } from '../../../../profiles/common'
 
 const AddedMemberCard: FC<AddedMemberCardProps> = ({ profile: profileRef, handleRemoveMember }) => {
   const { id, image, name } = useFragment(ProfileItemFragment, profileRef)

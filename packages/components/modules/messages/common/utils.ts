@@ -7,9 +7,9 @@ import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime
 import { GroupTitleFragment$key } from '../../../__generated__/GroupTitleFragment.graphql'
 import { RoomTitleFragment$key } from '../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$data } from '../../../__generated__/TitleFragment.graphql'
-import { CHAT_ROOM_PARTICIPANT_ROLES } from './__shared__/constants'
 import { GroupTitleFragment } from './graphql/fragments/GroupTitle'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
+import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 
 export const useGroupNameAndAvatar = (
   headerRef: GroupTitleFragment$key | RoomTitleFragment$key | null | undefined,

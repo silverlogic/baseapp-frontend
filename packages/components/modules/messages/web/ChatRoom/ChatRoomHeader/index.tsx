@@ -17,17 +17,15 @@ import {
   getParticipantCountString,
   useArchiveChatRoomMutation,
   useChatRoom,
+  useCheckIsAdmin,
   useNameAndAvatar,
 } from '../../../common'
-import { RoomTitleFragment$key } from '../../../../__generated__/RoomTitleFragment.graphql'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
-import { useChatRoom } from '../../context'
-import { RoomTitleFragment } from '../../graphql/fragments/RoomTitle'
-import { TitleFragment } from '../../graphql/fragments/Title'
-import { getParticipantCountString, useCheckIsAdmin, useNameAndAvatar } from '../../utils'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
+import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
+import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
 
 const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   isArchived,

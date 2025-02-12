@@ -7,11 +7,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { Box, Button, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-<<<<<<<< HEAD:packages/components/modules/messages/web/CreateGroup/ProfileCard/index.tsx
-import { ProfileItemFragment } from '../../../../profiles/common'
-========
-import { ProfileItemFragment } from '../../../../profiles/graphql/queries/ProfileItem'
->>>>>>>> 3f7d135 (feat: moved group chat list display functionality from CreateGroup into shared component GroupChatMembersList):packages/components/modules/messages/web/__shared__/GroupChatMembersList/ProfileCard/index.tsx
+import { ProfileItemFragment } from '../../../../../profiles/common'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 

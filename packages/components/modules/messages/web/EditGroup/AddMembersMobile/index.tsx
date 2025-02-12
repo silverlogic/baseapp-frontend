@@ -2,21 +2,23 @@
 
 import { FC, useMemo } from 'react'
 
-import { CheckMarkIcon, IconButton, Iconify } from '@baseapp-frontend/design-system'
+import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
-import { useAllProfilesList } from '../../../profiles/graphql/queries/AllProfilesList'
+import { useAllProfilesList } from '../../../../profiles/common'
+import { useUpdateChatRoomMutation } from '../../../common'
 import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../../__shared__/constants'
 import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
-import { useUpdateChatRoomMutation } from '../../graphql/mutations/UpdateChatRoom'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
 import { HeaderContainer } from '../styled'

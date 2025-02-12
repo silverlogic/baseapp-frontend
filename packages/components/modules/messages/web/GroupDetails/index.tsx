@@ -17,14 +17,11 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   getParticipantCountString,
+  useCheckIsAdmin,
   useGroupNameAndAvatar,
   useRoomListSubscription,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
-import { MembersListFragment } from '../graphql/fragments/MembersList'
-import { GroupDetailsQuery } from '../graphql/queries/GroupDetailsQuery'
-import useRoomListSubscription from '../graphql/subscriptions/useRoomListSubscription'
-import { getParticipantCountString, useCheckIsAdmin, useGroupNameAndAvatar } from '../utils'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
 import { GroupMembersEdge } from './ProfileCard/types'

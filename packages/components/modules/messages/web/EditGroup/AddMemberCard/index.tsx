@@ -2,12 +2,12 @@
 
 import { FC } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system'
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Checkbox, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment } from '../../../profiles/graphql/queries/ProfileItem'
+import { ProfileItemFragment } from '../../../../profiles/common'
 import { MainContainer } from './styled'
 import { AddMemberCardProps } from './types'
 

@@ -2,13 +2,8 @@ import { FC } from 'react'
 
 import { LoadMoreFn } from 'react-relay'
 import { VirtuosoProps } from 'react-virtuoso'
-
-<<<<<<<< HEAD:packages/components/modules/messages/web/CreateGroup/ConnectionsList/types.ts
-import { AllProfilesListPaginationQuery } from '../../../../../__generated__/AllProfilesListPaginationQuery.graphql'
-import { ProfileNode } from '../../../../profiles/common'
-========
+import { BoxProps } from '@mui/material'
 import { ProfileNode } from '../../types'
->>>>>>>> 3f7d135 (feat: moved group chat list display functionality from CreateGroup into shared component GroupChatMembersList):packages/components/modules/messages/web/__shared__/GroupChatMembersList/ProfilesList/types.ts
 
 export interface ProfilesListProps {
   profiles: ProfileNode[]
@@ -23,4 +18,8 @@ export interface ProfilesListProps {
   renderItem: (profile: ProfileNode, isMember?: boolean) => JSX.Element | null
   SearchNotFoundState?: FC
   EmptyProfilesListState?: FC
+  allowAddMember?: boolean
+  onAddMemberClick?: () => void
+  removeTitle?: boolean
+  NormalListProps?: Partial<BoxProps>
 }

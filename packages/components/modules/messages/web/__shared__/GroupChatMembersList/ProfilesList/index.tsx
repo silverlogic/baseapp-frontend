@@ -2,15 +2,14 @@
 
 import { FC } from 'react'
 
-import { AvatarButton, LoadingState } from '@baseapp-frontend/design-system'
-
 import { Box, Typography, useTheme } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
-
-import DefaultSearchNotFoundState from '../../../../__shared__/SearchNotFoundState'
-import DefaultEmptyProfilesListState from '../../../EmptyProfilesListState'
+import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { AvatarButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { ProfileNode } from '../../types'
 import { ProfilesListProps } from './types'
+import { SearchNotFoundState as DefaultSearchNotFoundState } from '../../../../../__shared__/web'
+import DefaultEmptyProfilesListState from '../../EmptyProfilesListState'
 
 const ProfilesList: FC<ProfilesListProps> = ({
   searchValue,

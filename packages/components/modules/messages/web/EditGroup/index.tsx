@@ -5,6 +5,7 @@ import { FC, useMemo, useState, useTransition } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -12,15 +13,23 @@ import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 
+import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
+import { MembersListFragment$key } from '../../../../__generated__/MembersListFragment.graphql'
+import { ProfileNode } from '../../../profiles/common'
 import {
   GroupDetailsQuery,
+  MembersListFragment,
   useGroupNameAndAvatar,
   useRoomListSubscription,
   useUpdateChatRoomMutation,
 } from '../../common'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
-import { DEFAULT_FORM_VALIDATION, FORM_VALUE, getDefaultFormValues } from './constants'
+import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
+import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
+import AddMembersDialog from './AddMembersDialog'
+import AddMembersMobile from './AddMembersMobile'
+import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
 import { HeaderContainer } from './styled'
 import { EditGroupProps } from './types'
 

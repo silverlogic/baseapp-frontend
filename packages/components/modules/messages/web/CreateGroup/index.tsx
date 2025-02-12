@@ -3,13 +3,8 @@
 import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-<<<<<<< HEAD:packages/components/modules/messages/web/CreateGroup/index.tsx
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
-=======
-import { CheckMarkIcon, CloseIcon, IconButton } from '@baseapp-frontend/design-system'
->>>>>>> f82cdb0 (feat: add members to existing group):packages/components/modules/messages/CreateGroup/index.tsx
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,30 +12,18 @@ import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'relay-runtime'
 
-<<<<<<< HEAD:packages/components/modules/messages/web/CreateGroup/index.tsx
 import { ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import { useChatRoom, useCreateChatRoomMutation } from '../../common'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
-import DefaultConnectionsList from './ConnectionsList'
-import DefaultProfileCard from './ProfileCard'
-import { DEFAULT_FORM_VALIDATION, DEFAULT_FORM_VALUES, FORM_VALUE } from './constants'
-import { HeaderContainer, ProfilesContainer, SearchbarContainer } from './styled'
-import { CreateGroupProps, CreateGroupUpload } from './types'
-=======
-import { useAllProfilesList } from '../../profiles/graphql/queries/AllProfilesList'
-import { EditGroupTitleAndImage } from '../__shared__'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../__shared__/constants'
-import { CreateOrEditGroup, ProfileNode } from '../__shared__/types'
-import { useChatRoom } from '../context'
-import { useCreateChatRoomMutation } from '../graphql/mutations/CreateChatRoom'
+import { CreateOrEditGroup } from '../__shared__/types'
 import { HeaderContainer, ProfilesContainer } from './styled'
 import { CreateGroupProps } from './types'
->>>>>>> f82cdb0 (feat: add members to existing group):packages/components/modules/messages/CreateGroup/index.tsx
 
 const CreateGroup: FC<CreateGroupProps> = ({
   allProfilesRef,

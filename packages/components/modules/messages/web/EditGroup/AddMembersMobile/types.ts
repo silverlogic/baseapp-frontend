@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { ChatRoomsQuery$data } from '../../../../__generated__/ChatRoomsQuery.graphql'
+import { ChatRoomsQuery$data } from '../../../../../__generated__/ChatRoomsQuery.graphql'
 import { GroupChatMembersListProps } from '../../__shared__/GroupChatMembersList/types'
 import { ProfileNode } from '../../__shared__/types'
 

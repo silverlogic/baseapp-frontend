@@ -3,7 +3,7 @@
 import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { AvatarButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
@@ -125,7 +125,6 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
           {...SearchbarProps}
         />
       </SearchbarContainer>
-
       <AvatarButton
         onClick={onGroupChatCreationButtonClicked}
         caption="New Group"

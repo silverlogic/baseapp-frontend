@@ -1,6 +1,3 @@
-<<<<<<< HEAD:packages/components/modules/messages/web/EditGroup/constants.ts
-import { CreateOrEditGroup } from '../__shared__/types/types'
-=======
 import z from 'zod'
 
 import {
@@ -8,7 +5,6 @@ import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION,
 } from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
->>>>>>> f82cdb0 (feat: add members to existing group):packages/components/modules/messages/EditGroup/constants.ts
 
 export const getDefaultFormValues = (
   title: string,
