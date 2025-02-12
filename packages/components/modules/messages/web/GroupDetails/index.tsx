@@ -146,7 +146,12 @@ const GroupDetails: FC<GroupDetailsProps> = ({
         <GroupHeaderContainer>
           <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
           <GroupTitleContainer>
-            <Typography variant="subtitle1" color="text.primary">
+            <Typography
+              variant="subtitle1"
+              color="text.primary"
+              noWrap
+              sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+            >
               {title}
             </Typography>
             <Typography variant="body2" color="text.secondary">

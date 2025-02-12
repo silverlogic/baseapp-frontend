@@ -123,7 +123,13 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           src={avatar}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
-          <Typography variant="subtitle2">{title}</Typography>
+          <Typography
+            variant="subtitle2"
+            noWrap
+            sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+          >
+            {title}
+          </Typography>
           {lastMessage && lastMessageTime ? (
             <Box
               display="grid"
