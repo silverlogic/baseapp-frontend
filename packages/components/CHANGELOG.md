@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.5
+
+### Patch Changes
+
+- Clean up the three dot menu in the chat header (do not display the option to leave a non-group chat, implement archiving chats from there)
+
 ## 1.0.4
 
 ### Patch Changes

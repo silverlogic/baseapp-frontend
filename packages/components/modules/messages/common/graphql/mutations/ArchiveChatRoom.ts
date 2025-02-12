@@ -1,14 +1,17 @@
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
+import { ConnectionHandler, Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { ArchiveChatRoomMutation } from '../../../../../__generated__/ArchiveChatRoomMutation.graphql'
+import { getChatRoomConnections } from '../../utils'
 
 export const ArchiveChatRoomMutationQuery = graphql`
   mutation ArchiveChatRoomMutation($input: ChatRoomArchiveInput!) {
     chatRoomArchive(input: $input) {
       room {
         id
+        isArchived
       }
       errors {
         field
@@ -26,6 +29,7 @@ export const useArchiveChatRoomMutation = (): [
   const [commitMutation, isMutationInFlight] = useMutation<ArchiveChatRoomMutation>(
     ArchiveChatRoomMutationQuery,
   )
+  const { currentProfile } = useCurrentProfile()
 
   const commit = (config: UseMutationConfig<ArchiveChatRoomMutation>) =>
     commitMutation({
@@ -39,6 +43,19 @@ export const useArchiveChatRoomMutation = (): [
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
         config?.onError?.(error)
+      },
+      updater: (store, data) => {
+        if (!data?.chatRoomArchive?.errors && currentProfile?.id) {
+          getChatRoomConnections(
+            store,
+            currentProfile.id,
+            ({ archived }) => archived === !data?.chatRoomArchive?.room?.isArchived,
+          ).forEach((connectionRecord) => {
+            if (data?.chatRoomArchive?.room?.id)
+              ConnectionHandler.deleteNode(connectionRecord, data?.chatRoomArchive?.room?.id)
+          })
+        }
+        config?.updater?.(store, data)
       },
     })
 
