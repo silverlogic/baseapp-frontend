@@ -7,9 +7,10 @@ import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/di
 import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
-import { MemberRoles, MemberStatuses, roleOptions } from '../constants'
+import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
+import { MemberActions, MemberRoles, MemberStatuses, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
@@ -130,7 +131,7 @@ const MemberItem: FC<MemberItemProps> = ({
     if (haveMemberRoleAndStatus) {
       return (
         <Box>
-          <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
+          <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
             {status === MemberStatuses.active
               ? capitalizeFirstLetter(memberRole)
               : capitalizeFirstLetter(status)}
