@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.6
+
+### Patch Changes
+
+- Fix mobile vertical nav bar height
+
 ## 1.0.5
 
 ### Patch Changes

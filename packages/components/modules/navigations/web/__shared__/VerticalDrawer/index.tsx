@@ -29,6 +29,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, o
       PaperProps={{
         sx: {
           width: NAV_WIDTH.VERTICAL,
+          height: '100% !important',
         },
       }}
     >
