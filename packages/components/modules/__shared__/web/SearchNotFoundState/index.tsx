@@ -2,7 +2,7 @@ import { SearchingImage } from '@baseapp-frontend/design-system/components/web/i
 
 import { Box, Typography } from '@mui/material'
 
-import { SearchNotFoundStateProps } from '../types'
+import { SearchNotFoundStateProps } from '../../common/types'
 
 const SearchNotFoundState = ({
   message = 'Check your spelling or try another search.',

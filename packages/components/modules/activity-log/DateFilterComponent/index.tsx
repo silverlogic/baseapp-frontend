@@ -1,7 +1,5 @@
 import React, { FC, useState } from 'react'
 
-import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
-
 import { Box, Button } from '@mui/material'
 import { DateValidationError, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
@@ -41,10 +39,8 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
 
     setError(null)
     executeRefetch({
-      createdFrom: tempCreatedFrom
-        ? formatDate(tempCreatedFrom, { toFormat: DATE_FORMAT.api })
-        : null,
-      createdTo: tempCreatedTo ? formatDate(tempCreatedTo, { toFormat: DATE_FORMAT.api }) : null,
+      createdFrom: tempCreatedFrom ? tempCreatedFrom.toISODate() : null,
+      createdTo: tempCreatedTo ? tempCreatedTo.toISODate() : null,
     })
     onApply?.()
   }
@@ -61,30 +57,50 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
     onClearFilter?.()
   }
 
+  const disableStartDate = (date: DateTime) => (tempCreatedTo ? date > tempCreatedTo : false)
+
+  const disableEndDate = (date: DateTime) => (tempCreatedFrom ? date < tempCreatedFrom : false)
+
   return (
     <Box display="flex" gap={2} flexDirection="column">
-      <Box display="flex" gap={2} flexDirection="column">
-        <LocalizationProvider dateAdapter={AdapterLuxon}>
-          <DatePicker
-            label="Start date"
-            onChange={(newValue) => setTempCreatedFrom(newValue)}
-            disableFuture
-            value={tempCreatedFrom}
-          />
-          <DatePicker
-            label="End date"
-            value={tempCreatedTo}
-            onChange={(newValue) => setTempCreatedTo(newValue)}
-            onError={(newError) => setError(newError)}
-            disableFuture
-            slotProps={{
-              textField: {
-                helperText: errorMessage,
+      <LocalizationProvider dateAdapter={AdapterLuxon}>
+        <DatePicker
+          label="Start date"
+          onChange={(newValue) => setTempCreatedFrom(newValue)}
+          disableFuture
+          value={tempCreatedFrom}
+          shouldDisableDate={disableStartDate}
+          slotProps={{
+            day: (dayProps) => ({
+              sx: {
+                ...(disableStartDate(dayProps.day) && {
+                  backgroundColor: 'error.lighter',
+                }),
               },
-            }}
-          />
-        </LocalizationProvider>
-      </Box>
+            }),
+          }}
+        />
+        <DatePicker
+          label="End date"
+          value={tempCreatedTo}
+          onChange={(newValue) => setTempCreatedTo(newValue)}
+          onError={(newError) => setError(newError)}
+          disableFuture
+          shouldDisableDate={disableEndDate}
+          slotProps={{
+            textField: {
+              helperText: errorMessage,
+            },
+            day: (dayProps) => ({
+              sx: {
+                ...(disableEndDate(dayProps.day) && {
+                  backgroundColor: 'error.lighter',
+                }),
+              },
+            }),
+          }}
+        />
+      </LocalizationProvider>
       <Box display="flex" gap={2} flexDirection="column" mt={4} mb={2}>
         <Button onClick={handleApply} variant="contained" color="inherit">
           Filter

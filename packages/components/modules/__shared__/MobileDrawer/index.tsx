@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { Box, Divider, Drawer, Typography, styled } from '@mui/material'
 
-import { MobileDrawerProps } from '../types'
+import { MobileDrawerProps } from '../common/types'
 
 const Puller = styled('div')(({ theme }) => ({
   width: 64,
