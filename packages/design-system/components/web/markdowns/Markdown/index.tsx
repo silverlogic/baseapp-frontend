@@ -5,7 +5,7 @@ import rehypeHighlight from 'rehype-highlight'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 
-import { LazyLoadImage } from '../images'
+import { LazyLoadImage } from '../../images'
 import './highlight'
 import StyledMarkdown from './styled'
 import { MarkdownProps } from './types'

@@ -5,8 +5,10 @@ import React, { FC } from 'react'
 import { withController } from '@baseapp-frontend/utils'
 
 import MDEditor from '@uiw/react-md-editor'
+import rehypeSanitize from 'rehype-sanitize'
 
-import './MarkdownEditorStyles.css'
+import './index.css'
+// TODO check custom css is not appling with the new build method
 import { MarkdownEditorProps } from './types'
 
 const MarkdownEditor: FC<MarkdownEditorProps> = ({
@@ -16,13 +18,16 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
   placeholder,
   ...props
 }) => (
-  <div className="container">
+  <div className="container" style={{ maxWidth: '100%', width: '100%' }}>
     <div data-color-mode="light">
       <MDEditor
         height={150}
         preview="edit"
         value={value}
         onChange={onChange}
+        previewOptions={{
+          rehypePlugins: [[rehypeSanitize]],
+        }}
         textareaProps={{
           placeholder,
           onKeyDown: (e) => {

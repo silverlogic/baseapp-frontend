@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useRef } from 'react'
 
-import { MarkdownEditor } from '@baseapp-frontend/design-system'
+import { MarkdownEditor } from '@baseapp-frontend/design-system/components/web/inputs'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'

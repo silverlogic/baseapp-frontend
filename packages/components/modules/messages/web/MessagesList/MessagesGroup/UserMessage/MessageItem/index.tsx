@@ -4,9 +4,9 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   CopyIcon,
   DownloadIcon,
-  Markdown,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdowns'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'

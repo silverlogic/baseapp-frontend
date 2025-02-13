@@ -2,4 +2,6 @@
 .container {
   border: 1px solid transparent;
   padding-bottom: 5px;
+  width: 100%;
+  max-width: 100%;
 }
