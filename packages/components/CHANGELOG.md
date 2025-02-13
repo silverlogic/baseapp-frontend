@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 0.0.59
+
+### Patch Changes
+
+- add filter by date
+
 ## 1.0.5
 
 ### Patch Changes
