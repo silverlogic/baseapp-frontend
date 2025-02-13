@@ -83,7 +83,7 @@ To build all apps and packages, run the following command:
 pnpm build
 
 # build only the authentication package
-pnpm build --filter=authentication
+pnpm build --filter=@baseapp-frontend/authentication
 ```
 
 ## Develop

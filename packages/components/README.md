@@ -18,12 +18,12 @@ pnpm install @baseapp-frontend/components
 
 ## **What is in here?**
 
-This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, navigate to the package folder and run the following command:
+This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, run the following command:
 
 ```bash
 # at root level
 
-pnpm storybook --filter components
+pnpm storybook --filter @baseapp-frontend/components
 ```
 
 ## **Build Process**
