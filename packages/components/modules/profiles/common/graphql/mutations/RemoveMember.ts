@@ -2,7 +2,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { RemoveMemberMutation } from '../../../../__generated__/RemoveMemberMutation.graphql'
+import { RemoveMemberMutation } from '../../../../../__generated__/RemoveMemberMutation.graphql'
 
 export const ProfileRemoveMemberMutationQuery = graphql`
   mutation RemoveMemberMutation($input: ProfileRemoveMemberInput!) {
