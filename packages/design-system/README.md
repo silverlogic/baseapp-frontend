@@ -6,19 +6,19 @@ This package defines our design system configuration (e.g. color pallete, typogr
 
 ## **What is in here?**
 
-This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, navigate to the package folder and run the following command:
+This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, run the following command:
 
 ```bash
 # at root level
 
-pnpm storybook --filter design-system
+pnpm storybook --filter @baseapp-frontend/design-system
 ```
 
 ## **Build Process**
 
 We use a hybrid build pipeline combining `tsup`, and `TypeScript Compiler` to balance type accuracy and modern bundling:
 
-1. **Source Code:** Original TypeScript/React files with Relay GraphQL queries.
+1. **Source Code:** Original TypeScript/React files.
 
 2. **tsup Bundling:**
 

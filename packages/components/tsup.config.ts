@@ -4,7 +4,7 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig((options) => ({
-  clean: false,
+  clean: true,
   dts: false,
   entry: ['./modules/**/(common|web|native)/index.ts'],
   esbuildOptions(esbuildOptions) {
