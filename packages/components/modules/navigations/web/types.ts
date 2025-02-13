@@ -30,6 +30,7 @@ export type NavItemBaseProps = {
   caption?: string
   disabled?: boolean
   externalLink?: boolean
+  active?: boolean
   children?: NavItemChildren[]
 }
 
