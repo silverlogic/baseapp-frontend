@@ -1,6 +1,6 @@
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
-import '../../../../styles/tailwind/globals.css'
+import '../../../../../styles/tailwind/globals.css'
 import {
   commentDeleteMockData,
   commentEditMockData,
