@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.7
+
+### Patch Changes
+
+- Enhanced the SocialInput component by introducing an optional keydown handler prop. This update enables custom keyboard event handling, with default behavior triggering submission on CTRL + Enter.
+
 ## 1.0.6
 
 ### Patch Changes
