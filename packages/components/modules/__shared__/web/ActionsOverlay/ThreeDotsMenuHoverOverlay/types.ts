@@ -5,7 +5,12 @@ import { ActionOverlayProps } from '../types'
 export interface ThreeDotsMenuHoverOverlayProps
   extends Pick<
     ActionOverlayProps,
-    'actions' | 'offsetRight' | 'offsetTop' | 'enableDelete' | 'isDeletingItem'
+    | 'actions'
+    | 'offsetRight'
+    | 'offsetTop'
+    | 'showDeleteButton'
+    | 'isDeletingItem'
+    | 'disableDeleteButton'
   > {
   handleDeleteDialogOpen: () => void
   handleClosePopover: () => void

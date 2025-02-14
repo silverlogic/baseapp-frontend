@@ -12,8 +12,9 @@ import { ThreeDotsMenuHoverOverlayProps } from './types'
 const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
   offsetRight,
   offsetTop,
-  enableDelete,
+  showDeleteButton,
   isDeletingItem,
+  disableDeleteButton,
   handleDeleteDialogOpen,
   actions = [],
   handleClosePopover,
@@ -54,10 +55,17 @@ const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
             </MenuItem>
           )
         })}
-        {enableDelete && (
-          <MenuItem onClick={handleDeleteDialogOpen} disabled={isDeletingItem}>
-            <TrashCanIcon />
-            <Typography variant="body2" color="error">
+        {showDeleteButton && (
+          <MenuItem
+            onClick={handleDeleteDialogOpen}
+            disabled={isDeletingItem || disableDeleteButton}
+            color="disabled"
+          >
+            <TrashCanIcon sx={{ color: disableDeleteButton ? 'text.disabled' : 'error.main' }} />
+            <Typography
+              variant="body2"
+              color={disableDeleteButton ? 'text.disabled' : 'error.main'}
+            >
               Delete
             </Typography>
           </MenuItem>
