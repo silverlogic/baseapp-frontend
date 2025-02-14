@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.8
+
+### Patch Changes
+
+- Create profile page storybook
+
 ## 1.0.7
 
 ### Patch Changes
