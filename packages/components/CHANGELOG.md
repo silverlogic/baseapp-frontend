@@ -1,5 +1,79 @@
 # @baseapp-frontend/components
 
+## 1.0.7
+
+### Patch Changes
+
+- Enhanced the SocialInput component by introducing an optional keydown handler prop. This update enables custom keyboard event handling, with default behavior triggering submission on CTRL + Enter.
+
+## 1.0.6
+
+### Patch Changes
+
+- Fix mobile vertical nav bar height
+
+## 1.0.5
+
+### Patch Changes
+
+- Clean up the three dot menu in the chat header (do not display the option to leave a non-group chat, implement archiving chats from there)
+
+## 1.0.4
+
+### Patch Changes
+
+- Implement a snackbar component with a 'progress bar' indicating the remaining time before it automatically disappears
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.4
+  - @baseapp-frontend/utils@3.1.5
+  - @baseapp-frontend/authentication@4.1.6
+  - @baseapp-frontend/graphql@1.2.6
+
+## 1.0.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.4
+  - @baseapp-frontend/authentication@4.1.5
+  - @baseapp-frontend/design-system@1.0.3
+  - @baseapp-frontend/graphql@1.2.5
+
+## 1.0.2
+
+### Patch Changes
+
+- Fix release with catalogs.
+
+## 1.0.1
+
+### Patch Changes
+
+- Fix `changeset` auto release.
+
+## 1.0.0
+
+### Major Changes
+
+- Rearrange each `module` code into folders, `common` for multi-platform code, `native` for native code and `web` for web code.
+- Transpile and bundle the package code using `babel`, `tsup` and `tsc`.
+- Migrate native `profile` components from the template into this package.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.0
+  - @baseapp-frontend/utils@3.1.3
+  - @baseapp-frontend/authentication@4.1.4
+  - @baseapp-frontend/graphql@1.2.4
+
+## 0.0.58
+
+### Patch Changes
+
+- Add missing `AccountPopoverProps` to the `AccountMenu` component.
+- Making sure conditonal render works on the `AccountMenu` component.
+
 ## 0.0.57
 
 ### Patch Changes

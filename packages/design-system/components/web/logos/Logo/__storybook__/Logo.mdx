@@ -1,0 +1,44 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Logos/Logo" />
+
+# Component Documentation
+
+## Logo
+
+- **Purpose**: A flexible component that wraps logo content in a consistent container with optional link functionality.
+- **Expected Behavior**: Renders a container that centers its content. When not disabled, wraps the logo in a link to the homepage ("/").
+
+## Use Cases
+
+- **Current Usage**:
+  - Application header logos
+
+## Props
+
+- **children** (ReactNode): The logo content to be displayed in the container
+- **disabledLink** (boolean): If true, removes the link wrapper (defaults to false)
+- **sx** (object): MUI system props for custom styling
+- **...other**: Additional props are passed to the root Box component
+
+## Notes
+
+- **Related Components**:
+  - Box: Used as the container component
+  - Link: Wraps the logo when clickable
+  - Various logo icon components that can be passed as children
+
+## Example Usage
+
+```javascript
+import { Logo, BaseAppLogoCondensed } from '@baseapp-frontend/design-system/web'
+
+const MyComponent = () => {
+  return (
+    <Logo disabledLink={false}>
+      <BaseAppLogoCondensed />
+    </Logo>
+  )
+}
+export default MyComponent
+```

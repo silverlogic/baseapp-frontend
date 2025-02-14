@@ -188,6 +188,7 @@ type ChatRoomOnNewMessage {
 type ChatRoomOnRoomUpdate {
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
 }
 
 type ChatRoomParticipant implements Node {
@@ -311,6 +312,7 @@ type ChatRoomUpdatePayload {
   _debug: DjangoDebug
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
   clientMutationId: String
 }
 

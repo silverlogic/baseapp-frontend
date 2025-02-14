@@ -1,8 +1,10 @@
 'use client'
 
-import { Box, styled } from '@mui/material'
+import { ComponentType } from 'react'
 
-export const StreamFieldWrapper = styled(Box)(({ theme }) => ({
+import { Box, BoxProps, styled } from '@mui/material'
+
+export const StreamFieldWrapper: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(2),

@@ -1,19 +1,17 @@
+import { ThemeProviderProps } from '@baseapp-frontend/design-system/providers/web'
 import {
-  ThemeProviderProps,
   breakpoints,
   createCustomShadows,
   createPalette,
   createShadows,
-  primaryFont,
-  secondaryFont,
   typography,
-} from '@baseapp-frontend/design-system'
+} from '@baseapp-frontend/design-system/styles/web'
 
 const defaultTheme: ThemeProviderProps = {
   palette: createPalette('light'),
   breakpoints: breakpoints,
-  primaryFont: primaryFont,
-  secondaryFont: secondaryFont,
+  primaryFont: undefined,
+  secondaryFont: undefined,
   settings: {
     themeMode: 'light',
     themeContrast: 'default',

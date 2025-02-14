@@ -1,8 +1,10 @@
 'use client'
 
-import { Box, styled } from '@mui/material'
+import { ComponentType } from 'react'
 
-export const RichTextBlockWrapper = styled(Box)(({ theme }) => ({
+import { Box, BoxProps, styled } from '@mui/material'
+
+export const RichTextBlockWrapper: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   '& p': {
     ...theme.typography.body1,
     color: theme.palette.common.white,

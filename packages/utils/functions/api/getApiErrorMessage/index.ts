@@ -9,7 +9,7 @@ export const getApiErrorMessage = (
   if (error?.message) {
     try {
       const parsedMessage = JSON.parse(error.message)
-      message = parsedMessage.detail || parsedMessage || message
+      message = parsedMessage.detail || error.message
     } catch {
       message = error.message
     }

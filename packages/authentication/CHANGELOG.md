@@ -1,5 +1,26 @@
 # @baseapp-frontend/authentication
 
+## 4.1.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.5
+
+## 4.1.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.4
+
+## 4.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.3
+
 ## 4.1.3
 
 ### Patch Changes

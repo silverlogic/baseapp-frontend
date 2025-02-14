@@ -1,5 +1,23 @@
 # @baseapp-frontend/utils
 
+## 3.1.5
+
+### Patch Changes
+
+- Implement a snackbar component with a 'progress bar' indicating the remaining time before it automatically disappears
+
+## 3.1.4
+
+### Patch Changes
+
+- setFormApiErrors also handles Error objects
+
+## 3.1.3
+
+### Patch Changes
+
+- Fix lint errors.
+
 ## 3.1.2
 
 ### Patch Changes

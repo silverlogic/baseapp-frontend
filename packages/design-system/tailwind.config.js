@@ -1,9 +1,9 @@
-const { responsiveTypography, hideScrollbar } = require('./styles/tailwind/plugins')
-const { breakpoints } = require('./styles/breakpoint')
-const { typography } = require('./styles/typography')
-const { createPalette } = require('./styles/palette')
-const { createShadows } = require('./styles/shadow')
-const { createCustomShadows } = require('./styles/material/custom-shadows')
+const { responsiveTypography, hideScrollbar } = require('./styles/web/tailwind/plugins')
+const { breakpoints } = require('./styles/web/breakpoint')
+const { typography } = require('./styles/web/typography')
+const { createPalette } = require('./styles/web/palette')
+const { createShadows } = require('./styles/web/shadow')
+const { createCustomShadows } = require('./styles/web/material/custom-shadows')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

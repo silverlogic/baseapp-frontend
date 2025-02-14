@@ -1,16 +1,17 @@
-import { ThemeProviderProps } from '../../providers/ThemeProvider/types'
-import { breakpoints } from '../../styles/breakpoint'
-import { primaryFont, secondaryFont } from '../../styles/font'
-import { createCustomShadows } from '../../styles/material/custom-shadows'
-import { createPalette } from '../../styles/palette'
-import { createShadows } from '../../styles/shadow'
-import { typography } from '../../styles/typography'
+import { ThemeProviderProps } from '../../providers/web'
+import {
+  breakpoints,
+  createCustomShadows,
+  createPalette,
+  createShadows,
+  typography,
+} from '../../styles/web'
 
 const defaultTheme: ThemeProviderProps = {
   palette: createPalette('light'),
   breakpoints: breakpoints,
-  primaryFont: primaryFont,
-  secondaryFont: secondaryFont,
+  primaryFont: undefined,
+  secondaryFont: undefined,
   settings: {
     themeMode: 'light',
     themeContrast: 'default',
