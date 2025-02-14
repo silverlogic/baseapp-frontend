@@ -154,20 +154,9 @@ type ChatRoomCreatePayload {
   clientMutationId: String
 }
 
-input ChatRoomDeleteMessageInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type ChatRoomDeleteMessagePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedMessage: MessageEdge
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `ChatRoom` and its cursor."""
+"""
+A Relay edge containing a `ChatRoom` and its cursor.
+"""
 type ChatRoomEdge {
   """The item at the end of the edge"""
   node: ChatRoom
@@ -201,6 +190,7 @@ type ChatRoomOnMessagesCountUpdate {
 type ChatRoomOnRoomUpdate {
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
 }
 
 type ChatRoomParticipant implements Node {
@@ -324,6 +314,7 @@ type ChatRoomUpdatePayload {
   _debug: DjangoDebug
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
   clientMutationId: String
 }
 
