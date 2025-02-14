@@ -1,11 +1,10 @@
 export interface ReportButtonWithDialogProps {
   currentProfileId?: string
-  target?: string
   handleClose: () => void
 }
 
-export interface ReportCategory {
+export interface ReportType {
   name: string
-  title: string
-  subCategories: ReportCategory[]
+  label: string
+  subTypes: ReportType[]
 }

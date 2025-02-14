@@ -118,11 +118,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
         />
       )}
       {profile && (
-        <ReportButtonWithDialog
-          target={profile?.id}
-          handleClose={handleClose}
-          currentProfileId={currentProfileId}
-        />
+        <ReportButtonWithDialog handleClose={handleClose} currentProfileId={currentProfileId} />
       )}
     </>
   )

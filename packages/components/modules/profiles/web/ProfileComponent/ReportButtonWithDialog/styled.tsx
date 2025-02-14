@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const CategoryButton = styled(Button)(({ theme }) => ({
+export const TypeButton = styled(Button)(({ theme }) => ({
   variant: 'text',
   borderRadius: 0,
   justifyContent: 'space-between',

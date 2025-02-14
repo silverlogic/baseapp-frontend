@@ -5,81 +5,131 @@ import { FC, useState } from 'react'
 import { FlagIcon } from '@baseapp-frontend/design-system/components/common/icons'
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, Button, Divider, MenuItem, TextField, Typography } from '@mui/material'
+import { graphql, useMutation } from 'react-relay'
 
-import { CategoryButton } from './styled'
-import { ReportButtonWithDialogProps, ReportCategory } from './types'
+import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateMutation.graphql'
+import { TypeButton } from './styled'
+import { ReportButtonWithDialogProps, ReportType } from './types'
 
-const mainCategories: ReportCategory[] = [
+const mainTypes: ReportType[] = [
   {
     name: 'scam',
-    title: 'Scam or fraud',
-    subCategories: [],
+    label: 'Scam or fraud',
+    subTypes: [],
   },
   {
     name: 'adultContent',
-    title: 'Adult Content',
-    subCategories: [
+    label: 'Adult Content',
+    subTypes: [
       {
         name: 'pornography',
-        title: 'Pornography',
-        subCategories: [],
+        label: 'Pornography',
+        subTypes: [],
       },
       {
         name: 'childAbuse',
-        title: 'Child abuse',
-        subCategories: [],
+        label: 'Child abuse',
+        subTypes: [],
       },
       {
         name: 'prostituition',
-        title: 'Prostituition',
-        subCategories: [],
+        label: 'Prostituition',
+        subTypes: [],
       },
     ],
   },
   {
     name: 'violence',
-    title: 'Violence, hate or exploitation',
-    subCategories: [],
+    label: 'Violence, hate or exploitation',
+    subTypes: [],
   },
   {
     name: 'bulling',
-    title: 'Bulling or unwanted contact',
-    subCategories: [],
+    label: 'Bulling or unwanted contact',
+    subTypes: [],
   },
   {
     name: 'other',
-    title: 'Other',
-    subCategories: [],
+    label: 'Other',
+    subTypes: [],
   },
 ]
+
+const mutationQuery = graphql`
+  mutation ReportMutation($input: ReportCreateInput!) {
+    reportCreate(
+      input: {
+        reportSubject
+        reportType
+        targetObjectId
+        }
+    ) {
+      report {
+        node {
+          id
+          created
+        }
+      }
+  }
+}
+`
 
 const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
   currentProfileId,
   handleClose,
-  target,
 }) => {
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState('report')
-  const [reportCategory, setReportCategory] = useState<ReportCategory>()
-  const [reportSubCategory, setReportSubCategory] = useState<ReportCategory>()
+  const [reportType, setReportType] = useState<ReportType>()
+  const [reportSubType, setReportSubType] = useState<ReportType>()
   const [reportText, setReportText] = useState('')
 
-  const handleReport = () => {
-    console.log('Reported')
-    console.log('reportCategory', reportCategory)
-    console.log('reportSubCategory', reportSubCategory)
-    console.log('reportText', reportText)
-    console.log('currentProfileId', currentProfileId)
-    console.log('target', target)
-    setCurrentStep('confirmation')
-  }
+  const [commitMutation, isMutationInFlight] = useMutation<ReportCreateMutation>(mutationQuery)
+  const { sendToast } = useNotification()
 
   const onClose = () => {
     handleClose()
     setCurrentStep('report')
   }
+
+  const handleReport = () => {
+    if (isMutationInFlight || !currentProfileId) {
+      return
+    }
+    commitMutation({
+      variables: {
+        input: {
+          reportSubject: reportText,
+          reportType,
+          targetObjectId: currentProfileId,
+        },
+      },
+      onCompleted: (response, errors) => {
+        errors?.forEach((error) => {
+          sendToast(error.message, { type: 'error' })
+        })
+        onClose()
+        setCurrentStep('confirmation')
+      },
+      onError: () => {
+        // Show something when report fails (likely due to existing one)
+        // Suggestion: setCurrentStep('error')
+        // handleError?.()
+      },
+    })
+  }
+
+  // const handleReport = () => {
+  //   console.log('Reported')
+  //   console.log('reportType', reportType)
+  //   console.log('reportSubType', reportSubType)
+  //   console.log('reportText', reportText)
+  //   console.log('currentProfileId', currentProfileId)
+  //   setCurrentStep('confirmation')
+  // }
 
   const steps = [
     {
@@ -97,45 +147,45 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
           </Box>
           <Divider />
           <Box display="flex" flexDirection="column">
-            {mainCategories.map((category) => (
-              <CategoryButton
-                key={category.name}
+            {mainTypes.map((type) => (
+              <TypeButton
+                key={type.name}
                 onClick={() => {
-                  if (category.subCategories.length) {
-                    setReportCategory(category)
-                    setCurrentStep('subCategory')
+                  if (type.subTypes.length) {
+                    setReportType(type)
+                    setCurrentStep('subTypes')
                     return
                   }
-                  setReportCategory(category)
+                  setReportType(type)
                   setCurrentStep('reportText')
                 }}
                 endIcon={<ChevronIcon position="right" />}
               >
-                <Typography variant="body2">{category.title}</Typography>
-              </CategoryButton>
+                <Typography variant="body2">{type.label}</Typography>
+              </TypeButton>
             ))}
           </Box>
         </>
       ),
     },
     {
-      name: 'subCategory',
+      name: 'subTypes',
       content: (
         <>
-          <Typography variant="h5">{reportCategory?.title}</Typography>
+          <Typography variant="h5">{reportType?.label}</Typography>
           <Divider />
           <Box display="flex" flexDirection="column">
-            {reportCategory?.subCategories?.map((subCategory) => (
-              <CategoryButton
-                key={subCategory.name}
+            {reportType?.subTypes?.map((subType) => (
+              <TypeButton
+                key={subType.name}
                 onClick={() => {
-                  setReportSubCategory(subCategory)
+                  setReportSubType(subType)
                   setCurrentStep('reportText')
                 }}
                 endIcon={<ChevronIcon position="right" />}
               >
-                <Typography variant="body2">{subCategory.title}</Typography>
-              </CategoryButton>
+                <Typography variant="body2">{subType.label}</Typography>
+              </TypeButton>
             ))}
           </Box>
         </>
@@ -173,16 +223,18 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
           </Typography>
           <Divider />
           <Typography variant="body2">Why are you reporting this?</Typography>
-          <Typography variant="caption">{reportCategory?.title}</Typography>
-          {reportCategory?.subCategories && reportCategory?.subCategories?.length > 0 && (
+          <Typography variant="caption">{reportType?.label}</Typography>
+          {reportType?.subTypes && reportType?.subTypes?.length > 0 && (
             <>
-              <Typography variant="body2">What type of {reportCategory?.title}?</Typography>
-              <Typography variant="caption">{reportSubCategory?.title}</Typography>
+              <Typography variant="body2">What type of {reportType?.label}?</Typography>
+              <Typography variant="caption">{reportSubType?.label}</Typography>
             </>
           )}
           <Typography variant="body2">About the problem</Typography>
           <Typography variant="caption">{reportText}</Typography>
-          <Button onClick={handleReport}>Submit Report</Button>
+          <Button disabled={isMutationInFlight} onClick={handleReport}>
+            Submit Report
+          </Button>
         </>
       ),
     },
@@ -190,7 +242,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
       name: 'confirmation',
       content: (
         <>
-          <Typography variant="h5">Thanks for reporting {reportCategory?.title}</Typography>
+          <Typography variant="h5">Thanks for reporting {reportType?.label}</Typography>
           <Typography variant="body2">
             Your report is anonymous. If someone is in immediate danger, call the local emergency
             services - don&apos;t wait.
