@@ -30,7 +30,10 @@ export const DEFAULT_PROFILE_FORM_VALIDATION = z.object({
   [PROFILE_FORM_VALUE.image]: z.any(),
   [PROFILE_FORM_VALUE.name]: z.string().min(1, { message: PROFILE_FORM_VALIDATION.name.empty }),
   [PROFILE_FORM_VALUE.phoneNumber]: z.string(),
-  [PROFILE_FORM_VALUE.urlPath]: z.string(),
+  [PROFILE_FORM_VALUE.urlPath]: z
+    .string()
+    .min(8, { message: PROFILE_FORM_VALIDATION.urlPath.empty })
+    .regex(/^[a-zA-Z0-9]+$/, { message: PROFILE_FORM_VALIDATION.urlPath.invalid }),
 })
 
 // .svg is not supported by the backend, so better not use 'image/*'
