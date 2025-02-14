@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, KeyboardEvent } from 'react'
 
 import { SocialTextFieldProps } from '@baseapp-frontend/design-system/components/web/inputs'
 
@@ -15,6 +15,7 @@ export interface SocialInputProps {
   SocialUpsertActions?: FC
   SubmitActions?: FC<SubmitActionsProps>
   SubmitActionsProps?: Partial<SubmitActionsProps>
+  onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, onSubmit: VoidFunction) => void
   formId?: string
   submit: (data: SocialUpsertForm) => void
   isLoading: boolean

@@ -1,6 +1,6 @@
 'use client'
 
-import { KeyboardEventHandler, forwardRef } from 'react'
+import { KeyboardEvent, KeyboardEventHandler, forwardRef } from 'react'
 
 import { SocialTextField as DefaultSocialTextField } from '@baseapp-frontend/design-system/components/web/inputs'
 
@@ -68,6 +68,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       SocialUpsertActions = DefaultSocialUpsertActions,
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
+      onKeyDown,
       formId = 'text-field-form',
       submit,
       isLoading,
@@ -78,10 +79,18 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
     },
     ref,
   ) => {
-    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
-      if (event.key === 'Enter' && !event.shiftKey) {
+    const defaultKeyDown = (event: KeyboardEvent<HTMLDivElement>, onSubmit: VoidFunction) => {
+      if (event.key === 'Enter' && event.ctrlKey) {
         event.preventDefault()
-        form.handleSubmit(submit)(event)
+        onSubmit()
+      }
+    }
+
+    const handleKeyDown: KeyboardEventHandler<HTMLDivElement> = (event) => {
+      if (onKeyDown) {
+        onKeyDown(event, () => form.handleSubmit(submit)(event))
+      } else {
+        defaultKeyDown(event, () => form.handleSubmit(submit)(event))
       }
     }
 
