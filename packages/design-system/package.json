@@ -78,6 +78,7 @@
     "next": "catalog:",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "catalog:",
+    "react-international-phone": "^4.5.0",
     "react-lazy-load-image-component": "^1.6.2",
     "react-native": "catalog:react-native-core",
     "react-native-gesture-handler": "catalog:react-native-core",
