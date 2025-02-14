@@ -18,3 +18,8 @@ export type UploadablesObj = {
   image?: File | Blob
   bannerImage?: File | Blob
 }
+
+export interface ProfileGetDefaultFormValues {
+  profile?: ProfileComponentFragment$data | null
+  removeSlashInUsername?: boolean
+}

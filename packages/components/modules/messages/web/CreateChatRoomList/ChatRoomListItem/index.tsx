@@ -31,7 +31,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onCh
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
         <Typography variant="subtitle2">{name}</Typography>
         <Typography variant="caption" color="text.secondary">
-          {urlPath?.path && `@${urlPath.path}`}
+          {urlPath?.path && `@${urlPath.path?.replace('/', '')}`}
         </Typography>
       </Box>
       <LoadingButton
