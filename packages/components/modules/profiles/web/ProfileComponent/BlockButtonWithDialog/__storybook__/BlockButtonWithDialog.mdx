@@ -1,0 +1,70 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Profiles/ProfileComponent/BlockButtonWithDialog" />
+
+# Component Documentation
+
+## BlockButtonWithDialog
+
+- **Purpose**:  
+  The `BlockButtonWithDialog` component allows users to block or unblock a profile. It provides a confirmation dialog to ensure the user understands the action before proceeding.
+
+- **Expected Behavior**:
+  - When clicked, the button opens a confirmation dialog to block or unblock a profile.
+  - The state of the button dynamically changes based on whether the profile is already blocked (`isBlockedByMe`).
+  - Displays a loading indicator when the mutation is in progress.
+  - Displays a toast notification with feedback after the action is completed or if an error occurs.
+
+---
+
+## Use Cases
+
+- **Current Usage**: Used within the `ProfileComponent` to manage the block/unblock functionality for a user profile.
+
+- **Potential Usage**: Can be reused in any other context where blocking/unblocking a user is needed, such as chat applications or user management dashboards.
+
+---
+
+## Props
+
+- **target** (Relay Fragment Reference): The target profile to be blocked or unblocked. Includes data like `id`, `name`, and `isBlockedByMe`.
+
+- **currentProfileId** (string): The ID of the currently logged-in user's profile. Used to identify the actor of the block/unblock action.
+
+- **isMenu** (boolean): Determines whether the button is rendered as part of a menu. Defaults to `false`.
+
+- **handleError** (function): Callback function to handle errors that occur during the block/unblock action.
+
+- **handleCloseMenu** (function): Callback function to close the menu if the button is used inside a dropdown or context menu.
+
+---
+
+## Notes
+
+- **Related Components**: `ProfileComponent`: Integrates the `BlockButtonWithDialog` to manage block/unblock actions.
+
+---
+
+## Example Usage
+
+```javascript
+import BlockButtonWithDialog from '@baseapp-frontend/components/Profiles/BlockButtonWithDialog'
+
+const ExampleBlockButton = () => {
+  const targetProfile = {
+    id: 'profile-2',
+    name: 'Jane Doe',
+    isBlockedByMe: false,
+  }
+
+  return (
+    <BlockButtonWithDialog
+      target={targetProfile}
+      currentProfileId="profile-1"
+      handleError={() => console.error('An error occurred while blocking/unblocking the profile.')}
+    />
+  )
+}
+
+export default ExampleBlockButton
+```

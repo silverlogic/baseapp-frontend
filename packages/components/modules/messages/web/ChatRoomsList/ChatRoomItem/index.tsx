@@ -10,6 +10,7 @@ import {
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
+
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../__generated__/UnreadMessagesCountFragment.graphql'
