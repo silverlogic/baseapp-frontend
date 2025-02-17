@@ -22,7 +22,10 @@ export const getDefaultFormValues = (
 })
 
 export const DEFAULT_FORM_VALIDATION = z.object({
-  [FORM_VALUE.title]: z.string().min(1, { message: 'Please enter a title' }),
+  [FORM_VALUE.title]: z
+    .string()
+    .min(1, { message: 'Please enter a title' })
+    .max(20, { message: "Title can't be more than 20 characters" }),
   [FORM_VALUE.addParticipants]: z.array(z.any()),
   [FORM_VALUE.removeParticipants]: z.array(z.any()),
   [FORM_VALUE.image]: z.any(),
