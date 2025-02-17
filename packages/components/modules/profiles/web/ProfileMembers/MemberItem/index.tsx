@@ -4,12 +4,13 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
-import { Box, Button, MenuItem, SelectChangeEvent, Typography } from '@mui/material'
+import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
-import { MemberRoles, MemberStatuses, roleOptions } from '../constants'
+import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
+import { MemberActions, MemberRoles, MemberStatuses, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
@@ -25,12 +26,16 @@ const MemberItem: FC<MemberItemProps> = ({
   userId,
   searchQuery,
 }) => {
+  const theme = useTheme()
+
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
 
   const { currentProfile } = useCurrentProfile()
 
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
+  const [removeMember, isRemovingMember] = useRemoveMemberMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
+  const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
 
   if (!memberProfile) return null
 
@@ -38,6 +43,25 @@ const MemberItem: FC<MemberItemProps> = ({
     status === MemberStatuses.active && memberRole !== 'owner' && canChangeMember
 
   const haveMemberRoleAndStatus = memberRole && status
+
+  const removeProfileMember = () => {
+    if (currentProfile?.id && userId) {
+      removeMember({
+        variables: { input: { profileId: currentProfile.id, userId } },
+      })
+    }
+  }
+
+  const confirmRemoveProfileMember = () => {
+    if (currentProfile?.id && userId) {
+      removeProfileMember()
+    }
+    setOpenConfirmRemoveMember(false)
+  }
+
+  const handleRemoveMemberDialog = () => {
+    setOpenConfirmRemoveMember(!openConfirmRemoveMember)
+  }
 
   const changeRole = (roleType: MemberRoles) => {
     if (currentProfile?.id && userId) {
@@ -76,16 +100,27 @@ const MemberItem: FC<MemberItemProps> = ({
         <Box>
           <Select
             value={memberRole}
-            onChange={(event, _) =>
-              handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
-            }
+            onChange={(event, _) => {
+              const { value } = event.target
+              if (value === MemberActions.remove) {
+                handleRemoveMemberDialog()
+              } else {
+                handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
+              }
+            }}
             displayEmpty
             variant="filled"
             size="small"
-            disabled={isChangingUserRole}
+            disabled={isChangingUserRole || isRemovingMember}
           >
             {roleOptions.map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
+              <MenuItem
+                key={value}
+                value={value}
+                sx={{
+                  color: value === MemberActions.remove ? theme.palette.error.main : 'inherit',
+                }}
+              >
                 {label}
               </MenuItem>
             ))}
@@ -96,7 +131,7 @@ const MemberItem: FC<MemberItemProps> = ({
     if (haveMemberRoleAndStatus) {
       return (
         <Box>
-          <Button variant="soft" color="inherit" sx={{ pointerEvents: 'none' }}>
+          <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
             {status === MemberStatuses.active
               ? capitalizeFirstLetter(memberRole)
               : capitalizeFirstLetter(status)}
@@ -129,6 +164,23 @@ const MemberItem: FC<MemberItemProps> = ({
           </Typography>
         }
         cancelText="Back"
+      />
+      <ConfirmDialog
+        title="Remove member"
+        open={openConfirmRemoveMember}
+        onClose={handleRemoveMemberDialog}
+        content={
+          <Typography variant="body1">
+            Are you sure you want to remove this member? This action will revoke their access to the
+            organization profile.
+          </Typography>
+        }
+        cancelText="Back"
+        action={
+          <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
+            Remove
+          </Button>
+        }
       />
       <MemberPersonalInformation isActive={status === MemberStatuses.active || false}>
         <AvatarWithPlaceholder
