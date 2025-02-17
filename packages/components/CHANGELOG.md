@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 1.0.8
+
+### Patch Changes
+
+- Limit group name length
+- Use ellipsis to prevent text overflow
+
 ## 1.0.7
 
 ### Patch Changes
