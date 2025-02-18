@@ -3,8 +3,9 @@ import { FC } from 'react'
 import { Divider } from '@mui/material'
 import { useFragment } from 'react-relay'
 
+import { ProfileRoleStatus } from '../../../../../__generated__/MemberItemFragment.graphql'
 import { MemberItemFragment } from '../../../common'
-import { MemberStatuses } from '../constants'
+import { MEMBER_STATUSES } from '../constants'
 import { MemberListItemProps } from './types'
 
 const MemberListItem: FC<MemberListItemProps> = ({
@@ -20,8 +21,8 @@ const MemberListItem: FC<MemberListItemProps> = ({
   const nextMemberFragment = useFragment(MemberItemFragment, nextMember)
   const prevMemberFragment = useFragment(MemberItemFragment, prevMember)
 
-  const isActiveMember = memberFragment?.status === MemberStatuses.active
-  const isPreviousMemberInactive = prevMemberFragment?.status !== MemberStatuses.active
+  const isActiveMember = memberFragment?.status === MEMBER_STATUSES.active
+  const isPreviousMemberInactive = prevMemberFragment?.status !== MEMBER_STATUSES.active
   const isPreviousMemberUndefined = !prevMemberFragment?.status
   const isNextMemberUndefined = !nextMemberFragment?.status
   const isFirstActiveMember =
@@ -37,7 +38,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
         <MemberItemComponent
           member={data}
           memberRole="owner"
-          status={MemberStatuses.active}
+          status={MEMBER_STATUSES.active as ProfileRoleStatus}
           searchQuery={searchQuery}
           {...memberItemComponentProps}
         />
@@ -68,7 +69,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
         <MemberItemComponent
           member={data}
           memberRole="owner"
-          status={MemberStatuses.active}
+          status={MEMBER_STATUSES.active as ProfileRoleStatus}
           searchQuery={searchQuery}
           {...memberItemComponentProps}
         />

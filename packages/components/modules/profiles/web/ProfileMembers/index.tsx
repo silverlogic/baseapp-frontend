@@ -6,6 +6,7 @@ import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-sy
 import { Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
+import { UserMembersListPaginationQuery as UserMembersListPaginationQueryType } from '../../../../__generated__/UserMembersListPaginationQuery.graphql'
 import { UserMembersListPaginationQuery } from '../../common'
 import MembersList from './MembersList'
 import { NUMBER_OF_MEMBERS_ON_FIRST_LOAD } from './constants'
@@ -14,11 +15,14 @@ import type { ProfileMembersProps, ProfileMembersSuspendedProps } from './types'
 const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
   const { currentProfile } = useCurrentProfile()
 
-  const data = useLazyLoadQuery(UserMembersListPaginationQuery, {
-    profileId: currentProfile?.id || '',
-    count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
-    orderBy: 'status',
-  })
+  const data = useLazyLoadQuery<UserMembersListPaginationQueryType>(
+    UserMembersListPaginationQuery,
+    {
+      profileId: currentProfile?.id || '',
+      count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
+      orderBy: 'status',
+    },
+  )
 
   if (!data.profile) return null
   return <MembersList userRef={data?.profile} {...MembersListProps} />
