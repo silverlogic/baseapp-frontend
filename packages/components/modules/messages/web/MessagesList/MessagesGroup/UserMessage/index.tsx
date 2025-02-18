@@ -97,6 +97,7 @@ const UserMessage: FC<UserMessageProps> = ({
         )}
         <MessageItem
           messageRef={message}
+          isGroup={isGroup}
           isFirstGroupedMessage={isFirstGroupedMessage}
           {...MessageItemProps}
         />

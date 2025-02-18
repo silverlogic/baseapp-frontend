@@ -22,13 +22,15 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
       actions = [],
       children,
       title = 'Item',
-      enableDelete = false,
+      showDeleteButton = false,
       isDeletingItem = false,
+      disableDeleteButton = false,
       handleDeleteItem = () => {},
       offsetTop = 0,
       offsetRight = 0,
       ContainerProps = {},
       SwipeableDrawerProps = {},
+      DeleteDialogProps = {},
       SwipeableDrawer = DefaultSwipeableDrawer,
       hoverOverlayMode = HOVER_OVERLAY_MODES.default,
     },
@@ -110,6 +112,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
         }
         onClose={handleDeleteDialogClose}
         open={isDeleteDialogOpen}
+        {...DeleteDialogProps}
       />
     )
 
@@ -128,7 +131,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
             aria-label="actions overlay"
             {...SwipeableDrawerProps}
           >
-            <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1}>
+            <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1} width="100%">
               {actions?.map(({ label, icon, onClick, disabled, hasPermission, closeOnClick }) => {
                 if (!hasPermission) return null
 
@@ -158,21 +161,26 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
                   </IconButton>
                 )
               })}
-              {enableDelete && (
+              {showDeleteButton && (
                 <>
                   <Divider />
                   <IconButton
                     onClick={handleDeleteDialogOpen}
-                    disabled={isDeletingItem}
+                    disabled={isDeletingItem || disableDeleteButton}
                     sx={{ width: 'fit-content' }}
                     aria-label="delete item"
                   >
                     <IconButtonContentContainer>
                       <Box display="grid" justifySelf="center" height="min-content">
-                        <TrashCanIcon />
+                        <TrashCanIcon
+                          sx={{ color: disableDeleteButton ? 'text.disabled' : 'error.main' }}
+                        />
                       </Box>
-                      <Typography variant="body2" color="error.main">
-                        {`Delete ${title}`}
+                      <Typography
+                        variant="body2"
+                        color={disableDeleteButton ? 'text.disabled' : 'error.main'}
+                      >
+                        Delete
                       </Typography>
                     </IconButtonContentContainer>
                   </IconButton>
@@ -190,8 +198,9 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
               {...{
                 offsetRight,
                 offsetTop,
-                enableDelete,
+                showDeleteButton,
                 isDeletingItem,
+                disableDeleteButton,
                 handleDeleteDialogOpen,
                 actions,
                 handleLongPressItemOptionsClose,
@@ -206,8 +215,9 @@ const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
               {...{
                 offsetRight,
                 offsetTop,
-                enableDelete,
+                showDeleteButton,
                 isDeletingItem,
+                disableDeleteButton,
                 handleDeleteDialogOpen,
                 actions,
                 handleClosePopover,
