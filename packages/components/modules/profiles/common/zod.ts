@@ -15,4 +15,8 @@ export const PROFILE_FORM_VALIDATION = {
     empty: 'Please enter a phone number.',
     invalid: 'Invalid phone number.',
   },
+  urlPath: {
+    empty: 'Username must be at least 8 characters long.',
+    invalid: 'Username can only contain letters and numbers',
+  },
 }
