@@ -1,5 +1,14 @@
 # @baseapp-frontend/components
 
+## 1.0.10
+
+### Patch Changes
+
+- Enable adding a member to an existing group
+- Refactor member and contacts list into a reusable component
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.5
+
 ## 1.0.9
 
 ### Patch Changes
