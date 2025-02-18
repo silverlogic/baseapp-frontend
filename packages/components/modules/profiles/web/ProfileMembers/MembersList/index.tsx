@@ -8,12 +8,15 @@ import { useForm } from 'react-hook-form'
 import { useFragment, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
-import { MemberItemFragment$key } from '../../../../../__generated__/MemberItemFragment.graphql'
+import {
+  MemberItemFragment$key,
+  ProfileRoleStatus,
+} from '../../../../../__generated__/MemberItemFragment.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
-import { MemberStatuses, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
+import { MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
 import { MembersListProps } from './types'
 
 const MembersList: FC<MembersListProps> = ({
@@ -97,7 +100,7 @@ const MembersList: FC<MembersListProps> = ({
         <MemberItem
           member={data}
           memberRole="owner"
-          status={MemberStatuses.active}
+          status={MEMBER_STATUSES.active as ProfileRoleStatus}
           searchQuery={watch('search')}
         />
       </>

@@ -7,10 +7,11 @@ import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/di
 import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileRoles } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
+import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
 import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
-import { MemberActions, MemberRoles, MemberStatuses, roleOptions } from '../constants'
+import { MEMBER_ACTIONS, MEMBER_ROLES, MEMBER_STATUSES, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
@@ -40,7 +41,7 @@ const MemberItem: FC<MemberItemProps> = ({
   if (!memberProfile) return null
 
   const shouldRenderChangeRoleSelect =
-    status === MemberStatuses.active && memberRole !== 'owner' && canChangeMember
+    status === MEMBER_STATUSES.active && memberRole !== 'owner' && canChangeMember
 
   const haveMemberRoleAndStatus = memberRole && status
 
@@ -63,7 +64,7 @@ const MemberItem: FC<MemberItemProps> = ({
     setOpenConfirmRemoveMember(!openConfirmRemoveMember)
   }
 
-  const changeRole = (roleType: MemberRoles) => {
+  const changeRole = (roleType: ProfileRoles) => {
     if (currentProfile?.id && userId) {
       changeUserRole({
         variables: {
@@ -73,13 +74,14 @@ const MemberItem: FC<MemberItemProps> = ({
     }
   }
 
-  const handleRoleChange = (event: SelectChangeEvent<{ value: MemberRoles }>) => {
-    if (event.target.value === MemberRoles.admin) {
+  const handleRoleChange = (event: SelectChangeEvent<{ value: ProfileRoles }>) => {
+    if (event.target.value === MEMBER_ROLES.admin) {
+      //
       setOpenConfirmChangeMember(true)
       return
     }
     if (currentProfile?.id && userId) {
-      changeRole(event?.target?.value as MemberRoles)
+      changeRole(event?.target?.value as ProfileRoles)
     }
   }
 
@@ -89,7 +91,7 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const confirmChangeRole = () => {
     if (currentProfile?.id && userId) {
-      changeRole(MemberRoles.admin)
+      changeRole(MEMBER_ROLES.admin as ProfileRoles)
     }
     setOpenConfirmChangeMember(false)
   }
@@ -102,10 +104,10 @@ const MemberItem: FC<MemberItemProps> = ({
             value={memberRole}
             onChange={(event, _) => {
               const { value } = event.target
-              if (value === MemberActions.remove) {
+              if (value === MEMBER_ACTIONS.remove) {
                 handleRemoveMemberDialog()
               } else {
-                handleRoleChange(event as SelectChangeEvent<{ value: MemberRoles }>)
+                handleRoleChange(event as SelectChangeEvent<{ value: ProfileRoles }>)
               }
             }}
             displayEmpty
@@ -118,7 +120,7 @@ const MemberItem: FC<MemberItemProps> = ({
                 key={value}
                 value={value}
                 sx={{
-                  color: value === MemberActions.remove ? theme.palette.error.main : 'inherit',
+                  color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                 }}
               >
                 {label}
@@ -132,7 +134,7 @@ const MemberItem: FC<MemberItemProps> = ({
       return (
         <Box>
           <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
-            {status === MemberStatuses.active
+            {status === MEMBER_STATUSES.active
               ? capitalizeFirstLetter(memberRole)
               : capitalizeFirstLetter(status)}
           </Button>
@@ -182,7 +184,7 @@ const MemberItem: FC<MemberItemProps> = ({
           </Button>
         }
       />
-      <MemberPersonalInformation isActive={status === MemberStatuses.active || false}>
+      <MemberPersonalInformation isActive={status === MEMBER_STATUSES.active || false}>
         <AvatarWithPlaceholder
           width={avatarWidth}
           height={avatarHeight}
