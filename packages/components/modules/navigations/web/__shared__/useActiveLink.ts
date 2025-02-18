@@ -1,7 +1,7 @@
 import { usePathname } from 'next/navigation'
 
 export function useActiveLink(path?: string, deep = true) {
-  const pathname = usePathname()
+  const pathname = usePathname() || ''
 
   if (!path) {
     return false
