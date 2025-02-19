@@ -13,7 +13,7 @@ import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileIte
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
-import { MemberStatuses, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
+import { MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
 import { MembersListProps } from './types'
 
 const MembersList: FC<MembersListProps> = ({
@@ -97,7 +97,7 @@ const MembersList: FC<MembersListProps> = ({
         <MemberItem
           member={data}
           memberRole="owner"
-          status={MemberStatuses.active}
+          status={MEMBER_STATUSES.active}
           searchQuery={watch('search')}
         />
       </>
