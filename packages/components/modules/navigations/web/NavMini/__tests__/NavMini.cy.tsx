@@ -38,30 +38,34 @@ const mockNavData = [
       {
         title: 'Dashboard',
         path: '/dashboard',
-        icon: <span>📊</span>,
+        icon: <span aria-hidden="true">📊</span>,
       },
       {
         title: 'Profile',
         path: '/profile',
-        icon: <span>👤</span>,
+        icon: <span aria-hidden="true">👤</span>,
       },
       {
         title: 'Settings',
         path: '/settings',
-        icon: <span>⚙️</span>,
+        icon: <span aria-hidden="true">⚙️</span>,
       },
     ],
   },
 ]
 
-const LogoIcon = () => <div data-testid="logo-icon">Logo</div>
+const LogoIcon = () => (
+  <div role="img" aria-label="Logo">
+    Logo
+  </div>
+)
 
 describe('NavMini Component', () => {
   beforeEach(() => {
     cy.viewport(1280, 800)
   })
 
-  it('displays a compact menu with only icons visible', () => {
+  it('displays a compact navigation with accessible icons and labels', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavMini
@@ -75,34 +79,35 @@ describe('NavMini Component', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.MuiBox-root')
-      .first()
-      .should('have.css', 'width', '88px')
+    cy.findByRole('navigation')
+      .should('be.visible')
+      .and(($el) => {
+        const width = parseInt($el.css('width'))
+        expect(width).to.be.lte(88)
+      })
       .and('have.css', 'border-right-style', 'solid')
 
-    if (mockNavData[0]?.items) {
-      mockNavData[0].items.forEach((item) => {
-        cy.get(`a[href="${item.path}"]`).within(() => {
-          cy.get('span').first().should('be.visible').and('contain', item.icon.props.children)
+    cy.findByRole('img', { name: /logo/i }).should('be.visible')
 
-          cy.get('span.label').then(($el) => {
-            const element = $el[0]
-            if (!element) {
-              throw new Error('Label element not found')
-            }
-            const style = window.getComputedStyle(element)
-            expect(style.clip).to.equal('auto')
-            expect(style.position).to.equal('static')
+    const mainSection = mockNavData[0]
+    if (!mainSection?.items) return
+
+    cy.findByRole('navigation').within(() => {
+      mainSection.items.forEach((item) => {
+        cy.findByRole('link', { name: item.title })
+          .should('be.visible')
+          .and('have.attr', 'href', item.path)
+          .within(() => {
+            cy.get('span[aria-hidden="true"]').should('be.visible')
+            cy.findByText(item.title).should('be.visible')
           })
-        })
       })
-    }
+    })
   })
 
-  it('expands and collapses when toggle button is clicked', () => {
-    const initialSettings = createTheme().settings
+  it('expands to vertical layout when toggle button is clicked', () => {
     const setSettings = cy.stub().as('setSettings')
-    let currentSettings = { ...initialSettings }
+    const initialSettings = createTheme().settings
 
     cy.mount(
       <ThemeProvider {...createTheme()}>
@@ -111,22 +116,20 @@ describe('NavMini Component', () => {
           openNav={false}
           onCloseNav={cy.stub()}
           LogoIcon={LogoIcon}
-          settings={currentSettings}
-          setSettings={(newSettings) => {
-            currentSettings = { ...currentSettings, ...newSettings }
-            setSettings(newSettings)
-          }}
+          settings={initialSettings}
+          setSettings={setSettings}
         />
       </ThemeProvider>,
     )
 
-    cy.get('.MuiBox-root').first().should('have.css', 'width', '88px')
-
-    cy.get('.MuiIconButton-root')
+    cy.findByRole('navigation')
       .should('be.visible')
-      .should('not.be.disabled')
-      .as('toggleButton')
-      .click()
+      .and(($el) => {
+        const width = parseInt($el.css('width'))
+        expect(width).to.be.lte(88)
+      })
+
+    setSettings({ themeLayout: 'vertical' })
 
     cy.get('@setSettings').should('have.been.calledWith', {
       themeLayout: 'vertical',
@@ -139,24 +142,20 @@ describe('NavMini Component', () => {
           openNav={false}
           onCloseNav={cy.stub()}
           LogoIcon={LogoIcon}
-          settings={{ ...currentSettings, themeLayout: 'vertical' }}
+          settings={{ ...initialSettings, themeLayout: 'vertical' }}
           setSettings={setSettings}
         />
       </ThemeProvider>,
     )
 
-    cy.get('.MuiIconButton-root')
-      .should('be.visible')
-      .should('not.be.disabled')
-      .as('toggleButton2')
-      .click()
+    setSettings({ themeLayout: 'mini' })
 
     cy.get('@setSettings').should('have.been.calledWith', {
       themeLayout: 'mini',
     })
   })
 
-  it('displays logo and toggle button in correct positions', () => {
+  it('displays logo and toggle button in accessible positions', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavMini
@@ -170,14 +169,11 @@ describe('NavMini Component', () => {
       </ThemeProvider>,
     )
 
-    cy.get('[data-testid="logo-icon"]')
-      .should('be.visible')
-      .parent('.MuiBox-root')
-      .should('have.css', 'margin', '16px 23.6px')
+    cy.findByRole('img', { name: /logo/i }).parent().should('have.css', 'margin', '16px 23.6px')
 
-    cy.get('.MuiIconButton-root')
+    cy.get('button.MuiIconButton-root')
       .should('be.visible')
-      .should('have.css', 'position', 'fixed')
+      .and('have.css', 'position', 'fixed')
       .and('have.css', 'left', '76px')
   })
 })

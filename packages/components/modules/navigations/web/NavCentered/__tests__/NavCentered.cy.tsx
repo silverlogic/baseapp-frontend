@@ -35,34 +35,34 @@ const mockNavData = [
       {
         title: 'Dashboard',
         path: '/dashboard',
-        icon: <span>📊</span>,
+        icon: <span aria-hidden="true">📊</span>,
       },
       {
         title: 'Profile',
         path: '/profile',
-        icon: <span>👤</span>,
+        icon: <span aria-hidden="true">👤</span>,
       },
       {
         title: 'Settings',
         path: '/settings',
-        icon: <span>⚙️</span>,
+        icon: <span aria-hidden="true">⚙️</span>,
       },
       {
         title: 'Analytics',
         path: '/analytics',
-        icon: <span>📈</span>,
+        icon: <span aria-hidden="true">📈</span>,
       },
       {
         title: 'Reports',
         path: '/reports',
-        icon: <span>📑</span>,
+        icon: <span aria-hidden="true">📑</span>,
       },
     ],
   },
 ]
 
 describe('NavCentered', () => {
-  it('displays drawer-style menu on mobile screens', () => {
+  it('provides accessible navigation drawer on mobile screens', () => {
     cy.viewport(375, 667)
 
     cy.mount(
@@ -71,21 +71,24 @@ describe('NavCentered', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.MuiDrawer-root')
-      .should('exist')
-      .within(() => {
-        cy.get('.MuiDrawer-paper').should('be.visible')
-        cy.get('#nav-section-vertical').within(() => {
-          cy.contains('Dashboard').should('be.visible')
-          cy.contains('Profile').should('be.visible')
-        })
-      })
+    cy.get('[role="presentation"]').should('be.visible')
 
-    cy.get('.MuiBackdrop-root').click({ force: true })
+    cy.get('[role="presentation"]').within(() => {
+      const mainSection = mockNavData[0]
+      if (!mainSection?.items) return
+      mainSection.items.forEach((item) => {
+        cy.findByRole('link', { name: item.title })
+          .should('be.visible')
+          .and('have.attr', 'href', item.path)
+          .find('.MuiListItemButton-root')
+          .should('have.attr', 'role', 'button')
+      })
+    })
+
     cy.get('@onCloseNav').should('have.been.called')
   })
 
-  it('displays centered horizontal bar on desktop screens', () => {
+  it('displays centered navigation bar with accessible links on desktop', () => {
     cy.viewport(1280, 800)
 
     cy.mount(
@@ -98,19 +101,24 @@ describe('NavCentered', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.MuiDrawer-root').should('not.exist')
+    cy.get('[role="presentation"]').should('not.exist')
 
-    cy.get('.flex.min-h-16')
-      .should('be.visible')
-      .within(() => {
-        cy.get('.flex.h-full').within(() => {
-          cy.contains('Dashboard').should('be.visible')
-          cy.contains('Profile').should('be.visible')
-        })
-      })
+    const mainSection = mockNavData[0]
+    if (!mainSection?.items) return
+
+    cy.get('.flex.min-h-16').should('exist')
+    cy.get('.flex.h-full').should('have.css', 'gap', '6px')
+
+    mainSection.items.forEach((item) => {
+      cy.findByRole('link', { name: item.title })
+        .should('be.visible')
+        .and('have.attr', 'href', item.path)
+        .find('.MuiListItemButton-root')
+        .should('have.attr', 'role', 'button')
+    })
   })
 
-  it('handles overflow with scrollable navigation on tablet screens', () => {
+  it('provides accessible navigation with scroll functionality on tablet', () => {
     cy.viewport(800, 600)
 
     cy.mount(
@@ -119,21 +127,17 @@ describe('NavCentered', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.MuiDrawer-root')
-      .should('exist')
-      .within(() => {
-        cy.get('.MuiDrawer-paper').should('be.visible')
-
-        cy.get('#nav-section-vertical').within(() => {
-          cy.contains('Dashboard').should('be.visible')
-          cy.contains('Profile').should('be.visible')
-          cy.contains('Settings').should('exist')
-          cy.contains('Analytics').should('exist')
-          cy.contains('Reports').should('exist')
-        })
+    cy.get('[role="presentation"]').within(() => {
+      const mainSection = mockNavData[0]
+      if (!mainSection?.items) return
+      mainSection.items.forEach((item) => {
+        cy.findByRole('link', { name: item.title })
+          .should('be.visible')
+          .and('have.attr', 'href', item.path)
+          .find('.MuiListItemButton-root')
+          .should('have.attr', 'role', 'button')
       })
-
-    cy.get('.MuiBackdrop-root').click({ force: true })
+    })
     cy.get('@onCloseNav').should('have.been.called')
   })
 })

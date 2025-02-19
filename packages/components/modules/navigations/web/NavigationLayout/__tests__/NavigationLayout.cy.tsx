@@ -24,15 +24,24 @@ interface AccountMenuProps extends PropsWithChildren {
   }
 }
 
-const LogoIcon = () => <div data-testid="logo-icon">Logo</div>
+const LogoIcon = () => (
+  <div data-testid="logo-icon" role="img" aria-label="Logo">
+    Logo
+  </div>
+)
+
 const AccountMenu: FC<AccountMenuProps> = ({ additionalComponent, children }) => (
-  <div data-testid="account-menu">
+  <div data-testid="account-menu" role="menu" aria-label="Account Menu">
     Account Menu
     {additionalComponent}
     {children}
   </div>
 )
-const AdditionalComponent = () => <div data-testid="additional-component">Additional Component</div>
+const AdditionalComponent = () => (
+  <div data-testid="additional-component" role="complementary" aria-label="Additional Component">
+    Additional Component
+  </div>
+)
 
 const defaultTheme = {
   palette: createPalette('light'),
@@ -58,12 +67,12 @@ const mockNavData = [
       {
         title: 'Dashboard',
         path: '/dashboard',
-        icon: <span>📊</span>,
+        icon: <span aria-hidden="true">📊</span>,
       },
       {
         title: 'Profile',
         path: '/profile',
-        icon: <span>👤</span>,
+        icon: <span aria-hidden="true">👤</span>,
       },
     ],
   },
@@ -85,66 +94,71 @@ describe('NavigationLayout', () => {
     mockSetSettings = cy.stub()
   })
 
-  it('switches between navigation layouts and sees the appropriate layout applied', () => {
+  it('renders navigation items in different layout modes', () => {
+    const mainSection = mockNavData[0]
+    if (!mainSection?.items) {
+      throw new Error('Navigation data is empty')
+    }
+
     cy.mount(
       <ThemeProvider {...defaultTheme}>
         <NavigationLayout
           navData={mockNavData}
           settings={{ ...defaultSettings, themeLayout: 'centered' }}
-          setSettings={mockSetSettings}
+          setSettings={cy.stub()}
           LogoIcon={BaseAppLogoCondensed}
         >
-          <div>Content</div>
+          <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
     )
-    cy.contains('Dashboard').should('exist')
-    cy.contains('Profile').should('exist')
+
+    cy.findByRole('banner').should('be.visible')
+    mainSection.items.forEach((item) => {
+      cy.findByRole('link', { name: item.title })
+        .should('be.visible')
+        .and('have.attr', 'href', item.path)
+    })
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
         <NavigationLayout
           navData={mockNavData}
           settings={{ ...defaultSettings, themeLayout: 'horizontal' }}
-          setSettings={mockSetSettings}
+          setSettings={cy.stub()}
           LogoIcon={BaseAppLogoCondensed}
         >
-          <div>Content</div>
+          <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
     )
-    cy.contains('Dashboard').should('exist')
-    cy.contains('Profile').should('exist')
+
+    cy.findByRole('banner').should('be.visible')
+    mainSection.items.forEach((item) => {
+      cy.findByRole('link', { name: item.title })
+        .should('be.visible')
+        .and('have.attr', 'href', item.path)
+    })
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
         <NavigationLayout
           navData={mockNavData}
           settings={{ ...defaultSettings, themeLayout: 'mini' }}
-          setSettings={mockSetSettings}
+          setSettings={cy.stub()}
           LogoIcon={BaseAppLogoCondensed}
         >
-          <div>Content</div>
+          <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
     )
-    cy.contains('Dashboard').should('exist')
-    cy.contains('Profile').should('exist')
 
-    cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={defaultSettings}
-          setSettings={mockSetSettings}
-          LogoIcon={BaseAppLogoCondensed}
-        >
-          <div>Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
-    )
-    cy.contains('Dashboard').should('exist')
-    cy.contains('Profile').should('exist')
+    cy.findByRole('banner').should('be.visible')
+    mainSection.items.forEach((item) => {
+      cy.findByRole('link', { name: item.title })
+        .should('be.visible')
+        .and('have.attr', 'href', item.path)
+    })
   })
 
   it('interacts with navigation toggle button and sees navigation open/close', () => {

@@ -37,62 +37,70 @@ describe('MainContainer Layout Styling', () => {
     cy.viewport(1280, 800)
   })
 
-  it('centers content when using centered layout', () => {
+  it('centers content in centered layout', () => {
     cy.mount(
       <ThemeProvider {...createTheme('centered')}>
         <MainContainer isNavCentered>
-          <div data-testid="content">Test Content</div>
+          <div role="main" aria-label="Test Content">
+            Test Content
+          </div>
         </MainContainer>
       </ThemeProvider>,
     )
 
-    cy.get('[data-testid="content"]')
+    cy.findByRole('main', { name: 'Test Content' })
       .parent()
       .should('have.css', 'margin', '0px')
       .and('have.css', 'width', '1280px')
   })
 
-  it('adds horizontal padding when using horizontal layout', () => {
+  it('provides horizontal padding in horizontal layout', () => {
     cy.mount(
       <ThemeProvider {...createTheme('horizontal')}>
         <MainContainer>
-          <div data-testid="content">Test Content</div>
+          <div role="main" aria-label="Test Content">
+            Test Content
+          </div>
         </MainContainer>
       </ThemeProvider>,
     )
 
-    cy.get('[data-testid="content"]')
+    cy.findByRole('main', { name: 'Test Content' })
       .parent()
       .should('have.css', 'padding-left')
       .and('not.equal', '0px')
 
-    cy.get('[data-testid="content"]')
+    cy.findByRole('main', { name: 'Test Content' })
       .parent()
       .should('have.css', 'padding-right')
       .and('not.equal', '0px')
   })
 
-  it('positions content next to sidebar in mini layout', () => {
+  it('positions content correctly in mini layout', () => {
     cy.mount(
       <ThemeProvider {...createTheme('mini')}>
         <MainContainer>
-          <div data-testid="content">Test Content</div>
+          <div role="main" aria-label="Test Content">
+            Test Content
+          </div>
         </MainContainer>
       </ThemeProvider>,
     )
 
-    cy.get('[data-testid="content"]').parent().should('have.css', 'width', `1000px`)
+    cy.findByRole('main', { name: 'Test Content' }).parent().should('have.css', 'width', '1000px')
   })
 
-  it('positions content next to sidebar in vertical layout', () => {
+  it('positions content correctly in vertical layout', () => {
     cy.mount(
       <ThemeProvider {...createTheme('vertical')}>
         <MainContainer>
-          <div data-testid="content">Test Content</div>
+          <div role="main" aria-label="Test Content">
+            Test Content
+          </div>
         </MainContainer>
       </ThemeProvider>,
     )
 
-    cy.get('[data-testid="content"]').parent().should('have.css', 'width', `1000px`)
+    cy.findByRole('main', { name: 'Test Content' }).parent().should('have.css', 'width', '1000px')
   })
 })

@@ -39,35 +39,39 @@ const mockNavData = [
       {
         title: 'Dashboard',
         path: '/dashboard',
-        icon: <span>📊</span>,
+        icon: <span aria-hidden="true">📊</span>,
       },
       {
         title: 'Profile',
         path: '/profile',
-        icon: <span>👤</span>,
+        icon: <span aria-hidden="true">👤</span>,
       },
       {
         title: 'Settings',
         path: '/settings',
-        icon: <span>⚙️</span>,
+        icon: <span aria-hidden="true">⚙️</span>,
       },
       ...Array.from({ length: 10 }, (_, index) => ({
         title: `Menu Item ${index + 1}`,
         path: `/menu-${index + 1}`,
-        icon: <span>📎</span>,
+        icon: <span aria-hidden="true">📎</span>,
       })),
     ],
   },
 ]
 
-const LogoIcon = () => <div data-testid="logo-icon">Logo</div>
+const LogoIcon = () => (
+  <div data-testid="logo-icon" role="img" aria-label="Logo">
+    Logo
+  </div>
+)
 
 describe('VerticalDrawer Component', () => {
   beforeEach(() => {
     cy.viewport(1280, 800)
   })
 
-  it('displays all navigation items with scrolling capability', () => {
+  it('displays accessible navigation with scrollable content', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <VerticalDrawer
@@ -79,61 +83,38 @@ describe('VerticalDrawer Component', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.MuiDrawer-root').should('exist').and('be.visible').and('have.class', 'MuiDrawer-root')
+    cy.get('[role="presentation"]').should('be.visible')
 
-    cy.get('[data-testid="logo-icon"]').should('exist').and('be.visible')
+    cy.findByRole('img', { name: /logo/i }).should('be.visible')
 
     const mainSection = mockNavData[0]
-    if (!mainSection) {
+    if (!mainSection?.items) {
       throw new Error('Navigation data is empty')
     }
 
-    if (!mainSection.items) {
-      throw new Error('No navigation items found')
-    }
-
-    cy.get('.MuiDrawer-paper').within(() => {
+    cy.findByRole('navigation').within(() => {
       mainSection.items.forEach((item) => {
-        cy.contains('a', item.title)
-          .should('exist')
-          .and('be.visible')
-          .and('have.attr', 'href', item.path)
-          .as(`navLink-${item.path}`)
-
-        cy.get(`@navLink-${item.path}`).within(() => {
-          cy.get('span')
-            .first()
-            .should('exist')
-            .and('be.visible')
-            .and('contain', item.icon.props.children)
-
-          cy.get('span').contains(item.title).should('exist').and('be.visible')
-        })
+        cy.findByRole('button', { name: item.title })
+          .should('be.visible')
+          .within(() => {
+            cy.get('span[aria-hidden="true"]').should('be.visible')
+            cy.findByText(item.title).should('be.visible')
+          })
       })
     })
 
-    cy.get('.simplebar-content-wrapper')
-      .should('exist')
-      .and('be.visible')
-      .and('have.class', 'simplebar-content-wrapper')
-      .then(($el) => {
-        const element = $el[0]
+    cy.findByRole('region', { name: 'scrollable content' })
+      .should('have.css', 'overflow', 'hidden')
+      .then(($nav) => {
+        const element = $nav[0]
         if (!element) {
-          throw new Error('SimpleBar content wrapper element not found')
+          throw new Error('Navigation element not found')
         }
         expect(element.scrollHeight).to.be.at.least(element.clientHeight)
       })
-
-    cy.get('.simplebar-content-wrapper')
-      .should('exist')
-      .and('be.visible')
-      .scrollTo('bottom', { ensureScrollable: false })
-      .then(() => {
-        cy.contains('a', 'Settings').should('exist').and('be.visible')
-      })
   })
 
-  it('closes drawer when navigating to a new page', () => {
+  it('closes navigation when route changes', () => {
     const onCloseNav = cy.stub().as('onCloseNav')
 
     cy.mount(

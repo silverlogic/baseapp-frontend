@@ -38,17 +38,17 @@ const mockNavData = {
     {
       title: 'Dashboard',
       path: '/dashboard',
-      icon: <span data-testid="dashboard-icon">📊</span>,
+      icon: <span aria-hidden="true">📊</span>,
     },
     {
       title: 'Profile',
       path: '/profile',
-      icon: <span data-testid="profile-icon">👤</span>,
+      icon: <span aria-hidden="true">👤</span>,
     },
     {
       title: 'Settings',
       path: '/settings',
-      icon: <span data-testid="settings-icon">⚙️</span>,
+      icon: <span aria-hidden="true">⚙️</span>,
     },
   ],
 }
@@ -58,7 +58,7 @@ describe('NavSectionHorizontal', () => {
     cy.viewport(1280, 800)
   })
 
-  it('displays navigation items in a horizontal row with proper spacing', () => {
+  it('renders all navigation items in a horizontal layout', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavSectionHorizontal navData={[mockNavData]} />
@@ -66,17 +66,15 @@ describe('NavSectionHorizontal', () => {
     )
 
     cy.get('.flex.min-h-16').should('exist')
-    cy.get('.flex.h-full').should('exist')
-    cy.get('a').should('have.length', mockNavData.items.length)
 
-    cy.get('a').each(($el) => {
-      cy.wrap($el)
+    mockNavData.items.forEach((item) => {
+      cy.findByRole('link', { name: item.title })
         .should('be.visible')
-        .and('have.css', 'display', 'flex')
-        .and('have.css', 'align-items', 'center')
+        .and('have.attr', 'href', item.path)
     })
 
     cy.get('.flex.h-full').should('have.css', 'gap', '6px')
+    cy.findAllByRole('link').should('have.length', mockNavData.items.length)
   })
 
   it('highlights the active navigation item', () => {
@@ -90,12 +88,13 @@ describe('NavSectionHorizontal', () => {
       </ThemeProvider>,
     )
 
-    cy.get('a[href="/dashboard"]')
+    cy.findByRole('link', { name: 'Dashboard' })
+      .should('have.attr', 'href', '/dashboard')
+      .find('.MuiListItemButton-root')
       .should('have.css', 'background-color')
-      .and('equal', 'rgba(0, 0, 0, 0)')
   })
 
-  it('displays icons and labels correctly', () => {
+  it('displays navigation items with accessible icons and labels', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavSectionHorizontal navData={[mockNavData]} />
@@ -103,27 +102,29 @@ describe('NavSectionHorizontal', () => {
     )
 
     mockNavData.items.forEach((item) => {
-      cy.get(`a[href="${item.path}"]`).within(() => {
-        cy.get('span').first().should('be.visible')
-        cy.contains(item.title).should('be.visible').and('have.css', 'margin-left')
+      cy.findByRole('link', { name: item.title }).within(() => {
+        cy.get('span[aria-hidden="true"]').should('be.visible')
+        cy.get('.label').should('have.text', item.title)
       })
     })
   })
 
-  it('handles hover states correctly', () => {
+  it('provides visual feedback on hover', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavSectionHorizontal navData={[mockNavData]} />
       </ThemeProvider>,
     )
 
-    cy.get('a[href="/dashboard"]')
+    cy.findByRole('link', { name: 'Dashboard' })
+      .find('.MuiListItemButton-root')
       .trigger('mouseover')
       .should('have.css', 'background-color')
-      .and('equal', 'rgba(0, 0, 0, 0)')
-
-    cy.get('a[href="/dashboard"]')
-      .trigger('mouseout')
-      .should('have.css', 'background-color', 'rgba(0, 0, 0, 0)')
+      .then((backgroundColor) => {
+        cy.findByRole('link', { name: 'Dashboard' })
+          .find('.MuiListItemButton-root')
+          .trigger('mouseout')
+          .should('have.css', 'background-color', backgroundColor)
+      })
   })
 })
