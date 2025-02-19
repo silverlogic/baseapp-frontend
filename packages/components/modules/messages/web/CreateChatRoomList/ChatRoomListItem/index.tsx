@@ -4,6 +4,7 @@ import { FC } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
@@ -29,7 +30,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onCh
         sx={{ alignSelf: 'center', justifySelf: 'center' }}
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
-        <Typography variant="subtitle2">{name}</Typography>
+        <TypographyWithEllipsis variant="subtitle2">{name}</TypographyWithEllipsis>
         <Typography variant="caption" color="text.secondary">
           {urlPath?.path && `@${urlPath.path}`}
         </Typography>

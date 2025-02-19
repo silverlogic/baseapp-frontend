@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.0.5
+
+### Patch Changes
+
+- Add Avatar Button
+- Make confirm Dialog more customizable
+- Add new icons
+
 ## 1.0.4
 
 ### Patch Changes

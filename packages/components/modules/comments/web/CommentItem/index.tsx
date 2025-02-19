@@ -2,10 +2,10 @@
 
 import { FC, useRef, useState, useTransition } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Typography } from '@mui/material'
 import { useRefetchableFragment } from 'react-relay'
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
@@ -127,7 +127,7 @@ const CommentItem: FC<CommentItemProps> = ({
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
         <ActionsOverlay
           actions={actions}
-          enableDelete={enableDelete && comment.canDelete}
+          showDeleteButton={enableDelete && comment.canDelete}
           handleDeleteItem={handleDeleteComment}
           isDeletingItem={isDeletingComment}
           title="Comment"

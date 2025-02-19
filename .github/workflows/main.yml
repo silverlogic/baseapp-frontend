@@ -78,5 +78,8 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build Packages
+        run: pnpm build
+
       - name: Component Test
         run: pnpm test:component

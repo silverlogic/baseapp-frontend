@@ -83,16 +83,55 @@ To build all apps and packages, run the following command:
 pnpm build
 
 # build only the authentication package
-pnpm build --filter=authentication
+pnpm build --filter=@baseapp-frontend/authentication
 ```
 
 ## Develop
 
-To develop all apps and packages, run the following command:
+Our development mode is designed to provide immediate feedback as you work on our monorepo apps and packages. In dev mode, each package automatically watches for changes in its source files, rebuilds itself using a custom build process, and synchronizes its output (bundled code, type declarations, etc.) to the consumer app.
+
+This ensures that any changes you make are quickly reflected in the running application without the need to manually rebuild or restart servers.
+
+### What Happens in Dev Mode
+
+Some of our packages—like `@baseapp-frontend/components` and `@baseapp-frontend/design-system`—have a multi-step build process. When you run:
 
 ```bash
 pnpm dev
 ```
+
+Each package in our monorepo enters a persistent watch mode.
+
+For example, when running dev mode for `@baseapp-frontend/components`, you might see output similar to the following:
+```bash
+[@baseapp-frontend/components] Waiting for other packages to start...  # wait for other dependencies to be build
+[@baseapp-frontend/components] Starting build process...               # start the build process
+[@baseapp-frontend/components] Running Relay Compiler...               # since this package uses relay, run the relay compiler
+[@baseapp-frontend/components] Relay compilation completed.
+[@baseapp-frontend/components] Running Babel transpiling...            # run babel step to transpile the code
+[@baseapp-frontend/components] Babel transpilation completed.
+[@baseapp-frontend/components] Running tsup bundling...                # run tsup step to bunle the code
+[@baseapp-frontend/components] Running type declaration generation...  # run tsc step to create type declarations
+[@baseapp-frontend/components] tsup Bundling completed.
+[@baseapp-frontend/components] Type declarations generated.
+[@baseapp-frontend/components] Copying DTS files...                    # merge the declaration files with the bundled files
+[@baseapp-frontend/components] DTS files copied.
+[@baseapp-frontend/components] Cleaning temporary files...             # remove temporary folders
+[@baseapp-frontend/components] Temporary files cleaned.
+[@baseapp-frontend/components] Build completed successfully.           # build completed
+[@baseapp-frontend/components] Syncing dist folder to consumer app...  # sync the build output with the consumer app (baseapp-frontend-template)
+[@baseapp-frontend/components] Sync completed successfully.
+```
+**Disclaimer**
+
+The dev mode is a powerful tool that makes live testing of changes very convenient by automatically rebuilding packages as you edit files.
+
+However, note that for packages like `@baseapp-frontend/design-system` and `@baseapp-frontend/components`, the watch process can trigger multiple build tasks upon every file change.
+
+This continuous rebuild may lead to increased memory consumption and CPU usage if you’re making a lot of simultaneous changes.
+
+It is recommended to use this live mode only at appropriate times rather than throughout your entire development phase.
+
 
 ## **PNPM Catalog Overview**
 
@@ -104,13 +143,10 @@ Make sure to keep [`@baseapp-frontend's catalog`](https://github.com/silverlogic
 
 ### **Remove Catalog Entries**:
 
-  Before using a package from GitHub, remove its catalog entry. This is necessary because pnpm doesn't handle catalogs well when using non-published versions. To remove the catalogs for the desired package, run the following command:
+  Before using a package from GitHub, remove its catalog entry. This is necessary because pnpm doesn't handle catalogs well when using non-published versions. To remove the catalogs for all packages, run the following command:
 
   ```bash
-  # will replace catalogs for utils and authentication packages
-  pnpm replace-catalogs utils authentication
-
-  # will replace catalogs for all packages
+  pnpm i # make sure the dependencies are installed
   pnpm replace-catalogs
   ```
 
@@ -119,10 +155,7 @@ Make sure to keep [`@baseapp-frontend's catalog`](https://github.com/silverlogic
   To restore the catalog entries to their original state, run the following command:
 
   ```bash
-  # will restore catalogs for utils and authentication packages
-  pnpm restore-catalogs utils authentication
-
-  # will restore catalogs for all packages
+  pnpm i # make sure the dependencies are installed
   pnpm restore-catalogs
   ```
 

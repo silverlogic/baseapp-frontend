@@ -1,5 +1,39 @@
 # @baseapp-frontend/components
 
+## 1.0.10
+
+### Patch Changes
+
+- Enable adding a member to an existing group
+- Refactor member and contacts list into a reusable component
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.5
+
+## 1.0.9
+
+### Patch Changes
+
+- Enabled deletion of chat room messages
+
+## 1.0.8
+
+### Patch Changes
+
+- Limit group name length
+- Use ellipsis to prevent text overflow
+
+## 1.0.7
+
+### Patch Changes
+
+- Enhanced the SocialInput component by introducing an optional keydown handler prop. This update enables custom keyboard event handling, with default behavior triggering submission on CTRL + Enter.
+
+## 1.0.6
+
+### Patch Changes
+
+- Fix mobile vertical nav bar height
+
 ## 1.0.5
 
 ### Patch Changes
