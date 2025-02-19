@@ -3,7 +3,6 @@ import { FC } from 'react'
 import { Divider } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileRoleStatus } from '../../../../../__generated__/MemberItemFragment.graphql'
 import { MemberItemFragment } from '../../../common'
 import { MEMBER_STATUSES } from '../constants'
 import { MemberListItemProps } from './types'
@@ -38,7 +37,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
         <MemberItemComponent
           member={data}
           memberRole="owner"
-          status={MEMBER_STATUSES.active as ProfileRoleStatus}
+          status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}
           {...memberItemComponentProps}
         />
@@ -69,7 +68,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
         <MemberItemComponent
           member={data}
           memberRole="owner"
-          status={MEMBER_STATUSES.active as ProfileRoleStatus}
+          status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}
           {...memberItemComponentProps}
         />
