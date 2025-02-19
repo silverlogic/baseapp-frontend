@@ -7,17 +7,21 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { Box, Button, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileItemFragment } from '../../../../profiles/common'
+import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
+import { ProfileItemFragment } from '../../../../../profiles/common'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
 const ProfileCard: FC<ProfileCardProps> = ({
-  profile: profileRef,
+  profile,
   handleAddMember,
   handleRemoveMember,
   isMember = false,
 }) => {
-  const { id, image, name, urlPath } = useFragment(ProfileItemFragment, profileRef)
+  const { id, name, image, urlPath } = useFragment(
+    ProfileItemFragment,
+    profile as ProfileItemFragment$key,
+  )
 
   return (
     <MainContainer key={`chat-room-item-${id}`}>
@@ -39,9 +43,9 @@ const ProfileCard: FC<ProfileCardProps> = ({
         size="small"
         onClick={() => {
           if (isMember) {
-            handleRemoveMember(profileRef)
+            handleRemoveMember(profile)
           } else {
-            handleAddMember(profileRef)
+            handleAddMember(profile)
           }
         }}
         sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
