@@ -6,6 +6,7 @@ import { IconButton } from '@baseapp-frontend/design-system/components/web/butto
 import { ThreeDotsIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
@@ -98,9 +99,17 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             sx={{ border: 'none', alignSelf: 'center' }}
           />
           <Box>
-            <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
+            <TypographyWithEllipsis
+              component="span"
+              variant="subtitle2"
+              maxWidth={isUpToMd ? '300px' : '200px'}
+              sx={{
+                float: 'left',
+                clear: 'left',
+              }}
+            >
               {title}
-            </Typography>
+            </TypographyWithEllipsis>
             {isGroup && (
               <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
                 {members}

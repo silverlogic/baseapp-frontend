@@ -1,5 +1,18 @@
 # @baseapp-frontend/components
 
+## 1.0.9
+
+### Patch Changes
+
+- Enabled deletion of chat room messages
+
+## 1.0.8
+
+### Patch Changes
+
+- Limit group name length
+- Use ellipsis to prevent text overflow
+
 ## 1.0.7
 
 ### Patch Changes

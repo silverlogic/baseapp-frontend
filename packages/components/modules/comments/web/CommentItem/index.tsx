@@ -127,7 +127,7 @@ const CommentItem: FC<CommentItemProps> = ({
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
         <ActionsOverlay
           actions={actions}
-          enableDelete={enableDelete && comment.canDelete}
+          showDeleteButton={enableDelete && comment.canDelete}
           handleDeleteItem={handleDeleteComment}
           isDeletingItem={isDeletingComment}
           title="Comment"

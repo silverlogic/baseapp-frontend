@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
-import type { SwipeableDrawerProps } from '@baseapp-frontend/design-system/components/web/drawers'
+import { ConfirmDialogProps } from '@baseapp-frontend/design-system/components/web/dialogs'
+import { SwipeableDrawerProps } from '@baseapp-frontend/design-system/components/web/drawers'
 import { ValueOf } from '@baseapp-frontend/utils'
 
 import { BoxProps } from '@mui/material'
@@ -24,10 +25,12 @@ export type LongPressHandler = {
 export interface ActionOverlayProps extends ActionOverlayTooltipContainerProps {
   actions: OverlayAction[]
   title: string
-  enableDelete?: boolean | null
+  showDeleteButton?: boolean | null
   isDeletingItem?: boolean
+  disableDeleteButton?: boolean
   handleDeleteItem?: () => void
   ContainerProps?: Partial<BoxProps>
+  DeleteDialogProps?: Partial<ConfirmDialogProps>
   SwipeableDrawer?: FC<SwipeableDrawerProps>
   SwipeableDrawerProps?: Partial<SwipeableDrawerProps>
   hoverOverlayMode?: ValueOf<typeof HOVER_OVERLAY_MODES>

@@ -5,6 +5,7 @@ import { FC, Suspense, useRef, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Typography, useTheme } from '@mui/material'
 import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
@@ -146,9 +147,9 @@ const GroupDetails: FC<GroupDetailsProps> = ({
         <GroupHeaderContainer>
           <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
           <GroupTitleContainer>
-            <Typography variant="subtitle1" color="text.primary">
+            <TypographyWithEllipsis variant="subtitle1" color="text.primary">
               {title}
-            </Typography>
+            </TypographyWithEllipsis>
             <Typography variant="body2" color="text.secondary">
               {getParticipantCountString(group?.participantsCount)}
             </Typography>

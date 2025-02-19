@@ -7,9 +7,11 @@ import {
   UnarchiveIcon,
   UnreadIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
+
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../__generated__/UnreadMessagesCountFragment.graphql'
@@ -105,7 +107,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           closeOnClick: true,
         },
       ]}
-      enableDelete
+      showDeleteButton
       handleDeleteItem={() => {}}
       isDeletingItem={false}
       ref={chatCardRef}
@@ -123,7 +125,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           src={avatar}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
-          <Typography variant="subtitle2">{title}</Typography>
+          <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
           {lastMessage && lastMessageTime ? (
             <Box
               display="grid"

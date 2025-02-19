@@ -19,9 +19,10 @@ import { Meta } from '@storybook/addon-docs'
 - **actions** (OverlayAction[]): The list of actions desired for the child component. Note that to implement a delete action, the component provides a enabler, loading and click handler props specifically for that action (see props below).
 - **title** (string): Title for the child component (currently only used on the delete dialog).
 - **children** (ReactNode): The child component to be wrapped.
-- **enableDelete** (boolean): Enables the delete action inside the tooltip/swippable drawer.
+- **showDeleteButton** (boolean): Renders the delete action inside the tooltip/swippable drawer.
 - **isDeletingItem** (boolean): Mutation loading state for the delete action.
 - **handleDeleteItem** (function): Callback function to handle deletion.
+- **disableDeleteButton** (function): Disables the delete button.
 - **offsetTop** (number): Number to offset the top positioning of the default tooltip position (only affects tooltip).
 - **offsetRight** (number): Number to offset the right positioning of the default tooltip position (only affects tooltip).
 - **ContainerProps** (BoxProps): Props for the parent `Box` component that wraps the child component.
@@ -45,7 +46,7 @@ export const DefaultActionsOverlay = (
   return (
     <ActionsOverlay
       title='Button',
-      enableDelete={true}
+      showDeleteButton={true}
       handleDeleteItem={() => {}}
       actions={[
         {
