@@ -7,6 +7,7 @@ import {
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdowns'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
@@ -80,7 +81,7 @@ const MessageItem: FC<MessageItemProps> = ({
       >
         {deletedMessage && <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} />}
         {deletedMessage && ' '}
-        {message?.content}
+        <Markdown>{message?.content}</Markdown>
       </Typography>
     )
   }
