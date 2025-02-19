@@ -7,12 +7,12 @@ export const MEMBER_STATUSES = {
   active: 'ACTIVE',
   pending: 'PENDING',
   inactive: 'INACTIVE',
-}
+} as const
 
 export const MEMBER_ROLES = {
   admin: 'ADMIN',
   manager: 'MANAGER',
-}
+} as const
 
 export const MEMBER_ACTIONS = {
   remove: 'REMOVE',

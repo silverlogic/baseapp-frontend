@@ -76,7 +76,6 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const handleRoleChange = (event: SelectChangeEvent<{ value: ProfileRoles }>) => {
     if (event.target.value === MEMBER_ROLES.admin) {
-      //
       setOpenConfirmChangeMember(true)
       return
     }
@@ -91,7 +90,7 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const confirmChangeRole = () => {
     if (currentProfile?.id && userId) {
-      changeRole(MEMBER_ROLES.admin as ProfileRoles)
+      changeRole(MEMBER_ROLES.admin)
     }
     setOpenConfirmChangeMember(false)
   }
