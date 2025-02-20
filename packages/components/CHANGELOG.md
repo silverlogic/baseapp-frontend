@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.11
+
+### Patch Changes
+
+- Implementing Remove Profile Members
+
 ## 1.0.10
 
 ### Patch Changes
