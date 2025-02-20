@@ -12,6 +12,7 @@ type ActivityLog implements Node {
   user: User
   ipAddress: String
   verb: String
+  diff: GenericScalar
   visibility: VisibilityTypes
   url: String
   pk: Int!
