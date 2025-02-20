@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import { graphql, usePaginationFragment } from 'react-relay'
 
@@ -20,6 +20,14 @@ export const ActivityLogsFragmentQuery = graphql`
         node {
           id
           createdAt
+          events {
+            edges {
+              node {
+                label
+                diff
+              }
+            }
+          }
           verb
           url
           user {
@@ -45,6 +53,9 @@ export const useActivityLogs = (targetRef: ActivityLogsFragment$key) => {
     ActivityLogsPaginationQuery,
     ActivityLogsFragment$key
   >(ActivityLogsFragmentQuery, targetRef)
+  useEffect(() => {
+    console.log('Relay Data:', JSON.stringify(data, null, 2))
+  }, [data])
 
   const logGroups = useMemo(() => {
     const groupedLogs: { [key: string]: LogGroup[] } = {}
