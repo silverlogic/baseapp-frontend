@@ -34,15 +34,16 @@ catalogs:
     "@gorhom/bottom-sheet": ^5.0.6
     "@react-navigation/drawer": ^7.0.19
     "@react-navigation/native": ^7.0.6
-    expo-constants: ~17.0.3
-    expo-file-system: ~18.0.6
+    expo-constants: ~17.0.7
+    expo-file-system: ~18.0.11
     expo-image-picker: ~16.0.4
     expo-router: ~4.0.5
     expo-secure-store: ~14.0.0
+    react-native-gesture-handler: ~2.20.2
     react-native-paper: ^5.12.5
     react-native-reanimated: ~3.16.3
-    react-native: 0.76.3
-    react-native-gesture-handler: ~2.20.2
+    react-native-svg: 15.8.0
+    react-native: 0.76.7
 
   graphql:
     "@types/react-relay": 16.0.6

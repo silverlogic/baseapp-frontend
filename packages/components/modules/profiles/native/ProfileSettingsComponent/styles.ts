@@ -4,11 +4,6 @@ import { StyleSheet } from 'react-native'
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
-    pageContainer: {
-      paddingHorizontal: 0,
-      paddingTop: 0,
-      flex: 1,
-    },
     scrollViewContainer: {
       padding: 0,
       flex: 1,

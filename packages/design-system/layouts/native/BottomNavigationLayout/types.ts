@@ -13,4 +13,5 @@ export type TabItem = {
 
 export interface BottomNavigationLayoutProps {
   tabs: TabItem[]
+  routesWithoutHeader?: Href[]
 }

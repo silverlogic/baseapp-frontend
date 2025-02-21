@@ -1,9 +1,11 @@
-import type { StyleProp } from 'react-native/Libraries/StyleSheet/StyleSheet'
-import type { ViewStyle } from 'react-native/Libraries/StyleSheet/StyleSheetTypes'
+import { FC } from 'react'
+
+import { SvgIconProps } from '../../icons'
 
 export type AppBarProps = {
   title: string
-  goBack?: () => void
-  headerStyle?: StyleProp<ViewStyle>
-  statusBarHeight?: number | undefined
+  onBack?: () => void
+  onClose?: () => void
+  BackIcon?: FC<SvgIconProps>
+  CloseIcon?: FC<SvgIconProps>
 }
