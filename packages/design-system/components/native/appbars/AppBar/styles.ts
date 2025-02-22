@@ -5,28 +5,20 @@ import { Theme } from '../../../../styles/native'
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.surface.background,
-      borderBottomWidth: 1,
+      alignItems: 'center',
       borderBottomColor: theme.colors.surface.border,
-      paddingHorizontal: 8,
-      paddingBottom: 0,
-      elevation: 0,
+      borderBottomWidth: 1,
+      flexDirection: 'row',
+      height: 64,
+      justifyContent: 'center',
+      padding: 16,
     },
     title: {
-      alignSelf: 'center',
-      color: theme.colors.object.high,
-      overflow: 'hidden',
+      flex: 1,
       textAlign: 'center',
-      fontSize: 14,
-      fontStyle: 'normal',
-      fontWeight: 600,
-      lineHeight: 22,
     },
-    titleAndroid: {
-      marginLeft: -8,
-    },
-    backActionAndroid: {
-      position: 'absolute',
-      left: 8,
+    buttonContainer: {
+      alignItems: 'center',
+      width: 24,
     },
   })
