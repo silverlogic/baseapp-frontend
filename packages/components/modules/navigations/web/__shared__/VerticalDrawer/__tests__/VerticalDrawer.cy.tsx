@@ -83,7 +83,7 @@ describe('VerticalDrawer Component', () => {
       </ThemeProvider>,
     )
 
-    cy.get('[role="presentation"]').should('be.visible')
+    cy.findByRole('presentation').should('be.visible')
 
     cy.findByRole('img', { name: /logo/i }).should('be.visible')
 

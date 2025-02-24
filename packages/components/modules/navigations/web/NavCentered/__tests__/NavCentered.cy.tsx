@@ -71,7 +71,7 @@ describe('NavCentered', () => {
       </ThemeProvider>,
     )
 
-    cy.get('[role="presentation"]').should('be.visible')
+    cy.findByRole('presentation').should('be.visible')
 
     cy.get('[role="presentation"]').within(() => {
       const mainSection = mockNavData[0]

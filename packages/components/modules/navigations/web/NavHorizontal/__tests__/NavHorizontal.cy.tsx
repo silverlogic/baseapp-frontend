@@ -83,7 +83,7 @@ describe('NavHorizontal', () => {
       </ThemeProvider>,
     )
 
-    cy.get('[role="presentation"]').should('be.visible')
+    cy.findByRole('presentation').should('be.visible')
 
     cy.findByRole('navigation').within(() => {
       const mainSection = mockNavData[0]
