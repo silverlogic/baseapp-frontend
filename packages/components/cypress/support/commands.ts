@@ -1,8 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import '@testing-library/cypress/add-commands'
 import 'cypress-plugin-steps'
+import * as Router from 'next/navigation'
 
 import '../../styles/tailwind/globals.css'
+import { RouterChainable } from './types'
 
 /// <reference types="cypress" />
 // ***********************************************
@@ -41,3 +43,26 @@ import '../../styles/tailwind/globals.css'
 //     }
 //   }
 // }
+
+Cypress.Commands.add('mockNextRouter', () => {
+  const router = {
+    push: cy.stub().as('router:push'),
+    back: cy.stub().as('router:back'),
+    forward: cy.stub().as('router:forward'),
+    refresh: cy.stub().as('router:refresh'),
+    replace: cy.stub().as('router:replace'),
+    prefetch: cy.stub().as('router:prefetch'),
+    pathname: '/mock-path',
+  }
+
+  cy.stub(Router, 'useRouter').returns(router)
+  return cy.wrap(router) as unknown as Cypress.Chainable<RouterChainable>
+})
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      mockNextRouter(): Cypress.Chainable<RouterChainable>
+    }
+  }
+}
