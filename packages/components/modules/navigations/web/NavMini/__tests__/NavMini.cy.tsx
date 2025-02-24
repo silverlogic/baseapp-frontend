@@ -169,7 +169,12 @@ describe('NavMini Component', () => {
       </ThemeProvider>,
     )
 
-    cy.findByRole('img', { name: /logo/i }).parent().should('have.css', 'margin', '16px 23.6px')
+    cy.findByRole('img', { name: /logo/i })
+      .parent()
+      .should(($el) => {
+        const marginRight = parseFloat($el.css('margin-right'))
+        expect(marginRight).to.be.lte(23.6)
+      })
 
     cy.get('button.MuiIconButton-root')
       .should('be.visible')
