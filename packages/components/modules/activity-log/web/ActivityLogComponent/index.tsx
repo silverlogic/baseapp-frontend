@@ -9,8 +9,7 @@ import { useForm } from 'react-hook-form'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
 import DateFilterChip from '../../DateFilterChip'
-import { IFetchParameters } from '../../DateFilterComponent/types'
-import { useActivityLogs } from '../../common'
+import { FetchParameters, useActivityLogs } from '../../common'
 import EventFilterChip from './EventFilterChip'
 import DefaultLogGroups from './LogGroups'
 import { ActivityLogComponentProps, EventFilterOption } from './types'
@@ -20,7 +19,7 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
   LogGroups = DefaultLogGroups,
   LogGroupsProps,
 }) => {
-  const [fetchParameters, setFetchParameters] = useState<IFetchParameters>({
+  const [fetchParameters, setFetchParameters] = useState<FetchParameters>({
     createdFrom: null,
     createdTo: null,
     userName: '',
@@ -33,7 +32,7 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
   const searchValue = watch('search')
 
-  const executeRefetch = (updatedParameters: Partial<IFetchParameters>) => {
+  const executeRefetch = (updatedParameters: Partial<FetchParameters>) => {
     const newFetchParameters = { ...fetchParameters, ...updatedParameters }
     setFetchParameters(newFetchParameters)
     startTransition(() => {

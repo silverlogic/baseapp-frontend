@@ -1,6 +1,6 @@
-import { IFetchParameters } from '../DateFilterComponent/types'
+import { FetchParameters } from '../common/types'
 
 export interface DateFilterChipProps {
-  fetchParameters: IFetchParameters
-  executeRefetch: (params: Partial<IFetchParameters>) => void
+  fetchParameters: FetchParameters
+  executeRefetch: (params: Partial<FetchParameters>) => void
 }
