@@ -23,7 +23,7 @@ export const Select = styled((props) => <MUISelect {...props} />)<SelectProps>((
   },
 }))
 
-export const ContryTitle = styled((props) => <Typography {...props} />)<TypographyProps>(
+export const CountryTitle = styled((props) => <Typography {...props} />)<TypographyProps>(
   ({ theme }) => ({
     margin: theme.spacing(0, 1),
   }),
