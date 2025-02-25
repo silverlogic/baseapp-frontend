@@ -1,12 +1,12 @@
 import { FC, useState } from 'react'
 
+import { SwipeableDrawer } from '@baseapp-frontend/design-system/components/web/drawers'
 import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
-import { Box, Chip, Menu, Theme, useMediaQuery } from '@mui/material'
+import { Box, Chip, Divider, Menu, Theme, Typography, useMediaQuery } from '@mui/material'
 import { DateTime } from 'luxon'
 
-import MobileDrawer from '../../__shared__/MobileDrawer'
 import DateFilterComponent from '../DateFilterComponent'
 import { DateFilterChipProps } from './types'
 
@@ -47,13 +47,19 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
   }
 
   const renderDateFilterComponent = (onClose: () => void) => (
-    <DateFilterComponent
-      createdFrom={parseDate(createdFrom)}
-      createdTo={parseDate(createdTo)}
-      executeRefetch={executeRefetch}
-      onApply={onClose}
-      onClearFilter={onClose}
-    />
+    <>
+      <Typography variant="subtitle1" m={4} align="center">
+        Period
+      </Typography>
+      <Divider sx={{ marginBottom: 2 }} />
+      <DateFilterComponent
+        createdFrom={parseDate(createdFrom)}
+        createdTo={parseDate(createdTo)}
+        executeRefetch={executeRefetch}
+        onApply={onClose}
+        onClearFilter={onClose}
+      />
+    </>
   )
 
   return (
@@ -69,13 +75,15 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
         variant={hasDateSelected ? 'filled' : 'soft'}
         color="default"
       />
-      <MobileDrawer open={drawerOpen} onClose={handleDrawerClose} title="Period">
-        {renderDateFilterComponent(handleDrawerClose)}
-      </MobileDrawer>
-
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <Box padding={2}>{renderDateFilterComponent(handleMenuClose)}</Box>
-      </Menu>
+      {isMobile ? (
+        <SwipeableDrawer globalHeight="auto" open={drawerOpen} onClose={handleDrawerClose}>
+          {renderDateFilterComponent(handleDrawerClose)}
+        </SwipeableDrawer>
+      ) : (
+        <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <Box padding={2}>{renderDateFilterComponent(handleMenuClose)}</Box>
+        </Menu>
+      )}
     </>
   )
 }
