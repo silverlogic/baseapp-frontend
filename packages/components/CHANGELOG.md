@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.12
+
+### Patch Changes
+
+- add filter by date to the module activity log. Filter as a modal on desktop and swap on mobile. Filtering can be don by start and/or end date
+
 ## 1.0.11
 
 ### Patch Changes
