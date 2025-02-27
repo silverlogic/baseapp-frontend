@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.13
+
+### Patch Changes
+
+- Remove `ProfileSettingsComponent` Appbar, it should now use `AppbarNavigationLayout` layout when it's rendered on a page route. 
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.6
+
 ## 1.0.12
 
 ### Patch Changes

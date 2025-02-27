@@ -9,14 +9,11 @@
  *    subpath imports, even if no file in our workspace has imported them yet.
  *  - Ensure auto-import suggestions display these subpaths immediately, without
  *    waiting for an existing import to reveal them.
- *
- * In other words, we’re “seeding” the TypeScript language service with references
- * to many subpaths in our monorepo. By listing them here, we avoid the scenario where
- * the editor only autocompletes subpaths that are already imported elsewhere.
  */
 // @baseapp-frontend/design-system
 import '@baseapp-frontend/design-system/components/common'
 import '@baseapp-frontend/design-system/components/native/appbars'
+import '@baseapp-frontend/design-system/components/native/avatars'
 import '@baseapp-frontend/design-system/components/native/buttons'
 import '@baseapp-frontend/design-system/components/native/displays'
 import '@baseapp-frontend/design-system/components/native/drawers'
