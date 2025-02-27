@@ -1,5 +1,16 @@
 # @baseapp-frontend/design-system
 
+## 1.0.6
+
+### Patch Changes
+
+- Redesing the `Appbar` native component to make it more reusable.
+- Create several native icons.
+- Add the `ClickableAvatar` native component.
+- The param `dismissKeyboard` defaults to `false` on the native View component.
+- Add the `AppbarNavigationLayout` native layout.
+- The `BottomNavigationLayout` native layout can now exclude the header for the selected routes.
+
 ## 1.0.5
 
 ### Patch Changes
