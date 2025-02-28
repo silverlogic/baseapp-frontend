@@ -2,7 +2,8 @@ import { forwardRef } from 'react'
 
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
-import { Box, Link, Tooltip } from '@mui/material'
+import { Box, Tooltip } from '@mui/material'
+import Link from 'next/link'
 
 import type { NavItemProps } from '../../../../../types'
 import { StyledNavItem } from './styled'
@@ -87,9 +88,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
           href={path}
           target="_blank"
           rel="noopener"
-          color="inherit"
-          underline="none"
-          sx={{
+          style={{
             ...(disabled && {
               pointerEvents: 'none',
             }),
@@ -102,9 +101,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
     return (
       <Link
         href={path}
-        color="inherit"
-        underline="none"
-        sx={{
+        style={{
           ...(disabled && {
             pointerEvents: 'none',
           }),

@@ -1,5 +1,6 @@
-import { Link, ListItemButton } from '@mui/material'
+import { ListItemButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import Link from 'next/link'
 
 import { StyledLinkProps, StyledNavItemProps } from './types'
 
