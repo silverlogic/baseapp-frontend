@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.15
+
+### Patch Changes
+
+- Clickable profile on comments
+
 ## 1.0.14
 
 ### Patch Changes
@@ -11,7 +17,7 @@
 
 ### Patch Changes
 
-- Remove `ProfileSettingsComponent` Appbar, it should now use `AppbarNavigationLayout` layout when it's rendered on a page route. 
+- Remove `ProfileSettingsComponent` Appbar, it should now use `AppbarNavigationLayout` layout when it's rendered on a page route.
 - Updated dependencies
   - @baseapp-frontend/design-system@1.0.6
 
