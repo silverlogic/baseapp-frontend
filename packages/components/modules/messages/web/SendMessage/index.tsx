@@ -128,19 +128,16 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         onCompleted: (response, errors) => {
           if (errors) {
             // TODO: handle errors
-            console.error(errors)
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
           if (mutationErrors) {
-            console.log(mutationErrors)
             setFormRelayErrors(form, mutationErrors)
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
         },
         // TODO: handle errors
-        onError: (errors) => {
-          console.error(errors)
+        onError: () => {
           sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
         },
       })
