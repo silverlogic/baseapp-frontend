@@ -110,6 +110,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
                 id: `client:new_message:${Date.now()}`,
                 content,
                 created: new Date(Date.now()).toISOString(),
+                deleted: false,
                 extraData: null,
                 messageType: MESSAGE_TYPE.user,
                 inReplyTo: null,
