@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.16
+
+### Patch Changes
+
+- Use optimistic updates when sending messages
+
 ## 1.0.15
 
 ### Patch Changes
