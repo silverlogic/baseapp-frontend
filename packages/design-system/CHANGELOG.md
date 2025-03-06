@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.7
+
+### Patch Changes
+
+- Moved PhoneNumberInput and UsernameIcon from `baseapp-frontend-template`
+
 ## 1.0.6
 
 ### Patch Changes
