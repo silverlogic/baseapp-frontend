@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.16
+
+### Patch Changes
+
+- Fix Group creation and details on landscape mode
+
 ## 1.0.15
 
 ### Patch Changes

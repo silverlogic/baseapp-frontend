@@ -26,7 +26,7 @@ import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
 import { GroupMembersEdge } from './ProfileCard/types'
-import { GroupHeaderContainer, GroupTitleContainer } from './styled'
+import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
 import { GroupDetailsProps } from './types'
 
 const GroupDetails: FC<GroupDetailsProps> = ({
@@ -156,9 +156,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
               Members
             </Typography>
           </Box>
-          <Box height="100%" width="100%">
-            {renderMembers()}
-          </Box>
+          <MembersContainer>{renderMembers()}</MembersContainer>
         </Box>
       </Box>
     </>
