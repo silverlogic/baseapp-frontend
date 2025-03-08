@@ -20,6 +20,7 @@ const NavVertical: FC<NavVerticalProps> = ({
   setSettings,
   navData,
   LogoIcon,
+  LogoSx,
   openNav,
   onCloseNav,
   hideToggleButton = false,
@@ -58,7 +59,7 @@ const NavVertical: FC<NavVerticalProps> = ({
           }}
         >
           {LogoIcon && (
-            <Logo sx={{ mt: 3, ml: 4, mb: 1 }}>
+            <Logo sx={{ mt: 3, ml: 4, mb: 1, ...LogoSx }}>
               <LogoIcon />
             </Logo>
           )}

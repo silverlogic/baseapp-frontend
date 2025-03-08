@@ -1,5 +1,7 @@
 import { UISettings } from '@baseapp-frontend/design-system/styles/web'
 
+import { SxProps } from '@mui/system'
+
 import { NavigationData } from '../types'
 
 export interface NavMiniProps {
@@ -9,5 +11,6 @@ export interface NavMiniProps {
   settings: UISettings
   setSettings: (newSettings: Partial<UISettings>) => void
   LogoIcon?: React.FC
+  LogoSx?: SxProps
   hideToggleButton?: boolean
 }
