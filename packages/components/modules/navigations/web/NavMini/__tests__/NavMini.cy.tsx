@@ -65,7 +65,7 @@ describe('NavMini Component', () => {
     cy.viewport(1280, 800)
   })
 
-  it.skip('displays a compact navigation with accessible icons and labels', () => {
+  it('displays a compact navigation with accessible icons and labels', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
         <NavMini

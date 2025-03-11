@@ -70,7 +70,8 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
           target="_blank"
           rel="noopener noreferrer"
           style={{
-            width: 1,
+            color: 'inherit',
+            textDecoration: 'none',
             ...(disabled && {
               pointerEvents: 'none',
             }),
@@ -84,7 +85,8 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
       <Link
         href={path}
         style={{
-          width: 1,
+          color: 'inherit',
+          textDecoration: 'none',
           ...(disabled && {
             pointerEvents: 'none',
           }),
