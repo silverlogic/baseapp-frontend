@@ -41,7 +41,12 @@ const ProfilesList: FC<ProfilesListProps> = ({
     if (currentProfile?.id !== profile.id) {
       // TODO: handle the absolute image path on the backend
       const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
-      const absoluteImagePath = profile.image ? `${baseUrl}${profile.image?.url}` : null
+      let absoluteImagePath = null
+      if (profile.image) {
+        absoluteImagePath = profile.image.url.startsWith('http')
+          ? profile.image.url
+          : `${baseUrl}${profile.image.url}`
+      }
 
       setCurrentProfile({
         id: profile.id,

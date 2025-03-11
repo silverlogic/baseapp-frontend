@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.17
+
+### Patch Changes
+
+- Fix image path handling for profile images
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.8
+
 ## 1.0.16
 
 ### Patch Changes
