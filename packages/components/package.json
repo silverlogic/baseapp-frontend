@@ -23,8 +23,7 @@
     "cypress:open": "cypress open --browser chrome",
     "test:component": "cypress run --component --browser chrome --headed",
     "test:unit": "jest --config ./jest.config.ts",
-    "prepublishOnly": "pnpm run build",
-    "prepare": "pnpm build"
+    "prepublishOnly": "pnpm run build"
   },
   "exports": {
     "./shared/*": {
