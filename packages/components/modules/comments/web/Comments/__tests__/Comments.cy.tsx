@@ -215,14 +215,15 @@ describe('Comments', () => {
     cy.step('Scroll to the bottom and see the next 5 comments')
 
     cy.findByText('Fourth comment').should('exist').scrollIntoView()
+    cy.findByText('Fifth comment').should('exist').scrollIntoView()
 
     cy.findByLabelText('loading more comments')
       .should('exist')
-      .scrollIntoView()
       .then(() => {
         resolveMostRecentOperation({ data: commentsNextPageMockData })
       })
-    cy.findByText('Fifth comment').should('exist')
+
+    cy.findByLabelText('loading more comments').should('not.exist')
     cy.findByText('Sixth comment').should('exist').scrollIntoView()
     cy.findByText('Seventh comment').should('exist')
     cy.findByText('Eighth comment').should('exist').scrollIntoView()
@@ -231,7 +232,6 @@ describe('Comments', () => {
 
     cy.step('Scroll to the bottom should not trigger another fetch')
     cy.findByText('Tenth comment').scrollIntoView()
-    cy.findByLabelText('loading more comments').should('not.exist')
   })
 
   it('should be able to render all comment`s replies', () => {

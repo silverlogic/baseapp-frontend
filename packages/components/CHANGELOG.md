@@ -6,6 +6,19 @@
 
 - Change `Link` component in `NavItem`, to use Link from next/link instead of Material UI Link.
 - Change `Header` border bottom from dashed to solid
+## 1.0.17
+
+### Patch Changes
+
+- Fix image path handling for profile images
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.8
+
+## 1.0.16
+
+### Patch Changes
+
+- Fix Group creation and details on landscape mode
 
 ## 1.0.15
 

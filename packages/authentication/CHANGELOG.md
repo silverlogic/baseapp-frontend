@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.1.8
+
+### Patch Changes
+
+- Fix image path handling for profile images
+
 ## 4.1.7
 
 ### Patch Changes

@@ -9,7 +9,7 @@
   "sideEffects": false,
   "scripts": {
     "build": "parcel build",
-    "dev": "parcel watch",
+    "dev": "echo Skipping parcel watch",
     "test": "ts-node ./rules/**/*.test.ts",
     "storybook": "echo Eslint Plugin: No storybook found",
     "clean": "rm -rf node_modules dist",
