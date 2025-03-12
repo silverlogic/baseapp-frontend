@@ -6,16 +6,16 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 
 import AuthApi from '../../../services/auth'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import type { ChangeExpiredPasswordForm, UseChangeExpiredPassword } from './types'
+import type { ChangePasswordForm, UseChangePassword } from './types'
 
-const useChangeExpiredPassword = ({
+const useChangePassword = ({
   token,
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
   ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
-}: UseChangeExpiredPassword) => {
+}: UseChangePassword) => {
   const form = useForm({
     defaultValues,
     resolver: zodResolver(validationSchema),
@@ -24,7 +24,9 @@ const useChangeExpiredPassword = ({
 
   const mutation = useMutation({
     mutationFn: ({ currentPassword, newPassword }) =>
-      ApiClass.changeExpiredPassword({ currentPassword, newPassword, token }),
+      token
+        ? ApiClass.changeExpiredPassword({ currentPassword, newPassword, token })
+        : ApiClass.changePassword({ currentPassword, newPassword }),
     ...options, // needs to be placed below all overridable options
     onError: (err, variables, context) => {
       options?.onError?.(err, variables, context)
@@ -37,7 +39,7 @@ const useChangeExpiredPassword = ({
     },
   })
 
-  const handleSubmit: SubmitHandler<ChangeExpiredPasswordForm> = async (values) => {
+  const handleSubmit: SubmitHandler<ChangePasswordForm> = async (values) => {
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
@@ -55,4 +57,4 @@ const useChangeExpiredPassword = ({
   }
 }
 
-export default useChangeExpiredPassword
+export default useChangePassword
