@@ -5,6 +5,7 @@ import { UISettings } from '@baseapp-frontend/design-system/styles/web'
 import { ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { AccountMenuProps } from '../Header/AccountMenu/types'
+import { PartialLogoProps } from '../Header/types'
 import { NavigationData } from '../types'
 
 export interface NavigationLayoutProps extends PropsWithChildren {
@@ -12,6 +13,7 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   settings: UISettings
   setSettings: (newSettings: Partial<UISettings>) => void
   LogoIcon?: React.FC
+  LogoProps?: PartialLogoProps
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
   ToolbarProps?: MuiToolbarProps

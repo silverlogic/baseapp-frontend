@@ -1,5 +1,6 @@
 import { UISettings } from '@baseapp-frontend/design-system/styles/web'
 
+import { PartialLogoProps } from '../Header/types'
 import { NavigationData } from '../types'
 
 export interface NavMiniProps {
@@ -9,5 +10,6 @@ export interface NavMiniProps {
   settings: UISettings
   setSettings: (newSettings: Partial<UISettings>) => void
   LogoIcon?: React.FC
+  LogoProps?: PartialLogoProps
   hideToggleButton?: boolean
 }

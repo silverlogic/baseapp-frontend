@@ -20,6 +20,7 @@ const NavMini: FC<NavMiniProps> = ({
   settings,
   setSettings,
   LogoIcon,
+  LogoProps,
   openNav,
   onCloseNav,
   hideToggleButton = false,
@@ -59,7 +60,7 @@ const NavMini: FC<NavMiniProps> = ({
         }}
       >
         {LogoIcon && (
-          <Logo sx={{ mx: 'auto', my: 2 }}>
+          <Logo {...LogoProps} sx={{ mx: 'auto', my: 2, ...LogoProps?.sx }}>
             <LogoIcon />
           </Logo>
         )}
