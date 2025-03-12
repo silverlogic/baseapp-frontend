@@ -17,6 +17,7 @@ const Header: FC<HeaderProps> = ({
   children,
   onOpenNav,
   LogoIcon,
+  LogoProps,
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
   ToolbarProps,
@@ -37,8 +38,10 @@ const Header: FC<HeaderProps> = ({
       >
         {LogoIcon && (isNavHorizontal || isNavCentered) && (
           <Logo
+            {...LogoProps}
             sx={{
               display: { xs: 'none', lg: 'flex' },
+              ...LogoProps?.sx,
             }}
           >
             <LogoIcon />
