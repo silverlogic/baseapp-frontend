@@ -11,8 +11,8 @@ import useChangePassword from '../index'
 
 describe('useChangePassword', () => {
   const currentPassword = '1234'
-  const password = '123456'
-  const changePasswordUrl = '/change-expired-password'
+  const password = 'abcABC@123456'
+  const changePasswordUrl = '/users/change-password'
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
@@ -165,7 +165,7 @@ describe('useChangePassword', () => {
 
 describe('useChangePassword with token for expired passwords', () => {
   const currentPassword = '1234'
-  const password = '123456'
+  const password = 'abcABC@123456'
   const token = 'fake-token'
   const changePasswordUrl = '/change-expired-password'
 
