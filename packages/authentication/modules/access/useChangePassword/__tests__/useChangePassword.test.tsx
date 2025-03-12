@@ -11,8 +11,17 @@ import useChangePassword from '../index'
 
 describe('useChangePassword', () => {
   const currentPassword = '1234'
+<<<<<<< HEAD:packages/authentication/modules/access/useChangeExpiredPassword/__tests__/useChangeExpiredPassword.test.tsx
   const password = '12345#Abcde'
+<<<<<<< HEAD
   const changePasswordUrl = '/users/change-password'
+=======
+  const token = 'fake-token'
+=======
+  const password = '123456'
+>>>>>>> 3034abb (feat: migrate change password from baseapp-frontend-template):packages/authentication/modules/access/useChangePassword/__tests__/useChangePassword.test.tsx
+  const changePasswordUrl = '/change-expired-password'
+>>>>>>> 0cbbc32 (feat: migrate change password from baseapp-frontend-template)
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
@@ -165,7 +174,11 @@ describe('useChangePassword', () => {
 
 describe('useChangePassword with token for expired passwords', () => {
   const currentPassword = '1234'
+<<<<<<< HEAD
   const password = 'abcABC@123456'
+=======
+  const password = '123456'
+>>>>>>> 0cbbc32 (feat: migrate change password from baseapp-frontend-template)
   const token = 'fake-token'
   const changePasswordUrl = '/change-expired-password'
 
