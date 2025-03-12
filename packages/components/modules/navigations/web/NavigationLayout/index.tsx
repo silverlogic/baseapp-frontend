@@ -19,6 +19,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   settings,
   setSettings,
   LogoIcon,
+  LogoProps,
   AccountMenu,
   AccountMenuProps,
   ToolbarProps,
@@ -36,6 +37,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         <Header
           settings={settings}
           LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
@@ -54,6 +56,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         <Header
           settings={settings}
           LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
@@ -71,6 +74,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         <Header
           settings={settings}
           LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
@@ -89,6 +93,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             openNav={nav.value}
             onCloseNav={nav.onFalse}
             LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
             settings={settings}
             setSettings={setSettings}
           />
@@ -103,6 +108,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
       <Header
         settings={settings}
         LogoIcon={LogoIcon}
+        LogoProps={LogoProps}
         onOpenNav={nav.onTrue}
         AccountMenu={AccountMenu}
         AccountMenuProps={AccountMenuProps}
@@ -120,6 +126,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           settings={settings}
           setSettings={setSettings}
           LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
           openNav={nav.value}
           onCloseNav={nav.onFalse}
         />

@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.18
+
+### Patch Changes
+
+- Forward LogoProps to make them customizable
+
 ## 1.0.17
 
 ### Patch Changes
