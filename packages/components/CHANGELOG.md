@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.18
+
+### Patch Changes
+
+- Moved ProfileSettingsComponent and related queries and mutations from `baseapp-frontend-template`
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.7
+
 ## 1.0.17
 
 ### Patch Changes

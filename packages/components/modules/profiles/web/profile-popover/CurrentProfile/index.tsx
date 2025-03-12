@@ -26,7 +26,7 @@ const CurrentProfile: FC = () => {
 
         {profile?.urlPath && (
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {profile.urlPath}
+            {profile?.urlPath?.replace('/', '')}
           </Typography>
         )}
       </Box>

@@ -1,0 +1,42 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/PhoneNumberField" />
+
+# Component Documentation
+
+## PhoneNumberField
+
+- **Purpose**: The `PhoneNumberField` component provides a text field that supports phone number formatting and validation. It enhances user experience by allowing users to select their country and enter a phone number in the correct format.
+- **Expected Behavior**: The component should display a text field with a country select dropdown. The phone number input should be formatted according to the selected country. It should handle various states such as loading, loaded, and error.
+
+## Use Cases
+
+- **Current Usage**: This component is currently used in forms where users need to enter their phone numbers, such as registration or profile update forms.
+- **Potential Usage**: The `PhoneNumberField` could be used in any scenario where phone number input is required, such as contact forms, booking systems, or customer support interfaces.
+
+## Props
+
+- **value** (string, optional): The current value of the phone number input.
+- **onChange** (function, optional): Callback function to handle changes to the phone number input.
+- **defaultCountry** (string, optional): The default country code for the phone number input.
+- **optionProps** (object, optional): Additional props for the country select options.
+- **selectProps** (object, optional): Additional props for the country select dropdown.
+- **countryNameProps** (object, optional): Additional props for the country name display.
+- **countryDialCodeProps** (object, optional): Additional props for the country dial code display.
+
+## Notes
+
+- **Related Components**:
+  - `PureTextField`: Used to create the base input field with additional functionality.
+  - `CountrySelect`: Used to display the country select dropdown.
+
+## Example Usage
+
+```javascript
+import PhoneNumberField from '../PhoneNumberField'
+
+const MyComponent = () => (
+  <PhoneNumberField value="" onChange={(phone) => console.log(phone)} defaultCountry="US" />
+)
+export default MyComponent
+```
