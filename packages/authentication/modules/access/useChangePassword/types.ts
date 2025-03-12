@@ -3,19 +3,19 @@ import { z } from 'zod'
 
 import AuthApi from '../../../services/auth'
 
-type ApiClass = Pick<typeof AuthApi, 'changeExpiredPassword'>
+type ApiClass = Pick<typeof AuthApi, 'changePassword' | 'changeExpiredPassword'>
 
-export type ChangeExpiredPasswordForm = {
+export type ChangePasswordForm = {
   currentPassword: string
   newPassword: string
   confirmNewPassword: string
 }
 
-export interface UseChangeExpiredPassword {
-  token: string
+export interface UseChangePassword {
+  token?: string
   validationSchema?: z.ZodObject<z.ZodRawShape> | z.ZodEffects<z.ZodObject<z.ZodRawShape>>
-  defaultValues?: ChangeExpiredPasswordForm
-  options?: UseMutationOptions<void, unknown, ChangeExpiredPasswordForm, any>
+  defaultValues?: ChangePasswordForm
+  options?: UseMutationOptions<void, unknown, ChangePasswordForm, any>
   ApiClass?: ApiClass
   enableFormApiErrors?: boolean
 }
