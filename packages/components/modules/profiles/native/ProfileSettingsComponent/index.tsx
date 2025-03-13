@@ -27,8 +27,8 @@ import {
   PROFILE_FORM_VALUE,
   ProfileComponentFragment,
   ProfileUpdateForm,
-  getDefaultValues,
   getImageUrl,
+  getProfileDefaultValues,
   useProfileMutation,
 } from '../../common'
 import BottomDrawer from './BottomDrawer'
@@ -46,7 +46,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   const { sendToast } = useNotification()
 
   const formReturn = useForm<ProfileUpdateForm>({
-    defaultValues: getDefaultValues(profile),
+    defaultValues: getProfileDefaultValues({ profile }),
     resolver: zodResolver(DEFAULT_PROFILE_FORM_VALIDATION),
     mode: 'onBlur',
   })

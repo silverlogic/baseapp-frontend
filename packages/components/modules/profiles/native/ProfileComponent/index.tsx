@@ -33,7 +33,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
             {profile?.name}
           </Text>
           <Text variant="body2" color="low">
-            @{profile?.urlPath?.path}
+            @{profile?.urlPath?.path?.replace('/', '')}
           </Text>
         </View>
         <View style={styles.statsContainer}>

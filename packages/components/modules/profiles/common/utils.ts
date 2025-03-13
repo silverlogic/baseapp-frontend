@@ -1,12 +1,15 @@
 import { getInitialValues } from '@baseapp-frontend/utils'
 
-import { ProfileComponentFragment$data } from '../../../__generated__/ProfileComponentFragment.graphql'
 import { DEFAULT_PROFILE_FORM_VALUES } from './constants'
+import { ProfileGetDefaultFormValues } from './types'
 
 // TODO: move this to a shared location, currently the template also uses it at apps/web/components/design-system/inputs/PhoneNumberField/constants.ts
 export const DEFAULT_PHONE_NUMBER_COUNTRY_CODE = '+1'
 
-export const getDefaultValues = (profile?: ProfileComponentFragment$data | null) => {
+export const getProfileDefaultValues = ({
+  profile,
+  removeSlashInUsername = true,
+}: ProfileGetDefaultFormValues) => {
   const formattedProfile = {
     ...profile,
     phoneNumber: profile?.owner?.phoneNumber ?? DEFAULT_PHONE_NUMBER_COUNTRY_CODE,
@@ -14,6 +17,9 @@ export const getDefaultValues = (profile?: ProfileComponentFragment$data | null)
     bannerImage: profile?.bannerImage?.url ?? '',
     urlPath: profile?.urlPath?.path ?? '',
     biography: profile?.biography ?? '',
+  }
+  if (removeSlashInUsername) {
+    formattedProfile.urlPath = formattedProfile.urlPath?.replace('/', '')
   }
   const defaultValues = getInitialValues({
     current: formattedProfile,
