@@ -4,8 +4,8 @@ import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 
 import Box from '@mui/material/Box'
-import Link from '@mui/material/Link'
 import Tooltip from '@mui/material/Tooltip'
+import Link from 'next/link'
 
 import type { NavItemProps } from '../../../../types'
 import { StyledNavItem } from './styled'
@@ -69,10 +69,9 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
           href={path}
           target="_blank"
           rel="noopener noreferrer"
-          color="inherit"
-          underline="none"
-          sx={{
-            width: 1,
+          style={{
+            color: 'inherit',
+            textDecoration: 'none',
             ...(disabled && {
               pointerEvents: 'none',
             }),
@@ -85,10 +84,9 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
     return (
       <Link
         href={path}
-        color="inherit"
-        underline="none"
-        sx={{
-          width: 1,
+        style={{
+          color: 'inherit',
+          textDecoration: 'none',
           ...(disabled && {
             pointerEvents: 'none',
           }),

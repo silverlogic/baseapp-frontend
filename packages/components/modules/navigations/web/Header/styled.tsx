@@ -31,7 +31,7 @@ export const CustomAppBar = styled(AppBar)<CustomAppBarProps>(({ theme, themeLay
         width: '100%',
         backgroundColor: theme.palette.background.default,
         height: HEADER_HEIGHT.DESKTOP_OFFSET,
-        borderBottom: `dashed 1px ${theme.palette.divider}`,
+        borderBottom: `solid 1px ${theme.palette.divider}`,
       }),
       ...(isNavMini && {
         width: `calc(100% - ${NAV_WIDTH.MINI + 1}px)`,

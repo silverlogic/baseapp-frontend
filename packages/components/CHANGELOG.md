@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 1.0.21
+
+### Patch Changes
+
+- Change `Link` component in `NavItem`, to use Link from next/link instead of Material UI Link.
+- Change `Header` border bottom from dashed to solid
+
 ## 1.0.20
 
 ### Patch Changes
