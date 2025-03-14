@@ -3,7 +3,7 @@
 import { forwardRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { setFormRelayErrors } from '@baseapp-frontend/utils'
+import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -15,7 +15,7 @@ import {
   SocialUpsertForm,
 } from '../../../__shared__/common'
 import { SocialInput as DefaultSocialInput } from '../../../__shared__/web'
-import { useSendMessageMutation } from '../../common'
+import { MESSAGE_TYPE, useSendMessageMutation } from '../../common'
 import { SendMessageProps } from './types'
 
 let nextClientMutationId = 0
@@ -76,6 +76,7 @@ let nextClientMutationId = 0
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
     const { currentProfile } = useCurrentProfile()
+    const { sendToast } = useNotification()
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -90,32 +91,57 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
       const clientMutationId = nextClientMutationId.toString()
 
       const connectionID = ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages')
+      const content = data.body
 
       commitMutation({
         variables: {
           input: {
-            content: data.body,
+            content,
             profileId: currentProfile?.id,
             roomId,
             clientMutationId,
           },
           connections: [connectionID],
         },
+        optimisticResponse: {
+          chatRoomSendMessage: {
+            message: {
+              node: {
+                id: `client:new_message:${Date.now()}`,
+                content,
+                created: new Date(Date.now()).toISOString(),
+                deleted: false,
+                extraData: null,
+                messageType: MESSAGE_TYPE.user,
+                inReplyTo: null,
+                isRead: true,
+                pk: 0, // This property is required, so we need to provide something to keep typescript happy
+                profile: {
+                  id: currentProfile.id,
+                },
+                verb: 'SENT_MESSAGE',
+              },
+            },
+            errors: [],
+          },
+        },
         onCompleted: (response, errors) => {
           if (errors) {
             // TODO: handle errors
-            console.error(errors)
+            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
-          setFormRelayErrors(form, mutationErrors)
-
-          if (!mutationErrors?.length) {
-            form.reset()
+          if (mutationErrors) {
+            setFormRelayErrors(form, mutationErrors)
+            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
         },
         // TODO: handle errors
-        onError: console.error,
+        onError: () => {
+          sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
+        },
       })
+      form.reset()
     }
 
     return (
