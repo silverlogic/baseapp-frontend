@@ -7,6 +7,13 @@
 - Change `Link` component in `NavItem`, to use Link from next/link instead of Material UI Link.
 - Change `Header` border bottom from dashed to solid
 
+## 1.0.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.9
+
 ## 1.0.19
 
 ### Patch Changes

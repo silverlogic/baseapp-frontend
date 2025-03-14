@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.1.9
+
+### Patch Changes
+
+- Add password validations to reset and change expired password
+
 ## 4.1.8
 
 ### Patch Changes
