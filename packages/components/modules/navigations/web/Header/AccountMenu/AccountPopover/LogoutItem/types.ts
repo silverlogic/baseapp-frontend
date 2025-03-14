@@ -1,6 +1,4 @@
-import type { PropsWithChildren } from 'react'
-
-export interface LogoutItemProps extends PropsWithChildren {
+export interface LogoutItemProps {
   handlePopoverOnClose: () => void
   logoutButtonLabel?: string
 }
