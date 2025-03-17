@@ -1,5 +1,6 @@
-import { Link, ListItemButton } from '@mui/material'
+import { ListItemButton } from '@mui/material'
 import { styled } from '@mui/material/styles'
+import Link from 'next/link'
 
 import { StyledLinkProps, StyledNavItemProps } from './types'
 
@@ -123,6 +124,8 @@ export const StyledNavItem = styled(ListItemButton, {
 export const StyledLink = styled(Link)<StyledLinkProps>(
   ({ theme, disabled, hasTabLayout, active }) => ({
     pointerEvents: disabled ? 'none' : 'cursor',
+    color: 'inherit',
+    textDecoration: 'none',
     display: 'flex',
     alignItems: 'center',
     borderBottom: hasTabLayout && active ? `2px solid ${theme.palette.grey[800]}` : 'none',
@@ -132,3 +135,4 @@ export const StyledLink = styled(Link)<StyledLinkProps>(
     variants: [],
   }),
 )
+
