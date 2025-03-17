@@ -43,7 +43,7 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
-      console.error(error)
+      // handled by onError
     }
   }
 

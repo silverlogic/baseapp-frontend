@@ -26,7 +26,6 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
         // silently fail
         // eslint-disable-next-line no-console
         setCurrentProfile(null)
-        console.error(e)
       }
       options?.onSettled?.(data, error, variables, context)
     },

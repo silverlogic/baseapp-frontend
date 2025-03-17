@@ -1,0 +1,1 @@
+export const DEFAULT_PHONE_NUMBER_COUNTRY_CODE = '+1'

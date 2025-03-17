@@ -75,8 +75,6 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
           href={path}
           target="_blank"
           rel="noopener"
-          color="inherit"
-          underline="none"
           disabled={disabled}
           active={active}
           hasTabLayout={hasTabLayout}
@@ -86,14 +84,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
       )
 
     return (
-      <StyledLink
-        href={path}
-        color="inherit"
-        underline="none"
-        disabled={disabled}
-        active={active}
-        hasTabLayout={hasTabLayout}
-      >
+      <StyledLink href={path} disabled={disabled} active={active} hasTabLayout={hasTabLayout}>
         {content}
       </StyledLink>
     )

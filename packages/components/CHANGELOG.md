@@ -1,10 +1,116 @@
 # @baseapp-frontend/components
 
+## 1.0.23
+
+### Patch Changes
+
+- Refactor AccountPopover and improve some tests
+
+## 1.0.22
+
+### Patch Changes
+
+- Add NotificationsList and NotificationBellWithBadge to native components
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.9
+
+## 1.0.21
+
+### Patch Changes
+
+- Change `Link` component in `NavItem`, to use Link from next/link instead of Material UI Link.
+- Change `Header` border bottom from dashed to solid
+
+## 1.0.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.9
+
+## 1.0.19
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.8
+
+## 1.0.18
+
+### Patch Changes
+
+- Moved ProfileSettingsComponent and related queries and mutations from `baseapp-frontend-template`
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.7
+
+## 1.0.17
+
+### Patch Changes
+
+- Fix image path handling for profile images
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.8
+
+## 1.0.16
+
+### Patch Changes
+
+- Fix Group creation and details on landscape mode
+
+## 1.0.15
+
+### Patch Changes
+
+- Clickable profile on comments
+
+## 1.0.14
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.7
+
+## 1.0.13
+
+### Patch Changes
+
+- Remove `ProfileSettingsComponent` Appbar, it should now use `AppbarNavigationLayout` layout when it's rendered on a page route.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.6
+
+## 1.0.12
+
+### Patch Changes
+
+- add filter by date to the module activity log. Filter as a modal on desktop and swap on mobile. Filtering can be don by start and/or end date
+
+## 1.0.11
+
+### Patch Changes
+
+- Implementing Remove Profile Members
+
+## 1.0.10
+
+### Patch Changes
+
+- Enable adding a member to an existing group
+- Refactor member and contacts list into a reusable component
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.5
+
+## 1.0.9
+
+### Patch Changes
+
+- Enabled deletion of chat room messages
+
 ## 1.0.8
 
 ### Patch Changes
 
-- Create profile page storybook
+- Limit group name length
+- Use ellipsis to prevent text overflow
 
 ## 1.0.7
 

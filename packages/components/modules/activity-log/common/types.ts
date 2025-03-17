@@ -8,3 +8,11 @@ export interface LogGroup {
   lastActivityTimestamp: string
   logs: ActivityLogNode[]
 }
+
+export interface FetchParameters {
+  createdFrom: string | null
+  createdTo: string | null
+  userName: string
+  count: number
+  cursor: string | null
+}

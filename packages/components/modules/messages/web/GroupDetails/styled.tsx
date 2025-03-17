@@ -17,3 +17,11 @@ export const GroupTitleContainer = styled(Box)(() => ({
   gridTemplateRows: '22px 22px',
   gap: '4px',
 }))
+
+export const MembersContainer = styled(Box)(() => ({
+  height: '100%',
+  width: '100%',
+  '@media (max-height: 600px) and (orientation: landscape)': {
+    height: '50vh',
+  },
+}))

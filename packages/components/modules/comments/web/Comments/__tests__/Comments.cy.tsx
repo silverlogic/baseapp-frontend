@@ -1,5 +1,8 @@
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
+import { AppRouterContext } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import * as Router from 'next/navigation'
+
 import '../../../../../styles/tailwind/globals.css'
 import {
   commentDeleteMockData,
@@ -26,10 +29,17 @@ import CommentsForTesting from './__utils__/CommentsForTesting'
 describe('Comments', () => {
   it('should render comments and be able to interact with it', () => {
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
-
-    cy.mount(<CommentsForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ mockResolvers: commentsResolver })
-    })
+    cy.mockNextRouter()
+      .then((router) => {
+        cy.mount(
+          <AppRouterContext.Provider value={router}>
+            <CommentsForTesting environment={environment} />
+          </AppRouterContext.Provider>,
+        )
+      })
+      .then(() => {
+        resolveMostRecentOperation({ mockResolvers: commentsResolver })
+      })
     cy.findByText('This is a regular comment.').should('exist')
 
     cy.step('Create a comment and check if it was created')
@@ -176,9 +186,18 @@ describe('Comments', () => {
   it('should render more comments when the bottom is reached', () => {
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
     cy.viewport(500, 350)
-    cy.mount(<CommentsForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ mockResolvers: commentsWithNextPageResolver })
-    })
+
+    cy.mockNextRouter()
+      .then((router) => {
+        cy.mount(
+          <AppRouterContext.Provider value={router}>
+            <CommentsForTesting environment={environment} />
+          </AppRouterContext.Provider>,
+        )
+      })
+      .then(() => {
+        resolveMostRecentOperation({ mockResolvers: commentsWithNextPageResolver })
+      })
 
     cy.step('See the first four comments')
     cy.findByText('First comment').should('exist')
@@ -196,14 +215,15 @@ describe('Comments', () => {
     cy.step('Scroll to the bottom and see the next 5 comments')
 
     cy.findByText('Fourth comment').should('exist').scrollIntoView()
+    cy.findByText('Fifth comment').should('exist').scrollIntoView()
 
     cy.findByLabelText('loading more comments')
       .should('exist')
-      .scrollIntoView()
       .then(() => {
         resolveMostRecentOperation({ data: commentsNextPageMockData })
       })
-    cy.findByText('Fifth comment').should('exist')
+
+    cy.findByLabelText('loading more comments').should('not.exist')
     cy.findByText('Sixth comment').should('exist').scrollIntoView()
     cy.findByText('Seventh comment').should('exist')
     cy.findByText('Eighth comment').should('exist').scrollIntoView()
@@ -212,16 +232,26 @@ describe('Comments', () => {
 
     cy.step('Scroll to the bottom should not trigger another fetch')
     cy.findByText('Tenth comment').scrollIntoView()
-    cy.findByLabelText('loading more comments').should('not.exist')
   })
 
   it('should be able to render all comment`s replies', () => {
+    const router = {
+      push: cy.stub().as('router:push'),
+    }
+    cy.stub(Router, 'useRouter').returns(router)
     cy.viewport(500, 1000)
     const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mount(<CommentsForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ mockResolvers: commentsWithElevenRepliesResolver })
-    })
-
+    cy.mockNextRouter()
+      .then((router) => {
+        cy.mount(
+          <AppRouterContext.Provider value={router}>
+            <CommentsForTesting environment={environment} />
+          </AppRouterContext.Provider>,
+        )
+      })
+      .then(() => {
+        resolveMostRecentOperation({ mockResolvers: commentsWithElevenRepliesResolver })
+      })
     cy.step('See the first comment and its replies')
     cy.findByRole('button', { name: /reply to comment comment-with-eleven-replies/i })
       .click()

@@ -64,6 +64,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
       </UploadImageContainer>
       <TextField
         label="Group Name"
+        inputProps={{ maxLength: 20 }}
         control={control}
         disabled={isMutationInFlight}
         name={FORM_VALUE.title}

@@ -34,6 +34,7 @@ export interface CommentItemProps {
   CommentReplyButton?: FC<CommentReplyButtonProps>
   CommentPinnedBadge?: FC<CommentPinnedBadgeProps>
   Timestamp?: FC<TimestampProps>
+  profilePath?: string
 }
 
 export interface CommentContainerWrapperProps extends BoxProps {

@@ -6,7 +6,7 @@ import { useTheme } from '../../../../providers/native'
 import { createStyles } from './styles'
 import type { ViewProps } from './types'
 
-const View: FC<ViewProps> = ({ style, dismissKeyboard = true, ...props }) => {
+const View: FC<ViewProps> = ({ style, dismissKeyboard = false, ...props }) => {
   const theme = useTheme()
 
   const styles = createStyles(theme)

@@ -1,21 +1,19 @@
-import { PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 import { PreloadedQuery } from 'react-relay'
 
-import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
+import { ChatRoomsQuery$data } from '../../../../__generated__/ChatRoomsQuery.graphql'
+import { GroupDetailsQuery } from '../../../../__generated__/GroupDetailsQuery.graphql'
+import { GroupChatMembersListProps } from '../__shared__/GroupChatMembersList/types'
 
 export interface EditGroupProps extends PropsWithChildren {
-  queryRef: PreloadedQuery<GroupDetailsQueryType>
-  remotePatternsHostName?: string
+  allProfilesRef: ChatRoomsQuery$data
+  queryRef: PreloadedQuery<GroupDetailsQuery>
   roomId: string | undefined
   onCancellation: () => void
   onRemovalFromGroup: () => void
   onValidSubmission: () => void
-}
-
-export interface EditGroupUpload {
-  title: string
-  addParticipants?: any[]
-  removeParticipants?: any[]
-  image?: string | File | Blob | null
+  GroupChatMembersList?: FC<GroupChatMembersListProps>
+  GroupChatMembersListProps?: Partial<GroupChatMembersListProps>
+  remotePatternsHostName?: string
 }

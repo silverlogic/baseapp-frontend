@@ -8,7 +8,8 @@ import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
-import { useActivityLogs } from '../../common'
+import DateFilterChip from '../../DateFilterChip'
+import { FetchParameters, useActivityLogs } from '../../common'
 import EventFilterChip from './EventFilterChip'
 import DefaultLogGroups from './LogGroups'
 import { ActivityLogComponentProps, EventFilterOption } from './types'
@@ -18,23 +19,38 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
   LogGroups = DefaultLogGroups,
   LogGroupsProps,
 }) => {
-  const [selectedFilters, setSelectedFilters] = useState<EventFilterOption[]>(['All'])
+  const [fetchParameters, setFetchParameters] = useState<FetchParameters>({
+    createdFrom: null,
+    createdTo: null,
+    userName: '',
+    count: 10,
+    cursor: null,
+  })
+  const { logGroups, loadNext, hasNext, isLoadingNext, refetch } = useActivityLogs(queryRef)
   const [isPending, startTransition] = useTransition()
+  const [selectedFilters, setSelectedFilters] = useState<EventFilterOption[]>(['All'])
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
   const searchValue = watch('search')
 
-  const { logGroups, loadNext, hasNext, isLoadingNext, refetch } = useActivityLogs(queryRef)
+  const executeRefetch = (updatedParameters: Partial<FetchParameters>) => {
+    const newFetchParameters = { ...fetchParameters, ...updatedParameters }
+    setFetchParameters(newFetchParameters)
+    startTransition(() => {
+      refetch(newFetchParameters, { fetchPolicy: 'store-and-network' })
+    })
+  }
 
   const handleSearchClear = () => {
     startTransition(() => {
       reset()
-      refetch({ userName: '' })
+      executeRefetch({ userName: '' })
     })
   }
+
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value || ''
     startTransition(() => {
-      refetch({ userName: value, count: 10, cursor: null }, { fetchPolicy: 'store-and-network' })
+      executeRefetch({ userName: value })
     })
   }
 
@@ -54,7 +70,8 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
           onClear={handleSearchClear}
           isPending={isPending}
         />
-        <Box display="flex" mt={2} mb={2}>
+        <Box display="flex" mt={2} mb={2} flexDirection="row" gap={2}>
+          <DateFilterChip fetchParameters={fetchParameters} executeRefetch={executeRefetch} />
           <EventFilterChip
             options={['All', 'Comments', 'Reactions', 'Posts']}
             selectedOptions={selectedFilters}
@@ -62,6 +79,11 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
           />
         </Box>
         {!isPending && searchValue && emptyLogsList && <SearchNotFoundState />}
+        {!isPending &&
+          (fetchParameters.createdFrom != null || fetchParameters.createdTo != null) &&
+          emptyLogsList && (
+            <SearchNotFoundState message="No results found for the selected date range." />
+          )}
         <LogGroups
           logGroups={logGroups}
           loadNext={loadNext}

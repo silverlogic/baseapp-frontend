@@ -11,7 +11,7 @@ import useChangeExpiredPassword from '../index'
 
 describe('useChangeExpiredPassword', () => {
   const currentPassword = '1234'
-  const password = '123456'
+  const password = '12345#Abcde'
   const token = 'fake-token'
   const changePasswordUrl = '/change-expired-password'
 

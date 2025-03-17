@@ -3,12 +3,12 @@
 import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { AvatarButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { NewGroupIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Typography } from '@mui/material'
-import Image from 'next/image'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -16,7 +16,7 @@ import { SearchNotFoundState } from '../../../__shared__/web'
 import { ProfileEdge, ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import EmptyProfilesListState from '../__shared__/EmptyProfilesListState'
 import DefaultChatRoomListItem from './ChatRoomListItem'
-import { GroupChatContainer, MainContainer, SearchbarContainer } from './styled'
+import { MainContainer, SearchbarContainer } from './styled'
 import { CreateChatRoomListProps } from './types'
 
 const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
@@ -126,27 +126,11 @@ const CreateChatRoomList: FC<CreateChatRoomListProps> = ({
           {...SearchbarProps}
         />
       </SearchbarContainer>
-      <GroupChatContainer onClick={onGroupChatCreationButtonClicked}>
-        <AvatarWithPlaceholder
-          width={48}
-          height={48}
-          sx={{
-            bgcolor: 'primary.main',
-            alignSelf: 'flex-start',
-            justifySelf: 'center',
-          }}
-        >
-          <Image
-            src="/svg/avatar-group-chat.svg"
-            alt="Avatar Group Fallback"
-            width={24}
-            height={24}
-          />
-        </AvatarWithPlaceholder>
-        <Typography component="span" variant="subtitle2" sx={{ alignSelf: 'center' }}>
-          New Group
-        </Typography>
-      </GroupChatContainer>
+      <AvatarButton
+        onClick={onGroupChatCreationButtonClicked}
+        caption="New Group"
+        Icon={NewGroupIcon}
+      />
       {renderListContent()}
     </MainContainer>
   )

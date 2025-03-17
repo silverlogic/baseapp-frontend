@@ -38,9 +38,8 @@ describe('AccountPopover', () => {
 
     cy.findByRole('button').click()
 
-    cy.contains(userMockData.firstName).should('exist')
-    cy.contains(userMockData.lastName).should('exist')
-    cy.contains(userMockData.email).should('exist')
+    cy.findByText(userMockData.firstName + ' ' + userMockData.lastName).should('exist')
+    cy.findByText(userMockData.email).should('exist')
 
     cy.findByRole('menuitem', { name: /logout/i }).click()
 
@@ -56,8 +55,8 @@ describe('AccountPopover', () => {
 
     cy.findByRole('button').click()
 
-    cy.contains(mockUserProfileData.name).should('exist')
-    cy.contains(mockUserProfileData.urlPath).should('exist')
+    cy.findByText(mockUserProfileData.name).should('exist')
+    cy.findByText(mockUserProfileData.urlPath).should('exist')
 
     // Step 1.
     cy.step('should be able to switch profile')
@@ -169,23 +168,13 @@ describe('AccountPopover', () => {
 
     cy.findByRole('menuitem', { name: /close/i }).should('exist')
 
-    cy.findByLabelText('List of available profiles').within(() => {
-      cy.get('li:visible').each(($li) => {
-        cy.wrap($li)
-          .find('.MuiAvatar-root')
-          .within(($avatar) => {
-            cy.get('img').then(($img) => {
-              if ($img.length && $img.attr('width') && $img.attr('height')) {
-                cy.wrap($img).should('have.attr', 'width', '24')
-                cy.wrap($img).should('have.attr', 'height', '24')
-              } else {
-                cy.wrap($avatar).should('have.attr', 'width', '24')
-                cy.wrap($avatar).should('have.attr', 'height', '24')
-              }
-            })
-          })
-      })
-    })
+    cy.findAllByAltText('Profile avatar').should('have.length', 5)
+
+    cy.findAllByAltText('Profile avatar')
+      .first()
+      .parent()
+      .should('have.attr', 'width', '24')
+      .should('have.attr', 'height', '24')
 
     // Step 4.
     cy.step('should show custom add profile label')

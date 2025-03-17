@@ -1,6 +1,14 @@
 'use client'
 
-import { ChangeEventHandler, FC, useCallback, useMemo, useState, useTransition } from 'react'
+import {
+  ChangeEventHandler,
+  FC,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useTransition,
+} from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
@@ -28,6 +36,7 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   VirtuosoProps = {},
 }) => {
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
+  const [renderList, setRenderList] = useState<boolean>(true)
 
   const [isRefetchPending, startRefetchTransition] = useTransition()
   const { data, loadNext, isLoadingNext, hasNext, refetch } = useRoomsList(
@@ -44,38 +53,52 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value || ''
     startTransition(() => {
-      refetch({
-        q: value,
-        unreadMessages: isInUnreadTab,
-        archived: isInArchivedTab,
-      })
+      refetch(
+        {
+          q: value,
+          unreadMessages: isInUnreadTab,
+          archived: isInArchivedTab,
+        },
+        { fetchPolicy: 'network-only' },
+      )
     })
   }
 
   const handleSearchClear = () => {
     startTransition(() => {
       reset()
-      refetch({
-        q: '',
-        unreadMessages: isInUnreadTab,
-        archived: isInArchivedTab,
-      })
+      refetch(
+        {
+          q: '',
+          unreadMessages: isInUnreadTab,
+          archived: isInArchivedTab,
+        },
+        { fetchPolicy: 'network-only' },
+      )
     })
   }
 
   const handleChange = (event: React.SyntheticEvent, newTab: string) => {
     setTab(newTab as ChatTabValues)
     startRefetchTransition(() => {
+      setRenderList(false)
       refetch(
         {
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
         },
-        { fetchPolicy: 'store-and-network' },
+        { fetchPolicy: 'network-only' },
       )
     })
   }
+
+  // Virtuoso has a bug where it does not recognize endReached if the data is changed while the component is still mounted.
+  // The `renderList` state is a workaround to force the component to dismount and remount,
+  // to ensure that Virtuoso will recognized endReached everytime the tab is changed
+  useEffect(() => {
+    setRenderList(true)
+  }, [data])
 
   const { id: selectedRoom, setChatRoom } = useChatRoom()
   const chatRooms = useMemo(
@@ -126,29 +149,14 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   )
 
   const renderListContent = () => {
-    const emptyChatRoomsList = chatRooms.length === 0
+    const hasEmptyStates = !isPending && chatRooms.length === 0
 
-    if (!isPending && searchValue && emptyChatRoomsList) return <SearchNotFoundState />
+    if (hasEmptyStates) {
+      if (searchValue) return <SearchNotFoundState />
+      return <EmptyChatRoomsState />
+    }
 
-    if (!isPending && emptyChatRoomsList) return <EmptyChatRoomsState />
-
-    return (
-      <Virtuoso
-        data={chatRooms}
-        overscan={1}
-        itemContent={(_index, item) => renderItem(item)}
-        style={{ scrollbarWidth: 'none' }}
-        components={{
-          Footer: renderLoadingState,
-        }}
-        endReached={() => {
-          if (hasNext) {
-            loadNext(5)
-          }
-        }}
-        {...VirtuosoProps}
-      />
-    )
+    return undefined
   }
 
   return (
@@ -194,6 +202,23 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
         <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
       </Tabs>
       {renderListContent()}
+      {renderList && (
+        <Virtuoso
+          data={chatRooms}
+          overscan={1}
+          itemContent={(_index, item) => renderItem(item)}
+          style={{ scrollbarWidth: 'none' }}
+          components={{
+            Footer: renderLoadingState,
+          }}
+          endReached={() => {
+            if (hasNext) {
+              loadNext(5)
+            }
+          }}
+          {...VirtuosoProps}
+        />
+      )}
     </ChatRoomListContainer>
   )
 }

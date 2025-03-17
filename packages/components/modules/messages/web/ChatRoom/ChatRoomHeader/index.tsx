@@ -6,19 +6,24 @@ import { IconButton } from '@baseapp-frontend/design-system/components/web/butto
 import { ThreeDotsIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
+import { MembersListFragment$data } from '../../../../../__generated__/MembersListFragment.graphql'
+import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
 import {
   TitleFragment,
   getParticipantCountString,
   useArchiveChatRoomMutation,
   useChatRoom,
+  useCheckIsAdmin,
   useNameAndAvatar,
 } from '../../../common'
+import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
@@ -33,15 +38,17 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
 }) => {
   const roomHeader = useFragment(TitleFragment, roomTitleRef)
   const [open, setOpen] = useState(false)
+  const { currentProfile } = useCurrentProfile()
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
   const { isGroup } = roomHeader
   const { title, avatar } = useNameAndAvatar(roomHeader)
+  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
+  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
   const members = getParticipantCountString(participantsCount)
   const popover = usePopover()
-  const { currentProfile } = useCurrentProfile()
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
   const toggleArchiveChatroom = () => {
@@ -69,8 +76,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
       <LeaveGroupDialog
         open={open}
         onClose={() => setOpen(false)}
-        profileId={currentProfile?.id}
+        profileId={currentProfile?.id ?? ''}
         roomId={roomId}
+        removingParticipantId={currentProfile?.id ?? ''}
+        isSoleAdmin={isSoleAdmin}
       />
       <ChatHeaderContainer>
         {isUpToMd ? (
@@ -98,9 +107,17 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             sx={{ border: 'none', alignSelf: 'center' }}
           />
           <Box>
-            <Typography component="span" variant="subtitle2" sx={{ float: 'left', clear: 'left' }}>
+            <TypographyWithEllipsis
+              component="span"
+              variant="subtitle2"
+              maxWidth={isUpToMd ? '300px' : '200px'}
+              sx={{
+                float: 'left',
+                clear: 'left',
+              }}
+            >
               {title}
-            </Typography>
+            </TypographyWithEllipsis>
             {isGroup && (
               <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
                 {members}

@@ -41,7 +41,7 @@ const ProfileMembersSuspended: FC<ProfileMembersSuspendedProps> = ({
     <Typography component="p" variant="body2" color="text.secondary" mb={4}>
       {subtitle}
     </Typography>
-    <Suspense fallback={<InitialLoadingState />}>
+    <Suspense fallback={<InitialLoadingState CircularProgressProps={{ size: 20 }} />}>
       <ProfileMembers {...props} />
     </Suspense>
   </>
