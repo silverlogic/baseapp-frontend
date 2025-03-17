@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.22
+
+### Patch Changes
+
+- Add NotificationsList and NotificationBellWithBadge to native components
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.9
+
 ## 1.0.21
 
 ### Patch Changes
