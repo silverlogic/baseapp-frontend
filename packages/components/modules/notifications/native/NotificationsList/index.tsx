@@ -2,19 +2,20 @@ import React, { FC, Suspense, useMemo } from 'react'
 
 import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
-import { View } from '@baseapp-frontend/design-system/components/native/views'
+import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
-import { FlatList } from 'react-native'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 
 import { NotificationsListFragment$key } from '../../../../__generated__/NotificationsListFragment.graphql'
 import { NotificationsListQuery as NotificationsListQueryType } from '../../../../__generated__/NotificationsListQuery.graphql'
 import {
+  NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
   useNotificationsSubscription,
 } from '../../common'
+import { NotificationsNode } from '../../common/types'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
@@ -34,8 +35,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     fetchPolicy: 'store-and-network',
   })
 
-  // TODO: handle infinite scroll
-  const { data, refetch } = usePaginationFragment<
+  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
     NotificationsListQueryType,
     NotificationsListFragment$key
   >(NotificationsListFragment, me)
@@ -51,7 +51,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     refetch(options, { fetchPolicy: 'network-only' })
   }
 
-  const renderNotificationItem = (notification: any) => {
+  const renderNotificationItem = (notification: NotificationsNode) => {
     if (!notification) return null
 
     // TODO add notifications divider and unread/Read notifications as per design
@@ -68,8 +68,18 @@ const NotificationsList: FC<NotificationsListProps> = ({
     if (notifications.length === 0) return <EmptyState />
 
     return (
-      <View>
-        <FlatList data={notifications} renderItem={({ item }) => renderNotificationItem(item)} />
+      <View style={styles.listContainer}>
+        <InfiniteScrollerView
+          data={notifications}
+          renderItem={({ item }: { item: NotificationsNode }) => renderNotificationItem(item)}
+          estimatedItemSize={134}
+          onEndReached={() => {
+            if (hasNext) {
+              loadNext(NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT)
+            }
+          }}
+          isLoading={isLoadingNext}
+        />
       </View>
     )
   }
