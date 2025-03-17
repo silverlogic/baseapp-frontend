@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "sideEffects": false,
   "scripts": {
     "babel:transpile": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",

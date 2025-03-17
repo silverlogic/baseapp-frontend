@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.23
+
+### Patch Changes
+
+- Refactor AccountPopover and improve some tests
+
 ## 1.0.22
 
 ### Patch Changes
