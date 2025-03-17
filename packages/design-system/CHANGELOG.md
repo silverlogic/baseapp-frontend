@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.9
+
+### Patch Changes
+
+- Add Badge and AvatarWithPlaceholder components for native
+
 ## 1.0.8
 
 ### Patch Changes
