@@ -1,6 +1,5 @@
-import { AllProfilesListFragment$data } from "../../../../__generated__/AllProfilesListFragment.graphql"
-import { MessagesListFragment$data } from "../../../../__generated__/MessagesListFragment.graphql"
-
+import { AllProfilesListFragment$data } from '../../../../__generated__/AllProfilesListFragment.graphql'
+import { MessagesListFragment$data } from '../../../../__generated__/MessagesListFragment.graphql'
 
 export interface TitleAndImage {
   title: string

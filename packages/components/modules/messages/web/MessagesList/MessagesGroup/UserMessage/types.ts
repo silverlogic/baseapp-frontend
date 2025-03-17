@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
-import { MessageItemProps } from './MessageItem/types'
 import { MessageNode } from '../../../../common'
+import { MessageItemProps } from './MessageItem/types'
 
 export interface UserMessageProps {
   allMessages: MessageNode[]

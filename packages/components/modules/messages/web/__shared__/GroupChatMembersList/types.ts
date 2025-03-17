@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren } from 'react'
 
 import { SearchbarProps } from '@baseapp-frontend/design-system/components/web/inputs'
-
 import { WithControllerProps } from '@baseapp-frontend/utils'
 
 import { BoxProps } from '@mui/material'

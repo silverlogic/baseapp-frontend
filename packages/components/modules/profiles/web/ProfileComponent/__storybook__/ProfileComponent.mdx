@@ -1,0 +1,69 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Profiles/ProfileComponent" />
+
+# Component Documentation
+
+## ProfileComponent
+
+- **Purpose**: The `ProfileComponent` displays a detailed view of a user profile, including their profile picture, name, biography, followers count, and additional actions like "Follow," "Block," or "Edit Profile" (when applicable).
+
+- **Expected Behavior**:  
+  The component should render all profile-related information and actions based on the props provided. It also supports:
+  - Conditional rendering of the "Edit Profile" button if the `currentProfileId` matches the profile's `id`.
+  - Feedback when the "Share Profile" button is clicked.
+  - Handling edge cases, such as missing profile data or API errors.
+
+---
+
+## Use Cases
+
+- **Current Usage**: The `ProfileComponent` is used in the `ProfilePage` to provide a detailed view of a user's profile.
+
+---
+
+## Props
+
+- **profile** (Relay Fragment Reference): The profile data to be displayed. This includes the user's name, biography, images, and other information about the profile.
+
+- **currentProfileId** (string): The ID of the currently logged-in user's profile. Used to determine if the "Edit Profile" button should be displayed.
+
+---
+
+## Notes
+
+- **Related Components**:
+  - `BlockButtonWithDialog`: Used within the `ProfileComponent` for blocking or unblocking profiles.
+  - `FollowToggleButton`: Allows toggling the follow/unfollow state for the profile.
+
+---
+
+## Example Usage
+
+```javascript
+import ProfileComponent from '@baseapp-frontend/components/Profiles/ProfileComponent'
+
+const ExampleProfile = () => {
+  const profileData = {
+    id: 'profile-1',
+    name: 'John Doe',
+    biography: 'Software Engineer at Example Inc.',
+    image: {
+      url: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png',
+    },
+    bannerImage: {
+      url: 'https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png',
+    },
+    followersCount: 120,
+    followingCount: 80,
+    isFollowedByMe: false,
+    isBlockedByMe: false,
+    canChange: true,
+    urlPath: { path: '/john-doe' },
+  }
+
+  return <ProfileComponent profile={profileData} currentProfileId="profile-1" />
+}
+
+export default ExampleProfile
+```

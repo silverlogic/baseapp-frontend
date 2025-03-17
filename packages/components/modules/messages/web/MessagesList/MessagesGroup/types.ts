@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
+import { MessageNode } from '../../../common'
 import { SystemMessageProps } from './SystemMessage/types'
 import { UserMessageProps } from './UserMessage/types'
-import { MessageNode } from '../../../common'
 
 export interface MessagesGroupProps {
   allMessages: MessageNode[]

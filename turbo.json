@@ -38,7 +38,7 @@
       "outputs": []
     },
     "storybook": {
-      "dependsOn": ["^storybook"]
+      "dependsOn": ["^build", "^storybook"]
     }
   }
 }

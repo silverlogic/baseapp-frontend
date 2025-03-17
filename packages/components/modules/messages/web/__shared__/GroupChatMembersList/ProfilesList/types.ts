@@ -1,8 +1,9 @@
 import { FC } from 'react'
 
+import { BoxProps } from '@mui/material'
 import { LoadMoreFn } from 'react-relay'
 import { VirtuosoProps } from 'react-virtuoso'
-import { BoxProps } from '@mui/material'
+
 import { ProfileNode } from '../../types'
 
 export interface ProfilesListProps {
