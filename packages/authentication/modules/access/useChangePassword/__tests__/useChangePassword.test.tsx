@@ -11,18 +11,8 @@ import useChangePassword from '../index'
 
 describe('useChangePassword', () => {
   const currentPassword = '1234'
-<<<<<<< HEAD
-<<<<<<< HEAD:packages/authentication/modules/access/useChangeExpiredPassword/__tests__/useChangeExpiredPassword.test.tsx
   const password = '12345#Abcde'
-  const token = 'fake-token'
-=======
-  const password = '123456'
->>>>>>> 3034abb (feat: migrate change password from baseapp-frontend-template):packages/authentication/modules/access/useChangePassword/__tests__/useChangePassword.test.tsx
-  const changePasswordUrl = '/change-expired-password'
-=======
-  const password = 'abcABC@123456'
   const changePasswordUrl = '/users/change-password'
->>>>>>> 426f513 (feat: add AlertTriangleIcon to native)
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
