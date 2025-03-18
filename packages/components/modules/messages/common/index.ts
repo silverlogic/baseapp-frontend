@@ -7,6 +7,8 @@ export { default as withChatRoomProvider } from './context/withChatRoomProvider'
 
 export * from './graphql/mutations/ArchiveChatRoom'
 export * from './graphql/mutations/CreateChatRoom'
+export * from './graphql/mutations/MessageDelete'
+export * from './graphql/mutations/MessageUpdate'
 export * from './graphql/mutations/ReadMessages'
 export * from './graphql/mutations/SendMessage'
 export * from './graphql/mutations/UnreadChat'

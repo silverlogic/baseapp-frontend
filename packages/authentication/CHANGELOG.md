@@ -1,5 +1,30 @@
 # @baseapp-frontend/authentication
 
+## 4.1.9
+
+### Patch Changes
+
+- Add password validations to reset and change expired password
+
+## 4.1.8
+
+### Patch Changes
+
+- Fix image path handling for profile images
+
+## 4.1.7
+
+### Patch Changes
+
+- Remove some unnecessary `console.error` logs.
+
+## 4.1.6
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.5
+
 ## 4.1.5
 
 ### Patch Changes

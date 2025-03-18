@@ -1,6 +1,5 @@
 import { FC, useCallback, useRef, useState } from 'react'
 
-import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
 import { Button } from '@baseapp-frontend/design-system/components/native/buttons'
 import { CameraIcon, ImageIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { TextInput } from '@baseapp-frontend/design-system/components/native/inputs'
@@ -28,8 +27,8 @@ import {
   PROFILE_FORM_VALUE,
   ProfileComponentFragment,
   ProfileUpdateForm,
-  getDefaultValues,
   getImageUrl,
+  getProfileDefaultValues,
   useProfileMutation,
 } from '../../common'
 import BottomDrawer from './BottomDrawer'
@@ -47,7 +46,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   const { sendToast } = useNotification()
 
   const formReturn = useForm<ProfileUpdateForm>({
-    defaultValues: getDefaultValues(profile),
+    defaultValues: getProfileDefaultValues({ profile }),
     resolver: zodResolver(DEFAULT_PROFILE_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -246,103 +245,100 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   const hasErrorBanner = bannerImageUrl.includes('error')
 
   return (
-    <View style={styles.pageContainer}>
-      <AppBar title="Profile Settings" statusBarHeight={0} />
-      <ScrollView style={styles.scrollViewContainer}>
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <View style={styles.bannerContainer}>
+    <ScrollView style={styles.scrollViewContainer}>
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View style={styles.bannerContainer}>
+            <Image
+              source={{ uri: bannerImageUrl }}
+              style={[styles.bannerImage, hasErrorBanner ? styles.errorBorder : {}]}
+            />
+            <Pressable style={styles.editIconContainer} onPress={handleEditBanner}>
+              <CameraIcon width={20} height={20} color={theme.colors.surface.default} />
+            </Pressable>
+          </View>
+          <View style={styles.profileContainer}>
+            {imageUrl ? (
               <Image
-                source={{ uri: bannerImageUrl }}
-                style={[styles.bannerImage, hasErrorBanner ? styles.errorBorder : {}]}
+                source={{ uri: imageUrl }}
+                style={[styles.profileImage, hasErrorImage ? styles.errorBorder : {}]}
               />
-              <Pressable style={styles.editIconContainer} onPress={handleEditBanner}>
-                <CameraIcon width={20} height={20} color={theme.colors.surface.default} />
-              </Pressable>
-            </View>
-            <View style={styles.profileContainer}>
-              {imageUrl ? (
-                <Image
-                  source={{ uri: imageUrl }}
-                  style={[styles.profileImage, hasErrorImage ? styles.errorBorder : {}]}
-                />
-              ) : (
-                <ImageIcon
-                  width={33}
-                  height={33}
-                  color={theme.colors.object.disabled}
-                  style={hasErrorImage ? styles.errorBorder : {}}
-                />
-              )}
-              <Pressable
-                style={[styles.editIconContainer, { bottom: 0, right: 0 }]}
-                onPress={handleEditProfile}
-              >
-                <CameraIcon width={20} height={20} color={theme.colors.surface.default} />
-              </Pressable>
-            </View>
+            ) : (
+              <ImageIcon
+                width={33}
+                height={33}
+                color={theme.colors.object.disabled}
+                style={hasErrorImage ? styles.errorBorder : {}}
+              />
+            )}
+            <Pressable
+              style={[styles.editIconContainer, { bottom: 0, right: 0 }]}
+              onPress={handleEditProfile}
+            >
+              <CameraIcon width={20} height={20} color={theme.colors.surface.default} />
+            </Pressable>
           </View>
-          <View style={styles.formContainer}>
-            <View style={styles.formGroup}>
-              <TextInput
-                label="Name"
-                name={PROFILE_FORM_VALUE.name}
-                control={control}
-                mode="outlined"
-                outlineStyle={styles.input}
-              />
-              <TextInput
-                label="Username"
-                name={PROFILE_FORM_VALUE.urlPath}
-                control={control}
-                mode="outlined"
-                outlineStyle={styles.input}
-              />
-              {/* TODO: Add a formattable TextInput for phone numbers */}
-              <TextInput
-                label="Phone Number"
-                name={PROFILE_FORM_VALUE.phoneNumber}
-                control={control}
-                mode="outlined"
-                outlineStyle={styles.input}
-              />
-            </View>
-            <View style={styles.formGroup}>
-              <TextInput
-                label="Bio"
-                name={PROFILE_FORM_VALUE.biography}
-                control={control}
-                mode="outlined"
-                multiline
-                numberOfLines={4}
-                style={styles.bioInput}
-                outlineStyle={styles.input}
-              />
-              <View style={styles.saveButtonContainer}>
-                <Button
-                  onPress={handleSubmit(handleSave)}
-                  size="medium"
-                  loading={isMutationInFlight}
-                  contentStyle={hasChanged ? styles.saveButton : styles.saveButtonDisabled}
-                  labelStyle={styles.saveButtonLabel}
-                  disabled={isMutationInFlight || !hasChanged}
-                >
-                  {isMutationInFlight ? '' : 'Save Changes'}
-                </Button>
-              </View>
-            </View>
-          </View>
-          <BottomDrawer
-            bottomDrawerRef={bottomDrawerRef}
-            handleSheetChanges={handleSheetChanges}
-            type={fieldType}
-            handleViewPhotoLibrary={handleViewPhotoLibrary}
-            handleTakePhoto={handleTakePhoto}
-            handleRemoveImage={handleRemoveImage}
-          />
         </View>
-      </ScrollView>
-    </View>
+        <View style={styles.formContainer}>
+          <View style={styles.formGroup}>
+            <TextInput
+              label="Name"
+              name={PROFILE_FORM_VALUE.name}
+              control={control}
+              mode="outlined"
+              outlineStyle={styles.input}
+            />
+            <TextInput
+              label="Username"
+              name={PROFILE_FORM_VALUE.urlPath}
+              control={control}
+              mode="outlined"
+              outlineStyle={styles.input}
+            />
+            {/* TODO: Add a formattable TextInput for phone numbers */}
+            <TextInput
+              label="Phone Number"
+              name={PROFILE_FORM_VALUE.phoneNumber}
+              control={control}
+              mode="outlined"
+              outlineStyle={styles.input}
+            />
+          </View>
+          <View style={styles.formGroup}>
+            <TextInput
+              label="Bio"
+              name={PROFILE_FORM_VALUE.biography}
+              control={control}
+              mode="outlined"
+              multiline
+              numberOfLines={4}
+              style={styles.bioInput}
+              outlineStyle={styles.input}
+            />
+            <View style={styles.saveButtonContainer}>
+              <Button
+                onPress={handleSubmit(handleSave)}
+                size="medium"
+                loading={isMutationInFlight}
+                contentStyle={hasChanged ? styles.saveButton : styles.saveButtonDisabled}
+                labelStyle={styles.saveButtonLabel}
+                disabled={isMutationInFlight || !hasChanged}
+              >
+                {isMutationInFlight ? '' : 'Save Changes'}
+              </Button>
+            </View>
+          </View>
+        </View>
+        <BottomDrawer
+          bottomDrawerRef={bottomDrawerRef}
+          handleSheetChanges={handleSheetChanges}
+          type={fieldType}
+          handleViewPhotoLibrary={handleViewPhotoLibrary}
+          handleTakePhoto={handleTakePhoto}
+          handleRemoveImage={handleRemoveImage}
+        />
+      </View>
+    </ScrollView>
   )
 }
 

@@ -5,23 +5,29 @@ import { MenuItem, MenuList, Typography } from '@mui/material'
 import { ChatRoomOptionsProps } from './types'
 
 const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
+  isArchived,
+  isArchiveMutationInFlight,
+  isGroup,
   onArchiveClicked,
   onDetailsClicked,
   onLeaveClicked,
 }) => (
   <MenuList>
-    {/* TODO: Implement archive room functionality */}
-    <MenuItem onClick={onArchiveClicked}>
-      <Typography variant="body2">Archive Chat</Typography>
+    <MenuItem onClick={onArchiveClicked} disabled={isArchiveMutationInFlight}>
+      <Typography variant="body2">{isArchived ? 'Unarchive Chat' : 'Archive Chat'}</Typography>
     </MenuItem>
-    <MenuItem onClick={onDetailsClicked}>
-      <Typography variant="body2">Group Details</Typography>
-    </MenuItem>
-    <MenuItem onClick={onLeaveClicked}>
-      <Typography variant="body2" color="error">
-        Leave Group
-      </Typography>
-    </MenuItem>
+    {isGroup ? (
+      <>
+        <MenuItem onClick={onDetailsClicked}>
+          <Typography variant="body2">Group Details</Typography>
+        </MenuItem>
+        <MenuItem onClick={onLeaveClicked}>
+          <Typography variant="body2" color="error">
+            Leave Group
+          </Typography>
+        </MenuItem>
+      </>
+    ) : null}
   </MenuList>
 )
 

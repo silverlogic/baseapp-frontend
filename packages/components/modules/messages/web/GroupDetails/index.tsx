@@ -5,6 +5,7 @@ import { FC, Suspense, useRef, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Typography, useTheme } from '@mui/material'
 import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
@@ -17,15 +18,15 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   getParticipantCountString,
+  useCheckIsAdmin,
   useGroupNameAndAvatar,
   useRoomListSubscription,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
 import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
-import { CHAT_ROOM_PARTICIPANT_ROLES } from './ProfileCard/constants'
 import { GroupMembersEdge } from './ProfileCard/types'
-import { GroupHeaderContainer, GroupTitleContainer } from './styled'
+import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
 import { GroupDetailsProps } from './types'
 
 const GroupDetails: FC<GroupDetailsProps> = ({
@@ -57,9 +58,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const me = members?.edges.find((edge) => profileId && edge?.node?.profile?.id === profileId)
-  const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
-
+  const { isAdmin, isSoleAdmin } = useCheckIsAdmin(members)
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
 
@@ -123,19 +122,9 @@ const GroupDetails: FC<GroupDetailsProps> = ({
         profileId={profileId}
         roomId={group?.id}
         open={!!removingParticipantId}
-        removingParticipantId={removingParticipantId}
-        removingParticipantName={removingParticipantName.current}
+        removingParticipantId={removingParticipantId ?? ''}
         onClose={handleRemoveDialogClose}
-        title={
-          profileId === removingParticipantId
-            ? undefined
-            : `Remove ${removingParticipantName.current}?`
-        }
-        content={
-          profileId === removingParticipantId
-            ? undefined
-            : `Are you sure you want to remove ${removingParticipantName.current}? This cannot be undone.`
-        }
+        isSoleAdmin={isSoleAdmin}
       />
       <GroupDetailsHeader
         onBackButtonClicked={onBackButtonClicked}
@@ -146,9 +135,9 @@ const GroupDetails: FC<GroupDetailsProps> = ({
         <GroupHeaderContainer>
           <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
           <GroupTitleContainer>
-            <Typography variant="subtitle1" color="text.primary">
+            <TypographyWithEllipsis variant="subtitle1" color="text.primary">
               {title}
-            </Typography>
+            </TypographyWithEllipsis>
             <Typography variant="body2" color="text.secondary">
               {getParticipantCountString(group?.participantsCount)}
             </Typography>
@@ -167,9 +156,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
               Members
             </Typography>
           </Box>
-          <Box height="100%" width="100%">
-            {renderMembers()}
-          </Box>
+          <MembersContainer>{renderMembers()}</MembersContainer>
         </Box>
       </Box>
     </>

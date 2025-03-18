@@ -2,9 +2,11 @@
 
 import { FC, useRef, useState, useTransition } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Typography } from '@mui/material'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useRefetchableFragment } from 'react-relay'
 
 import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
@@ -34,12 +36,14 @@ const CommentItem: FC<CommentItemProps> = ({
   CommentReplyButton = DefaultCommentReplyButton,
   CommentPinnedBadge = DefaultCommentPinnedBadge,
   CommentReactionButton = DefaultCommentReactionButton,
+  profilePath = '/profile',
 }) => {
   const [comment, refetchCommentItem] = useRefetchableFragment<
     CommentItemRefetchQuery,
     CommentItem_comment$key
   >(CommentItemFragmentQuery, commentRef)
   const { setCommentReply } = useCommentReply()
+  const router = useRouter()
 
   const commentItemRef = useRef<HTMLDivElement>(null)
 
@@ -58,6 +62,8 @@ const CommentItem: FC<CommentItemProps> = ({
   const { resetCommentReply } = useCommentReply()
 
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
+
+  const profileUrl = `${profilePath}/${comment?.user?.pk}`
 
   const showReplies = () => {
     if (isReplyExpanded) return
@@ -127,7 +133,7 @@ const CommentItem: FC<CommentItemProps> = ({
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
         <ActionsOverlay
           actions={actions}
-          enableDelete={enableDelete && comment.canDelete}
+          showDeleteButton={enableDelete && comment.canDelete}
           handleDeleteItem={handleDeleteComment}
           isDeletingItem={isDeletingComment}
           title="Comment"
@@ -135,16 +141,19 @@ const CommentItem: FC<CommentItemProps> = ({
           ref={commentItemRef}
         >
           <CommentContainer>
-            <AvatarWithPlaceholder
+            <ClickableAvatar
               width={40}
               height={40}
               alt={comment.user?.fullName ?? `Comment's user avatar`}
               src={comment.user?.avatar?.url}
+              onClick={() => router.push(profileUrl)}
             />
             <div className="grid gap-3">
               <div className="grid grid-cols-1 justify-start">
                 <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
-                  <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
+                  <Link href={profileUrl}>
+                    <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
+                  </Link>
                   <CommentPinnedBadge isPinned={comment.isPinned} />
                 </div>
                 {renderCommentContent()}

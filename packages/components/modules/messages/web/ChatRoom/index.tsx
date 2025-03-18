@@ -43,6 +43,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
   return (
     <ChatRoomContainer>
       <ChatRoomHeader
+        isArchived={!!chatRoom.isArchived}
         participantsCount={chatRoom.participantsCount}
         roomTitleRef={chatRoom}
         onDisplayGroupDetailsClicked={onDisplayGroupDetailsClicked}

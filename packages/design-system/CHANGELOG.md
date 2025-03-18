@@ -1,5 +1,50 @@
 # @baseapp-frontend/design-system
 
+## 1.0.9
+
+### Patch Changes
+
+- Add Badge and AvatarWithPlaceholder components for native
+
+## 1.0.8
+
+### Patch Changes
+
+- Added BiometricsIcon, DevicesIcon, EmailIcon, KeyIcon and LockIcon to Native icons
+
+## 1.0.7
+
+### Patch Changes
+
+- Moved PhoneNumberInput and UsernameIcon from `baseapp-frontend-template`
+
+## 1.0.6
+
+### Patch Changes
+
+- Redesing the `Appbar` native component to make it more reusable.
+- Create several native icons.
+- Add the `ClickableAvatar` native component.
+- The param `dismissKeyboard` defaults to `false` on the native View component.
+- Add the `AppbarNavigationLayout` native layout.
+- The `BottomNavigationLayout` native layout can now exclude the header for the selected routes.
+
+## 1.0.5
+
+### Patch Changes
+
+- Add Avatar Button
+- Make confirm Dialog more customizable
+- Add new icons
+
+## 1.0.4
+
+### Patch Changes
+
+- Implement a snackbar component with a 'progress bar' indicating the remaining time before it automatically disappears
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.5
+
 ## 1.0.3
 
 ### Patch Changes

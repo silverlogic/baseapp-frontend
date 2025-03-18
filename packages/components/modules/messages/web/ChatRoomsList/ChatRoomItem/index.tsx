@@ -7,10 +7,10 @@ import {
   UnarchiveIcon,
   UnreadIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
-import { ConnectionHandler, useFragment } from 'react-relay'
-import { RecordSourceSelectorProxy } from 'relay-runtime'
+import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
@@ -20,7 +20,6 @@ import {
   LastMessageFragment,
   TitleFragment,
   UnreadMessagesCountFragment,
-  getChatRoomConnections,
   useArchiveChatRoomMutation,
   useNameAndAvatar,
   useUnreadChatMutation,
@@ -94,13 +93,6 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
                     archive: !isInArchivedTab,
                   },
                 },
-                updater: (store: RecordSourceSelectorProxy<unknown>, data: any) => {
-                  if (!data?.errors) {
-                    getChatRoomConnections(store, currentProfile.id).forEach((connectionRecord) =>
-                      ConnectionHandler.deleteNode(connectionRecord, roomRef.id),
-                    )
-                  }
-                },
               })
             }
           },
@@ -115,7 +107,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           closeOnClick: true,
         },
       ]}
-      enableDelete
+      showDeleteButton
       handleDeleteItem={() => {}}
       isDeletingItem={false}
       ref={chatCardRef}
@@ -133,7 +125,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           src={avatar}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
-          <Typography variant="subtitle2">{title}</Typography>
+          <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
           {lastMessage && lastMessageTime ? (
             <Box
               display="grid"

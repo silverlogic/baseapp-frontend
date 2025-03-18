@@ -1,41 +1,43 @@
 import { FC } from 'react'
 
-import { useRouter } from 'expo-router'
-import { Platform } from 'react-native'
-import { Appbar } from 'react-native-paper'
-
 import { useTheme } from '../../../../providers/native'
+import { IconButton } from '../../buttons'
+import { ChevronIcon as DefaultBackIcon, CloseIcon as DefaultCloseIcon } from '../../icons'
+import { Text } from '../../typographies'
+import { View } from '../../views'
 import { createStyles } from './styles'
 import { AppBarProps } from './types'
 
-const AppBar: FC<AppBarProps> = ({ title, goBack, headerStyle, statusBarHeight }) => {
-  const router = useRouter()
+const AppBar: FC<AppBarProps> = ({
+  title,
+  onBack,
+  onClose,
+  BackIcon = DefaultBackIcon,
+  CloseIcon = DefaultCloseIcon,
+}) => {
   const theme = useTheme()
-
   const styles = createStyles(theme)
 
-  const isAndroid = Platform.OS === 'android'
-
-  const titleStyle = [styles.title, isAndroid && styles.titleAndroid]
-
-  const handleGoBack = () => {
-    if (goBack) {
-      goBack()
-    } else {
-      router.back()
-    }
-  }
-
   return (
-    <Appbar.Header style={[styles.container, headerStyle]} statusBarHeight={statusBarHeight}>
-      <Appbar.BackAction
-        onPress={handleGoBack}
-        size={16}
-        color={theme.colors.object.low}
-        style={isAndroid && styles.backActionAndroid}
-      />
-      <Appbar.Content title={title} titleStyle={titleStyle} />
-    </Appbar.Header>
+    <View style={styles.container}>
+      <View style={styles.buttonContainer}>
+        {onBack && (
+          <IconButton onPress={onBack}>
+            <BackIcon />
+          </IconButton>
+        )}
+      </View>
+      <Text variant="subtitle2" style={styles.title}>
+        {title}
+      </Text>
+      <View style={styles.buttonContainer}>
+        {onClose && (
+          <IconButton onPress={onClose}>
+            <CloseIcon />
+          </IconButton>
+        )}
+      </View>
+    </View>
   )
 }
 

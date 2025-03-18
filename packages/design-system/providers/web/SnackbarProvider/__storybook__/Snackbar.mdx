@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/SnackbarProvider/SnackbarProvider" />
+
+# Component Documentation
+
+## SnackbarProvider
+
+- **Purpose**: A customized wrapper around MUI's snackbar displaying messages from the notification store. It provides consistent styling for icons and a uniform color scheme.
+- **Expected Behavior**: Renders messages set with 'useNotification'. The messages disappear automatically after a fixed amount of time, but can also be dismissed before by clicking on a close icon. The component can be used with or without a bar indicating the remaining time before the message is dismissed. If used without a bar, the time until automatic dismissal is restarted after the user interacts with the message, if used with bar the message is always dismissed after the timeout, no matter whether the user interacted with it or not.
+
+## Props
+
+- **children** (ReactNode): The content wrapped by the SnackbarProvider. Any components in this wrapped content can make use of 'useNotification' to display messages
+- **shouldShowProgress** (Boolean): The default for showing the progress bar, indicating the time left before the snackbar disappears. Will be overwritten by the 'shouldShowProgress' option of sendToast, if it is set.
+- **...other**: All other props are passed to the snackbar
+
+## Example Usage
+
+```javascript
+import { SnackbarProvider } from '@baseapp-frontend/design-system/web'
+import { useNotification } from '@baseapp-frontend/utils'
+
+const MessageEmitter = () => {
+  const { sendToast } = useNotification()
+
+  return (
+    <>
+      <Button onClick={() => sendToast("Button 1 was clicked", {type: "info"})}>
+        Click this button to display a message without progress bar.
+      </Button>
+      <Button onClick={() => sendToast("Button 2 was clicked", {type: "info", shouldShowProgress: true})}>
+        Click this button to display a message with progress bar.
+      </Button>
+    < />
+  )
+}
+
+const MyComponent = () => {
+  return (
+    <SnackbarProvider>
+      <MessageEmitter />
+    </SnackbarProvider>
+  )
+}
+```
