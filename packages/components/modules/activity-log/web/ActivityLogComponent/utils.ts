@@ -1,14 +1,22 @@
-export const getUpdateMessage = (verb: string, diff: Record<string, any>) => {
-  if (!diff) return `Updated ${verb.split('.')[0]}`
+export const getUpdateMessage = (verb: string, diff: Record<string, any>): string => {
+  const baseMessage = `Updated ${verb.split('.')[0]}`
 
-  const updates: string[] = []
+  if (!diff) {
+    return baseMessage
+  }
 
-  Object.keys(diff).forEach((key) => {
-    if (key === 'image') updates.push('Updated their profile picture')
-    else if (key === 'banner_image') updates.push('Updated their profile banner')
-    else if (key === 'biography') updates.push('Updated their bio')
-    else updates.push(`Updated ${key.replace('_', ' ')}`)
+  const updateMessages: string[] = Object.keys(diff).map((key) => {
+    switch (key) {
+      case 'image':
+        return 'Updated their profile picture'
+      case 'banner_image':
+        return 'Updated their profile banner'
+      case 'biography':
+        return 'Updated their bio'
+      default:
+        return `Updated ${key.replace('_', ' ')}`
+    }
   })
 
-  return updates.length > 0 ? updates.join(', ') : `Updated ${verb.split('.')[0]}`
+  return updateMessages.length > 0 ? updateMessages.join(', ') : baseMessage
 }

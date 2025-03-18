@@ -1,27 +1,17 @@
 import { SxProps, Theme } from '@mui/system'
 
-import { ActivityLogNode } from '../../../common'
+import { ActivityLogsFragment$data } from '../../../../../__generated__/ActivityLogsFragment.graphql'
+
+export type ActivityLogs = NonNullable<ActivityLogsFragment$data['activityLogs']>
+export type ActivityLogEdges = ActivityLogs['edges']
+export type ActivityLogNode = NonNullable<ActivityLogEdges[number]>['node']
+export type LogEvent = NonNullable<ActivityLogNode>['events']
+
+export type LogEventEdges = NonNullable<LogEvent>['edges']
+export type LogEventEdgesNode = NonNullable<LogEventEdges[number]>['node']
+export type LogDiff = NonNullable<LogEventEdgesNode>['diff']
 
 export interface LogItemProps {
   log: ActivityLogNode
   sx?: SxProps<Theme>
-}
-
-export interface LogDiff {
-  image?: string[]
-  banner_image?: string[]
-  biography?: string[]
-  [key: string]: any
-}
-
-export interface LogEvent {
-  node: {
-    label: string
-    diff?: LogDiff
-  }
-}
-
-export interface LogNode {
-  verb: string
-  events: { edges: LogEvent[] }
 }
