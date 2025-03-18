@@ -23,9 +23,9 @@ import {
 } from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
 import { HeaderContainer, ProfilesContainer } from './styled'
-import { CreateGroupProps } from './types'
+import { GroupChatRoomCreateProps } from './types'
 
-const CreateGroup: FC<CreateGroupProps> = ({
+const GroupChatRoomCreate: FC<GroupChatRoomCreateProps> = ({
   allProfilesRef,
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
@@ -176,4 +176,4 @@ const CreateGroup: FC<CreateGroupProps> = ({
   )
 }
 
-export default CreateGroup
+export default GroupChatRoomCreate

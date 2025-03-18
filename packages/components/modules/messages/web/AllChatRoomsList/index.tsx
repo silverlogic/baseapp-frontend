@@ -11,9 +11,10 @@ import {
 } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -23,11 +24,12 @@ import { useChatRoom, useRoomListSubscription, useRoomsList } from '../../common
 import DefaultChatRoomItem from './ChatRoomItem'
 import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
 import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from './constants'
-import { ChatRoomListContainer } from './styled'
-import { ChatRoomNode, ChatRoomsListProps, ChatTabValues } from './types'
+import { Header, MainContainer } from './styled'
+import { AllChatRoomsListProps, ChatRoomNode, ChatTabValues } from './types'
 
-const ChatRoomsList: FC<ChatRoomsListProps> = ({
+const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   targetRef,
+  onHeaderClick = () => {},
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
   ChatRoomItem = DefaultChatRoomItem,
@@ -160,67 +162,84 @@ const ChatRoomsList: FC<ChatRoomsListProps> = ({
   }
 
   return (
-    <ChatRoomListContainer>
-      <Box
-        sx={{
-          paddingX: {
-            xs: 1.5,
-            sm: 2.5,
-          },
-          paddingTop: 2,
-        }}
-      >
-        <Searchbar
-          key={
-            tab /* The handleSearchChange function depends on tab.
+    <>
+      <Header>
+        <Box display="grid" width="100%" gridTemplateColumns="auto min-content" gap={1}>
+          <Typography variant="h4" component="span">
+            Messages
+          </Typography>
+          <Button
+            variant="contained"
+            color="inherit"
+            startIcon={<Iconify icon="mingcute:add-line" />}
+            onClick={onHeaderClick}
+          >
+            New
+          </Button>
+        </Box>
+      </Header>
+      <MainContainer>
+        <Box
+          sx={{
+            paddingX: {
+              xs: 1.5,
+              sm: 2.5,
+            },
+            paddingTop: 2,
+          }}
+        >
+          <Searchbar
+            key={
+              tab /* The handleSearchChange function depends on tab.
             Searchbar calls useRef on the onChange function (to debounce),
             hence it does not see the changes unless it is reloaded */
-          }
-          name="search"
-          control={control}
-          onChange={handleSearchChange}
-          onClear={handleSearchClear}
-          isPending={isPending}
-          {...SearchbarProps}
-        />
-      </Box>
-      <Tabs
-        value={tab}
-        onChange={handleChange}
-        centered
-        variant="fullWidth"
-        sx={{
-          paddingX: {
-            xs: 0,
-            sm: 2.5,
-          },
-          paddingTop: 2,
-        }}
-      >
-        <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
-        <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
-        <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
-      </Tabs>
-      {renderListContent()}
-      {renderList && (
-        <Virtuoso
-          data={chatRooms}
-          overscan={1}
-          itemContent={(_index, item) => renderItem(item)}
-          style={{ scrollbarWidth: 'none' }}
-          components={{
-            Footer: renderLoadingState,
-          }}
-          endReached={() => {
-            if (hasNext) {
-              loadNext(5)
             }
+            name="search"
+            control={control}
+            onChange={handleSearchChange}
+            onClear={handleSearchClear}
+            isPending={isPending}
+            {...SearchbarProps}
+          />
+        </Box>
+        <Tabs
+          value={tab}
+          onChange={handleChange}
+          centered
+          variant="fullWidth"
+          sx={{
+            paddingX: {
+              xs: 0,
+              sm: 2.5,
+            },
+            paddingTop: 2,
           }}
-          {...VirtuosoProps}
-        />
-      )}
-    </ChatRoomListContainer>
+        >
+          <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
+          <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
+          <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
+        </Tabs>
+        {renderListContent()}
+        {renderList && (
+          <Virtuoso
+            data={chatRooms}
+            overscan={1}
+            itemContent={(_index, item) => renderItem(item)}
+            style={{ scrollbarWidth: 'none' }}
+            components={{
+              Footer: renderLoadingState,
+            }}
+            endReached={() => {
+              if (hasNext) {
+                loadNext(5)
+              }
+            }}
+            {...VirtuosoProps}
+          />
+        )}
+      </MainContainer>
+    </>
   )
 }
 
-export default ChatRoomsList
+export default AllChatRoomsList

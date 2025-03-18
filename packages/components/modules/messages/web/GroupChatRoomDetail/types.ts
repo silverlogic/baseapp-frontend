@@ -6,7 +6,7 @@ import { VirtuosoProps } from 'react-virtuoso'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import { ProfileCardProps } from './ProfileCard/types'
 
-export type GroupDetailsProps = {
+export type GroupChatRoomDetailProps = {
   onBackButtonClicked: () => void
   onEditButtonClicked: () => void
   queryRef: PreloadedQuery<GroupDetailsQueryType>

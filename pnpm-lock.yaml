@@ -403,11 +403,29 @@ importers:
         specifier: ^2.27.11
         version: 2.28.1
       '@parcel/packager-ts':
+<<<<<<< HEAD
         specifier: ^2.14.1
+=======
+        specifier: latest
+<<<<<<< HEAD
+>>>>>>> 33261891 (feat: move ChatRooms from baseapp-frontend-template to components)
         version: 2.14.4(@parcel/core@2.14.4)
       '@parcel/transformer-typescript-types':
         specifier: ^2.14.1
         version: 2.14.4(@parcel/core@2.14.4)(typescript@5.4.5)
+=======
+<<<<<<< HEAD
+        version: 2.14.2(@parcel/core@2.14.2)
+      '@parcel/transformer-typescript-types':
+        specifier: latest
+        version: 2.14.2(@parcel/core@2.14.2)(typescript@5.4.5)
+=======
+        version: 2.14.0(@parcel/core@2.13.3)
+      '@parcel/transformer-typescript-types':
+        specifier: latest
+        version: 2.14.0(@parcel/core@2.13.3)(typescript@5.4.5)
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
       '@types/node':
         specifier: 'catalog:'
         version: 22.7.2
@@ -3567,9 +3585,25 @@ packages:
     resolution: {integrity: sha512-fRKkmFGnQIa/X+Kr8csTWjOwRRh2JfJfTpNS8JhbjBSWvOoKsDG9T2U5Ky8akIG7c9WDGwB3ngONauI1vtaInA==}
     engines: {node: '>= 16.0.0'}
 
+<<<<<<< HEAD
   '@parcel/compressor-raw@2.14.4':
     resolution: {integrity: sha512-wYRdokznP1iI3n6M6leQ0nI65tCIWhZaD0vW3G3qodDFi+qsdpvZymCpNUkh6AYkFFr3Lur+r/+xkWDoqNoMWA==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
+=======
+<<<<<<< HEAD
+  '@parcel/compressor-raw@2.14.2':
+    resolution: {integrity: sha512-u8fJO1M/BcaJ/Um7pq6/OstJd0Rrs532NHJDc9UQHhreDlrjB2W97vVVMyF0aL23ebzfP3Hta3WnH7Eg64gAJg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.2}
+=======
+  '@parcel/codeframe@2.14.0':
+    resolution: {integrity: sha512-WLG6d/6Pm7zk6V+DmOLTE/T9g1kfsmTZTVfPGJwRIF29ZRKGBLNX/FZvlHEg0g7gZtRHNHF/NGu9EMlJhTRasQ==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/compressor-raw@2.13.3':
+    resolution: {integrity: sha512-C6vjDlgTLjYc358i7LA/dqcL0XDQZ1IHXFw6hBaHHOfxPKW2T4bzUI6RURyToEK9Q1X7+ggDKqgdLxwp4veCFg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.13.3}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/config-default@2.14.4':
     resolution: {integrity: sha512-bHtr8yT2IZDv5w44/VKoNz07goidO99c6hsp9s0hjSVC1G6krdE+nriryPVfUFbw044LeQThSvA8EwTas72QZg==}
@@ -3584,8 +3618,14 @@ packages:
     resolution: {integrity: sha512-+pElcMMlTnpEIm9MrrSEOh38ylKYYdTYMgv2iZQU7799yzD9sSac9dkGSbbKGDYWhALCuzWQOgdaGG9ExJZw6w==}
     engines: {node: '>= 16.0.0'}
 
+<<<<<<< HEAD
   '@parcel/error-overlay@2.14.4':
     resolution: {integrity: sha512-GZ6Z1XO/VYqIFNwa3iAYWX7Pskwd+xw9tPw9kjF7tG8wdL9VipkcILJ4APj/G5CKw8XrXH/6NsC7HndNbR7EqA==}
+=======
+<<<<<<< HEAD
+  '@parcel/error-overlay@2.14.2':
+    resolution: {integrity: sha512-/xFL4dVb5bh9L+31Zo3whI5RdhPDgSJNZ/yIPuITKiC7UWWEZpLdGvdCwP0EV3NVA4RauYJovkcgCgtkM61LBQ==}
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     engines: {node: '>= 16.0.0'}
 
   '@parcel/events@2.14.4':
@@ -3596,8 +3636,37 @@ packages:
     resolution: {integrity: sha512-T2HE+lOmlU6PZOUnuXn6UZPXV4higCPgF2c2YXhrzTlSFcLMiAXATyzrylbYY/i/WjiYAlqvmEcaBX5fSaW95g==}
     engines: {node: '>= 16.0.0'}
 
+<<<<<<< HEAD
   '@parcel/fs@2.14.4':
     resolution: {integrity: sha512-SQbuW6v1URv871FVj23HoC8+UUwpgkQ7iWmG7EITpp6AV42ojRr/jZ93hLjzkQQfYlRI64jUExn6AQAZDN3bqQ==}
+=======
+  '@parcel/fs@2.14.2':
+    resolution: {integrity: sha512-SOKgXMGA4buLs56kEVqymdpysb9Lpmo7QQn9QRcSZYX0u+vkD5JORCK0SiO7etvPWFttXNKjdlYE9IvvrRweaQ==}
+=======
+  '@parcel/diagnostic@2.14.0':
+    resolution: {integrity: sha512-Y7sLbpWIeNqMgtB+RIcvFia6QKYCckz7CO0sSsYi9A76HQDO+poSPXAdzWZbkZbfQCeKwKbLGEpbPLfEpTXiqA==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/events@2.13.3':
+    resolution: {integrity: sha512-ZkSHTTbD/E+53AjUzhAWTnMLnxLEU5yRw0H614CaruGh+GjgOIKyukGeToF5Gf/lvZ159VrJCGE0Z5EpgHVkuQ==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/events@2.14.0':
+    resolution: {integrity: sha512-qkO4fWnFTjp0CP5U5H7kOJ2dluNcJJ+N94lIHRmtxV2wtQi9SeLLcDIklCekRrhKaCF6QXeXUet5ANso61FVrA==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/feature-flags@2.13.3':
+    resolution: {integrity: sha512-UZm14QpamDFoUut9YtCZSpG1HxPs07lUwUCpsAYL0PpxASD3oWJQxIJGfDZPa2272DarXDG9adTKrNXvkHZblw==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/feature-flags@2.14.0':
+    resolution: {integrity: sha512-SzoIz7SjwVmS2BIUJeDM/me1rYaZzN1uLrr8KHvoJldTO484gQzlnRhN+pk5BTaHW5Jrg8oob2LQWBv9kymphg==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/fs@2.13.3':
+    resolution: {integrity: sha512-+MPWAt0zr+TCDSlj1LvkORTjfB/BSffsE99A9AvScKytDSYYpY2s0t4vtV9unSh0FHMS2aBCZNJ4t7KL+DcPIg==}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       '@parcel/core': ^2.14.4
@@ -3610,6 +3679,7 @@ packages:
     resolution: {integrity: sha512-uqSGeCqraWpbe8gqbb1k9ePrlzdKoOwkdQPcRIv8TTTWZfCt6Qcl08w8didO4iAOz4H5C4Ng82wbVO/ieaMoKg==}
     engines: {node: '>= 16.0.0'}
 
+<<<<<<< HEAD
   '@parcel/markdown-ansi@2.14.4':
     resolution: {integrity: sha512-B4787HHXHi0wcuYbV4qBibws/yaX4RXoNel5xWdwzn1ZFmeLAXluNjMO2Q6FmII/Lej9OIQEaTppl7/DxJGifg==}
     engines: {node: '>= 16.0.0'}
@@ -3617,6 +3687,33 @@ packages:
   '@parcel/namer-default@2.14.4':
     resolution: {integrity: sha512-3FvZhkRgYlipj0NGRmw/rZ9ZiuM+a9ZcNW/MHRpytiNNBgcGCpR00XKhhvn0O5//MH13nLpiQXUf+J279CuN2A==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
+=======
+<<<<<<< HEAD
+  '@parcel/markdown-ansi@2.14.2':
+    resolution: {integrity: sha512-9wSiT2C7kW9pcvh2PyiuN/jWvIkDWpZvlGpCGmFU87qYAJbOjsjC7cybqDbqVEMQUplFPs8RL5vcTGU88vrzvA==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/namer-default@2.14.2':
+    resolution: {integrity: sha512-4Om4hEOZCX08uWqNvh6M4AX6344rtt1YT0Yup7uuLw2N5H8dr0Xpy4SXLabD52SAoi57gG2B0yX8g7tV142QzQ==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.2}
+=======
+  '@parcel/logger@2.14.0':
+    resolution: {integrity: sha512-dtWVz8oKVOpW1s013wDH8G2C8sv8ZuJ2JgTJHMV4sPPfX0KMHx04x0L8+JMmmo4mvjtrAy/lTKXh/yq2tvZnbA==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/markdown-ansi@2.13.3':
+    resolution: {integrity: sha512-B4rUdlNUulJs2xOQuDbN7Hq5a9roq8IZUcJ1vQ8PAv+zMGb7KCfqIIr/BSCDYGhayfAGBVWW8x55Kvrl1zrDYw==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/markdown-ansi@2.14.0':
+    resolution: {integrity: sha512-6HlvNAwyBtbyI0A5BnU51Y+4gJEra7p8gKemCw5zU4cph4I822jkurAedQ6ffrDK7vFRSXBvY1Ab524rN9BfEQ==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/namer-default@2.13.3':
+    resolution: {integrity: sha512-A2a5A5fuyNcjSGOS0hPcdQmOE2kszZnLIXof7UMGNkNkeC62KAG8WcFZH5RNOY3LT5H773hq51zmc2Y2gE5Rnw==}
+    engines: {node: '>= 16.0.0', parcel: ^2.13.3}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/node-resolver-core@3.5.4':
     resolution: {integrity: sha512-KmmsVD8Ym+19DIbe0Y2SUbdcB+iUfgstR4dBpaogV36DlxV4d0uiia4GCpOO3kG9zlRYMVsfZEwy/NNZHELx3w==}
@@ -3670,9 +3767,21 @@ packages:
     resolution: {integrity: sha512-ja5P9PXp+v/mh+UXUXdQ1O35yr2kRqdRlytYrzmAaeILuS1ko2n3ZJoeUYYprYOh/UmLmkgbXh/DyzrhEH7TZw==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
 
+<<<<<<< HEAD
   '@parcel/packager-ts@2.14.4':
     resolution: {integrity: sha512-fWidTKSdqOISK4FrszXA8TAWzsF2Wq6Z3ElvCWeyQHPKIf1PHuv74uxiTSF+UKSjf64deCXrnhilhwRn6gdaiQ==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
+=======
+<<<<<<< HEAD
+  '@parcel/packager-ts@2.14.2':
+    resolution: {integrity: sha512-zXvkI2v6o8sE4uxov5o9p3veDJ/ejSjaN1WNaOxqI9hklo25ukII9iCOgPwXJKOa8f9+nt7r8JyzZxmHIlEHhg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.2}
+=======
+  '@parcel/packager-ts@2.14.0':
+    resolution: {integrity: sha512-XaO17awCGyuyiAgyT72f6MgBeqVtsBgA8bZ++6LoTU7PJYZQ17uNzwnQnZvaUwsLQaazcGau8oITCmxlE5/mjg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.0}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/packager-wasm@2.14.4':
     resolution: {integrity: sha512-sgGCitPjl80Ku+xZIu3wCIAjOYXVEGJ00uXeexR8hgMx/PMhiHXLWUG8eLYAvxXx/CcLmHDOEBNrl6G3JxsP9g==}
@@ -3682,6 +3791,7 @@ packages:
     resolution: {integrity: sha512-EcehbthkBtQ9S2jWAzIiSlodbIMZ0bSsN3PC1q9jVaCM16ueObjZohKkzMjzR6Qot91qL0EJoMLzuNvtryvpHA==}
     engines: {node: '>= 16.0.0'}
 
+<<<<<<< HEAD
   '@parcel/profiler@2.14.4':
     resolution: {integrity: sha512-oZAdCDW3bYRpBOuL4coq4OQDN6HXADaSd4X8xJCeGsEsbVfJt0Qg5RgxdWC1L86mukyZMQ9ZrQUpC8aU9CAmFg==}
     engines: {node: '>= 16.0.0'}
@@ -3689,6 +3799,33 @@ packages:
   '@parcel/reporter-cli@2.14.4':
     resolution: {integrity: sha512-KgBXBiwGb9hqf3A6vw6eIqX1uYaMRjSqYXUUybGTOxonc+yB6J5q+skv1Wuty6IYuBfjNlV/zdvgggVZMl0ZxA==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
+=======
+<<<<<<< HEAD
+  '@parcel/profiler@2.14.2':
+    resolution: {integrity: sha512-kNgEz7FDC1hb7gpA/Z3s9vp6NiAJ5tEvxGhRAV64CDx98Jd/FES5MJLZ7A0vDWMHqDChgtprCkh0u3KnWrXRqg==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/reporter-cli@2.14.2':
+    resolution: {integrity: sha512-qzsn8GXBsl6dc8rLdmFsVVYAvzzSP+q+c6dvxvspC5NMu9N/fE4zfeZ0ShLexsxlpjn/ipa7cJo0gZa6E8F8qg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.2}
+=======
+  '@parcel/plugin@2.14.0':
+    resolution: {integrity: sha512-vlrxyErfpGcMyaEADi4EYCmV8T5RsiyhtzZKwUiLwNzfXTV0oICNzOAmVUoE42pcY70XtH1f/TWdN9dOKd3LQQ==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/profiler@2.13.3':
+    resolution: {integrity: sha512-ok6BwWSLvyHe5TuSXjSacYnDStFgP5Y30tA9mbtWSm0INDsYf+m5DqzpYPx8U54OaywWMK8w3MXUClosJX3aPA==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/profiler@2.14.0':
+    resolution: {integrity: sha512-iRldBix80/zq1HWkGP3xAyN73n9i40oxNso3C4spx3xw+iQdJ3/+UG+tJXk21IZhjLx6Gze2fu/Mqgr3egxndw==}
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/reporter-cli@2.13.3':
+    resolution: {integrity: sha512-EA5tKt/6bXYNMEavSs35qHlFdx6cZmRazlZxPBgxPePQYoouNAPMNLUOEQozaPhz9f5fvNDN7EHOFaAWcdO2LA==}
+    engines: {node: '>= 16.0.0', parcel: ^2.13.3}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/reporter-dev-server@2.14.4':
     resolution: {integrity: sha512-Ezg24vHftV0El0tWcxnsGAxwSdNTMs9M+l9Nbm1k4rydx1lCoKBAhpa2Icv8vKZY8K075giww8TOkjk6zVkAmQ==}
@@ -3720,6 +3857,15 @@ packages:
 
   '@parcel/rust@2.14.4':
     resolution: {integrity: sha512-Ti+ZVr8mMTgrSA7UHcFXxG98anD0C8dGzYfP1+DTgxkcU16nywTv5F/VsPqpV2qiDWrHbm06CEWQbOrowjzvVw==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      napi-wasm: ^1.1.2
+    peerDependenciesMeta:
+      napi-wasm:
+        optional: true
+
+  '@parcel/rust@2.14.0':
+    resolution: {integrity: sha512-KIyUxZCLFkyqTn5NXDwXJidT0IZRb1f4kQRLPNfvObW1bwpZmNF9pSXr1rzRAfBvWtF9C/VFLc37AzcVKDti9Q==}
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       napi-wasm: ^1.1.2
@@ -3779,9 +3925,16 @@ packages:
     resolution: {integrity: sha512-nb70CAvjDizAIQ1naZ39P/PxYWtPllWvvxrkpldNnk8AF74OcHodrsuHKwhyPZHMmnMdexFonsenf+VeN4l/aQ==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
 
+<<<<<<< HEAD
   '@parcel/transformer-svg@2.14.4':
     resolution: {integrity: sha512-iqnyvgGmwu4wNh+khEBkMEu1hAGZWnc7/xQnhiuQBAcoy5qGNEjyVUv6PbMLWWAVK/0PjqV4FaB2deXBYKeW0A==}
     engines: {node: '>= 16.0.0', parcel: ^2.14.4}
+=======
+<<<<<<< HEAD
+  '@parcel/transformer-svg@2.14.2':
+    resolution: {integrity: sha512-WFyh/JwAeJWwQX2NUrKGWolXrtL6Uu/BbrYAFvWIH9GHVlq24GofRDKnncrbtF8CJ4y3K7S5ztExLpirLQT0Tg==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.2}
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/transformer-typescript-types@2.14.4':
     resolution: {integrity: sha512-tq1KBD45SX1bQ2aP3MKoDA3EFX0dus8w/GTUOt03rIR+qDCLg4Y7MSR8J7QG26uic44+XX/IfwM6Gy8I3Rf3pQ==}
@@ -3789,8 +3942,23 @@ packages:
     peerDependencies:
       typescript: '>=3.0.0'
 
+<<<<<<< HEAD
   '@parcel/ts-utils@2.14.4':
     resolution: {integrity: sha512-HKBd1Nardh2S7IJxdpxel+w6Yp/6e/q3Bl3eFejye0tZpkb4wZeypfzIG1OSTniPDdlYPQwbzCSxBa5quQMOqw==}
+=======
+  '@parcel/ts-utils@2.14.2':
+    resolution: {integrity: sha512-YWaU1G73h4+Zu0v1UY3M42V5CxP8nTlnrbntQxuqSNrBFZatBGqWAZOg4QEQjUUuG+NNk96X1IIaOxBhmuoKvQ==}
+=======
+  '@parcel/transformer-typescript-types@2.14.0':
+    resolution: {integrity: sha512-xw6VeJcC+vQVRlF2UoxTXdO/GUOOMr4F6kaZzULtmhuSIB4lVxD0cC/OP/9GHqRvoY3qsFZOP7X03klib/1cRQ==}
+    engines: {node: '>= 16.0.0', parcel: ^2.14.0}
+    peerDependencies:
+      typescript: '>=3.0.0'
+
+  '@parcel/ts-utils@2.14.0':
+    resolution: {integrity: sha512-eLVH4+Qa+4hYKqMPXljM05Fx5JPgGld1jhxlB5Qm9HJHU9yf8MzNNI80M9AZcNx7jHRn5ZsTTOnG6k+oW+xQNg==}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       typescript: '>=3.0.0'
@@ -3798,11 +3966,37 @@ packages:
   '@parcel/types-internal@2.14.4':
     resolution: {integrity: sha512-Y2JnljFG7KcxLrCiYNCqBfjDo12alhRVpNugm0jwz1EQ3OQNO3HYiB0f3djq6pv2clZ5ndpgkNgYsn6L7KR9Nw==}
 
+<<<<<<< HEAD
   '@parcel/types@2.14.4':
     resolution: {integrity: sha512-NL4N9M6IPwBquAo1DKOPqy66nwJLXMX3KPalzAA7ktt3HYr5YNG5h3GeVXPOLNIVVMrSIiodYGPEeEBYy6kyYA==}
 
   '@parcel/utils@2.14.4':
     resolution: {integrity: sha512-icK6QgKjis+UZLyaHJcsKXYOSKYeYr41m8ZB9j20/yEcvrMqj/LMVsNjLz3iWVhLwfgussG2ODxycCdu3M5cvQ==}
+=======
+<<<<<<< HEAD
+  '@parcel/types@2.14.2':
+    resolution: {integrity: sha512-15vSnfdjWB3fLkqGGZ0dEZVeHheH4XgtkSBnmwhgLN7LgigK1P9BwwN8/cN/tIKMP+YfcvjVpHCtaeKRGpje9A==}
+
+  '@parcel/utils@2.14.2':
+    resolution: {integrity: sha512-jgDQrzPOU4IfWnYjRL2zGMbc439334ia1nRa13XcID3+oEp10HWTxw26PGhnYQ02mlOwxg8mtrb5ugZOL+dEIQ==}
+=======
+  '@parcel/types-internal@2.14.0':
+    resolution: {integrity: sha512-JffGtI9dk4P0FyxVeKdm6PCEWVW4Z/3Q0CLEaXhG67pFz4j15pdqtdzQ3Xf42HIWW+jOZ4KFtDwbtF5+n+1lwA==}
+
+  '@parcel/types@2.13.3':
+    resolution: {integrity: sha512-+RpFHxx8fy8/dpuehHUw/ja9PRExC3wJoIlIIF42E7SLu2SvlTHtKm6EfICZzxCXNEBzjoDbamCRcN0nmTPlhw==}
+
+  '@parcel/types@2.14.0':
+    resolution: {integrity: sha512-w5gqSN5FQiP9Xiv1DeCtr7Z+y3O/AhuBf38ZKQjGcxLUBFNmN2I5ulkZ2sj8xIQncYUwbYcv7TWxD/TuJJiBsA==}
+
+  '@parcel/utils@2.13.3':
+    resolution: {integrity: sha512-yxY9xw2wOUlJaScOXYZmMGoZ4Ck4Kqj+p6Koe5kLkkWM1j98Q0Dj2tf/mNvZi4yrdnlm+dclCwNRnuE8Q9D+pw==}
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+    engines: {node: '>= 16.0.0'}
+
+  '@parcel/utils@2.14.0':
+    resolution: {integrity: sha512-hiXMDS2xzS/ZHqpvcoJCR4GxGLWEqd/UGB/z5wzJ6QVouhatBtYe7Ca3vQtwc/ki9JDeNZv6+QmiVqPmQWv6dA==}
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     engines: {node: '>= 16.0.0'}
 
   '@parcel/watcher-android-arm64@2.5.1':
@@ -3892,6 +4086,12 @@ packages:
     engines: {node: '>= 16.0.0'}
     peerDependencies:
       '@parcel/core': ^2.14.4
+
+  '@parcel/workers@2.14.0':
+    resolution: {integrity: sha512-kte2OzI2L3lvZsJ9iu4qRmOT5fMhm6cdCS2oeAm8iN5btljrDCbjEqz35FSwfmxudIKBlfqI+89l5pnBou1Exw==}
+    engines: {node: '>= 16.0.0'}
+    peerDependencies:
+      '@parcel/core': ^2.14.0
 
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
@@ -13776,7 +13976,19 @@ snapshots:
     dependencies:
       chalk: 4.1.2
 
+<<<<<<< HEAD
   '@parcel/compressor-raw@2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))':
+=======
+<<<<<<< HEAD
+  '@parcel/compressor-raw@2.14.2(@parcel/core@2.14.2(@swc/helpers@0.5.15))':
+=======
+  '@parcel/codeframe@2.14.0':
+    dependencies:
+      chalk: 4.1.2
+
+  '@parcel/compressor-raw@2.13.3(@parcel/core@2.13.3(@swc/helpers@0.5.15))':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/plugin': 2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))
     transitivePeerDependencies:
@@ -13898,13 +14110,38 @@ snapshots:
       '@mischnic/json-sourcemap': 0.1.1
       nullthrows: 1.1.1
 
+<<<<<<< HEAD
   '@parcel/error-overlay@2.14.4': {}
+=======
+<<<<<<< HEAD
+  '@parcel/error-overlay@2.14.2': {}
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
 
   '@parcel/events@2.14.4': {}
 
   '@parcel/feature-flags@2.14.4': {}
 
+<<<<<<< HEAD
   '@parcel/fs@2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))':
+=======
+  '@parcel/fs@2.14.2(@parcel/core@2.14.2(@swc/helpers@0.5.15))':
+=======
+  '@parcel/diagnostic@2.14.0':
+    dependencies:
+      '@mischnic/json-sourcemap': 0.1.1
+      nullthrows: 1.1.1
+
+  '@parcel/events@2.13.3': {}
+
+  '@parcel/events@2.14.0': {}
+
+  '@parcel/feature-flags@2.13.3': {}
+
+  '@parcel/feature-flags@2.14.0': {}
+
+  '@parcel/fs@2.13.3(@parcel/core@2.13.3(@swc/helpers@0.5.15))':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/core': 2.14.4(@swc/helpers@0.5.15)
       '@parcel/feature-flags': 2.14.4
@@ -13938,11 +14175,36 @@ snapshots:
       '@parcel/diagnostic': 2.14.4
       '@parcel/events': 2.14.4
 
+<<<<<<< HEAD
   '@parcel/markdown-ansi@2.14.4':
     dependencies:
       chalk: 4.1.2
 
   '@parcel/namer-default@2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))':
+=======
+<<<<<<< HEAD
+  '@parcel/markdown-ansi@2.14.2':
+    dependencies:
+      chalk: 4.1.2
+
+  '@parcel/namer-default@2.14.2(@parcel/core@2.14.2(@swc/helpers@0.5.15))':
+=======
+  '@parcel/logger@2.14.0':
+    dependencies:
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/events': 2.14.0
+
+  '@parcel/markdown-ansi@2.13.3':
+    dependencies:
+      chalk: 4.1.2
+
+  '@parcel/markdown-ansi@2.14.0':
+    dependencies:
+      chalk: 4.1.2
+
+  '@parcel/namer-default@2.13.3(@parcel/core@2.13.3(@swc/helpers@0.5.15))':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/diagnostic': 2.14.4
       '@parcel/plugin': 2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))
@@ -14130,9 +14392,21 @@ snapshots:
       - '@parcel/core'
       - napi-wasm
 
+<<<<<<< HEAD
   '@parcel/packager-ts@2.14.4(@parcel/core@2.14.4)':
     dependencies:
       '@parcel/plugin': 2.14.4(@parcel/core@2.14.4)
+=======
+<<<<<<< HEAD
+  '@parcel/packager-ts@2.14.2(@parcel/core@2.14.2)':
+    dependencies:
+      '@parcel/plugin': 2.14.2(@parcel/core@2.14.2)
+=======
+  '@parcel/packager-ts@2.14.0(@parcel/core@2.13.3)':
+    dependencies:
+      '@parcel/plugin': 2.14.0(@parcel/core@2.13.3)
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     transitivePeerDependencies:
       - '@parcel/core'
       - napi-wasm
@@ -14158,14 +14432,44 @@ snapshots:
       - '@parcel/core'
       - napi-wasm
 
+<<<<<<< HEAD
   '@parcel/profiler@2.14.4':
+=======
+<<<<<<< HEAD
+  '@parcel/profiler@2.14.2':
+=======
+  '@parcel/plugin@2.14.0(@parcel/core@2.13.3)':
+    dependencies:
+      '@parcel/types': 2.14.0(@parcel/core@2.13.3)
+    transitivePeerDependencies:
+      - '@parcel/core'
+      - napi-wasm
+
+  '@parcel/profiler@2.13.3':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/diagnostic': 2.14.4
       '@parcel/events': 2.14.4
       '@parcel/types-internal': 2.14.4
       chrome-trace-event: 1.0.4
 
+<<<<<<< HEAD
   '@parcel/reporter-cli@2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))':
+=======
+<<<<<<< HEAD
+  '@parcel/reporter-cli@2.14.2(@parcel/core@2.14.2(@swc/helpers@0.5.15))':
+=======
+  '@parcel/profiler@2.14.0':
+    dependencies:
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/events': 2.14.0
+      '@parcel/types-internal': 2.14.0
+      chrome-trace-event: 1.0.4
+
+  '@parcel/reporter-cli@2.13.3(@parcel/core@2.13.3(@swc/helpers@0.5.15))':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/plugin': 2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))
       '@parcel/types': 2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))
@@ -14242,6 +14546,8 @@ snapshots:
       - napi-wasm
 
   '@parcel/rust@2.14.4': {}
+
+  '@parcel/rust@2.14.0': {}
 
   '@parcel/source-map@2.1.1':
     dependencies:
@@ -14389,20 +14695,47 @@ snapshots:
       - '@parcel/core'
       - napi-wasm
 
+<<<<<<< HEAD
   '@parcel/transformer-typescript-types@2.14.4(@parcel/core@2.14.4)(typescript@5.4.5)':
+=======
+<<<<<<< HEAD
+  '@parcel/transformer-typescript-types@2.14.2(@parcel/core@2.14.2)(typescript@5.4.5)':
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/diagnostic': 2.14.4
       '@parcel/plugin': 2.14.4(@parcel/core@2.14.4)
       '@parcel/source-map': 2.1.1
+<<<<<<< HEAD
       '@parcel/ts-utils': 2.14.4(typescript@5.4.5)
       '@parcel/utils': 2.14.4
+=======
+      '@parcel/ts-utils': 2.14.2(typescript@5.4.5)
+      '@parcel/utils': 2.14.2
+=======
+  '@parcel/transformer-typescript-types@2.14.0(@parcel/core@2.13.3)(typescript@5.4.5)':
+    dependencies:
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/plugin': 2.14.0(@parcel/core@2.13.3)
+      '@parcel/source-map': 2.1.1
+      '@parcel/ts-utils': 2.14.0(typescript@5.4.5)
+      '@parcel/utils': 2.14.0
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
       nullthrows: 1.1.1
       typescript: 5.4.5
     transitivePeerDependencies:
       - '@parcel/core'
       - napi-wasm
 
+<<<<<<< HEAD
   '@parcel/ts-utils@2.14.4(typescript@5.4.5)':
+=======
+<<<<<<< HEAD
+  '@parcel/ts-utils@2.14.2(typescript@5.4.5)':
+=======
+  '@parcel/ts-utils@2.14.0(typescript@5.4.5)':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       nullthrows: 1.1.1
       typescript: 5.4.5
@@ -14414,7 +14747,22 @@ snapshots:
       '@parcel/source-map': 2.1.1
       utility-types: 3.11.0
 
+<<<<<<< HEAD
   '@parcel/types@2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))':
+=======
+<<<<<<< HEAD
+  '@parcel/types@2.14.2(@parcel/core@2.14.2(@swc/helpers@0.5.15))':
+=======
+  '@parcel/types-internal@2.14.0':
+    dependencies:
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/feature-flags': 2.14.0
+      '@parcel/source-map': 2.1.1
+      utility-types: 3.11.0
+
+  '@parcel/types@2.13.3(@parcel/core@2.13.3(@swc/helpers@0.5.15))':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/types-internal': 2.14.4
       '@parcel/workers': 2.14.4(@parcel/core@2.14.4(@swc/helpers@0.5.15))
@@ -14430,13 +14778,42 @@ snapshots:
       - '@parcel/core'
       - napi-wasm
 
+<<<<<<< HEAD
   '@parcel/utils@2.14.4':
+=======
+<<<<<<< HEAD
+  '@parcel/utils@2.14.2':
+=======
+  '@parcel/types@2.14.0(@parcel/core@2.13.3)':
+    dependencies:
+      '@parcel/types-internal': 2.14.0
+      '@parcel/workers': 2.14.0(@parcel/core@2.13.3)
+    transitivePeerDependencies:
+      - '@parcel/core'
+      - napi-wasm
+
+  '@parcel/utils@2.13.3':
+>>>>>>> 21d2666 (feat: move ChatRooms from baseapp-frontend-template to components)
+>>>>>>> 8e3ecb58 (feat: move ChatRooms from baseapp-frontend-template to components)
     dependencies:
       '@parcel/codeframe': 2.14.4
       '@parcel/diagnostic': 2.14.4
       '@parcel/logger': 2.14.4
       '@parcel/markdown-ansi': 2.14.4
       '@parcel/rust': 2.14.4
+      '@parcel/source-map': 2.1.1
+      chalk: 4.1.2
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
+      - napi-wasm
+
+  '@parcel/utils@2.14.0':
+    dependencies:
+      '@parcel/codeframe': 2.14.0
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/logger': 2.14.0
+      '@parcel/markdown-ansi': 2.14.0
+      '@parcel/rust': 2.14.0
       '@parcel/source-map': 2.1.1
       chalk: 4.1.2
       nullthrows: 1.1.1
@@ -14523,6 +14900,18 @@ snapshots:
       '@parcel/profiler': 2.14.4
       '@parcel/types-internal': 2.14.4
       '@parcel/utils': 2.14.4
+      nullthrows: 1.1.1
+    transitivePeerDependencies:
+      - napi-wasm
+
+  '@parcel/workers@2.14.0(@parcel/core@2.13.3)':
+    dependencies:
+      '@parcel/core': 2.13.3
+      '@parcel/diagnostic': 2.14.0
+      '@parcel/logger': 2.14.0
+      '@parcel/profiler': 2.14.0
+      '@parcel/types-internal': 2.14.0
+      '@parcel/utils': 2.14.0
       nullthrows: 1.1.1
     transitivePeerDependencies:
       - napi-wasm

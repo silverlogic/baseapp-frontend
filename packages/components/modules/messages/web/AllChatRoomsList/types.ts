@@ -14,8 +14,9 @@ type ChatRooms = NonNullable<RoomsListFragment$data['chatRooms']>
 type ChatRoomsEdges = ChatRooms['edges']
 export type ChatRoomNode = NonNullable<ChatRoomsEdges[number]>['node']
 
-export interface ChatRoomsListProps {
+export interface AllChatRoomsListProps {
   targetRef: ChatRoomsQuery$data
+  onHeaderClick: () => void
   Searchbar?: FC<SearchbarProps>
   SearchbarProps?: Partial<SearchbarProps>
   ChatRoomItem?: FC<ChatRoomItemProps>
