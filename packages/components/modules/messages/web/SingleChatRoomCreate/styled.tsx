@@ -1,4 +1,6 @@
-import { Box } from '@mui/material'
+import { ComponentType } from 'react'
+
+import { Box, BoxProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const MainContainer = styled(Box)(() => ({
@@ -9,14 +11,14 @@ export const MainContainer = styled(Box)(() => ({
   gridTemplateRows: 'min-content min-content auto',
 }))
 
-export const SearchbarContainer = styled(Box)(({ theme }) => ({
+export const SearchbarContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   padding: `${theme.spacing(2)} ${theme.spacing(2.5)} 0`,
   [theme.breakpoints.down('sm')]: {
     padding: `${theme.spacing(2)} ${theme.spacing(1.5)} 0`,
   },
 }))
 
-export const GroupChatContainer = styled(Box)(({ theme }) => ({
+export const GroupChatContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '48px auto',
   gap: theme.spacing(1.5),
@@ -24,5 +26,14 @@ export const GroupChatContainer = styled(Box)(({ theme }) => ({
   cursor: 'pointer',
   [theme.breakpoints.down('sm')]: {
     padding: `${theme.spacing(1.5)} ${theme.spacing(1.5)}`,
+  },
+}))
+
+export const Header: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
+  borderBottom: `1px ${theme.palette.divider} solid`,
+  width: '100%',
+  padding: `${theme.spacing(2)}`,
+  [theme.breakpoints.down('sm')]: {
+    padding: `${theme.spacing(2)} ${theme.spacing(1.5)} ${theme.spacing(2)}`,
   },
 }))
