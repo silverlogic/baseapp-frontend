@@ -27,9 +27,9 @@ import { GroupDetailsHeader } from './GroupDetailsHeader'
 import DefaultProfileCard from './ProfileCard'
 import { GroupMembersEdge } from './ProfileCard/types'
 import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
-import { GroupDetailsProps } from './types'
+import { GroupChatRoomDetailProps } from './types'
 
-const GroupDetails: FC<GroupDetailsProps> = ({
+const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
   queryRef,
@@ -163,7 +163,7 @@ const GroupDetails: FC<GroupDetailsProps> = ({
   )
 }
 
-const SuspendedGroupDetails: FC<GroupDetailsProps> = ({ onBackButtonClicked, ...props }) => (
+const SuspendedGroupDetails: FC<GroupChatRoomDetailProps> = ({ onBackButtonClicked, ...props }) => (
   // Displays a 'preliminary' header and a spinner below
   // Header has "Group Details" label and back button, but no edit button (appears if the group details are loaded and current user has admin permissions)
   <Suspense
@@ -177,7 +177,7 @@ const SuspendedGroupDetails: FC<GroupDetailsProps> = ({ onBackButtonClicked, ...
       </>
     }
   >
-    <GroupDetails onBackButtonClicked={onBackButtonClicked} {...props} />
+    <GroupChatRoomDetail onBackButtonClicked={onBackButtonClicked} {...props} />
   </Suspense>
 )
 
