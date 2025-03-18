@@ -21,7 +21,7 @@ import { useFragment } from 'react-relay'
 import { ProfileComponentFragment } from '../../common'
 import BlockButtonWithDialog from './BlockButtonWithDialog'
 import FollowToggleButton from './FollowToggleButton'
-import ReportButtonWithDialog from './ReportButtonWithDialog'
+// import ReportButtonWithDialog from './ReportButtonWithDialog'
 import {
   ProfileContainer,
   ProfileContentContainer,
@@ -117,9 +117,10 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
           isMenu
         />
       )}
-      {profile && (
-        <ReportButtonWithDialog handleClose={handleClose} currentProfileId={currentProfileId} />
-      )}
+      {console.log('currentProfileId', currentProfileId)}
+      {/* {profile && (
+        <ReportButtonWithDialog handleClose={handleClose} targetId={currentProfileId} />
+      )} */}
     </>
   )
 

@@ -1,5 +1,5 @@
 export interface ReportButtonWithDialogProps {
-  currentProfileId?: string
+  targetId?: string
   handleClose: () => void
 }
 
