@@ -1,4 +1,4 @@
-import { FetchParameters } from '../common/types'
+import { FetchParameters } from '../../../common/types'
 
 export interface DateFilterChipProps {
   fetchParameters: FetchParameters

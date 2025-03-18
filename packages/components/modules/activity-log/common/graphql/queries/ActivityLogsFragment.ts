@@ -31,6 +31,14 @@ export const ActivityLogsFragmentQuery = graphql`
         node {
           id
           createdAt
+          events {
+            edges {
+              node {
+                label
+                diff
+              }
+            }
+          }
           verb
           url
           user {
