@@ -7,13 +7,12 @@ import {
 
 import { z } from 'zod'
 
-import useChangeExpiredPassword from '../index'
+import useChangePassword from '../index'
 
-describe('useChangeExpiredPassword', () => {
+describe('useChangePassword', () => {
   const currentPassword = '1234'
   const password = '12345#Abcde'
-  const token = 'fake-token'
-  const changePasswordUrl = '/change-expired-password'
+  const changePasswordUrl = '/users/change-password'
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
@@ -27,7 +26,6 @@ describe('useChangeExpiredPassword', () => {
       response: {
         currentPassword,
         newPassword: password,
-        token,
       },
     })
 
@@ -35,8 +33,7 @@ describe('useChangeExpiredPassword', () => {
 
     const { result } = renderHook(
       () =>
-        useChangeExpiredPassword({
-          token,
+        useChangePassword({
           defaultValues: {
             currentPassword,
             newPassword: password,
@@ -66,8 +63,7 @@ describe('useChangeExpiredPassword', () => {
 
     const { result } = renderHook(
       () =>
-        useChangeExpiredPassword({
-          token,
+        useChangePassword({
           defaultValues: {
             currentPassword,
             newPassword: password,
@@ -101,8 +97,7 @@ describe('useChangeExpiredPassword', () => {
 
     const { result } = renderHook(
       () =>
-        useChangeExpiredPassword({
-          token,
+        useChangePassword({
           defaultValues: {
             currentPassword,
             newPassword: password,
@@ -148,10 +143,60 @@ describe('useChangeExpiredPassword', () => {
 
     const { result } = renderHook(
       () =>
-        useChangeExpiredPassword({
-          token,
+        useChangePassword({
           defaultValues: customDefaultValues,
           validationSchema: customValidationSchema,
+          options: {
+            onSuccess: () => {
+              hasOnSuccessRan = true
+            },
+          },
+        }),
+      {
+        wrapper: ComponentWithProviders,
+      },
+    )
+
+    await result.current.form.handleSubmit()
+
+    expect(hasOnSuccessRan).toBe(true)
+  })
+})
+
+describe('useChangePassword with token for expired passwords', () => {
+  const currentPassword = '1234'
+  const password = 'abcABC@123456'
+  const token = 'fake-token'
+  const changePasswordUrl = '/change-expired-password'
+
+  afterEach(() => {
+    ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
+  })
+
+  // This is just to ensure that running with token has the same behavior as running without token
+  test('should run onSuccess', async () => {
+    // Mock the fetch call with a success response for POST method
+    mockFetch(changePasswordUrl, {
+      method: 'POST',
+      status: 200,
+      response: {
+        currentPassword,
+        newPassword: password,
+        token,
+      },
+    })
+
+    let hasOnSuccessRan = false
+
+    const { result } = renderHook(
+      () =>
+        useChangePassword({
+          token,
+          defaultValues: {
+            currentPassword,
+            newPassword: password,
+            confirmNewPassword: password,
+          },
           options: {
             onSuccess: () => {
               hasOnSuccessRan = true

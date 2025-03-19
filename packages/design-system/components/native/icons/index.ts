@@ -1,3 +1,4 @@
+export { default as AlertTriangleIcon } from './AlertTriangleIcon'
 export { default as BellIcon } from './BellIcon'
 export { default as BiometricsIcon } from './BiometricsIcon'
 export { default as BlockIcon } from './BlockIcon'
