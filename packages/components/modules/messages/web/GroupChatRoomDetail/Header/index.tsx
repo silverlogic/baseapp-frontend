@@ -7,9 +7,9 @@ import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Typography } from '@mui/material'
 
 import { GroupDetailsHeaderContainer } from './styled'
-import { GroupDetailsHeaderProps } from './types'
+import { HeaderProps } from './types'
 
-export const GroupDetailsHeader: FC<GroupDetailsHeaderProps> = ({
+const Header: FC<HeaderProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
   shouldDisplayEditButton,
@@ -36,3 +36,5 @@ export const GroupDetailsHeader: FC<GroupDetailsHeaderProps> = ({
     )}
   </GroupDetailsHeaderContainer>
 )
+
+export default Header

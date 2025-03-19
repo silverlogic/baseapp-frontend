@@ -1,10 +1,9 @@
 import { ComponentType } from 'react'
 
-import { ViewportHeightContainer } from '@baseapp-frontend/components/navigations/web'
-
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
+import { ViewportHeightContainer, ViewportHeightContainerProps } from '../../../navigations/web'
 import { HidableContainerProps } from './types'
 
 export const ChatRoomContainer: ComponentType<HidableContainerProps> = styled(
@@ -17,7 +16,9 @@ export const ChatRoomContainer: ComponentType<HidableContainerProps> = styled(
   },
 }))
 
-export const ChatRoomsContainer = styled(ViewportHeightContainer)(({ theme }) => ({
+export const ChatRoomsContainer: ComponentType<ViewportHeightContainerProps> = styled(
+  ViewportHeightContainer,
+)<ViewportHeightContainerProps>(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '390px auto',
   alignItems: 'flex-start',
