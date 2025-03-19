@@ -3,11 +3,9 @@
 import { FC, Suspense, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
-import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box } from '@mui/material'
 import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -17,22 +15,25 @@ import { MembersListFragment$key } from '../../../../__generated__/MembersListFr
 import {
   GroupDetailsQuery,
   MembersListFragment,
-  getParticipantCountString,
   useCheckIsAdmin,
   useGroupNameAndAvatar,
   useRoomListSubscription,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
-import { GroupDetailsHeader } from './GroupDetailsHeader'
+import DefaultBody from './Body'
+import DefaultHeader from './Header'
 import DefaultProfileCard from './ProfileCard'
 import { GroupMembersEdge } from './ProfileCard/types'
-import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
 import { GroupChatRoomDetailProps } from './types'
 
 const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
   queryRef,
+  Header = DefaultHeader,
+  HeaderProps = {},
+  Body = DefaultBody,
+  BodyProps = {},
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
   VirtuosoProps = {},
@@ -40,7 +41,6 @@ const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { currentProfile } = useCurrentProfile()
   const { avatar, title } = useGroupNameAndAvatar(group)
-  const theme = useTheme()
   const profileId = currentProfile?.id ?? ''
 
   const connections = group?.id
@@ -126,52 +126,39 @@ const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
         onClose={handleRemoveDialogClose}
         isSoleAdmin={isSoleAdmin}
       />
-      <GroupDetailsHeader
+      <Header
         onBackButtonClicked={onBackButtonClicked}
         onEditButtonClicked={onEditButtonClicked}
         shouldDisplayEditButton={isAdmin}
+        {...HeaderProps}
       />
-      <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
-        <GroupHeaderContainer>
-          <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
-          <GroupTitleContainer>
-            <TypographyWithEllipsis variant="subtitle1" color="text.primary">
-              {title}
-            </TypographyWithEllipsis>
-            <Typography variant="body2" color="text.secondary">
-              {getParticipantCountString(group?.participantsCount)}
-            </Typography>
-          </GroupTitleContainer>
-        </GroupHeaderContainer>
-        <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
-          <Box role="list" aria-label="group members">
-            <Typography
-              variant="subtitle2"
-              color="text.primary"
-              sx={{
-                padding: theme.spacing(2),
-                borderBottom: `1px solid ${theme.palette.divider}`,
-              }}
-            >
-              Members
-            </Typography>
-          </Box>
-          <MembersContainer>{renderMembers()}</MembersContainer>
-        </Box>
-      </Box>
+      <Body
+        title={title}
+        avatar={avatar}
+        participantsCount={group?.participantsCount}
+        {...BodyProps}
+      >
+        {renderMembers()}
+      </Body>
     </>
   )
 }
 
-const SuspendedGroupDetails: FC<GroupChatRoomDetailProps> = ({ onBackButtonClicked, ...props }) => (
+const SuspendedGroupDetails: FC<GroupChatRoomDetailProps> = ({
+  onBackButtonClicked,
+  Header = DefaultHeader,
+  HeaderProps = {},
+  ...props
+}) => (
   // Displays a 'preliminary' header and a spinner below
   // Header has "Group Details" label and back button, but no edit button (appears if the group details are loaded and current user has admin permissions)
   <Suspense
     fallback={
       <>
-        <GroupDetailsHeader
+        <Header
           onBackButtonClicked={onBackButtonClicked}
           shouldDisplayEditButton={false}
+          {...HeaderProps}
         />
         <LoadingState />
       </>
