@@ -10,7 +10,7 @@ import { z } from 'zod'
 import useResetPassword from '../index'
 
 describe('useResetPassword', () => {
-  const password = '123456'
+  const password = '12345#Abcde'
   const token = 'fake-token'
   const resetPasswordUrl = '/forgot-password/reset'
 

@@ -1,5 +1,23 @@
 # @baseapp-frontend/design-system
 
+## 1.0.9
+
+### Patch Changes
+
+- Add Badge and AvatarWithPlaceholder components for native
+
+## 1.0.8
+
+### Patch Changes
+
+- Added BiometricsIcon, DevicesIcon, EmailIcon, KeyIcon and LockIcon to Native icons
+
+## 1.0.7
+
+### Patch Changes
+
+- Moved PhoneNumberInput and UsernameIcon from `baseapp-frontend-template`
+
 ## 1.0.6
 
 ### Patch Changes

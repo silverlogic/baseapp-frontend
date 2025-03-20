@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon'
 
-import { FetchParameters } from '../common/types'
+import { FetchParameters } from '../../../common/types'
 
 export interface DateFilterComponentProps {
   createdFrom: DateTime | null

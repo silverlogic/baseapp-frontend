@@ -9,6 +9,18 @@
 - Updated form validation to ensure correct input for the revised registration fields.
 - If you're using `useSignUp` with name only, you should set `useNameField`  to `true` on the hook's option 
 
+## 4.1.9
+
+### Patch Changes
+
+- Add password validations to reset and change expired password
+
+## 4.1.8
+
+### Patch Changes
+
+- Fix image path handling for profile images
+
 ## 4.1.7
 
 ### Patch Changes

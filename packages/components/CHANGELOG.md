@@ -1,5 +1,70 @@
 # @baseapp-frontend/components
 
+## 1.0.25
+
+### Patch Changes
+
+- Forward LogoProps to make them customizable
+
+## 1.0.24
+
+### Patch Changes
+
+- Add user activities to the Activity Log
+  - updated dependencies
+    - @baseapp-frontend/components
+
+## 1.0.23
+
+### Patch Changes
+
+- Refactor AccountPopover and improve some tests
+
+## 1.0.22
+
+### Patch Changes
+
+- Add NotificationsList and NotificationBellWithBadge to native components
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.9
+
+## 1.0.21
+
+### Patch Changes
+
+- Change `Link` component in `NavItem`, to use Link from next/link instead of Material UI Link.
+- Change `Header` border bottom from dashed to solid
+
+## 1.0.20
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.9
+
+## 1.0.19
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.8
+
+## 1.0.18
+
+### Patch Changes
+
+- Moved ProfileSettingsComponent and related queries and mutations from `baseapp-frontend-template`
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.7
+
+## 1.0.17
+
+### Patch Changes
+
+- Fix image path handling for profile images
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.1.8
+
 ## 1.0.16
 
 ### Patch Changes

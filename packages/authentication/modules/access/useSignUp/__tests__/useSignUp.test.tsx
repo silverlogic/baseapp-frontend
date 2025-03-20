@@ -73,7 +73,7 @@ describe('useSignUp', () => {
               firstName: 'John',
               lastName: 'Doe',
               email: 'john.doe@example.com',
-              password: 'password',
+              password: '#F12W7q0jwv525',
             },
           },
           options: {
