@@ -8,7 +8,7 @@ import { BodyProps } from './Body/types'
 import { HeaderProps } from './Header/types'
 import { ProfileCardProps } from './ProfileCard/types'
 
-export type GroupChatRoomDetailProps = {
+export type GroupChatDetailsProps = {
   onBackButtonClicked: () => void
   onEditButtonClicked: () => void
   queryRef: PreloadedQuery<GroupDetailsQueryType>

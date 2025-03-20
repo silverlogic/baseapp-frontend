@@ -24,9 +24,9 @@ import DefaultBody from './Body'
 import DefaultHeader from './Header'
 import DefaultProfileCard from './ProfileCard'
 import { GroupMembersEdge } from './ProfileCard/types'
-import { GroupChatRoomDetailProps } from './types'
+import { GroupChatDetailsProps } from './types'
 
-const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
+const GroupChatDetails: FC<GroupChatDetailsProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
   queryRef,
@@ -144,7 +144,7 @@ const GroupChatRoomDetail: FC<GroupChatRoomDetailProps> = ({
   )
 }
 
-const SuspendedGroupDetails: FC<GroupChatRoomDetailProps> = ({
+const SuspendedGroupDetails: FC<GroupChatDetailsProps> = ({
   onBackButtonClicked,
   Header = DefaultHeader,
   HeaderProps = {},
@@ -164,7 +164,7 @@ const SuspendedGroupDetails: FC<GroupChatRoomDetailProps> = ({
       </>
     }
   >
-    <GroupChatRoomDetail onBackButtonClicked={onBackButtonClicked} {...props} />
+    <GroupChatDetails onBackButtonClicked={onBackButtonClicked} {...props} />
   </Suspense>
 )
 

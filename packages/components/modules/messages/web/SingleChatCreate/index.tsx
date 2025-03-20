@@ -3,33 +3,35 @@
 import { ChangeEventHandler, FC, useMemo, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { AvatarButton, IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
-import { NewGroupIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
 import { ProfileEdge, ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import EmptyProfilesListState from '../__shared__/EmptyProfilesListState'
+import DefaultBody from './Body'
 import DefaultChatRoomListItem from './ChatRoomListItem'
-import { Header, MainContainer, SearchbarContainer } from './styled'
-import { SingleChatRoomCreateProps } from './types'
+import DefaultHeader from './Header'
+import { SingleChatCreateProps } from './types'
 
-const SingleChatRoomCreate: FC<SingleChatRoomCreateProps> = ({
+const SingleChatCreate: FC<SingleChatCreateProps> = ({
   allProfilesRef,
-  onHeaderClick,
+  Body = DefaultBody,
+  BodyProps = {},
   ChatRoomListItem = DefaultChatRoomListItem,
   ChatRoomListItemProps = {},
+  Header = DefaultHeader,
+  HeaderProps = {},
+  onChatCreation,
+  onGroupChatCreationButtonClicked,
+  onHeaderClick,
   Searchbar = DefaultSearchbar,
   SearchbarProps = {},
   VirtuosoProps = {},
-  onChatCreation,
-  onGroupChatCreationButtonClicked,
 }) => {
   const {
     data: { allProfiles },
@@ -118,47 +120,21 @@ const SingleChatRoomCreate: FC<SingleChatRoomCreateProps> = ({
 
   return (
     <>
-      <Header>
-        <Box
-          display="grid"
-          width="100%"
-          gridTemplateColumns="24px auto 24px"
-          gap={1.5}
-          alignItems="center"
-        >
-          <IconButton
-            aria-label="return to existing chat rooms"
-            onClick={onHeaderClick}
-            sx={{ maxWidth: 'fit-content' }}
-          >
-            <Iconify icon="eva:arrow-ios-back-fill" width={24} />
-          </IconButton>
-          <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-            New Chat
-          </Typography>
-          <div />
-        </Box>
-      </Header>
-      <MainContainer>
-        <SearchbarContainer>
-          <Searchbar
-            name="search"
-            onChange={handleSearchChange}
-            onClear={handleSearchClear}
-            control={control}
-            isPending={isPending}
-            {...SearchbarProps}
-          />
-        </SearchbarContainer>
-        <AvatarButton
-          onClick={onGroupChatCreationButtonClicked}
-          caption="New Group"
-          Icon={NewGroupIcon}
-        />
+      <Header onHeaderClick={onHeaderClick} {...HeaderProps} />
+      <Body
+        control={control}
+        isPending={isPending}
+        handleSearchChange={handleSearchChange}
+        handleSearchClear={handleSearchClear}
+        onGroupChatCreationButtonClicked={onGroupChatCreationButtonClicked}
+        Searchbar={Searchbar}
+        SearchbarProps={SearchbarProps}
+        {...BodyProps}
+      >
         {renderListContent()}
-      </MainContainer>
+      </Body>
     </>
   )
 }
 
-export default SingleChatRoomCreate
+export default SingleChatCreate
