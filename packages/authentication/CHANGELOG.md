@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 4.1.8
+
+### Patch changes
+
+- Enhanced the registration process to support separate first and last name inputs, improving user profile detail.
+- Introduced a configurable option that allows toggling between separate name fields and a consolidated name field.
+- Updated form validation to ensure correct input for the revised registration fields.
+
 ## 4.1.7
 
 ### Patch Changes
