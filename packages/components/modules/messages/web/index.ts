@@ -9,14 +9,14 @@ export type * from './ChatRoom/types'
 export { default as ChatRoomsComponent } from './ChatRoomsComponent'
 export type * from './ChatRoomsComponent/types'
 
-export { default as GroupChatRoomCreate } from './GroupChatRoomCreate'
-export type * from './GroupChatRoomCreate/types'
+export { default as GroupChatCreate } from './GroupChatCreate'
+export type * from './GroupChatCreate/types'
 
-export { default as GroupChatRoomDetails } from './GroupChatRoomDetail'
-export type * from './GroupChatRoomDetail/types'
+export { default as GroupChatDetails } from './GroupChatDetails'
+export type * from './GroupChatDetails/types'
 
-export { default as GroupChatRoomEdit } from './GroupChatRoomEdit'
-export type * from './GroupChatRoomEdit/types'
+export { default as GroupChatEdit } from './GroupChatEdit'
+export type * from './GroupChatEdit/types'
 
 export { default as MessageCreate } from './MessageCreate'
 export type * from './MessageCreate/types'
@@ -27,5 +27,5 @@ export type * from './MessagesList/types'
 export { default as MessageUpdate } from './MessageUpdate'
 export type * from './MessageUpdate/types'
 
-export { default as SingleChatRoomCreate } from './SingleChatRoomCreate'
-export type * from './SingleChatRoomCreate/types'
+export { default as SingleChatCreate } from './SingleChatCreate'
+export type * from './SingleChatCreate/types'

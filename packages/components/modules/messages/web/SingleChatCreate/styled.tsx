@@ -28,12 +28,3 @@ export const GroupChatContainer: ComponentType<BoxProps> = styled(Box)(({ theme 
     padding: `${theme.spacing(1.5)} ${theme.spacing(1.5)}`,
   },
 }))
-
-export const Header: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
-  borderBottom: `1px ${theme.palette.divider} solid`,
-  width: '100%',
-  padding: `${theme.spacing(2)}`,
-  [theme.breakpoints.down('sm')]: {
-    padding: `${theme.spacing(2)} ${theme.spacing(1.5)} ${theme.spacing(2)}`,
-  },
-}))
