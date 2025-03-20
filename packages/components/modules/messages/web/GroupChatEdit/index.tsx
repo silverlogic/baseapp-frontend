@@ -31,9 +31,9 @@ import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
 import { HeaderContainer } from './styled'
-import { GroupChatRoomEditProps } from './types'
+import { GroupChatEditProps } from './types'
 
-const GroupChatRoomEdit: FC<GroupChatRoomEditProps & { profileId: string }> = ({
+const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   profileId,
   allProfilesRef,
   queryRef,
@@ -218,12 +218,12 @@ const GroupChatRoomEdit: FC<GroupChatRoomEditProps & { profileId: string }> = ({
   )
 }
 
-const WrappedEditGroup: FC<GroupChatRoomEditProps> = (props) => {
+const WrappedEditGroup: FC<GroupChatEditProps> = (props) => {
   const { currentProfile } = useCurrentProfile()
   if (!currentProfile?.id) {
     return null
   }
-  return <GroupChatRoomEdit profileId={currentProfile.id} {...props} />
+  return <GroupChatEdit profileId={currentProfile.id} {...props} />
 }
 
 export default WrappedEditGroup
