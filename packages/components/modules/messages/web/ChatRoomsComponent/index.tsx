@@ -10,10 +10,10 @@ import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__genera
 import { GroupDetailsQuery, useChatRoom } from '../../common'
 import DefaultAllChatRoomsList from '../AllChatRoomsList'
 import ChatRoom from '../ChatRoom'
-import DefaultGroupChatRoomCreate from '../GroupChatRoomCreate'
-import DefaultGroupChatRoomDetails from '../GroupChatRoomDetail'
-import DefaultGroupChatRoomEdit from '../GroupChatRoomEdit'
-import DefaultSingleChatRoomCreate from '../SingleChatRoomCreate'
+import DefaultGroupChatCreate from '../GroupChatCreate'
+import DefaultGroupChatDetails from '../GroupChatDetails'
+import DefaultGroupChatEdit from '../GroupChatEdit'
+import DefaultSingleChatCreate from '../SingleChatCreate'
 import { LEFT_PANEL_CONTENT, LeftPanelContentValues } from './constants'
 import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
 import { ChatRoomsComponentProps } from './types'
@@ -23,14 +23,14 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   settings,
   AllChatRoomsListComponent = DefaultAllChatRoomsList,
   AllChatRoomsListComponentProps = {},
-  GroupChatRoomCreateComponent = DefaultGroupChatRoomCreate,
-  GroupChatRoomCreateComponentProps = {},
-  GroupChatRoomDetailsComponent = DefaultGroupChatRoomDetails,
-  GroupChatRoomDetailsComponentProps = {},
-  GroupChatRoomEditComponent = DefaultGroupChatRoomEdit,
-  GroupChatRoomEditComponentProps = {},
-  SingleChatRoomCreateComponent = DefaultSingleChatRoomCreate,
-  SingleChatRoomCreateComponentProps = {},
+  GroupChatCreateComponent = DefaultGroupChatCreate,
+  GroupChatCreateComponentProps = {},
+  GroupChatDetailsComponent = DefaultGroupChatDetails,
+  GroupChatDetailsComponentProps = {},
+  GroupChatEditComponent = DefaultGroupChatEdit,
+  GroupChatEditComponentProps = {},
+  SingleChatCreateComponent = DefaultSingleChatCreate,
+  SingleChatCreateComponentProps = {},
 }) => {
   const isUpToMd = useResponsive('up', 'md')
   const [leftPanelContent, setLeftPanelContent] = useState<LeftPanelContentValues>(
@@ -57,46 +57,46 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
     switch (leftPanelContent) {
       case LEFT_PANEL_CONTENT.createGroupChat:
         return (
-          <GroupChatRoomCreateComponent
+          <GroupChatCreateComponent
             allProfilesRef={chatRoomsQueryData}
             onValidSubmission={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onBackButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.createChat)}
-            {...GroupChatRoomCreateComponentProps}
+            {...GroupChatCreateComponentProps}
           />
         )
       case LEFT_PANEL_CONTENT.editGroupChat:
         if (!groupDetailsQueryRef) return null
         return (
-          <GroupChatRoomEditComponent
+          <GroupChatEditComponent
             onCancellation={() => setLeftPanelContent(LEFT_PANEL_CONTENT.groupDetails)}
             onRemovalFromGroup={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onValidSubmission={() => setLeftPanelContent(LEFT_PANEL_CONTENT.groupDetails)}
             queryRef={groupDetailsQueryRef}
             roomId={selectedRoom}
             allProfilesRef={chatRoomsQueryData}
-            {...GroupChatRoomEditComponentProps}
+            {...GroupChatEditComponentProps}
           />
         )
       case LEFT_PANEL_CONTENT.groupDetails:
         if (!groupDetailsQueryRef) return null
         return (
-          <GroupChatRoomDetailsComponent
+          <GroupChatDetailsComponent
             queryRef={groupDetailsQueryRef}
             onBackButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onEditButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.editGroupChat)}
-            {...GroupChatRoomDetailsComponentProps}
+            {...GroupChatDetailsComponentProps}
           />
         )
       case LEFT_PANEL_CONTENT.createChat:
         return (
-          <SingleChatRoomCreateComponent
+          <SingleChatCreateComponent
             allProfilesRef={chatRoomsQueryData}
             onHeaderClick={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onChatCreation={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onGroupChatCreationButtonClicked={() =>
               setLeftPanelContent(LEFT_PANEL_CONTENT.createGroupChat)
             }
-            {...SingleChatRoomCreateComponentProps}
+            {...SingleChatCreateComponentProps}
           />
         )
       default:
