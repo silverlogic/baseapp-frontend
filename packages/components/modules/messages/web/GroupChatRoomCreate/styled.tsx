@@ -1,16 +1,9 @@
-import { Box } from '@mui/material'
+import { FC } from 'react'
+
+import { Box, BoxProps } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const HeaderContainer = styled(Box)(({ theme }) => ({
-  display: 'grid',
-  gridTemplateColumns: '24px auto 24px',
-  alignItems: 'center',
-  width: '100%',
-  padding: theme.spacing(2),
-  borderBottom: `1px solid ${theme.palette.divider}`,
-}))
-
-export const ProfilesContainer = styled(Box)(({ theme }) => ({
+export const ProfilesContainer: FC<BoxProps> = styled(Box)<BoxProps>(({ theme }) => ({
   height: '100%',
   width: '100%',
   overflowY: 'auto',

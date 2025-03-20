@@ -3,12 +3,10 @@
 import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
-import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'relay-runtime'
 
@@ -22,7 +20,8 @@ import {
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
-import { HeaderContainer, ProfilesContainer } from './styled'
+import Header from './Header'
+import { ProfilesContainer } from './styled'
 import { GroupChatRoomCreateProps } from './types'
 
 const GroupChatRoomCreate: FC<GroupChatRoomCreateProps> = ({
@@ -129,36 +128,23 @@ const GroupChatRoomCreate: FC<GroupChatRoomCreateProps> = ({
   const isCreateButtonDisabled = !isValid || !isDirty || isMutationInFlight
 
   return (
-    <>
-      <Box>
-        <HeaderContainer>
-          <IconButton onClick={onBackButtonClicked} aria-label="cancel group creation">
-            <CloseIcon sx={{ fontSize: '24px' }} />
-          </IconButton>
-          <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-            New Group
-          </Typography>
-          <IconButton
-            aria-label="Create group"
-            disabled={isCreateButtonDisabled}
-            onClick={() => {
-              onSubmit()
-            }}
-          >
-            <CheckMarkIcon sx={{ fontSize: '24px' }} />
-          </IconButton>
-        </HeaderContainer>
-        <EditGroupTitleAndImage
-          control={control}
-          FORM_VALUE={FORM_VALUE}
-          handleRemoveImage={handleRemoveImage}
-          imageError={getFieldState(FORM_VALUE.image).error}
-          isMutationInFlight={isMutationInFlight}
-          setValue={setValue}
-          trigger={trigger}
-          watch={watch}
-        />
-      </Box>
+    <Box>
+      <Header
+        isDisabled={isCreateButtonDisabled}
+        onCreateButtonClicked={onSubmit}
+        onBackButtonClicked={onBackButtonClicked}
+      />
+      <EditGroupTitleAndImage
+        control={control}
+        FORM_VALUE={FORM_VALUE}
+        handleRemoveImage={handleRemoveImage}
+        imageError={getFieldState(FORM_VALUE.image).error}
+        isMutationInFlight={isMutationInFlight}
+        setValue={setValue}
+        trigger={trigger}
+        watch={watch}
+      />
+
       <GroupChatMembersList
         FORM_VALUE={FORM_VALUE}
         setValue={setValue}
@@ -172,7 +158,7 @@ const GroupChatRoomCreate: FC<GroupChatRoomCreateProps> = ({
         ProfilesContainer={ProfilesContainer}
         {...GroupChatMembersListProps}
       />
-    </>
+    </Box>
   )
 }
 
