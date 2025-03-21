@@ -1393,6 +1393,11 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Rate
+  reportTypes(
+    """The ID of the object"""
+    id: ID!
+  ): ReportType
+  allReportTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection
   report(
     """The ID of the object"""
     id: ID!
@@ -1591,7 +1596,7 @@ type Report implements Node {
   created: DateTime!
   modified: DateTime!
   user: User!
-  reportType: ReportTypes
+  reportType: ReportType
   reportSubject: String
   pk: Int!
   target: Node
@@ -1609,7 +1614,7 @@ type ReportConnection {
 
 input ReportCreateInput {
   targetObjectId: ID!
-  reportType: ReportTypes = null
+  reportTypeId: ID
   reportSubject: String
   clientMutationId: String
 }
@@ -1632,35 +1637,40 @@ type ReportEdge {
   cursor: String!
 }
 
-type ReportsCount {
-  SPAM: Int
-  INAPPROPRIATE: Int
-  FAKE: Int
-  OTHER: Int
-  total: Int
-}
-
 interface ReportsInterface {
   """The ID of the object"""
   id: ID!
-  reportsCount: ReportsCount
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
 }
 
-"""An enumeration."""
-enum ReportTypes {
-  """Spam"""
-  SPAM
+type ReportType implements Node {
+  """The ID of the object"""
+  id: ID!
+  name: String!
+  label: String!
+  parentType: ReportType
+  subTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
+  pk: Int!
+}
 
-  """Inappropriate"""
-  INAPPROPRIATE
+type ReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
 
-  """Fake"""
-  FAKE
+  """Contains the nodes in this connection."""
+  edges: [ReportTypeEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
 
-  """Other"""
-  OTHER
+"""A Relay edge containing a `ReportType` and its cursor."""
+type ReportTypeEdge {
+  """The item at the end of the edge"""
+  node: ReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 input RoleUpdateInput {
