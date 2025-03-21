@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useCallback, useMemo } from 'react'
+import React, { FC, Suspense, useMemo } from 'react'
 
 import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -26,7 +26,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
   EmptyState = DefaultEmptyState,
   NotificationItem = DefaultNotificationItem,
   NotificationItemProps = {},
-  fetchKey,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -34,7 +33,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
   const options = { count: 10 }
   const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
     fetchPolicy: 'store-and-network',
-    fetchKey,
   })
 
   // TODO: handle infinite scroll
@@ -50,12 +48,9 @@ const NotificationsList: FC<NotificationsListProps> = ({
     [data?.notifications?.edges],
   )
 
-  const refetchNotifications = useCallback(() => {
-    console.log('refetching')
+  const refetchNotifications = () => {
     refetch(options, { fetchPolicy: 'store-and-network' })
-  }, [refetch])
-
-  // useFocusEffect(refetchNotifications)
+  }
 
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
