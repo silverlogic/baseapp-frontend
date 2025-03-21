@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fe8028b7a20596b985585fdc3f7764f8>>
+ * @generated SignedSource<<a0e0f33be280b1cb77648b563497e8ff>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,24 @@ export type ActivityLogsFragment$data = {
               readonly node:
                 | {
                     readonly createdAt: any
+                    readonly events:
+                      | {
+                          readonly edges: ReadonlyArray<
+                            | {
+                                readonly node:
+                                  | {
+                                      readonly diff: any | null | undefined
+                                      readonly label: string | null | undefined
+                                    }
+                                  | null
+                                  | undefined
+                              }
+                            | null
+                            | undefined
+                          >
+                        }
+                      | null
+                      | undefined
                     readonly id: string
                     readonly url: string | null | undefined
                     readonly user:
@@ -177,6 +195,53 @@ const node: ReaderFragment = (function () {
                   {
                     alias: null,
                     args: null,
+                    concreteType: 'NodeLogEventConnection',
+                    kind: 'LinkedField',
+                    name: 'events',
+                    plural: false,
+                    selections: [
+                      {
+                        alias: null,
+                        args: null,
+                        concreteType: 'NodeLogEventEdge',
+                        kind: 'LinkedField',
+                        name: 'edges',
+                        plural: true,
+                        selections: [
+                          {
+                            alias: null,
+                            args: null,
+                            concreteType: 'NodeLogEvent',
+                            kind: 'LinkedField',
+                            name: 'node',
+                            plural: false,
+                            selections: [
+                              {
+                                alias: null,
+                                args: null,
+                                kind: 'ScalarField',
+                                name: 'label',
+                                storageKey: null,
+                              },
+                              {
+                                alias: null,
+                                args: null,
+                                kind: 'ScalarField',
+                                name: 'diff',
+                                storageKey: null,
+                              },
+                            ],
+                            storageKey: null,
+                          },
+                        ],
+                        storageKey: null,
+                      },
+                    ],
+                    storageKey: null,
+                  },
+                  {
+                    alias: null,
+                    args: null,
                     kind: 'ScalarField',
                     name: 'verb',
                     storageKey: null,
@@ -283,6 +348,6 @@ const node: ReaderFragment = (function () {
   }
 })()
 
-;(node as any).hash = 'f5d29f31cbedd5432a4805c649a74929'
+;(node as any).hash = '331e3d4312fbe40053110fe98844df70'
 
 export default node
