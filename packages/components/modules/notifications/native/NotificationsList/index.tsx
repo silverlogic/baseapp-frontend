@@ -1,4 +1,4 @@
-import React, { FC, Suspense, useMemo } from 'react'
+import React, { FC, Suspense, useCallback, useMemo } from 'react'
 
 import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -15,6 +15,7 @@ import {
   NotificationsListQuery,
   useNotificationsSubscription,
 } from '../../common'
+import Divider from './Divider'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
@@ -25,6 +26,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
   EmptyState = DefaultEmptyState,
   NotificationItem = DefaultNotificationItem,
   NotificationItemProps = {},
+  fetchKey,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -32,6 +34,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
   const options = { count: 10 }
   const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
     fetchPolicy: 'store-and-network',
+    fetchKey,
   })
 
   // TODO: handle infinite scroll
@@ -47,20 +50,30 @@ const NotificationsList: FC<NotificationsListProps> = ({
     [data?.notifications?.edges],
   )
 
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
-  }
+  const refetchNotifications = useCallback(() => {
+    console.log('refetching')
+    refetch(options, { fetchPolicy: 'store-and-network' })
+  }, [refetch])
 
-  const renderNotificationItem = (notification: any) => {
+  // useFocusEffect(refetchNotifications)
+
+  const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
-
+    let divider = null
+    if (!notification.unread && index > 0 && notifications[index - 1]?.unread) {
+      divider = <Divider />
+    }
     // TODO add notifications divider and unread/Read notifications as per design
     return (
-      <NotificationItem
-        key={`notification-${notification.id}`}
-        notification={notification}
-        {...NotificationItemProps}
-      />
+      <>
+        {divider}
+        <NotificationItem
+          key={`notification-${notification.id}`}
+          notification={notification}
+          refetch={refetchNotifications}
+          {...NotificationItemProps}
+        />
+      </>
     )
   }
 
@@ -69,7 +82,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
 
     return (
       <View>
-        <FlatList data={notifications} renderItem={({ item }) => renderNotificationItem(item)} />
+        <FlatList
+          data={notifications}
+          renderItem={({ item, index }) => renderNotificationItem(item, index)}
+        />
       </View>
     )
   }

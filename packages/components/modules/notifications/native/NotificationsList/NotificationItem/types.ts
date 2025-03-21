@@ -9,6 +9,7 @@ import { NotificationItemRendererProps } from './NotificationItemRenderer/types'
 export interface NotificationItemProps {
   notification: NotificationItemFragment$key
   NotificationItemRenderer?: FC<NotificationItemRendererProps>
+  refetch: VoidFunction
 }
 
 export interface GenericItemProps {
