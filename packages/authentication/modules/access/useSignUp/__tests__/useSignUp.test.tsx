@@ -37,6 +37,45 @@ describe('useSignUp', () => {
           formOptions: {
             defaultValues: request,
           },
+          useNameField: true,
+          options: {
+            onSuccess: () => {
+              hasOnSuccessRan = true
+            },
+          },
+        }),
+      {
+        wrapper: ComponentWithProviders,
+      },
+    )
+
+    await result.current.form.handleSubmit()
+
+    expect(hasOnSuccessRan).toBe(true)
+  })
+
+  test('should run onSuccess with first and last name field', async () => {
+    mockFetch(registerUrl, {
+      method: 'POST',
+      status: 200,
+      response: {
+        email: request.email,
+      },
+    })
+
+    let hasOnSuccessRan = false
+
+    const { result } = renderHook(
+      () =>
+        useSignUp({
+          formOptions: {
+            defaultValues: {
+              firstName: 'John',
+              lastName: 'Doe',
+              email: 'john.doe@example.com',
+              password: '#F12W7q0jwv525',
+            },
+          },
           options: {
             onSuccess: () => {
               hasOnSuccessRan = true
@@ -76,6 +115,7 @@ describe('useSignUp', () => {
           formOptions: {
             defaultValues: customRequest,
           },
+          useNameField: true,
         }),
       {
         wrapper: ComponentWithProviders,
@@ -102,6 +142,7 @@ describe('useSignUp', () => {
           formOptions: {
             defaultValues: request,
           },
+          useNameField: true,
           options: {
             onError: () => {
               hasOnErrorRan = true
@@ -146,6 +187,7 @@ describe('useSignUp', () => {
             defaultValues: customDefaultValues,
             resolver: zodResolver(customValidationSchema),
           },
+          useNameField: true,
           options: {
             onSuccess: () => {
               hasOnSuccessRan = true

@@ -135,4 +135,3 @@ export const StyledLink = styled(Link)<StyledLinkProps>(
     variants: [],
   }),
 )
-
