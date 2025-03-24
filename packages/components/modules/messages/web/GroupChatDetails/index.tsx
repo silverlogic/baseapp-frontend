@@ -27,15 +27,15 @@ import { GroupMembersEdge } from './ProfileCard/types'
 import { GroupChatDetailsProps } from './types'
 
 const GroupChatDetails: FC<GroupChatDetailsProps> = ({
-  onBackButtonClicked,
-  onEditButtonClicked,
-  queryRef,
-  Header = DefaultHeader,
-  HeaderProps = {},
   Body = DefaultBody,
   BodyProps = {},
+  Header = DefaultHeader,
+  HeaderProps = {},
+  onBackButtonClicked,
+  onEditButtonClicked,
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
+  queryRef,
   VirtuosoProps = {},
 }) => {
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)

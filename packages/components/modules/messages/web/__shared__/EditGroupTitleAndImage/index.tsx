@@ -12,18 +12,25 @@ import { EditGroupTitleAndImageProps } from './types'
 import { getImageUrl } from './utils'
 
 const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
-  control,
+  form,
   FORM_VALUE,
-  handleRemoveImage,
-  imageError,
   isMutationInFlight,
-  setValue,
-  trigger,
-  watch,
 }) => {
+  const { control, setValue, watch, getFieldState, clearErrors, trigger } = form
+
+  const handleRemoveImage = () => {
+    clearErrors(FORM_VALUE.image)
+    setValue(FORM_VALUE.image, null, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+  }
+
   const theme = useTheme()
   const watchImage = watch(FORM_VALUE.image)
   const imageUrl = getImageUrl(watchImage)
+  const imageError = getFieldState(FORM_VALUE.image)?.error
 
   return (
     <Box
@@ -38,7 +45,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
         {imageError && (
           <div className="text-center">
             <Typography color="error.main" variant="caption">
-              {imageError!.message}
+              {imageError.message}
             </Typography>
           </div>
         )}

@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const HeaderContainer = styled(Box)(({ theme }) => ({
+export const Container = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateColumns: '24px auto 24px',
   width: '100%',

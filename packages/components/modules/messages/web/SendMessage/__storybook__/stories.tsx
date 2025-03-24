@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import MessageCreate from '..'
+import SendMessage from '..'
 
-const meta: Meta<typeof MessageCreate> = {
+const meta: Meta<typeof SendMessage> = {
   title: '@baseapp-frontend | components/Messages/MessageCreate',
-  component: MessageCreate,
+  component: SendMessage,
 }
 
 export default meta
 
-type Story = StoryObj<typeof MessageCreate>
+type Story = StoryObj<typeof SendMessage>
 
 export const DefaultMessageCreate: Story = {
   name: 'Default MessageCreate',

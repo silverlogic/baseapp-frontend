@@ -10,6 +10,9 @@ import { GroupDetailsHeaderContainer } from './styled'
 import { HeaderProps } from './types'
 
 const Header: FC<HeaderProps> = ({
+  backIcon = 'eva:arrow-ios-back-fill',
+  backIconProps = {},
+  EditIcon = PenEditIcon,
   onBackButtonClicked,
   onEditButtonClicked,
   shouldDisplayEditButton,
@@ -20,7 +23,7 @@ const Header: FC<HeaderProps> = ({
       onClick={onBackButtonClicked}
       sx={{ maxWidth: 'fit-content' }}
     >
-      <Iconify icon="eva:arrow-ios-back-fill" width={24} />
+      <Iconify icon={backIcon} width={24} {...backIconProps} />
     </IconButton>
     <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
       Group View
@@ -31,7 +34,7 @@ const Header: FC<HeaderProps> = ({
         onClick={onEditButtonClicked}
         sx={{ maxWidth: 'fit-content' }}
       >
-        <PenEditIcon sx={{ fontSize: '24px' }} />
+        <EditIcon sx={{ fontSize: '24px' }} />
       </IconButton>
     )}
   </GroupDetailsHeaderContainer>
