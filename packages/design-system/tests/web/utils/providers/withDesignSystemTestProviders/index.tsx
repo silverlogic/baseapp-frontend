@@ -18,17 +18,17 @@ const withDesignSystemProvider =
     const emotionCache = createCache({ key: 'test-key' })
 
     return (
-      <NotificationProvider>
-        <SnackbarProvider>
-          <CacheProvider value={emotionCache}>
-            <ReactSuspenseWithLoading {...ReactSuspenseWithLoadingProps}>
-              <ThemeTestProvider {...ThemeTestProviderProps}>
+      <ThemeTestProvider {...ThemeTestProviderProps}>
+        <NotificationProvider>
+          <SnackbarProvider>
+            <CacheProvider value={emotionCache}>
+              <ReactSuspenseWithLoading {...ReactSuspenseWithLoadingProps}>
                 <Component {...(restProps as Props)} />
-              </ThemeTestProvider>
-            </ReactSuspenseWithLoading>
-          </CacheProvider>
-        </SnackbarProvider>
-      </NotificationProvider>
+              </ReactSuspenseWithLoading>
+            </CacheProvider>
+          </SnackbarProvider>
+        </NotificationProvider>
+      </ThemeTestProvider>
     )
   }
 
