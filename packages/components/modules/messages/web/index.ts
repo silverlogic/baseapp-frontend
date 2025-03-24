@@ -18,14 +18,14 @@ export type * from './GroupChatDetails/types'
 export { default as GroupChatEdit } from './GroupChatEdit'
 export type * from './GroupChatEdit/types'
 
-export { default as MessageCreate } from './MessageCreate'
-export type * from './MessageCreate/types'
-
 export { default as MessagesList } from './MessagesList'
 export type * from './MessagesList/types'
 
 export { default as MessageUpdate } from './MessageUpdate'
 export type * from './MessageUpdate/types'
+
+export { default as SendMessage } from './SendMessage'
+export type * from './SendMessage/types'
 
 export { default as SingleChatCreate } from './SingleChatCreate'
 export type * from './SingleChatCreate/types'

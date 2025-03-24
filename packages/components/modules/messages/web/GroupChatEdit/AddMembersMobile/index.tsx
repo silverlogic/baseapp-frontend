@@ -21,7 +21,7 @@ import {
 import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
-import { HeaderContainer } from '../styled'
+import { Container as HeaderContainer } from '../Header/styled'
 import { DEFAULT_FORM_VALIDATION } from './constants'
 import { SearchbarContainer } from './styled'
 import { AddMembersMobileProps } from './types'

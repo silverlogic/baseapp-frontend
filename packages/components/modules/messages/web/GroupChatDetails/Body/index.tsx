@@ -11,18 +11,26 @@ import { getParticipantCountString } from '../../../common'
 import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
 import { BodyProps } from './types'
 
-const Body: FC<BodyProps> = ({ title, avatar, participantsCount, children }) => {
+const Body: FC<BodyProps> = ({
+  avatar,
+  avatarSize = 144,
+  children,
+  participantsCount,
+  participantsCountStyle = {},
+  title,
+  titleProps = {},
+}) => {
   const theme = useTheme()
 
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <GroupHeaderContainer>
-        <CircledAvatar src={avatar} width={144} height={144} hasError={false} />
+        <CircledAvatar src={avatar} width={avatarSize} height={avatarSize} hasError={false} />
         <GroupTitleContainer>
-          <TypographyWithEllipsis variant="subtitle1" color="text.primary">
+          <TypographyWithEllipsis variant="subtitle1" color="text.primary" {...titleProps}>
             {title}
           </TypographyWithEllipsis>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" {...participantsCountStyle}>
             {getParticipantCountString(participantsCount)}
           </Typography>
         </GroupTitleContainer>

@@ -3,13 +3,11 @@
 import { FC, useMemo, useState, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
-import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 
@@ -29,20 +27,22 @@ import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
+import DefaultHeader from './Header'
 import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
-import { HeaderContainer } from './styled'
 import { GroupChatEditProps } from './types'
 
 const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
-  profileId,
   allProfilesRef,
-  queryRef,
-  roomId,
+  Header = DefaultHeader,
+  HeaderProps = {},
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
   onCancellation,
   onRemovalFromGroup,
   onValidSubmission,
+  profileId,
+  queryRef,
+  roomId,
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
@@ -77,12 +77,8 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   })
 
   const {
-    control,
     setValue,
     watch,
-    getFieldState,
-    clearErrors,
-    trigger,
     handleSubmit,
     formState: { isValid, isDirty, dirtyFields },
   } = formReturn
@@ -127,15 +123,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     })
   })
 
-  const handleRemoveImage = () => {
-    clearErrors(FORM_VALUE.image)
-    setValue(FORM_VALUE.image, null, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    })
-  }
-
   const isEditButtonDisabled = !isValid || !isDirty
   const [isPending, startTransition] = useTransition()
   const handleAddMemberSuccess = () => {
@@ -170,33 +157,17 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
         isPending={isPending}
         existingMembers={participants}
       />
-      <HeaderContainer>
-        <IconButton onClick={onCancellation} aria-label="cancel editing group">
-          <CloseIcon sx={{ fontSize: '24px' }} />
-        </IconButton>
-        <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-          Edit Group
-        </Typography>
-        <IconButton
-          aria-label="Edit group"
-          disabled={isEditButtonDisabled}
-          isLoading={isMutationInFlight}
-          onClick={() => {
-            onSubmit()
-          }}
-        >
-          <CheckMarkIcon sx={{ fontSize: '24px' }} />
-        </IconButton>
-      </HeaderContainer>
-      <EditGroupTitleAndImage
-        control={control}
-        FORM_VALUE={FORM_VALUE}
-        handleRemoveImage={handleRemoveImage}
-        imageError={getFieldState(FORM_VALUE.image).error}
+      <Header
+        isEditButtonDisabled={isEditButtonDisabled}
         isMutationInFlight={isMutationInFlight}
-        setValue={setValue}
-        trigger={trigger}
-        watch={watch}
+        onCancellation={onCancellation}
+        onSubmit={onSubmit}
+        {...HeaderProps}
+      />
+      <EditGroupTitleAndImage
+        form={formReturn}
+        FORM_VALUE={FORM_VALUE}
+        isMutationInFlight={isMutationInFlight}
       />
       <GroupChatMembersList
         FORM_VALUE={FORM_VALUE}
