@@ -60,6 +60,11 @@
       "types": "./dist/profiles/*/index.d.ts",
       "import": "./dist/profiles/*/index.mjs",
       "require": "./dist/profiles/*/index.js"
+    },
+    "./tests/*": {
+      "types": "./dist/tests/*/index.d.ts",
+      "import": "./dist/tests/*/index.mjs",
+      "require": "./dist/tests/*/index.js"
     }
   },
   "files": [

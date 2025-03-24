@@ -1,3 +1,1 @@
-module.exports = require('@baseapp-frontend/test/__mocks__/expo-constants.ts')
-
-export {}
+export * from '@baseapp-frontend/test/__mocks__/expo-constants'

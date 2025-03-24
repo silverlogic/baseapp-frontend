@@ -1,9 +1,6 @@
 import AccountPopover from '../..'
-import { AccountPopoverProps } from '../../types'
-import withProviders from '../withProviders'
+import { withComponentCompleteTestProviders } from '../../../../../../../tests/web'
 
-const AccountPopoverForTesting = (props?: Partial<AccountPopoverProps>) => (
-  <AccountPopover {...props} />
-)
+const AccountPopoverForTesting = withComponentCompleteTestProviders(AccountPopover)
 
-export default withProviders(AccountPopoverForTesting)
+export default AccountPopoverForTesting

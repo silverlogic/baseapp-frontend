@@ -45,6 +45,11 @@
     "./styles/web/globals.css": {
       "default": "./dist/styles/web/index.css"
     },
+    "./tests/*": {
+      "types": "./dist/tests/*/index.d.ts",
+      "import": "./dist/tests/*/index.mjs",
+      "require": "./dist/tests/*/index.js"
+    },
     "./utils/*": {
       "types": "./dist/utils/*/index.d.ts",
       "import": "./dist/utils/*/index.mjs",

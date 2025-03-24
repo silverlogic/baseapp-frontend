@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { useHydrateAtoms } from 'jotai/utils'
 
-import { profileAtom } from '..'
+import { profileAtom } from '../../../../profile/useCurrentProfile'
 import { InitialProfileProviderForTestingProps } from './types'
 
 /**

@@ -5,8 +5,6 @@ import { NotificationState, useNotification } from '@baseapp-frontend/utils'
 import { Button } from '@mui/material'
 import { Meta, StoryObj } from '@storybook/react'
 
-import SnackbarProvider from '..'
-
 interface SnackbarProps {
   message: string
   shouldShowProgress: boolean
@@ -16,9 +14,7 @@ interface SnackbarProps {
 const SnackbarWrapper: FC<SnackbarProps> = ({ message, shouldShowProgress, type }) => {
   const { sendToast } = useNotification()
   return (
-    <SnackbarProvider>
-      <Button onClick={() => sendToast(message, { type, shouldShowProgress })}>Post message</Button>
-    </SnackbarProvider>
+    <Button onClick={() => sendToast(message, { type, shouldShowProgress })}>Post message</Button>
   )
 }
 

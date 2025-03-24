@@ -19,7 +19,8 @@
     "@mui/material": "catalog:material-ui",
     "@tanstack/react-query": "catalog:",
     "axios-mock-adapter": "^1.22.0",
-    "js-cookie": "catalog:"
+    "js-cookie": "catalog:",
+    "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
     "react": "catalog:react18"

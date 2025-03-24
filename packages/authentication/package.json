@@ -19,7 +19,8 @@
     "jotai": "catalog:",
     "js-cookie": "catalog:",
     "react-hook-form": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",

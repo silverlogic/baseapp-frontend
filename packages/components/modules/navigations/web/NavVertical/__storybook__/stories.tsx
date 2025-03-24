@@ -1,10 +1,10 @@
 import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system/components/web/icons'
+import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavVertical from '..'
 import { navDataMock } from '../../../../../.storybook/__mocks__/navigation'
-import defaultTheme from '../../../../../.storybook/__mocks__/theme'
 import { NavVerticalProps } from '../types'
 
 const meta: Meta<typeof NavVertical> = {
