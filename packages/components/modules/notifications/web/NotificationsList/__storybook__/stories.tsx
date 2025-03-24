@@ -31,5 +31,7 @@ export const EmptyNotificationsList: Story = {
 export const LoadingNotificationsList: Story = {
   name: 'Loading NotificationsList',
   args: {},
-  parameters: {},
+  parameters: {
+    queryName: 'NotificationsPopoverQuery',
+  },
 }

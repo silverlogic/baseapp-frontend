@@ -1,6 +1,7 @@
-import { withComponentsProviders } from '../../../../../tests/web'
+import { withComponentCompleteTestProviders } from '../../../../../tests/web'
 import { NotificationsPopover } from '../../../index'
 
-const NotificationsPopoverForTestingWithProviders = withComponentsProviders(NotificationsPopover)
+const NotificationsPopoverForTestingWithProviders =
+  withComponentCompleteTestProviders(NotificationsPopover)
 
 export default NotificationsPopoverForTestingWithProviders

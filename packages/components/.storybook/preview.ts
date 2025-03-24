@@ -2,7 +2,7 @@ import { withStorybookProvidersWrapper } from '@baseapp-frontend/test/providers'
 
 import type { Preview } from '@storybook/react'
 
-import { withComponentsProviders } from '../modules/tests/web/utils/withProviders'
+import { withComponentCompleteTestProviders } from '../modules/tests/web'
 import '../styles/tailwind/globals.css'
 import { handlers } from './__mocks__/handlers'
 import './overrides.css'
@@ -22,7 +22,7 @@ initialize({
 })
 
 const preview: Preview = {
-  decorators: [withStorybookProvidersWrapper(withComponentsProviders)],
+  decorators: [withStorybookProvidersWrapper(withComponentCompleteTestProviders)],
   loaders: [mswLoader],
   parameters: {
     controls: {

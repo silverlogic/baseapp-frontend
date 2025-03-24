@@ -1,5 +1,5 @@
 import { QueryClient } from '@tanstack/react-query'
 
-export interface WithProvidersProps {
+export interface WithComponentTestProvidersProps {
   queryClient?: QueryClient
 }

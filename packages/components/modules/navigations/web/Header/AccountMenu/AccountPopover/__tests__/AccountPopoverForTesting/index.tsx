@@ -1,6 +1,6 @@
 import AccountPopover from '../..'
-import { withComponentsProviders } from '../../../../../../../tests/web/utils/withProviders'
+import { withComponentCompleteTestProviders } from '../../../../../../../tests/web'
 
-const AccountPopoverForTesting = withComponentsProviders(AccountPopover)
+const AccountPopoverForTesting = withComponentCompleteTestProviders(AccountPopover)
 
 export default AccountPopoverForTesting
