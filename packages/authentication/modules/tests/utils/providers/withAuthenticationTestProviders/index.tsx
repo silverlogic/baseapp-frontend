@@ -7,16 +7,18 @@ import { WithAuthenticationTestProvidersProps } from './types'
 
 const withAuthenticationTestProviders =
   <Props extends object>(Component: FC<Props>) =>
-  (props: Props & WithAuthenticationTestProvidersProps) => {
-    const { InitialProfileProviderForTestingProps, context, ...restProps } = props
-
+  ({
+    context,
+    InitialProfileProviderForTestingProps,
+    ...props
+  }: Props & WithAuthenticationTestProvidersProps) => {
     const currentProfile =
       context?.parameters?.initialProfile || InitialProfileProviderForTestingProps?.initialProfile
 
     return (
       <JotaiProvider>
         <InitialProfileProviderForTesting initialProfile={currentProfile}>
-          <Component {...(restProps as Props)} />
+          <Component {...(props as Props)} {...context} />
         </InitialProfileProviderForTesting>
       </JotaiProvider>
     )
