@@ -2,7 +2,7 @@ import { graphql, useLazyLoadQuery } from 'react-relay'
 
 import { CommentsForTestingQuery } from '../../../../../../../__generated__/CommentsForTestingQuery.graphql'
 import { CommentsFragment$key } from '../../../../../../../__generated__/CommentsFragment.graphql'
-import { withComponentsProviders } from '../../../../../../tests/web/utils/withProviders'
+import { withComponentCompleteTestProviders } from '../../../../../../tests/web'
 import Comments from '../../../index'
 import { CommentsProps } from '../../../types'
 
@@ -27,4 +27,4 @@ const CommentsForTesting = (props?: Partial<CommentsProps>) => {
   )
 }
 
-export default withComponentsProviders(CommentsForTesting)
+export default withComponentCompleteTestProviders(CommentsForTesting)

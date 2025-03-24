@@ -1,2 +1,3 @@
-export * from './utils/withProviders'
-export type * from './utils/withProviders/types'
+export { default as withComponentCompleteTestProviders } from './utils/withComponentCompleteTestProviders'
+export { default as withComponentTestProviders } from './utils/withComponentTestProviders'
+export type * from './utils/withComponentTestProviders/types'

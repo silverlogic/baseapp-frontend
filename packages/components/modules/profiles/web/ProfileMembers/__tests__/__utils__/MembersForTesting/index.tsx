@@ -1,8 +1,8 @@
 import { ProfileMembers, ProfileMembersProps } from '../../../..'
-import { withComponentsProviders } from '../../../../../../tests/web/utils/withProviders'
+import { withComponentCompleteTestProviders } from '../../../../../../tests/web'
 
 const MembersForTesting = (props?: Partial<ProfileMembersProps>) => {
   return <ProfileMembers subtitle="Members Testing" {...props} />
 }
 
-export default withComponentsProviders(MembersForTesting)
+export default withComponentCompleteTestProviders(MembersForTesting)
