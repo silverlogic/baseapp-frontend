@@ -1,5 +1,3 @@
-import Constants from 'expo-constants'
-
 import type { MobileDefaultEnvironmentVariables } from '../../types/env'
 
 export const getExpoConstant = <
@@ -7,7 +5,20 @@ export const getExpoConstant = <
 >(
   key: keyof T,
 ) => {
-  if (!Constants?.expoConfig?.extra) return undefined
+  try {
+    // Dynamically require to avoid crashing Storybook
+    const Constants = require('expo-constants').default
 
-  return (Constants.expoConfig.extra as T)[key]
+    if (!Constants?.expoConfig?.extra) return undefined
+
+    return (Constants.expoConfig.extra as T)[key]
+  } catch (e) {
+    // Catch the crash in Storybook or web
+    return undefined
+  }
+  // const Constants = require('expo-constants').default
+
+  // if (!Constants?.expoConfig?.extra) return undefined
+
+  // return (Constants.expoConfig.extra as T)[key]
 }

@@ -1,4 +1,4 @@
-import { baseAppFetch } from '@baseapp-frontend/utils'
+import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 
 import type { User, UserUpdateParams } from '../types/user'
 

@@ -1,11 +1,13 @@
+import { withStorybookProvidersWrapper } from '@baseapp-frontend/test/providers'
+
 import type { Preview } from '@storybook/react'
 
 import '../styles/web/material/globals.css'
 import '../styles/web/tailwind/globals.css'
-import { withProviders } from './decorators'
+import withDesignSystemTestProviders from '../tests/web/utils/providers/withDesignSystemTestProviders'
 
 const preview: Preview = {
-  decorators: [withProviders],
+  decorators: [withStorybookProvidersWrapper(withDesignSystemTestProviders)],
   parameters: {
     controls: {
       matchers: {
