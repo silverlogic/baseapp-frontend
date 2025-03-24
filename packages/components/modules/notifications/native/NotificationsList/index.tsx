@@ -15,6 +15,7 @@ import {
   NotificationsListQuery,
   useNotificationsSubscription,
 } from '../../common'
+import Divider from './Divider'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
@@ -48,19 +49,26 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 
   const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
+    refetch(options, { fetchPolicy: 'store-and-network' })
   }
 
-  const renderNotificationItem = (notification: any) => {
+  const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
-
+    let divider = null
+    if (!notification.unread && index > 0 && notifications[index - 1]?.unread) {
+      divider = <Divider />
+    }
     // TODO add notifications divider and unread/Read notifications as per design
     return (
-      <NotificationItem
-        key={`notification-${notification.id}`}
-        notification={notification}
-        {...NotificationItemProps}
-      />
+      <>
+        {divider}
+        <NotificationItem
+          key={`notification-${notification.id}`}
+          notification={notification}
+          refetch={refetchNotifications}
+          {...NotificationItemProps}
+        />
+      </>
     )
   }
 
@@ -69,7 +77,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
 
     return (
       <View>
-        <FlatList data={notifications} renderItem={({ item }) => renderNotificationItem(item)} />
+        <FlatList
+          data={notifications}
+          renderItem={({ item, index }) => renderNotificationItem(item, index)}
+        />
       </View>
     )
   }
