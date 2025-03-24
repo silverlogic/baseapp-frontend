@@ -2,6 +2,7 @@ export * from './modules/access'
 export * from './modules/mfa'
 export * from './modules/profile'
 export * from './modules/user'
+export * from './modules/tests/utils'
 
 export { default as AuthApi } from './services/auth'
 export * from './services/auth'

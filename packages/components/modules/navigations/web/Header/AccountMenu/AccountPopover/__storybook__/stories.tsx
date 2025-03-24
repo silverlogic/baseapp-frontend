@@ -1,10 +1,8 @@
 import { User, UserApi } from '@baseapp-frontend/authentication'
-import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
 import { Meta, StoryObj } from '@storybook/react'
 
 import AccountPopover from '..'
-import { withTokenSetup } from '../../../../../../../.storybook/decorators'
 import { AccountPopoverProps } from '../types'
 import { mockResolvers } from './mockResolvers'
 
@@ -27,18 +25,6 @@ const meta: Meta = {
       ],
     },
   },
-  decorators: [
-    withTokenSetup,
-    (Story, context) => {
-      const { queueOperationResolver } = context.parameters.relayMockEnvironment as ReturnType<
-        typeof createTestEnvironment
-      >
-
-      queueOperationResolver({ mockResolvers })
-
-      return <Story />
-    },
-  ],
 }
 
 export default meta

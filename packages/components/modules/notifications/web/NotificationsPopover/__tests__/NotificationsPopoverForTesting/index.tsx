@@ -1,8 +1,6 @@
-import withProviders from '../../../../../../__test_utils__/withProviders'
-import { NotificationsPopover, NotificationsPopoverProps } from '../../../index'
+import { withComponentsProviders } from '../../../../../tests/web'
+import { NotificationsPopover } from '../../../index'
 
-const NotificationsPopoverForTesting = (props?: Partial<NotificationsPopoverProps>) => {
-  return <NotificationsPopover {...props} />
-}
+const NotificationsPopoverForTestingWithProviders = withComponentsProviders(NotificationsPopover)
 
-export default withProviders(NotificationsPopoverForTesting)
+export default NotificationsPopoverForTestingWithProviders
