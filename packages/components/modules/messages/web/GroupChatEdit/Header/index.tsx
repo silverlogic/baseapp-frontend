@@ -10,29 +10,37 @@ import {
 
 import { Typography } from '@mui/material'
 
-import { HeaderContainer } from './styled'
+import { Container } from './styled'
 import { HeaderProps } from './types'
 
 const Header: FC<HeaderProps> = ({
   CloseIcon = DefaultCloseIcon,
-  CreateIcon = CheckMarkIcon,
-  isDisabled,
-  onBackButtonClicked,
-  onCreateButtonClicked,
-  title = 'New Group',
+  EditIcon = CheckMarkIcon,
+  isEditButtonDisabled,
+  isMutationInFlight,
+  onCancellation,
+  onSubmit,
+  title = 'Edit Group',
   titleProps = {},
 }) => (
-  <HeaderContainer>
-    <IconButton onClick={onBackButtonClicked} aria-label="cancel group creation">
+  <Container>
+    <IconButton onClick={onCancellation} aria-label="cancel editing group">
       <CloseIcon sx={{ fontSize: '24px' }} />
     </IconButton>
     <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
       {title}
     </Typography>
-    <IconButton aria-label="Create group" disabled={isDisabled} onClick={onCreateButtonClicked}>
-      <CreateIcon sx={{ fontSize: '24px' }} />
+    <IconButton
+      aria-label="Edit group"
+      disabled={isEditButtonDisabled}
+      isLoading={isMutationInFlight}
+      onClick={() => {
+        onSubmit()
+      }}
+    >
+      <EditIcon sx={{ fontSize: '24px' }} />
     </IconButton>
-  </HeaderContainer>
+  </Container>
 )
 
 export default Header

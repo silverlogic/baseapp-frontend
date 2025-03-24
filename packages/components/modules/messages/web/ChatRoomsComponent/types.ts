@@ -1,5 +1,7 @@
 import { FC } from 'react'
 
+import { UISettings } from '@baseapp-frontend/design-system/styles/web'
+
 import { BoxProps } from '@mui/material'
 
 import { ChatRoomsQuery$data } from '../../../../__generated__/ChatRoomsQuery.graphql'
@@ -15,7 +17,7 @@ export interface HidableContainerProps extends BoxProps {
 
 export interface ChatRoomsComponentProps {
   chatRoomsQueryData: ChatRoomsQuery$data
-  settings: any
+  settings: UISettings
   AllChatRoomsListComponent?: FC<AllChatRoomsListProps>
   AllChatRoomsListComponentProps?: Partial<AllChatRoomsListProps>
   GroupChatCreateComponent?: FC<GroupChatCreateProps>

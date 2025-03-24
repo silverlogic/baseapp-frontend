@@ -10,8 +10,10 @@ import { MainContainer, SearchbarContainer } from './styled'
 import { BodyProps } from './types'
 
 const Body: FC<BodyProps> = ({
+  AvatarButtonIcon = NewGroupIcon,
   children,
   control,
+  groupChatCreateButtonCaption = 'New Group',
   handleSearchChange,
   handleSearchClear,
   isPending,
@@ -32,8 +34,8 @@ const Body: FC<BodyProps> = ({
     </SearchbarContainer>
     <AvatarButton
       onClick={onGroupChatCreationButtonClicked}
-      caption="New Group"
-      Icon={NewGroupIcon}
+      caption={groupChatCreateButtonCaption}
+      Icon={AvatarButtonIcon}
     />
     {children}
   </MainContainer>

@@ -9,14 +9,14 @@ import { HeaderProps } from './Header/types'
 import { ProfileCardProps } from './ProfileCard/types'
 
 export type GroupChatDetailsProps = {
-  onBackButtonClicked: () => void
-  onEditButtonClicked: () => void
-  queryRef: PreloadedQuery<GroupDetailsQueryType>
-  Header?: FC<HeaderProps>
-  HeaderProps?: Partial<HeaderProps>
   Body?: FC<BodyProps>
   BodyProps?: Partial<BodyProps>
+  Header?: FC<HeaderProps>
+  HeaderProps?: Partial<HeaderProps>
+  onBackButtonClicked: () => void
+  onEditButtonClicked: () => void
   ProfileCard?: FC<ProfileCardProps>
   ProfileCardProps?: Partial<ProfileCardProps>
+  queryRef: PreloadedQuery<GroupDetailsQueryType>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
 }

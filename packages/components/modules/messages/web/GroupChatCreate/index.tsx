@@ -12,7 +12,7 @@ import { ConnectionHandler } from 'relay-runtime'
 
 import { ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import { useChatRoom, useCreateChatRoomMutation } from '../../common'
-import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
+import DefaultEditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
@@ -20,14 +20,18 @@ import {
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
-import Header from './Header'
+import DefaultHeader from './Header'
 import { ProfilesContainer } from './styled'
 import { GroupChatCreateProps } from './types'
 
 const GroupChatCreate: FC<GroupChatCreateProps> = ({
   allProfilesRef,
+  EditGroupTitleAndImage = DefaultEditGroupTitleAndImage,
+  EditGroupTitleAndImageProps = {},
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
+  Header = DefaultHeader,
+  HeaderProps = {},
   onValidSubmission,
   onBackButtonClicked,
 }) => {
@@ -47,14 +51,10 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
   })
 
   const {
-    control,
     setValue,
     watch,
-    getFieldState,
-    clearErrors,
     handleSubmit,
     formState: { isValid, isDirty, dirtyFields },
-    trigger,
   } = formReturn
 
   const { currentProfile } = useCurrentProfile()
@@ -116,15 +116,6 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
     [allProfiles, participants, currentProfile?.id],
   )
 
-  const handleRemoveImage = () => {
-    clearErrors(FORM_VALUE.image)
-    setValue(FORM_VALUE.image, null, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    })
-  }
-
   const isCreateButtonDisabled = !isValid || !isDirty || isMutationInFlight
 
   return (
@@ -133,16 +124,13 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
         isDisabled={isCreateButtonDisabled}
         onCreateButtonClicked={onSubmit}
         onBackButtonClicked={onBackButtonClicked}
+        {...HeaderProps}
       />
       <EditGroupTitleAndImage
-        control={control}
+        form={formReturn}
         FORM_VALUE={FORM_VALUE}
-        handleRemoveImage={handleRemoveImage}
-        imageError={getFieldState(FORM_VALUE.image).error}
         isMutationInFlight={isMutationInFlight}
-        setValue={setValue}
-        trigger={trigger}
-        watch={watch}
+        {...EditGroupTitleAndImageProps}
       />
 
       <GroupChatMembersList

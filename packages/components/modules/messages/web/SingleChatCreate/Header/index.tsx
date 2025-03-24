@@ -8,8 +8,15 @@ import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Box, Typography } from '@mui/material'
 
 import { HeaderContainer } from './styled'
+import { HeaderProps } from './types'
 
-const Header: FC<{ onHeaderClick: () => void }> = ({ onHeaderClick }) => (
+const Header: FC<HeaderProps> = ({
+  backIcon = 'eva:arrow-ios-back-fill',
+  backIconProps = {},
+  onHeaderClick,
+  title = 'New Chat',
+  titleProps = {},
+}) => (
   <HeaderContainer>
     <Box
       display="grid"
@@ -23,10 +30,10 @@ const Header: FC<{ onHeaderClick: () => void }> = ({ onHeaderClick }) => (
         onClick={onHeaderClick}
         sx={{ maxWidth: 'fit-content' }}
       >
-        <Iconify icon="eva:arrow-ios-back-fill" width={24} />
+        <Iconify icon={backIcon} width={24} {...backIconProps} />
       </IconButton>
-      <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-        New Chat
+      <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
+        {title}
       </Typography>
       <div />
     </Box>

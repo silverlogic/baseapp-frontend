@@ -16,12 +16,12 @@ import {
 } from '../../../__shared__/common'
 import { SocialInput as DefaultSocialInput } from '../../../__shared__/web'
 import { MESSAGE_TYPE, useSendMessageMutation } from '../../common'
-import { MessageCreateProps } from './types'
+import { SendMessageProps } from './types'
 
 let nextClientMutationId = 0
 
 /**
- * ### MessageCreate Component
+ * ### SendMessage Component
  *
  * @description
  * This is a **BaseApp** feature.
@@ -73,7 +73,7 @@ let nextClientMutationId = 0
  * };
  * ```
  */
-const MessageCreate = forwardRef<HTMLInputElement, MessageCreateProps>(
+const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
@@ -156,4 +156,4 @@ const MessageCreate = forwardRef<HTMLInputElement, MessageCreateProps>(
   },
 )
 
-export default MessageCreate
+export default SendMessage

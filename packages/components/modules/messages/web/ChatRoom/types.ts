@@ -1,13 +1,13 @@
 import { FC } from 'react'
 
-import { MessageCreateProps } from '../MessageCreate/types'
 import { MessagesListProps } from '../MessagesList/types'
+import { SendMessageProps } from '../SendMessage/types'
 
 export interface ChatRoomProps {
   roomId: string
   MessagesList?: FC<MessagesListProps>
   MessagesListProps?: Partial<MessagesListProps>
-  SendMessage?: FC<MessageCreateProps>
-  SendMessageProps?: Partial<MessageCreateProps>
+  SendMessage?: FC<SendMessageProps>
+  SendMessageProps?: Partial<SendMessageProps>
   onDisplayGroupDetailsClicked: () => void
 }
