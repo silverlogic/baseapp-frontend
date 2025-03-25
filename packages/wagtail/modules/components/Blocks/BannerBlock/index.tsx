@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { useFragment } from 'react-relay'
 
 import { PageBannerBlockFields$key } from '../../../../__generated__/PageBannerBlockFields.graphql'
-import { PageBannerBlockFields } from '../../../graphql/queries/Page'
+import { PageFragments } from '../../../graphql/queries/Page'
 import BlockContainer from '../../BlockContainer'
 import BannerDescriptionRichText from './BannerDescriptionRichText'
 import { BannerContainer, ContentContainer, ImageContainer, TextContainer } from './styled'
@@ -13,7 +13,7 @@ import { BannerBlockProps } from './types'
 
 const BannerBlock = (props: BannerBlockProps) => {
   const { imagePosition, title, description, featuredImage } =
-    useFragment<PageBannerBlockFields$key>(PageBannerBlockFields, props)
+    useFragment<PageBannerBlockFields$key>(PageFragments, props)
   return (
     <BlockContainer>
       <BannerContainer imagePosition={imagePosition}>

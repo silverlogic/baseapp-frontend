@@ -7,7 +7,6 @@ export type PageBody = NonNullable<NonNullable<PageURLPathQuery$data['page']>['b
 export type PageBodySectionStreamBlock = NonNullable<PageBody[number]>
 export type PageBodyBlock = NonNullable<NonNullable<PageBodySectionStreamBlock['blocks']>[number]>
 export type PageBodyItem = PageBodySectionStreamBlock | PageBodyBlock
-export type PageBodyBlockSharedProps = Pick<PageBodyBlock, 'id' | 'field' | 'blockType'>
 
 export interface StreamFieldProps {
   body: PageBody | NonNullable<PageBodySectionStreamBlock['blocks']>

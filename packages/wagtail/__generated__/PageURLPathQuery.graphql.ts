@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6ace01761bbb57462671be5d6fd2edfd>>
+ * @generated SignedSource<<7e8115d1431a8e56dd776e05b059c739>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -366,7 +366,6 @@ const node: ConcreteRequest = (function () {
                                       storageKey:
                                         'srcSet(format:"webp",preserveSvg:true,sizes:[300,600,900])',
                                     },
-                                    v10 /*: any*/,
                                     v2 /*: any*/,
                                   ],
                                   storageKey: null,
@@ -395,12 +394,12 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '3bdbe9da75de17d70757e04fe392c2cf',
+      cacheID: '6d23f3bead25e483a1e7ebcf813c20d0',
       id: null,
       metadata: {},
       name: 'PageURLPathQuery',
       operationKind: 'query',
-      text: 'query PageURLPathQuery(\n  $path: String!\n) {\n  page(urlPath: $path) {\n    __typename\n    id\n    title\n    pageType\n    ancestors {\n      __typename\n      urlPath\n      title\n      id\n    }\n    ... on StandardPage {\n      body {\n        __typename\n        id\n        field\n        blockType\n        ... on StreamBlock {\n          blocks {\n            __typename\n            id\n            field\n            blockType\n            ...PageBannerBlockFields\n            ...PageRichTextBlockFields\n            ...PageCustomImageBlockFields\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageBannerBlockFields on BannerBlock {\n  title\n  description\n  featuredImage {\n    url\n    altText\n    id\n  }\n  imagePosition\n}\n\nfragment PageCustomImageBlockFields on CustomImageBlock {\n  altText\n  image {\n    url\n    srcSet(sizes: [300, 600, 900], format: "webp", preserveSvg: true)\n    altText\n    id\n  }\n}\n\nfragment PageRichTextBlockFields on RichTextBlock {\n  value\n}\n',
+      text: 'query PageURLPathQuery(\n  $path: String!\n) {\n  page(urlPath: $path) {\n    __typename\n    id\n    title\n    pageType\n    ancestors {\n      __typename\n      urlPath\n      title\n      id\n    }\n    ... on StandardPage {\n      body {\n        __typename\n        id\n        field\n        blockType\n        ... on StreamBlock {\n          blocks {\n            __typename\n            id\n            field\n            blockType\n            ...PageBannerBlockFields\n            ...PageRichTextBlockFields\n            ...PageCustomImageBlockFields\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageBannerBlockFields on BannerBlock {\n  title\n  description\n  featuredImage {\n    url\n    altText\n    id\n  }\n  imagePosition\n}\n\nfragment PageCustomImageBlockFields on CustomImageBlock {\n  altText\n  image {\n    url\n    srcSet(sizes: [300, 600, 900], format: "webp", preserveSvg: true)\n    id\n  }\n}\n\nfragment PageRichTextBlockFields on RichTextBlock {\n  value\n}\n',
     },
   }
 })()

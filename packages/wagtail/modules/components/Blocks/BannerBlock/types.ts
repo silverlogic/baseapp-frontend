@@ -1,12 +1,9 @@
 import type { BoxProps } from '@mui/material'
 
-import type {
-  ImagePosition,
-  PageBannerBlockFields$key,
-} from '../../../../__generated__/PageBannerBlockFields.graphql'
-import type { PageBodyBlockSharedProps } from '../../StreamField/types'
+import type { ImagePosition } from '../../../../__generated__/PageBannerBlockFields.graphql'
+import type { PageBodyBlock } from '../../StreamField/types'
 
-export type BannerBlockBodyItem = PageBodyBlockSharedProps & PageBannerBlockFields$key
+export type BannerBlockBodyItem = PageBodyBlock
 
 export interface BannerBlockProps extends BannerBlockBodyItem {}
 
