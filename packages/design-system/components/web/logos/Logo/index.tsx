@@ -6,7 +6,6 @@ import { Box, Link } from '@mui/material'
 
 import { LogoProps } from './types'
 
-// TODO: move this to @baseapp-frontend/design-system/components/web/logos
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ children, disabledLink = false, sx, ...other }, ref) => {
     const logo = (

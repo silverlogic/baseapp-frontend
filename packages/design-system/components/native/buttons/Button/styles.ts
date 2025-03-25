@@ -44,7 +44,17 @@ export const createContainedStyles = (
   })
 }
 
-export const textStyles = StyleSheet.create(baseButtonStyles)
+export const createTextStyles = ({ colors }: Theme, { disabled, variant }: ButtonStylesOptions) => {
+  const textColor = variant === 'inherit' ? colors.object.high : colors[variant].main
+
+  return StyleSheet.create({
+    ...baseButtonStyles,
+    text: {
+      ...baseButtonStyles.text,
+      color: disabled ? colors.object.disabled : textColor,
+    },
+  })
+}
 
 export const createOutlinedStyles = (
   { colors }: Theme,
