@@ -1,6 +1,6 @@
 import { graphql } from 'react-relay'
 
-export const PageFragments = graphql`
+export const PageBannerBlockFields = graphql`
   fragment PageBannerBlockFields on BannerBlock {
     title
     description
@@ -10,14 +10,21 @@ export const PageFragments = graphql`
     }
     imagePosition
   }
+`
+
+export const PageRichTextBlockFields = graphql`
   fragment PageRichTextBlockFields on RichTextBlock {
     value
   }
+`
+
+export const PageCustomImageBlockFields = graphql`
   fragment PageCustomImageBlockFields on CustomImageBlock {
     altText
     image {
       url
       srcSet(sizes: [300, 600, 900], format: "webp", preserveSvg: true)
+      altText
     }
   }
 `

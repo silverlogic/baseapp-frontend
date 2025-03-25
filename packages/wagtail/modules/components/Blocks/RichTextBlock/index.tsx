@@ -5,12 +5,15 @@ import { FC } from 'react'
 import { useFragment } from 'react-relay'
 
 import { PageRichTextBlockFields$key } from '../../../../__generated__/PageRichTextBlockFields.graphql'
-import { PageFragments } from '../../../graphql/queries/Page'
+import { PageRichTextBlockFields } from '../../../graphql/queries/Page'
 import { RichTextBlockWrapper } from './styled'
 import { RichTextBlockProps } from './types'
 
 const RichTextBlock: FC<RichTextBlockProps> = ({ WrapperProps, ...props }) => {
-  const notificationSettings = useFragment<PageRichTextBlockFields$key>(PageFragments, props)
+  const notificationSettings = useFragment<PageRichTextBlockFields$key>(
+    PageRichTextBlockFields,
+    props,
+  )
   return (
     <RichTextBlockWrapper
       {...WrapperProps}
