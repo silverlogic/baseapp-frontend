@@ -67,6 +67,7 @@
     "@mui/material-nextjs": "catalog:material-ui",
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
+    "@react-native-async-storage/async-storage": "catalog:react-native-core",
     "@react-navigation/drawer": "catalog:react-native-core",
     "@react-navigation/native": "catalog:react-native-core",
     "@shopify/flash-list": "^1.7.6",
