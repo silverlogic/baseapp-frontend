@@ -1,22 +1,15 @@
 import type { BoxProps } from '@mui/material'
 
-import type { PageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
-import type { ImageRecordItem } from '../../../services/Wagtail/types'
+import type {
+  ImagePosition,
+  PageBannerBlockFields$key,
+} from '../../../../__generated__/PageBannerBlockFields.graphql'
+import type { PageBodyBlockSharedProps } from '../../StreamField/types'
 
-export interface BannerBlockBodyItem extends PageBodyItem {
-  value: BannerBlockValue
-  type: 'banner_block'
-}
+export type BannerBlockBodyItem = PageBodyBlockSharedProps & PageBannerBlockFields$key
 
-export interface BannerBlockProps extends Omit<BannerBlockBodyItem, 'type'> {}
-
-export interface BannerBlockValue {
-  featuredImage: ImageRecordItem
-  title: string
-  description: string
-  imagePosition: 'left' | 'right'
-}
+export interface BannerBlockProps extends BannerBlockBodyItem {}
 
 export interface ContainerProps extends BoxProps {
-  imagePosition: 'left' | 'right'
+  imagePosition: ImagePosition
 }

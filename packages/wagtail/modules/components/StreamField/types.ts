@@ -1,15 +1,17 @@
-import { FC } from 'react'
+import type { FC } from 'react'
 
-import { PageBodyItem } from '../../services/Wagtail/PagesAPI/types'
+import type { PageURLPathQuery$data } from '../../../__generated__/PageURLPathQuery.graphql'
+import type { AvailableBlocksType } from '../Blocks/types'
+
+export type PageBody = NonNullable<NonNullable<PageURLPathQuery$data['page']>['body']>
+export type PageBodySectionStreamBlock = NonNullable<PageBody[number]>
+export type PageBodyBlock = NonNullable<NonNullable<PageBodySectionStreamBlock['blocks']>[number]>
+export type PageBodyItem = PageBodySectionStreamBlock | PageBodyBlock
+export type PageBodyBlockSharedProps = Pick<PageBodyBlock, 'id' | 'field' | 'blockType'>
 
 export interface StreamFieldProps {
-  body: PageBodyItem[]
-  availableBlocks: StreamFieldsTableType
-}
-
-export type StreamFieldsTableType = {
-  // TODO (Tech Debt): Switch "key: string" to a list of valid types that can be added within the availableBlocks.
-  [key: string]: ExtractFC<PageBodyItem>
+  body: PageBody | NonNullable<PageBodySectionStreamBlock['blocks']>
+  availableBlocks: AvailableBlocksType
 }
 
 // helper type to transform PageBodyItem into FC<RichTextBlockProps> | FC<ImageBlockProps> | ...
