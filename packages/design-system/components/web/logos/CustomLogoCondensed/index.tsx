@@ -6,7 +6,6 @@ import Image from 'next/image'
 
 import { useLogoOverrides } from '../../../../hooks/web'
 
-// TODO: move this to @baseapp-frontend/design-system/components/web/logos
 const CustomLogoCondensed: FC = () => {
   const { logos } = useLogoOverrides()
   if (!logos?.square) {

@@ -9,10 +9,10 @@ import {
   createContainedStyles,
   createOutlinedStyles,
   createSoftStyles,
+  createTextStyles,
   largeSizeStyles,
   mediumSizeStyles,
   smallSizeStyles,
-  textStyles,
 } from './styles'
 import { ButtonProps, StyleSheetSchema } from './types'
 
@@ -33,7 +33,7 @@ const Button: FC<ButtonProps> = ({
 
   const buttonVariant = {
     contained: createContainedStyles(theme, { variant: color, disabled }),
-    text: textStyles,
+    text: createTextStyles(theme, { variant: color, disabled }),
     outlined: createOutlinedStyles(theme, { variant: color, disabled }),
     soft: createSoftStyles(theme, { variant: color, disabled }),
   } as const
