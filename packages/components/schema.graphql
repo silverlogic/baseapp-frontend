@@ -12,7 +12,6 @@ type ActivityLog implements Node {
   user: User
   ipAddress: String
   verb: String
-  diff: GenericScalar
   visibility: VisibilityTypes
   url: String
   pk: Int!
@@ -202,6 +201,7 @@ type ChatRoomOnMessagesCountUpdate {
 type ChatRoomOnRoomUpdate {
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
 }
 
 type ChatRoomParticipant implements Node {
@@ -325,6 +325,7 @@ type ChatRoomUpdatePayload {
   _debug: DjangoDebug
   room: ChatRoomEdge
   removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
   clientMutationId: String
 }
 
@@ -496,6 +497,19 @@ scalar DateTime
 
 """The `Decimal` scalar type represents a python Decimal."""
 scalar Decimal
+
+input DeleteNodeInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type DeleteNodePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedID: ID!
+  clientMutationId: String
+}
 
 """Debugging information for the current query."""
 type DjangoDebug {
@@ -732,6 +746,7 @@ type Mutation {
   commentDelete(input: CommentDeleteInput!): CommentDeletePayload
   pageCreate(input: PageCreateInput!): PageCreatePayload
   pageEdit(input: PageEditInput!): PageEditPayload
+  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
   profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
@@ -1126,7 +1141,7 @@ interface PermissionsInterface {
   hasPerm(perm: String!): Boolean
 }
 
-type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface {
+type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
@@ -1135,7 +1150,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   blockingCount: Int
   followersCount: Int
   followingCount: Int
-  reportsCount: JSONString!
+  reportsCount: ReportsCount
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
   name: String
@@ -1146,20 +1161,20 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   status: ProfilesProfileStatusChoices!
   owner: User!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
-  ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String): ReactionConnection!
+  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
-  activitylogSet(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
+  activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
   members(
     offset: Int
     before: String
@@ -1172,11 +1187,11 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
-  chatroomparticipantSet(offset: Int, before: String, after: String, first: Int, last: Int, profile_TargetContentType: ID): ChatRoomParticipantConnection!
-  unreadmessagecountSet(offset: Int, before: String, after: String, first: Int, last: Int): UnreadMessageCountConnection!
-  linkedAsContentActorSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
-  linkedAsContentTargetSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
-  messageSet(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection!
+  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String): ChatRoomParticipantConnection!
+  unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
+  linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
+  linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
+  messageSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -1207,6 +1222,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReports: Report
   pk: Int!
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
@@ -1637,9 +1654,25 @@ type ReportEdge {
   cursor: String!
 }
 
+type ReportsCount {
+  spam: Int
+  inappropriate: Int
+  fake: Int
+  other: Int
+  scam: Int
+  adultContent: Int
+  violence: Int
+  bulling: Int
+  pornography: Int
+  childAbuse: Int
+  prostituition: Int
+  total: Int
+}
+
 interface ReportsInterface {
   """The ID of the object"""
   id: ID!
+  reportsCount: ReportsCount
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
 }
@@ -1650,7 +1683,7 @@ type ReportType implements Node {
   name: String!
   label: String!
   parentType: ReportType
-  subTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
+  subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
   pk: Int!
 }
 
@@ -1754,19 +1787,19 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   isActive: Boolean!
   isStaff: Boolean
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String): ReactionConnection!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  pages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection!
+  pages(first: Int, last: Int, offset: Int, after: String, before: String, status: PageStatus): PageConnection!
 
   """The ID of the object"""
   id: ID!

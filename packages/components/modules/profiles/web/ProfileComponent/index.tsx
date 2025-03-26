@@ -117,9 +117,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
           isMenu
         />
       )}
-      {profile && (
-        <ReportButtonWithDialog handleClose={handleClose} target={profile} />
-      )}
+      {profile && <ReportButtonWithDialog handleClose={handleClose} targetId={profile?.id} />}
     </>
   )
 

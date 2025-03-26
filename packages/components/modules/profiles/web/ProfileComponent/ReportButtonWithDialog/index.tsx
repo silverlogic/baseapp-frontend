@@ -1,84 +1,45 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { FlagIcon } from '@baseapp-frontend/design-system/components/common/icons'
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
-// import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, Button, Divider, MenuItem, TextField, Typography } from '@mui/material'
-// import { useMutation } from 'react-relay'
+import { useLazyLoadQuery } from 'react-relay'
 
-// import { ReportTypes } from '../../../../../__generated__/ReportCreateMutation.graphql'
-// import { ReportCreateMutation, ReportTypes } from '../../../../../__generated__/ReportCreateMutation.graphql'
-// import { ReportCreateMutationQuery } from '../../../common/graphql/mutations/ReportCreate'
+import { ReportTypeListQuery as ReportTypeListQueryType } from '../../../../../__generated__/ReportTypeListQuery.graphql'
+import { useReportCreateMutation } from '../../../common/graphql/mutations/ReportCreate'
+import { ReportTypeListQuery } from '../../../common/graphql/queries/ReportTypeList'
 import { TypeButton } from './styled'
 import { ReportButtonWithDialogProps } from './types'
 
-const mainTypes = [
-  {
-    name: 'scam',
-    label: 'Scam or fraud',
-    parentType: null,
-    subTypes: [],
-  },
-  {
-    name: 'adultContent',
-    label: 'Adult Content',
-    parentType: null,
-    subTypes: [
-      {
-        name: 'pornography',
-        label: 'Pornography',
-        parentType: 'adultContent',
-      },
-      {
-        name: 'childAbuse',
-        label: 'Child abuse',
-        parentType: 'adultContent',
-      },
-      {
-        name: 'prostituition',
-        label: 'Prostituition',
-        parentType: 'adultContent',
-      },
-    ],
-  },
-  {
-    name: 'violence',
-    label: 'Violence, hate or exploitation',
-    parentType: null,
-    subTypes: [],
-  },
-  {
-    name: 'bulling',
-    label: 'Bulling or unwanted contact',
-    parentType: null,
-    subTypes: [],
-  },
-  {
-    name: 'other',
-    label: 'Other',
-    parentType: null,
-    subTypes: [],
-  },
-]
+type AllReportTypes = NonNullable<ReportTypeListQueryType['response']['allReportTypes']>
+type ReportType = NonNullable<AllReportTypes['edges'][number]>
+type ReportTypeNode = NonNullable<ReportType['node']>
+type ReportTypeSubType = NonNullable<ReportTypeNode['subTypes']['edges'][number]>
+type ReportTypeSubTypeNode = ReportTypeSubType['node']
 
-const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
-  target: targetRef,
-  handleClose,
-}) => {
-  // const target = useFragment(ReportCreateFragment, targetRef)
+const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, handleClose }) => {
+  const { allReportTypes } = useLazyLoadQuery<ReportTypeListQueryType>(ReportTypeListQuery, {
+    topLevelOnly: true,
+  })
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState('report')
-  // const [reportType, setReportType] = useState()
-  // const [reportSubType, setReportSubType] = useState<ReportTypes>()
+  const [reportType, setReportType] = useState<ReportTypeNode>()
+  const [reportSubType, setReportSubType] = useState<ReportTypeSubTypeNode>()
   const [reportText, setReportText] = useState('')
 
-  // const [commitMutation, isMutationInFlight] = useMutation(ReportCreateMutationQuery)
-  // const [commitMutation, isMutationInFlight] = useMutation<ReportCreateMutation>(ReportCreateMutationQuery)
-  // const { sendToast } = useNotification()
+  const [commitMutation, isMutationInFlight] = useReportCreateMutation()
+  const reportTypes = useMemo(
+    () => allReportTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    [allReportTypes?.edges],
+  )
+  const subTypes = useMemo(
+    () => reportType?.subTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    [reportType?.subTypes?.edges],
+  )
 
   const onClose = () => {
     handleClose()
@@ -86,68 +47,29 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
   }
 
   const handleReport = () => {
-    console.log('Reported', target.id)
-  //   if (isMutationInFlight || !targetId) {
-  //     return
-  //   }
-  //   commitMutation({
-  //     variables: {
-  //       input: {
-  //         reportSubject: reportText,
-  //         reportType,
-  //         targetObjectId: targetId,
-  //       },
-  //     },
-  //     onCompleted: (response, errors) => {
-  //       if (!errors) {
-  //         setCurrentStep('confirmation')
-  //         return
-  //       }
-  //       errors?.forEach((error) => {
-  //         sendToast(error.message, { type: 'error' })
-  //       })
-  //       onClose()
-  //     },
-  //     onError: () => {
-  //       onClose()
-  //     },
-  //   })
+    if (isMutationInFlight || !targetId) {
+      return
+    }
+    commitMutation({
+      variables: {
+        input: {
+          reportSubject: reportText,
+          reportTypeId: reportType?.id,
+          targetObjectId: targetId,
+        },
+      },
+      onCompleted: (_, errors) => {
+        if (!errors) {
+          setCurrentStep('confirmation')
+          return
+        }
+        onClose()
+      },
+      onError: () => {
+        onClose()
+      },
+    })
   }
-
-  // const findReportTypeByName = (
-  //   name: string,
-  //   types: ReportType[]
-  // ): ReportType | null => {
-  //   for (const type of types) {
-  //     if (type.name === name) {
-  //       return type
-  //     }
-  //     const found = findReportTypeByName(name, type.subTypes)
-  //     if (found) {
-  //       return found
-  //     }
-  //   }
-  //   return null
-  // }
-
-  // const RenderReportChain = ({
-  //   reportType,
-  //   allTypes,
-  // }) => {
-  //   const parent =
-  //     reportType.parentType && findReportTypeByName(reportType.parentType, allTypes)
-  //   return (
-  //     <>
-  //       {parent && <RenderReportChain reportType={parent} allTypes={allTypes} />}
-  //       {parent && (
-  //         <Typography variant="body2">
-  //           What type of {parent.label}?
-  //         </Typography>
-  //       )}
-  //       <Typography variant="caption">{reportType.label}</Typography>
-  //     </>
-  //   )
-  // }
 
   const steps = [
     {
@@ -165,54 +87,52 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
           </Box>
           <Divider />
           <Box display="flex" flexDirection="column">
-            {mainTypes.map((type) => (
+            {reportTypes?.map((type) => (
               <TypeButton
-                key={type.name}
+                key={type?.id}
                 onClick={() => {
-                  if (type.subTypes.length) {
-                    // setReportType(type.name as ReportTypes)
+                  if (type?.subTypes?.edges?.length) {
+                    setReportType(type)
                     setCurrentStep('subTypes')
                     return
                   }
-                  // setReportType(type.name as ReportTypes)
-                  setCurrentStep('reportText')
+                  if (type) {
+                    setReportType(type)
+                    setCurrentStep('reportText')
+                  }
                 }}
                 endIcon={<ChevronIcon position="right" />}
               >
-                <Typography variant="body2">{type.label}</Typography>
+                <Typography variant="body2">{type?.label}</Typography>
               </TypeButton>
             ))}
           </Box>
         </>
       ),
     },
-    // {
-    //   name: 'subTypes',
-    //   content: (
-    //     <>
-    //       <Typography variant="h5">{reportType?.label}</Typography>
-    //       <Divider />
-    //       <Box display="flex" flexDirection="column">
-    //         {(!reportSubType ? reportType?.subTypes : reportSubType.subTypes).map((subType) => (
-    //           <TypeButton
-    //             key={subType.name}
-    //             onClick={() => {
-    //               if (subType.subTypes.length > 0) {
-    //                 setReportSubType(subType)
-    //                 return
-    //               }
-    //               setReportSubType(subType)
-    //               setCurrentStep('reportText')
-    //             }}
-    //             endIcon={<ChevronIcon position="right" />}
-    //           >
-    //             <Typography variant="body2">{subType.label}</Typography>
-    //           </TypeButton>
-    //         ))}
-    //       </Box>
-    //     </>
-    //   ),
-    // },
+    {
+      name: 'subTypes',
+      content: (
+        <>
+          <Typography variant="h5">{reportType?.label}</Typography>
+          <Divider />
+          <Box display="flex" flexDirection="column">
+            {subTypes?.map((subType) => (
+              <TypeButton
+                key={subType?.name}
+                onClick={() => {
+                  setReportSubType(subType)
+                  setCurrentStep('reportText')
+                }}
+                endIcon={<ChevronIcon position="right" />}
+              >
+                <Typography variant="body2">{subType?.label}</Typography>
+              </TypeButton>
+            ))}
+          </Box>
+        </>
+      ),
+    },
     {
       name: 'reportText',
       content: (
@@ -245,13 +165,16 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
           </Typography>
           <Divider />
           <Typography variant="body2">Why are you reporting this?</Typography>
-          {/* {!reportSubType ? (<Typography variant="caption">{reportType?.label}</Typography>}) :
-            RenderReportChain({ reportType, allTypes: mainTypes })
-          } */}
+          <Typography variant="caption">{reportType?.label}</Typography>
+          {reportSubType && (
+            <>
+              <Typography variant="body2">What type of {reportType?.label}?</Typography>
+              <Typography variant="caption">{reportSubType?.label}</Typography>
+            </>
+          )}
           <Typography variant="body2">About the problem</Typography>
           <Typography variant="caption">{reportText}</Typography>
-          <Button onClick={handleReport}>
-          {/* <Button disabled={isMutationInFlight} onClick={handleReport}> */}
+          <Button disabled={isMutationInFlight} onClick={handleReport}>
             Submit Report
           </Button>
         </>
@@ -261,7 +184,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({
       name: 'confirmation',
       content: (
         <>
-          {/* <Typography variant="h5">Thanks for reporting {reportType?.label}</Typography> */}
+          <Typography variant="h5">Thanks for reporting {reportType?.label}</Typography>
           <Typography variant="body2">
             Your report is anonymous. If someone is in immediate danger, call the local emergency
             services - don&apos;t wait.

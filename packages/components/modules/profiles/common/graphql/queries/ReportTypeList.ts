@@ -1,16 +1,27 @@
-// import { graphql } from 'relay-runtime'
+import { graphql } from 'react-relay'
 
-// export const ReportTypeListFragment = graphql`
-//   query ReportTypeListQuery($topLevelOnly: Boolean!) {
-//     reportTypes(topLevelOnly: $topLevelOnly) {
-//       id
-//       name
-//       label
-//       subTypes {
-//         id
-//         name
-//         label
-//       }
-//     }
-//   }
-// `
+export const ReportTypeListQuery = graphql`
+  query ReportTypeListQuery($topLevelOnly: Boolean!, $targetObjectId: String) {
+    allReportTypes(topLevelOnly: $topLevelOnly, targetObjectId: $targetObjectId) {
+      edges {
+        node {
+          id
+          name
+          label
+          subTypes {
+            edges {
+              node {
+                id
+                name
+                label
+                parentType {
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`

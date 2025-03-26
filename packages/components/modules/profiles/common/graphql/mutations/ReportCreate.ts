@@ -1,44 +1,49 @@
-// import { useNotification } from '@baseapp-frontend/utils'
-// import { useMutation, UseMutationConfig, graphql } from 'react-relay'
+import { useNotification } from '@baseapp-frontend/utils'
 
-// import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateMutation.graphql'
+import { UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-// export const ReportCreateMutationQuery = graphql`
-//   mutation ReportCreateMutation($input: ReportCreateInput!) {
-//     reportCreate(input: $input) {
-//       target {
-//         reports {
-//           edges {
-//             node {
-//               pk
-//               created
-//             }
-//           }
-//         }
-//       }
-//     }
-//   }
-// `
+import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateMutation.graphql'
 
-// export function useReportCreateMutation() {
-//   const [commitMutation, isMutationInFlight] = useMutation(ReportCreateMutationQuery)
+export const ReportCreateMutationQuery = graphql`
+  mutation ReportCreateMutation($input: ReportCreateInput!) {
+    reportCreate(input: $input) {
+      target {
+        reports {
+          edges {
+            node {
+              pk
+              created
+            }
+          }
+        }
+      }
+    }
+  }
+`
 
-//   const { sendToast } = useNotification()
-//     const commit = (config: UseMutationConfig<ReportCreateMutation>) => {
-//     commitMutation({
-//       ...config,
-//       onCompleted: (response, errors) => {
-//         errors?.forEach((error) => {
-//           sendToast(error.message, { type: 'error' })
-//         })
-//         config?.onCompleted?.(response, errors)
-//       },
-//       onError: (error) => {
-//         sendToast(error.message, { type: 'error' })
-//         config?.onError?.(error)
-//       },
-//     })
-//   }
+export const useReportCreateMutation = (): [
+  (config: UseMutationConfig<ReportCreateMutation>) => void,
+  boolean,
+] => {
+  const [commitMutation, isMutationInFlight] =
+    useMutation<ReportCreateMutation>(ReportCreateMutationQuery)
 
-//   return [commit, isMutationInFlight]
-// }
+  const { sendToast } = useNotification()
+  const commit = (config: UseMutationConfig<ReportCreateMutation>) => {
+    commitMutation({
+      ...config,
+      onCompleted: (response, errors) => {
+        errors?.forEach((error) => {
+          sendToast(error.message, { type: 'error' })
+        })
+        config?.onCompleted?.(response, errors)
+      },
+      onError: (error) => {
+        sendToast(error.message, { type: 'error' })
+        config?.onError?.(error)
+      },
+    })
+  }
+
+  return [commit, isMutationInFlight]
+}
