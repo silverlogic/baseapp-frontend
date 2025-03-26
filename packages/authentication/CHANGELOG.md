@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 4.2.1
+
+### Patch Changes
+
+- Rename `useChangeExpiredPassword` to `useChangePassword`
+- Modify `useChangePassword` to include the `/change-password` endpoint
+
 ## 4.2.0
 
 ### Minor changes
@@ -7,7 +14,7 @@
 - Enhanced the registration process to support separate first and last name inputs, improving user profile detail.
 - Introduced a configurable option that allows toggling between separate name fields and a consolidated name field.
 - Updated form validation to ensure correct input for the revised registration fields.
-- If you're using `useSignUp` with name only, you should set `useNameField`  to `true` on the hook's option 
+- If you're using `useSignUp` with name only, you should set `useNameField` to `true` on the hook's option
 
 ## 4.1.9
 
