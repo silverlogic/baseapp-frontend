@@ -3,8 +3,8 @@ import { useMemo } from 'react'
 import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
 
 export const newMessageSubscription = graphql`
-  subscription useMessagesListSubscription($roomId: ID!, $connections: [ID!]!) {
-    chatRoomOnMessage(roomId: $roomId) {
+  subscription useMessagesListSubscription($roomId: ID!, $profileId: ID!, $connections: [ID!]!) {
+    chatRoomOnMessage(roomId: $roomId, profileId: $profileId) {
       message @prependEdge(connections: $connections) {
         node {
           ...MessageItemFragment
@@ -17,13 +17,14 @@ export const newMessageSubscription = graphql`
   }
 `
 
-export const useMessagesListSubscription = (roomId: string) => {
+export const useMessagesListSubscription = (roomId: string, profileId: string) => {
   const config = useMemo(() => {
     const connectionID = ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages')
     return {
       subscription: newMessageSubscription,
       variables: {
         roomId,
+        profileId,
         connections: [connectionID],
       },
       onError: console.error,

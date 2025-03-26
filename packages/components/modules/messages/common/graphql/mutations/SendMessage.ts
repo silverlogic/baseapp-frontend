@@ -5,11 +5,13 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { SendMessageMutation } from '../../../../../__generated__/SendMessageMutation.graphql'
 
 export const SendMessageMutationQuery = graphql`
-  mutation SendMessageMutation($input: ChatRoomSendMessageInput!, $connections: [ID!]!) {
+  mutation SendMessageMutation($input: ChatRoomSendMessageInput!, $connections: [ID!]!)
+  @raw_response_type {
     chatRoomSendMessage(input: $input) {
       message @prependEdge(connections: $connections) {
         node {
           id
+          messageType
           ...MessageItemFragment
         }
       }
