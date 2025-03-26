@@ -13,11 +13,6 @@ const config: StorybookConfig = {
   stories: [
     resolve(__dirname, './*.mdx'),
     resolve(__dirname, '../modules/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)'),
-    resolve(__dirname, '../../design-system/components/**/__storybook__/*.mdx'),
-    resolve(
-      __dirname,
-      '../../design-system/components/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
-    ),
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),
