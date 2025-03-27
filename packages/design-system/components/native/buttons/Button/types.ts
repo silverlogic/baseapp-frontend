@@ -10,6 +10,7 @@ type ButtonColor = ColorVariant | 'inherit'
 export type ButtonStylesOptions = {
   variant: ButtonColor
   disabled?: boolean
+  mode?: ButtonMode
 }
 
 export type StyleSheetSchema = {

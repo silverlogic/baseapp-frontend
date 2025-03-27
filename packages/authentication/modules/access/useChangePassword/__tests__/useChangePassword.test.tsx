@@ -11,7 +11,7 @@ import useChangePassword from '../index'
 
 describe('useChangePassword', () => {
   const currentPassword = '1234'
-  const password = '12345#Abcde'
+  const password = 'abcABC@123456'
   const changePasswordUrl = '/users/change-password'
 
   afterEach(() => {
