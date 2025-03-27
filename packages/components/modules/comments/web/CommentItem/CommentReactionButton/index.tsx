@@ -8,7 +8,7 @@ import {
 
 import { Typography } from '@mui/material'
 
-import { ReactionButton } from '../../../../__shared__/web'
+import { ReactionButton } from '../../../../__shared__/common'
 import { CommentReactionButtonProps } from './types'
 
 const CommentReactionButton: FC<CommentReactionButtonProps> = ({ target: targetRef }) => (
