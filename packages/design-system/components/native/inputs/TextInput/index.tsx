@@ -1,6 +1,7 @@
 import { FC, useState } from 'react'
 
 import { Ionicons } from '@expo/vector-icons'
+import { LayoutChangeEvent } from 'react-native'
 import { TextInput as PaperTextInput } from 'react-native-paper'
 
 import { useTheme } from '../../../../providers/native'
@@ -14,7 +15,13 @@ const TextInput: FC<TextInputProps> = (props) => {
   const { disabled, helperText } = props
 
   const [isFocused, setIsFocused] = useState(false)
+  const [errorContainerWidth, setErrorContainerWidth] = useState(0)
   const theme = useTheme()
+
+  const onLayout = (event: LayoutChangeEvent) => {
+    const { width } = event.nativeEvent.layout
+    setErrorContainerWidth(width)
+  }
 
   const outlinedStyles = createOutlinedStyles(theme, {
     isFocused,
@@ -23,7 +30,7 @@ const TextInput: FC<TextInputProps> = (props) => {
   })
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container} onLayout={onLayout}>
       <PaperTextInput
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
@@ -32,7 +39,9 @@ const TextInput: FC<TextInputProps> = (props) => {
         {...props}
       />
       {helperText && !disabled && (
-        <View style={styles.errorContainer}>
+        // Had to do this adjustment to the error container width because the error text was overflowing the container
+        // The 12px subtraction is to account for the padding of the error container
+        <View style={[styles.errorContainer, { width: errorContainerWidth - 12 }]}>
           <Ionicons name="warning" size={15} color={theme.colors.error.main} />
           <Text variant="caption" style={{ color: theme.colors.error.main }}>
             {helperText}

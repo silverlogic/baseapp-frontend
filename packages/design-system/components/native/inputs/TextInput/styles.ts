@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
     gap: 8,
   },
   errorContainer: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     flexDirection: 'row',
     gap: 4,
     paddingLeft: 12,

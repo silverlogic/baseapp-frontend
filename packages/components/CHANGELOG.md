@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.28
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.2.1
+  - @baseapp-frontend/design-system@1.0.11
+
 ## 1.0.27
 
 ### Patch Changes

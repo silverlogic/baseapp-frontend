@@ -51,7 +51,7 @@ export const createOutlinedStyles = (
   { disabled, variant }: ButtonStylesOptions,
 ) => {
   const borderColor = variant === 'inherit' ? colors.surface.border : colors[variant].low
-  const textColor = variant === 'inherit' ? colors.object.contrast : colors[variant].high
+  const textColor = variant === 'inherit' ? colors.object.high : colors[variant].high
 
   return StyleSheet.create({
     ...baseButtonStyles,
@@ -69,7 +69,7 @@ export const createOutlinedStyles = (
 export const createSoftStyles = ({ colors }: Theme, { disabled, variant }: ButtonStylesOptions) => {
   const backgroundColor = variant === 'inherit' ? colors.surface.active : colors[variant].overlay
   const textColor = variant === 'inherit' ? colors.object.high : colors[variant].high
-  // if variant inherid display no shadow to the button
+  // if variant inherit display no shadow to the button
   return StyleSheet.create({
     ...baseButtonStyles,
     wrapper: {
