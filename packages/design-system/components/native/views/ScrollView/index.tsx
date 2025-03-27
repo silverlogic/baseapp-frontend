@@ -11,25 +11,16 @@ const ScrollView: FC<ScrollViewProps> = ({ style, avoidKeyboard = true, children
 
   if (avoidKeyboard) {
     return (
-<<<<<<< HEAD
       <KeyboardAvoidingView behavior="padding" style={styles.keyboardHideContainer}>
         <NativeScrollView style={[styles.scrollViewcontainer, style]} {...props}>
           {children}
         </NativeScrollView>
-=======
-      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
-        <NativeScrollView style={[styles.container, style]}>{children}</NativeScrollView>
->>>>>>> 56094f3 (feat: fix inherit btn colors, add ScrollView component)
       </KeyboardAvoidingView>
     )
   }
 
   return (
-<<<<<<< HEAD
     <NativeScrollView style={[styles.scrollViewcontainer, style]} {...props}>
-=======
-    <NativeScrollView style={[styles.container, style]} {...props}>
->>>>>>> 56094f3 (feat: fix inherit btn colors, add ScrollView component)
       {children}
     </NativeScrollView>
   )
