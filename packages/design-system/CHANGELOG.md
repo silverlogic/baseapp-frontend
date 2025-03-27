@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.10
+
+### Patch Changes
+
+- Add infinit scroller custom component based on @shopify/flash-list 1.7.6
+
 ## 1.0.9
 
 ### Patch Changes

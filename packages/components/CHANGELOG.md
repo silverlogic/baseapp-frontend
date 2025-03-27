@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.0.27
+
+### Patch Changes
+
+- Add infinite scroller functionality to RN notifications list
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.10
+
 ## 1.0.26
 
 ### Patch Changes

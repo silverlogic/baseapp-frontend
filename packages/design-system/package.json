@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "sideEffects": false,
   "scripts": {
     "tsup:bundle": "tsup --tsconfig tsconfig.build.json",
@@ -69,6 +69,7 @@
     "@mui/x-date-pickers": "catalog:material-ui",
     "@react-navigation/drawer": "catalog:react-native-core",
     "@react-navigation/native": "catalog:react-native-core",
+    "@shopify/flash-list": "^1.7.6",
     "@storybook/react": "catalog:storybook",
     "color": "^4.2.3",
     "expo-router": "catalog:react-native-core",

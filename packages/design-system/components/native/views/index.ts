@@ -1,5 +1,7 @@
 export { default as CollapsibleView } from './CollapsibleView'
 export type * from './CollapsibleView/types'
+export { default as InfiniteScrollerView } from './InfiniteScrollerView'
+export type * from './InfiniteScrollerView/types'
 export { default as PageViewWithHeader } from './PageViewWithHeader'
 export type * from './PageViewWithHeader/types'
 export { default as ParallaxScrollView } from './ParallaxScrollView'
