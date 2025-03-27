@@ -11,27 +11,8 @@ import useChangePassword from '../index'
 
 describe('useChangePassword', () => {
   const currentPassword = '1234'
-  const password = '12345#Abcde'
-<<<<<<< HEAD
-<<<<<<< HEAD
-  const changePasswordUrl = '/users/change-password'
-=======
-  const token = 'fake-token'
-=======
-  const password = '123456'
->>>>>>> 3034abb (feat: migrate change password from baseapp-frontend-template):packages/authentication/modules/access/useChangePassword/__tests__/useChangePassword.test.tsx
-  const changePasswordUrl = '/change-expired-password'
-<<<<<<< HEAD
->>>>>>> 0cbbc32 (feat: migrate change password from baseapp-frontend-template)
-=======
-=======
   const password = 'abcABC@123456'
   const changePasswordUrl = '/users/change-password'
->>>>>>> 426f513 (feat: add AlertTriangleIcon to native)
->>>>>>> 2bb7a9e (feat: add AlertTriangleIcon to native)
-=======
-  const changePasswordUrl = '/users/change-password'
->>>>>>> 16f76e3 (feat: add wrap to erro container on native TextInput)
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
@@ -184,15 +165,7 @@ describe('useChangePassword', () => {
 
 describe('useChangePassword with token for expired passwords', () => {
   const currentPassword = '1234'
-<<<<<<< HEAD
-<<<<<<< HEAD
   const password = 'abcABC@123456'
-=======
-  const password = '123456'
->>>>>>> 0cbbc32 (feat: migrate change password from baseapp-frontend-template)
-=======
-  const password = 'abcABC@123456'
->>>>>>> 2bb7a9e (feat: add AlertTriangleIcon to native)
   const token = 'fake-token'
   const changePasswordUrl = '/change-expired-password'
 
