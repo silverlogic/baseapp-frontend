@@ -24,6 +24,7 @@ type ReportTypeSubTypeNode = ReportTypeSubType['node']
 const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, handleClose }) => {
   const { allReportTypes } = useLazyLoadQuery<ReportTypeListQueryType>(ReportTypeListQuery, {
     topLevelOnly: true,
+    targetObjectId: targetId,
   })
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState('report')
@@ -35,7 +36,11 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
   const reportTypes = useMemo(
     () => allReportTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [allReportTypes?.edges],
-  )
+  ).sort((a, b) => {
+    if (!a) return -1
+    if (!b) return 1
+    return a.name > b.name ? 1 : -1
+  })
   const subTypes = useMemo(
     () => reportType?.subTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [reportType?.subTypes?.edges],

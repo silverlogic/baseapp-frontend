@@ -1655,18 +1655,7 @@ type ReportEdge {
 }
 
 type ReportsCount {
-  spam: Int
-  inappropriate: Int
-  fake: Int
-  other: Int
-  scam: Int
-  adultContent: Int
-  violence: Int
-  bulling: Int
-  pornography: Int
-  childAbuse: Int
-  prostituition: Int
-  total: Int
+  counts: JSONString
 }
 
 interface ReportsInterface {

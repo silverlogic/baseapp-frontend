@@ -7,14 +7,10 @@ import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateM
 export const ReportCreateMutationQuery = graphql`
   mutation ReportCreateMutation($input: ReportCreateInput!) {
     reportCreate(input: $input) {
-      target {
-        reports {
-          edges {
-            node {
-              pk
-              created
-            }
-          }
+      report {
+        node {
+          id
+          created
         }
       }
     }
