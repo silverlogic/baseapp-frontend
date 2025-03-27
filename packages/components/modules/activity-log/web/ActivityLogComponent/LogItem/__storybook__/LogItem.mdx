@@ -1,0 +1,43 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/ActivityLog/LogItem" />
+
+# Component Documentation
+
+## LogItem
+
+- **Purpose**: A component that renders an individual log item for the activity log.
+- **Expected Behavior**: Displays comment content with the author's avatar and name, allows editing and deleting (if permitted), supports reactions and replies, and can expand/collapse nested replies.
+- **Expected Behavior**: Displays single log based on the verb passed to it.
+
+## Use Cases
+
+- **Current Usage**: Used within activity log list.
+
+## Props
+
+- **log** (ActivityLogNode): Relay node reference for the log data.
+- **sx** (SxProps): Optional Material-UI system props for additional styling.
+
+## Notes
+
+- **Related Components**:
+  - ActivityLog
+  - LogGroup
+
+## Example Usage
+
+```javascript
+import { LogItem } from '@baseapp-frontend/components/activity-log/web'
+
+const MyComponent = (log: ActivityLogNode, isLast: Boolean) => {
+  return (
+    <LogItem
+      key={log.id}
+      sx={isLast ? { marginBottom: '6px' } : undefined}
+      log={log}
+    />
+  )
+}
+export default MyComponent
+```
