@@ -2,9 +2,12 @@
 
 import { FC, useMemo, useState } from 'react'
 
-import { FlagIcon } from '@baseapp-frontend/design-system/components/common/icons'
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
-import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import {
+  ChevronIcon,
+  FlagIcon,
+  OutlinedCheckMarkIcon,
+} from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, Button, Divider, MenuItem, TextField, Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
@@ -210,9 +213,14 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
       </MenuItem>
       <Dialog open={isReportModalOpen} onClose={onClose}>
         <Box display="flex" flexDirection="column" padding={4} gap={2}>
-          <Typography variant="subtitle1">
-            {currentStep === 'confirmation' ? 'Check Report' : 'Report'}
-          </Typography>
+          {currentStep === 'confirmation' ? (
+            <Box display="flex" alignItems="center" gap={2}>
+              <OutlinedCheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
+              <Typography variant="subtitle1">Report</Typography>
+            </Box>
+          ) : (
+            <Typography variant="subtitle1">Report</Typography>
+          )}
           {steps?.find((step) => step.name === currentStep)?.content}
         </Box>
       </Dialog>
