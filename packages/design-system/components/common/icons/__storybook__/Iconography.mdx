@@ -1,0 +1,14 @@
+import { Meta, IconGallery, IconItem } from '@storybook/blocks'
+import * as AllIcons from '..' 
+
+<Meta title="@baseapp-frontend | designSystem/Iconography" />
+
+# Iconography
+
+<IconGallery>
+  {Object.entries(AllIcons).map(([iconName, IconComponent]) => (
+    <IconItem key={iconName} name={iconName.replace(/([A-Z])/g, ' $1').replace('Icon', '').trim()}>
+      <IconComponent sx={{ color: 'primary.main' }} />
+    </IconItem>
+  ))}
+</IconGallery>
