@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.12
+
+### Patch Changes
+
+- Add custom Tabs Components to design system
+
 ## 1.0.11
 
 ### Patch Changes
@@ -8,7 +14,6 @@
 - Modified native `TextInput` to adjust the error message view so it doesn't overflow offscreen
 - Added `AlertTriangleIcon` to native components
 - Fixed text color for `Button` `outlined` variant
-
 
 ## 1.0.10
 
