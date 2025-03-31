@@ -18,7 +18,6 @@ const logosAtom = atomWithStorage<LogoOverrides>(
 
 const useLogoOverrides = () => {
   const [logos, setLogos] = useAtom(logosAtom)
-  const isSSR = typeof window === typeof undefined
 
   const handleSetLogoOverrides = (newLogos: Partial<LogoOverrides>) => {
     setLogos(async (prev: LogoOverrides | Promise<LogoOverrides>) => {
@@ -26,14 +25,6 @@ const useLogoOverrides = () => {
       const updatedLogoOverrides = { ...prevLogos, ...newLogos }
       return updatedLogoOverrides
     })
-  }
-
-  if (isSSR) {
-    // SSR fallback, return default settings if in a server-side context
-    return {
-      logos: DEFAULT_LOGO_SETTINGS,
-      setLogos: handleSetLogoOverrides,
-    }
   }
 
   return {

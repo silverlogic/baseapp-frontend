@@ -5,7 +5,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @baseapp-frontend/design-system@1.0.12
+  - @baseapp-frontend/design-system@1.0.13
 
 ## 1.0.28
 

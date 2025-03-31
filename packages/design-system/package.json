@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "sideEffects": false,
   "scripts": {
     "tsup:bundle": "tsup --tsconfig tsconfig.build.json",
@@ -73,6 +73,7 @@
     "@shopify/flash-list": "^1.7.6",
     "@storybook/react": "catalog:storybook",
     "color": "^4.2.3",
+    "expo-image-picker": "catalog:react-native-core",
     "expo-router": "catalog:react-native-core",
     "framer-motion": "^11.2.10",
     "jotai": "catalog:",

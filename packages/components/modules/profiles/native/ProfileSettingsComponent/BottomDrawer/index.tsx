@@ -51,7 +51,7 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
         <Pressable onPress={() => handleRemoveImage(type)} style={styles.modalItem}>
           <TrashIcon width={20} height={20} color={theme.colors.error.main} />
           <Text variant="body2" style={{ color: theme.colors.error.main }}>
-            Remove {type}
+            Remove {type === 'image' ? 'image' : 'banner'}
           </Text>
         </Pressable>
       </View>
