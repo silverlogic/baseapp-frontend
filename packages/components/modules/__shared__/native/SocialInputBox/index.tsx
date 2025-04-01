@@ -17,8 +17,9 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
       SocialUpsertActions = DefaultSocialUpsertActions,
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
-      isLoading,
       form,
+      isLoading,
+      shouldUseBottomSheetSafeComponents = false,
       submit,
     },
     ref,
@@ -30,12 +31,14 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
         control={form.control}
         name={SOCIAL_UPSERT_FORM.body}
         ref={ref}
+        shouldUseBottomSheetSafeComponents={shouldUseBottomSheetSafeComponents}
         {...SocialTextInputProps}
       >
         <SocialUpsertActions />
         <SubmitActions
           disabled={submissionDisabled}
           handleSubmit={submit}
+          shouldUseBottomSheetSafeComponents={shouldUseBottomSheetSafeComponents}
           {...SubmitActionsProps}
         />
       </SocialTextInput>

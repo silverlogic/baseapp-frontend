@@ -7,4 +7,5 @@ export interface SubmitActionsProps {
   handleSubmit: VoidFunction
   SendMessageIcon?: FC<SvgIconProps>
   SendMessageIconProps?: SvgIconProps
+  shouldUseBottomSheetSafeComponents?: boolean
 }

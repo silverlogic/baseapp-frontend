@@ -2,7 +2,20 @@ import { StyleSheet } from 'react-native'
 
 import { Theme } from '../../../../styles/native'
 
-export const createStyles = (theme: Theme, isFocused: boolean) =>
+export const createStyles = (
+  theme: Theme,
+  {
+    isFocused,
+    inputHeight,
+    lineHeight,
+    maxLines,
+  }: {
+    isFocused: boolean
+    inputHeight: number
+    lineHeight: number
+    maxLines: number
+  },
+) =>
   StyleSheet.create({
     container: {
       display: 'flex',
@@ -25,9 +38,11 @@ export const createStyles = (theme: Theme, isFocused: boolean) =>
     input: {
       alignSelf: 'stretch',
       textAlignVertical: 'top',
+      height: inputHeight,
     },
     contentStyle: {
-      lineHeight: 22,
+      lineHeight,
+      fontSize: 14,
       paddingHorizontal: 0,
       paddingVertical: 0,
       paddingLeft: 0,
@@ -37,5 +52,13 @@ export const createStyles = (theme: Theme, isFocused: boolean) =>
     },
     outlineStyle: {
       display: 'none',
+    },
+    iosInput: {
+      width: '100%',
+      padding: 0,
+      maxHeight: lineHeight * maxLines,
+      lineHeight, // This property does not work on android directly
+      // and requires the react-native-paper workaround from above
+      fontSize: 14,
     },
   })
