@@ -90,6 +90,7 @@
     "react-hook-form": "catalog:",
     "react-native": "catalog:react-native-core",
     "react-native-gesture-handler": "catalog:react-native-core",
+    "react-native-safe-area-context": "^5.3.0",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",
