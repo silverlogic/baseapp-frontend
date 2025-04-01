@@ -32,6 +32,7 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
         depth={depth}
         active={active}
         disabled={disabled}
+        disableRipple={hasChild}
         {...props}
       >
         <div className="relative">
@@ -80,6 +81,8 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
           {content}
         </Link>
       )
+
+    if (hasChild) return content
 
     return (
       <Link
