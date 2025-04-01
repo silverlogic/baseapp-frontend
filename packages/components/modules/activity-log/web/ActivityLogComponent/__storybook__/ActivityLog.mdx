@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/ActivityLog/ActivityLog" />
+
+# Component Documentation
+
+## ActivityLog
+
+- **Purpose**: A component that renders the activity log groups allowing the user to search by user and filter by periods.
+- **Expected Behavior**: Displays an Activity Log title, search by user, filter by period and list of activity log groups.
+
+## Use Cases
+
+- **Current Usage**: Used as main component for Activity Logs.
+
+## Props
+
+- **queryRef** (ActivityLogsPaginationQuery$data): Relay pagination query reference for the activity logs.
+- **LogGroups** (FC\<LogGroupsProps\>): Optional field to replace default activity logs retrieved by the component.
+- **LogGroupsProps** (Partial\<LogGroupsProps\>): Optional field to add extra props to LogGroups.
+
+## Notes
+
+- **Related Components**:
+  - LogItem
+  - LogGroups
+
+## Example Usage
+
+```javascript
+import { ActivityLogComponent } from '@baseapp-frontend/components/activity-log/web'
+
+const MyComponent = () => {
+  const data = usePreloadedQuery(ActivityLogsQuery, queryRef)
+  return <ActivityLogComponent queryRef={data} />
+}
+```
