@@ -15,5 +15,6 @@ export interface SocialInputBoxProps {
   SubmitActionsProps?: Partial<SubmitActionsProps>
   isLoading: boolean
   form: UseFormReturn<SocialUpsertForm, any, undefined>
+  shouldUseBottomSheetSafeComponents?: boolean
   submit: VoidFunction
 }

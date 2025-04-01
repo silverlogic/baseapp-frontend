@@ -12,4 +12,5 @@ export type SocialTextInputProps = PaperTextInputProps &
     maxLines?: number
     containerStyle?: StyleProp<ViewStyle>
     toolStyle?: StyleProp<ViewStyle>
+    shouldUseBottomSheetSafeComponents?: boolean
   }

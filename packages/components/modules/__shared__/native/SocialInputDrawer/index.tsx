@@ -1,7 +1,16 @@
-import { forwardRef, useCallback, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
+
+import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { TextInput as NativeTextInput } from 'react-native'
+import {
+  Dimensions,
+  Keyboard,
+  KeyboardEvent,
+  TextInput as NativeTextInput,
+  Platform,
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 import DefaultSocialInputBox from '../SocialInputBox'
 import DefaultDrawerHandle from './DrawerHandle'
@@ -23,22 +32,59 @@ const SocialInputDrawer = forwardRef<NativeTextInput, SocialInputDrawerProps>(
     ref,
   ) => {
     const bottomSheetRef = useRef<BottomSheet>(null)
+    const [keyboardHeight, setKeyboardHeight] = useState(0)
+    const insets = useSafeAreaInsets()
 
-    const handleSheetChange = useCallback((index: number) => {
-      console.log('handleSheetChange', index)
-    }, [])
-    const handleAnimate = useCallback(
-      (index: number, to: number) => {
-        console.log('handleAnimate', index, to)
-        if (to === 0) {
-          if (ref && 'current' in ref) ref.current?.blur()
+    useEffect(() => {
+      // on android the keyboard is handled automatically by BottomSheet
+      if (Platform.OS === 'android') return () => {}
+
+      const onKeyboardShow = (e: KeyboardEvent) => {
+        const screenHeight = Dimensions.get('screen').height
+        const safeHeight = screenHeight - insets.bottom
+        const newKeyboardHeight = safeHeight - e.endCoordinates.screenY
+        setKeyboardHeight(newKeyboardHeight)
+      }
+
+      const onKeyboardHide = () => {
+        setKeyboardHeight(0)
+      }
+
+      const showListener = Keyboard.addListener('keyboardWillShow', onKeyboardShow)
+      const hideListener = Keyboard.addListener('keyboardWillHide', onKeyboardHide)
+
+      return () => {
+        showListener.remove()
+        hideListener.remove()
+      }
+    }, [insets])
+
+    const handleSheetChange = useCallback(
+      (index: number) => {
+        if (index !== 1) {
           bottomSheetRef.current?.snapToIndex(1)
-        } else if (to === 2) {
-          if (ref && 'current' in ref) ref.current?.focus()
-          bottomSheetRef.current?.snapToIndex(1)
+          if (index === 0) {
+            if (ref && 'current' in ref) ref.current?.blur()
+          } else if (index === 2) {
+            if (ref && 'current' in ref) ref.current?.focus()
+          }
         }
       },
-      [ref, bottomSheetRef.current],
+      [ref, bottomSheetRef],
+    )
+
+    const handleAnimate = useCallback(
+      (from: number, to: number) => {
+        if (to !== 1) {
+          bottomSheetRef.current?.snapToIndex(1)
+        }
+        if (to === 0) {
+          if (ref && 'current' in ref) ref.current?.blur()
+        } else if (to === 2) {
+          if (ref && 'current' in ref) ref.current?.focus()
+        }
+      },
+      [ref, bottomSheetRef],
     )
 
     const styles = createStyles()
@@ -47,11 +93,11 @@ const SocialInputDrawer = forwardRef<NativeTextInput, SocialInputDrawerProps>(
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
-        snapPoints={[80, 200]}
+        snapPoints={[80 + keyboardHeight, 200 + keyboardHeight]}
         onChange={handleSheetChange}
         onAnimate={handleAnimate}
         enableContentPanningGesture={false}
-        keyboardBlurBehavior="restore"
+        keyboardBehavior="interactive"
         handleComponent={showHandle ? DrawerHandle : null}
         backgroundStyle={styles.background}
       >
@@ -60,9 +106,16 @@ const SocialInputDrawer = forwardRef<NativeTextInput, SocialInputDrawerProps>(
             form={form}
             isLoading={isLoading}
             ref={ref}
+            shouldUseBottomSheetSafeComponents
             submit={submit}
             {...SocialInputBoxProps}
           />
+          {
+            // The next view extends the bottom sheet by the height of the keyboard
+            // so that the SocialInputBox is not hidden by the keyboard
+            // On android this works automatically (keyboardHeight = 0 in this case)
+          }
+          <View style={{ height: keyboardHeight }} />
         </BottomSheetView>
       </BottomSheet>
     )

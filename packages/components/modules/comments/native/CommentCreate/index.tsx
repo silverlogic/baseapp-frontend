@@ -90,8 +90,9 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           {children}
           <View
             style={{ height: textHeight + (showHandle ? 38 : 0) + 88 }}
-            // This space is taken by the social input drawer
-            // 38 is handle height (26) plus padding (12) padding
+            // This space is taken by the social input drawer.
+            // We add it here so that no scrollable content is hidden behind the social input drawer.
+            // 38 is handle height (26) plus padding (12)
           />
         </ScrollView>
         <SocialInputDrawer
