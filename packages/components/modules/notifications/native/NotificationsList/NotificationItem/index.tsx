@@ -10,6 +10,7 @@ import { NotificationItemProps } from './types'
 const NotificationItem: FC<NotificationItemProps> = ({
   notification: notificationRef,
   NotificationItemRenderer = DefaultNotificationItemRenderer,
+  refetch,
 }) => {
   const notification = useFragment(NotificationItemFragment, notificationRef)
 
@@ -18,6 +19,7 @@ const NotificationItem: FC<NotificationItemProps> = ({
   const markAsRead = () => {
     if (notification.unread) {
       commitMutation({
+        onCompleted: refetch,
         variables: {
           input: {
             read: true,

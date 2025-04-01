@@ -16,6 +16,7 @@ import {
   useNotificationsSubscription,
 } from '../../common'
 import { NotificationsNode } from '../../common/types'
+import Divider from './Divider'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
@@ -48,19 +49,24 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 
   const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
+    refetch(options, { fetchPolicy: 'store-and-network' })
   }
 
-  const renderNotificationItem = (notification: NotificationsNode) => {
+  const renderNotificationItem = (notification: NotificationsNode, index: number) => {
     if (!notification) return null
-
-    // TODO add notifications divider and unread/Read notifications as per design
+    let divider = null
+    if (!notification.unread && index > 0 && notifications[index - 1]?.unread) {
+      divider = <Divider />
+    }
     return (
-      <NotificationItem
-        key={`notification-${notification.id}`}
-        notification={notification}
-        {...NotificationItemProps}
-      />
+      <>
+        {divider}
+        <NotificationItem
+          notification={notification}
+          refetch={refetchNotifications}
+          {...NotificationItemProps}
+        />
+      </>
     )
   }
 
@@ -71,7 +77,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <View style={styles.listContainer}>
         <InfiniteScrollerView
           data={notifications}
-          renderItem={({ item }: { item: NotificationsNode }) => renderNotificationItem(item)}
+          renderItem={({ item, index }: { item: NotificationsNode, index: number }) => renderNotificationItem(item, index)}
           estimatedItemSize={134}
           onEndReached={() => {
             if (hasNext) {
