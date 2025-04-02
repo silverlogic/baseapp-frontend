@@ -61,6 +61,11 @@
       "import": "./dist/profiles/*/index.mjs",
       "require": "./dist/profiles/*/index.js"
     },
+    "./payments/*": {
+      "types": "./dist/payments/*/index.d.ts",
+      "import": "./dist/payments/*/index.mjs",
+      "require": "./dist/payments/*/index.js"
+    },
     "./tests/*": {
       "types": "./dist/tests/*/index.d.ts",
       "import": "./dist/tests/*/index.mjs",
@@ -87,6 +92,8 @@
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
     "@storybook/react": "catalog:storybook",
+    "@stripe/react-stripe-js": "^3.6.0",
+    "@stripe/stripe-js": "^7.0.0",
     "@tanstack/react-query": "catalog:",
     "expo-file-system": "catalog:react-native-core",
     "expo-image-picker": "catalog:react-native-core",
