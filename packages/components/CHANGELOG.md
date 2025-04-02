@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.30
+
+### Patch Changes
+
+- Native: Dividing notifications into unread/read
+
 ## 1.0.29
 
 ### Patch Changes

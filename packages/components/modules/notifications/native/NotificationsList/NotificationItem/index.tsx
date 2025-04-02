@@ -10,6 +10,7 @@ import { NotificationItemProps } from './types'
 const NotificationItem: FC<NotificationItemProps> = ({
   notification: notificationRef,
   NotificationItemRenderer = DefaultNotificationItemRenderer,
+  refetch,
 }) => {
   const notification = useFragment(NotificationItemFragment, notificationRef)
 
@@ -18,6 +19,9 @@ const NotificationItem: FC<NotificationItemProps> = ({
   const markAsRead = () => {
     if (notification.unread) {
       commitMutation({
+        // TODO: check whether this is needed (clicking on a notification should navigate to the underlying comment,
+        // so the screen will not remain visible). If needed, check whether we can use optimistic updates
+        onCompleted: refetch,
         variables: {
           input: {
             read: true,
