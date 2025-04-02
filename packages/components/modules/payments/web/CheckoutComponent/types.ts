@@ -8,18 +8,6 @@ export interface CheckoutComponentProps {
   onPaymentError?: (error: string) => void
 }
 
-export interface BillingDetails {
-  name?: string
-  address?: {
-    line1?: string
-    line2?: string
-    city?: string
-    state?: string
-    postalCode?: string
-    country?: string
-  }
-}
-
 export interface CheckoutProps {
   isLoadingMethods: boolean
   checkoutCustomerId: string
