@@ -24,6 +24,7 @@ const config: StorybookConfig = {
       __dirname,
       '../../design-system/providers/**/__storybook__/stories.@(js|jsx|mjs|ts|tsx)',
     ),
+    // TODO compose wagtail stories here
   ],
   framework: {
     name: getAbsolutePath('@storybook/react-webpack5'),

@@ -38,7 +38,9 @@
       "outputs": []
     },
     "storybook": {
-      "dependsOn": ["^storybook"]
+      "dependsOn": ["^build"],
+      "cache": false,
+      "persistent": true
     }
   }
 }
