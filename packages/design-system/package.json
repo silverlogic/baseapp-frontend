@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "sideEffects": false,
   "scripts": {
     "tsup:bundle": "tsup --tsconfig tsconfig.build.json",
@@ -67,11 +67,13 @@
     "@mui/material-nextjs": "catalog:material-ui",
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
+    "@react-native-async-storage/async-storage": "catalog:react-native-core",
     "@react-navigation/drawer": "catalog:react-native-core",
     "@react-navigation/native": "catalog:react-native-core",
     "@shopify/flash-list": "^1.7.6",
     "@storybook/react": "catalog:storybook",
     "color": "^4.2.3",
+    "expo-image-picker": "catalog:react-native-core",
     "expo-router": "catalog:react-native-core",
     "framer-motion": "^11.2.10",
     "jotai": "catalog:",

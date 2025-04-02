@@ -4,6 +4,7 @@ import { Button } from '@baseapp-frontend/design-system/components/native/button
 import { CameraIcon, ImageIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { TextInput } from '@baseapp-frontend/design-system/components/native/inputs'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
+import { useViewPhotoLibrary } from '@baseapp-frontend/design-system/hooks/native'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import {
   ACCESS_KEY_NAME,
@@ -41,7 +42,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   const profile = useFragment(ProfileComponentFragment, profileRef)
   const bottomDrawerRef = useRef<BottomSheetModal>(null)
   const [commitMutation, isMutationInFlight] = useProfileMutation()
-  const [fieldType, setFieldType] = useState<'image' | 'banner'>('image')
+  const [fieldType, setFieldType] = useState<'image' | 'bannerImage'>('image')
   // const { updateProfileIfActive } = useCurrentProfile()
   const { sendToast } = useNotification()
 
@@ -153,52 +154,18 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
     onSubmit(data)
   }
 
-  const handleImageSelection = async (
-    result: ImagePicker.ImagePickerResult,
-    type: 'image' | 'banner',
-  ) => {
-    if (!result.canceled) {
-      const loadedImage = result.assets[0]?.uri
-      const fieldName = type === 'image' ? PROFILE_FORM_VALUE.image : PROFILE_FORM_VALUE.bannerImage
-
-      setValue(fieldName, loadedImage, { shouldValidate: true, shouldDirty: true })
-    }
-    bottomDrawerRef.current?.close()
-  }
-  const aspectRatio = fieldType === 'image' ? ([1, 1] as const) : ([16, 9] as const)
-
-  const handleViewPhotoLibrary = async () => {
-    const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-    if (permissionResult.granted === false) {
-      sendToast('Permission to access photo library is required!', { type: 'error' })
-      return
-    }
-
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: 'images',
-      allowsEditing: Platform.OS === 'android',
-      aspect: [aspectRatio[0], aspectRatio[1]],
-      quality: 1,
-    })
-
-    handleImageSelection(result, fieldType)
-  }
-
-  const handleTakePhoto = async () => {
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync()
-    if (permissionResult.granted === false) {
-      sendToast('Permission to access camera is required!', { type: 'error' })
-      return
-    }
-
-    const result = await ImagePicker.launchCameraAsync({
-      allowsEditing: Platform.OS === 'android',
-      aspect: [aspectRatio[0], aspectRatio[1]],
-      quality: 1,
-    })
-
-    handleImageSelection(result, fieldType)
-  }
+  const { handleViewPhotoLibrary, handleTakePhoto } = useViewPhotoLibrary({
+    allowsEditing: Platform.OS === 'android',
+    isBase64: false,
+    onResult: (image?: ImagePicker.ImagePickerAsset) => {
+      const imageUri = image?.uri
+      setValue(fieldType, imageUri, { shouldValidate: true, shouldDirty: true })
+    },
+    onFinally: () => {
+      bottomDrawerRef.current?.close()
+    },
+    type: fieldType,
+  })
 
   // TODO: add this back when support multiple profiles
   // useEffect(() => {
@@ -212,7 +179,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   //   }
   // }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
-  const handleRemoveImage = (type: 'image' | 'banner') => {
+  const handleRemoveImage = (type: 'image' | 'bannerImage') => {
     clearErrors(type === 'image' ? 'image' : 'bannerImage')
     setValue(type === 'image' ? 'image' : 'bannerImage', undefined, {
       shouldValidate: false,
@@ -232,7 +199,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   }, [])
 
   const handleEditBanner = () => {
-    setFieldType('banner')
+    setFieldType('bannerImage')
     handlePresentModalPress()
   }
 
