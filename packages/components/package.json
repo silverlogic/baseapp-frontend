@@ -60,6 +60,11 @@
       "types": "./dist/profiles/*/index.d.ts",
       "import": "./dist/profiles/*/index.mjs",
       "require": "./dist/profiles/*/index.js"
+    },
+    "./content-feed/*": {
+      "types": "./dist/content-feed/*/index.d.ts",
+      "import": "./dist/content-feed/*/index.mjs",
+      "require": "./dist/content-feed/*/index.js"
     }
   },
   "files": [
