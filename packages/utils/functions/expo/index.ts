@@ -13,12 +13,6 @@ export const getExpoConstant = <
 
     return (Constants.expoConfig.extra as T)[key]
   } catch (e) {
-    // Catch the crash in Storybook or web
     return undefined
   }
-  // const Constants = require('expo-constants').default
-
-  // if (!Constants?.expoConfig?.extra) return undefined
-
-  // return (Constants.expoConfig.extra as T)[key]
 }

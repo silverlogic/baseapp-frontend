@@ -26,7 +26,7 @@ const withGraphqlTestProviders =
 
     return (
       <RelayTestProvider environment={currentEnvironment}>
-        <Component {...(restProps as Props)} />
+        <Component {...(restProps as Props)} {...context} />
       </RelayTestProvider>
     )
   }

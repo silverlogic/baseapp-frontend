@@ -1,1 +1,3 @@
-export * from '@baseapp-frontend/test/__mocks__/style'
+const Style = require('@baseapp-frontend/test/__mocks__/style.ts')
+
+export default Style

@@ -17,8 +17,8 @@ const withAuthenticationTestProviders =
 
     return (
       <JotaiProvider>
-        <InitialProfileProviderForTesting initialProfile={currentProfile}>
-          <Component {...(props as Props)} />
+        <InitialProfileProviderForTesting initialProfile={currentProfile || null}>
+          <Component {...(props as Props)} {...context} />
         </InitialProfileProviderForTesting>
       </JotaiProvider>
     )

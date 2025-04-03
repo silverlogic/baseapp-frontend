@@ -1,3 +1,3 @@
-module.exports = require('@baseapp-frontend/test/__mocks__/file.ts')
+const File = require('@baseapp-frontend/test/__mocks__/file.ts')
 
-export {}
+export default File

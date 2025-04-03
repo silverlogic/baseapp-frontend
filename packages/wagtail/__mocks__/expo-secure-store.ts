@@ -1,3 +1,3 @@
-module.exports = require('@baseapp-frontend/test/__mocks__/expo-secure-store.ts')
+const ExpoSecureStore = require('@baseapp-frontend/test/__mocks__/expo-secure-store.ts')
 
-export {}
+export default ExpoSecureStore
