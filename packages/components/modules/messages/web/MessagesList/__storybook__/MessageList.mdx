@@ -1,0 +1,40 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Messages/MessageList" />
+
+# Component Documentation
+
+## MessagesList
+
+- **Purpose**: Displays a scrollable list of chat messages with grouping.
+- **Expected Behavior**: Loads chat messages in reverse chronological order, supports infinite scroll, groups messages by sender and day, and automatically marks messages as read when viewed.
+
+## Use Cases
+
+- **Current Usage**: Embedded in `ChatRoom` to show the full conversation.
+- **Potential Usage**: Can be adapted for threaded comment systems, activity feeds, or any scrollable message-based UI.
+
+## Props
+
+- **roomRef** (`MessagesListFragment$key`): Relay fragment reference for the current chat room data.
+- **VirtuosoProps** (object, optional): Props passed down to the `react-virtuoso` virtual scroller.
+- **MessagesGroup** (component, optional): Custom message grouping component. Defaults to `DefaultMessagesGroup`.
+- **MessagesGroupProps** (object, optional): Additional props for the message group renderer.
+
+## Notes
+
+- **Related Components**:
+  - `MessagesGroup` – Responsible for rendering grouped message blocks.
+  - `ChatRoom` – The parent component that uses this to display chat history.
+  - `LoadingState` – Loading spinner shown when paginating messages.
+  - `Virtuoso` – Virtualized list renderer for efficient scrolling.
+
+## Example Usage
+
+```tsx
+const MyComponent = () => {
+  return <MessagesList roomRef={chatRoomData} />
+}
+
+export default MyComponent
+```
