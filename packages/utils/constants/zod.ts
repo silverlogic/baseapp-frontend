@@ -3,5 +3,5 @@ export const ZOD_MESSAGE = {
   email: 'Please provide a properly formatted email address.',
   passwordDoNotMatch: 'Passwords do not match.',
   password:
-    'Password must be at least 10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.',
+    'Password must be at least 10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character. Blank spaces are not allowed.',
 }

@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.7
+
+### Patch Changes
+
+- improve password validation feedback
+
 ## 3.1.6
 
 ### Patch Changes
