@@ -39,13 +39,13 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
         {...props}
       >
         {!subItem && icon && (
-          <Box component="span" className="icon">
+          <Box component="span" className="icon" sx={{ lineHeight: 1 }}>
             {icon}
           </Box>
         )}
 
         {subItem && icon ? (
-          <Box component="span" className="icon">
+          <Box component="span" className="icon" sx={{ lineHeight: 1 }}>
             {icon}
           </Box>
         ) : (
