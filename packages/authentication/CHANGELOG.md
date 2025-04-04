@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 4.2.2
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.6
+
 ## 4.2.1
 
 ### Patch Changes

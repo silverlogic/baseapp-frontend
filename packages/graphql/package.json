@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/graphql",
   "description": "GraphQL configurations and utilities",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -20,7 +20,8 @@
     "react-relay": "catalog:graphql",
     "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
-    "relay-test-utils": "catalog:graphql"
+    "relay-test-utils": "catalog:graphql",
+    "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",

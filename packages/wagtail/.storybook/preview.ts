@@ -1,6 +1,8 @@
+import { withStorybookProvidersWrapper } from '@baseapp-frontend/test/providers'
+
 import type { Preview } from '@storybook/react'
 
-import { withProviders } from './decorators'
+import { withWagtailProviders } from './decorators/withProviders'
 import './overrides.css'
 
 const { initialize, mswLoader } = require('msw-storybook-addon')
@@ -18,7 +20,7 @@ initialize({
 })
 
 const preview: Preview = {
-  decorators: [withProviders],
+  decorators: [withStorybookProvidersWrapper(withWagtailProviders)],
   loaders: [mswLoader],
   parameters: {
     controls: {

@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 3.1.6
+
+### Patch Changes
+
+- Unify test and storybook providers
+
 ## 3.1.5
 
 ### Patch Changes

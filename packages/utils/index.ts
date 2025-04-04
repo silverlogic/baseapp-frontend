@@ -10,6 +10,7 @@ export * from './constants/zod'
 
 export * from './functions/api'
 export * from './functions/axios'
+export * from './functions/compose'
 export * from './functions/cookie'
 export * from './functions/date'
 export * from './functions/events'

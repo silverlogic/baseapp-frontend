@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.12",
+  "version": "2.0.13",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,

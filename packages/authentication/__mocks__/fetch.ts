@@ -1,3 +1,3 @@
-module.exports = require('@baseapp-frontend/test/__mocks__/fetch.ts')
+const Fetch = require('@baseapp-frontend/test/__mocks__/fetch.ts')
 
-export {}
+export default Fetch

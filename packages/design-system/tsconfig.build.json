@@ -7,7 +7,7 @@
     "outDir": "tmp-dts",
     "target": "es2022"
   },
-  "include": ["components", "hooks", "layouts", "providers", "styles", "utils"],
+  "include": ["components", "hooks", "layouts", "providers", "styles", "utils", "tests"],
   "exclude": [
     "node_modules",
     "**/*.test.ts",

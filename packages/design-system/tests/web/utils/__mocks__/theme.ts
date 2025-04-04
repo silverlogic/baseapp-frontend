@@ -1,13 +1,13 @@
-import { ThemeProviderProps } from '@baseapp-frontend/design-system/providers/web'
+import { ThemeProviderProps } from '../../../../providers/web/ThemeProvider/types'
 import {
   breakpoints,
   createCustomShadows,
   createPalette,
   createShadows,
   typography,
-} from '@baseapp-frontend/design-system/styles/web'
+} from '../../../../styles/web'
 
-const defaultTheme: ThemeProviderProps = {
+export const defaultTheme: ThemeProviderProps = {
   palette: createPalette('light'),
   breakpoints: breakpoints,
   primaryFont: undefined,
@@ -23,5 +23,3 @@ const defaultTheme: ThemeProviderProps = {
   customShadows: createCustomShadows('light'),
   typography: typography,
 }
-
-export default defaultTheme

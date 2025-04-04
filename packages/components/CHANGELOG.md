@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.0.31
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.2.2
+  - @baseapp-frontend/design-system@1.0.14
+  - @baseapp-frontend/graphql@1.2.7
+  - @baseapp-frontend/utils@3.1.6
+
 ## 1.0.30
 
 ### Patch Changes
