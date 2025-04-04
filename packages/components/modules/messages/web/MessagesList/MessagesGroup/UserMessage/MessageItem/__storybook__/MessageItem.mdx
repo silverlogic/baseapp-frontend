@@ -1,0 +1,37 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Messages/MessageItem" />
+
+# Component Documentation
+
+## MessageItem
+
+- **Purpose**: Displays an individual chat message within a conversation, supporting editing, deletion, and context actions (copy/download).
+- **Expected Behavior**: Shows the message content with conditional styling depending on ownership and deletion state. Enables editing and deletion for the current user’s own messages. Supports contextual menu for actions like copy or download.
+
+## Use Cases
+
+- **Current Usage**: Used in chat interfaces where messages from different users are shown in sequence.
+- **Potential Usage**: Could be adapted to any messaging UI that needs per-message interaction like forums, comments, or support chats.
+
+## Props
+
+- **messageRef** (`MessageFragment`): A Relay fragment reference containing the message data.
+- **isFirstGroupedMessage** (`boolean`): If the message is the first in a group (used to apply spacing/avatars).
+- **isGroup** (`boolean`, optional): Whether the message is in a group conversation.
+
+## Notes
+
+- **Related Components**:
+  - `ActionsOverlay` – Wraps the message with a contextual action menu
+  - `MessageUpdate` – Renders the editable message input
+
+## Example Usage
+
+```tsx
+const MyComponent = () => {
+  return <MessageItem messageRef={message} isGroup={true} isFirstGroupedMessage={true} />
+}
+
+export default MyComponent
+```

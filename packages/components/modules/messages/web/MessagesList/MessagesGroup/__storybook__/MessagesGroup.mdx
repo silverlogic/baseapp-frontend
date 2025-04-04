@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Messages/MessagesGroup" />
+
+# Component Documentation
+
+## MessagesGroup
+
+- **Purpose**: Responsible for rendering grouped chat messages by type (user/system), date, and read status.
+- **Expected Behavior**: Displays message blocks separated by date headers and an "unread" divider when applicable. Differentiates between system and user messages using customizable components.
+
+## Use Cases
+
+- **Current Usage**: Used inside `MessagesList` to group and format each message node.
+- **Potential Usage**: Any message-driven timeline (e.g. comments, notifications) where temporal grouping or visual separation is useful.
+
+## Props
+
+- **allMessages** (`MessageNode[]`): Complete list of message nodes to render in context.
+- **message** (`MessageNode`): The specific message node to be rendered by this group.
+- **messageIndex** (`number`): The index of the current message in the full message list.
+- **isGroup** (`boolean`, optional): Whether the room is a group chat. Affects visual display (like names/avatars).
+- **allMessagesLastIndex** (`number`): Index of the last message, for determining date headers.
+- **firstUnreadMessageId** (`string | null`, optional): Used to insert an "Unread" divider at the correct position.
+- **hasNext** (`boolean`): Whether there are more messages available to paginate. Used in rendering date headers correctly.
+- **SystemMessage** (`component`, optional): Custom renderer for system messages. Defaults to `DefaultSystemMessage`.
+- **SystemMessageProps** (`object`, optional): Additional props for the `SystemMessage` component.
+- **UserMessage** (`component`, optional): Custom renderer for user messages. Defaults to `DefaultUserMessage`.
+- **UserMessageProps** (`object`, optional): Additional props for the `UserMessage` component.
+
+## Notes
+
+- **Related Components**:
+  - `MessagesList` – Parent list component that uses `MessagesGroup` to render each message.
+  - `UserMessage` – Handles rendering of user-submitted messages with avatar/name logic.
+  - `SystemMessage` – Handles rendering of system-generated messages like "User joined".
+
+## Example Usage
+
+```tsx
+const MyComponent = () => {
+  return (
+    <MessagesGroup
+      allMessages={messages}
+      message={messages[0]}
+      messageIndex={0}
+      allMessagesLastIndex={messages.length - 1}
+      isGroup={true}
+      hasNext={false}
+    />
+  )
+}
+
+export default MyComponent
+```
