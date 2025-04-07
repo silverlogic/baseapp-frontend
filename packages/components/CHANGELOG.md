@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.32
+
+### Patch Changes
+
+- Disables link for navigation elements with children and fixes vertical alignment
+
 ## 1.0.31
 
 ### Patch Changes
