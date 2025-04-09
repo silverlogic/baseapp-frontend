@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "sideEffects": false,
   "scripts": {
     "babel:transpile": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",
@@ -65,6 +65,11 @@
       "types": "./dist/tests/*/index.d.ts",
       "import": "./dist/tests/*/index.mjs",
       "require": "./dist/tests/*/index.js"
+    },
+    "./content-feed/*": {
+      "types": "./dist/content-feed/*/index.d.ts",
+      "import": "./dist/content-feed/*/index.mjs",
+      "require": "./dist/content-feed/*/index.js"
     }
   },
   "files": [
