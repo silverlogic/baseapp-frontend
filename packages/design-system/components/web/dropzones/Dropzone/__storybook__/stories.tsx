@@ -19,6 +19,8 @@ export const Default: Story = {
     maxFileSize: 15,
     subTitle: 'Max. File Size: 15MB',
     storedImg: undefined,
+    multiple: false,
+    asBase64: true,
   },
 }
 

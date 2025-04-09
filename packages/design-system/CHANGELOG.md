@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.15
+
+### Patch Changes
+
+- Content Feed creation page and Dropzone Improvements
+
 ## 1.0.14
 
 ### Patch Changes
