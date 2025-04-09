@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.33
+
+### Patch Changes
+
+- Add optimistic updates to reaction button
+
 ## 1.0.32
 
 ### Patch Changes
