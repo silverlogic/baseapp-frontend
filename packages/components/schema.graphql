@@ -1631,7 +1631,7 @@ type ReportConnection {
 
 input ReportCreateInput {
   targetObjectId: ID!
-  reportTypeId: ID
+  reportTypeId: ID!
   reportSubject: String
   clientMutationId: String
 }
@@ -1669,7 +1669,7 @@ interface ReportsInterface {
 type ReportType implements Node {
   """The ID of the object"""
   id: ID!
-  name: String!
+  key: String!
   label: String!
   parentType: ReportType
   subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!

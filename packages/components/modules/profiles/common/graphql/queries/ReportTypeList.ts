@@ -6,13 +6,13 @@ export const ReportTypeListQuery = graphql`
       edges {
         node {
           id
-          name
+          key
           label
           subTypes {
             edges {
               node {
                 id
-                name
+                key
                 label
                 parentType {
                   id

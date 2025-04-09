@@ -42,7 +42,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
   ).sort((a, b) => {
     if (!a) return -1
     if (!b) return 1
-    return a.name > b.name ? 1 : -1
+    return a.key > b.key ? 1 : -1
   })
   const subTypes = useMemo(
     () => reportType?.subTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
@@ -55,14 +55,14 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
   }
 
   const handleReport = () => {
-    if (isMutationInFlight || !targetId) {
+    if (isMutationInFlight || !targetId || !reportType) {
       return
     }
     commitMutation({
       variables: {
         input: {
           reportSubject: reportText,
-          reportTypeId: reportType?.id,
+          reportTypeId: reportType.id,
           targetObjectId: targetId,
         },
       },
@@ -127,7 +127,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
           <Box display="flex" flexDirection="column">
             {subTypes?.map((subType) => (
               <TypeButton
-                key={subType?.name}
+                key={subType?.key}
                 onClick={() => {
                   setReportSubType(subType)
                   setCurrentStep('reportText')
