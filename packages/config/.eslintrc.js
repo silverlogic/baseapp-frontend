@@ -62,6 +62,7 @@ module.exports = {
       },
     ],
     '@baseapp-frontend/no-process-env-comparison': 'error',
+    'react/no-array-index-key': 0,
   },
   settings: {
     react: {

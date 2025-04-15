@@ -1,5 +1,24 @@
 # @baseapp-frontend/components
 
+## 1.0.34
+
+### Patch Changes
+- Content Feed creation page and Dropzone Improvements
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.15
+
+## 1.0.33
+
+### Patch Changes
+
+- Add optimistic updates to reaction button
+
+## 1.0.32
+
+### Patch Changes
+
+- Disables link for navigation elements with children and fixes vertical alignment
+
 ## 1.0.31
 
 ### Patch Changes

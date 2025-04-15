@@ -13,13 +13,9 @@ import { CommentReactionButtonProps } from './types'
 
 const CommentReactionButton: FC<CommentReactionButtonProps> = ({ target: targetRef }) => (
   <ReactionButton target={targetRef} reactionType="LIKE">
-    {({ handleReaction, isLoading, target }) => (
+    {({ handleReaction, target }) => (
       <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
-        <IconButton
-          onClick={handleReaction}
-          isLoading={isLoading}
-          aria-label={`react to comment ${target.id}`}
-        >
+        <IconButton onClick={handleReaction} aria-label={`react to comment ${target.id}`}>
           {target?.myReaction?.id ? (
             <FavoriteSelectedIcon sx={{ color: 'error.main' }} />
           ) : (
