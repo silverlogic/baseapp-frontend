@@ -1,0 +1,46 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Messages/ChatRoom" />
+
+# Component Documentation
+
+## ChatRoom
+
+- **Purpose**: Central component for rendering a complete chat experience, including header, message list, and input form.
+- **Expected Behavior**: Loads chat room data via Relay, shows messages, allows message sending, and provides access to group or conversation-specific actions.
+
+## Use Cases
+
+- **Current Usage**: Used in the messaging module as the main interface for individual or group chats.
+- **Potential Usage**: Could be adapted for support ticket threads, comment discussions, or community channels.
+
+## Props
+
+- **roomId** (`string`): The unique identifier for the chat room to fetch and render.
+- **MessagesList** (`component`, optional): Custom component to render messages. Defaults to `DefaultMessagesList`.
+- **MessagesListProps** (`object`, optional): Extra props passed to `MessagesList`.
+- **SendMessage** (`component`, optional): Custom component to render the message input. Defaults to `DefaultSendMessage`.
+- **SendMessageProps** (`object`, optional): Extra props passed to `SendMessage`.
+- **onDisplayGroupDetailsClicked** (`function`): Callback triggered when user clicks on group chat header to view group info.
+
+## Notes
+
+- **Related Components**:
+  - `MessagesList` – Renders the message timeline inside the chat.
+  - `SendMessage` – Handles input and sending of messages.
+  - `ChatRoomHeader` – Displays chat participants, title, and group options.
+
+## Example Usage
+
+```tsx
+const MyComponent = () => {
+  return (
+    <ChatRoom
+      roomId="room-123"
+      onDisplayGroupDetailsClicked={() => console.log('Group info opened')}
+    />
+  )
+}
+
+export default MyComponent
+```
