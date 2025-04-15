@@ -1,8 +1,15 @@
 # @baseapp-frontend/components
 
+## 1.0.35
+
+### Patch Changes
+
+- create MessageList, messageItem, ChatRoom and MessagesGroup storybook
+
 ## 1.0.34
 
 ### Patch Changes
+
 - Content Feed creation page and Dropzone Improvements
 - Updated dependencies
   - @baseapp-frontend/design-system@1.0.15
