@@ -55,28 +55,6 @@ export const GroupedMessage: Story = {
   },
 }
 
-export const OwnGroupedMessage: Story = {
-  name: 'Own Grouped Message (not first)',
-  args: {
-    isGroup: true,
-    isFirstGroupedMessage: false,
-  },
-  parameters: {
-    mockResolvers: {
-      Node: () => ({
-        ...mockResolvers.Node(),
-        content: 'Default Message',
-      }),
-    },
-    initialProfile: {
-      id: 'profile-123',
-      name: 'Profile Name',
-      image: '',
-      urlPath: 'profile',
-    },
-  },
-}
-
 export const OwnMessage: Story = {
   name: 'Own Message',
   args: {

@@ -30,6 +30,9 @@ const MessagesGroupWithQuery = () => {
     {},
   )
 
+  // eslint-disable-next-line no-underscore-dangle
+  if (!data.node || data.node.__typename !== 'Message') return null
+
   const allMessages = [
     {
       ...data.node,
