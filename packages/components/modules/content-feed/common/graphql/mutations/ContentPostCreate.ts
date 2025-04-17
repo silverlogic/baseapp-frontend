@@ -12,6 +12,7 @@ export const ContentPostCreateMutationQuery = graphql`
           user {
             email
           }
+          isReactionsEnabled
         }
       }
       errors {

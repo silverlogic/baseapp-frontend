@@ -481,14 +481,20 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node {
+type ContentPost implements Node & ReactionsInterface {
+  created: DateTime!
+  modified: DateTime!
+  isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
   content: String!
-  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ContentPostImageConnection
+  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
 
   """The ID of the object"""
   id: ID!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  myReaction(profileId: ID): Reaction
   pk: Int!
 }
 
@@ -504,7 +510,7 @@ type ContentPostConnection {
 
 input ContentPostCreateInput {
   content: String!
-  images: [String]
+  isReactionsEnabled: Boolean!
   clientMutationId: String
 }
 
@@ -513,6 +519,19 @@ type ContentPostCreatePayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   contentPost: ContentPostEdge
+  clientMutationId: String
+}
+
+input ContentPostDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type ContentPostDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
   clientMutationId: String
 }
 
@@ -551,6 +570,21 @@ type ContentPostImageEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+input ContentPostUpdateInput {
+  id: ID!
+  content: String!
+  isReactionsEnabled: Boolean!
+  clientMutationId: String
+}
+
+type ContentPostUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPost
+  clientMutationId: String
 }
 
 """
@@ -813,6 +847,8 @@ type Mutation {
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
   contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
+  contentPostUpdate(input: ContentPostUpdateInput!): ContentPostUpdatePayload
+  contentPostDelete(input: ContentPostDeleteInput!): ContentPostDeletePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
@@ -1265,7 +1301,16 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  contentPosts(first: Int, last: Int, offset: Int, after: String, before: String): ContentPostConnection!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -1486,7 +1531,25 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Report
-  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
+  contentPost(
+    """The ID of the object"""
+    id: ID!
+  ): ContentPost
+  contentPosts(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection
+  contentPostImage(
+    """The ID of the object"""
+    id: ID!
+  ): ContentPostImage
+  contentPostImages(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
   comment(
     """The ID of the object"""
     id: ID!

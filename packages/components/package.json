@@ -107,6 +107,7 @@
     "slugify": "^1.6.6",
     "use-long-press": "^3.2.0",
     "zod": "catalog:",
+    "react-multi-carousel": "catalog:",
     "zustand": "catalog:"
   },
   "peerDependencies": {

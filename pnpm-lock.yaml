@@ -45,6 +45,9 @@ catalogs:
     react-hook-form:
       specifier: 7.51.5
       version: 7.51.5
+    react-multi-carousel:
+      specifier: 2.8.6
+      version: 2.8.6
     react-virtuoso:
       specifier: 4.7.11
       version: 4.7.11
@@ -616,6 +619,9 @@ importers:
       react-hook-form:
         specifier: 'catalog:'
         version: 7.51.5(react@18.3.1)
+      react-multi-carousel:
+        specifier: 'catalog:'
+        version: 2.8.6
       react-native:
         specifier: catalog:react-native-core
         version: 0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.0(@babel/core@7.26.10))(@types/react@18.3.3)(react@18.3.1)
@@ -5928,6 +5934,9 @@ packages:
   core-js-compat@3.41.0:
     resolution: {integrity: sha512-RFsU9LySVue9RTwdDVX/T0e2Y6jRYWXERKElIjpuEOEnxaXffI0X7RUwVzfYLfzuLXSNJDYoRYUAmRUcyln20A==}
 
+  core-js@3.41.0:
+    resolution: {integrity: sha512-SJ4/EHwS36QMJd6h/Rg+GyR4A5xE0FSI3eZ+iBVpfqf1x0eTSg1smWLHrA+2jQThZSh97fmSgFSU8B61nxosxA==}
+
   core-util-is@1.0.2:
     resolution: {integrity: sha512-3lqz5YjWTYnW6dlDa5TLaTCcShfar1e40rmcJVwCBJC6mWlFuj0eCHIElmG1g5kyuJ/GD+8Wn4FFCcz4gJPfaQ==}
 
@@ -7477,6 +7486,10 @@ packages:
     resolution: {integrity: sha512-7PnF4oN3CvZF23ADhA5wRaYEQpJ8qygSkbtTXWBeXWXmEVRXK+1ITciHWwHhsjv1TmW0MgacIv6hEi5pX5NQdA==}
     engines: {node: '>=10'}
 
+  install@0.13.0:
+    resolution: {integrity: sha512-zDml/jzr2PKU9I8J/xyZBQn8rPCAY//UOYNmR01XwNwyfhEWObo2SWfSl1+0tm1u6PhxLwDnfsT/6jB7OUxqFA==}
+    engines: {node: '>= 0.10'}
+
   internal-ip@4.3.0:
     resolution: {integrity: sha512-S1zBo1D6zcsyuC6PMmY5+55YMILQ9av8lotMx447Bq6SAgo/sDK6y6uUKmuYhW7eacnIhFfsPmCNYdDzsnnDCg==}
     engines: {node: '>=6'}
@@ -8779,6 +8792,80 @@ packages:
     resolution: {integrity: sha512-9qny7Z9DsQU8Ou39ERsPU4OZQlSTP47ShQzuKZ6PRXpYLtIFgl/DEBYEXKlvcEa+9tHVcK8CF81Y2V72qaZhWA==}
     engines: {node: '>=18'}
 
+  npm@10.9.2:
+    resolution: {integrity: sha512-iriPEPIkoMYUy3F6f3wwSZAU93E0Eg6cHwIR6jzzOXWSy+SD/rOODEs74cVONHKSx2obXtuUoyidVEhISrisgQ==}
+    engines: {node: ^18.17.0 || >=20.5.0}
+    hasBin: true
+    bundledDependencies:
+      - '@isaacs/string-locale-compare'
+      - '@npmcli/arborist'
+      - '@npmcli/config'
+      - '@npmcli/fs'
+      - '@npmcli/map-workspaces'
+      - '@npmcli/package-json'
+      - '@npmcli/promise-spawn'
+      - '@npmcli/redact'
+      - '@npmcli/run-script'
+      - '@sigstore/tuf'
+      - abbrev
+      - archy
+      - cacache
+      - chalk
+      - ci-info
+      - cli-columns
+      - fastest-levenshtein
+      - fs-minipass
+      - glob
+      - graceful-fs
+      - hosted-git-info
+      - ini
+      - init-package-json
+      - is-cidr
+      - json-parse-even-better-errors
+      - libnpmaccess
+      - libnpmdiff
+      - libnpmexec
+      - libnpmfund
+      - libnpmhook
+      - libnpmorg
+      - libnpmpack
+      - libnpmpublish
+      - libnpmsearch
+      - libnpmteam
+      - libnpmversion
+      - make-fetch-happen
+      - minimatch
+      - minipass
+      - minipass-pipeline
+      - ms
+      - node-gyp
+      - nopt
+      - normalize-package-data
+      - npm-audit-report
+      - npm-install-checks
+      - npm-package-arg
+      - npm-pick-manifest
+      - npm-profile
+      - npm-registry-fetch
+      - npm-user-validate
+      - p-map
+      - pacote
+      - parse-conflict-json
+      - proc-log
+      - qrcode-terminal
+      - read
+      - semver
+      - spdx-expression-parse
+      - ssri
+      - supports-color
+      - tar
+      - text-table
+      - tiny-relative-date
+      - treeverse
+      - validate-npm-package-name
+      - which
+      - write-file-atomic
+
   nth-check@2.1.1:
     resolution: {integrity: sha512-lqjrjmaOoAnWfMmBPL+XNnynZh2+swxiX3WUE0s4yEHI6m+AwrK2UZOimIRl3X/4QctVqS8AiZjFqyOGrMXb/w==}
 
@@ -9513,6 +9600,10 @@ packages:
     resolution: {integrity: sha512-kdQYUDbuISF3T9El0sBLNoWrmPohqlytcG4ognLtHYjY8bZAsJ0/Ez+VaV+0QlVyUY3K6dDXkuQAz3GpvdjBkw==}
     peerDependencies:
       react: ^15.x.x || ^16.x.x || ^17.x.x || ^18.x.x || ^19.x.x
+
+  react-multi-carousel@2.8.6:
+    resolution: {integrity: sha512-sAX5I9Xec3MR9FxLgZYcYqNnY8M8zJxRRwRipMPtuh4BGvcvoptJfX8Z6nRn0ROMkqVO72iAmb83GlqmSW4Gqw==}
+    engines: {node: '>=8'}
 
   react-native-drawer-layout@4.1.6:
     resolution: {integrity: sha512-gfEFQ7jxIz/2dbLI/HvEOSXRIM0UAUVakwZ7PmgtV98kSXEl7SOGr1J2E5Gv37OIsvYA1Om3k+7Xr/DzX+zmmg==}
@@ -17106,6 +17197,8 @@ snapshots:
     dependencies:
       browserslist: 4.24.4
 
+  core-js@3.41.0: {}
+
   core-util-is@1.0.2: {}
 
   core-util-is@1.0.3: {}
@@ -19193,6 +19286,8 @@ snapshots:
 
   ini@2.0.0: {}
 
+  install@0.13.0: {}
+
   internal-ip@4.3.0:
     dependencies:
       default-gateway: 4.2.0
@@ -20829,6 +20924,8 @@ snapshots:
       path-key: 4.0.0
       unicorn-magic: 0.3.0
 
+  npm@10.9.2: {}
+
   nth-check@2.1.1:
     dependencies:
       boolbase: 1.0.0
@@ -21533,6 +21630,12 @@ snapshots:
       lodash.debounce: 4.0.8
       lodash.throttle: 4.1.1
       react: 18.3.1
+
+  react-multi-carousel@2.8.6:
+    dependencies:
+      core-js: 3.41.0
+      install: 0.13.0
+      npm: 10.9.2
 
   react-native-drawer-layout@4.1.6(react-native-gesture-handler@2.20.2(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.0(@babel/core@7.26.10))(@types/react@18.3.3)(react@18.3.1))(react@18.3.1))(react-native-reanimated@3.16.7(@babel/core@7.26.10)(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.0(@babel/core@7.26.10))(@types/react@18.3.3)(react@18.3.1))(react@18.3.1))(react-native@0.76.7(@babel/core@7.26.10)(@babel/preset-env@7.26.0(@babel/core@7.26.10))(@types/react@18.3.3)(react@18.3.1))(react@18.3.1):
     dependencies:

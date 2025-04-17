@@ -1,4 +1,4 @@
-import { Box, styled } from '@mui/material'
+import { Box, Stack, styled } from '@mui/material'
 
 export const RootContainer = styled(Box)(() => ({
   display: 'flex',
@@ -13,12 +13,23 @@ export const HeaderContainer = styled(Box)(() => ({
   alignSelf: 'center',
   flexDirection: 'row',
   justifyContent: 'space-between',
-  marginBottom: '32px',
 }))
 
 export const ButtonContainer = styled(Box)(() => ({
   display: 'flex',
   width: 'fit-content',
   flexDirection: 'row',
+  justifyContent: 'space-between',
   gap: '10px',
+}))
+
+export const PostsListContainer = styled(Stack)(({ theme }) => ({
+  '& > :not(:last-of-type)': {
+    borderBottom: '1px solid',
+    borderColor: theme.palette.divider,
+  },
+}))
+
+export const PostHeaderContainer = styled(Stack)(({ theme }) => ({
+  padding: theme.spacing(1, 5),
 }))
