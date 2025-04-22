@@ -481,6 +481,77 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
+type ContentPost implements Node {
+  user: User!
+  profile: Profile
+  content: String!
+  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ContentPostImageConnection
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
+type ContentPostConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentPostEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input ContentPostCreateInput {
+  content: String!
+  clientMutationId: String
+}
+
+type ContentPostCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `ContentPost` and its cursor."""
+type ContentPostEdge {
+  """The item at the end of the edge"""
+  node: ContentPost
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentPostImage implements Node {
+  image: String
+  post: ContentPost!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
+type ContentPostImageConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentPostImageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ContentPostImage` and its cursor."""
+type ContentPostImageEdge {
+  """The item at the end of the edge"""
+  node: ContentPostImage
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 """
 The `Date` scalar type represents a Date
 value as specified by
@@ -740,6 +811,7 @@ type Mutation {
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
@@ -1150,7 +1222,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   blockingCount: Int
   followersCount: Int
   followingCount: Int
-  reportsCount: ReportsCount
+  reportsCount: GenericScalar
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
   name: String
@@ -1171,7 +1243,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  reactions(first: Int, last: Int, offset: Int, after: String, before: String): ReactionConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
   ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
   activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
@@ -1187,11 +1259,12 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
-  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String): ChatRoomParticipantConnection!
+  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, profile_TargetContentType: ID): ChatRoomParticipantConnection!
   unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
-  linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
-  linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
-  messageSet(first: Int, last: Int, offset: Int, after: String, before: String): MessageConnection!
+  linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  contentPosts(first: Int, last: Int, offset: Int, after: String, before: String): ContentPostConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -1419,6 +1492,7 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Report
+  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
   comment(
     """The ID of the object"""
     id: ID!
@@ -1654,14 +1728,10 @@ type ReportEdge {
   cursor: String!
 }
 
-type ReportsCount {
-  counts: JSONString
-}
-
 interface ReportsInterface {
   """The ID of the object"""
   id: ID!
-  reportsCount: ReportsCount
+  reportsCount: GenericScalar
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
 }
@@ -1776,7 +1846,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   isActive: Boolean!
   isStaff: Boolean
-  reactions(first: Int, last: Int, offset: Int, after: String, before: String): ReactionConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
   comments(
     first: Int
     last: Int
@@ -1826,7 +1896,6 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
-  shortName: String
   avatar(width: Int!, height: Int!): File
 }
 
