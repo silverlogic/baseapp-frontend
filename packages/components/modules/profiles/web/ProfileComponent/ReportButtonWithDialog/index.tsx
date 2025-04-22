@@ -4,25 +4,22 @@ import { FC, useMemo, useState } from 'react'
 
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import {
-  ChevronIcon,
   FlagIcon,
   OutlinedCheckMarkIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
-import { Box, Button, Divider, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, MenuItem, Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ReportTypeListQuery as ReportTypeListQueryType } from '../../../../../__generated__/ReportTypeListQuery.graphql'
 import { useReportCreateMutation } from '../../../common/graphql/mutations/ReportCreate'
 import { ReportTypeListQuery } from '../../../common/graphql/queries/ReportTypeList'
-import { TypeButton } from './styled'
-import { ReportButtonWithDialogProps } from './types'
-
-type AllReportTypes = NonNullable<ReportTypeListQueryType['response']['allReportTypes']>
-type ReportType = NonNullable<AllReportTypes['edges'][number]>
-type ReportTypeNode = NonNullable<ReportType['node']>
-type ReportTypeSubType = NonNullable<ReportTypeNode['subTypes']['edges'][number]>
-type ReportTypeSubTypeNode = ReportTypeSubType['node']
+import ConfirmationStep from './components/ConfirmationStep'
+import SelectReportTypeStep from './components/SelectReportTypeStep'
+import SummaryStep from './components/SummaryStep'
+import TextStep from './components/TextStep'
+import { STEPS } from './constants'
+import { ReportButtonWithDialogProps, ReportTypeNode, ReportTypeSubTypeNode } from './types'
 
 const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, handleClose }) => {
   const { allReportTypes } = useLazyLoadQuery<ReportTypeListQueryType>(ReportTypeListQuery, {
@@ -30,7 +27,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
     targetObjectId: targetId,
   })
   const [isReportModalOpen, setIsReportModalOpen] = useState(false)
-  const [currentStep, setCurrentStep] = useState('report')
+  const [currentStep, setCurrentStep] = useState(STEPS.report)
   const [reportType, setReportType] = useState<ReportTypeNode>()
   const [reportSubType, setReportSubType] = useState<ReportTypeSubTypeNode>()
   const [reportText, setReportText] = useState('')
@@ -51,7 +48,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
 
   const onClose = () => {
     handleClose()
-    setCurrentStep('report')
+    setCurrentStep(STEPS.report)
   }
 
   const handleReport = () => {
@@ -68,7 +65,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
       },
       onCompleted: (_, errors) => {
         if (!errors) {
-          setCurrentStep('confirmation')
+          setCurrentStep(STEPS.confirmation)
           return
         }
         onClose()
@@ -81,125 +78,55 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
 
   const steps = [
     {
-      name: 'report',
+      name: STEPS.report,
       content: (
-        <>
-          <Box>
-            <Typography variant="h5">Why are you reporting this?</Typography>
-          </Box>
-          <Box>
-            <Typography variant="body2">
-              Your report is anonymous. If someone is in immediate danger, call the local emergency
-              services - don&apos;t wait.
-            </Typography>
-          </Box>
-          <Divider />
-          <Box display="flex" flexDirection="column">
-            {reportTypes?.map((type) => (
-              <TypeButton
-                key={type?.id}
-                onClick={() => {
-                  if (type?.subTypes?.edges?.length) {
-                    setReportType(type)
-                    setCurrentStep('subTypes')
-                    return
-                  }
-                  if (type) {
-                    setReportType(type)
-                    setCurrentStep('reportText')
-                  }
-                }}
-                endIcon={<ChevronIcon position="right" />}
-              >
-                <Typography variant="body2">{type?.label}</Typography>
-              </TypeButton>
-            ))}
-          </Box>
-        </>
+        <SelectReportTypeStep
+          reportTypes={reportTypes}
+          reportType={reportType}
+          setReportType={setReportType}
+          setCurrentStep={setCurrentStep}
+          setReportSubType={setReportSubType}
+        />
       ),
     },
     {
-      name: 'subTypes',
+      name: STEPS.subTypes,
       content: (
-        <>
-          <Typography variant="h5">{reportType?.label}</Typography>
-          <Divider />
-          <Box display="flex" flexDirection="column">
-            {subTypes?.map((subType) => (
-              <TypeButton
-                key={subType?.key}
-                onClick={() => {
-                  setReportSubType(subType)
-                  setCurrentStep('reportText')
-                }}
-                endIcon={<ChevronIcon position="right" />}
-              >
-                <Typography variant="body2">{subType?.label}</Typography>
-              </TypeButton>
-            ))}
-          </Box>
-        </>
+        <SelectReportTypeStep
+          reportTypes={subTypes}
+          reportType={reportType}
+          setReportType={setReportType}
+          setCurrentStep={setCurrentStep}
+          setReportSubType={setReportSubType}
+          subType
+        />
       ),
     },
     {
-      name: 'reportText',
+      name: STEPS.text,
       content: (
-        <>
-          <Typography variant="h5">How would you describe the problem?</Typography>
-          <Typography variant="body2">
-            Use the text field below to explain what the problem you are reporting is.
-          </Typography>
-          <Divider />
-          <TextField
-            fullWidth
-            multiline
-            rows={4}
-            value={reportText}
-            onChange={(e) => setReportText(e.target.value)}
-            placeholder="I find the post to be offensive..."
-          />
-          <Button onClick={() => setCurrentStep('summary')}>Confirm</Button>
-        </>
+        <TextStep
+          reportText={reportText}
+          setReportText={setReportText}
+          setCurrentStep={setCurrentStep}
+        />
       ),
     },
     {
-      name: 'summary',
+      name: STEPS.summary,
       content: (
-        <>
-          <Typography variant="h5">You&apos;re about to submit a report</Typography>
-          <Typography variant="body2">
-            Your report is anonymous. If someone is in immediate danger, call the local emergency
-            services - don&apos;t wait.
-          </Typography>
-          <Divider />
-          <Typography variant="body2">Why are you reporting this?</Typography>
-          <Typography variant="caption">{reportType?.label}</Typography>
-          {reportSubType && (
-            <>
-              <Typography variant="body2">What type of {reportType?.label}?</Typography>
-              <Typography variant="caption">{reportSubType?.label}</Typography>
-            </>
-          )}
-          <Typography variant="body2">About the problem</Typography>
-          <Typography variant="caption">{reportText}</Typography>
-          <Button disabled={isMutationInFlight} onClick={handleReport}>
-            Submit Report
-          </Button>
-        </>
+        <SummaryStep
+          reportType={reportType}
+          reportSubType={reportSubType}
+          reportText={reportText}
+          isMutationInFlight={isMutationInFlight}
+          handleReport={handleReport}
+        />
       ),
     },
     {
-      name: 'confirmation',
-      content: (
-        <>
-          <Typography variant="h5">Thanks for reporting {reportType?.label}</Typography>
-          <Typography variant="body2">
-            Your report is anonymous. If someone is in immediate danger, call the local emergency
-            services - don&apos;t wait.
-          </Typography>
-          <Button onClick={onClose}>Close</Button>
-        </>
-      ),
+      name: STEPS.confirmation,
+      content: <ConfirmationStep reportType={reportType} onClose={onClose} />,
     },
   ]
 
@@ -213,7 +140,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
       </MenuItem>
       <Dialog open={isReportModalOpen} onClose={onClose}>
         <Box display="flex" flexDirection="column" padding={4} gap={2}>
-          {currentStep === 'confirmation' ? (
+          {currentStep === STEPS.confirmation ? (
             <Box display="flex" alignItems="center" gap={2}>
               <OutlinedCheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
               <Typography variant="subtitle1">Report</Typography>

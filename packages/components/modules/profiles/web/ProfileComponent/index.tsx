@@ -110,14 +110,16 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
         Share profile
       </MenuItem>
       {profile && (
-        <BlockButtonWithDialog
-          target={profile}
-          handleCloseMenu={handleClose}
-          currentProfileId={currentProfileId}
-          isMenu
-        />
+        <>
+          <BlockButtonWithDialog
+            target={profile}
+            handleCloseMenu={handleClose}
+            currentProfileId={currentProfileId}
+            isMenu
+          />
+          <ReportButtonWithDialog handleClose={handleClose} targetId={profile?.id} />
+        </>
       )}
-      {profile && <ReportButtonWithDialog handleClose={handleClose} targetId={profile?.id} />}
     </>
   )
 

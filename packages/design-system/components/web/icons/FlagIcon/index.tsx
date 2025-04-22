@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const UnreadIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
+const FlagIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   <SvgIcon sx={{ fontSize: 24, color: 'grey.600', ...sx }} {...props}>
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
@@ -33,4 +33,4 @@ const UnreadIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   </SvgIcon>
 )
 
-export default UnreadIcon
+export default FlagIcon
