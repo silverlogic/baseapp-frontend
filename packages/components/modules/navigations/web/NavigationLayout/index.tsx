@@ -24,6 +24,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   AccountMenuProps,
   ToolbarProps,
   children,
+  BodyProps,
 }) => {
   const nav = useBoolean()
 
@@ -45,7 +46,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
-        <MainContainer isNavCentered>{children}</MainContainer>
+        <MainContainer isNavCentered BodyProps={BodyProps}>
+          {children}
+        </MainContainer>
       </>
     )
   }
@@ -63,7 +66,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           ToolbarProps={ToolbarProps}
         />
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
-        <MainContainer isNavHorizontal>{children}</MainContainer>
+        <MainContainer isNavHorizontal BodyProps={BodyProps}>
+          {children}
+        </MainContainer>
       </>
     )
   }
@@ -97,7 +102,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             settings={settings}
             setSettings={setSettings}
           />
-          <MainContainer isNavMini>{children}</MainContainer>
+          <MainContainer isNavMini BodyProps={BodyProps}>
+            {children}
+          </MainContainer>
         </Box>
       </>
     )
@@ -130,7 +137,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           openNav={nav.value}
           onCloseNav={nav.onFalse}
         />
-        <MainContainer>{children}</MainContainer>
+        <MainContainer BodyProps={BodyProps}>{children}</MainContainer>
       </Box>
     </>
   )

@@ -1,6 +1,6 @@
 'use client'
 
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 import { NavCenteredContainer, NavHorizontalContainer, NavVerticalContainer } from './styled'
 import { MainContainerProps } from './types'
@@ -10,17 +10,26 @@ const MainContainer: FC<MainContainerProps> = ({
   isNavMini,
   isNavCentered,
   isNavHorizontal,
+  BodyProps,
 }) => {
   if (isNavCentered) {
-    return <NavCenteredContainer component="main">{children}</NavCenteredContainer>
+    return (
+      <NavCenteredContainer component="main" {...BodyProps}>
+        {children}
+      </NavCenteredContainer>
+    )
   }
 
   if (isNavHorizontal) {
-    return <NavHorizontalContainer component="main">{children}</NavHorizontalContainer>
+    return (
+      <NavHorizontalContainer component="main" {...BodyProps}>
+        {children}
+      </NavHorizontalContainer>
+    )
   }
 
   return (
-    <NavVerticalContainer component="main" isNavMini={isNavMini}>
+    <NavVerticalContainer component="main" isNavMini={isNavMini} {...BodyProps}>
       {children}
     </NavVerticalContainer>
   )
