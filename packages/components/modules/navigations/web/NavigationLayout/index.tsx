@@ -11,7 +11,7 @@ import NavCentered from '../NavCentered'
 import NavHorizontal from '../NavHorizontal'
 import NavMini from '../NavMini'
 import NavVertical from '../NavVertical'
-import MainContainer from './MainContainer'
+import DefaultMainContainer from './MainContainer'
 import { NavigationLayoutProps } from './types'
 
 const NavigationLayout: FC<NavigationLayoutProps> = ({
@@ -24,7 +24,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   AccountMenuProps,
   ToolbarProps,
   children,
-  BodyProps,
+  MainContainerProps = {},
+  MainContainer = DefaultMainContainer,
 }) => {
   const nav = useBoolean()
 
@@ -46,7 +47,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
-        <MainContainer isNavCentered BodyProps={BodyProps}>
+        <MainContainer isNavCentered MainContainerProps={MainContainerProps}>
           {children}
         </MainContainer>
       </>
@@ -66,7 +67,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           ToolbarProps={ToolbarProps}
         />
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
-        <MainContainer isNavHorizontal BodyProps={BodyProps}>
+        <MainContainer isNavHorizontal MainContainerProps={MainContainerProps}>
           {children}
         </MainContainer>
       </>
@@ -102,7 +103,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             settings={settings}
             setSettings={setSettings}
           />
-          <MainContainer isNavMini BodyProps={BodyProps}>
+          <MainContainer isNavMini MainContainerProps={MainContainerProps}>
             {children}
           </MainContainer>
         </Box>
@@ -137,7 +138,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           openNav={nav.value}
           onCloseNav={nav.onFalse}
         />
-        <MainContainer BodyProps={BodyProps}>{children}</MainContainer>
+        <MainContainer MainContainerProps={MainContainerProps}>{children}</MainContainer>
       </Box>
     </>
   )
