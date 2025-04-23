@@ -8,10 +8,7 @@ export const ContentPostCreateMutationQuery = graphql`
       contentPost {
         node {
           id
-          content
-          user {
-            email
-          }
+          ...ContentPost_post
         }
       }
       errors {
