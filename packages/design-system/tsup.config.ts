@@ -3,7 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { defineConfig } from 'tsup'
 
-export default defineConfig((options) => ({
+export default defineConfig(() => ({
   clean: true,
   dts: false,
   entry: [
@@ -25,7 +25,7 @@ export default defineConfig((options) => ({
     '@emotion/*',
   ],
   format: ['esm', 'cjs'],
-  minify: !options.watch,
+  minify: false,
   outDir: 'dist',
   sourcemap: true,
   splitting: true,
