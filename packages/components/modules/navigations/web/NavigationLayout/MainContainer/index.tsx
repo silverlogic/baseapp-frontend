@@ -3,18 +3,18 @@
 import { FC } from 'react'
 
 import { NavCenteredContainer, NavHorizontalContainer, NavVerticalContainer } from './styled'
-import { MainContainerProps as MainContainerComponentProps } from './types'
+import { MainContainerProps } from './types'
 
-const MainContainer: FC<MainContainerComponentProps> = ({
+const MainContainer: FC<MainContainerProps> = ({
   children,
   isNavMini,
   isNavCentered,
   isNavHorizontal,
-  MainContainerProps,
+  BoxProps,
 }) => {
   if (isNavCentered) {
     return (
-      <NavCenteredContainer component="main" {...MainContainerProps}>
+      <NavCenteredContainer component="main" {...BoxProps}>
         {children}
       </NavCenteredContainer>
     )
@@ -22,14 +22,14 @@ const MainContainer: FC<MainContainerComponentProps> = ({
 
   if (isNavHorizontal) {
     return (
-      <NavHorizontalContainer component="main" {...MainContainerProps}>
+      <NavHorizontalContainer component="main" {...BoxProps}>
         {children}
       </NavHorizontalContainer>
     )
   }
 
   return (
-    <NavVerticalContainer component="main" isNavMini={isNavMini} {...MainContainerProps}>
+    <NavVerticalContainer component="main" isNavMini={isNavMini} {...BoxProps}>
       {children}
     </NavVerticalContainer>
   )

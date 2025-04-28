@@ -6,7 +6,7 @@ export interface MainContainerProps extends PropsWithChildren {
   isNavMini?: boolean
   isNavHorizontal?: boolean
   isNavCentered?: boolean
-  MainContainerProps?: BoxProps
+  BoxProps?: BoxProps
 }
 
 export interface NavVerticalContainerProps

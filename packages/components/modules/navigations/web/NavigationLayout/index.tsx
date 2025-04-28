@@ -47,7 +47,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
-        <MainContainer isNavCentered MainContainerProps={MainContainerProps}>
+        <MainContainer isNavCentered {...MainContainerProps}>
           {children}
         </MainContainer>
       </>
@@ -67,7 +67,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           ToolbarProps={ToolbarProps}
         />
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
-        <MainContainer isNavHorizontal MainContainerProps={MainContainerProps}>
+        <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}
         </MainContainer>
       </>
@@ -103,7 +103,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             settings={settings}
             setSettings={setSettings}
           />
-          <MainContainer isNavMini MainContainerProps={MainContainerProps}>
+          <MainContainer isNavMini {...MainContainerProps}>
             {children}
           </MainContainer>
         </Box>
@@ -138,7 +138,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           openNav={nav.value}
           onCloseNav={nav.onFalse}
         />
-        <MainContainer MainContainerProps={MainContainerProps}>{children}</MainContainer>
+        <MainContainer {...MainContainerProps}>{children}</MainContainer>
       </Box>
     </>
   )
