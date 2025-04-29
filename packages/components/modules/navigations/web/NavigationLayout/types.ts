@@ -19,5 +19,5 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   AccountMenuProps?: Partial<AccountMenuProps>
   ToolbarProps?: MuiToolbarProps
   MainContainerProps?: Partial<MainContainerProps>
-  MainContainer?: FC<Partial<MainContainerProps>>
+  MainContainer?: FC<MainContainerProps>
 }

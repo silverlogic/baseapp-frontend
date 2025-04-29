@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.0.36
+
+### Patch Changes
+
+- Customizable Styles for Main Page Area
+
 ## 1.0.35
 
 ### Patch Changes
