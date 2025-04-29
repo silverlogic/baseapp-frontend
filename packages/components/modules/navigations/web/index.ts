@@ -1,6 +1,9 @@
 export { default as NavigationLayout } from './NavigationLayout'
 export type * from './NavigationLayout/types'
 
+export { default as MainContainer } from './NavigationLayout/MainContainer'
+export type * from './NavigationLayout/MainContainer/types'
+
 export { default as Header } from './Header'
 export type * from './Header/types'
 
