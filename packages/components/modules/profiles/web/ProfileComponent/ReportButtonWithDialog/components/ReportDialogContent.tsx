@@ -8,13 +8,12 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
-import { Box, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ReportTypeListQuery as ReportTypeListQueryType } from '../../../../../../__generated__/ReportTypeListQuery.graphql'
 import { useReportCreateMutation } from '../../../../common/graphql/mutations/ReportCreate'
 import { ReportTypeListQuery } from '../../../../common/graphql/queries/ReportTypeList'
-import LoadingState from '../../../profile-popover/ProfilesList/LoadingState'
 import { STEPS } from '../constants'
 import { ReportButtonWithDialogProps, ReportTypeNode, ReportTypeSubTypeNode } from '../types'
 import ConfirmationStep from './ConfirmationStep'
@@ -165,7 +164,13 @@ const ReportDialogContentSuspended: FC<ReportButtonWithDialogProps> = ({
   targetId,
   handleClose,
 }) => (
-  <Suspense fallback={<LoadingState />}>
+  <Suspense
+    fallback={
+      <Box display="flex" alignItems="center" justifyContent="center" height="100%" padding={4}>
+        <CircularProgress />
+      </Box>
+    }
+  >
     <ReportDialogContent targetId={targetId} handleClose={handleClose} />
   </Suspense>
 )
