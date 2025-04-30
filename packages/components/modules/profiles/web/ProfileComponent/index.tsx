@@ -13,7 +13,7 @@ import { ImageWithFallback } from '@baseapp-frontend/design-system/components/we
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Button, MenuItem, Typography } from '@mui/material'
+import { Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import numbro from 'numbro'
 import { useFragment } from 'react-relay'
@@ -109,6 +109,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
         <ShareIcon />
         Share profile
       </MenuItem>
+      {smDown && <Divider />}
       {profile && (
         <>
           <BlockButtonWithDialog

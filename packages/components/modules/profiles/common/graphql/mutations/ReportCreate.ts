@@ -35,7 +35,11 @@ export const useReportCreateMutation = (): [
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {
-        sendToast(error.message, { type: 'error' })
+        if (error.message.includes('duplicate key value violates unique constraint')) {
+          sendToast('You have already reported this profile.', { type: 'error' })
+        } else {
+          sendToast(error.message, { type: 'error' })
+        }
         config?.onError?.(error)
       },
     })

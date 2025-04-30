@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Divider, Typography } from '@mui/material'
 
@@ -16,6 +17,7 @@ const SelectReportTypeStep: FC<SelectReportTypeStepProps> = ({
   setCurrentStep,
   setReportSubType,
 }) => {
+  const smDown = useResponsive('down', 'sm')
   const renderReportTypeButtons = (
     types:
       | ReadonlyArray<ReportTypeNode | null | undefined>
@@ -50,10 +52,12 @@ const SelectReportTypeStep: FC<SelectReportTypeStepProps> = ({
       ) : (
         <>
           <Box>
-            <Typography variant="h5">Why are you reporting this?</Typography>
+            <Typography variant="h5" textAlign={smDown ? 'center' : 'left'}>
+              Why are you reporting this?
+            </Typography>
           </Box>
           <Box>
-            <Typography variant="body2">
+            <Typography variant="body2" textAlign={smDown ? 'center' : 'left'}>
               Your report is anonymous. If someone is in immediate danger, call the local emergency
               services - don&apos;t wait.
             </Typography>
