@@ -3,7 +3,7 @@
 import { FC, Suspense, useMemo, useState } from 'react'
 
 import {
-  CheckMarkIcon,
+  NegativeCheckMarkIcon,
   OutlinedCheckMarkIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
@@ -142,10 +142,10 @@ const ReportDialogContent: FC<ReportButtonWithDialogProps> = ({ targetId, handle
           justifyContent={smDown ? 'center' : 'flex-start'}
         >
           {smDown ? (
-            <CheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
+            <OutlinedCheckMarkIcon sx={{ color: 'success.main', width: 55, height: 55 }} />
           ) : (
             <>
-              <OutlinedCheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
+              <NegativeCheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
               <Typography variant="subtitle1">Report</Typography>
             </>
           )}

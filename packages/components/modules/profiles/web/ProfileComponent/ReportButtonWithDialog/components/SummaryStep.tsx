@@ -24,7 +24,7 @@ const SummaryStep: FC<SummaryStepProps> = ({
         Your report is anonymous. If someone is in immediate danger, call the local emergency
         services - don&apos;t wait.
       </Typography>
-      <Divider />
+      <Divider sx={{ marginX: '-32px' }} />
       <Box display="flex" flexDirection="column" gap={1}>
         <Typography variant="body2">Why are you reporting this?</Typography>
         <Typography variant="caption" color="text.secondary">

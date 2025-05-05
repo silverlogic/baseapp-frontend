@@ -18,7 +18,7 @@ const TextStep: FC<TextStepProps> = ({ reportText, setReportText, setCurrentStep
       <Typography variant="body2" textAlign={smDown ? 'center' : 'left'}>
         Use the text field below to explain what the problem you are reporting is.
       </Typography>
-      <Divider />
+      <Divider sx={{ marginX: '-32px' }} />
       <TextField
         fullWidth
         multiline

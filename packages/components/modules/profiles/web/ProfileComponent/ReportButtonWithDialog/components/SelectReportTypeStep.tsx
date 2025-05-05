@@ -40,6 +40,7 @@ const SelectReportTypeStep: FC<SelectReportTypeStepProps> = ({
           setCurrentStep(STEPS.text)
         }}
         endIcon={<ChevronIcon position="right" />}
+        sx={{ marginX: '-12px', width: 'calc(100% + 24px)' }}
       >
         <Typography variant="body2">{type?.label}</Typography>
       </TypeButton>
@@ -64,7 +65,7 @@ const SelectReportTypeStep: FC<SelectReportTypeStepProps> = ({
           </Box>
         </>
       )}
-      <Divider />
+      <Divider sx={{ marginX: '-32px' }} />
       <Box display="flex" flexDirection="column">
         {reportTypes && renderReportTypeButtons(reportTypes)}
       </Box>
