@@ -49,6 +49,7 @@ const NewContentPost: FC<NewContentPostProps> = () => {
 
     commitMutation({
       variables: {
+        // @ts-ignore this will be handle on BA-2452
         input: {
           content: data.content,
         },

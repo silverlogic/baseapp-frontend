@@ -481,14 +481,20 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node {
+type ContentPost implements Node & ReactionsInterface {
+  created: DateTime!
+  modified: DateTime!
+  isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
   content: String!
-  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ContentPostImageConnection
+  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
 
   """The ID of the object"""
   id: ID!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  myReaction(profileId: ID): Reaction
   pk: Int!
 }
 
@@ -504,7 +510,7 @@ type ContentPostConnection {
 
 input ContentPostCreateInput {
   content: String!
-  images: [String]
+  isReactionsEnabled: Boolean!
   clientMutationId: String
 }
 
@@ -526,7 +532,7 @@ type ContentPostEdge {
 }
 
 type ContentPostImage implements Node {
-  image: String
+  image(width: Int!, height: Int!): File
   post: ContentPost!
 
   """The ID of the object"""
@@ -1214,7 +1220,7 @@ interface PermissionsInterface {
   hasPerm(perm: String!): Boolean
 }
 
-type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface {
+type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
@@ -1223,7 +1229,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   blockingCount: Int
   followersCount: Int
   followingCount: Int
-  reportsCount: JSONString!
+  reportsCount: GenericScalar
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
   name: String
@@ -1265,7 +1271,16 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  contentPosts(first: Int, last: Int, offset: Int, after: String, before: String): ContentPostConnection!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -1296,6 +1311,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReports: Report
   pk: Int!
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
@@ -1486,7 +1503,25 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Report
-  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
+  reportTypes(
+    """The ID of the object"""
+    id: ID!
+  ): ReportType
+  allReportTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection
+  contentPost(
+    """The ID of the object"""
+    id: ID!
+  ): ContentPost
+  contentPosts(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection
   comment(
     """The ID of the object"""
     id: ID!
@@ -1681,7 +1716,7 @@ type Report implements Node {
   created: DateTime!
   modified: DateTime!
   user: User!
-  reportType: ReportTypes
+  reportType: ReportType
   reportSubject: String
   pk: Int!
   target: Node
@@ -1699,7 +1734,7 @@ type ReportConnection {
 
 input ReportCreateInput {
   targetObjectId: ID!
-  reportType: ReportTypes = null
+  reportTypeId: ID!
   reportSubject: String
   clientMutationId: String
 }
@@ -1722,35 +1757,41 @@ type ReportEdge {
   cursor: String!
 }
 
-type ReportsCount {
-  SPAM: Int
-  INAPPROPRIATE: Int
-  FAKE: Int
-  OTHER: Int
-  total: Int
-}
-
 interface ReportsInterface {
   """The ID of the object"""
   id: ID!
-  reportsCount: ReportsCount
+  reportsCount: GenericScalar
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
 }
 
-"""An enumeration."""
-enum ReportTypes {
-  """Spam"""
-  SPAM
+type ReportType implements Node {
+  """The ID of the object"""
+  id: ID!
+  key: String!
+  label: String!
+  parentType: ReportType
+  subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
+  pk: Int!
+}
 
-  """Inappropriate"""
-  INAPPROPRIATE
+type ReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
 
-  """Fake"""
-  FAKE
+  """Contains the nodes in this connection."""
+  edges: [ReportTypeEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
 
-  """Other"""
-  OTHER
+"""A Relay edge containing a `ReportType` and its cursor."""
+type ReportTypeEdge {
+  """The item at the end of the edge"""
+  node: ReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
 }
 
 input RoleUpdateInput {

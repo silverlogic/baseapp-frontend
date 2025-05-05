@@ -1,22 +1,22 @@
 // exports web messages components
 
+export { default as AllChatRoomsList } from './AllChatRoomsList'
+export type * from './AllChatRoomsList/types'
+
 export { default as ChatRoom } from './ChatRoom'
 export type * from './ChatRoom/types'
 
-export { default as ChatRoomsList } from './ChatRoomsList'
-export type * from './ChatRoomsList/types'
+export { default as ChatRoomsComponent } from './ChatRoomsComponent'
+export type * from './ChatRoomsComponent/types'
 
-export { default as CreateChatRoomList } from './CreateChatRoomList'
-export type * from './CreateChatRoomList/types'
+export { default as GroupChatCreate } from './GroupChatCreate'
+export type * from './GroupChatCreate/types'
 
-export { default as CreateGroup } from './CreateGroup'
-export type * from './CreateGroup/types'
+export { default as GroupChatDetails } from './GroupChatDetails'
+export type * from './GroupChatDetails/types'
 
-export { default as EditGroup } from './EditGroup'
-export type * from './EditGroup/types'
-
-export { default as GroupDetails } from './GroupDetails'
-export type * from './GroupDetails/types'
+export { default as GroupChatEdit } from './GroupChatEdit'
+export type * from './GroupChatEdit/types'
 
 export { default as MessagesList } from './MessagesList'
 export type * from './MessagesList/types'
@@ -26,3 +26,6 @@ export type * from './MessageUpdate/types'
 
 export { default as SendMessage } from './SendMessage'
 export type * from './SendMessage/types'
+
+export { default as SingleChatCreate } from './SingleChatCreate'
+export type * from './SingleChatCreate/types'

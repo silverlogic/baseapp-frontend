@@ -10,7 +10,7 @@
     "dev": "tsc --watch",
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
-    "relay-update-schema": "yarn relay-download-schema && yarn relay",
+    "relay:update-schema": "yarn relay-download-schema && yarn relay",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "storybook": "storybook dev -p 6008",
