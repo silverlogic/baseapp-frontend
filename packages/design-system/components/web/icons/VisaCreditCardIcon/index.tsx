@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
 const VisaCreditCardIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
-  <SvgIcon sx={{ fontSize: 24, currentColor: 'action.active', ...sx }} {...props}>
+  <SvgIcon sx={{ fontSize: 24, color: 'action.active', ...sx }} {...props}>
     <svg
       width="36"
       height="24"
