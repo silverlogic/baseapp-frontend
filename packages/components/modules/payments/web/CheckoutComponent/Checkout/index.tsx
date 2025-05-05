@@ -123,6 +123,7 @@ const Checkout: FC<CheckoutProps> = ({
           onError: (error: any) => {
             const message = extractErrorMessage(error)
             sendToast(message, { type: 'error' })
+            setIsConfirmCardPaymentProcessing(false)
             setIsRetry(true)
           },
         },
@@ -188,7 +189,7 @@ const Checkout: FC<CheckoutProps> = ({
                 {Number.isFinite(product?.defaultPrice?.unitAmount) && (
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                     <Typography variant="body2" fontWeight={700}>
-                      {(product.defaultPrice.unitAmount / 100).toLocaleString('en-US', {
+                      {(product?.defaultPrice?.unitAmount || 0 / 100).toLocaleString('en-US', {
                         style: 'currency',
                         currency: 'USD',
                       })}
