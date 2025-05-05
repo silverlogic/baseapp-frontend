@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import { UISettings } from '@baseapp-frontend/design-system/styles/web'
+import { ValueOf } from '@baseapp-frontend/utils'
 
 import { BoxProps } from '@mui/material'
 
@@ -10,10 +11,13 @@ import { GroupChatCreateProps } from '../GroupChatCreate/types'
 import { GroupChatDetailsProps } from '../GroupChatDetails/types'
 import { GroupChatEditProps } from '../GroupChatEdit/types'
 import { SingleChatCreateProps } from '../SingleChatCreate/types'
+import { LEFT_PANEL_CONTENT } from './constants'
 
 export interface HidableContainerProps extends BoxProps {
   hide: boolean
 }
+
+export type LeftPanelContentValues = ValueOf<typeof LEFT_PANEL_CONTENT>
 
 export interface ChatRoomsComponentProps {
   chatRoomsQueryData: ChatRoomsQuery$data

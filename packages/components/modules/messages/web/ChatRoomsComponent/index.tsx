@@ -14,9 +14,9 @@ import DefaultGroupChatCreate from '../GroupChatCreate'
 import DefaultGroupChatDetails from '../GroupChatDetails'
 import DefaultGroupChatEdit from '../GroupChatEdit'
 import DefaultSingleChatCreate from '../SingleChatCreate'
-import { LEFT_PANEL_CONTENT, LeftPanelContentValues } from './constants'
+import { LEFT_PANEL_CONTENT } from './constants'
 import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
-import { ChatRoomsComponentProps } from './types'
+import { ChatRoomsComponentProps, LeftPanelContentValues } from './types'
 
 const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   chatRoomsQueryData,
