@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.1.0
+
+### Minor Changes
+
+- Restructure several components from the `messages` module to make it more customizable.
+
 ## 1.0.36
 
 ### Patch Changes
