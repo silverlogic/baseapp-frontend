@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.1.1
+
+### Patch Changes
+
+- Added report option for profiles
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.16
+
 ## 1.1.0
 
 ### Minor Changes

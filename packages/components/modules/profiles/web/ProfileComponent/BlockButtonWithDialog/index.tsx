@@ -4,7 +4,7 @@ import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/di
 import { BlockIcon, UnblockIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Button, CircularProgress, Typography } from '@mui/material'
+import { Button, CircularProgress, MenuItem, Typography } from '@mui/material'
 import { useFragment, useMutation } from 'react-relay'
 
 import { BlockToggleMutation } from '../../../../../__generated__/BlockToggleMutation.graphql'
@@ -71,26 +71,44 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
 
   return (
     <>
-      <Button
-        variant={isMenu ? 'text' : 'contained'}
-        onClick={handleOpen}
-        sx={{ justifyContent: isMenu ? 'start' : 'center' }}
-        size="medium"
-      >
-        <Typography variant="body2" color={isMenu ? 'error.main' : 'inherit'} noWrap>
-          {isBlockedByMe ? (
-            <>
-              <UnblockIcon sx={{ color: isMenu ? 'error.main' : 'inherit', marginRight: '5px' }} />
-              {isMenu ? 'Unblock profile' : 'Unblock'}
-            </>
-          ) : (
-            <>
-              <BlockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
-              Block profile
-            </>
-          )}
-        </Typography>
-      </Button>
+      {isMenu ? (
+        <MenuItem onClick={handleOpen} disableRipple>
+          <Typography variant="body2" color="error.main" noWrap>
+            {isBlockedByMe ? (
+              <>
+                <UnblockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
+                Unblock profile
+              </>
+            ) : (
+              <>
+                <BlockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
+                Block profile
+              </>
+            )}
+          </Typography>
+        </MenuItem>
+      ) : (
+        <Button
+          variant="contained"
+          onClick={handleOpen}
+          sx={{ justifyContent: 'center' }}
+          size="medium"
+        >
+          <Typography variant="body2" color="inherit" noWrap>
+            {isBlockedByMe ? (
+              <>
+                <UnblockIcon sx={{ color: 'inherit', marginRight: '5px' }} />
+                Unblock
+              </>
+            ) : (
+              <>
+                <BlockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
+                Block profile
+              </>
+            )}
+          </Typography>
+        </Button>
+      )}
       <ConfirmDialog
         open={open}
         title={

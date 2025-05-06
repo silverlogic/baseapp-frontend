@@ -13,7 +13,7 @@ import { ImageWithFallback } from '@baseapp-frontend/design-system/components/we
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Button, MenuItem, Typography } from '@mui/material'
+import { Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import numbro from 'numbro'
 import { useFragment } from 'react-relay'
@@ -21,6 +21,7 @@ import { useFragment } from 'react-relay'
 import { ProfileComponentFragment } from '../../common'
 import BlockButtonWithDialog from './BlockButtonWithDialog'
 import FollowToggleButton from './FollowToggleButton'
+import ReportButtonWithDialog from './ReportButtonWithDialog'
 import {
   ProfileContainer,
   ProfileContentContainer,
@@ -102,6 +103,27 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
     )
   }
 
+  const menuOptions = (
+    <>
+      <MenuItem onClick={handleShareClick} disableRipple>
+        <ShareIcon />
+        Share profile
+      </MenuItem>
+      {smDown && <Divider />}
+      {profile && (
+        <>
+          <BlockButtonWithDialog
+            target={profile}
+            handleCloseMenu={handleClose}
+            currentProfileId={currentProfileId}
+            isMenu
+          />
+          <ReportButtonWithDialog handleClose={handleClose} targetId={profile?.id} />
+        </>
+      )}
+    </>
+  )
+
   return (
     <div className="flex h-full w-full justify-center">
       <ProfileContainer>
@@ -167,34 +189,12 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
             </Button>
             {!smDown && (
               <StyledMenu anchorEl={anchorEl} open={open} onClose={handleClose}>
-                <MenuItem onClick={handleShareClick} disableRipple>
-                  <ShareIcon />
-                  Share profile
-                </MenuItem>
-                {profile && (
-                  <BlockButtonWithDialog
-                    target={profile}
-                    handleCloseMenu={handleClose}
-                    currentProfileId={currentProfileId}
-                    isMenu
-                  />
-                )}
+                {menuOptions}
               </StyledMenu>
             )}
             {smDown && (
               <SwipeableDrawer anchor="bottom" open={open} onClose={handleClose}>
-                <MenuItem onClick={handleShareClick} disableRipple>
-                  <ShareIcon />
-                  Share profile
-                </MenuItem>
-                {profile && (
-                  <BlockButtonWithDialog
-                    target={profile}
-                    handleCloseMenu={handleClose}
-                    currentProfileId={currentProfileId}
-                    isMenu
-                  />
-                )}
+                {menuOptions}
               </SwipeableDrawer>
             )}
           </div>

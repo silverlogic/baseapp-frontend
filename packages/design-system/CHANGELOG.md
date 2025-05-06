@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.16
+
+### Patch Changes
+
+- Added report option for profiles
+
 ## 1.0.15
 
 ### Patch Changes
