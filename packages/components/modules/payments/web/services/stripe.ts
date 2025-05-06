@@ -33,17 +33,9 @@ class StripeApi {
     const requestBody: SubscriptionRequestBody = {
       remote_customer_id: customerId,
       price_id: priceId,
-    }
-    if (paymentMethodId) {
-      requestBody.payment_method_id = paymentMethodId
-    }
-
-    if (allowIncomplete !== undefined) {
-      requestBody.allow_incomplete = allowIncomplete
-    }
-
-    if (billingDetails) {
-      requestBody.billing_details = billingDetails
+      ...(paymentMethodId && { payment_method_id: paymentMethodId }),
+      ...(allowIncomplete !== undefined && { allow_incomplete: allowIncomplete }),
+      ...(billingDetails && { billing_details: billingDetails }),
     }
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
