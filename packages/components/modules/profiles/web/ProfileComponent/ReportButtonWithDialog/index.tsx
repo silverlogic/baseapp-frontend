@@ -24,14 +24,13 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
           Report profile
         </Typography>
       </MenuItem>
-      {smDown && (
+      {smDown ? (
         <StyledSwipeableDrawer anchor="bottom" open={isReportModalOpen} onClose={handleClose}>
           {isReportModalOpen && (
             <ReportDialogContent targetId={targetId} handleClose={handleClose} />
           )}
         </StyledSwipeableDrawer>
-      )}
-      {!smDown && (
+      ) : (
         <Dialog open={isReportModalOpen} onClose={handleClose}>
           {isReportModalOpen && (
             <ReportDialogContent targetId={targetId} handleClose={handleClose} />

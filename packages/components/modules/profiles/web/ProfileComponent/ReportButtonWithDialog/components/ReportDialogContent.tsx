@@ -34,15 +34,19 @@ const ReportDialogContent: FC<ReportButtonWithDialogProps> = ({ targetId, handle
   const smDown = useResponsive('down', 'sm')
   const [commitMutation, isMutationInFlight] = useReportCreateMutation()
   const reportTypes = useMemo(
-    () => allReportTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    () =>
+      allReportTypes?.edges
+        ?.filter((edge) => edge?.node)
+        .map((edge) => edge?.node)
+        .sort((a, b) => {
+          if (!a) return -1
+          if (!b) return 1
+          if (a.key === 'other') return 1
+          if (b.key === 'other') return -1
+          return a.key > b.key ? 1 : -1
+        }) || [],
     [allReportTypes?.edges],
-  ).sort((a, b) => {
-    if (!a) return -1
-    if (!b) return 1
-    if (a.key === 'other') return 1
-    if (b.key === 'other') return -1
-    return a.key > b.key ? 1 : -1
-  })
+  )
   const subTypes = useMemo(
     () => reportType?.subTypes?.edges?.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [reportType?.subTypes?.edges],
