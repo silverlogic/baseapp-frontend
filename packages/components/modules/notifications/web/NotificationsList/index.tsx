@@ -12,6 +12,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { NotificationsListFragment$key } from '../../../../__generated__/NotificationsListFragment.graphql'
 import { NotificationsListQuery as NotificationsListQueryType } from '../../../../__generated__/NotificationsListQuery.graphql'
 import {
+  NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
   useNotificationsSubscription,
@@ -19,7 +20,6 @@ import {
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
-import { NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT } from './constants'
 import { HeaderContainer } from './styled'
 import { NotificationsListProps } from './types'
 

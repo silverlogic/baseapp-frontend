@@ -41,27 +41,25 @@ export const NavCenteredContainer = styled(NavHorizontalContainer)(({ theme }) =
   },
 }))
 
-export const NavVerticalContainer = styled(CommonContainer)<NavVerticalContainerProps>(
-  ({ theme, isNavMini = false }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    flexGrow: 1,
-    minHeight: 1,
-    paddingTop: NAV_PADDING_DOWN_TO_LG.vertical.top,
-    paddingBottom: NAV_PADDING_DOWN_TO_LG.vertical.bottom,
-    paddingLeft: 0,
-    paddingRight: 0,
-    [theme.breakpoints.up('lg')]: {
-      paddingTop: NAV_PADDING_UP_TO_LG.vertical.top,
-      paddingBottom: NAV_PADDING_UP_TO_LG.vertical.bottom,
-      paddingLeft: theme.spacing(2),
-      paddingRight: theme.spacing(2),
-      width: isNavMini
-        ? `calc(100% - ${NAV_WIDTH.MINI}px)`
-        : `calc(100% - ${NAV_WIDTH.VERTICAL}px)`,
-    },
-    [theme.breakpoints.down('sm')]: {
-      paddingBottom: 0,
-    },
-  }),
-)
+export const NavVerticalContainer = styled(CommonContainer, {
+  shouldForwardProp: (prop) => prop !== 'isNavMini',
+})<NavVerticalContainerProps>(({ theme, isNavMini = false }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  flexGrow: 1,
+  minHeight: 1,
+  paddingTop: NAV_PADDING_DOWN_TO_LG.vertical.top,
+  paddingBottom: NAV_PADDING_DOWN_TO_LG.vertical.bottom,
+  paddingLeft: 0,
+  paddingRight: 0,
+  [theme.breakpoints.up('lg')]: {
+    paddingTop: NAV_PADDING_UP_TO_LG.vertical.top,
+    paddingBottom: NAV_PADDING_UP_TO_LG.vertical.bottom,
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    width: isNavMini ? `calc(100% - ${NAV_WIDTH.MINI}px)` : `calc(100% - ${NAV_WIDTH.VERTICAL}px)`,
+  },
+  [theme.breakpoints.down('sm')]: {
+    paddingBottom: 0,
+  },
+}))

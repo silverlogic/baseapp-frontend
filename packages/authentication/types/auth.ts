@@ -51,8 +51,11 @@ export interface CustomJWTKeyNames {
   refreshKeyName?: string
 }
 
-export interface ChangeExpiredPasswordRequest {
+export interface ChangePasswordRequest {
   currentPassword: string
   newPassword: string
+}
+
+export interface ChangeExpiredPasswordRequest extends ChangePasswordRequest {
   token: string
 }

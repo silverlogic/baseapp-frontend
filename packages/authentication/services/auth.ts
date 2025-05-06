@@ -1,7 +1,8 @@
-import { baseAppFetch } from '@baseapp-frontend/utils'
+import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 
 import type {
   ChangeExpiredPasswordRequest,
+  ChangePasswordRequest,
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
@@ -24,6 +25,13 @@ export default class AuthApi {
 
   static register<TResponse = void>(request: RegisterRequest): Promise<TResponse> {
     return baseAppFetch(`/register`, { method: 'POST', body: request })
+  }
+
+  static changePassword({ currentPassword, newPassword }: ChangePasswordRequest) {
+    return baseAppFetch('/users/change-password', {
+      method: 'POST',
+      body: { currentPassword, newPassword },
+    })
   }
 
   static changeExpiredPassword({

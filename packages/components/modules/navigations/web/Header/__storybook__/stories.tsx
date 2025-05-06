@@ -2,11 +2,11 @@ import {
   BaseAppLogoCondensed,
   SendMessageIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
 import Header from '..'
-import defaultTheme from '../../../../../.storybook/__mocks__/theme'
 import { withTokenSetup } from '../../../../../.storybook/decorators'
 import { HeaderProps } from '../types'
 

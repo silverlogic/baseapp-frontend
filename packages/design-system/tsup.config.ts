@@ -6,7 +6,9 @@ import { defineConfig } from 'tsup'
 export default defineConfig((options) => ({
   clean: true,
   dts: false,
-  entry: ['./(components|hooks|layouts|providers|styles|utils)/(common|web|native)/**/index.ts'],
+  entry: [
+    './(components|hooks|layouts|providers|styles|utils|tests)/(common|web|native)/**/index.ts',
+  ],
   esbuildOptions(esbuildOptions) {
     esbuildOptions.loader = {
       ...esbuildOptions.loader,

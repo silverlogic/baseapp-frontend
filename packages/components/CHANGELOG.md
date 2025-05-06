@@ -1,5 +1,83 @@
 # @baseapp-frontend/components
 
+## 1.1.0
+
+### Minor Changes
+
+- Restructure several components from the `messages` module to make it more customizable.
+
+## 1.0.36
+
+### Patch Changes
+
+- Customizable Styles for Main Page Area
+
+## 1.0.35
+
+### Patch Changes
+
+- create MessageList, messageItem, ChatRoom and MessagesGroup storybook
+
+## 1.0.34
+
+### Patch Changes
+
+- Content Feed creation page and Dropzone Improvements
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.15
+
+## 1.0.33
+
+### Patch Changes
+
+- Add optimistic updates to reaction button
+
+## 1.0.32
+
+### Patch Changes
+
+- Disables link for navigation elements with children and fixes vertical alignment
+
+## 1.0.31
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.2.2
+  - @baseapp-frontend/design-system@1.0.14
+  - @baseapp-frontend/graphql@1.2.7
+  - @baseapp-frontend/utils@3.1.6
+
+## 1.0.30
+
+### Patch Changes
+
+- Native: Dividing notifications into unread/read
+
+## 1.0.29
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.13
+
+## 1.0.28
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@4.2.1
+  - @baseapp-frontend/design-system@1.0.11
+
+## 1.0.27
+
+### Patch Changes
+
+- Add infinite scroller functionality to RN notifications list
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.10
+
 ## 1.0.26
 
 ### Patch Changes

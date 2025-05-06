@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.2.7
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.6
+
 ## 1.2.6
 
 ### Patch Changes

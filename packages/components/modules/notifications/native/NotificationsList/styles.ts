@@ -17,4 +17,8 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       flex: 1,
     },
+    listContainer: {
+      height: '100%',
+      paddingBottom: 74,
+    },
   })

@@ -2,12 +2,12 @@ import {
   BaseAppLogoCondensed,
   SendMessageIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
 import NavigationLayout from '..'
 import { navDataMock } from '../../../../../.storybook/__mocks__/navigation'
-import defaultTheme from '../../../../../.storybook/__mocks__/theme'
 import { withTokenSetup } from '../../../../../.storybook/decorators'
 import { NavigationLayoutProps } from '../types'
 

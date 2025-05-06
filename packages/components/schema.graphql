@@ -481,14 +481,20 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node {
+type ContentPost implements Node & ReactionsInterface {
+  created: DateTime!
+  modified: DateTime!
+  isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
   content: String!
-  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ContentPostImageConnection
+  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
 
   """The ID of the object"""
   id: ID!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  myReaction(profileId: ID): Reaction
   pk: Int!
 }
 
@@ -504,6 +510,7 @@ type ContentPostConnection {
 
 input ContentPostCreateInput {
   content: String!
+  isReactionsEnabled: Boolean!
   clientMutationId: String
 }
 
@@ -525,7 +532,7 @@ type ContentPostEdge {
 }
 
 type ContentPostImage implements Node {
-  image: String
+  image(width: Int!, height: Int!): File
   post: ContentPost!
 
   """The ID of the object"""
@@ -1264,7 +1271,16 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  contentPosts(first: Int, last: Int, offset: Int, after: String, before: String): ContentPostConnection!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
@@ -1492,7 +1508,26 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Report
+  reportTypes(
+    """The ID of the object"""
+    id: ID!
+  ): ReportType
+  allReportTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection
   contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
+  contentPost(
+    """The ID of the object"""
+    id: ID!
+  ): ContentPost
+  contentPosts(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection
   comment(
     """The ID of the object"""
     id: ID!

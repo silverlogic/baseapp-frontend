@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.0.26",
+  "version": "1.1.0",
   "sideEffects": false,
   "scripts": {
     "babel:transpile": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",
@@ -13,7 +13,7 @@
     "dev": "rm -rf dist && node .scripts/dev-command.mjs",
     "relay": "relay-compiler",
     "relay-download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
-    "relay-update-schema": "pnpm relay-download-schema && pnpm relay",
+    "relay:update-schema": "pnpm relay-download-schema && pnpm relay",
     "lint": "pnpm relay && eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "prettier": "prettier --write .",
@@ -60,6 +60,16 @@
       "types": "./dist/profiles/*/index.d.ts",
       "import": "./dist/profiles/*/index.mjs",
       "require": "./dist/profiles/*/index.js"
+    },
+    "./tests/*": {
+      "types": "./dist/tests/*/index.d.ts",
+      "import": "./dist/tests/*/index.mjs",
+      "require": "./dist/tests/*/index.js"
+    },
+    "./content-feed/*": {
+      "types": "./dist/content-feed/*/index.d.ts",
+      "import": "./dist/content-feed/*/index.mjs",
+      "require": "./dist/content-feed/*/index.js"
     }
   },
   "files": [

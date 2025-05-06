@@ -7,6 +7,7 @@ import { ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { AccountMenuProps } from '../Header/AccountMenu/types'
 import { NavigationData } from '../types'
+import { MainContainerProps } from './MainContainer/types'
 
 export interface NavigationLayoutProps extends PropsWithChildren {
   navData: NavigationData
@@ -17,4 +18,6 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
   ToolbarProps?: MuiToolbarProps
+  MainContainerProps?: Partial<MainContainerProps>
+  MainContainer?: FC<MainContainerProps>
 }

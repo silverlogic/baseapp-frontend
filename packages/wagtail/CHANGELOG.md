@@ -1,5 +1,36 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.30
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.15
+
+## 1.0.29
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.14
+  - @baseapp-frontend/graphql@1.2.7
+  - @baseapp-frontend/utils@3.1.6
+
+## 1.0.28
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.13
+
+## 1.0.27
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.10
+
 ## 1.0.26
 
 ### Patch Changes

@@ -1,5 +1,46 @@
 # @baseapp-frontend/design-system
 
+## 1.0.15
+
+### Patch Changes
+
+- Content Feed creation page and Dropzone Improvements
+
+## 1.0.14
+
+### Patch Changes
+
+- Unify test and storybook providers
+- Updated dependencies
+  - @baseapp-frontend/utils@3.1.6
+
+## 1.0.13
+
+### Patch Changes
+
+- Added `useLogoOverride` for native
+
+## 1.0.12
+
+### Patch Changes
+
+- Add custom Tabs Components to design system
+
+## 1.0.11
+
+### Patch Changes
+
+- Create `ScrollView` component with support for `KeyboardAvoidingView` functionality
+- Modified native `TextInput` to adjust the error message view so it doesn't overflow offscreen
+- Added `AlertTriangleIcon` to native components
+- Fixed text color for `Button` `outlined` variant
+
+## 1.0.10
+
+### Patch Changes
+
+- Add infinit scroller custom component based on @shopify/flash-list 1.7.6
+
 ## 1.0.9
 
 ### Patch Changes

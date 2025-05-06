@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.1.2
+
+### Patch Changes
+
+- Unify test and storybook providers
+
 ## 2.1.1
 
 ### Patch Changes

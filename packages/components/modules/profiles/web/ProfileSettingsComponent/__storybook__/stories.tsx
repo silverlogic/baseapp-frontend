@@ -6,7 +6,7 @@ import ProfileSettingsComponentWithQuery from './index'
 import { mockResolvers, mockResolversWithMutationError } from './mockResolver'
 
 export default {
-  title: '@baseapp-frontend-template / Pages/User/Settings/AccountSettings/AccountProfile',
+  title: '@baseapp-frontend | components/Profiles/ProfileSettingsComponent',
   component: ProfileSettingsComponentWithQuery,
   decorators: [withMutationResolver],
   args: {

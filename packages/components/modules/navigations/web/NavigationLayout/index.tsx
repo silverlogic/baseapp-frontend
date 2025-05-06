@@ -11,7 +11,7 @@ import NavCentered from '../NavCentered'
 import NavHorizontal from '../NavHorizontal'
 import NavMini from '../NavMini'
 import NavVertical from '../NavVertical'
-import MainContainer from './MainContainer'
+import DefaultMainContainer from './MainContainer'
 import { NavigationLayoutProps } from './types'
 
 const NavigationLayout: FC<NavigationLayoutProps> = ({
@@ -24,6 +24,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   AccountMenuProps,
   ToolbarProps,
   children,
+  MainContainerProps = {},
+  MainContainer = DefaultMainContainer,
 }) => {
   const nav = useBoolean()
 
@@ -45,7 +47,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
-        <MainContainer isNavCentered>{children}</MainContainer>
+        <MainContainer isNavCentered {...MainContainerProps}>
+          {children}
+        </MainContainer>
       </>
     )
   }
@@ -63,7 +67,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           ToolbarProps={ToolbarProps}
         />
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
-        <MainContainer isNavHorizontal>{children}</MainContainer>
+        <MainContainer isNavHorizontal {...MainContainerProps}>
+          {children}
+        </MainContainer>
       </>
     )
   }
@@ -97,7 +103,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             settings={settings}
             setSettings={setSettings}
           />
-          <MainContainer isNavMini>{children}</MainContainer>
+          <MainContainer isNavMini {...MainContainerProps}>
+            {children}
+          </MainContainer>
         </Box>
       </>
     )
@@ -130,7 +138,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           openNav={nav.value}
           onCloseNav={nav.onFalse}
         />
-        <MainContainer>{children}</MainContainer>
+        <MainContainer {...MainContainerProps}>{children}</MainContainer>
       </Box>
     </>
   )

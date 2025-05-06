@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/test",
   "description": "Test utils that extends React Testing Library.",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -19,7 +19,8 @@
     "@mui/material": "catalog:material-ui",
     "@tanstack/react-query": "catalog:",
     "axios-mock-adapter": "^1.22.0",
-    "js-cookie": "catalog:"
+    "js-cookie": "catalog:",
+    "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
     "react": "catalog:react18"
