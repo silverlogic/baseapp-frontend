@@ -20,14 +20,14 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
   checkoutProductId,
   stripePublishableKey,
 }) => {
-  const { useSetupIntent, useGetPaymentMethod, useGetProduct } = useStripeHook()
+  const { useSetupIntent, useListPaymentMethods, useGetProduct } = useStripeHook()
   const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
 
   const {
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useGetPaymentMethod(checkoutCustomerId || '')
+  } = useListPaymentMethods(checkoutCustomerId || '')
 
   const {
     data: product,
@@ -72,4 +72,5 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     </Elements>
   )
 }
+
 export default CheckoutWrapper

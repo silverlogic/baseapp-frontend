@@ -114,7 +114,7 @@ const Checkout: FC<CheckoutProps> = ({
                 if (paymentMethods?.length > 0) {
                   setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
                 }
-                queryClient.invalidateQueries({ queryKey: ['useGetPaymentMethod'] })
+                queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
                 setConfirmationModalOpen(true)
                 setIsRetry(false)
               }
@@ -279,4 +279,5 @@ const Checkout: FC<CheckoutProps> = ({
     </Box>
   )
 }
+
 export default Checkout

@@ -1,15 +1,11 @@
 import { FC } from 'react'
 
-import {
-  AddIcon,
-  CreditCardIcon,
-  MastercardCreditCardIcon,
-  VisaCreditCardIcon,
-} from '@baseapp-frontend/design-system/components/web/icons'
+import { AddIcon, CreditCardIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 
 import AddCardModal from '../AddCardModal'
+import { getCardIcon } from '../utils'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
 
@@ -25,19 +21,6 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   handleSetupSuccess,
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
-  const getCardIcon = (brand?: string) => {
-    const cardBrand = brand?.toLowerCase() || ''
-
-    switch (cardBrand) {
-      case 'visa':
-        return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      case 'mastercard':
-        return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      default:
-        return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
-    }
-  }
-
   const handleOpenModal = () => {
     setIsAddCardModalOpen(true)
   }
@@ -109,7 +92,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
                   <Box sx={{ mr: 2 }}>{getCardIcon(pm?.card?.brand)}</Box>
                   <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                     <Typography variant="body2" fontWeight={500}>
-                      {pm?.card?.brand?.toUpperCase() || 'CARD'} ••• ••• •••{pm?.card?.last4}
+                      {pm?.card?.brand?.toUpperCase() ?? 'CARD'} ••• ••• •••{pm?.card?.last4}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
                       Expires: {pm?.card?.expMonth}/{pm?.card?.expYear}

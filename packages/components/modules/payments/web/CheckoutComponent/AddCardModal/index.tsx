@@ -73,7 +73,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
         setIsAddingCardPaymentProcessing(false)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: ['useGetPaymentMethod'],
+          queryKey: ['listPaymentMethods'],
         })
         if (handleSetupSuccess) {
           handleSetupSuccess()

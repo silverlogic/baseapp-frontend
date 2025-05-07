@@ -7,7 +7,7 @@ import {
   IStripePaymentMethod,
   ISubscription,
 } from '../types'
-import { SubscriptionRequestBody } from './types'
+import { SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from './types'
 
 const baseUrl = '/payments'
 
@@ -17,8 +17,23 @@ class StripeApi {
       customer_id: customerId,
     })
 
-  static getPaymentMethod = (customerId: string): Promise<IStripePaymentMethod[]> =>
+  static listPaymentMethods = (customerId: string): Promise<IStripePaymentMethod[]> =>
     axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`, {})
+
+  static updatePaymentMethod = (
+    paymentMethodId: string,
+    payload: UpdatePaymentMethodRequestBody,
+  ): Promise<IStripePaymentMethod> =>
+    axios.put(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, payload)
+
+  static deletePaymentMethod = (
+    paymentMethodId: string,
+    customerId: string,
+    isDefault: boolean,
+  ): Promise<void> =>
+    axios.delete(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, {
+      params: { customer_id: customerId, is_default: isDefault },
+    })
 
   static getProduct = (productId: string): Promise<IProduct> =>
     axios.get(`${baseUrl}/stripe/products/${productId}`, {})
