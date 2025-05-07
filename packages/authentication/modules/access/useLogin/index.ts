@@ -31,17 +31,17 @@ import {
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useCurrentProfile } from '../../profile'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
-import type { UseLoginOptions } from './types'
+import type { ApiClass, LoginParams, UseLoginOptions } from './types'
 
-const useLogin = ({
+const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
   loginFormOptions = {},
   loginOptions = {},
   mfaOptions = {},
   accessKeyName = ACCESS_KEY_NAME,
   refreshKeyName = REFRESH_KEY_NAME,
-  ApiClass = AuthApi,
+  ApiClass = AuthApi as unknown as TApiClass,
   enableFormApiErrors = true,
-}: UseLoginOptions = {}) => {
+}: UseLoginOptions<TApiClass> = {}) => {
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
   const { setCurrentProfile } = useCurrentProfile()
 
@@ -83,7 +83,7 @@ const useLogin = ({
   }
 
   const form = useForm({
-    defaultValues: DEFAULT_INITIAL_VALUES,
+    defaultValues: DEFAULT_INITIAL_VALUES as LoginParams<TApiClass>,
     resolver: zodResolver(DEFAULT_VALIDATION_SCHEMA),
     mode: 'onBlur',
     ...loginFormOptions,
