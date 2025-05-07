@@ -35,9 +35,7 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) =>
         PaymentMethodApi.createSubscription(options),
-      onSuccess: () => {
-        console.log('Subscription created successfully:')
-      },
+
       onError: (error) => {
         sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
       },
@@ -85,7 +83,6 @@ const useStripeHook = () => {
         options?.onError?.(error, variables, context)
       },
       mutationKey: ['useUpdateSubscription', subscriptionId],
-      ...options,
     })
 
   return {

@@ -52,6 +52,8 @@ export interface IProduct {
 export interface ISubscription {
   id: string
   clientSecret?: string
+  defaultPaymentMethod?: string
+  remoteCustomerId: string
   invoiceId: string
   plan?: {
     product?: string

@@ -33,7 +33,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
   const isTablet = useMediaQuery<Theme>((theme) => theme.breakpoints.between('sm', 'md'))
   const [isAddingCardPaymentProcessing, setIsAddingCardPaymentProcessing] = useState(false)
-  console.log('isAddingCardPaymentProcessing', isAddingCardPaymentProcessing)
 
   const handleConfirmSetup = async () => {
     if (!stripe || !elements) {

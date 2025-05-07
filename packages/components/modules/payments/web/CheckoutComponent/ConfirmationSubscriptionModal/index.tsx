@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import getUser from '@baseapp-frontend/authentication/dist/modules/user/getUser'
 import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
@@ -18,8 +18,21 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
     onClose()
     // TODO: Add navigation to subscription details page
   }
-  const user = getUser()
-  const maskedEmail = maskEmail(user?.email)
+  const [user, setUser] = useState<any>(null)
+  const [maskedEmail, setMaskedEmail] = useState<string>('')
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser()
+        setUser(userData)
+        setMaskedEmail(maskEmail(userData?.email))
+      } catch (error) {
+        console.error('Error fetching user:', error)
+      }
+    }
+    fetchUser()
+  }, [])
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
 
   return (

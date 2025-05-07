@@ -39,7 +39,7 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     if (checkoutCustomerId) {
       createSetupIntent(checkoutCustomerId)
     }
-  }, [createSetupIntent])
+  }, [createSetupIntent, checkoutCustomerId])
 
   const handleSetupSuccess = () => {
     createSetupIntent(checkoutCustomerId)
