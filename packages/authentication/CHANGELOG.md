@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 4.2.3
+
+### Patch Changes
+
+- `useLogin` now supports custom `ApiClass` types, so when the login method changes, we can get the corresponding request/response types. The login form should also reflect the correct types if the schema is changed.
+
 ## 4.2.2
 
 ### Patch Changes

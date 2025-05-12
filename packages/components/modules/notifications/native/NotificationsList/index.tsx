@@ -77,7 +77,9 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <View style={styles.listContainer}>
         <InfiniteScrollerView
           data={notifications}
-          renderItem={({ item, index }: { item: NotificationsNode, index: number }) => renderNotificationItem(item, index)}
+          renderItem={({ item, index }: { item: NotificationsNode; index: number }) =>
+            renderNotificationItem(item, index)
+          }
           estimatedItemSize={134}
           onEndReached={() => {
             if (hasNext) {
