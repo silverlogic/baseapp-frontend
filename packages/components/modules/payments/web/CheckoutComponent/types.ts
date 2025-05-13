@@ -8,7 +8,7 @@ export interface CheckoutComponentProps {
   onPaymentError?: (error: string) => void
 }
 
-export interface BillingDetails {
+export interface BillingDetails { //TODO: move to types.ts?
   name?: string
   address?: {
     line1?: string
