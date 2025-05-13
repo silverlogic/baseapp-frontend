@@ -1,38 +1,30 @@
+import {  PaymentMethod } from '@stripe/stripe-js'
+import { BillingDetails } from '../CheckoutComponent/types'
+
 export interface ISetupIntent {
   clientSecret: string
 }
 
-export interface IStripePaymentMethod {
-  id: string
-  isDefault: boolean
-  card?: {
-    brand: string
-    last4: string
-    expMonth: number
-    expYear: number
+
+
+export interface StripePaymentMethod extends PaymentMethod {
+  isDefault?: boolean
+  card?: PaymentMethod.Card &{
+    expMonth?: number
+    expYear?: number
   }
-  billingDetails?: {
-    address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
-      postalCode?: string
-      country?: string
-    }
-    name?: string
-    email?: string
-    phone?: string
-  }
+  billingDetails?: BillingDetails
 }
 
 export interface IProduct {
   id: string
   name: string
   images: string[]
-  defaultPrice: {
+  defaultPrice: {   
     id: string
     unitAmount: number
+    currency?: string
+    locale?: string
   }
 }
 
@@ -47,15 +39,5 @@ export interface CreateSubscriptionOptions {
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
-  billingDetails?: {
-    name?: string
-    address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
-      postalCode?: string
-      country?: string
-    }
-  }
+  billingDetails?: BillingDetails
 }

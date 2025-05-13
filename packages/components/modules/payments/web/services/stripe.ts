@@ -4,8 +4,8 @@ import {
   CreateSubscriptionOptions,
   IProduct,
   ISetupIntent,
-  IStripePaymentMethod,
   ISubscription,
+  StripePaymentMethod,  
 } from '../types'
 import { SubscriptionRequestBody } from './types'
 
@@ -17,7 +17,7 @@ class StripeApi {
       customer_id: customerId,
     })
 
-  static getPaymentMethod = (customerId: string): Promise<IStripePaymentMethod[]> =>
+  static getPaymentMethod = (customerId: string): Promise<StripePaymentMethod[]> =>
     axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`, {})
 
   static getProduct = (productId: string): Promise<IProduct> =>

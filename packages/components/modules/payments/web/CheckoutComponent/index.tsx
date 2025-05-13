@@ -5,9 +5,9 @@ import { FC, useEffect } from 'react'
 import { Box, LinearProgress } from '@mui/material'
 import { Elements } from '@stripe/react-stripe-js'
 
-import { getStripePromise } from '../../stripe'
 import useStripeHook from '../hooks/useStripeHook'
 import Checkout from './Checkout'
+import { getStripePromise } from '../utils/stripe'
 
 interface CheckoutWrapperProps {
   checkoutCustomerId: string
@@ -45,14 +45,16 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     createSetupIntent(checkoutCustomerId)
   }
 
-  return isPending ||
+  const isNotReady = isPending ||
     isError ||
     isLoadingMethods ||
     isErrorMethods ||
     isLoadingProduct ||
     isErrorProduct ||
     !product ||
-    !setupIntent?.clientSecret ? (
+    !setupIntent?.clientSecret
+
+  return isNotReady ? (
     <Box sx={{ width: '100%' }}>
       <LinearProgress />
     </Box>

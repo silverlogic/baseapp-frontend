@@ -26,12 +26,17 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
   const getCardIcon = (brand?: string) => {
+
+    const CARD_BRANDS = {
+  VISA: 'visa',
+  MASTERCARD: 'mastercard',
+};
     const cardBrand = brand?.toLowerCase() || ''
 
     switch (cardBrand) {
-      case 'visa':
+      case CARD_BRANDS.VISA:
         return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      case 'mastercard':
+      case CARD_BRANDS.MASTERCARD:
         return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
       default:
         return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />

@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 
 import PaymentMethodApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
+import { PAYMENT_METHOD_API_KEY, PRODUCT_API_KEY } from './keys'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -19,14 +20,14 @@ const useStripeHook = () => {
 
   const useGetPaymentMethod = (customerId: string) =>
     useQuery({
-      queryKey: ['useGetPaymentMethod', customerId],
+      queryKey: [PAYMENT_METHOD_API_KEY.get(), customerId],
       queryFn: () => PaymentMethodApi.getPaymentMethod(customerId),
       enabled: !!customerId,
     })
 
   const useGetProduct = (customerId: string) =>
     useQuery({
-      queryKey: ['useGetProduct', customerId],
+      queryKey: [PRODUCT_API_KEY.get(), customerId],
       queryFn: () => PaymentMethodApi.getProduct(customerId),
       enabled: !!customerId,
     })

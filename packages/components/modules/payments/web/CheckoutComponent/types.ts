@@ -1,7 +1,7 @@
-import { IProduct, IStripePaymentMethod } from '../types'
+import { IProduct, StripePaymentMethod } from '../types'
 
 export interface CheckoutComponentProps {
-  paymentMethods: IStripePaymentMethod[]
+  paymentMethods: StripePaymentMethod[]
   product: IProduct
   setupClientSecret: string
   onPaymentSuccess?: (subscriptionId: string) => void
@@ -23,7 +23,7 @@ export interface BillingDetails {
 export interface CheckoutProps {
   isLoadingMethods: boolean
   checkoutCustomerId: string
-  paymentMethods: IStripePaymentMethod[]
+  paymentMethods: StripePaymentMethod[]
   product: IProduct
   setupClientSecret: string
   handleSetupSuccess: () => void

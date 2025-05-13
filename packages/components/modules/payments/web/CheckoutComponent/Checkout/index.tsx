@@ -14,6 +14,7 @@ import ConfirmationSubscriptionModal from '../ConfirmationSubscriptionModal'
 import PaymentDropdown from '../paymentDropDown'
 import { CheckoutProps } from '../types'
 import { ProductContainer, StyledLoadingButton } from './styled'
+import { PAYMENT_METHOD_API_KEY } from '../../hooks/keys'
 
 const Checkout: FC<CheckoutProps> = ({
   checkoutCustomerId,
@@ -66,14 +67,12 @@ const Checkout: FC<CheckoutProps> = ({
 
   const handlePlaceOrder = async () => {
     if (!elements) {
-      console.error('Stripe elements not initialized')
       return
     }
 
     const addressElement = elements.getElement(AddressElement)
 
     if (!addressElement) {
-      console.error('AddressElement not found')
       return
     }
 
@@ -114,7 +113,7 @@ const Checkout: FC<CheckoutProps> = ({
                 if (paymentMethods?.length > 0) {
                   setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
                 }
-                queryClient.invalidateQueries({ queryKey: ['useGetPaymentMethod'] })
+                queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
                 setConfirmationModalOpen(true)
                 setIsRetry(false)
               }
@@ -189,9 +188,9 @@ const Checkout: FC<CheckoutProps> = ({
                 {Number.isFinite(product?.defaultPrice?.unitAmount) && (
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                     <Typography variant="body2" fontWeight={700}>
-                      {(product?.defaultPrice?.unitAmount || 0 / 100).toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
+                      {(product?.defaultPrice?.unitAmount || 0 / 100).toLocaleString(product?.defaultPrice?.locale ||'en-US', {
+                      style: 'currency',
+                      currency: product?.defaultPrice?.currency || 'USD',
                       })}
                     </Typography>
                   </Box>
