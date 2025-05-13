@@ -9,6 +9,17 @@ const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
+  const useGetCustomer = () =>
+    useQuery({
+      queryKey: ['useGetCustomer'],
+      queryFn: () => StripeApi.getCustomer(),
+    })
+
+  const useCreateCustomer = () =>
+    useMutation({
+      mutationFn: (userId?: string) => StripeApi.createCustomer(userId),
+    })
+
   const useSetupIntent = (customerId?: string) =>
     useMutation({
       mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
@@ -98,6 +109,8 @@ const useStripeHook = () => {
     })
 
   return {
+    useGetCustomer,
+    useCreateCustomer,
     useListPaymentMethods,
     useUpdatePaymentMethod,
     useDeletePaymentMethod,

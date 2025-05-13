@@ -1,3 +1,9 @@
+export interface ICustomer {
+  remoteCustomerId: string
+  entityType: string
+  entityId: number
+}
+
 export interface ISetupIntent {
   clientSecret: string
 }

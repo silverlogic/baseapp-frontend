@@ -2,6 +2,7 @@ import { axios } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
+  ICustomer,
   IProduct,
   ISetupIntent,
   IStripePaymentMethod,
@@ -12,13 +13,21 @@ import { SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from './types
 const baseUrl = '/payments'
 
 class StripeApi {
+  static getCustomer = (userId?: string): Promise<ICustomer> =>
+    axios.get(`${baseUrl}/stripe/customers/${userId ?? 'me'}`)
+
+  static createCustomer = (userId?: string): Promise<ICustomer> =>
+    axios.post(`${baseUrl}/stripe/customers`, {
+      ...(userId && { user_id: userId }),
+    })
+
   static createSetupIntent = (customerId: string): Promise<ISetupIntent> =>
     axios.post(`${baseUrl}/stripe/payment-methods`, {
       customer_id: customerId,
     })
 
   static listPaymentMethods = (customerId: string): Promise<IStripePaymentMethod[]> =>
-    axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`, {})
+    axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`)
 
   static updatePaymentMethod = (
     paymentMethodId: string,
@@ -36,7 +45,7 @@ class StripeApi {
     })
 
   static getProduct = (productId: string): Promise<IProduct> =>
-    axios.get(`${baseUrl}/stripe/products/${productId}`, {})
+    axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
     customerId,
