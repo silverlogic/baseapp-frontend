@@ -5,9 +5,9 @@ import {
   IProduct,
   ISetupIntent,
   ISubscription,
-  StripePaymentMethod,  
+  StripePaymentMethod,
 } from '../types'
-import { SubscriptionRequestBody } from './types'
+import { SubscriptionRequestBody } from '../types/stripe'
 
 const baseUrl = '/payments'
 

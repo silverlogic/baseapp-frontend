@@ -1,10 +1,15 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import {
+  CONFIRM_CARD_PAYMENT_API_KEY,
+  PAYMENT_METHOD_API_KEY,
+  PRODUCT_API_KEY,
+} from '../services/keys'
 import PaymentMethodApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
-import { PAYMENT_METHOD_API_KEY, PRODUCT_API_KEY } from './keys'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -36,13 +41,39 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) =>
         PaymentMethodApi.createSubscription(options),
-      onSuccess: () => {
-        console.log('Subscription created successfully:')
-      },
       onError: (error) => {
         sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
       },
       mutationKey: ['useCreationSubscription'],
+    })
+
+  const useConfirmCardPayment = (stripe: Stripe | null) =>
+    useMutation({
+      mutationFn: async ({
+        clientSecret,
+        paymentMethodId,
+      }: {
+        clientSecret: string
+        paymentMethodId: string
+      }) => {
+        if (!stripe) {
+          throw new Error('Stripe is not initialized.')
+        }
+
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethodId,
+        })
+
+        if (result.error) {
+          throw new Error(result.error.message || 'Failed to confirm card payment.')
+        }
+
+        return result.paymentIntent
+      },
+      onError: (error) => {
+        sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
+      },
+      mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
   return {
@@ -50,6 +81,7 @@ const useStripeHook = () => {
     useSetupIntent,
     useGetProduct,
     useCreationSubscription,
+    useConfirmCardPayment,
   }
 }
 

@@ -1,4 +1,4 @@
-import { QueryKey } from "@tanstack/react-query";
+import { QueryKey } from '@tanstack/react-query'
 
 export const PAYMENT_METHOD_API_KEY = {
   default: ['paymentMethod'] as QueryKey,
@@ -10,3 +10,7 @@ export const PRODUCT_API_KEY = {
   get: (...params: string[]) => [...PRODUCT_API_KEY.default, ...params] as QueryKey,
 }
 
+export const CONFIRM_CARD_PAYMENT_API_KEY = {
+  default: ['confirmCardPayment'] as QueryKey,
+  get: (...params: string[]) => [...CONFIRM_CARD_PAYMENT_API_KEY.default, ...params] as QueryKey,
+}

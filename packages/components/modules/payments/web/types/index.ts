@@ -1,26 +1,27 @@
-import {  PaymentMethod } from '@stripe/stripe-js'
-import { BillingDetails } from '../CheckoutComponent/types'
+import { BillingDetails, PaymentMethod } from '@stripe/stripe-js'
 
 export interface ISetupIntent {
   clientSecret: string
 }
 
-
-
 export interface StripePaymentMethod extends PaymentMethod {
   isDefault?: boolean
-  card?: PaymentMethod.Card &{
+  card?: PaymentMethod.Card & {
     expMonth?: number
     expYear?: number
   }
-  billingDetails?: BillingDetails
+  billingDetails?: BillingDetails & {
+    address?: {
+      postalCode?: string
+    }
+  }
 }
 
 export interface IProduct {
   id: string
   name: string
   images: string[]
-  defaultPrice: {   
+  defaultPrice: {
     id: string
     unitAmount: number
     currency?: string

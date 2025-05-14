@@ -17,9 +17,9 @@ import {
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
+import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
 import { AddCardModalContainer } from './styled'
 import { AddCardModalProps } from './types'
-import { PAYMENT_METHOD_API_KEY } from '../../hooks/keys'
 
 const AddCardModal: FC<AddCardModalProps> = ({
   customerId,
@@ -45,10 +45,10 @@ const AddCardModal: FC<AddCardModalProps> = ({
       sendToast('Address element is missing. Please try again.', { type: 'error' })
       return
     }
+    console.log('open', open)
 
     const addressValue = await addressElement.getValue()
     if (!addressValue.complete) {
-      console.error('Address validation error: Incomplete address')
       sendToast('Error confirming card: Incomplete address', { type: 'error' })
       return
     }
@@ -65,14 +65,13 @@ const AddCardModal: FC<AddCardModalProps> = ({
       })
 
       if (result.error) {
-        console.error('Error confirming card:', result.error.message)
         sendToast(`Error confirming card: ${result.error.message || 'Unknown error'}`, {
           type: 'error',
         })
         setIsAddingCardPaymentProcessing(false)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: [PAYMENT_METHOD_API_KEY.get()]
+          queryKey: [PAYMENT_METHOD_API_KEY.get()],
         })
         if (handleSetupSuccess) {
           handleSetupSuccess()

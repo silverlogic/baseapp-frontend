@@ -7,8 +7,17 @@ import {
   VisaCreditCardIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import {
+  Box,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  Typography,
+} from '@mui/material'
 
+import { CARD_BRANDS } from '../../utils'
 import AddCardModal from '../AddCardModal'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
@@ -26,11 +35,6 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
   const getCardIcon = (brand?: string) => {
-
-    const CARD_BRANDS = {
-  VISA: 'visa',
-  MASTERCARD: 'mastercard',
-};
     const cardBrand = brand?.toLowerCase() || ''
 
     switch (cardBrand) {
@@ -51,9 +55,18 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
     setIsAddCardModalOpen(false)
   }
 
-  return (
-    <>
-      {isEmpty ? (
+  const handleSelectPaymentMethod = (e: SelectChangeEvent<string>) => {
+    const selectedId = e.target.value as string
+    if (selectedId === 'add-new') {
+      handleOpenModal()
+    } else {
+      setSelectedPaymentMethodId(selectedId)
+    }
+  }
+
+  if (isEmpty) {
+    return (
+      <>
         <StyledButton fullWidth variant="outlined" color="primary" onClick={handleOpenModal}>
           <Box
             sx={{
@@ -72,77 +85,84 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
             <AddIcon color="action" />
           </Box>
         </StyledButton>
-      ) : (
-        <FormControl fullWidth>
-          <InputLabel id="payment-method-select-label">Select a Payment Method</InputLabel>
-          <Select
-            labelId="payment-method-select-label"
-            value={selectedPaymentMethodId}
-            label="Select a Payment Method"
-            onChange={(e) => {
-              if (e.target.value === 'add-new') {
-                handleOpenModal()
-              } else {
-                setSelectedPaymentMethodId(e.target.value as string)
-              }
-            }}
-            MenuProps={{
-              PaperProps: {
-                sx: {
-                  '& .MuiMenuItem-root': {
-                    py: 0.5,
-                  },
+        <AddCardModal
+          customerId={customerId}
+          stripe={stripe}
+          elements={elements}
+          open={isAddCardModalOpen}
+          onClose={handleCloseModal}
+          handleSetupSuccess={handleSetupSuccess}
+        />
+      </>
+    )
+  }
+
+  return (
+    <>
+      <FormControl fullWidth>
+        <InputLabel id="payment-method-select-label">Select a Payment Method</InputLabel>
+        <Select
+          labelId="payment-method-select-label"
+          value={selectedPaymentMethodId}
+          label="Select a Payment Method"
+          onChange={(e) => {
+            handleSelectPaymentMethod(e)
+          }}
+          MenuProps={{
+            PaperProps: {
+              sx: {
+                '& .MuiMenuItem-root': {
+                  py: 0.5,
                 },
               },
-            }}
-            sx={{
-              '& .MuiSelect-select': {
-                py: 1,
-              },
-            }}
-          >
-            {paymentMethods.map((pm) => (
-              <MenuItem
-                key={pm.id}
-                value={pm.id}
-                dense
-                sx={{
-                  py: 0.5,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <Box sx={{ mr: 2 }}>{getCardIcon(pm?.card?.brand)}</Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant="body2" fontWeight={500}>
-                      {pm?.card?.brand?.toUpperCase() || 'CARD'} ••• ••• •••{pm?.card?.last4}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Expires: {pm?.card?.expMonth}/{pm?.card?.expYear}
-                    </Typography>
-                  </Box>
+            },
+          }}
+          sx={{
+            '& .MuiSelect-select': {
+              py: 1,
+            },
+          }}
+        >
+          {paymentMethods.map((pm) => (
+            <MenuItem
+              key={pm.id}
+              value={pm.id}
+              dense
+              sx={{
+                py: 0.5,
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
+                <Box sx={{ mr: 2 }}>{getCardIcon(pm?.card?.brand)}</Box>
+                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                  <Typography variant="body2" fontWeight={500}>
+                    {pm?.card?.brand?.toUpperCase() || 'CARD'} ••• ••• •••{pm?.card?.last4}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Expires: {pm?.card?.expMonth}/{pm?.card?.expYear}
+                  </Typography>
                 </Box>
-              </MenuItem>
-            ))}
-            <MenuItem value="add-new">
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
-                  <Typography variant="body2">Add payment method</Typography>
-                </Box>
-                <AddIcon color="action" />
               </Box>
             </MenuItem>
-          </Select>
-        </FormControl>
-      )}
-
+          ))}
+          <MenuItem value="add-new">
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                justifyContent: 'space-between',
+              }}
+            >
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
+                <Typography variant="body2">Add payment method</Typography>
+              </Box>
+              <AddIcon color="action" />
+            </Box>
+          </MenuItem>
+        </Select>
+      </FormControl>
       <AddCardModal
         customerId={customerId}
         stripe={stripe}

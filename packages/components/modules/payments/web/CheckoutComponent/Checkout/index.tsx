@@ -10,13 +10,16 @@ import { AddressElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
 import useStripeHook from '../../hooks/useStripeHook'
-import ConfirmationSubscriptionModal from '../ConfirmationSubscriptionModal'
-import PaymentDropdown from '../paymentDropDown'
+import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
+import { formatPrice } from '../../utils'
+import DefaultConfirmationSubscriptionModal from '../ConfirmationSubscriptionModal'
+import PaymentDropdown from '../PaymentDropDown'
 import { CheckoutProps } from '../types'
 import { ProductContainer, StyledLoadingButton } from './styled'
-import { PAYMENT_METHOD_API_KEY } from '../../hooks/keys'
 
 const Checkout: FC<CheckoutProps> = ({
+  ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
+  ConfirmationSubscriptionModalProps = {},
   checkoutCustomerId,
   paymentMethods,
   product,
@@ -26,7 +29,6 @@ const Checkout: FC<CheckoutProps> = ({
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
-  const [isConfirmCardPaymentProcessing, setIsConfirmCardPaymentProcessing] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
   const { sendToast } = useNotification()
   const [isRetry, setIsRetry] = useState<boolean>(false)
@@ -40,12 +42,17 @@ const Checkout: FC<CheckoutProps> = ({
   const { useCreationSubscription } = useStripeHook()
   const { mutate: createSubscription, isPending: isCreatingSubscription } =
     useCreationSubscription()
+  const { mutateAsync: confirmCardPayment, isPending: isConfirmCardPaymentProcessing } =
+    useStripeHook().useConfirmCardPayment(stripe)
 
   const selectedMethod = useMemo(
     () => paymentMethods.find((pm) => pm.id === selectedPaymentMethodId),
     [selectedPaymentMethodId, paymentMethods],
   )
 
+  // On component mount, select the default payment method if available.
+  // This logic ensures the default payment method is selected only once during the initial render.
+  // If new payment methods are added later, the selection will be the new one.
   useEffect(() => {
     if (!hasMounted && paymentMethods.length > 0) {
       const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
@@ -90,7 +97,7 @@ const Checkout: FC<CheckoutProps> = ({
             name,
             address: {
               ...address,
-              line2: address.line2 ?? undefined,
+              line2: address.line2 ?? null,
             },
           },
         },
@@ -98,31 +105,30 @@ const Checkout: FC<CheckoutProps> = ({
           onSuccess: async (data) => {
             const { clientSecret } = data
             if (stripe && clientSecret) {
-              setIsConfirmCardPaymentProcessing(true)
-              const result = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: selectedPaymentMethodId,
-              })
-              setIsConfirmCardPaymentProcessing(false)
-              const { paymentIntent } = result
-              setOrderNumber(paymentIntent?.id ?? null)
-              if (result.error) {
-                const message = extractErrorMessage(result.error)
-                sendToast(message, { type: 'error' })
+              let paymentIntent = null
+              try {
+                paymentIntent = await confirmCardPayment({
+                  clientSecret,
+                  paymentMethodId: selectedPaymentMethodId,
+                })
+              } catch (error) {
+                const message = extractErrorMessage(error)
+                sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
                 setIsRetry(true)
-              } else {
-                if (paymentMethods?.length > 0) {
-                  setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
-                }
-                queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
-                setConfirmationModalOpen(true)
-                setIsRetry(false)
+                return
               }
+              setOrderNumber(paymentIntent?.id ?? null)
+              if (paymentMethods?.length > 0) {
+                setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
+              }
+              queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+              setConfirmationModalOpen(true)
+              setIsRetry(false)
             }
           },
           onError: (error: any) => {
             const message = extractErrorMessage(error)
             sendToast(message, { type: 'error' })
-            setIsConfirmCardPaymentProcessing(false)
             setIsRetry(true)
           },
         },
@@ -188,10 +194,11 @@ const Checkout: FC<CheckoutProps> = ({
                 {Number.isFinite(product?.defaultPrice?.unitAmount) && (
                   <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
                     <Typography variant="body2" fontWeight={700}>
-                      {(product?.defaultPrice?.unitAmount || 0 / 100).toLocaleString(product?.defaultPrice?.locale ||'en-US', {
-                      style: 'currency',
-                      currency: product?.defaultPrice?.currency || 'USD',
-                      })}
+                      {formatPrice(
+                        product?.defaultPrice?.unitAmount,
+                        product?.defaultPrice?.locale,
+                        product?.defaultPrice?.currency,
+                      )}
                     </Typography>
                   </Box>
                 )}
@@ -271,6 +278,7 @@ const Checkout: FC<CheckoutProps> = ({
         </Grid>
       </Grid>
       <ConfirmationSubscriptionModal
+        {...ConfirmationSubscriptionModalProps}
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
         orderNumber={orderNumber}

@@ -2,23 +2,21 @@
 
 import { FC, useEffect } from 'react'
 
-import { Box, LinearProgress } from '@mui/material'
+import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+
 import { Elements } from '@stripe/react-stripe-js'
 
 import useStripeHook from '../hooks/useStripeHook'
-import Checkout from './Checkout'
 import { getStripePromise } from '../utils/stripe'
+import Checkout from './Checkout'
+import { CheckoutComponentProps } from './types'
 
-interface CheckoutWrapperProps {
-  checkoutCustomerId: string
-  checkoutProductId: string
-  stripePublishableKey: string
-}
-
-const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
+const CheckoutComponent: FC<CheckoutComponentProps> = ({
   checkoutCustomerId,
   checkoutProductId,
   stripePublishableKey,
+  ConfirmationSubscriptionModal,
+  ConfirmationSubscriptionModalProps,
 }) => {
   const { useSetupIntent, useGetPaymentMethod, useGetProduct } = useStripeHook()
   const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
@@ -45,7 +43,8 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     createSetupIntent(checkoutCustomerId)
   }
 
-  const isNotReady = isPending ||
+  const isNotReady =
+    isPending ||
     isError ||
     isLoadingMethods ||
     isErrorMethods ||
@@ -54,11 +53,9 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     !product ||
     !setupIntent?.clientSecret
 
-  return isNotReady ? (
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress />
-    </Box>
-  ) : (
+  if (isNotReady) return <LoadingState />
+
+  return (
     <Elements
       stripe={getStripePromise(stripePublishableKey)}
       options={{ clientSecret: setupIntent?.clientSecret }}
@@ -70,8 +67,10 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
         setupClientSecret={setupIntent.clientSecret}
         isLoadingMethods={isLoadingMethods}
         handleSetupSuccess={handleSetupSuccess}
+        ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
+        ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
       />
     </Elements>
   )
 }
-export default CheckoutWrapper
+export default CheckoutComponent

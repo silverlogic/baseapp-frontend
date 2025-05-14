@@ -1,4 +1,4 @@
-import { CreateSubscriptionOptions } from '../types'
+import { CreateSubscriptionOptions } from '.'
 
 export interface SubscriptionRequestBody {
   remote_customer_id: string
