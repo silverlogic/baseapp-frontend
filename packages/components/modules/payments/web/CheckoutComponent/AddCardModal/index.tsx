@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 
+import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -9,7 +10,6 @@ import {
   Divider,
   IconButton,
   LinearProgress,
-  Modal,
   Theme,
   Typography,
   useMediaQuery,
@@ -92,7 +92,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
     return 600
   }
   return (
-    <Modal open={open} onClose={onClose}>
+    <Dialog open={open} onClose={onClose}>
       <AddCardModalContainer
         sx={{
           width: getModalWidth(),
@@ -148,7 +148,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
           </Box>
         )}
       </AddCardModalContainer>
-    </Modal>
+    </Dialog>
   )
 }
 
