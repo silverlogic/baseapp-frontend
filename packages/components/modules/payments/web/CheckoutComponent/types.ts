@@ -4,12 +4,13 @@ import { IProduct, StripePaymentMethod } from '../types'
 import { ConfirmationSubscriptionModalProps } from './ConfirmationSubscriptionModal/types'
 
 export interface CheckoutProps {
+  lastAddedPaymentMethodIdDuringSession: string | null
   isLoadingMethods: boolean
   checkoutCustomerId: string
   paymentMethods: StripePaymentMethod[]
   product: IProduct
   setupClientSecret: string
-  handleSetupSuccess: () => void
+  handleSetupSuccess: (id: string) => void
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
   ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
 }

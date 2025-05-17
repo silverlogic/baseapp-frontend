@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -18,6 +18,7 @@ import { CheckoutProps } from '../types'
 import { ProductContainer, StyledLoadingButton } from './styled'
 
 const Checkout: FC<CheckoutProps> = ({
+  lastAddedPaymentMethodIdDuringSession,
   ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps = {},
   checkoutCustomerId,
@@ -27,13 +28,25 @@ const Checkout: FC<CheckoutProps> = ({
   handleSetupSuccess,
 }) => {
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
+  const getInitialPaymentMethodId = () => {
+    if (paymentMethods.length > 0 && lastAddedPaymentMethodIdDuringSession !== null)
+      return lastAddedPaymentMethodIdDuringSession
+
+    if (paymentMethods.length > 0 && lastAddedPaymentMethodIdDuringSession == null) {
+      const defaultPaymentMethod = paymentMethods.find((pm) => pm.isDefault)
+      return defaultPaymentMethod ? defaultPaymentMethod.id : paymentMethods[0]?.id || ''
+    }
+    return ''
+  }
+
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>(
+    getInitialPaymentMethodId(),
+  )
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
   const { sendToast } = useNotification()
   const [isRetry, setIsRetry] = useState<boolean>(false)
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false)
-  const [hasMounted, setHasMounted] = useState<boolean>(false)
 
   const elements = useElements()
   const stripe = useStripe()
@@ -49,22 +62,6 @@ const Checkout: FC<CheckoutProps> = ({
     () => paymentMethods.find((pm) => pm.id === selectedPaymentMethodId),
     [selectedPaymentMethodId, paymentMethods],
   )
-
-  // On component mount, select the default payment method if available.
-  // This logic ensures the default payment method is selected only once during the initial render.
-  // If new payment methods are added later, the selection will be the new one.
-  useEffect(() => {
-    if (!hasMounted && paymentMethods.length > 0) {
-      const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
-      setSelectedPaymentMethodId(
-        defaultPaymentMethod ? defaultPaymentMethod.id : paymentMethods[0]?.id || '',
-      )
-      setHasMounted(true)
-    } else {
-      setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentMethods])
 
   const extractErrorMessage = (error: any): string =>
     error?.response?.data?.nonFieldErrors?.[0] ||

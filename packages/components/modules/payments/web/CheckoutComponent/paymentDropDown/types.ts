@@ -1,6 +1,6 @@
 import { Stripe, StripeElements } from '@stripe/stripe-js'
-import { StripePaymentMethod } from '../../types'
 
+import { StripePaymentMethod } from '../../types'
 
 export interface PaymentDropdownProps {
   paymentMethods: StripePaymentMethod[]
@@ -11,5 +11,5 @@ export interface PaymentDropdownProps {
   setIsAddCardModalOpen: (isOpen: boolean) => void
   isAddCardModalOpen: boolean
   customerId: string
-  handleSetupSuccess: () => void
+  handleSetupSuccess: (id: string) => void
 }

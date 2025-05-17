@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
@@ -18,6 +18,9 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   ConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
 }) => {
+  const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
+    useState<string | null>(null)
+
   const { useSetupIntent, useGetPaymentMethod, useGetProduct } = useStripeHook()
   const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
 
@@ -39,7 +42,10 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     }
   }, [createSetupIntent])
 
-  const handleSetupSuccess = () => {
+  const handleSetupSuccess = (paymentMethodId: string) => {
+    if (paymentMethodId) {
+      setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
+    }
     createSetupIntent(checkoutCustomerId)
   }
 
@@ -61,6 +67,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
       options={{ clientSecret: setupIntent?.clientSecret }}
     >
       <Checkout
+        lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
         checkoutCustomerId={checkoutCustomerId}
         paymentMethods={paymentMethods || []}
         product={product}

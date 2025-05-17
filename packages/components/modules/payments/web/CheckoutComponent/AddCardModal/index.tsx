@@ -1,24 +1,13 @@
 import { FC, useState } from 'react'
 
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
-import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import {
-  Box,
-  Button,
-  Divider,
-  IconButton,
-  LinearProgress,
-  Theme,
-  Typography,
-  useMediaQuery,
-} from '@mui/material'
+import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
-import { AddCardModalContainer } from './styled'
 import { AddCardModalProps } from './types'
 
 const AddCardModal: FC<AddCardModalProps> = ({
@@ -31,8 +20,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
 }) => {
   const queryClient = useQueryClient()
   const { sendToast } = useNotification()
-  const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
-  const isTablet = useMediaQuery<Theme>((theme) => theme.breakpoints.between('sm', 'md'))
   const [isAddingCardPaymentProcessing, setIsAddingCardPaymentProcessing] = useState(false)
 
   const handleConfirmSetup = async () => {
@@ -45,7 +32,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
       sendToast('Address element is missing. Please try again.', { type: 'error' })
       return
     }
-    console.log('open', open)
 
     const addressValue = await addressElement.getValue()
     if (!addressValue.complete) {
@@ -56,7 +42,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
     try {
       setIsAddingCardPaymentProcessing(true)
 
-      const result = await stripe.confirmSetup({
+      const { setupIntent, error } = await stripe.confirmSetup({
         elements,
         confirmParams: {
           return_url: window.location.href,
@@ -64,8 +50,8 @@ const AddCardModal: FC<AddCardModalProps> = ({
         redirect: 'if_required',
       })
 
-      if (result.error) {
-        sendToast(`Error confirming card: ${result.error.message || 'Unknown error'}`, {
+      if (error) {
+        sendToast(`Error confirming card: ${error.message || 'Unknown error'}`, {
           type: 'error',
         })
         setIsAddingCardPaymentProcessing(false)
@@ -73,8 +59,9 @@ const AddCardModal: FC<AddCardModalProps> = ({
         await queryClient.invalidateQueries({
           queryKey: [PAYMENT_METHOD_API_KEY.get()],
         })
+        // renew the session is required to get the new payment method
         if (handleSetupSuccess) {
-          handleSetupSuccess()
+          handleSetupSuccess(setupIntent?.payment_method as string)
         }
         sendToast('Card added successfully')
         onClose()
@@ -86,68 +73,57 @@ const AddCardModal: FC<AddCardModalProps> = ({
       setIsAddingCardPaymentProcessing(false)
     }
   }
-  const getModalWidth = () => {
-    if (isMobile) return '90%'
-    if (isTablet) return '70%'
-    return 600
-  }
+
   return (
     <Dialog open={open} onClose={onClose}>
-      <AddCardModalContainer
-        sx={{
-          width: getModalWidth(),
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Typography variant="h6">Add payment method</Typography>
-          <IconButton onClick={onClose}>
-            <CloseIcon sx={{ fontSize: '24px' }} />
-          </IconButton>
-        </Box>
-
-        <Typography variant="subtitle2">Card Information</Typography>
-
-        <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
-        {elements ? (
-          <>
-            <PaymentElement />
-            <Typography variant="subtitle2">Billing Address</Typography>
-
-            <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
-            <AddressElement options={{ mode: 'billing' }} />
-            <Box
-              sx={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: 2,
-              }}
-            >
-              <Button variant="outlined" color="inherit" onClick={onClose} sx={{ width: 'auto' }}>
-                Cancel
-              </Button>
-              <Button
-                variant="contained"
-                color="inherit"
-                sx={{ width: 'auto' }}
-                onClick={handleConfirmSetup}
-                disabled={!customerId || isAddingCardPaymentProcessing}
-              >
-                Confirm
-              </Button>
-            </Box>
-          </>
-        ) : (
-          <Box sx={{ width: '100%' }}>
-            <LinearProgress />
+      {open && (
+        <Box padding={4} display="flex" flexDirection="column" gap={2}>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Typography variant="h6">Add payment method</Typography>
           </Box>
-        )}
-      </AddCardModalContainer>
+          <Typography variant="subtitle2">Card Information</Typography>
+          <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
+          {elements ? (
+            <>
+              <PaymentElement />
+              <Typography variant="subtitle2">Billing Address</Typography>
+
+              <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
+              <AddressElement options={{ mode: 'billing' }} />
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: 2,
+                }}
+              >
+                <Button variant="outlined" color="inherit" onClick={onClose} sx={{ width: 'auto' }}>
+                  Cancel
+                </Button>
+                <Button
+                  variant="contained"
+                  color="inherit"
+                  sx={{ width: 'auto' }}
+                  onClick={handleConfirmSetup}
+                  disabled={!customerId || isAddingCardPaymentProcessing}
+                >
+                  Confirm
+                </Button>
+              </Box>
+            </>
+          ) : (
+            <Box sx={{ width: '100%' }}>
+              <LinearProgress />
+            </Box>
+          )}
+        </Box>
+      )}
     </Dialog>
   )
 }
