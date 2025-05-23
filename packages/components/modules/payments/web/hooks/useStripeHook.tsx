@@ -9,10 +9,11 @@ const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
-  const useGetCustomer = () =>
+  const useGetCustomer = ({ enabled = true }: { enabled?: boolean } = {}) =>
     useQuery({
       queryKey: ['useGetCustomer'],
       queryFn: () => StripeApi.getCustomer(),
+      enabled,
     })
 
   const useCreateCustomer = () =>
@@ -89,6 +90,12 @@ const useStripeHook = () => {
       },
     })
 
+  const useListProducts = () =>
+    useQuery({
+      queryKey: ['useListProducts'],
+      queryFn: () => StripeApi.listProducts(),
+    })
+
   const useGetProduct = (customerId: string) =>
     useQuery({
       queryKey: ['useGetProduct', customerId],
@@ -115,6 +122,7 @@ const useStripeHook = () => {
     useUpdatePaymentMethod,
     useDeletePaymentMethod,
     useSetupIntent,
+    useListProducts,
     useGetProduct,
     useCreationSubscription,
   }

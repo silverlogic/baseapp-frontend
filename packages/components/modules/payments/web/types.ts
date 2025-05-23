@@ -35,11 +35,18 @@ export interface IStripePaymentMethod {
 export interface IProduct {
   id: string
   name: string
+  description: string
   images: string[]
   defaultPrice: {
     id: string
     unitAmount: number
+    recurring: {
+      interval: string
+    }
   }
+  marketingFeatures: {
+    name: string
+  }[]
 }
 
 export interface ISubscription {

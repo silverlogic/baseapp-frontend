@@ -44,6 +44,8 @@ class StripeApi {
       params: { customer_id: customerId, is_default: isDefault },
     })
 
+  static listProducts = (): Promise<IProduct[]> => axios.get(`${baseUrl}/stripe/products`)
+
   static getProduct = (productId: string): Promise<IProduct> =>
     axios.get(`${baseUrl}/stripe/products/${productId}`)
 
