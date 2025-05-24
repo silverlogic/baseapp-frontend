@@ -27,7 +27,7 @@ const Checkout: FC<CheckoutProps> = ({
   isLoadingMethods,
   handleSetupSuccess,
 }) => {
-  const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
+  const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
   const getInitialPaymentMethodId = () => {
     if (paymentMethods.length > 0 && lastAddedPaymentMethodIdDuringSession !== null)
       return lastAddedPaymentMethodIdDuringSession
@@ -165,14 +165,27 @@ const Checkout: FC<CheckoutProps> = ({
 
   return (
     <Box sx={{ width: '100%', padding: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 4,
+        }}
+      >
+        <Typography variant="h3" fontWeight={700}>
+          Checkout
+        </Typography>
+      </Box>
+
       <Grid
         container
-        spacing={3}
+        spacing={{ xs: 3, md: 8 }}
         direction={isMobile ? 'column' : 'row-reverse'}
         justifyContent="center"
       >
         <Grid item xs={12} sm={6}>
-          <Box sx={{ maxWidth: 400 }} display="flex" flexDirection="column" gap={2}>
+          <Box display="flex" flexDirection="column" gap={2}>
             <ProductContainer>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 {product?.images.length > 0 && (
@@ -231,7 +244,11 @@ const Checkout: FC<CheckoutProps> = ({
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Box sx={{ maxWidth: 400 }}>
+          <Box
+            sx={{
+              minWidth: { md: 400 },
+            }}
+          >
             <Box
               sx={{
                 display: 'flex',
@@ -256,8 +273,12 @@ const Checkout: FC<CheckoutProps> = ({
               )}
               {shouldRenderAddressElement ? (
                 <>
-                  <Typography variant="subtitle2">Billing Address</Typography>
-
+                  <Box display="flex" flexDirection="column" gap="none">
+                    <Typography variant="subtitle2">Address</Typography>
+                    <Typography variant="caption" color="text.primary">
+                      Used to calculate taxes.
+                    </Typography>
+                  </Box>
                   <Divider
                     variant="fullWidth"
                     sx={{ backgroundColor: 'divider', color: 'divider' }}

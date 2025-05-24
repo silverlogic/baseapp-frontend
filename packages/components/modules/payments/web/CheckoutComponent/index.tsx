@@ -9,6 +9,7 @@ import { Elements } from '@stripe/react-stripe-js'
 import useStripeHook from '../hooks/useStripeHook'
 import { getStripePromise } from '../utils/stripe'
 import Checkout from './Checkout'
+import { StyledBox, StyledContainer } from './styled'
 import { CheckoutComponentProps } from './types'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
@@ -66,17 +67,21 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
       stripe={getStripePromise(stripePublishableKey)}
       options={{ clientSecret: setupIntent?.clientSecret }}
     >
-      <Checkout
-        lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
-        checkoutCustomerId={checkoutCustomerId}
-        paymentMethods={paymentMethods || []}
-        product={product}
-        setupClientSecret={setupIntent.clientSecret}
-        isLoadingMethods={isLoadingMethods}
-        handleSetupSuccess={handleSetupSuccess}
-        ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
-        ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
-      />
+      <StyledContainer>
+        <StyledBox>
+          <Checkout
+            lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
+            checkoutCustomerId={checkoutCustomerId}
+            paymentMethods={paymentMethods || []}
+            product={product}
+            setupClientSecret={setupIntent.clientSecret}
+            isLoadingMethods={isLoadingMethods}
+            handleSetupSuccess={handleSetupSuccess}
+            ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
+            ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
+          />
+        </StyledBox>
+      </StyledContainer>
     </Elements>
   )
 }
