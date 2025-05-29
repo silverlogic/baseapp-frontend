@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.1.2
+
+### Patch Changes
+
+- add stripe checkout page
+
 ## 1.1.1
 
 ### Patch Changes
