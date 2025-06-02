@@ -1,25 +1,27 @@
 'use client'
 
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 
-import { Box, LinearProgress } from '@mui/material'
+import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+
 import { Elements } from '@stripe/react-stripe-js'
 
-import { getStripePromise } from '../../stripe'
 import useStripeHook from '../hooks/useStripeHook'
+import { getStripePromise } from '../utils/stripe'
 import Checkout from './Checkout'
+import { StyledBox, StyledContainer } from './styled'
+import { CheckoutComponentProps } from './types'
 
-interface CheckoutWrapperProps {
-  checkoutCustomerId: string
-  checkoutProductId: string
-  stripePublishableKey: string
-}
-
-const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
+const CheckoutComponent: FC<CheckoutComponentProps> = ({
   checkoutCustomerId,
   checkoutProductId,
   stripePublishableKey,
+  ConfirmationSubscriptionModal,
+  ConfirmationSubscriptionModalProps,
 }) => {
+  const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
+    useState<string | null>(null)
+
   const { useSetupIntent, useListPaymentMethods, useGetProduct } = useStripeHook()
   const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
 
@@ -41,36 +43,46 @@ const CheckoutWrapper: FC<CheckoutWrapperProps> = ({
     }
   }, [createSetupIntent])
 
-  const handleSetupSuccess = () => {
+  const handleSetupSuccess = (paymentMethodId: string) => {
+    if (paymentMethodId) {
+      setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
+    }
     createSetupIntent(checkoutCustomerId)
   }
 
-  return isPending ||
+  const isNotReady =
+    isPending ||
     isError ||
     isLoadingMethods ||
     isErrorMethods ||
     isLoadingProduct ||
     isErrorProduct ||
     !product ||
-    !setupIntent?.clientSecret ? (
-    <Box sx={{ width: '100%' }}>
-      <LinearProgress />
-    </Box>
-  ) : (
+    !setupIntent?.clientSecret
+
+  if (isNotReady) return <LoadingState />
+
+  return (
     <Elements
       stripe={getStripePromise(stripePublishableKey)}
       options={{ clientSecret: setupIntent?.clientSecret }}
     >
-      <Checkout
-        checkoutCustomerId={checkoutCustomerId}
-        paymentMethods={paymentMethods || []}
-        product={product}
-        setupClientSecret={setupIntent.clientSecret}
-        isLoadingMethods={isLoadingMethods}
-        handleSetupSuccess={handleSetupSuccess}
-      />
+      <StyledContainer>
+        <StyledBox>
+          <Checkout
+            lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
+            checkoutCustomerId={checkoutCustomerId}
+            paymentMethods={paymentMethods || []}
+            product={product}
+            setupClientSecret={setupIntent.clientSecret}
+            isLoadingMethods={isLoadingMethods}
+            handleSetupSuccess={handleSetupSuccess}
+            ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
+            ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
+          />
+        </StyledBox>
+      </StyledContainer>
     </Elements>
   )
 }
-
-export default CheckoutWrapper
+export default CheckoutComponent

@@ -1,3 +1,5 @@
+import { BillingDetails, PaymentMethod } from '@stripe/stripe-js'
+
 export interface ICustomer {
   remoteCustomerId: string
   entityType: string
@@ -10,25 +12,15 @@ export interface ISetupIntent {
 
 export interface IStripePaymentMethod {
   id: string
-  isDefault: boolean
-  card?: {
-    brand: string
-    last4: string
-    expMonth: number
-    expYear: number
+  isDefault?: boolean
+  card?: PaymentMethod.Card & {
+    expMonth?: number
+    expYear?: number
   }
-  billingDetails?: {
+  billingDetails?: BillingDetails & {
     address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
       postalCode?: string
-      country?: string
     }
-    name?: string
-    email?: string
-    phone?: string
   }
 }
 
@@ -39,6 +31,8 @@ export interface IProduct {
   defaultPrice: {
     id: string
     unitAmount: number
+    currency?: string
+    locale?: string
   }
 }
 
@@ -53,15 +47,13 @@ export interface CreateSubscriptionOptions {
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
-  billingDetails?: {
-    name?: string
-    address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
-      postalCode?: string
-      country?: string
-    }
-  }
+  billingDetails?: BillingDetails
+}
+
+export interface SubscriptionRequestBody {
+  remote_customer_id: string
+  price_id: string
+  payment_method_id?: string
+  allow_incomplete?: boolean
+  billing_details?: CreateSubscriptionOptions['billingDetails']
 }

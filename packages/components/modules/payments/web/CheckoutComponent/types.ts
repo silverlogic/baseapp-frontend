@@ -1,30 +1,24 @@
+import { FC } from 'react'
+
 import { IProduct, IStripePaymentMethod } from '../types'
-
-export interface CheckoutComponentProps {
-  paymentMethods: IStripePaymentMethod[]
-  product: IProduct
-  setupClientSecret: string
-  onPaymentSuccess?: (subscriptionId: string) => void
-  onPaymentError?: (error: string) => void
-}
-
-export interface BillingDetails {
-  name?: string
-  address?: {
-    line1?: string
-    line2?: string
-    city?: string
-    state?: string
-    postalCode?: string
-    country?: string
-  }
-}
+import { ConfirmationSubscriptionModalProps } from './ConfirmationSubscriptionModal/types'
 
 export interface CheckoutProps {
+  lastAddedPaymentMethodIdDuringSession: string | null
   isLoadingMethods: boolean
   checkoutCustomerId: string
   paymentMethods: IStripePaymentMethod[]
   product: IProduct
   setupClientSecret: string
-  handleSetupSuccess: () => void
+  handleSetupSuccess: (id: string) => void
+  ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
+  ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
+}
+
+export interface CheckoutComponentProps {
+  checkoutCustomerId: string
+  checkoutProductId: string
+  stripePublishableKey: string
+  ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
+  ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
 }

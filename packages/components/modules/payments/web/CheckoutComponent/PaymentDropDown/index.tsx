@@ -1,11 +1,16 @@
 import { FC } from 'react'
 
-import { AddIcon, CreditCardIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import {
+  AddIcon,
+  CheckMarkIcon,
+  CreditCardIcon,
+} from '@baseapp-frontend/design-system/components/web/icons'
 
-import { Box, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 
 import AddCardModal from '../AddCardModal'
 import { getCardIcon } from '../utils'
+import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
 
@@ -21,12 +26,22 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   handleSetupSuccess,
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
+
   const handleOpenModal = () => {
     setIsAddCardModalOpen(true)
   }
 
   const handleCloseModal = () => {
     setIsAddCardModalOpen(false)
+  }
+
+  const handleSelectPaymentMethod = (e: SelectChangeEvent<string>) => {
+    const selectedId = e.target.value as string
+    if (selectedId === 'add-new') {
+      handleOpenModal()
+    } else {
+      setSelectedPaymentMethodId(selectedId)
+    }
   }
 
   return (
@@ -52,17 +67,16 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
         </StyledButton>
       ) : (
         <FormControl fullWidth>
-          <InputLabel id="payment-method-select-label">Select a Payment Method</InputLabel>
           <Select
             labelId="payment-method-select-label"
             value={selectedPaymentMethodId}
-            label="Select a Payment Method"
             onChange={(e) => {
-              if (e.target.value === 'add-new') {
-                handleOpenModal()
-              } else {
-                setSelectedPaymentMethodId(e.target.value as string)
-              }
+              handleSelectPaymentMethod(e)
+            }}
+            renderValue={(selectedId) => {
+              const pm = paymentMethods.find((pam) => pam.id === selectedId)
+              if (!pm) return ''
+              return <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
             }}
             MenuProps={{
               PaperProps: {
@@ -80,24 +94,15 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
             }}
           >
             {paymentMethods.map((pm) => (
-              <MenuItem
-                key={pm.id}
-                value={pm.id}
-                dense
-                sx={{
-                  py: 0.5,
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-                  <Box sx={{ mr: 2 }}>{getCardIcon(pm?.card?.brand)}</Box>
-                  <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                    <Typography variant="body2" fontWeight={500}>
-                      {pm?.card?.brand?.toUpperCase() ?? 'CARD'} ••• ••• •••{pm?.card?.last4}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Expires: {pm?.card?.expMonth}/{pm?.card?.expYear}
-                    </Typography>
-                  </Box>
+              <MenuItem key={pm.id} value={pm.id} dense sx={{ py: 0.5 }}>
+                <Box
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ width: '100%' }}
+                >
+                  <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
+                  {pm.id === selectedPaymentMethodId && <CheckMarkIcon color="action" />}
                 </Box>
               </MenuItem>
             ))}

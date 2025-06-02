@@ -1,7 +1,9 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import { CONFIRM_CARD_PAYMENT_API_KEY } from '../services/keys'
 import StripeApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
 
@@ -89,6 +91,32 @@ const useStripeHook = () => {
       },
     })
 
+  const useConfirmCardPayment = (stripe: Stripe | null) =>
+    useMutation({
+      mutationFn: async ({
+        clientSecret,
+        paymentMethodId,
+      }: {
+        clientSecret: string
+        paymentMethodId: string
+      }) => {
+        if (!stripe) {
+          throw new Error('Stripe is not initialized.')
+        }
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethodId,
+        })
+        if (result.error) {
+          throw new Error(result.error.message || 'Failed to confirm card payment.')
+        }
+        return result.paymentIntent
+      },
+      onError: (error) => {
+        sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
+      },
+      mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
+    })
+
   const useGetProduct = (customerId: string) =>
     useQuery({
       queryKey: ['useGetProduct', customerId],
@@ -115,6 +143,7 @@ const useStripeHook = () => {
     useUpdatePaymentMethod,
     useDeletePaymentMethod,
     useSetupIntent,
+    useConfirmCardPayment,
     useGetProduct,
     useCreationSubscription,
   }

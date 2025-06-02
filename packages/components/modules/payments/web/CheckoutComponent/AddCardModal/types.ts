@@ -6,5 +6,5 @@ export interface AddCardModalProps {
   onClose: () => void
   stripe: Stripe
   elements: StripeElements
-  handleSetupSuccess: () => void
+  handleSetupSuccess: (id: string) => void
 }
