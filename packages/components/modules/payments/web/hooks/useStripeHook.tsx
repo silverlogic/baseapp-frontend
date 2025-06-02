@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import { CONFIRM_CARD_PAYMENT_API_KEY } from '../services/keys'
 import StripeApi from '../services/stripe'
-import { CreateSubscriptionOptions } from '../types'
+import { CreateSubscriptionOptions, Subscription } from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -136,6 +136,49 @@ const useStripeHook = () => {
       mutationKey: ['useCreationSubscription'],
     })
 
+  const useGetSubscription = (subscriptionId: string) =>
+    useQuery({
+      queryKey: ['useGetSubscription', subscriptionId],
+      queryFn: () => StripeApi.getSubscription(subscriptionId),
+      enabled: !!subscriptionId,
+    })
+
+  const useCancelSubscription = (subscriptionId: string, refetch: () => void) =>
+    useMutation({
+      mutationFn: () => StripeApi.cancelSubscription(subscriptionId),
+      onSuccess: () => {
+        sendToast('Subscription cancelled successfully.', { type: 'success' })
+        refetch()
+      },
+      onError: () => {
+        sendToast(`Failed to cancel subscription`, { type: 'error' })
+      },
+      mutationKey: ['useCancelSubscription', subscriptionId],
+    })
+
+  const useUpdateSubscription = (
+    subscriptionId: string,
+    refetch: () => void,
+    options: {
+      onSuccess?: (response: any, variables: Partial<Subscription>, context: any) => void
+      onError?: (error: any, variables: Partial<Subscription>, context: any) => void
+    } = {},
+  ) =>
+    useMutation({
+      mutationFn: (updateData: Partial<Subscription>) =>
+        StripeApi.updateSubscription(subscriptionId, updateData),
+      onSuccess: (response, variables, context) => {
+        sendToast('Subscription updated successfully.', { type: 'success' })
+        refetch()
+        options?.onSuccess?.(response, variables, context)
+      },
+      onError: (error, variables, context) => {
+        sendToast(`Failed to update subscription: ${error.message}`, { type: 'error' })
+        options?.onError?.(error, variables, context)
+      },
+      mutationKey: ['useUpdateSubscription', subscriptionId],
+    })
+
   return {
     useGetCustomer,
     useCreateCustomer,
@@ -146,6 +189,9 @@ const useStripeHook = () => {
     useConfirmCardPayment,
     useGetProduct,
     useCreationSubscription,
+    useGetSubscription,
+    useCancelSubscription,
+    useUpdateSubscription,
   }
 }
 

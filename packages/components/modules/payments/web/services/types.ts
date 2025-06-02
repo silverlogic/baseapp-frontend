@@ -1,4 +1,4 @@
-import { CreateSubscriptionOptions, IStripePaymentMethod } from '../types'
+import { CreateSubscriptionOptions, PaymentMethod } from '../types'
 
 export interface SubscriptionRequestBody {
   remote_customer_id: string
@@ -8,7 +8,7 @@ export interface SubscriptionRequestBody {
   billing_details?: CreateSubscriptionOptions['billingDetails']
 }
 
-export type UpdatePaymentMethodRequestBody = Partial<IStripePaymentMethod> & {
+export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
   customer_id: string
   default_payment_method_id?: string
 }
