@@ -2,10 +2,10 @@ import { FC } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import { StripePaymentMethod } from '../../types'
+import { IStripePaymentMethod } from '../../types'
 
 const PaymentMethodDisplay: FC<{
-  pm: StripePaymentMethod
+  pm: IStripePaymentMethod
   getCardIcon: (brand?: string) => JSX.Element
 }> = ({ pm, getCardIcon }) => (
   <Box sx={{ display: 'flex', alignItems: 'center' }}>
