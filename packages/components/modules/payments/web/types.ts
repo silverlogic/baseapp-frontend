@@ -1,19 +1,19 @@
-import { BillingDetails, PaymentMethod } from '@stripe/stripe-js'
+import { BillingDetails, PaymentMethod as StripePaymentMethod} from '@stripe/stripe-js'
 
-export interface ICustomer {
+export interface Customer {
   remoteCustomerId: string
   entityType: string
   entityId: number
 }
 
-export interface ISetupIntent {
+export interface SetupIntent {
   clientSecret: string
 }
 
-export interface IStripePaymentMethod {
+export interface PaymentMethod {
   id: string
   isDefault?: boolean
-  card?: PaymentMethod.Card & {
+  card?: StripePaymentMethod.Card & {
     expMonth?: number
     expYear?: number
   }
@@ -24,7 +24,7 @@ export interface IStripePaymentMethod {
   }
 }
 
-export interface IProduct {
+export interface Product {
   id: string
   name: string
   images: string[]
@@ -36,7 +36,7 @@ export interface IProduct {
   }
 }
 
-export interface ISubscription {
+export interface Subscription {
   id: string
   clientSecret?: string
   status: string

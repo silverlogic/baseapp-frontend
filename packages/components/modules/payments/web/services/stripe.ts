@@ -2,37 +2,37 @@ import { axios } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
-  ICustomer,
-  IProduct,
-  ISetupIntent,
-  IStripePaymentMethod,
-  ISubscription,
+  Customer,
+  Product,
+  SetupIntent,
+  PaymentMethod,
+  Subscription,
 } from '../types'
 import { SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from './types'
 
 const baseUrl = '/payments'
 
 class StripeApi {
-  static getCustomer = (userId?: string): Promise<ICustomer> =>
+  static getCustomer = (userId?: string): Promise<Customer> =>
     axios.get(`${baseUrl}/stripe/customers/${userId ?? 'me'}`)
 
-  static createCustomer = (userId?: string): Promise<ICustomer> =>
+  static createCustomer = (userId?: string): Promise<Customer> =>
     axios.post(`${baseUrl}/stripe/customers`, {
       ...(userId && { user_id: userId }),
     })
 
-  static createSetupIntent = (customerId: string): Promise<ISetupIntent> =>
+  static createSetupIntent = (customerId: string): Promise<SetupIntent> =>
     axios.post(`${baseUrl}/stripe/payment-methods`, {
       customer_id: customerId,
     })
 
-  static listPaymentMethods = (customerId: string): Promise<IStripePaymentMethod[]> =>
+  static listPaymentMethods = (customerId: string): Promise<PaymentMethod[]> =>
     axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`)
 
   static updatePaymentMethod = (
     paymentMethodId: string,
     payload: UpdatePaymentMethodRequestBody,
-  ): Promise<IStripePaymentMethod> =>
+  ): Promise<PaymentMethod> =>
     axios.put(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, payload)
 
   static deletePaymentMethod = (
@@ -44,7 +44,7 @@ class StripeApi {
       params: { customer_id: customerId, is_default: isDefault },
     })
 
-  static getProduct = (productId: string): Promise<IProduct> =>
+  static getProduct = (productId: string): Promise<Product> =>
     axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
@@ -53,7 +53,7 @@ class StripeApi {
     paymentMethodId,
     allowIncomplete,
     billingDetails,
-  }: CreateSubscriptionOptions): Promise<ISubscription> => {
+  }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
       remote_customer_id: customerId,
       price_id: priceId,
