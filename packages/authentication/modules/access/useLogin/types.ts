@@ -13,7 +13,7 @@ export type LoginReturn<T extends ApiClass> = Awaited<ReturnType<T['login']>>
 
 export interface UseLoginOptions<TApiClass extends ApiClass = typeof AuthApi>
   extends CustomJWTKeyNames {
-  loginFormOptions?: UseFormProps<Partial<LoginParams<TApiClass>>>
+  loginFormOptions?: UseFormProps<LoginParams<TApiClass>>
   loginOptions?: UseMutationOptions<LoginReturn<TApiClass>, unknown, LoginParams<TApiClass>, any>
   mfaOptions?: UseMutationOptions<LoginResponse, unknown, LoginMfaRequest, any>
   ApiClass?: TApiClass

@@ -1,7 +1,7 @@
 import { type JWTResponse } from '../../../types/jwt'
 import { getExpoConstant } from '../../expo'
 
-export const getAccessToken = async (refreshToken: string) => {
+export const getAccessToken = async (refreshToken?: string | null) => {
   if (!refreshToken) {
     throw new Error('No refresh token provided.')
   }

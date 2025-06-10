@@ -68,14 +68,7 @@ describe('NavMini Component', () => {
   it('displays a compact navigation with accessible icons and labels', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
-        <NavMini
-          navData={mockNavData}
-          openNav={false}
-          onCloseNav={cy.stub()}
-          LogoIcon={LogoIcon}
-          settings={createTheme().settings}
-          setSettings={cy.stub()}
-        />
+        <NavMini navData={mockNavData} openNav={false} onCloseNav={cy.stub()} LogoIcon={LogoIcon} />
       </ThemeProvider>,
     )
 
@@ -107,18 +100,9 @@ describe('NavMini Component', () => {
 
   it('expands to vertical layout when toggle button is clicked', () => {
     const setSettings = cy.stub().as('setSettings')
-    const initialSettings = createTheme().settings
-
     cy.mount(
       <ThemeProvider {...createTheme()}>
-        <NavMini
-          navData={mockNavData}
-          openNav={false}
-          onCloseNav={cy.stub()}
-          LogoIcon={LogoIcon}
-          settings={initialSettings}
-          setSettings={setSettings}
-        />
+        <NavMini navData={mockNavData} openNav={false} onCloseNav={cy.stub()} LogoIcon={LogoIcon} />
       </ThemeProvider>,
     )
 
@@ -137,14 +121,7 @@ describe('NavMini Component', () => {
 
     cy.mount(
       <ThemeProvider {...createTheme()}>
-        <NavMini
-          navData={mockNavData}
-          openNav={false}
-          onCloseNav={cy.stub()}
-          LogoIcon={LogoIcon}
-          settings={{ ...initialSettings, themeLayout: 'vertical' }}
-          setSettings={setSettings}
-        />
+        <NavMini navData={mockNavData} openNav={false} onCloseNav={cy.stub()} LogoIcon={LogoIcon} />
       </ThemeProvider>,
     )
 
@@ -158,14 +135,7 @@ describe('NavMini Component', () => {
   it('displays logo and toggle button in accessible positions', () => {
     cy.mount(
       <ThemeProvider {...createTheme()}>
-        <NavMini
-          navData={mockNavData}
-          openNav={false}
-          onCloseNav={cy.stub()}
-          LogoIcon={LogoIcon}
-          settings={createTheme().settings}
-          setSettings={cy.stub()}
-        />
+        <NavMini navData={mockNavData} openNav={false} onCloseNav={cy.stub()} LogoIcon={LogoIcon} />
       </ThemeProvider>,
     )
 
