@@ -74,13 +74,13 @@ const MemberItem: FC<MemberItemProps> = ({
     }
   }
 
-  const handleRoleChange = (event: SelectChangeEvent<{ value: ProfileRoles }>) => {
+  const handleRoleChange = (event: SelectChangeEvent<ProfileRoles>) => {
     if (event.target.value === MEMBER_ROLES.admin) {
       setOpenConfirmChangeMember(true)
       return
     }
     if (currentProfile?.id && userId) {
-      changeRole(event?.target?.value as ProfileRoles)
+      changeRole(event.target.value as ProfileRoles)
     }
   }
 
@@ -101,12 +101,12 @@ const MemberItem: FC<MemberItemProps> = ({
         <Box>
           <Select
             value={memberRole}
-            onChange={(event, _) => {
+            onChange={(event: SelectChangeEvent<ProfileRoles>) => {
               const { value } = event.target
               if (value === MEMBER_ACTIONS.remove) {
                 handleRemoveMemberDialog()
               } else {
-                handleRoleChange(event as SelectChangeEvent<{ value: ProfileRoles }>)
+                handleRoleChange(event)
               }
             }}
             displayEmpty

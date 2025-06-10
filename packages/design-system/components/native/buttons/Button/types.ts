@@ -1,6 +1,9 @@
+import { FC } from 'react'
+
 import { ButtonProps as PaperButtonProps } from 'react-native-paper'
 
 import { ColorVariant } from '../../../../styles/native'
+import { SvgIconProps } from '../../icons'
 
 type ButtonMode = 'text' | 'outlined' | 'contained' | 'soft'
 type ButtonSize = 'small' | 'medium' | 'large'
@@ -19,9 +22,10 @@ export type StyleSheetSchema = {
   wrapper: {}
 }
 
-export interface ButtonProps extends Omit<PaperButtonProps, 'mode'> {
+export interface ButtonProps extends Omit<PaperButtonProps, 'mode' | 'icon'> {
   mode?: ButtonMode
   size?: ButtonSize
   color?: ButtonColor
   dismissKeyboardOnPress?: boolean
+  icon?: FC<SvgIconProps>
 }

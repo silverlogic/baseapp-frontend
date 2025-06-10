@@ -17,8 +17,6 @@ import { NavMiniProps } from './types'
 
 const NavMini: FC<NavMiniProps> = ({
   navData,
-  settings,
-  setSettings,
   LogoIcon,
   LogoProps,
   openNav,
@@ -41,8 +39,6 @@ const NavMini: FC<NavMiniProps> = ({
     >
       {!hideToggleButton && (
         <NavToggleButton
-          settings={settings}
-          setSettings={setSettings}
           sx={{
             top: 22,
             left: NAV_WIDTH.MINI - 12,

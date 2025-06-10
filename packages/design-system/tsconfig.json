@@ -13,5 +13,5 @@
     "index.d.ts",
     "jest.config.ts"
   ],
-  "exclude": ["node_modules", "./relay.config.js"]
+  "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }

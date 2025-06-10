@@ -38,12 +38,13 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   AddProfileMenuItemProps = {},
   LogoutItemProps = {},
 }) => {
-  const { currentProfile: profile } = useCurrentProfile({ noSSR: false })
+  const { currentProfile: profile } = useCurrentProfile()
+
   const popover = usePopover()
 
   const [openProfilesList, setOpenProfilesList] = useState(false)
 
-  let timeoutId: NodeJS.Timeout | null = null
+  let timeoutId: ReturnType<typeof setTimeout> | null = null
 
   const handlePopoverOnClose = () => {
     popover.onClose()
