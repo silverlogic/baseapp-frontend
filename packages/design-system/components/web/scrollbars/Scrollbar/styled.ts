@@ -1,21 +1,16 @@
 'use client'
 
-import { HTMLAttributes } from 'react'
-
-import { StyledComponent } from '@emotion/styled'
 import { alpha, styled } from '@mui/material/styles'
+// @ts-expect-error - simplebar-react has module resolution issues
 import SimpleBar from 'simplebar-react'
 
-export const StyledRootScrollbar: StyledComponent<HTMLAttributes<HTMLDivElement>> = styled('div')(
-  () => ({
-    flexGrow: 1,
-    height: 'fit-content',
-    overflow: 'hidden',
-  }),
-)
+export const StyledRootScrollbar = styled('div')(() => ({
+  flexGrow: 1,
+  height: 'fit-content',
+  overflow: 'hidden',
+}))
 
-// @ts-ignore TODO: investigate import issue
-export const StyledScrollbar: StyledComponent = styled(SimpleBar)(({ theme }) => ({
+export const StyledScrollbar = styled(SimpleBar)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {

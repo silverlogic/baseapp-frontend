@@ -25,6 +25,7 @@ import {
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
+import { CreateOrEditGroup } from '../__shared__/types'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import DefaultHeader from './Header'
@@ -70,7 +71,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     [membersList],
   )
 
-  const formReturn = useForm({
+  const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: getDefaultFormValues(title || '', avatar),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
@@ -85,14 +86,14 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
 
-  const onSubmit = handleSubmit((data: any) => {
+  const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     if (!roomId) return
 
     const dirtyValues = filterDirtyValues({ values: data, dirtyFields })
     const { image } = data
     const uploadables: { image?: File | Blob } = {}
     if ('image' in dirtyValues) {
-      if (image) {
+      if (image && (image instanceof File || image instanceof Blob)) {
         uploadables.image = image
       } else {
         dirtyValues.deleteImage = true

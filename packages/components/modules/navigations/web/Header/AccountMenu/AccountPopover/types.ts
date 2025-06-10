@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { FC, ReactElement } from 'react'
 
 import type { CSSProperties } from '@mui/material/styles/createMixins'
 
@@ -21,4 +21,4 @@ export interface SectionController {
   items: ComponentItems
 }
 
-export type ComponentItems = (JSX.Element | FC | null)[]
+export type ComponentItems = (ReactElement | FC | null)[]

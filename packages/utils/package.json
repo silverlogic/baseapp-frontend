@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
-  "version": "3.1.6",
+  "version": "4.0.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -16,22 +16,22 @@
   "dependencies": {
     "axios": "catalog:",
     "events": "^3.3.0",
-    "expo-constants": "catalog:react-native-core",
-    "expo-secure-store": "catalog:react-native-core",
+    "expo-constants": "catalog:react-native",
+    "expo-secure-store": "catalog:react-native",
     "humps": "^2.0.1",
     "js-cookie": "catalog:",
     "jwt-decode": "^4.0.0",
     "lodash": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
-    "qs": "^6.12.1",
+    "qs": "^6.14.0",
     "react-hook-form": "catalog:",
-    "react-native": "catalog:react-native-core",
+    "react-native": "catalog:react-native",
     "server-only": "^0.0.1",
     "zustand": "catalog:"
   },
   "peerDependencies": {
-    "react": "catalog:react18"
+    "react": "catalog:react19"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
@@ -46,9 +46,9 @@
     "@types/lodash": "catalog:",
     "@types/luxon": "catalog:",
     "@types/node": "catalog:",
-    "@types/qs": "^6.9.7",
-    "@types/react": "catalog:react18",
-    "@types/react-dom": "catalog:react18",
+    "@types/qs": "^6.14.0",
+    "@types/react": "catalog:react19",
+    "@types/react-dom": "catalog:react19",
     "babel-jest": "catalog:test",
     "jest": "catalog:test",
     "jest-environment-jsdom": "catalog:test",

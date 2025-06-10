@@ -1,5 +1,3 @@
-import { ServerSideRenderingOption } from '../../types/server'
-
 // TODO: temporary hardcoding CookieAttributes, having problems with importing from js-cookie
 interface CookieAttributes {
   /**
@@ -40,7 +38,7 @@ interface CookieAttributes {
   [property: string]: any
 }
 
-export interface GetCookieOptions extends ServerSideRenderingOption {
+export interface GetCookieOptions {
   parseJSON?: boolean
 }
 

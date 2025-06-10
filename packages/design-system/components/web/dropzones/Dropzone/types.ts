@@ -1,4 +1,4 @@
-import { CSSProperties, HTMLAttributes, InputHTMLAttributes } from 'react'
+import { CSSProperties, HTMLAttributes, InputHTMLAttributes, ReactElement } from 'react'
 
 import { Theme } from '@mui/material/styles'
 import type { Accept, DropzoneOptions } from 'react-dropzone'
@@ -22,7 +22,7 @@ export interface BaseDropzoneProps {
   maxFileSize?: number
   DropzoneOptions?: Partial<DropzoneOptions>
   InputProps?: InputHTMLAttributes<HTMLInputElement>
-  title?: string | JSX.Element
+  title?: string | ReactElement
   includeActionButton: boolean
   InputContainerStyle?: CSSProperties
   multiple?: boolean

@@ -18,10 +18,10 @@ const useRecoverPassword = ({
   enableFormApiErrors = true,
   options = {},
 }: UseRecoverPasswordOptions = {}) => {
-  const form = useForm({
+  const form = useForm<ForgotPasswordRequest>({
     defaultValues,
     resolver: zodResolver(validationSchema),
-    mode: 'onBlur',
+    mode: 'onChange',
   })
 
   const mutation = useMutation({
@@ -49,8 +49,7 @@ const useRecoverPassword = ({
   return {
     form: {
       ...form,
-      // TODO: improve types
-      handleSubmit: form.handleSubmit(handleSubmit) as any,
+      handleSubmit: form.handleSubmit(handleSubmit),
     },
     mutation,
   }

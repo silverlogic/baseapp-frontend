@@ -44,8 +44,9 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
     refetch,
   } = useAllProfilesList(allProfilesRef)
 
-  const formReturn = useForm({
+  const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: DEFAULT_FORM_VALUES,
+    // @ts-ignore TODO: check typing issue with zodResolver
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -62,6 +63,7 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
   const [commit, isMutationInFlight] = useCreateChatRoomMutation()
   const { setChatRoom } = useChatRoom()
 
+  // @ts-ignore TODO: check typing issue with zodResolver
   const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     const dirtyValues = filterDirtyValues({ values: data, dirtyFields })
     const { title, participants, image } = data
@@ -92,6 +94,7 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
         const errors = response?.chatRoomCreate?.errors
         if (errors) {
           sendToast('Something went wrong', { type: 'error' })
+          // @ts-ignore TODO: check typing issue with zodResolver
           setFormRelayErrors(formReturn, errors)
         } else {
           setChatRoom({ id: response?.chatRoomCreate?.room?.node?.id })
@@ -127,6 +130,7 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
         {...HeaderProps}
       />
       <EditGroupTitleAndImage
+        // @ts-ignore TODO: check typing issue with zodResolver
         form={formReturn}
         FORM_VALUE={FORM_VALUE}
         isMutationInFlight={isMutationInFlight}

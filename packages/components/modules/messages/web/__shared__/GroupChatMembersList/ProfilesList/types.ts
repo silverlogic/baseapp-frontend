@@ -1,8 +1,9 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 
+import { BoxProps } from '@mui/material'
 import { LoadMoreFn } from 'react-relay'
 import { VirtuosoProps } from 'react-virtuoso'
-import { BoxProps } from '@mui/material'
+
 import { ProfileNode } from '../../types'
 
 export interface ProfilesListProps {
@@ -15,7 +16,7 @@ export interface ProfilesListProps {
   isPending?: boolean
   label?: string
   title?: string
-  renderItem: (profile: ProfileNode, isMember?: boolean) => JSX.Element | null
+  renderItem: (profile: ProfileNode, isMember?: boolean) => ReactNode | null
   SearchNotFoundState?: FC
   EmptyProfilesListState?: FC
   allowAddMember?: boolean

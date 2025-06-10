@@ -1,7 +1,9 @@
+import { RefObject } from 'react'
+
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 export type BottomDrawerProps = {
-  bottomDrawerRef: React.RefObject<BottomSheetModal>
+  bottomDrawerRef: RefObject<BottomSheetModal | undefined>
   handleSheetChanges: (index: number) => void
   type?: 'image' | 'bannerImage'
   handleViewPhotoLibrary: () => void

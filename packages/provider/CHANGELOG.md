@@ -1,5 +1,13 @@
 # @baseapp-frontend/provider
 
+## 2.0.14
+
+### Patch Changes
+
+- Update `react`dependencies
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.0
+
 ## 2.0.13
 
 ### Patch Changes

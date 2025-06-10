@@ -1,5 +1,14 @@
 # @baseapp-frontend/graphql
 
+## 1.3.0
+
+### Patch Changes
+
+- Updated several dependencies, including `relay`, `react`, and `graphql`to the latest versions
+- Removed the use of `getToken`for getting the access token for the WS client (using `js-cookies` instead)
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.0
+
 ## 1.2.7
 
 ### Patch Changes

@@ -21,7 +21,6 @@ import type {
   LoginChangeExpiredPasswordRedirectResponse,
   LoginJWTResponse,
   LoginMfaRequest,
-  LoginRequest,
 } from '../../../types/auth'
 import { User } from '../../../types/user'
 import {
@@ -82,15 +81,15 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
     })
   }
 
-  const form = useForm({
+  const form = useForm<LoginParams<TApiClass>>({
     defaultValues: DEFAULT_INITIAL_VALUES as LoginParams<TApiClass>,
     resolver: zodResolver(DEFAULT_VALIDATION_SCHEMA),
-    mode: 'onBlur',
+    mode: 'onChange',
     ...loginFormOptions,
   })
 
   const mutation = useMutation({
-    mutationFn: (data: LoginRequest) => ApiClass.login(data),
+    mutationFn: (data: LoginParams<TApiClass>) => ApiClass.login(data),
     ...loginOptions, // needs to be placed bellow all overridable options
     onError: (err, variables, context) => {
       loginOptions?.onError?.(err, variables, context)
@@ -124,9 +123,10 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
         setFormApiErrors(form, err)
       }
     },
-    onSuccess: (response, variables, context) => {
-      // @ts-ignore BA-1206: fix typing
-      handleLoginSuccess(response)
+    onSuccess: async (response, variables, context) => {
+      if (!isLoginMfaResponse(response)) {
+        await handleLoginSuccess(response)
+      }
       mfaOptions?.onSuccess?.(response, variables, context)
     },
   })
@@ -134,29 +134,25 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
   return {
     form: {
       ...form,
-      // TODO: refactor types
       handleSubmit: form.handleSubmit(async (values) => {
         try {
-          await mutation.mutateAsync(values as LoginRequest)
+          await mutation.mutateAsync(values)
         } catch (error) {
           // mutateAsync will raise an error if there's an API error
         }
-        // TODO: refactor types
-      }) as any,
+      }),
     },
     mutation,
     mfaForm: {
       ...mfaForm,
-      // TODO: refactor types
-      handleSubmit: mfaForm.handleSubmit(async (values: any) => {
+      handleSubmit: mfaForm.handleSubmit(async (values) => {
         try {
-          const newValues = { ...values, ephemeralToken: mfaEphemeralToken }
+          const newValues = { token: values.code, ephemeralToken: mfaEphemeralToken || '' }
           await mfaMutation.mutateAsync(newValues)
         } catch (error) {
           // mutateAsync will raise an error if there's an API error
         }
-        // TODO: refactor types
-      }) as any,
+      }),
     },
     mfaMutation,
   }

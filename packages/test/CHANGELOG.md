@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.1.3
+
+### Patch Changes
+
+- Update `react`dependencies
+
 ## 2.1.2
 
 ### Patch Changes

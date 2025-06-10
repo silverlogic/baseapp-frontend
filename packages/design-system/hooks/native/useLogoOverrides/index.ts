@@ -13,7 +13,8 @@ const logosAtom = atomWithStorage<LogoOverrides>(
   DEFAULT_LOGO_KEY,
   DEFAULT_LOGO_SETTINGS,
   asyncStorageSync,
-  { getOnInit: true },
+  // TODO: rethink this hook, this can cause problems during react render
+  { getOnInit: false },
 )
 
 const useLogoOverrides = () => {
