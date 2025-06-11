@@ -14,7 +14,6 @@ export const MotionContainer: FC<MotionContainerProps> = ({
   children,
   ...other
 }) => {
-  console.log('hi')
   if (action) {
     return (
       <Box

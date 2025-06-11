@@ -25,7 +25,7 @@ const withTokenSetup = (Story: StoryFn, context: StoryContext) => {
     return <div />
   }
 
-  return <Story />
+  return Story({}, context)
 }
 
 export default withTokenSetup

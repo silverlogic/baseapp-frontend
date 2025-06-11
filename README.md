@@ -24,10 +24,10 @@ If one of the apps wants to consume any package feature, we could simply add tha
 And then just import the feature needed:
 
 ```jsx
-import { useUser } from '@baseapp-frontend/authentication'
+import { useJWTUser } from '@baseapp-frontend/authentication'
 
 export default function Docs() {
-  const {user} = useUser()
+  const {user} = useJWTUser()
 
   return (
     <div>

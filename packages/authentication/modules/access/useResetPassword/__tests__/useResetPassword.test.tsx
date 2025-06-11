@@ -7,6 +7,7 @@ import {
 
 import { z } from 'zod'
 
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useResetPassword from '../index'
 
 describe('useResetPassword', () => {
@@ -45,7 +46,7 @@ describe('useResetPassword', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -78,7 +79,7 @@ describe('useResetPassword', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -111,7 +112,7 @@ describe('useResetPassword', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -151,7 +152,7 @@ describe('useResetPassword', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 

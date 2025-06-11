@@ -1,7 +1,6 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, ReactElement } from 'react'
 
 import { SearchbarProps } from '@baseapp-frontend/design-system/components/web/inputs'
-
 import { WithControllerProps } from '@baseapp-frontend/utils'
 
 import { BoxProps } from '@mui/material'
@@ -26,7 +25,7 @@ export interface GroupChatMembersListProps extends PropsWithChildren {
   membersHasNext?: boolean
   membersIsLoadingNext?: boolean
   ProfilesContainer?: FC<BoxProps>
-  Searchbar?: FC<SearchbarProps> | ((props: WithControllerProps<SearchbarProps>) => JSX.Element)
+  Searchbar?: FC<SearchbarProps> | ((props: WithControllerProps<SearchbarProps>) => ReactElement)
   SearchbarProps?: Partial<SearchbarProps>
   SearchbarContainer?: FC<BoxProps>
   ProfileCard?: FC<ProfileCardProps>

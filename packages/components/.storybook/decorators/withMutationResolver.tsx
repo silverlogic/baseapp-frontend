@@ -61,7 +61,7 @@ const withMutationResolver = (Story: StoryFn, context: StoryContext) => {
     }
   }, [environment, queueOperationResolver])
 
-  return <Story />
+  return Story({}, context)
 }
 
 export default withMutationResolver

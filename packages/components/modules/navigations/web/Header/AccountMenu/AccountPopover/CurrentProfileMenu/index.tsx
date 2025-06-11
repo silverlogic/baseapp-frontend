@@ -22,7 +22,7 @@ const CurrentProfileMenu: FC<CurrentProfileMenuProps> = ({
   handlePopoverOnClose,
   setOpenProfilesList,
 }) => {
-  const { currentProfile: profile } = useCurrentProfile({ noSSR: false })
+  const { currentProfile: profile } = useCurrentProfile()
   const loadCurrentProfile = Boolean(CurrentProfile) && Boolean(profile)
   const loadCurrentUser = !loadCurrentProfile && Boolean(CurrentUser)
   const shouldShowDivider = Boolean(

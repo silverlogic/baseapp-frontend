@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<75b6ee0b9ad6bcd307634d310129e71b>>
+ * @generated SignedSource<<9ace20e318d24c5254a3faf22e301517>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { ConcreteRequest, Mutation } from 'relay-runtime'
+import { ConcreteRequest } from 'relay-runtime'
 
 export type ProfileRemoveMemberInput = {
   clientMutationId?: string | null | undefined

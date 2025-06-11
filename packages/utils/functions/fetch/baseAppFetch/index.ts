@@ -6,9 +6,10 @@ import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getExpoConstant } from '../../expo'
-import { getLanguage } from '../../language/getLanguage'
 import { buildQueryString } from '../../string'
-import { decodeJWT, getToken, isUserTokenValid, refreshAccessToken } from '../../token'
+import { decodeJWT } from '../../token/decodeJWT'
+import { isUserTokenValid } from '../../token/isUserTokenValid'
+import { refreshAccessToken } from '../../token/refreshAccessToken'
 import { BaseAppFetch, RequestOptions } from './types'
 
 /**
@@ -108,13 +109,28 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // token refresh logic
-  let authToken = getToken(accessKeyName, { noSSR: false })
+  let accessAuthToken
+  let refreshAuthToken
+  // TODO: maybe find a better way to deal with RSC
+  if (typeof window === typeof undefined) {
+    const { getTokenSSR } = await import('../../token/getTokenSSR')
+    accessAuthToken = await getTokenSSR(accessKeyName)
+    refreshAuthToken = await getTokenSSR(refreshKeyName)
+  } else {
+    const { getToken } = await import('../../token/getToken')
+    accessAuthToken = getToken(accessKeyName)
+    refreshAuthToken = getToken(refreshKeyName)
+  }
 
-  if (authToken && isAuthTokenRequired && refreshToken) {
-    const isTokenValid = isUserTokenValid(decodeJWT(authToken))
+  if (accessAuthToken && isAuthTokenRequired && refreshToken) {
+    const isTokenValid = isUserTokenValid(decodeJWT(accessAuthToken))
     if (!isTokenValid) {
       try {
-        authToken = await refreshAccessToken(accessKeyName, refreshKeyName)
+        accessAuthToken = await refreshAccessToken({
+          refreshToken: refreshAuthToken,
+          accessKeyName,
+          refreshKeyName,
+        })
       } catch (error) {
         if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
           eventEmitter.emit(LOGOUT_EVENT)
@@ -125,12 +141,21 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // set Authorization header
-  if (authToken && isAuthTokenRequired) {
-    fetchOptions.headers!.Authorization = `${tokenType} ${authToken}`
+  if (accessAuthToken && isAuthTokenRequired) {
+    fetchOptions.headers!.Authorization = `${tokenType} ${accessAuthToken}`
   }
 
   // set language header
-  const language = getLanguage(languageCookieName, { noSSR: false })
+  // TODO: maybe find a better way to deal with RSC
+  let language
+  if (typeof window === typeof undefined) {
+    const { cookies } = await import('next/headers')
+    const cookieStore = await cookies()
+    language = cookieStore.get(languageCookieName)?.value
+  } else {
+    const { getLanguage } = await import('../../language/getLanguage')
+    language = getLanguage(languageCookieName)
+  }
   if (language) {
     fetchOptions.headers!['Accept-Language'] = language
   }

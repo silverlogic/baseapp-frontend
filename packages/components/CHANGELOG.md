@@ -1,5 +1,19 @@
 # @baseapp-frontend/components
 
+## 1.2.0
+
+### Minor Changes
+
+- Refactored navigation system (`Header`, `AccountMenu`, `NavMini`, `NavVertical`) to use `useUISettings` hook
+- Migrated a few functions due to breaking changes in the authentication package
+- Updated `zustand` providers to match the latest version
+- Updated several dependencies, including `react`, `zod`, and `zustand`to the latest versions
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.0
+  - @baseapp-frontend/utils@4.0.0
+  - @baseapp-frontend/graphql@2.0.0
+  - @baseapp-frontend/design-system@2.0.0
+
 ## 1.1.1
 
 ### Patch Changes

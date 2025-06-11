@@ -1,4 +1,5 @@
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { bgBlur } from '@baseapp-frontend/design-system/styles/web'
 
 import IconButton from '@mui/material/IconButton'
@@ -7,12 +8,8 @@ import { useTheme } from '@mui/material/styles'
 import { NAV_WIDTH } from '../../constants'
 import { NavToggleButtonProps } from './types'
 
-export default function NavToggleButton({
-  settings,
-  setSettings,
-  sx,
-  ...other
-}: NavToggleButtonProps) {
+export default function NavToggleButton({ sx, ...other }: NavToggleButtonProps) {
+  const { settings, setSettings } = useUISettings()
   const theme = useTheme()
 
   return (
