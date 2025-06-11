@@ -1,11 +1,4 @@
-import {
-  ContentPostsFragment$data,
-  ContentPostsFragment$key,
-} from '../../../../__generated__/ContentPostsFragment.graphql'
-
-export interface ContentFeedProps {
-  preloadedQuery: ContentPostsFragment$key
-}
+import { ContentPostsFragment$data } from '../../../__generated__/ContentPostsFragment.graphql'
 
 export type ContentPosts = NonNullable<ContentPostsFragment$data['contentPosts']>
 export type ContentPostEdges = ContentPosts['edges']

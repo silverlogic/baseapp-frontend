@@ -1,5 +1,12 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.31
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.16
+
 ## 1.0.30
 
 ### Patch Changes
