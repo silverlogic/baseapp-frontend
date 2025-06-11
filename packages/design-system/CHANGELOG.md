@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.17
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
 ## 1.0.16
 
 ### Patch Changes

@@ -1513,7 +1513,6 @@ type Query {
     id: ID!
   ): ReportType
   allReportTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection
-  contentPosts(offset: Int, before: String, after: String, first: Int, last: Int): ContentPostConnection
   contentPost(
     """The ID of the object"""
     id: ID!
