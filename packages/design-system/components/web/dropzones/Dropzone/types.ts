@@ -1,5 +1,6 @@
-import { CSSProperties, HTMLAttributes, InputHTMLAttributes } from 'react'
+import { CSSProperties, FC, HTMLAttributes, InputHTMLAttributes } from 'react'
 
+import { SvgIconProps } from '@mui/material'
 import { Theme } from '@mui/material/styles'
 import type { Accept, DropzoneOptions } from 'react-dropzone'
 
@@ -27,6 +28,12 @@ export interface BaseDropzoneProps {
   InputContainerStyle?: CSSProperties
   multiple?: boolean
   onFileClick?: (selectedFile: string | File | Blob, index?: number) => void
+  DropzonePreview?: FC<DropzonePreviewProps>
+  DropzonePreviewProps?: Partial<DropzonePreviewProps>
+  DropZoneIcon?: FC<SvgIconProps>
+  DropZoneIconProps?: Partial<SvgIconProps>
+  DropZoneCancelIcon?: FC<SvgIconProps>
+  DropZoneCancelIconProps?: Partial<SvgIconProps>
 }
 
 export interface DropzoneAsSingleBase64Props extends BaseDropzoneProps {
