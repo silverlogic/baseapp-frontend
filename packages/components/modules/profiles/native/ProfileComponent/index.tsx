@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Button } from '@baseapp-frontend/design-system/components/native/buttons'
-import { EditIcon, ShareIcon } from '@baseapp-frontend/design-system/components/native/icons'
+import { EditIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { PageViewWithHeader, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
@@ -72,7 +72,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
           >
             Edit Profile
           </Button>
-          <Button
+          {/* <Button
             size="medium"
             mode="soft"
             color="inherit"
@@ -81,7 +81,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
             contentStyle={styles.buttonContent}
           >
             Share profile
-          </Button>
+          </Button> */}
         </View>
       </View>
     </PageViewWithHeader>
