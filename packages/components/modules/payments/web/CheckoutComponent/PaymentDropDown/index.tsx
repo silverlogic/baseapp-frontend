@@ -2,16 +2,14 @@ import { FC } from 'react'
 
 import {
   AddIcon,
-  CheckIcon,
+  CheckMarkIcon,
   CreditCardIcon,
-  MastercardCreditCardIcon,
-  VisaCreditCardIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 
-import { CARD_BRANDS } from '../../utils'
 import AddCardModal from '../AddCardModal'
+import { getCardIcon } from '../utils'
 import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
@@ -28,19 +26,6 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   handleSetupSuccess,
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
-
-  const getCardIcon = (brand?: string) => {
-    const cardBrand = brand?.toLowerCase() || ''
-
-    switch (cardBrand) {
-      case CARD_BRANDS.VISA:
-        return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      case CARD_BRANDS.MASTERCARD:
-        return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      default:
-        return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
-    }
-  }
 
   const handleOpenModal = () => {
     setIsAddCardModalOpen(true)
@@ -117,7 +102,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
                   sx={{ width: '100%' }}
                 >
                   <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
-                  {pm.id === selectedPaymentMethodId && <CheckIcon color="action" />}
+                  {pm.id === selectedPaymentMethodId && <CheckMarkIcon color="action" />}
                 </Box>
               </MenuItem>
             ))}
