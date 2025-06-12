@@ -10,7 +10,7 @@ export interface SocialInputDrawerProps {
   DrawerHandle?: FC
   SocialInputBox?: FC<SocialInputBoxProps>
   SocialInputBoxProps?: Partial<SocialInputBoxProps>
-  form: UseFormReturn<SocialUpsertForm, any, undefined>
+  form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
   isLoading: boolean
   showHandle: boolean
   style?: StyleProp<ViewStyle>

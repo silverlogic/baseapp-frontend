@@ -8,11 +8,11 @@ import { UseSocialTextInput } from './types'
 export const SocialTextInputContext = createContext<StoreApi<UseSocialTextInput> | null>(null)
 
 const SocialTextInputProvider: FC<PropsWithChildren> = ({ children }) => {
-  const storeRef = useRef<StoreApi<UseSocialTextInput>>()
+  const storeRef = useRef<StoreApi<UseSocialTextInput>>(null)
   if (!storeRef.current) {
     storeRef.current = create<UseSocialTextInput>((set) => ({
       ...INITIAL_SOCIAL_TEXT_INPUT_STATE,
-      setSocialInputState: set,
+      setSocialInputState: set as UseSocialTextInput['setSocialInputState'],
       reset: () => set({ ...INITIAL_SOCIAL_TEXT_INPUT_STATE }),
     }))
   }
