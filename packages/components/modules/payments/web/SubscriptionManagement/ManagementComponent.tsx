@@ -67,7 +67,7 @@ const ManagementComponent: FC<IManagementComponent> = ({
     if (!paymentMethods || paymentMethods.length === 0) return ''
     if (lastAddedPaymentMethodIdDuringSession) return lastAddedPaymentMethodIdDuringSession
     if (subscription?.defaultPaymentMethod) {
-      const defaultPM = paymentMethods.find((pm) => pm.id === subscription.defaultPaymentMethod)
+      const defaultPM = paymentMethods.find((pm) => pm.isDefault)
       if (defaultPM) return defaultPM.id
     }
     const fallbackDefault = paymentMethods.find((pm) => pm.isDefault)

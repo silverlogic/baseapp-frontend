@@ -14,19 +14,7 @@ export const SubscriptionManagementContainer = styled(Box)({
 })
 
 export const CancelSubscriptionModalContainer = styled(Box)(({ theme }) => ({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  maxWidth: '500px',
-  backgroundColor: theme.palette.background.paper,
-  boxShadow: theme.shadows[24],
   padding: theme.spacing(4),
-  borderRadius: theme.shape.borderRadius,
-  [theme.breakpoints.up('sm')]: {
-    width: '400px',
-  },
 }))
 
 export const SubscriptionPlanContainer = styled(Box)({
