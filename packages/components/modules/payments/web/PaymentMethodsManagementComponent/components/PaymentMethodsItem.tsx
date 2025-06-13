@@ -19,13 +19,10 @@ const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({
     new Date(paymentMethod?.card?.expYear, paymentMethod?.card?.expMonth) < new Date()
   return (
     <>
-      <Box
-        key={paymentMethod.id}
-        sx={{ display: 'flex', alignItems: 'center', width: '100%', gap: 2 }}
-      >
+      <Box key={paymentMethod.id} display="flex" alignItems="center" width="100%" gap={2}>
         {getCardIcon(paymentMethod?.card?.brand)}
-        <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-          <Box sx={{ display: 'flex', gap: 2, mb: 1 }}>
+        <Box display="flex" flexDirection="column" flexGrow={1}>
+          <Box display="flex" gap={2} mb={1}>
             {paymentMethod?.isDefault && <Chip color="default" label="Default" variant="soft" />}
             {isExpired && <Chip color="error" label="Expired" variant="soft" />}
           </Box>

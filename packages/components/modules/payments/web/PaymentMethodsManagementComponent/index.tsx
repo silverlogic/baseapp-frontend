@@ -136,8 +136,8 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
             createSetupIntent(customerId ?? '')
           }}
           startIcon={<Add />}
-          sx={{ width: 'auto' }}
           disabled={isCreatingSetupIntent}
+          sx={{ width: 'auto' }}
         >
           Add payment method
         </Button>

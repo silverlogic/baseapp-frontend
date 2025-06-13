@@ -48,15 +48,8 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
     <>
       {isEmpty ? (
         <StyledButton fullWidth variant="outlined" color="primary" onClick={handleOpenModal}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+            <Box display="flex" alignItems="center">
               <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
               <Typography variant="body2" color="text.primary">
                 Add payment method
@@ -95,27 +88,15 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
           >
             {paymentMethods.map((pm) => (
               <MenuItem key={pm.id} value={pm.id} dense sx={{ py: 0.5 }}>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ width: '100%' }}
-                >
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                   <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
                   {pm.id === selectedPaymentMethodId && <CheckMarkIcon color="action" />}
                 </Box>
               </MenuItem>
             ))}
             <MenuItem value="add-new">
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box display="flex" alignItems="center" width="100%" justifyContent="space-between">
+                <Box display="flex" alignItems="center">
                   <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
                   <Typography variant="body2">Add payment method</Typography>
                 </Box>
