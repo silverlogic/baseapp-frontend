@@ -2,15 +2,15 @@ import { FC } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import { StripePaymentMethod } from '../../types'
+import { PaymentMethod } from '../../types'
 
 const PaymentMethodDisplay: FC<{
-  pm: StripePaymentMethod
+  pm: PaymentMethod
   getCardIcon: (brand?: string) => JSX.Element
 }> = ({ pm, getCardIcon }) => (
-  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-    <Box sx={{ mr: 2 }}>{getCardIcon(pm?.card?.brand)}</Box>
-    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+  <Box display="flex" alignItems="center">
+    <Box mr={2}>{getCardIcon(pm?.card?.brand)}</Box>
+    <Box display="flex" flexDirection="column">
       <Typography variant="body2" fontWeight={500}>
         {pm?.card?.brand
           ? pm.card.brand.charAt(0).toUpperCase() + pm.card.brand.slice(1).toLowerCase()
