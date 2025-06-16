@@ -7,6 +7,6 @@ export { default as PaymentMethodsManagementComponentWithElements } from './Paym
 export type * from './PaymentMethodsManagementComponent/types'
 
 export { default as AvailableSubscriptions } from './AvailableSubscriptions'
-// export type * from './AvailableSubscriptions/types'
+export { default as SubscriptionCard } from './AvailableSubscriptions/SubscriptionCard'
 
 export type * from './types'

@@ -1,22 +1,22 @@
+'use client'
+
 import { useState } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { useRouter } from 'next/router'
+import { NextRouter } from 'next/router'
 
 import useStripeHook from '../hooks/useStripeHook'
-import { IProduct } from '../types'
 import SubscriptionCard from './SubscriptionCard'
 
-const AvailableSubscriptions = () => {
+const AvailableSubscriptions = ({ router }: { router: NextRouter }) => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')
 
   const { useListProducts } = useStripeHook()
   const { data: products, isLoading: isLoadingProducts } = useListProducts()
   const smDown = useResponsive('down', 'sm')
-  const router = useRouter()
 
   const monthlySubs = products?.filter((sub) => sub.defaultPrice?.recurring?.interval === 'month')
   const yearlySubs = products?.filter((sub) => sub.defaultPrice?.recurring?.interval === 'year')
@@ -51,7 +51,7 @@ const AvailableSubscriptions = () => {
         {subs?.map((sub) => (
           <SubscriptionCard
             key={sub.id}
-            sub={sub as IProduct}
+            sub={sub}
             isActive={isActive}
             smDown={smDown}
             selectedTerm={selectedTerm}
