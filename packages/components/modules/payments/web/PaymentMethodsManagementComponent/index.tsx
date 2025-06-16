@@ -7,6 +7,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Add } from '@mui/icons-material'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { getStripePromise } from '../../stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
@@ -31,6 +32,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     useStripeHook()
   const elements = useElements()
   const stripe = useStripe()
+  const queryClient = useQueryClient()
 
   const {
     data: paymentMethods,
@@ -178,6 +180,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
             setIsAddCardModalOpen(false)
+            queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
           }}
         />
       )}
