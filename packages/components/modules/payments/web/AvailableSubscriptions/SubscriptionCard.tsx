@@ -35,6 +35,7 @@ const SubscriptionCard = ({
         width: '100%',
         minWidth: '300px',
         maxWidth: smDown ? '100%' : '300px',
+        height: 'max-content',
         flex: '1 1 300px',
       }}
     >

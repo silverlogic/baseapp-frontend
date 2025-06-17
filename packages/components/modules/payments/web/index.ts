@@ -10,3 +10,4 @@ export { default as AvailableSubscriptions } from './AvailableSubscriptions'
 export { default as SubscriptionCard } from './AvailableSubscriptions/SubscriptionCard'
 
 export type * from './types'
+export type * from './services/types'
