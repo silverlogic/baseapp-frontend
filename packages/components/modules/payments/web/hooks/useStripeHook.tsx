@@ -59,8 +59,8 @@ const useStripeHook = () => {
           customer_id: customerId,
           default_payment_method_id: defaultPaymentMethodId,
         }),
-      onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+      onSuccess: (_data, variables) => {
+        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods', variables.customerId] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -168,6 +168,8 @@ const useStripeHook = () => {
       mutationFn: (updateData: Partial<Subscription>) =>
         StripeApi.updateSubscription(subscriptionId, updateData),
       onSuccess: (response, variables, context) => {
+        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+
         sendToast('Subscription updated successfully.', { type: 'success' })
         refetch()
         options?.onSuccess?.(response, variables, context)

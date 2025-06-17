@@ -1,7 +1,7 @@
 import { QueryKey } from '@tanstack/react-query'
 
 export const PAYMENT_METHOD_API_KEY = {
-  default: ['paymentMethod'] as QueryKey,
+  default: ['listPaymentMethods'] as QueryKey,
   get: (...params: string[]) => [...PAYMENT_METHOD_API_KEY.default, ...params] as QueryKey,
 }
 

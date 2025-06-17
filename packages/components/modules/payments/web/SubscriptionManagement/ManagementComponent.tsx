@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -65,12 +65,13 @@ const ManagementComponent: FC<IManagementComponent> = ({
 
   const selectedPaymentMethodId = useMemo(() => {
     if (!paymentMethods || paymentMethods.length === 0) return ''
-    if (lastAddedPaymentMethodIdDuringSession) return lastAddedPaymentMethodIdDuringSession
+
     if (subscription?.defaultPaymentMethod) {
-      const defaultPM = paymentMethods.find((pm) => pm.isDefault)
+      const defaultPM = paymentMethods.find((pm) => pm.id === subscription.defaultPaymentMethod)
       if (defaultPM) return defaultPM.id
     }
     const fallbackDefault = paymentMethods.find((pm) => pm.isDefault)
+
     return fallbackDefault ? fallbackDefault.id : paymentMethods[0]?.id
   }, [paymentMethods, subscription?.defaultPaymentMethod, lastAddedPaymentMethodIdDuringSession])
 
@@ -128,6 +129,12 @@ const ManagementComponent: FC<IManagementComponent> = ({
       console.error('Error updating subscription:', error)
     }
   }
+
+  useEffect(() => {
+    if (lastAddedPaymentMethodIdDuringSession) {
+      handleUpdateSubscription(lastAddedPaymentMethodIdDuringSession)
+    }
+  }, [lastAddedPaymentMethodIdDuringSession])
 
   return isLoading ? (
     <Box
