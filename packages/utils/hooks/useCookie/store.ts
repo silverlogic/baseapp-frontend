@@ -25,8 +25,12 @@ const createCookieStore = <T extends Record<string, any> = {}>(
 export const initializeCookieStore = <T extends Record<string, any> = {}>(
   initialCookies?: BaseCookies & T,
 ): StoreApi<CookieState<T>> => {
-  // Create a new store in dev mode to prevent HMR from preserving stale data
-  if (process.env.NODE_ENV === 'development' || !cookieStore) {
+  if (
+    // Create a new store in dev mode to prevent HMR from preserving stale data
+    process.env.NODE_ENV === 'development' ||
+    !cookieStore ||
+    (initialCookies && Object.keys(initialCookies).length > 0)
+  ) {
     cookieStore = createCookieStore(initialCookies)
   }
 

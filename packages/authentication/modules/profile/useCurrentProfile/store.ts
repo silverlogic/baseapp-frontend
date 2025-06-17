@@ -30,8 +30,12 @@ const createProfileStore = (
 export const initializeProfileStore = (
   initialProfile: MinimalProfile | null = null,
 ): StoreApi<CurrentProfileState> => {
-  // Create a new store in dev mode to prevent HMR from preserving stale data
-  if (process.env.NODE_ENV === 'development' || !profileStore) {
+  if (
+    // Create a new store in dev mode to prevent HMR from preserving stale data
+    process.env.NODE_ENV === 'development' ||
+    !profileStore ||
+    (initialProfile && Object.keys(initialProfile).length > 0)
+  ) {
     profileStore = createProfileStore(initialProfile)
     return profileStore
   }
