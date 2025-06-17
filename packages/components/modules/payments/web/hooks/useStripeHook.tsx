@@ -3,7 +3,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { CONFIRM_CARD_PAYMENT_API_KEY } from '../services/keys'
+import { CONFIRM_CARD_PAYMENT_API_KEY, PRODUCT_API_KEY } from '../services/keys'
 import StripeApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
 
@@ -60,7 +60,7 @@ const useStripeHook = () => {
           default_payment_method_id: defaultPaymentMethodId,
         }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+        queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -83,7 +83,7 @@ const useStripeHook = () => {
         isDefault: boolean
       }) => StripeApi.deletePaymentMethod(paymentMethodId, customerId, isDefault),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+        queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
         options.onSuccess?.()
       },
       onError: (error) => {

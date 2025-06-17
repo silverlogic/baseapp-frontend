@@ -12,6 +12,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { getStripePromise } from '../../stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
+import { PRODUCT_API_KEY } from '../services/keys'
 import PaymentMethodsItem from './components/PaymentMethodsItem'
 import {
   PaymentMethodsManagementComponentProps,
@@ -180,7 +181,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
             setIsAddCardModalOpen(false)
-            queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+            queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
           }}
         />
       )}
