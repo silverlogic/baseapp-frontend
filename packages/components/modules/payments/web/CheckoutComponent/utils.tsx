@@ -1,3 +1,11 @@
+import React from 'react'
+
+import {
+  CreditCardIcon,
+  MastercardCreditCardIcon,
+  VisaCreditCardIcon,
+} from '@baseapp-frontend/design-system/components/web/icons'
+
 export const maskEmail = (
   email: string | undefined,
   maskDomain: boolean = false,
@@ -30,4 +38,17 @@ export const maskEmail = (
   }
 
   return `${maskedUsername}@${domain}`
+}
+
+export const getCardIcon = (brand?: string) => {
+  const cardBrand = brand?.toLowerCase() || ''
+
+  switch (cardBrand) {
+    case 'visa':
+      return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
+    case 'mastercard':
+      return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
+    default:
+      return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
+  }
 }
