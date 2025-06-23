@@ -8,7 +8,7 @@ import { Add } from '@mui/icons-material'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 
-import { getStripePromise } from '../../stripe'
+import { getStripePromise } from '../utils/stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
 import PaymentMethodsItem from './components/PaymentMethodsItem'

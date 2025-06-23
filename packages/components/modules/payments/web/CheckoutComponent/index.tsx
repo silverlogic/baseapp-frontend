@@ -5,7 +5,7 @@ import { FC, useEffect } from 'react'
 import { Box, LinearProgress } from '@mui/material'
 import { Elements } from '@stripe/react-stripe-js'
 
-import { getStripePromise } from '../../stripe'
+import { getStripePromise } from '../utils/stripe'
 import useStripeHook from '../hooks/useStripeHook'
 import Checkout from './Checkout'
 
