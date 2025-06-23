@@ -4,9 +4,6 @@ export { default as ActionsOverlay } from './ActionsOverlay'
 export * from './ActionsOverlay/constants'
 export type * from './ActionsOverlay/types'
 
-export { default as ReactionButton } from './ReactionButton'
-export type * from './ReactionButton/types'
-
 export { default as SocialInput } from './SocialInput'
 export type * from './SocialInput/types'
 
