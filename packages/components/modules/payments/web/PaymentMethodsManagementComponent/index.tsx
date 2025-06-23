@@ -9,7 +9,7 @@ import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { getStripePromise } from '../../stripe'
+import { getStripePromise } from '../utils/stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
 import { PRODUCT_API_KEY } from '../services/keys'
