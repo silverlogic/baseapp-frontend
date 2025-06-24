@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { MoreVert } from '@mui/icons-material'
 import { Box, Chip, Divider, IconButton, Typography } from '@mui/material'
 
-import { getCardIcon } from '../../CheckoutComponent/utils'
+import { getCardIcon } from '../../utils'
 import { PaymentMethodsItemProps } from '../types'
 
 const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({

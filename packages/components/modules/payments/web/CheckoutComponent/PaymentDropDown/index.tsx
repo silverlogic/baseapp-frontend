@@ -8,8 +8,8 @@ import {
 
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 
+import { getCardIcon } from '../../utils'
 import AddCardModal from '../AddCardModal'
-import { getCardIcon } from '../utils'
 import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
