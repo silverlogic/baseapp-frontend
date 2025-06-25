@@ -45,18 +45,17 @@ describe('getToken', () => {
     const result = getToken(accessKeyName)
 
     expect(result).toBe(clientCookieValue)
-    expect(getCookie).toHaveBeenCalledWith(accessKeyName, { noSSR: false })
+    expect(getCookie).toHaveBeenCalledWith(accessKeyName)
     expect(getItem).not.toHaveBeenCalled()
   })
 
-  it('should retrieve a client-side cookie using getCookie with noSSR option set to true', () => {
+  it('should use default ACCESS_KEY_NAME when no key is provided', () => {
     ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
     ;(getCookie as jest.Mock).mockReturnValue(clientCookieValue)
 
-    const result = getToken(accessKeyName, { noSSR: true })
+    const result = getToken()
 
     expect(result).toBe(clientCookieValue)
-    expect(getCookie).toHaveBeenCalledWith(accessKeyName, { noSSR: true })
-    expect(getItem).not.toHaveBeenCalled()
+    expect(getCookie).toHaveBeenCalledWith(ACCESS_KEY_NAME)
   })
 })

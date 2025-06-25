@@ -1,9 +1,9 @@
-import { getExpoConstant } from '@baseapp-frontend/utils'
+import { ACCESS_KEY_NAME, getExpoConstant } from '@baseapp-frontend/utils'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
-import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
 import { createClient } from 'graphql-ws'
 import WebSocket from 'isomorphic-ws'
+import Cookies from 'js-cookie'
 import ConnectionHandler from 'relay-connection-handler-plus'
 import {
   CacheConfig,
@@ -99,7 +99,7 @@ const EXPO_PUBLIC_WS_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDP
 const wsClient = createClient({
   url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
   connectionParams: () => {
-    const Authorization = getToken()
+    const Authorization = Cookies.get(ACCESS_KEY_NAME)
     if (!Authorization) return {}
     return { Authorization }
   },

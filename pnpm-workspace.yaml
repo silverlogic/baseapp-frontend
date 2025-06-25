@@ -3,63 +3,71 @@ packages:
   - packages/*
 
 catalog:
-  "@hookform/resolvers": 3.6.0
-  "@tanstack/react-query": 5.45.1
-  "@tanstack/react-query-devtools": 5.45.1
+  "@hookform/resolvers": 5.0.1
+  "@tanstack/react-query": 5.76.1
+  "@tanstack/react-query-devtools": 5.76.1
   "@types/js-cookie": 3.0.6
   "@types/lodash": 4.17.7
-  "@types/luxon": 3.4.2
+  "@types/luxon": 3.6.2
   "@types/node": 22.7.2
-  axios: 1.7.2
-  jotai: 2.9.3
+  axios: 1.9.0
+  jotai: 2.12.4
   js-cookie: 3.0.5
   lodash: 4.17.21
-  luxon: 3.4.4
-  next: 14.3.0-canary.24
-  react-hook-form: 7.51.5
-  react-virtuoso: 4.7.11
+  luxon: 3.6.1
+  next: ^15.3.2
+  react-international-phone: 4.5.0
+  react-hook-form: 7.56.4
+  react-virtuoso: 4.12.7
+  simplebar-react: 3.3.1
   tsup: 8.3.6
-  typescript: 5.4.5
-  zod: 3.24.1
-  zustand: 4.5.2
+  typescript: 5.8.3
+  zod: 3.25.7
+  zustand: 5.0.4
 
 catalogs:
+  react19:
+    "@types/react": 19.1.4
+    "@types/react-dom": 19.1.5
+    react-dom: 19.1.0
+    react: 19.1.0
+
   react18:
     "@types/react": 18.3.3
     "@types/react-dom": 18.3.0
     react-dom: 18.3.1
     react: 18.3.1
 
-  react-native-core:
-    "@gorhom/bottom-sheet": ^5.0.6
-    "@react-navigation/drawer": ^7.0.19
-    "@react-navigation/native": ^7.0.6
+  react-native:
+    "@gorhom/bottom-sheet": ^5.1.4
+    "@react-navigation/drawer": ^7.3.12
+    "@react-navigation/native": ^7.1.9
     "@react-native-async-storage/async-storage": ^2.1.2
-    expo-constants: ~17.0.7
-    expo-file-system: ~18.0.11
-    expo-image-picker: ~16.0.4
-    expo-router: ~4.0.5
-    expo-secure-store: ~14.0.0
-    react-native-gesture-handler: ~2.20.2
-    react-native-paper: ^5.12.5
-    react-native-reanimated: ~3.16.3
-    react-native-svg: 15.8.0
-    react-native: 0.76.7
+    expo-constants: ~17.1.6
+    expo-file-system: ~18.1.10
+    expo-image-picker: ~16.1.4
+    expo-router: ~5.0.7
+    expo-secure-store: ~14.2.3
+    react-native-gesture-handler: ~2.24.0
+    react-native-paper: ^5.14.5
+    react-native-reanimated: ~3.17.4
+    react-native-svg: 15.11.2
+    react-native: 0.79.2
 
   graphql:
-    "@types/react-relay": 16.0.6
-    "@types/relay-runtime": 17.0.3
-    "@types/relay-test-utils": 14.1.4
-    babel-plugin-relay: 17.0.0
+    "@types/react-relay": 18.2.1
+    "@types/relay-runtime": 19.0.1 
+    "@types/relay-test-utils": 19.0.0
+    babel-plugin-relay: 19.0.0
     get-graphql-schema: 2.1.2
-    graphql-ws: 5.16.0
-    graphql: 16.8.1
+    graphql-ws: 6.0.5
+    graphql: 16.11.0
     isomorphic-ws: 5.0.0
-    react-relay: 16.2.0
-    relay-compiler: 16.2.0
+    react-relay: 19.0.0
+    relay-compiler: 19.0.0
     relay-connection-handler-plus: 0.1.2
-    relay-runtime: 16.2.0
-    relay-test-utils: 17.0.0
+    relay-runtime: 19.0.0
+    relay-test-utils: 19.0.0
 
   tailwind:
     "@tailwindcss/typography": 0.5.13

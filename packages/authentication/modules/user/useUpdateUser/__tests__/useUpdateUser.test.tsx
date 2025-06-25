@@ -1,3 +1,5 @@
+'use client'
+
 import {
   ComponentWithProviders,
   type CookiesGetByNameFn,
@@ -11,6 +13,7 @@ import Cookies from 'js-cookie'
 
 import useUpdateUser from '..'
 import type { User } from '../../../../types/user'
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import request from './fixtures/request.json'
 
 interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unknown>, 'data'> {
@@ -64,7 +67,7 @@ describe('useUpdateUser', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 

@@ -1,5 +1,15 @@
 # @baseapp-frontend/design-system
 
+## 1.0.18
+
+### Patch Changes
+
+- Moved `useUISettings` hook from the template to this package
+- Fixed/ignored some typing issues
+- Updated several dependencies, including `react`, and `zustand`to the latest versions
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.0
+
 ## 1.0.17
 
 ### Patch Changes

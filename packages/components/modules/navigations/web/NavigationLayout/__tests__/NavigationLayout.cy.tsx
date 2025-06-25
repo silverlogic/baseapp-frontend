@@ -102,12 +102,7 @@ describe('NavigationLayout', () => {
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={{ ...defaultSettings, themeLayout: 'centered' }}
-          setSettings={cy.stub()}
-          LogoIcon={BaseAppLogoCondensed}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
           <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -122,12 +117,7 @@ describe('NavigationLayout', () => {
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={{ ...defaultSettings, themeLayout: 'horizontal' }}
-          setSettings={cy.stub()}
-          LogoIcon={BaseAppLogoCondensed}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
           <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -142,12 +132,7 @@ describe('NavigationLayout', () => {
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={{ ...defaultSettings, themeLayout: 'mini' }}
-          setSettings={cy.stub()}
-          LogoIcon={BaseAppLogoCondensed}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
           <div role="main">Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -164,12 +149,7 @@ describe('NavigationLayout', () => {
   it('interacts with navigation toggle button and sees navigation open/close', () => {
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={{ ...defaultSettings, themeLayout: 'vertical' }}
-          setSettings={mockSetSettings}
-          LogoIcon={BaseAppLogoCondensed}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
           <div>Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -190,13 +170,7 @@ describe('NavigationLayout', () => {
   it('displays logo and account menu correctly', () => {
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={defaultSettings}
-          setSettings={cy.stub().as('setSettings')}
-          LogoIcon={LogoIcon}
-          AccountMenu={AccountMenu}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={LogoIcon} AccountMenu={AccountMenu}>
           <div>Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -212,13 +186,7 @@ describe('NavigationLayout', () => {
 
     cy.mount(
       <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          settings={defaultSettings}
-          setSettings={cy.stub().as('setSettings')}
-          LogoIcon={LogoIcon}
-          AccountMenu={CustomAccountMenu}
-        >
+        <NavigationLayout navData={mockNavData} LogoIcon={LogoIcon} AccountMenu={CustomAccountMenu}>
           <div>Content</div>
         </NavigationLayout>
       </ThemeProvider>,
@@ -233,8 +201,6 @@ describe('NavigationLayout', () => {
       <ThemeProvider {...defaultTheme}>
         <NavigationLayout
           navData={mockNavData}
-          settings={defaultSettings}
-          setSettings={mockSetSettings}
           LogoIcon={LogoIcon}
           AccountMenu={AccountMenu}
           AccountMenuProps={{

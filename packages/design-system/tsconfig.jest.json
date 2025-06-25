@@ -1,0 +1,3 @@
+{
+  "extends": "@baseapp-frontend/tsconfig/unit-test.json"
+}

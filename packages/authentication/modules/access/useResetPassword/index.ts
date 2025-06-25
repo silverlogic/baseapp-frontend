@@ -18,7 +18,7 @@ const useResetPassword = ({
   enableFormApiErrors = true,
   options = {},
 }: UseResetPasswordOptions) => {
-  const form = useForm({
+  const form = useForm<ResetPasswordForm>({
     defaultValues,
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
@@ -49,8 +49,7 @@ const useResetPassword = ({
   return {
     form: {
       ...form,
-      // TODO: improve types
-      handleSubmit: form.handleSubmit(handleSubmit) as any,
+      handleSubmit: form.handleSubmit(handleSubmit),
     },
     mutation,
   }

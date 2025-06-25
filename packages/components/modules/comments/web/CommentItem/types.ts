@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
 import type { BoxProps } from '@mui/material'
 
@@ -13,7 +13,7 @@ import type { CommentsRepliesProps } from './CommentsReplies/types'
 
 export type CommentOption = {
   label: string
-  icon: JSX.Element
+  icon: ReactNode
   onClick: () => void
   disabled: boolean
   hasPermission?: boolean | null

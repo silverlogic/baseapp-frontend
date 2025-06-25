@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { User as BaseUser, getUser } from '@baseapp-frontend/authentication'
+import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
 import { JWTContent } from '@baseapp-frontend/utils'
 
 import { Button } from '@mui/material'
@@ -21,7 +21,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
   registerButtonLabel = 'Register',
   registerButtonProps,
 }) => {
-  const user = getUser<BaseUser & JWTContent>({ noSSR: false })
+  const { user } = useJWTUser<BaseUser & JWTContent>()
 
   const renderAdditionalComponent = () => {
     if (additionalComponent) return additionalComponent

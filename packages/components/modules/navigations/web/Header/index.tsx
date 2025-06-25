@@ -4,6 +4,7 @@ import { FC } from 'react'
 
 import { MenuIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Logo } from '@baseapp-frontend/design-system/components/web/logos'
+import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
@@ -13,7 +14,6 @@ import { CustomAppBar } from './styled'
 import { HeaderProps } from './types'
 
 const Header: FC<HeaderProps> = ({
-  settings,
   children,
   onOpenNav,
   LogoIcon,
@@ -22,6 +22,7 @@ const Header: FC<HeaderProps> = ({
   AccountMenuProps,
   ToolbarProps,
 }) => {
+  const { settings } = useUISettings()
   const isNavHorizontal = settings.themeLayout === 'horizontal'
   const isNavCentered = settings.themeLayout === 'centered'
 

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.13",
+  "version": "2.0.14",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -18,13 +18,13 @@
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react18"
+    "react": "catalog:react19"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/lodash": "catalog:",
-    "@types/react": "catalog:react18",
+    "@types/react": "catalog:react19",
     "typescript": "catalog:"
   },
   "license": "MIT",

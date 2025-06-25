@@ -1,12 +1,14 @@
 'use client'
 
-import React, { type FC, type PropsWithChildren, createContext, useContext, useRef } from 'react'
+import React, { type PropsWithChildren, createContext, useContext, useRef } from 'react'
 
 import { createStore, useStore } from 'zustand'
 
 import { getApiErrorMessage } from '../../functions/api'
 import { INITIAL_NOTIFICATION_STATE } from './constants'
 import type { UseNotification } from './types'
+
+type NotificationStore = ReturnType<typeof createNotificationStore>
 
 const createNotificationStore = () =>
   createStore<UseNotification>((set) => ({
@@ -23,12 +25,10 @@ const createNotificationStore = () =>
     closeToast: () => set({ open: false }),
   }))
 
-const NotificationStoreContext = createContext<ReturnType<typeof createNotificationStore> | null>(
-  null,
-)
+const NotificationStoreContext = createContext<NotificationStore | null>(null)
 
-export const NotificationProvider: FC<PropsWithChildren> = ({ children }) => {
-  const storeRef = useRef<ReturnType<typeof createNotificationStore>>()
+export const NotificationProvider = ({ children }: PropsWithChildren) => {
+  const storeRef = useRef<NotificationStore>(undefined)
 
   if (!storeRef.current) {
     storeRef.current = createNotificationStore()

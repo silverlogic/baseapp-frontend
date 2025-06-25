@@ -240,42 +240,6 @@ return <form onSubmit={form.handleSubmit}>
 </form>
 ```
 
-### **useUser**
-
-Retrieves the authenticated user's data. Extends all ReactQuery's useQuery's options on `options` field.
-
-#### **Parameters**
-
-- `options` (optional)
-  - This object is used to provide additional configuration to the useQuery hook from react-query that retrieves the user's data. By default, it's an empty object {}.
-
-#### **Returns**
-
-- `user`
-  - The data of the authenticated user.
-- `...rest`
-  - The rest of the properties returned by the useQuery hook, like `status`, `error`, `isFetching`, etc.
-
-This hook also removes the user's token cookie and invalidates the user data cache if a 401 Unauthorized error occurs.
-
-#### **Usage**
-
-- `useUser` usage example:
-
-```jsx
-const { user, isLoading, isError, error } = useUser()
-
-if (isLoading) {
-  return <div>Loading...</div>
-}
-
-if (isError) {
-  return <div>Error: {error.message}</div>
-}
-
-return <div>Hello, {user.name}</div>
-```
-
 ### **useLogout**
 
 Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) data in cache, and removes the user's token cookie.

@@ -1,3 +1,5 @@
+'use client'
+
 import { deleteItemAsync } from 'expo-secure-store'
 
 import { removeCookie } from '../../cookie'

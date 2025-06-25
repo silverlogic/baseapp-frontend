@@ -1,8 +1,6 @@
-'use client'
+import { alpha } from '@mui/system/colorManipulator'
 
-import { alpha } from '@mui/material/styles'
-
-import { Palette, ThemeMode } from './types'
+import type { Palette, ThemeMode } from './types'
 
 declare module '@mui/material/styles/createPalette' {
   interface TypeBackground {
