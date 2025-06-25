@@ -10,8 +10,12 @@ export interface SubscriptionRequestBody {
 
 export interface Invoice {
   id: string
-  amount: number
-  currency: string
+  amountDue: number
   status: string
-  created: number
+  webhooksDeliveredAt: string
+  hostedInvoiceUrl: string
+  lines: {
+    description: string
+    amount: number
+  }[]
 }

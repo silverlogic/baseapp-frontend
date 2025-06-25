@@ -1,4 +1,4 @@
-import { axios, DjangoPaginatedResponse } from '@baseapp-frontend/utils'
+import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
@@ -7,7 +7,7 @@ import {
   ISubscription,
   StripePaymentMethod,
 } from '../types'
-import { Invoice, SubscriptionRequestBody } from './types'
+import { Invoice, SubscriptionRequestBody } from '../types/stripe'
 
 const baseUrl = '/payments'
 
