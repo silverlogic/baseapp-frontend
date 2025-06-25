@@ -7,3 +7,11 @@ export interface SubscriptionRequestBody {
   allow_incomplete?: boolean
   billing_details?: CreateSubscriptionOptions['billingDetails']
 }
+
+export interface Invoice {
+  id: string
+  amount: number
+  currency: string
+  status: string
+  created: number
+}

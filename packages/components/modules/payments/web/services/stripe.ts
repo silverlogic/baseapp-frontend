@@ -1,4 +1,4 @@
-import { axios } from '@baseapp-frontend/utils'
+import { axios, DjangoPaginatedResponse } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
@@ -7,7 +7,7 @@ import {
   ISubscription,
   StripePaymentMethod,
 } from '../types'
-import { SubscriptionRequestBody } from '../types/stripe'
+import { Invoice, SubscriptionRequestBody } from './types'
 
 const baseUrl = '/payments'
 
@@ -40,6 +40,9 @@ class StripeApi {
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
   }
+
+  static listInvoices = (page: number): Promise<DjangoPaginatedResponse<Invoice>> =>
+    axios.get(`${baseUrl}/stripe/invoices`, { params: { page } })
 }
 
 export default StripeApi

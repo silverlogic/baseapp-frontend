@@ -8,7 +8,7 @@ import {
   PAYMENT_METHOD_API_KEY,
   PRODUCT_API_KEY,
 } from '../services/keys'
-import PaymentMethodApi from '../services/stripe'
+import StripeApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
 
 const useStripeHook = () => {
@@ -16,7 +16,7 @@ const useStripeHook = () => {
 
   const useSetupIntent = (customerId?: string) =>
     useMutation({
-      mutationFn: (id: string = customerId || '') => PaymentMethodApi.createSetupIntent(id),
+      mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
@@ -26,21 +26,21 @@ const useStripeHook = () => {
   const useGetPaymentMethod = (customerId: string) =>
     useQuery({
       queryKey: [PAYMENT_METHOD_API_KEY.get(), customerId],
-      queryFn: () => PaymentMethodApi.getPaymentMethod(customerId),
+      queryFn: () => StripeApi.getPaymentMethod(customerId),
       enabled: !!customerId,
     })
 
   const useGetProduct = (customerId: string) =>
     useQuery({
       queryKey: [PRODUCT_API_KEY.get(), customerId],
-      queryFn: () => PaymentMethodApi.getProduct(customerId),
+      queryFn: () => StripeApi.getProduct(customerId),
       enabled: !!customerId,
     })
 
   const useCreationSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) =>
-        PaymentMethodApi.createSubscription(options),
+        StripeApi.createSubscription(options),
       onError: (error) => {
         sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
       },
@@ -76,12 +76,19 @@ const useStripeHook = () => {
       mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
+  const useListInvoices = ({ page = 1 }) =>
+    useQuery({
+      queryKey: ['useListInvoices'],
+      queryFn: () => StripeApi.listInvoices(page),
+    })
+
   return {
     useGetPaymentMethod,
     useSetupIntent,
     useGetProduct,
     useCreationSubscription,
     useConfirmCardPayment,
+    useListInvoices,
   }
 }
 
