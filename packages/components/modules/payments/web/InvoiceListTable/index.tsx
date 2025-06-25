@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 
 import useStripeHook from '../hooks/useStripeHook'
-import { Invoice } from '../types/stripe'
+import { Invoice } from '../types'
 import { InvoiceListTableProps } from './types'
 
 const InvoiceListTable = ({ title, titleProps, tableProps, rowProps }: InvoiceListTableProps) => {
