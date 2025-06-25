@@ -164,15 +164,8 @@ const Checkout: FC<CheckoutProps> = ({
     !isAddCardModalOpen && !isLoadingMethods && paymentMethods.length > 0
 
   return (
-    <Box sx={{ width: '100%', padding: 2 }}>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          marginBottom: 4,
-        }}
-      >
+    <Box width="100%" padding={2}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
         <Typography variant="h3" fontWeight={700}>
           Checkout
         </Typography>
@@ -202,7 +195,7 @@ const Checkout: FC<CheckoutProps> = ({
               </Box>
               <Box>
                 {Number.isFinite(product?.defaultPrice?.unitAmount) && (
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                  <Box display="flex" justifyContent="flex-end" gap={1}>
                     <Typography variant="body2" fontWeight={700}>
                       {formatPrice(
                         product?.defaultPrice?.unitAmount,
@@ -244,18 +237,8 @@ const Checkout: FC<CheckoutProps> = ({
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Box
-            sx={{
-              minWidth: { md: 400 },
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
+          <Box minWidth={{ md: 400 }}>
+            <Box display="flex" flexDirection="column" gap={2}>
               <Typography variant="subtitle2">Payment</Typography>
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider' }} />
               {elements && stripe && (

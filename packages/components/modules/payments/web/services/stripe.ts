@@ -2,26 +2,50 @@ import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
-  IProduct,
-  ISetupIntent,
-  ISubscription,
-  StripePaymentMethod,
+  Customer,
+  Product,
+  SetupIntent,
+  PaymentMethod,
+  Subscription,
 } from '../types'
-import { Invoice, SubscriptionRequestBody } from '../types/stripe'
+import { Invoice, SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from '../types'
 
 const baseUrl = '/payments'
 
 class StripeApi {
-  static createSetupIntent = (customerId: string): Promise<ISetupIntent> =>
+  static getCustomer = (userId?: string): Promise<Customer> =>
+    axios.get(`${baseUrl}/stripe/customers/${userId ?? 'me'}`)
+
+  static createCustomer = (userId?: string): Promise<Customer> =>
+    axios.post(`${baseUrl}/stripe/customers`, {
+      ...(userId && { user_id: userId }),
+    })
+
+  static createSetupIntent = (customerId: string): Promise<SetupIntent> =>
     axios.post(`${baseUrl}/stripe/payment-methods`, {
       customer_id: customerId,
     })
 
-  static getPaymentMethod = (customerId: string): Promise<StripePaymentMethod[]> =>
-    axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`, {})
+  static listPaymentMethods = (customerId: string): Promise<PaymentMethod[]> =>
+    axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`)
 
-  static getProduct = (productId: string): Promise<IProduct> =>
-    axios.get(`${baseUrl}/stripe/products/${productId}`, {})
+  static updatePaymentMethod = (
+    paymentMethodId: string,
+    payload: UpdatePaymentMethodRequestBody,
+  ): Promise<PaymentMethod> =>
+    axios.put(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, payload)
+
+  static deletePaymentMethod = (
+    paymentMethodId: string,
+    customerId: string,
+    isDefault: boolean,
+  ): Promise<void> =>
+    axios.delete(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, {
+      params: { customer_id: customerId, is_default: isDefault },
+    })
+
+  static getProduct = (productId: string): Promise<Product> =>
+    axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
     customerId,
@@ -29,7 +53,7 @@ class StripeApi {
     paymentMethodId,
     allowIncomplete,
     billingDetails,
-  }: CreateSubscriptionOptions): Promise<ISubscription> => {
+  }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
       remote_customer_id: customerId,
       price_id: priceId,
