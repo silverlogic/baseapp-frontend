@@ -8,6 +8,4 @@ export type * from './PaymentMethodsManagementComponent/types'
 
 export { default as InvoiceListTable } from './InvoiceListTable'
 
-export { default as useStripeHook } from './hooks/useStripeHook'
-
 export type * from './types'
