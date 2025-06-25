@@ -15,7 +15,6 @@
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
     "test:unit": "jest --config ./jest.config.ts",
-    "prepare": "pnpm run build",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
