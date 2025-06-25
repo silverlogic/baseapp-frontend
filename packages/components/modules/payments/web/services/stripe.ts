@@ -3,12 +3,14 @@ import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 import {
   CreateSubscriptionOptions,
   Customer,
+  Invoice,
+  PaymentMethod,
   Product,
   SetupIntent,
-  PaymentMethod,
   Subscription,
+  SubscriptionRequestBody,
+  UpdatePaymentMethodRequestBody,
 } from '../types'
-import { Invoice, SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from '../types'
 
 const baseUrl = '/payments'
 
