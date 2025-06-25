@@ -1,14 +1,14 @@
 import { FC } from 'react'
 
-import { IProduct, StripePaymentMethod } from '../types'
+import { Product, PaymentMethod } from '../types'
 import { ConfirmationSubscriptionModalProps } from './ConfirmationSubscriptionModal/types'
 
 export interface CheckoutProps {
   lastAddedPaymentMethodIdDuringSession: string | null
   isLoadingMethods: boolean
   checkoutCustomerId: string
-  paymentMethods: StripePaymentMethod[]
-  product: IProduct
+  paymentMethods: PaymentMethod[]
+  product: Product
   setupClientSecret: string
   handleSetupSuccess: (id: string) => void
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
