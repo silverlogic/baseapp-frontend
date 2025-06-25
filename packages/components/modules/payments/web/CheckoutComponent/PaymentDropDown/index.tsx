@@ -2,15 +2,13 @@ import { FC } from 'react'
 
 import {
   AddIcon,
-  CheckIcon,
+  CheckMarkIcon,
   CreditCardIcon,
-  MastercardCreditCardIcon,
-  VisaCreditCardIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent, Typography } from '@mui/material'
 
-import { CARD_BRANDS } from '../../utils'
+import { getCardIcon } from '../../utils'
 import AddCardModal from '../AddCardModal'
 import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
@@ -28,19 +26,6 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   handleSetupSuccess,
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
-
-  const getCardIcon = (brand?: string) => {
-    const cardBrand = brand?.toLowerCase() || ''
-
-    switch (cardBrand) {
-      case CARD_BRANDS.VISA:
-        return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      case CARD_BRANDS.MASTERCARD:
-        return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
-      default:
-        return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
-    }
-  }
 
   const handleOpenModal = () => {
     setIsAddCardModalOpen(true)
@@ -63,15 +48,8 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
     <>
       {isEmpty ? (
         <StyledButton fullWidth variant="outlined" color="primary" onClick={handleOpenModal}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              width: '100%',
-              justifyContent: 'space-between',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
+            <Box display="flex" alignItems="center">
               <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
               <Typography variant="body2" color="text.primary">
                 Add payment method
@@ -110,27 +88,15 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
           >
             {paymentMethods.map((pm) => (
               <MenuItem key={pm.id} value={pm.id} dense sx={{ py: 0.5 }}>
-                <Box
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ width: '100%' }}
-                >
+                <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
                   <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
-                  {pm.id === selectedPaymentMethodId && <CheckIcon color="action" />}
+                  {pm.id === selectedPaymentMethodId && <CheckMarkIcon color="action" />}
                 </Box>
               </MenuItem>
             ))}
             <MenuItem value="add-new">
-              <Box
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: '100%',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box display="flex" alignItems="center" width="100%" justifyContent="space-between">
+                <Box display="flex" alignItems="center">
                   <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
                   <Typography variant="body2">Add payment method</Typography>
                 </Box>
