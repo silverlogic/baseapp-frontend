@@ -57,7 +57,7 @@ class StripeApi {
     billingDetails,
   }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
-      remote_customer_id: customerId,
+      customer_id: customerId,
       price_id: priceId,
       ...(paymentMethodId && { payment_method_id: paymentMethodId }),
       ...(allowIncomplete !== undefined && { allow_incomplete: allowIncomplete }),
