@@ -25,7 +25,13 @@ import useStripeHook from '../hooks/useStripeHook'
 import { Invoice } from '../types'
 import { InvoiceListTableProps } from './types'
 
-const InvoiceListTable = ({ title, titleProps, tableProps, rowProps }: InvoiceListTableProps) => {
+const InvoiceListTable = ({
+  title,
+  titleProps,
+  tableProps,
+  rowProps,
+  cellProps,
+}: InvoiceListTableProps) => {
   const [page, setPage] = useState(1)
 
   const smDown = useResponsive('down', 'sm')
@@ -85,7 +91,10 @@ const InvoiceListTable = ({ title, titleProps, tableProps, rowProps }: InvoiceLi
                     formatDateFromApi(row.webhooksDeliveredAt, { toFormat: DATE_FORMAT[1] }) ?? ''
                   return smDown ? (
                     <TableRow key={row.id} sx={{ display: 'flex', gap: 1 }} {...rowProps}>
-                      <TableCell sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                      <TableCell
+                        sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
+                        {...cellProps}
+                      >
                         <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                           {row.lines?.[0]?.description ?? ''}
                         </Typography>
@@ -100,11 +109,12 @@ const InvoiceListTable = ({ title, titleProps, tableProps, rowProps }: InvoiceLi
                           gap: 1,
                           alignItems: 'flex-end',
                         }}
+                        {...cellProps}
                       >
                         <Chip label={row.status} color={color} variant="soft" size="small" />
                         {amountDue ? `$${amountDue}` : '-'}
                       </TableCell>
-                      <TableCell>
+                      <TableCell {...cellProps}>
                         <IconButton
                           onClick={() => {
                             window.open(row.hostedInvoiceUrl, '_blank')
@@ -117,17 +127,17 @@ const InvoiceListTable = ({ title, titleProps, tableProps, rowProps }: InvoiceLi
                     </TableRow>
                   ) : (
                     <TableRow key={row.id} {...rowProps}>
-                      <TableCell>
+                      <TableCell {...cellProps}>
                         <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                           {row.lines?.[0]?.description ?? ''}
                         </Typography>
                       </TableCell>
-                      <TableCell>{formattedDate}</TableCell>
-                      <TableCell>
+                      <TableCell {...cellProps}>{formattedDate}</TableCell>
+                      <TableCell {...cellProps}>
                         <Chip label={row.status} color={color} variant="soft" size="small" />
                       </TableCell>
-                      <TableCell>{amountDue ? `$${amountDue}` : '-'}</TableCell>
-                      <TableCell>
+                      <TableCell {...cellProps}>{amountDue ? `$${amountDue}` : '-'}</TableCell>
+                      <TableCell {...cellProps}>
                         <Button
                           variant="soft"
                           color="inherit"
