@@ -55,7 +55,8 @@ const AvailableSubscriptions = ({ router }: { router: NextRouter }) => {
             isActive={isActive}
             smDown={smDown}
             selectedTerm={selectedTerm}
-            onClick={() => router.push('/user/settings?tab=subscription')}
+            onManageClick={() => router.push('/user/settings?tab=subscription')}
+            onSubscribeClick={() => router.push(`/payments/checkout?product=${sub.id}`)}
           />
         ))}
       </Box>

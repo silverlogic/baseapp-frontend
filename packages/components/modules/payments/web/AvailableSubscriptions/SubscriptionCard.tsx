@@ -3,42 +3,22 @@ import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/ic
 import { Box, Button, Chip, Typography } from '@mui/material'
 import Image from 'next/image'
 
-import { IProduct } from '../types'
+import { SubscriptionCardWrapper } from './styled'
+import { SubscriptionCardProps } from './types'
 
 const SubscriptionCard = ({
   sub,
   isActive,
   smDown,
   selectedTerm,
-  onClick,
-}: {
-  sub: IProduct
-  isActive: boolean
-  smDown: boolean
-  selectedTerm: string
-  onClick: () => void
-}) => {
+  onManageClick,
+  onSubscribeClick,
+}: SubscriptionCardProps) => {
   const dolarPrice = Math.floor((sub.defaultPrice?.unitAmount ?? 0) / 100)
   const centsPrice = ((sub.defaultPrice?.unitAmount ?? 0) % 100).toString().padStart(2, '0')
 
   return (
-    <Box
-      key={sub.id}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        border: '1px solid',
-        borderColor: 'divider',
-        borderRadius: 2,
-        padding: 2,
-        gap: 2,
-        width: '100%',
-        minWidth: '300px',
-        maxWidth: smDown ? '100%' : '300px',
-        height: 'max-content',
-        flex: '1 1 300px',
-      }}
-    >
+    <SubscriptionCardWrapper key={sub.id} smDown={smDown}>
       {sub?.images?.length > 0 && (
         <Image src={sub.images[0] ?? ''} alt={sub.name} width={28} height={28} />
       )}
@@ -58,11 +38,11 @@ const SubscriptionCard = ({
       </Box>
       <Typography variant="body2">{sub.description}</Typography>
       {isActive ? (
-        <Button variant="soft" color="inherit" onClick={onClick}>
+        <Button variant="soft" color="inherit" onClick={onManageClick}>
           Manage Subscription
         </Button>
       ) : (
-        <Button variant="contained" color="inherit">
+        <Button variant="contained" color="inherit" onClick={onSubscribeClick}>
           Subscribe
         </Button>
       )}
@@ -73,7 +53,7 @@ const SubscriptionCard = ({
           </Typography>
         ))}
       </Box>
-    </Box>
+    </SubscriptionCardWrapper>
   )
 }
 
