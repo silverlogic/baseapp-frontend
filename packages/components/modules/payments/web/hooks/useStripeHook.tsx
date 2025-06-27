@@ -3,7 +3,11 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import { CONFIRM_CARD_PAYMENT_API_KEY, PRODUCT_API_KEY } from '../services/keys'
+import {
+  CONFIRM_CARD_PAYMENT_API_KEY,
+  PAYMENT_METHOD_API_KEY,
+  PRODUCT_API_KEY,
+} from '../services/keys'
 import StripeApi from '../services/stripe'
 import { CreateSubscriptionOptions } from '../types'
 
@@ -25,9 +29,6 @@ const useStripeHook = () => {
   const useSetupIntent = (customerId?: string) =>
     useMutation({
       mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
-      onSuccess: () => {
-        console.log('Setup intent created successfully:')
-      },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
@@ -36,7 +37,7 @@ const useStripeHook = () => {
 
   const useListPaymentMethods = (customerId: string) =>
     useQuery({
-      queryKey: ['listPaymentMethods', customerId],
+      queryKey: [PAYMENT_METHOD_API_KEY.get(), customerId],
       queryFn: () => StripeApi.listPaymentMethods(customerId),
       enabled: !!customerId,
     })
@@ -136,6 +137,12 @@ const useStripeHook = () => {
       mutationKey: ['useCreationSubscription'],
     })
 
+  const useListInvoices = ({ page = 1 }) =>
+    useQuery({
+      queryKey: ['useListInvoices'],
+      queryFn: () => StripeApi.listInvoices(page),
+    })
+
   return {
     useGetCustomer,
     useCreateCustomer,
@@ -146,6 +153,7 @@ const useStripeHook = () => {
     useConfirmCardPayment,
     useGetProduct,
     useCreationSubscription,
+    useListInvoices,
   }
 }
 

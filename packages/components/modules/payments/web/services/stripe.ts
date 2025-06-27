@@ -1,14 +1,16 @@
-import { axios } from '@baseapp-frontend/utils'
+import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
 import {
   CreateSubscriptionOptions,
   Customer,
+  Invoice,
+  PaymentMethod,
   Product,
   SetupIntent,
-  PaymentMethod,
   Subscription,
+  SubscriptionRequestBody,
+  UpdatePaymentMethodRequestBody,
 } from '../types'
-import { SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from './types'
 
 const baseUrl = '/payments'
 
@@ -55,7 +57,7 @@ class StripeApi {
     billingDetails,
   }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
-      remote_customer_id: customerId,
+      customer_id: customerId,
       price_id: priceId,
       ...(paymentMethodId && { payment_method_id: paymentMethodId }),
       ...(allowIncomplete !== undefined && { allow_incomplete: allowIncomplete }),
@@ -64,6 +66,9 @@ class StripeApi {
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
   }
+
+  static listInvoices = (page: number): Promise<DjangoPaginatedResponse<Invoice>> =>
+    axios.get(`${baseUrl}/stripe/invoices`, { params: { page } })
 }
 
 export default StripeApi
