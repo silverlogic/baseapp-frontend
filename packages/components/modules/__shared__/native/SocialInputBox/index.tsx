@@ -31,7 +31,6 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
         control={form.control}
         name={SOCIAL_UPSERT_FORM.body}
         ref={ref}
-        shouldUseBottomSheetSafeComponents={shouldUseBottomSheetSafeComponents}
         {...SocialTextInputProps}
       >
         <SocialUpsertActions />

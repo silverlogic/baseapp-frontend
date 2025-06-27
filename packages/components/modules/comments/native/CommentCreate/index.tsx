@@ -1,4 +1,4 @@
-import { forwardRef } from 'react'
+import { forwardRef, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { useSocialTextInput } from '@baseapp-frontend/design-system/components/native/inputs'
@@ -7,7 +7,15 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TextInput as NativeTextInput, ScrollView } from 'react-native'
+import {
+  Dimensions,
+  Keyboard,
+  KeyboardEvent,
+  TextInput as NativeTextInput,
+  Platform,
+  ScrollView,
+} from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { ConnectionHandler } from 'react-relay'
 
 import {
@@ -84,12 +92,40 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
     const { textHeight, isFocused } = useSocialTextInput()
     const showHandle = isFocused || body !== ''
 
+    const [keyboardHeight, setKeyboardHeight] = useState(0)
+    const insets = useSafeAreaInsets()
+    useEffect(() => {
+      const onKeyboardShow = (e: KeyboardEvent) => {
+        const screenHeight = Dimensions.get('screen').height
+        const safeHeight = screenHeight - insets.bottom
+        const newKeyboardHeight = safeHeight - e.endCoordinates.screenY
+        setKeyboardHeight(newKeyboardHeight)
+      }
+
+      const onKeyboardHide = () => {
+        setKeyboardHeight(0)
+      }
+
+      const isAndroid = Platform.OS === 'android'
+      const showListener = isAndroid
+        ? Keyboard.addListener('keyboardDidShow', onKeyboardShow)
+        : Keyboard.addListener('keyboardWillShow', onKeyboardShow)
+      const hideListener = isAndroid
+        ? Keyboard.addListener('keyboardDidHide', onKeyboardHide)
+        : Keyboard.addListener('keyboardWillHide', onKeyboardHide)
+
+      return () => {
+        showListener.remove()
+        hideListener.remove()
+      }
+    }, [insets])
+
     return (
       <>
         <ScrollView style={styles.contentContainer}>
           {children}
           <View
-            style={{ height: (textHeight || 0) + (showHandle ? 38 : 0) + 88 }}
+            style={{ height: (textHeight || 0) + (showHandle ? 38 : 0) + 88 + keyboardHeight }}
             // This space is taken by the social input drawer.
             // We add it here so that no scrollable content is hidden behind the social input drawer.
             // 38 is handle height (26) plus padding (12)
@@ -98,6 +134,7 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         <SocialInputDrawer
           form={form}
           isLoading={isMutationInFlight}
+          keyboardHeight={keyboardHeight}
           showHandle={showHandle}
           ref={ref}
           style={drawerStyle}

@@ -12,6 +12,7 @@ export interface SocialInputDrawerProps {
   SocialInputBoxProps?: Partial<SocialInputBoxProps>
   form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
   isLoading: boolean
+  keyboardHeight?: number
   showHandle: boolean
   style?: StyleProp<ViewStyle>
   submit: VoidFunction
