@@ -100,8 +100,7 @@
     "react-native-paper": "catalog:react-native",
     "react-native-reanimated": "catalog:react-native",
     "react-native-svg": "catalog:react-native",
-    "simplebar-react": "catalog:",
-    "zustand": "catalog:"
+    "simplebar-react": "catalog:"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
