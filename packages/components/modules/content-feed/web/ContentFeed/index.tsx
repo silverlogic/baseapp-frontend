@@ -5,10 +5,11 @@ import { FC, useCallback } from 'react'
 import { Button, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
 
-import { HeaderContainer, RootContainer } from './styled'
+import PostList from '../PostList'
+import { HeaderContainer, RootContainer } from '../styled'
 import { ContentFeedProps } from './types'
 
-const ContentFeed: FC<ContentFeedProps> = () => {
+const ContentFeed: FC<ContentFeedProps> = ({ preloadedQuery }) => {
   const router = useRouter()
 
   const onNewPost = useCallback(() => {
@@ -31,6 +32,8 @@ const ContentFeed: FC<ContentFeedProps> = () => {
           New Post
         </Button>
       </HeaderContainer>
+
+      <PostList preloadedQuery={preloadedQuery} />
     </RootContainer>
   )
 }

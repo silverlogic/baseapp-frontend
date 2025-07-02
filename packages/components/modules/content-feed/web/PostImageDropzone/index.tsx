@@ -7,9 +7,9 @@ import { Dropzone } from '@baseapp-frontend/design-system/components/web/dropzon
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 
-import { IContentFeedImageProps } from './types'
+import { PostImageDropzoneProps } from './types'
 
-const ContentFeedImage: FC<IContentFeedImageProps> = ({ form }) => {
+const PostImageDropzone: FC<PostImageDropzoneProps> = ({ form }) => {
   const [selectedPreview, setSelectedPreview] = useState<File>()
   const [selectedPreviewIndex, setSelectedPreviewIndex] = useState<number>()
 
@@ -19,7 +19,7 @@ const ContentFeedImage: FC<IContentFeedImageProps> = ({ form }) => {
 
   const handleRemoveFile = (fileIndex?: number) => {
     const updatedFiles = formFiles?.filter((_, index) => index !== fileIndex)
-    form.setValue('images', updatedFiles as File[], { shouldValidate: true })
+    form.setValue('images', updatedFiles || [], { shouldValidate: true })
 
     if (selectedPreviewIndex === fileIndex) {
       setSelectedPreview(undefined)
@@ -29,7 +29,7 @@ const ContentFeedImage: FC<IContentFeedImageProps> = ({ form }) => {
 
   const onSelect = (files: (File | Blob)[]) => {
     if (files.length) {
-      form.setValue('images', [...formFiles, ...(files as File[])])
+      form.setValue('images', [...(formFiles || []), ...(files as File[])])
     }
   }
 
@@ -69,4 +69,4 @@ const ContentFeedImage: FC<IContentFeedImageProps> = ({ form }) => {
   )
 }
 
-export default ContentFeedImage
+export default PostImageDropzone

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "sideEffects": false,
   "scripts": {
     "babel:transpile": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",
@@ -107,6 +107,7 @@
     "slugify": "^1.6.6",
     "use-long-press": "^3.2.0",
     "zod": "catalog:",
+    "react-multi-carousel": "catalog:",
     "zustand": "catalog:"
   },
   "peerDependencies": {

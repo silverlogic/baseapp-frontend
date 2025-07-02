@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.2.1
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
 ## 1.2.0
 
 ### Minor Changes
