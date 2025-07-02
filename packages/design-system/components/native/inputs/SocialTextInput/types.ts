@@ -10,6 +10,8 @@ export type SocialTextInputProps = PaperTextInputProps &
   PropsWithChildren & {
     lineHeight?: number
     maxLines?: number
+    onFocusChange?: (focused: boolean) => void
+    onTextHeightChange?: (height: number) => void
     containerStyle?: StyleProp<ViewStyle>
     toolStyle?: StyleProp<ViewStyle>
   }

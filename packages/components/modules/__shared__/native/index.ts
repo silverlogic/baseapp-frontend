@@ -1,5 +1,5 @@
-export { default as SocialInputBox } from './SocialInputBox'
-export type * from './SocialInputBox/types'
+export { default as SocialInput } from './SocialInput'
+export type * from './SocialInput/types'
 
 export { default as SocialInputDrawer } from './SocialInputDrawer'
 export type * from './SocialInputDrawer/types'

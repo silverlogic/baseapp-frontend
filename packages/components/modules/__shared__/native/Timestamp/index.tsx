@@ -16,6 +16,8 @@ const Timestamp: FC<TimestampProps> = ({ date }) => {
   if (diffDays === 0) text = 'Today'
   else if (diffDays === 1) text = 'Yesterday'
   else if (diffDays <= 7) text = `${diffDays} days ago`
+  // TODO (Design): Can we reuse formatDateWithDiffNow or formatRelativeTeam?
+  // The text would then be slightly different, but more consistent.
   else text = formatDate(dateTime, { toFormat: DATE_FORMAT[2] })
 
   return (

@@ -1,6 +1,5 @@
 import { FC, useRef } from 'react'
 
-import { withSocialTextInputProvider } from '@baseapp-frontend/design-system/components/native/inputs'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { TextInput as NativeTextInput } from 'react-native'
@@ -12,7 +11,7 @@ import DefaultCommentsList from '../CommentsList'
 import { createStyles } from './styles'
 import { CommentsProps } from './types'
 
-const WithComment: FC<CommentsProps> = ({
+const WithComments: FC<CommentsProps> = ({
   children,
   subscriptionsEnabled = true,
   target: targetRef,
@@ -44,4 +43,4 @@ const WithComment: FC<CommentsProps> = ({
   )
 }
 
-export default withSocialTextInputProvider(WithComment)
+export default WithComments

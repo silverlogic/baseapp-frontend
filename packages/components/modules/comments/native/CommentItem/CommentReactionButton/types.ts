@@ -2,4 +2,5 @@ import type { ReactionButton_target$key } from '../../../../../__generated__/Rea
 
 export interface CommentReactionButtonProps {
   target: ReactionButton_target$key
+  shouldUseBottomSheetSafeComponents?: boolean
 }

@@ -50,8 +50,12 @@ const CommentItem: FC<CommentItemProps> = ({
         </Text>
         <View style={styles.footerContainer}>
           <View style={styles.buttonContainer}>
-            <CommentReactionButton target={comment} />
-            <CommentReplyButton onReply={replyToComment} commentId={comment.id} />
+            <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
+            <CommentReplyButton
+              onReply={replyToComment}
+              commentId={comment.id}
+              shouldUseBottomSheetSafeComponents
+            />
           </View>
           <View style={styles.timestampContainer}>
             <Timestamp date={comment.created} />

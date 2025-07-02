@@ -1,19 +1,25 @@
-import { FC } from 'react'
+import { FC, ForwardRefExoticComponent, RefAttributes } from 'react'
 
-import { UseFormReturn } from 'react-hook-form'
-import { StyleProp, ViewStyle } from 'react-native'
+import { TextInput } from 'react-native'
 
-import { SocialUpsertForm } from '../../common'
-import type { SocialInputBoxProps } from '../SocialInputBox/types'
+import { DrawerProps } from './Drawer/types'
+import { PlaceholderProps } from './Placeholder/types'
+
+export interface UseTextInputProperties {
+  isFocused: boolean
+  onFocusChange: (focused: boolean) => void
+  textHeight: number
+  onTextHeightChange: (height: number) => void
+  keyboardHeight: number
+}
+
+export interface SocialInputDrawerType {
+  Drawer: ForwardRefExoticComponent<DrawerProps & RefAttributes<TextInput>>
+  Placeholder: FC<PlaceholderProps>
+  useTextInputProperties: () => UseTextInputProperties
+}
 
 export interface SocialInputDrawerProps {
-  DrawerHandle?: FC
-  SocialInputBox?: FC<SocialInputBoxProps>
-  SocialInputBoxProps?: Partial<SocialInputBoxProps>
-  form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
-  isLoading: boolean
-  keyboardHeight?: number
-  showHandle: boolean
-  style?: StyleProp<ViewStyle>
-  submit: VoidFunction
+  DrawerProps: Partial<DrawerProps>
+  PlaceholderProps: Partial<PlaceholderProps>
 }

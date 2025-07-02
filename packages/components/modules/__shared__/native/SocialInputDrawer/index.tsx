@@ -1,91 +1,68 @@
-import { forwardRef, useCallback, useRef } from 'react'
+import Drawer from './Drawer'
+import Placeholder from './Placeholder'
+import { SocialInputDrawerType } from './types'
+import { useTextInputProperties } from './utils'
 
-import { View } from '@baseapp-frontend/design-system/components/native/views'
-import { useTheme } from '@baseapp-frontend/design-system/providers/native'
+/* 
+This component will display a SocialInput inside a BottomSheet.
+- The BottomSheet will appear in front of whatever content is on your page,
+and potentially hide the bottom of it. You can use the Placeholder component
+to ensure that only blank space is hidden (see below).
+- If your page is scrollable and you want to be able to scroll all content into view, 
+add the Placeholder at the end of the scrollable view (it reserves some blank space 
+that will be hidden behind the BottomSheet, so all your content remains visible).
+- By default, the BottomSheet consumes gestures and might block any buttons from being 
+pressable, even when they are visible on the screen (not hidden behind the Bottom Sheet).
+If you want the buttons to remain pressable, you need to use gorhom's TouchableOpacity instead.
 
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { TextInput as NativeTextInput } from 'react-native'
+**Example usage**:
+const ExampleComponent = () => {
+  // logic for setting up a form
+  const form = ...
+  const text = form.watch('someField') || ''
+  
+  const { 
+    textHeight,         // pass to the Placeholder
+    onTextHeightChange, // pass to the Drawer
+    isFocused,          // can be used for custom logic
+    onFocusChange,      // pass to the Drawer
+    keyboardHeight      // pass to both Drawer and Placeholder
+  } = SocialInputDrawer.useTextInputProperties()
+  
+  // You can add some custom logic for when to show the handle.
+  // In this case, it is displayed when the input is focused or non-empty.
+  const showHandle = isFocused || text !== ''
+  
+  return (
+    <>
+      <ScrollView>
+        // Your content here. Use <TouchableOpacity> instead of button
+        // components like <IconButton> to ensure they remain pressable.
 
-import DefaultSocialInputBox from '../SocialInputBox'
-import DefaultDrawerHandle from './DrawerHandle'
-import { createStyles } from './styles'
-import { SocialInputDrawerProps } from './types'
+        <SocialInputDrawer.Placeholder
+          keyboardHeight={keyboardHeight}
+          showHandle={showHandle}
+          textHeight={textHeight}
+        />
+      </ScrollView>
+      <SocialInputDrawer.Drawer
+        form={form}
+        keyboardHeight={keyboardHeight}
+        onFocusChange={onFocusChange}
+        onTextHeightChange={onTextHeightChange}
+        ref={ref}
+        showHandle={showHandle}
+        submit={onSubmit}
+      />
+    </>
+  )
+}
+*/
 
-const SocialInputDrawer = forwardRef<NativeTextInput, SocialInputDrawerProps>(
-  (
-    {
-      DrawerHandle = DefaultDrawerHandle,
-      SocialInputBox = DefaultSocialInputBox,
-      SocialInputBoxProps = {},
-      form,
-      isLoading,
-      keyboardHeight = 0,
-      showHandle,
-      style = {},
-      submit,
-    },
-    ref,
-  ) => {
-    const bottomSheetRef = useRef<BottomSheet>(null)
-    const theme = useTheme()
-
-    const handleSheetChange = useCallback(
-      (index: number) => {
-        if (index !== 1) {
-          bottomSheetRef.current?.snapToIndex(1)
-          if (index === 0) {
-            if (ref && 'current' in ref) ref.current?.blur()
-          } else if (index === 2) {
-            if (ref && 'current' in ref) ref.current?.focus()
-          }
-        }
-      },
-      [ref, bottomSheetRef],
-    )
-
-    const handleAnimate = useCallback(
-      (from: number, to: number) => {
-        if (to !== 1) {
-          bottomSheetRef.current?.snapToIndex(1)
-        }
-        if (to === 0) {
-          if (ref && 'current' in ref) ref.current?.blur()
-        } else if (to === 2) {
-          if (ref && 'current' in ref) ref.current?.focus()
-        }
-      },
-      [ref, bottomSheetRef],
-    )
-
-    const styles = createStyles(theme)
-    return (
-      <BottomSheet
-        ref={bottomSheetRef}
-        index={1}
-        snapPoints={[80 + keyboardHeight, 200 + keyboardHeight]}
-        onChange={handleSheetChange}
-        onAnimate={handleAnimate}
-        handleComponent={showHandle ? DrawerHandle : null}
-        backgroundStyle={styles.background}
-      >
-        <BottomSheetView style={[styles.bottomSheetContainer, style]}>
-          <SocialInputBox
-            form={form}
-            isLoading={isLoading}
-            ref={ref}
-            shouldUseBottomSheetSafeComponents
-            submit={submit}
-            {...SocialInputBoxProps}
-          />
-          {
-            // The next view extends the bottom sheet by the height of the keyboard
-            // so that the SocialInputBox is not hidden by the keyboard
-          }
-          <View style={{ height: keyboardHeight }} />
-        </BottomSheetView>
-      </BottomSheet>
-    )
-  },
-)
+const SocialInputDrawer: SocialInputDrawerType = {
+  Drawer,
+  Placeholder,
+  useTextInputProperties,
+}
 
 export default SocialInputDrawer

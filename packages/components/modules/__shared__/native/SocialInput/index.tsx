@@ -7,9 +7,9 @@ import { TextInput as NativeTextInput } from 'react-native'
 import { SOCIAL_UPSERT_FORM } from '../../common'
 import DefaultSocialUpsertActions from '../SocialUpsertActions'
 import DefaultSubmitActions from './SubmitActions'
-import { SocialInputBoxProps } from './types'
+import { SocialInputProps } from './types'
 
-const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
+const SocialInput = forwardRef<NativeTextInput, SocialInputProps>(
   (
     {
       SocialTextInput = DefaultSocialTextInput,
@@ -19,6 +19,8 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
       SubmitActionsProps = {},
       form,
       isLoading,
+      onFocusChange,
+      onTextHeightChange,
       shouldUseBottomSheetSafeComponents = false,
       submit,
     },
@@ -30,6 +32,8 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputBoxProps>(
       <SocialTextInput
         control={form.control}
         name={SOCIAL_UPSERT_FORM.body}
+        onFocusChange={onFocusChange}
+        onTextHeightChange={onTextHeightChange}
         ref={ref}
         {...SocialTextInputProps}
       >
