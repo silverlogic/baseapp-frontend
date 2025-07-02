@@ -1,4 +1,4 @@
-import { BillingDetails, PaymentMethod as StripePaymentMethod} from '@stripe/stripe-js'
+import { BillingDetails, PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js'
 
 export interface Customer {
   remoteCustomerId: string
@@ -51,9 +51,26 @@ export interface CreateSubscriptionOptions {
 }
 
 export interface SubscriptionRequestBody {
-  remote_customer_id: string
+  customer_id: string
   price_id: string
   payment_method_id?: string
   allow_incomplete?: boolean
   billing_details?: CreateSubscriptionOptions['billingDetails']
+}
+
+export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
+  customer_id: string
+  default_payment_method_id?: string
+}
+
+export interface Invoice {
+  id: string
+  amountDue: number
+  status: string
+  webhooksDeliveredAt: string
+  hostedInvoiceUrl: string
+  lines: {
+    description: string
+    amount: number
+  }[]
 }
