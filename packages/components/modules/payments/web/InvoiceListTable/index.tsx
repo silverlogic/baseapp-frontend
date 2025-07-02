@@ -49,7 +49,7 @@ const InvoiceListTable = ({
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h4" sx={{ p: 2 }} {...titleProps}>
-        {title ?? 'Order History'}
+        {title ?? 'Subscription Receipts'}
       </Typography>
       {isLoading ? (
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -90,29 +90,31 @@ const InvoiceListTable = ({
                   const formattedDate =
                     formatDateFromApi(row.webhooksDeliveredAt, { toFormat: DATE_FORMAT[1] }) ?? ''
                   return smDown ? (
-                    <TableRow key={row.id} sx={{ display: 'flex', gap: 1 }} {...rowProps}>
-                      <TableCell
-                        sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}
-                        {...cellProps}
-                      >
-                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                          {row.lines?.[0]?.description ?? ''}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {formattedDate}
-                        </Typography>
+                    <TableRow key={row.id} {...rowProps}>
+                      <TableCell {...cellProps}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                            {row.lines?.[0]?.description ?? ''}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {formattedDate}
+                          </Typography>
+                        </Box>
                       </TableCell>
-                      <TableCell
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: 1,
-                          alignItems: 'flex-end',
-                        }}
-                        {...cellProps}
-                      >
-                        <Chip label={row.status} color={color} variant="soft" size="small" />
-                        {amountDue ? `$${amountDue}` : '-'}
+                      <TableCell {...cellProps}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: 1,
+                            alignItems: 'flex-end',
+                          }}
+                        >
+                          <Chip label={row.status} color={color} variant="soft" size="small" />
+                          <Typography variant="body2">
+                            {amountDue ? `$${amountDue}` : '-'}
+                          </Typography>
+                        </Box>
                       </TableCell>
                       <TableCell {...cellProps}>
                         <IconButton
