@@ -1,10 +1,6 @@
 import { forwardRef, useCallback, useState } from 'react'
 
-import {
-  NativeSyntheticEvent,
-  TextInput as NativeTextInput,
-  TextInputContentSizeChangeEventData,
-} from 'react-native'
+import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
 import { withNativeController } from '../../../../utils/native'
@@ -25,10 +21,10 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
       maxLines,
     })
 
-    const onContentSizeChange = useCallback(
-      (event: NativeSyntheticEvent<TextInputContentSizeChangeEventData>) => {
-        const componentHeight = Math.floor(event.nativeEvent.contentSize.height)
-        props.onTextHeightChange?.(Math.min(maxLines * lineHeight, componentHeight))
+    const onLayout = useCallback(
+      ({ nativeEvent }: LayoutChangeEvent) => {
+        const componentHeight = Math.floor(nativeEvent.layout.height)
+        props.onTextHeightChange?.(componentHeight)
       },
       [lineHeight, maxLines, props.onTextHeightChange],
     )
@@ -56,7 +52,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
         {/* TODO: Replies */}
         <NativeTextInput
           multiline
-          onContentSizeChange={onContentSizeChange}
+          onLayout={onLayout}
           placeholder="Comment..."
           placeholderTextColor={theme.colors.object.low}
           ref={ref}
