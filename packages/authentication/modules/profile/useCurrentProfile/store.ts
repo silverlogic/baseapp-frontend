@@ -1,3 +1,5 @@
+import { setTokenAsync } from '@baseapp-frontend/utils'
+
 import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 
@@ -12,11 +14,13 @@ const createProfileStore = (
 ): StoreApi<CurrentProfileState> =>
   createStore<CurrentProfileState>()((set) => ({
     currentProfile: initialProfile,
-    setCurrentProfile: (profile: MinimalProfile | null) => {
+    setCurrentProfile: async (profile: MinimalProfile | null) => {
       Cookies.set(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
       set(() => ({ currentProfile: profile }))
+      await setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
     },
-    updateProfileIfActive: (profile: MinimalProfile) => {
+    updateProfileIfActive: async (profile: MinimalProfile) => {
+      await setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
       set((state) => {
         if (state.currentProfile?.id === profile.id) {
           Cookies.set(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
