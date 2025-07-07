@@ -68,12 +68,14 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
           ? user.profile.image
           : `${baseUrl}${user.profile.image}`
       }
-      const userProfile = {
+
+      const currentProfile = {
         ...user.profile,
         image: absoluteImagePath,
       }
-      setCurrentProfile(userProfile)
-      await setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(userProfile))
+
+      setCurrentProfile(currentProfile)
+      await setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(currentProfile))
     }
 
     await setTokenAsync(accessKeyName, response.access, {
