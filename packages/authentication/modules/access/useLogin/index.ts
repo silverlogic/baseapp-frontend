@@ -68,7 +68,7 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
           ? user.profile.image
           : `${baseUrl}${user.profile.image}`
       }
-      setCurrentProfile({
+      await setCurrentProfile({
         ...user.profile,
         image: absoluteImagePath,
       })
