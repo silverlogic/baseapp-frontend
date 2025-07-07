@@ -111,13 +111,14 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
 
   useEffect(() => {
     if (profile) {
-      updateProfileIfActive({
+      const newProfile = {
         id: profile.id,
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
         image: profile.image?.url ?? null,
-      })
-      setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
+      }
+      updateProfileIfActive(newProfile)
+      setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(newProfile))
     }
   }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
