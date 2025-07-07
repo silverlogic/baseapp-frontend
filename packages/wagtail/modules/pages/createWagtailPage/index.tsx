@@ -1,23 +1,41 @@
+import { SerializablePreloadedQuery, loadSerializableQuery } from '@baseapp-frontend/graphql'
+
+import { notFound } from 'next/navigation'
+import type { ConcreteRequest, GraphQLResponseWithData } from 'relay-runtime'
+
+import PageQueryNode, { PageURLPathQuery } from '../../../__generated__/PageURLPathQuery.graphql'
 import PageTypes from '../../components/PageTypes'
-import { WagtailPagesProvider } from '../../providers/WagtailPagesProvider'
-import { PagesAPI } from '../../services/Wagtail/PagesAPI'
-import { Page } from '../../services/Wagtail/PagesAPI/types'
-import { handlePageRequestError } from '../../utils/requests'
+import WagtailPagesProvider from '../../providers/WagtailPagesProvider'
 import { PageParams, WagtailPageProps } from './types'
 
-const getCurrentPage = async (path: string): Promise<Page> => {
-  try {
-    return await PagesAPI.getPageByPath(path)
-  } catch (error) {
-    return handlePageRequestError(error)
+const getCurrentPage = async (
+  path: string,
+): Promise<SerializablePreloadedQuery<ConcreteRequest, PageURLPathQuery>> => {
+  const preloadedQuery = await loadSerializableQuery<typeof PageQueryNode, PageURLPathQuery>(
+    PageQueryNode.params,
+    {
+      path,
+    },
+  )
+
+  const response = (preloadedQuery.response as GraphQLResponseWithData).data
+  const page = response?.page
+
+  if (!page) {
+    notFound()
   }
+
+  return preloadedQuery
 }
 
-export const generateWagtailPageComponents = (currentPage: Page) => ({
+export const generateWagtailPageComponents = (
+  preloadedPageQueryRef: SerializablePreloadedQuery<ConcreteRequest, PageURLPathQuery>,
+) => ({
+  preloadedPageQueryRef,
   WagtailPagesProvider: ({ children, defaultSettings }: WagtailPageProps) => (
     <WagtailPagesProvider
+      preloadedQuery={preloadedPageQueryRef}
       defaultSettings={{
-        currentPage,
         ...(defaultSettings ?? {}),
       }}
     >
@@ -32,5 +50,7 @@ const createWagtailPage = async ({ params }: PageParams) => {
 
   return generateWagtailPageComponents(currentPage)
 }
+
+// TODO: (wagtail) add metadata method here.
 
 export default createWagtailPage

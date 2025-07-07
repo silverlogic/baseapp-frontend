@@ -2,36 +2,43 @@
 
 import { Typography } from '@mui/material'
 import Image from 'next/image'
+import { useFragment } from 'react-relay'
 
+import { PageBannerBlockFields$key } from '../../../../__generated__/PageBannerBlockFields.graphql'
+import { PageBannerBlockFields } from '../../../graphql/queries/Page'
 import BlockContainer from '../../BlockContainer'
 import BannerDescriptionRichText from './BannerDescriptionRichText'
 import { BannerContainer, ContentContainer, ImageContainer, TextContainer } from './styled'
 import { BannerBlockProps } from './types'
 
-const BannerBlock = ({ value }: BannerBlockProps) => (
-  <BlockContainer>
-    <BannerContainer imagePosition={value.imagePosition}>
-      <ContentContainer>
-        <TextContainer>
-          <Typography component="h2" variant="h3" color="common.white">
-            {value.title}
-          </Typography>
-          {value.description && <BannerDescriptionRichText value={value.description} />}
-        </TextContainer>
-      </ContentContainer>
-      <ImageContainer>
-        {value.featuredImage?.imageSizes?.medium && (
-          <Image
-            loader={({ src, width }) => `${src}?w=${width}`}
-            src={value.featuredImage.imageSizes.medium.imageUrl}
-            alt={value.featuredImage.altText ?? ''}
-            style={{ objectFit: 'cover' }}
-            fill
-          />
-        )}
-      </ImageContainer>
-    </BannerContainer>
-  </BlockContainer>
-)
+const BannerBlock = (props: BannerBlockProps) => {
+  const { imagePosition, title, description, featuredImage } =
+    useFragment<PageBannerBlockFields$key>(PageBannerBlockFields, props)
+  return (
+    <BlockContainer>
+      <BannerContainer imagePosition={imagePosition}>
+        <ContentContainer>
+          <TextContainer>
+            <Typography component="h2" variant="h3" color="common.white">
+              {title}
+            </Typography>
+            {description && <BannerDescriptionRichText value={description} />}
+          </TextContainer>
+        </ContentContainer>
+        <ImageContainer>
+          {featuredImage?.url && (
+            <Image
+              loader={({ src, width }) => `${src}?w=${width}`}
+              src={featuredImage.url}
+              alt={featuredImage.altText ?? ''}
+              style={{ objectFit: 'cover' }}
+              fill
+            />
+          )}
+        </ImageContainer>
+      </BannerContainer>
+    </BlockContainer>
+  )
+}
 
 export default BannerBlock
