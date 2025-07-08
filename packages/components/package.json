@@ -115,7 +115,8 @@
     "@baseapp-frontend/graphql": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "react-native-safe-area-context": "catalog:react-native"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
