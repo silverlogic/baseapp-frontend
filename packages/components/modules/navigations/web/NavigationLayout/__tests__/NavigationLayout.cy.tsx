@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren } from 'react'
 
 import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system/components/web/icons'
-import { ThemeProvider } from '@baseapp-frontend/design-system/providers/web'
 import { ThemeProviderProps } from '@baseapp-frontend/design-system/providers/web'
 import {
   PresetType,
@@ -15,7 +14,7 @@ import {
   typography,
 } from '@baseapp-frontend/design-system/styles/web'
 
-import NavigationLayout from '..'
+import NavigationLayoutForTesting from './NavigationLayoutForTesting'
 
 interface AccountMenuProps extends PropsWithChildren {
   additionalComponent?: React.ReactNode
@@ -78,14 +77,6 @@ const mockNavData = [
   },
 ]
 
-const defaultSettings = {
-  themeMode: 'light' as ThemeMode,
-  themeContrast: 'default' as ThemeContrast,
-  themeColorPresets: 'default' as PresetType,
-  themeStretch: false,
-  themeLayout: 'vertical' as ThemeLayout,
-}
-
 let mockSetSettings: any
 
 describe('NavigationLayout', () => {
@@ -101,11 +92,15 @@ describe('NavigationLayout', () => {
     }
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
-          <div role="main">Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={BaseAppLogoCondensed}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div role="main">Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.findByRole('banner').should('be.visible')
@@ -116,11 +111,9 @@ describe('NavigationLayout', () => {
     })
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
-          <div role="main">Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
+        <div role="main">Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.findByRole('banner').should('be.visible')
@@ -131,11 +124,15 @@ describe('NavigationLayout', () => {
     })
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
-          <div role="main">Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={BaseAppLogoCondensed}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div role="main">Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.findByRole('banner').should('be.visible')
@@ -148,11 +145,15 @@ describe('NavigationLayout', () => {
 
   it('interacts with navigation toggle button and sees navigation open/close', () => {
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={BaseAppLogoCondensed}>
-          <div>Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={BaseAppLogoCondensed}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div>Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.contains('Dashboard').should('exist')
@@ -164,16 +165,21 @@ describe('NavigationLayout', () => {
 
     cy.viewport(1280, 800)
     cy.get('button').filter(':visible').last().click()
-    cy.wrap(mockSetSettings).should('have.been.calledWith', { themeLayout: 'mini' })
+    cy.get('[data-testid="nav-mini"]').should('exist')
   })
 
   it('displays logo and account menu correctly', () => {
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={LogoIcon} AccountMenu={AccountMenu}>
-          <div>Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={LogoIcon}
+        AccountMenu={AccountMenu}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div>Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.get('[data-testid="logo-icon"]').should('exist')
@@ -185,11 +191,16 @@ describe('NavigationLayout', () => {
     const CustomAccountMenu = () => <div data-testid="custom-account-menu">Custom Account Menu</div>
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout navData={mockNavData} LogoIcon={LogoIcon} AccountMenu={CustomAccountMenu}>
-          <div>Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={LogoIcon}
+        AccountMenu={CustomAccountMenu}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div>Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.get('[data-testid="custom-account-menu"]').should('exist')
@@ -198,18 +209,19 @@ describe('NavigationLayout', () => {
 
   it('displays additional component in AccountMenuProps', () => {
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavigationLayout
-          navData={mockNavData}
-          LogoIcon={LogoIcon}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={{
-            additionalComponent: <AdditionalComponent />,
-          }}
-        >
-          <div>Content</div>
-        </NavigationLayout>
-      </ThemeProvider>,
+      <NavigationLayoutForTesting
+        navData={mockNavData}
+        LogoIcon={LogoIcon}
+        AccountMenu={AccountMenu}
+        AccountMenuProps={{
+          additionalComponent: <AdditionalComponent />,
+        }}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      >
+        <div>Content</div>
+      </NavigationLayoutForTesting>,
     )
 
     cy.get('[data-testid="additional-component"]')

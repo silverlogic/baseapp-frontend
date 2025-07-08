@@ -1,4 +1,3 @@
-import { ThemeProvider } from '@baseapp-frontend/design-system/providers/web'
 import { ThemeProviderProps } from '@baseapp-frontend/design-system/providers/web'
 import {
   ThemeMode,
@@ -9,7 +8,7 @@ import {
   typography,
 } from '@baseapp-frontend/design-system/styles/web'
 
-import NavCentered from '..'
+import NavCenteredForTesting from './NavCenteredForTesting'
 
 const defaultTheme = {
   palette: createPalette('light'),
@@ -66,9 +65,14 @@ describe('NavCentered', () => {
     cy.viewport(375, 667)
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavCentered navData={mockNavData} openNav={true} onCloseNav={cy.stub().as('onCloseNav')} />
-      </ThemeProvider>,
+      <NavCenteredForTesting
+        navData={mockNavData}
+        openNav={true}
+        onCloseNav={cy.stub().as('onCloseNav')}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      />,
     )
 
     cy.findByRole('presentation').should('be.visible')
@@ -92,13 +96,14 @@ describe('NavCentered', () => {
     cy.viewport(1280, 800)
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavCentered
-          navData={mockNavData}
-          openNav={false}
-          onCloseNav={cy.stub().as('onCloseNav')}
-        />
-      </ThemeProvider>,
+      <NavCenteredForTesting
+        navData={mockNavData}
+        openNav={false}
+        onCloseNav={cy.stub().as('onCloseNav')}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      />,
     )
 
     cy.get('[role="presentation"]').should('not.exist')
@@ -122,9 +127,14 @@ describe('NavCentered', () => {
     cy.viewport(800, 600)
 
     cy.mount(
-      <ThemeProvider {...defaultTheme}>
-        <NavCentered navData={mockNavData} openNav={true} onCloseNav={cy.stub().as('onCloseNav')} />
-      </ThemeProvider>,
+      <NavCenteredForTesting
+        navData={mockNavData}
+        openNav={true}
+        onCloseNav={cy.stub().as('onCloseNav')}
+        ThemeTestProviderProps={{
+          customTheme: defaultTheme,
+        }}
+      />,
     )
 
     cy.get('[role="presentation"]').within(() => {

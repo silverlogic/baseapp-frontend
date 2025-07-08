@@ -1,7 +1,6 @@
 'use client'
 
 import { alpha, styled } from '@mui/material/styles'
-// @ts-expect-error - simplebar-react has module resolution issues
 import SimpleBar from 'simplebar-react'
 
 export const StyledRootScrollbar = styled('div')(() => ({

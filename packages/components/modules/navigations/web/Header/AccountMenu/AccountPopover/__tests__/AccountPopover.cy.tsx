@@ -57,7 +57,11 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        InitialProfileProviderForTestingProps={{ initialProfile: mockUserProfileData }}
+        context={{
+          parameters: {
+            initialProfile: mockUserProfileData,
+          },
+        }}
       />,
     )
 
@@ -126,7 +130,11 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        InitialProfileProviderForTestingProps={{ initialProfile: mockUserProfileData }}
+        context={{
+          parameters: {
+            initialProfile: mockUserProfileData,
+          },
+        }}
         MenuItemsProps={{
           menuItems: [
             {
