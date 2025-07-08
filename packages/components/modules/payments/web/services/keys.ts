@@ -14,3 +14,8 @@ export const CONFIRM_CARD_PAYMENT_API_KEY = {
   default: ['confirmCardPayment'] as QueryKey,
   get: (...params: string[]) => [...CONFIRM_CARD_PAYMENT_API_KEY.default, ...params] as QueryKey,
 }
+
+export const CUSTOMER_API_KEY = {
+  default: ['useGetCustomer'] as QueryKey,
+  get: (...params: string[]) => [...CUSTOMER_API_KEY.default, ...params] as QueryKey,
+}
