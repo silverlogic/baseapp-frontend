@@ -3,9 +3,6 @@ import { FC, PropsWithChildren } from 'react'
 import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system/components/web/icons'
 import { ThemeProviderProps } from '@baseapp-frontend/design-system/providers/web'
 import {
-  PresetType,
-  ThemeContrast,
-  ThemeLayout,
   ThemeMode,
   breakpoints,
   createCustomShadows,
@@ -77,12 +74,9 @@ const mockNavData = [
   },
 ]
 
-let mockSetSettings: any
-
 describe('NavigationLayout', () => {
   beforeEach(() => {
     cy.viewport(1280, 800)
-    mockSetSettings = cy.stub()
   })
 
   it('renders navigation items in different layout modes', () => {
