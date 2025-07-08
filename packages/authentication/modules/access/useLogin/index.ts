@@ -28,7 +28,8 @@ import {
   isLoginMfaResponse,
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
-import { CURRENT_PROFILE_KEY_NAME, useCurrentProfile } from '../../profile'
+import { useCurrentProfile } from '../../profile'
+import { setProfileExpoStorage } from '../../profile/utils'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { ApiClass, LoginParams, UseLoginOptions } from './types'
 
@@ -75,7 +76,7 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
       }
 
       setCurrentProfile(currentProfile)
-      await setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(currentProfile))
+      await setProfileExpoStorage(currentProfile)
     }
 
     await setTokenAsync(accessKeyName, response.access, {

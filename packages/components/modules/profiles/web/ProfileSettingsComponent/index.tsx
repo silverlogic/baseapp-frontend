@@ -2,7 +2,8 @@
 
 import { FC, useEffect } from 'react'
 
-import { CURRENT_PROFILE_KEY_NAME, useCurrentProfile } from '@baseapp-frontend/authentication'
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { setProfileExpoStorage } from '@baseapp-frontend/authentication/modules/profile/utils'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { FileUploadButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { UsernameIcon } from '@baseapp-frontend/design-system/components/web/icons'
@@ -12,12 +13,7 @@ import {
   TextField,
   TextareaField,
 } from '@baseapp-frontend/design-system/components/web/inputs'
-import {
-  filterDirtyValues,
-  setFormRelayErrors,
-  setTokenAsync,
-  useNotification,
-} from '@baseapp-frontend/utils'
+import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import LoadingButton from '@mui/lab/LoadingButton'
@@ -118,7 +114,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         image: profile.image?.url ?? null,
       }
       updateProfileIfActive(newProfile)
-      setTokenAsync(CURRENT_PROFILE_KEY_NAME, JSON.stringify(newProfile))
+      setProfileExpoStorage(newProfile)
     }
   }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
