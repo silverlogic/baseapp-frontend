@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- Fix component tests after dependencies update.
+
+## 1.0.19
+
+### Patch Changes
+
 - Content Feed Posts list with images and reactions
 
 ## 1.0.18

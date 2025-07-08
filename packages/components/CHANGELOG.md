@@ -1,5 +1,14 @@
 # @baseapp-frontend/components
 
+## 1.2.2
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.1
+  - @baseapp-frontend/design-system@1.0.19
+
 ## 1.2.1
 
 ### Patch Changes
