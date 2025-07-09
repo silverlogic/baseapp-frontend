@@ -3,6 +3,7 @@
 import { FC, useEffect } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { setProfileExpoStorage } from '@baseapp-frontend/authentication/modules/profile/utils'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { FileUploadButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { UsernameIcon } from '@baseapp-frontend/design-system/components/web/icons'
@@ -106,12 +107,14 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
 
   useEffect(() => {
     if (profile) {
-      updateProfileIfActive({
+      const newProfile = {
         id: profile.id,
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
         image: profile.image?.url ?? null,
-      })
+      }
+      updateProfileIfActive(newProfile)
+      setProfileExpoStorage(newProfile)
     }
   }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
