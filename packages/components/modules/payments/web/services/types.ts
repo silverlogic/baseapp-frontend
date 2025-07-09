@@ -1,14 +1,14 @@
 import { CreateSubscriptionOptions, PaymentMethod } from '../types'
 
 export interface SubscriptionRequestBody {
-  remote_customer_id: string
-  price_id: string
-  payment_method_id?: string
-  allow_incomplete?: boolean
-  billing_details?: CreateSubscriptionOptions['billingDetails']
+  remoteCustomerId: string
+  priceId: string
+  paymentMethod_id?: string
+  allowIncomplete?: boolean
+  billingDetails?: CreateSubscriptionOptions['billingDetails']
 }
 
 export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
-  customer_id: string
-  default_payment_method_id?: string
+  customerId: string
+  defaultPaymentMethodId?: string
 }

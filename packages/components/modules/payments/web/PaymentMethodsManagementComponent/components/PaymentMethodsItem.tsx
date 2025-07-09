@@ -13,10 +13,12 @@ const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({
   setAnchorEl,
   isLast,
 }) => {
-  const isExpired =
-    paymentMethod?.card?.expMonth &&
-    paymentMethod?.card?.expYear &&
-    new Date(paymentMethod?.card?.expYear, paymentMethod?.card?.expMonth) < new Date()
+  const cardExpiryDate =
+    paymentMethod?.card?.expMonth && paymentMethod?.card?.expYear
+      ? new Date(paymentMethod.card.expYear, paymentMethod.card.expMonth)
+      : null
+
+  const isExpired = cardExpiryDate && cardExpiryDate < new Date()
   return (
     <>
       <Box key={paymentMethod.id} display="flex" alignItems="center" width="100%" gap={2}>
