@@ -29,33 +29,37 @@ interface DefaultPrice {
   currency?: string
   locale?: string
 }
+interface MarketingFeatures {
+  name: string
+}
+
 export interface Product {
   id: string
   name: string
   images: string[]
   description: string
   defaultPrice: DefaultPrice
-  marketingFeatures?: {
-    name: string
-  }[]
+  marketingFeatures?: MarketingFeatures[]
 }
 
+interface Plan {
+  product: string
+  amount: number
+}
+interface Items {
+  data: {
+    currentPeriodEnd: number
+  }[]
+}
 export interface Subscription {
   id: string
   clientSecret?: string
   defaultPaymentMethod?: string
   remoteCustomerId: string
   invoiceId: string
-  plan?: {
-    product?: string
-    amount?: number
-  }
+  plan?: Plan
   status: string
-  items?: {
-    data: {
-      currentPeriodEnd: number
-    }[]
-  }
+  items?: Items
 }
 
 export interface CreateSubscriptionOptions {

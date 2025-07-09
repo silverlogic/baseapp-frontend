@@ -21,6 +21,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import PaymentDropdown from '../CheckoutComponent/PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
+import { SUBSCRIPTION_API_KEY } from '../services/keys'
 import CancelSubscriptionModal from './CancelSubscriptionModal'
 import {
   CancelButton,
@@ -269,7 +270,7 @@ const ManagementComponent: FC<ManagementComponentProps> = ({
         onClose={() => setIsCancelSubscriptionModalOpen(false)}
         onConfirm={() => {
           cancelSubscription()
-          queryClient.invalidateQueries({ queryKey: ['useGetSubscription', subscriptionId] })
+          queryClient.invalidateQueries({ queryKey: [SUBSCRIPTION_API_KEY.get(), subscriptionId] })
           setIsCancelSubscriptionModalOpen(false)
         }}
       />
