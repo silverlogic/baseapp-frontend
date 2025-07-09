@@ -51,16 +51,21 @@ export interface CreateSubscriptionOptions {
 }
 
 export interface SubscriptionRequestBody {
-  customer_id: string
-  price_id: string
-  payment_method_id?: string
-  allow_incomplete?: boolean
-  billing_details?: CreateSubscriptionOptions['billingDetails']
+  customerId: string
+  priceId: string
+  paymentMethodId?: string
+  allowIncomplete?: boolean
+  billingDetails?: CreateSubscriptionOptions['billingDetails']
 }
 
 export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
-  customer_id: string
-  default_payment_method_id?: string
+  customerId: string
+  defaultPaymentMethodId?: string
+}
+
+export interface InvoiceLines {
+  description: string
+  amount: number
 }
 
 export interface Invoice {
@@ -69,8 +74,5 @@ export interface Invoice {
   status: string
   webhooksDeliveredAt: string
   hostedInvoiceUrl: string
-  lines: {
-    description: string
-    amount: number
-  }[]
+  lines: InvoiceLines[]
 }

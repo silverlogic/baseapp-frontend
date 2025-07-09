@@ -5,6 +5,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
   CONFIRM_CARD_PAYMENT_API_KEY,
+  CUSTOMER_API_KEY,
+  INVOICE_API_KEY,
   PAYMENT_METHOD_API_KEY,
   PRODUCT_API_KEY,
 } from '../services/keys'
@@ -17,7 +19,7 @@ const useStripeHook = () => {
 
   const useGetCustomer = () =>
     useQuery({
-      queryKey: ['useGetCustomer'],
+      queryKey: [CUSTOMER_API_KEY.get()],
       queryFn: () => StripeApi.getCustomer(),
     })
 
@@ -37,7 +39,7 @@ const useStripeHook = () => {
 
   const useListPaymentMethods = (customerId: string) =>
     useQuery({
-      queryKey: [PAYMENT_METHOD_API_KEY.get(), customerId],
+      queryKey: [PAYMENT_METHOD_API_KEY.get(customerId)],
       queryFn: () => StripeApi.listPaymentMethods(customerId),
       enabled: !!customerId,
     })
@@ -57,8 +59,8 @@ const useStripeHook = () => {
         defaultPaymentMethodId?: string
       }) =>
         StripeApi.updatePaymentMethod(paymentMethodId, {
-          customer_id: customerId,
-          default_payment_method_id: defaultPaymentMethodId,
+          customerId,
+          defaultPaymentMethodId,
         }),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
@@ -120,7 +122,7 @@ const useStripeHook = () => {
 
   const useGetProduct = (customerId: string) =>
     useQuery({
-      queryKey: ['useGetProduct', customerId],
+      queryKey: [PRODUCT_API_KEY.get(customerId)],
       queryFn: () => StripeApi.getProduct(customerId),
       enabled: !!customerId,
     })
@@ -139,7 +141,7 @@ const useStripeHook = () => {
 
   const useListInvoices = ({ page = 1 }) =>
     useQuery({
-      queryKey: ['useListInvoices'],
+      queryKey: [INVOICE_API_KEY.get(page.toString())],
       queryFn: () => StripeApi.listInvoices(page),
     })
 

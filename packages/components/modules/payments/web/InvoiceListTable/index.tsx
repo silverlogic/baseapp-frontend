@@ -1,15 +1,10 @@
 import { useState } from 'react'
 
-import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
-import { DATE_FORMAT, formatDateFromApi } from '@baseapp-frontend/utils'
 
 import {
   Box,
-  Button,
-  Chip,
   CircularProgress,
-  IconButton,
   Pagination,
   Table,
   TableBody,
@@ -23,6 +18,7 @@ import {
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Invoice } from '../types'
+import InvoiceItemWrapper from './components/InvoiceItemWrapper'
 import { InvoiceListTableProps } from './types'
 
 const InvoiceListTable = ({
@@ -39,12 +35,6 @@ const InvoiceListTable = ({
   const { data, isLoading, isFetching } = useListInvoices({ page })
 
   const receipts = data?.results || []
-
-  const getStatusColor = (status: string) => {
-    if (status === 'paid') return 'success'
-    if (status === 'failed') return 'error'
-    return 'warning'
-  }
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
@@ -84,77 +74,15 @@ const InvoiceListTable = ({
                   </TableCell>
                 </TableRow>
               ) : (
-                receipts.map((row: Invoice) => {
-                  const color = getStatusColor(row.status)
-                  const amountDue = (row.amountDue / 100).toFixed(2) ?? ''
-                  const formattedDate =
-                    formatDateFromApi(row.webhooksDeliveredAt, { toFormat: DATE_FORMAT[1] }) ?? ''
-                  return smDown ? (
-                    <TableRow key={row.id} {...rowProps}>
-                      <TableCell {...cellProps}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                          <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                            {row.lines?.[0]?.description ?? ''}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {formattedDate}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell {...cellProps}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: 1,
-                            alignItems: 'flex-end',
-                          }}
-                        >
-                          <Chip label={row.status} color={color} variant="soft" size="small" />
-                          <Typography variant="body2">
-                            {amountDue ? `$${amountDue}` : '-'}
-                          </Typography>
-                        </Box>
-                      </TableCell>
-                      <TableCell {...cellProps}>
-                        <IconButton
-                          onClick={() => {
-                            window.open(row.hostedInvoiceUrl, '_blank')
-                          }}
-                          disabled={!row.hostedInvoiceUrl}
-                        >
-                          <ChevronIcon position="right" />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    <TableRow key={row.id} {...rowProps}>
-                      <TableCell {...cellProps}>
-                        <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                          {row.lines?.[0]?.description ?? ''}
-                        </Typography>
-                      </TableCell>
-                      <TableCell {...cellProps}>{formattedDate}</TableCell>
-                      <TableCell {...cellProps}>
-                        <Chip label={row.status} color={color} variant="soft" size="small" />
-                      </TableCell>
-                      <TableCell {...cellProps}>{amountDue ? `$${amountDue}` : '-'}</TableCell>
-                      <TableCell {...cellProps}>
-                        <Button
-                          variant="soft"
-                          color="inherit"
-                          size="small"
-                          onClick={() => {
-                            window.open(row.hostedInvoiceUrl, '_blank')
-                          }}
-                          disabled={!row.hostedInvoiceUrl}
-                        >
-                          Receipt
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  )
-                })
+                receipts.map((row: Invoice) => (
+                  <InvoiceItemWrapper
+                    key={row.id}
+                    row={row}
+                    rowProps={rowProps}
+                    cellProps={cellProps}
+                    smDown={smDown}
+                  />
+                ))
               )}
             </TableBody>
             <TableFooter>

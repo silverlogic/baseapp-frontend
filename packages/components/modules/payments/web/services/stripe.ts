@@ -25,7 +25,7 @@ class StripeApi {
 
   static createSetupIntent = (customerId: string): Promise<SetupIntent> =>
     axios.post(`${baseUrl}/stripe/payment-methods`, {
-      customer_id: customerId,
+      customerId,
     })
 
   static listPaymentMethods = (customerId: string): Promise<PaymentMethod[]> =>
@@ -43,7 +43,7 @@ class StripeApi {
     isDefault: boolean,
   ): Promise<void> =>
     axios.delete(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, {
-      params: { customer_id: customerId, is_default: isDefault },
+      params: { customerId, isDefault },
     })
 
   static getProduct = (productId: string): Promise<Product> =>
@@ -57,11 +57,11 @@ class StripeApi {
     billingDetails,
   }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
-      customer_id: customerId,
-      price_id: priceId,
-      ...(paymentMethodId && { payment_method_id: paymentMethodId }),
-      ...(allowIncomplete !== undefined && { allow_incomplete: allowIncomplete }),
-      ...(billingDetails && { billing_details: billingDetails }),
+      customerId,
+      priceId,
+      ...(paymentMethodId && { paymentMethodId }),
+      ...(allowIncomplete !== undefined && { allowIncomplete }),
+      ...(billingDetails && { billingDetails }),
     }
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
