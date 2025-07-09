@@ -31,6 +31,7 @@ const NavMini: FC<NavMiniProps> = ({
 
   return (
     <Box
+      data-testid="nav-mini"
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH.MINI },

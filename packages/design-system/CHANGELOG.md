@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.0.20
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+
 ## 1.0.19
 
 ### Patch Changes

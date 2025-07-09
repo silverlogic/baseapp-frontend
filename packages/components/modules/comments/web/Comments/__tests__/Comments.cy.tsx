@@ -8,6 +8,9 @@ import {
   commentDeleteMockData,
   commentEditMockData,
   commentsNextPageMockData,
+  commentsTestMockData,
+  commentsWithElevenRepliesMockData,
+  commentsWithNextPageMockData,
   likeACommentMockData,
   pinACommentMockData,
   replytoCommentMockData,
@@ -17,29 +20,27 @@ import {
   unlikeACommentMockData,
   unpinACommentMockData,
 } from './__mocks__/requests'
-import {
-  commentCreateResolver,
-  commentReplyResolver,
-  commentsResolver,
-  commentsWithElevenRepliesResolver,
-  commentsWithNextPageResolver,
-} from './__mocks__/resolvers'
+import { commentCreateResolver, commentReplyResolver } from './__mocks__/resolvers'
 import CommentsForTesting from './__utils__/CommentsForTesting'
 
 describe('Comments', () => {
   it('should render comments and be able to interact with it', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mockNextRouter()
-      .then((router) => {
-        cy.mount(
-          <AppRouterContext.Provider value={router}>
-            <CommentsForTesting environment={environment} />
-          </AppRouterContext.Provider>,
-        )
-      })
-      .then(() => {
-        resolveMostRecentOperation({ mockResolvers: commentsResolver })
-      })
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'CommentsForTestingQuery',
+      data: commentsTestMockData,
+    })
+
+    cy.mockNextRouter().then((router) => {
+      cy.mount(
+        <AppRouterContext.Provider value={router}>
+          <CommentsForTesting environment={environment} />
+        </AppRouterContext.Provider>,
+      )
+    })
+
     cy.findByText('This is a regular comment.').should('exist')
 
     cy.step('Create a comment and check if it was created')
@@ -184,20 +185,23 @@ describe('Comments', () => {
   })
 
   it('should render more comments when the bottom is reached', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'CommentsForTestingQuery',
+      data: commentsWithNextPageMockData,
+    })
+
     cy.viewport(500, 350)
 
-    cy.mockNextRouter()
-      .then((router) => {
-        cy.mount(
-          <AppRouterContext.Provider value={router}>
-            <CommentsForTesting environment={environment} />
-          </AppRouterContext.Provider>,
-        )
-      })
-      .then(() => {
-        resolveMostRecentOperation({ mockResolvers: commentsWithNextPageResolver })
-      })
+    cy.mockNextRouter().then((router) => {
+      cy.mount(
+        <AppRouterContext.Provider value={router}>
+          <CommentsForTesting environment={environment} />
+        </AppRouterContext.Provider>,
+      )
+    })
 
     cy.step('See the first four comments')
     cy.findByText('First comment').should('exist')
@@ -205,6 +209,7 @@ describe('Comments', () => {
     cy.findByText('Third comment').should('exist')
     cy.findByText('Fourth comment').should('exist')
     cy.findByLabelText('loading more comments').should('not.exist')
+
     cy.findByText('Fifth comment').should('not.exist')
     cy.findByText('Sixth comment').should('not.exist')
     cy.findByText('Seventh comment').should('not.exist')
@@ -215,10 +220,12 @@ describe('Comments', () => {
     cy.step('Scroll to the bottom and see the next 5 comments')
 
     cy.findByText('Fourth comment').should('exist').scrollIntoView()
+    cy.wait(100)
     cy.findByText('Fifth comment').should('exist').scrollIntoView()
 
     cy.findByLabelText('loading more comments')
       .should('exist')
+      .scrollIntoView()
       .then(() => {
         resolveMostRecentOperation({ data: commentsNextPageMockData })
       })
@@ -240,18 +247,21 @@ describe('Comments', () => {
     }
     cy.stub(Router, 'useRouter').returns(router)
     cy.viewport(500, 1000)
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mockNextRouter()
-      .then((router) => {
-        cy.mount(
-          <AppRouterContext.Provider value={router}>
-            <CommentsForTesting environment={environment} />
-          </AppRouterContext.Provider>,
-        )
-      })
-      .then(() => {
-        resolveMostRecentOperation({ mockResolvers: commentsWithElevenRepliesResolver })
-      })
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'CommentsForTestingQuery',
+      data: commentsWithElevenRepliesMockData,
+    })
+    cy.mockNextRouter().then((router) => {
+      cy.mount(
+        <AppRouterContext.Provider value={router}>
+          <CommentsForTesting environment={environment} />
+        </AppRouterContext.Provider>,
+      )
+    })
+
     cy.step('See the first comment and its replies')
     cy.findByRole('button', { name: /reply to comment comment-with-eleven-replies/i })
       .click()
