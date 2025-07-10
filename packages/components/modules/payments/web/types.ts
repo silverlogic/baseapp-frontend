@@ -24,16 +24,18 @@ export interface PaymentMethod {
   }
 }
 
+export interface Price {
+  id: string
+  unitAmount: number
+  currency?: string
+  locale?: string
+}
+
 export interface Product {
   id: string
   name: string
   images: string[]
-  defaultPrice: {
-    id: string
-    unitAmount: number
-    currency?: string
-    locale?: string
-  }
+  defaultPrice: Price
 }
 
 export interface Subscription {
@@ -43,7 +45,7 @@ export interface Subscription {
 }
 
 export interface CreateSubscriptionOptions {
-  customerId: string
+  entityId: number
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
@@ -51,7 +53,7 @@ export interface CreateSubscriptionOptions {
 }
 
 export interface SubscriptionRequestBody {
-  customerId: string
+  entityId: number
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
@@ -59,7 +61,6 @@ export interface SubscriptionRequestBody {
 }
 
 export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
-  customerId: string
   defaultPaymentMethodId?: string
 }
 

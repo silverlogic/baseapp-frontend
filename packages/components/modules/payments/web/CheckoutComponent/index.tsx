@@ -13,7 +13,7 @@ import { StyledBox, StyledContainer } from './styled'
 import { CheckoutComponentProps } from './types'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
-  checkoutCustomerId,
+  entityId,
   checkoutProductId,
   stripePublishableKey,
   ConfirmationSubscriptionModal,
@@ -23,14 +23,17 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     useState<string | null>(null)
 
   const { useSetupIntent, useListPaymentMethods, useGetProduct } = useStripeHook()
-  const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
-
+  const {
+    mutate: createSetupIntent,
+    data: setupIntent,
+    isPending,
+    isError,
+  } = useSetupIntent(entityId)
   const {
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useListPaymentMethods(checkoutCustomerId || '')
-
+  } = useListPaymentMethods(entityId)
   const {
     data: product,
     isLoading: isLoadingProduct,
@@ -38,8 +41,8 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   } = useGetProduct(checkoutProductId || '')
 
   useEffect(() => {
-    if (checkoutCustomerId) {
-      createSetupIntent(checkoutCustomerId)
+    if (entityId) {
+      createSetupIntent(entityId)
     }
   }, [createSetupIntent])
 
@@ -47,7 +50,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     if (paymentMethodId) {
       setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
     }
-    createSetupIntent(checkoutCustomerId)
+    createSetupIntent(entityId)
   }
 
   const isNotReady =
@@ -71,7 +74,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
         <StyledBox>
           <Checkout
             lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
-            checkoutCustomerId={checkoutCustomerId}
+            entityId={entityId}
             paymentMethods={paymentMethods || []}
             product={product}
             setupClientSecret={setupIntent.clientSecret}

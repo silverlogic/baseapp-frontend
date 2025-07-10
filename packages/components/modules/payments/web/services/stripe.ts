@@ -15,49 +15,51 @@ import {
 const baseUrl = '/payments'
 
 class StripeApi {
-  static getCustomer = (userId?: string): Promise<Customer> =>
-    axios.get(`${baseUrl}/stripe/customers/${userId ?? 'me'}`)
+  static getCustomer = (entityId?: number): Promise<Customer> =>
+    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}`)
 
-  static createCustomer = (userId?: string): Promise<Customer> =>
-    axios.post(`${baseUrl}/stripe/customers`, {
-      ...(userId && { user_id: userId }),
-    })
+  static createCustomer = (): Promise<Customer> => axios.post(`${baseUrl}/stripe/customers`)
 
-  static createSetupIntent = (customerId: string): Promise<SetupIntent> =>
-    axios.post(`${baseUrl}/stripe/payment-methods`, {
-      customerId,
-    })
+  static createSetupIntent = (entityId: number): Promise<SetupIntent> =>
+    axios.post(`${baseUrl}/stripe/customers/${entityId}/payment-methods`)
 
-  static listPaymentMethods = (customerId: string): Promise<PaymentMethod[]> =>
-    axios.get(`${baseUrl}/stripe/payment-methods?customer_id=${customerId}`)
+  static listPaymentMethods = (entityId: number): Promise<PaymentMethod[]> =>
+    axios.get(`${baseUrl}/stripe/customers/${entityId}/payment-methods`)
 
   static updatePaymentMethod = (
+    entityId: number,
     paymentMethodId: string,
     payload: UpdatePaymentMethodRequestBody,
   ): Promise<PaymentMethod> =>
-    axios.put(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, payload)
+    axios.put(`${baseUrl}/stripe/customers/${entityId}/payment-methods/${paymentMethodId}`, payload)
 
   static deletePaymentMethod = (
+    entityId: number,
     paymentMethodId: string,
-    customerId: string,
     isDefault: boolean,
   ): Promise<void> =>
-    axios.delete(`${baseUrl}/stripe/payment-methods/${paymentMethodId}`, {
-      params: { customerId, isDefault },
+    axios.delete(`${baseUrl}/stripe/customers/${entityId}/payment-methods/${paymentMethodId}`, {
+      params: { isDefault },
     })
+
+  static listInvoices = (
+    page: number,
+    entityId?: number,
+  ): Promise<DjangoPaginatedResponse<Invoice>> =>
+    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/list-invoices`, { params: { page } })
 
   static getProduct = (productId: string): Promise<Product> =>
     axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
-    customerId,
+    entityId,
     priceId,
     paymentMethodId,
     allowIncomplete,
     billingDetails,
   }: CreateSubscriptionOptions): Promise<Subscription> => {
     const requestBody: SubscriptionRequestBody = {
-      customerId,
+      entityId,
       priceId,
       ...(paymentMethodId && { paymentMethodId }),
       ...(allowIncomplete !== undefined && { allowIncomplete }),
@@ -66,9 +68,6 @@ class StripeApi {
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
   }
-
-  static listInvoices = (page: number): Promise<DjangoPaginatedResponse<Invoice>> =>
-    axios.get(`${baseUrl}/stripe/invoices`, { params: { page } })
 }
 
 export default StripeApi

@@ -17,31 +17,31 @@ const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
-  const useGetCustomer = () =>
+  const useGetCustomer = (entityId?: number) =>
     useQuery({
-      queryKey: [CUSTOMER_API_KEY.get()],
-      queryFn: () => StripeApi.getCustomer(),
+      queryKey: [CUSTOMER_API_KEY.get(entityId?.toString() ?? 'me')],
+      queryFn: () => StripeApi.getCustomer(entityId),
     })
 
   const useCreateCustomer = () =>
     useMutation({
-      mutationFn: (userId?: string) => StripeApi.createCustomer(userId),
+      mutationFn: () => StripeApi.createCustomer(),
     })
 
-  const useSetupIntent = (customerId?: string) =>
+  const useSetupIntent = (entityId: number) =>
     useMutation({
-      mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
+      mutationFn: (id: number) => StripeApi.createSetupIntent(id),
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
-      mutationKey: ['useSetupIntent', customerId],
+      mutationKey: ['useSetupIntent', entityId],
     })
 
-  const useListPaymentMethods = (customerId: string) =>
+  const useListPaymentMethods = (entityId: number) =>
     useQuery({
-      queryKey: [PAYMENT_METHOD_API_KEY.get(customerId)],
-      queryFn: () => StripeApi.listPaymentMethods(customerId),
-      enabled: !!customerId,
+      queryKey: [PAYMENT_METHOD_API_KEY.get(entityId.toString())],
+      queryFn: () => StripeApi.listPaymentMethods(entityId),
+      enabled: !!entityId,
     })
 
   const useUpdatePaymentMethod = (options: {
@@ -51,15 +51,14 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         defaultPaymentMethodId,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: number
         defaultPaymentMethodId?: string
       }) =>
-        StripeApi.updatePaymentMethod(paymentMethodId, {
-          customerId,
+        StripeApi.updatePaymentMethod(entityId, paymentMethodId, {
           defaultPaymentMethodId,
         }),
       onSuccess: () => {
@@ -78,13 +77,13 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         isDefault,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: number
         isDefault: boolean
-      }) => StripeApi.deletePaymentMethod(paymentMethodId, customerId, isDefault),
+      }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
         options.onSuccess?.()
@@ -139,10 +138,10 @@ const useStripeHook = () => {
       mutationKey: ['useCreationSubscription'],
     })
 
-  const useListInvoices = ({ page = 1 }) =>
+  const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: number }) =>
     useQuery({
       queryKey: [INVOICE_API_KEY.get(page.toString())],
-      queryFn: () => StripeApi.listInvoices(page),
+      queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 
   return {

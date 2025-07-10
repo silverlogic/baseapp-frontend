@@ -23,5 +23,5 @@ export interface InvoiceItemTableRowProps {
   cellProps?: TableCellProps
   formattedDate: string
   amountDue: string
-  color: string
+  color: 'success' | 'error' | 'warning'
 }
