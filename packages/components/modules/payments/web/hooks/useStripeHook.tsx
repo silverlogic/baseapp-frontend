@@ -126,11 +126,11 @@ const useStripeHook = () => {
       mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
-  const useGetProduct = (customerId: string) =>
+  const useGetProduct = (productId: string) =>
     useQuery({
-      queryKey: [PRODUCT_API_KEY.get(customerId)],
-      queryFn: () => StripeApi.getProduct(customerId),
-      enabled: !!customerId,
+      queryKey: [PRODUCT_API_KEY.get(productId)],
+      queryFn: () => StripeApi.getProduct(productId),
+      enabled: !!productId,
     })
 
   const useCreationSubscription = () =>

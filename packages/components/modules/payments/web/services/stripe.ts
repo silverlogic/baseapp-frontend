@@ -49,7 +49,7 @@ class StripeApi {
     axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/list-invoices`, { params: { page } })
 
   static getProduct = (productId: string): Promise<Product> =>
-    axios.get(`${baseUrl}/stripe/products/${productId}`)
+    axios.get(`${baseUrl}/stripe/products`, { params: { productId } })
 
   static createSubscription = ({
     entityId,
@@ -73,11 +73,7 @@ class StripeApi {
     axios.get(`${baseUrl}/stripe/subscriptions/${subscriptionId}`, {})
 
   static cancelSubscription = (subscriptionId: string): Promise<void> =>
-    axios.delete(`${baseUrl}/stripe/subscriptions`, {
-      params: {
-        remoteSubscriptionId: subscriptionId,
-      },
-    })
+    axios.delete(`${baseUrl}/stripe/subscriptions/${subscriptionId}`)
 
   static updateSubscription = (
     subscriptionId: string,

@@ -1,13 +1,13 @@
 export interface ManagementComponentProps {
   subscriptionId: string
-  customerId: string
+  entityId: number
   handleSetupSuccess: (id: string) => void
   lastAddedPaymentMethodIdDuringSession: string | null
 }
 export interface SubscriptionManagementProps {
   stripePublishableKey: string
   subscriptionId: string
-  customerId: string
+  entityId: number
 }
 
 export interface CancelSubscriptionModalProps {

@@ -35,7 +35,7 @@ import { ManagementComponentProps } from './types'
 
 const ManagementComponent: FC<ManagementComponentProps> = ({
   subscriptionId,
-  customerId,
+  entityId,
   handleSetupSuccess,
   lastAddedPaymentMethodIdDuringSession,
 }) => {
@@ -59,7 +59,7 @@ const ManagementComponent: FC<ManagementComponentProps> = ({
   const { data: product, isLoading: isLoadingProduct } = useGetProduct(
     subscription?.plan?.product || '',
   )
-  const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(customerId)
+  const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(subscriptionId, refetchSubscription)
 
   const { sendToast } = useNotification()
@@ -124,7 +124,6 @@ const ManagementComponent: FC<ManagementComponentProps> = ({
     try {
       await updateSubscription({
         defaultPaymentMethod: paymentMethodId,
-        remoteCustomerId: customerId,
       })
     } catch (error) {
       console.error('Error updating subscription:', error)
@@ -230,7 +229,7 @@ const ManagementComponent: FC<ManagementComponentProps> = ({
             {elements && stripe && (
               <PaymentDropdown
                 handleSetupSuccess={handleSetupSuccess}
-                customerId={customerId}
+                entityId={entityId}
                 paymentMethods={paymentMethods || []}
                 selectedPaymentMethodId={selectedPaymentMethodId || ''}
                 setSelectedPaymentMethodId={handleUpdateSubscription}
