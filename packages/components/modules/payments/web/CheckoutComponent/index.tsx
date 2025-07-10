@@ -28,12 +28,12 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     data: setupIntent,
     isPending,
     isError,
-  } = useSetupIntent(entityId)
+  } = useSetupIntent(entityId ?? 0)
   const {
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useListPaymentMethods(entityId)
+  } = useListPaymentMethods(entityId ?? 0)
   const {
     data: product,
     isLoading: isLoadingProduct,

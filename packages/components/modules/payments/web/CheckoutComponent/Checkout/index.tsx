@@ -86,7 +86,7 @@ const Checkout: FC<CheckoutProps> = ({
     try {
       createSubscription(
         {
-          entityId,
+          entityId: entityId ?? 0,
           priceId: product.defaultPrice.id,
           allowIncomplete: true,
           paymentMethodId: selectedPaymentMethodId,
