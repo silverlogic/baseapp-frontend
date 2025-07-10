@@ -68,6 +68,22 @@ class StripeApi {
 
     return axios.post(`${baseUrl}/stripe/subscriptions`, requestBody)
   }
+
+  static getSubscription = (subscriptionId: string): Promise<Subscription> =>
+    axios.get(`${baseUrl}/stripe/subscriptions/${subscriptionId}`, {})
+
+  static cancelSubscription = (subscriptionId: string): Promise<void> =>
+    axios.delete(`${baseUrl}/stripe/subscriptions`, {
+      params: {
+        remoteSubscriptionId: subscriptionId,
+      },
+    })
+
+  static updateSubscription = (
+    subscriptionId: string,
+    updateData: Partial<Subscription>,
+  ): Promise<Subscription> =>
+    axios.patch(`${baseUrl}/stripe/subscriptions/${subscriptionId}`, updateData)
 }
 
 export default StripeApi

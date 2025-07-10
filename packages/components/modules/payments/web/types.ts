@@ -24,6 +24,10 @@ export interface PaymentMethod {
   }
 }
 
+interface MarketingFeatures {
+  name: string
+}
+
 export interface Price {
   id: string
   unitAmount: number
@@ -35,13 +39,31 @@ export interface Product {
   id: string
   name: string
   images: string[]
+  description: string
   defaultPrice: Price
+  marketingFeatures?: MarketingFeatures[]
+}
+
+interface Plan {
+  product: string
+  amount: number
+}
+
+interface Items {
+  data: {
+    currentPeriodEnd: number
+  }[]
 }
 
 export interface Subscription {
   id: string
   clientSecret?: string
+  defaultPaymentMethod?: string
+  remoteCustomerId: string
+  invoiceId: string
+  plan?: Plan
   status: string
+  items?: Items
 }
 
 export interface CreateSubscriptionOptions {

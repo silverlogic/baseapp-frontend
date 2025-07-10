@@ -24,3 +24,25 @@ export const INVOICE_API_KEY = {
   default: ['invoice'] as QueryKey,
   get: (...params: string[]) => [...INVOICE_API_KEY.default, ...params] as QueryKey,
 }
+
+export const SUBSCRIPTION_API_KEY = {
+  default: ['useGetSubscription'] as QueryKey,
+  get: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
+}
+export const CREATION_SUBSCRIPTION_API_KEY = {
+  default: ['useCreationSubscription'] as QueryKey,
+  get: (...params: string[]) => [...CREATION_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
+}
+
+export const UPDATE_SUBSCRIPTION_API_KEY = {
+  default: ['useCreationSubscription'] as QueryKey,
+  get: (...params: string[]) => [...UPDATE_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
+}
+export const CANCEL_SUBSCRIPTION_API_KEY = {
+  default: ['useCancelSubscription'] as QueryKey,
+  get: (...params: string[]) => [...CANCEL_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
+}
+export const SETUP_INTENT_API_KEY = {
+  default: ['useSetupIntent'] as QueryKey,
+  get: (...params: string[]) => [...SETUP_INTENT_API_KEY.default, ...params] as QueryKey,
+}

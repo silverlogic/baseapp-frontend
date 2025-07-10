@@ -2,17 +2,18 @@ import { FC, useEffect, useState } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
-import { useNotification } from '@baseapp-frontend/utils'
+import { getApiErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Add } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { getStripePromise } from '../utils/stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
 import { PRODUCT_API_KEY } from '../services/keys'
+import { getStripePromise } from '../utils/stripe'
 import PaymentMethodsItem from './components/PaymentMethodsItem'
 import {
   PaymentMethodsManagementComponentProps,
@@ -46,7 +47,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
         sendToast('Payment method removed successfully', { type: 'success' })
       },
       onError: (error: any) => {
-        const message = error?.response?.data?.error ?? error?.message ?? 'Please try again.'
+        const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
         sendToast(`Failed to delete payment method: ${message}`, { type: 'error' })
       },
     })
@@ -55,7 +56,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
       sendToast('Default payment method set successfully', { type: 'success' })
     },
     onError: (error: any) => {
-      const message = error?.response?.data?.error ?? error?.message ?? 'Please try again.'
+      const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
       sendToast(`Failed to set default payment method: ${message}`, { type: 'error' })
     },
   })
@@ -198,7 +199,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
             </Typography>
           }
           action={
-            <Button
+            <LoadingButton
               variant="contained"
               color="error"
               disabled={isDeletingPaymentMethod}
@@ -207,7 +208,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
               }}
             >
               {isDeletingPaymentMethod ? 'Removing...' : 'Remove'}
-            </Button>
+            </LoadingButton>
           }
         />
       )}
