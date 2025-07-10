@@ -21,7 +21,7 @@ const Checkout: FC<CheckoutProps> = ({
   lastAddedPaymentMethodIdDuringSession,
   ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps = {},
-  checkoutCustomerId,
+  entityId,
   paymentMethods,
   product,
   isLoadingMethods,
@@ -86,7 +86,7 @@ const Checkout: FC<CheckoutProps> = ({
     try {
       createSubscription(
         {
-          customerId: checkoutCustomerId || '',
+          entityId: entityId ?? 0,
           priceId: product.defaultPrice.id,
           allowIncomplete: true,
           paymentMethodId: selectedPaymentMethodId,
@@ -243,7 +243,7 @@ const Checkout: FC<CheckoutProps> = ({
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider' }} />
               {elements && stripe && (
                 <PaymentDropdown
-                  customerId={checkoutCustomerId}
+                  entityId={entityId}
                   paymentMethods={paymentMethods}
                   selectedPaymentMethodId={selectedPaymentMethodId}
                   setSelectedPaymentMethodId={setSelectedPaymentMethodId}

@@ -8,6 +8,7 @@ import {
   CONFIRM_CARD_PAYMENT_API_KEY,
   CREATION_SUBSCRIPTION_API_KEY,
   CUSTOMER_API_KEY,
+  INVOICE_API_KEY,
   PAYMENT_METHOD_API_KEY,
   PRODUCT_API_KEY,
   SETUP_INTENT_API_KEY,
@@ -21,34 +22,31 @@ const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
-  const useGetCustomer = () =>
+  const useGetCustomer = (entityId?: number) =>
     useQuery({
-      queryKey: [CUSTOMER_API_KEY.get()],
-      queryFn: () => StripeApi.getCustomer(),
+      queryKey: [CUSTOMER_API_KEY.get(entityId?.toString() ?? 'me')],
+      queryFn: () => StripeApi.getCustomer(entityId),
     })
 
   const useCreateCustomer = () =>
     useMutation({
-      mutationFn: (userId?: string) => StripeApi.createCustomer(userId),
+      mutationFn: () => StripeApi.createCustomer(),
     })
 
-  const useSetupIntent = (customerId?: string) =>
+  const useSetupIntent = (entityId: number) =>
     useMutation({
-      mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
-      onSuccess: () => {
-        console.log('Setup intent created successfully:')
-      },
+      mutationFn: (id: number) => StripeApi.createSetupIntent(id),
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
-      mutationKey: [SETUP_INTENT_API_KEY.get(), customerId],
+      mutationKey: [SETUP_INTENT_API_KEY.get(), entityId],
     })
 
-  const useListPaymentMethods = (customerId: string) =>
+  const useListPaymentMethods = (entityId: number) =>
     useQuery({
-      queryKey: [PAYMENT_METHOD_API_KEY.get(), customerId],
-      queryFn: () => StripeApi.listPaymentMethods(customerId),
-      enabled: !!customerId,
+      queryKey: [PAYMENT_METHOD_API_KEY.get(entityId.toString())],
+      queryFn: () => StripeApi.listPaymentMethods(entityId),
+      enabled: !!entityId,
     })
 
   const useUpdatePaymentMethod = (options: {
@@ -58,20 +56,19 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         defaultPaymentMethodId,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: number
         defaultPaymentMethodId?: string
       }) =>
-        StripeApi.updatePaymentMethod(paymentMethodId, {
-          customerId,
+        StripeApi.updatePaymentMethod(entityId, paymentMethodId, {
           defaultPaymentMethodId,
         }),
       onSuccess: (_data, variables) => {
         queryClient.invalidateQueries({
-          queryKey: [PAYMENT_METHOD_API_KEY.get(), variables.customerId],
+          queryKey: [PAYMENT_METHOD_API_KEY.get(), variables.entityId],
         })
         options.onSuccess?.()
       },
@@ -87,13 +84,13 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         isDefault,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: number
         isDefault: boolean
-      }) => StripeApi.deletePaymentMethod(paymentMethodId, customerId, isDefault),
+      }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: PAYMENT_METHOD_API_KEY.get() })
         options.onSuccess?.()
@@ -129,11 +126,11 @@ const useStripeHook = () => {
       mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
-  const useGetProduct = (customerId: string) =>
+  const useGetProduct = (productId: string) =>
     useQuery({
-      queryKey: [PRODUCT_API_KEY.get(), customerId],
-      queryFn: () => StripeApi.getProduct(customerId),
-      enabled: !!customerId,
+      queryKey: [PRODUCT_API_KEY.get(productId)],
+      queryFn: () => StripeApi.getProduct(productId),
+      enabled: !!productId,
     })
 
   const useCreationSubscription = () =>
@@ -193,6 +190,12 @@ const useStripeHook = () => {
       mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
     })
 
+  const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: number }) =>
+    useQuery({
+      queryKey: [INVOICE_API_KEY.get(page.toString())],
+      queryFn: () => StripeApi.listInvoices(page, entityId),
+    })
+
   return {
     useGetCustomer,
     useCreateCustomer,
@@ -206,6 +209,7 @@ const useStripeHook = () => {
     useGetSubscription,
     useCancelSubscription,
     useUpdateSubscription,
+    useListInvoices,
   }
 }
 

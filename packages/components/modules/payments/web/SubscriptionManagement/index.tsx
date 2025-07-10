@@ -12,17 +12,22 @@ import { SubscriptionManagementProps } from './types'
 
 const SubscriptionManagement: FC<SubscriptionManagementProps> = ({
   subscriptionId,
-  customerId,
+  entityId,
   stripePublishableKey,
 }) => {
   const { useSetupIntent } = useStripeHook()
-  const { mutate: createSetupIntent, data: setupIntent, isPending, isError } = useSetupIntent()
+  const {
+    mutate: createSetupIntent,
+    data: setupIntent,
+    isPending,
+    isError,
+  } = useSetupIntent(entityId)
   const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
     useState<string | null>(null)
 
   useEffect(() => {
-    if (customerId) {
-      createSetupIntent(customerId)
+    if (entityId) {
+      createSetupIntent(entityId)
     }
   }, [createSetupIntent])
 
@@ -30,7 +35,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({
     if (paymentMethodId) {
       setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
     }
-    createSetupIntent(customerId)
+    createSetupIntent(entityId)
   }
 
   return isPending || isError || !setupIntent?.clientSecret ? (
@@ -44,7 +49,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({
     >
       <ManagementComponent
         subscriptionId={subscriptionId}
-        customerId={customerId}
+        entityId={entityId}
         handleSetupSuccess={handleSetupSuccess}
         lastAddedPaymentMethodIdDuringSession={lastAddedPaymentMethodIdDuringSession}
       />
