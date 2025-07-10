@@ -1,5 +1,14 @@
 # @baseapp-frontend/components
 
+## 1.2.3
+
+### Patch Changes
+
+- Update config so websockets works properly on Native
+- Fix Error msg when missing ChatRoomProvider
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.3.1
+
 ## 1.2.2
 
 ### Patch Changes

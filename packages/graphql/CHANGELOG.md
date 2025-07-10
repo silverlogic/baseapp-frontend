@@ -1,5 +1,12 @@
 # @baseapp-frontend/graphql
 
+## 1.3.1
+
+### Patch Changes
+
+- Update config so websockets works properly on Native
+- Fix Error msg when missing ChatRoomProvider
+
 ## 1.3.0
 
 ### Patch Changes
