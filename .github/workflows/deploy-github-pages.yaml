@@ -23,7 +23,7 @@ jobs:
           version: 9.12.0
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build Storybook
         run: pnpm --filter @baseapp-frontend/components storybook:build
@@ -33,5 +33,5 @@ jobs:
         with:
           path: packages/components/storybook-static
           checkout: false
-          install_command: pnpm install --frozen-lockfile
+          install_command: pnpm install
           build_command: pnpm --filter @baseapp-frontend/components storybook:build
