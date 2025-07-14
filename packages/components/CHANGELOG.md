@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.2.4
+
+### Minor Changes
+
+- Remove setProfileExpoStorage from web component ProfileSettingsComponent
+
 ## 1.2.3
 
 ### Patch Changes
