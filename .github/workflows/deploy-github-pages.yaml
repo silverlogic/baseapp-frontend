@@ -25,10 +25,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Storybook
-        run: pnpm --filter @baseapp-frontend/components storybook:build
+      # - name: Build Storybook
+      #   run: pnpm --filter @baseapp-frontend/components storybook:build
 
       - name: Deploy Storybook to GitHub Pages
-        uses: actions/upload-pages-artifact@v3
+        uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
         with:
           path: packages/components/storybook-static
+          checkout: false
+          install_command: pnpm install --frozen-lockfile
+          build_command: pnpm --filter @baseapp-frontend/components storybook:build
