@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - hotfix/storybook-build
 
 permissions:
   contents: read
