@@ -44,7 +44,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
-        run: pnpm --filter @baseapp-frontend/components storybook:build
+        run: |
+          rm -rf packages/components/node_modules/.cache/storybook
+          pnpm --filter @baseapp-frontend/components storybook:build
 
       - name: Deploy Storybook to GitHub Pages
         uses: bitovi/github-actions-storybook-to-github-pages@v1.0.3
