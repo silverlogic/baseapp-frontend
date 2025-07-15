@@ -76,29 +76,71 @@ type BannerBlock implements StreamFieldInterface {
   imagePosition: ImagePosition!
 }
 
+type BAPage implements Node & PageInterface & PermissionsInterface & CommentsInterface {
+  created: DateTime!
+  modified: DateTime!
+  user: User
+  status: PageStatus
+
+  """
+  The ID of the object
+  """
+  id: ID!
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  commentsCount: CommentsCount!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """
+    Ordering
+    """
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+  pk: Int!
+  title: String
+  body: String
+}
+
+type BAPageConnection {
+  """
+  Pagination data for this connection.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Contains the nodes in this connection.
+  """
+  edges: [BAPageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
 """
-An enumeration.
+A Relay edge containing a `BAPage` and its cursor.
 """
-enum BaseappNotificationsNotificationLevelChoices {
+type BAPageEdge {
   """
-  success
+  The item at the end of the edge
   """
-  SUCCESS
+  node: BAPage
 
   """
-  info
+  A cursor for use in pagination
   """
-  INFO
-
-  """
-  warning
-  """
-  WARNING
-
-  """
-  error
-  """
-  ERROR
+  cursor: String!
 }
 
 type Block implements Node {
@@ -722,6 +764,125 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
+type ContentPost implements Node & ReactionsInterface {
+  created: DateTime!
+  modified: DateTime!
+  isReactionsEnabled: Boolean!
+  user: User!
+  profile: Profile
+  content: String!
+  images(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+    post: ID
+  ): ContentPostImageConnection
+
+  """
+  The ID of the object
+  """
+  id: ID!
+  reactionsCount: ReactionsCount
+  reactions(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReactionConnection
+  myReaction(profileId: ID): Reaction
+  pk: Int!
+}
+
+type ContentPostConnection {
+  """
+  Pagination data for this connection.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Contains the nodes in this connection.
+  """
+  edges: [ContentPostEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input ContentPostCreateInput {
+  content: String!
+  isReactionsEnabled: Boolean!
+  clientMutationId: String
+}
+
+type ContentPostCreatePayload {
+  """
+  May contain more than one error for same field.
+  """
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
+}
+
+"""
+A Relay edge containing a `ContentPost` and its cursor.
+"""
+type ContentPostEdge {
+  """
+  The item at the end of the edge
+  """
+  node: ContentPost
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
+}
+
+type ContentPostImage implements Node {
+  image(width: Int!, height: Int!): File
+  post: ContentPost!
+
+  """
+  The ID of the object
+  """
+  id: ID!
+  pk: Int!
+}
+
+type ContentPostImageConnection {
+  """
+  Pagination data for this connection.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Contains the nodes in this connection.
+  """
+  edges: [ContentPostImageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""
+A Relay edge containing a `ContentPostImage` and its cursor.
+"""
+type ContentPostImageEdge {
+  """
+  The item at the end of the edge
+  """
+  node: ContentPostImage
+
+  """
+  A cursor for use in pagination
+  """
+  cursor: String!
+}
+
 type CustomDocument {
   id: ID
   collection: CollectionObjectType!
@@ -1159,6 +1320,15 @@ schema (one of the key benefits of GraphQL).
 """
 scalar JSONString
 
+"""
+Languages available
+"""
+enum Languages {
+  en
+  es
+  pt
+}
+
 type ListBlock implements StreamFieldInterface {
   id: String
   blockType: String!
@@ -1224,7 +1394,22 @@ enum MessageType {
   SYSTEM_GENERATED
 }
 
+type Metadata {
+  created: DateTime!
+  modified: DateTime!
+  targetObjectId: Int
+  language: Languages
+  metaTitle: String
+  metaDescription: String
+  metaRobots: String
+  metaOgType: String
+  metaOgImage(width: Int!, height: Int!): File
+  pk: Int!
+}
+
 type Mutation {
+  rateCreate(input: RateCreateInput!): RateCreatePayload
+  organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
@@ -1233,7 +1418,10 @@ type Mutation {
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
-  organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
+  reportCreate(input: ReportCreateInput!): ReportCreatePayload
+  followToggle(input: FollowToggleInput!): FollowTogglePayload
+  blockToggle(input: BlockToggleInput!): BlockTogglePayload
+  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(
     input: NotificationsMarkAllAsReadInput!
@@ -1241,21 +1429,19 @@ type Mutation {
   notificationSettingToggle(
     input: NotificationSettingToggleInput!
   ): NotificationSettingTogglePayload
-  blockToggle(input: BlockToggleInput!): BlockTogglePayload
-  followToggle(input: FollowToggleInput!): FollowTogglePayload
-  rateCreate(input: RateCreateInput!): RateCreatePayload
-  reportCreate(input: ReportCreateInput!): ReportCreatePayload
-  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
+  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
   commentDelete(input: CommentDeleteInput!): CommentDeletePayload
+  pageCreate(input: PageCreateInput!): PageCreatePayload
+  pageEdit(input: PageEditInput!): PageEditPayload
+  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
   profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
   profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
-  deleteNode(input: DeleteNodeInput!): DeleteNodePayload
 }
 
 """
@@ -1356,7 +1542,7 @@ type Notification implements Node {
   The ID of the object
   """
   id: ID!
-  level: BaseappNotificationsNotificationLevelChoices!
+  level: NotificationsNotificationLevelChoices!
   recipient: User!
   unread: Boolean!
   actorObjectId: String!
@@ -1500,7 +1686,7 @@ interface NotificationsInterface {
     after: String
     first: Int
     last: Int
-    level: BaseappNotificationsNotificationLevelChoices
+    level: NotificationsNotificationLevelChoices
     unread: Boolean
     verbs: String
   ): NotificationConnection
@@ -1550,6 +1736,31 @@ type NotificationsMarkAsReadPayload {
   recipient: NotificationsInterface
   notifications: [Notification]
   clientMutationId: String
+}
+
+"""
+An enumeration.
+"""
+enum NotificationsNotificationLevelChoices {
+  """
+  success
+  """
+  SUCCESS
+
+  """
+  info
+  """
+  INFO
+
+  """
+  warning
+  """
+  WARNING
+
+  """
+  error
+  """
+  ERROR
 }
 
 type OnCommentChange {
@@ -1611,7 +1822,11 @@ type OrganizationEdge {
   cursor: String!
 }
 
-type Page implements PageInterface {
+"""
+Base Page type used if one isn't generated for the current model.
+All other node types extend this.
+"""
+type Page implements WagtailPageInterface {
   id: ID
   path: String!
   depth: Int
@@ -1641,10 +1856,9 @@ type Page implements PageInterface {
   sitesRootedHere: [SiteObjectType!]!
   aliases: [Page!]!
   standardpage: StandardPage
-  pagefortests: PageForTests
   pageType: String
   url: String
-  parent: PageInterface
+  parent: WagtailPageInterface
   children(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1680,7 +1894,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   siblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1716,7 +1930,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   nextSiblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1752,7 +1966,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   previousSiblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1788,7 +2002,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   descendants(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1824,7 +2038,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   ancestors(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -1860,7 +2074,7 @@ type Page implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   searchScore: Float
 }
 
@@ -1869,257 +2083,44 @@ type PageChooserBlock implements StreamFieldInterface {
   blockType: String!
   field: String!
   rawValue: String!
-  page: PageInterface
+  page: WagtailPageInterface
 }
 
-type PageForTests implements PageInterface {
-  id: ID
-  path: String!
-  depth: Int
-  numchild: Int!
-  translationKey: UUID!
-  live: Boolean!
-  hasUnpublishedChanges: Boolean!
-  firstPublishedAt: DateTime
-  lastPublishedAt: DateTime
-  goLiveAt: DateTime
-  expireAt: DateTime
-  expired: Boolean!
-  locked: Boolean
-  lockedAt: DateTime
-  lockedBy: User
-  title: String!
-  draftTitle: String!
-  slug: String!
-  contentType: String!
-  urlPath: String!
-  owner: User
-  seoTitle: String!
-  showInMenus: Boolean!
-  searchDescription: String
-  latestRevisionCreatedAt: DateTime
-  aliasOf: Page
-  body: [StreamFieldInterface]
-  pageType: String
-  url: String
-  parent: PageInterface
-  children(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
+input PageCreateInput {
+  user: String
+  title: String
+  body: String
+  urlPath: String
+  clientMutationId: String
+}
 
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
+type PageCreatePayload {
+  """
+  May contain more than one error for same field.
+  """
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  page: BAPageEdge
+  clientMutationId: String
+}
 
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
+input PageEditInput {
+  id: ID!
+  user: String
+  title: String
+  body: String
+  urlPath: String
+  clientMutationId: String
+}
 
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  siblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  nextSiblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  previousSiblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  descendants(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  ancestors(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  searchScore: Float
+type PageEditPayload {
+  """
+  May contain more than one error for same field.
+  """
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  page: BAPage
+  clientMutationId: String
 }
 
 """
@@ -2148,239 +2149,28 @@ type PageInfo {
 }
 
 interface PageInterface {
-  id: ID
-  title: String!
-  slug: String!
-  contentType: String!
-  pageType: String
-  live: Boolean!
-  url: String
-  urlPath: String!
-  depth: Int
-  seoTitle: String!
-  searchDescription: String
-  showInMenus: Boolean!
-  locked: Boolean
-  firstPublishedAt: DateTime
-  lastPublishedAt: DateTime
-  parent: PageInterface
-  children(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
+  """
+  The ID of the object
+  """
+  id: ID!
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
+}
 
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
+"""
+An enumeration.
+"""
+enum PageStatus {
+  """
+  Draft
+  """
+  DRAFT
 
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  siblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  nextSiblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  previousSiblings(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  descendants(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  ancestors(
-    """
-    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
-    """
-    inMenu: Boolean
-
-    """
-    Limit a number of resulting objects.
-    """
-    limit: PositiveInt
-
-    """
-    Number of records skipped from the beginning of the results set.
-    """
-    offset: PositiveInt
-
-    """
-    Use the Django queryset order format.
-    """
-    order: String
-
-    """
-    Filter the results using Wagtail's search.
-    """
-    searchQuery: String
-
-    """
-    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
-    """
-    searchOperator: SearchOperatorEnum = AND
-
-    """
-    Filter by ID
-    """
-    id: ID
-  ): [PageInterface!]!
-  searchScore: Float
+  """
+  Published
+  """
+  PUBLISHED
 }
 
 interface PermissionsInterface {
@@ -2400,7 +2190,7 @@ GraphQL type for an integer that must be equal or greater than zero.
 """
 scalar PositiveInt
 
-type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface {
+type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
   """
   The ID of the object
   """
@@ -2411,7 +2201,7 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
   blockingCount: Int
   followersCount: Int
   followingCount: Int
-  reportsCount: JSONString!
+  reportsCount: GenericScalar
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
   name: String
@@ -2434,24 +2224,6 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     """
     orderBy: String
   ): CommentConnection!
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  following(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
-  followers(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    targetIsFollowingBack: Boolean
-  ): FollowConnection
   reactions(
     first: Int
     last: Int
@@ -2460,20 +2232,6 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     before: String
     id: ID
   ): ReactionConnection!
-  members(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    role: ProfileRoles
-
-    """
-    Ordering
-    """
-    orderBy: String
-    q: String
-  ): ProfileUserRoleConnection
   ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
   activitylogSet(
@@ -2488,6 +2246,20 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     profilePk: Decimal
     userName: String
   ): ActivityLogConnection!
+  members(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    role: ProfileRoles
+
+    """
+    Ordering
+    """
+    orderBy: String
+    q: String
+  ): ProfileUserRoleConnection
   chatroomparticipantSet(
     first: Int
     last: Int
@@ -2527,11 +2299,44 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     before: String
     verb: Verbs
   ): MessageConnection!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """
+    Ordering
+    """
+    orderBy: String
+  ): ContentPostConnection!
+  following(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    targetIsFollowingBack: Boolean
+  ): FollowConnection
+  followers(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    targetIsFollowingBack: Boolean
+  ): FollowConnection
+  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
 
   """
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
   isFollowedByMe(profileId: ID): Boolean
   isBlockedByMe(profileId: ID): Boolean
   chatRooms(
@@ -2551,6 +2356,16 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     archived: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
+  reports(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReportConnection
+  myReports: Report
+  pk: Int!
   activityLogs(
     visibility: VisibilityTypes
     first: Int = 10
@@ -2565,7 +2380,6 @@ type Profile implements Node & PermissionsInterface & FollowsInterface & BlocksI
     userName: String
   ): ActivityLogConnection
   target: ProfileInterface
-  pk: Int!
 }
 
 type ProfileConnection {
@@ -2836,6 +2650,7 @@ type Query {
     """
     id: ID
   ): [TagObjectType!]!
+  search(query: String): [Search!]!
   snippets: [SnippetInterface!]!
   document(id: ID): CustomDocument
   documents(
@@ -3006,7 +2821,7 @@ type Query {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   page(
     id: ID
     slug: String
@@ -3036,31 +2851,7 @@ type Query {
     Filter to pages in the give site.
     """
     site: String
-  ): PageInterface
-  chatRoom(
-    """
-    The ID of the object
-    """
-    id: ID!
-  ): ChatRoom
-  organization(
-    """
-    The ID of the object
-    """
-    id: ID!
-  ): Organization
-  rate(
-    """
-    The ID of the object
-    """
-    id: ID!
-  ): Rate
-  reaction(
-    """
-    The ID of the object
-    """
-    id: ID!
-  ): Reaction
+  ): WagtailPageInterface
   activityLogs(
     visibility: VisibilityTypes
     first: Int = 10
@@ -3074,6 +2865,63 @@ type Query {
     profilePk: Decimal
     userName: String
   ): ActivityLogConnection
+  organization(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): Organization
+  chatRoom(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): ChatRoom
+  rate(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): Rate
+  report(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): Report
+  reportTypes(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): ReportType
+  allReportTypes(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    topLevelOnly: Boolean
+    targetObjectId: String
+  ): ReportTypeConnection
+  contentPost(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): ContentPost
+  contentPosts(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+
+    """
+    Ordering
+    """
+    orderBy: String
+  ): ContentPostConnection
   comment(
     """
     The ID of the object
@@ -3093,6 +2941,21 @@ type Query {
     """
     orderBy: String
   ): CommentConnection
+  urlPath(path: String!): URLPath
+  allPages(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    status: PageStatus
+  ): BAPageConnection
+  baPage(
+    """
+    The ID of the object
+    """
+    id: ID!
+  ): BAPage
   allProfiles(
     offset: Int
     before: String
@@ -3327,7 +3190,7 @@ type Redirect {
   oldPath: String!
   oldUrl: String!
   newUrl: String
-  page: PageInterface
+  page: WagtailPageInterface
   site: SiteObjectType!
   isPermanent: Boolean!
 }
@@ -3348,7 +3211,7 @@ type Report implements Node {
   created: DateTime!
   modified: DateTime!
   user: User!
-  reportType: ReportTypes
+  reportType: ReportType
   reportSubject: String
   pk: Int!
   target: Node
@@ -3370,7 +3233,7 @@ type ReportConnection {
 
 input ReportCreateInput {
   targetObjectId: ID!
-  reportType: ReportTypes = null
+  reportTypeId: ID!
   reportSubject: String
   clientMutationId: String
 }
@@ -3401,20 +3264,12 @@ type ReportEdge {
   cursor: String!
 }
 
-type ReportsCount {
-  SPAM: Int
-  INAPPROPRIATE: Int
-  FAKE: Int
-  OTHER: Int
-  total: Int
-}
-
 interface ReportsInterface {
   """
   The ID of the object
   """
   id: ID!
-  reportsCount: ReportsCount
+  reportsCount: GenericScalar
   reports(
     offset: Int
     before: String
@@ -3426,29 +3281,53 @@ interface ReportsInterface {
   myReports: Report
 }
 
+type ReportType implements Node {
+  """
+  The ID of the object
+  """
+  id: ID!
+  key: String!
+  label: String!
+  parentType: ReportType
+  subTypes(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    topLevelOnly: Boolean
+    targetObjectId: String
+  ): ReportTypeConnection!
+  pk: Int!
+}
+
+type ReportTypeConnection {
+  """
+  Pagination data for this connection.
+  """
+  pageInfo: PageInfo!
+
+  """
+  Contains the nodes in this connection.
+  """
+  edges: [ReportTypeEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
 """
-An enumeration.
+A Relay edge containing a `ReportType` and its cursor.
 """
-enum ReportTypes {
+type ReportTypeEdge {
   """
-  Spam
+  The item at the end of the edge
   """
-  SPAM
+  node: ReportType
 
   """
-  Inappropriate
+  A cursor for use in pagination
   """
-  INAPPROPRIATE
-
-  """
-  Fake
-  """
-  FAKE
-
-  """
-  Other
-  """
-  OTHER
+  cursor: String!
 }
 
 scalar RichText
@@ -3477,6 +3356,8 @@ type RoleUpdatePayload {
   profileUserRole: ProfileUserRole
   clientMutationId: String
 }
+
+union Search = StandardPage | Page | CustomDocument | CustomImage | CustomRendition
 
 """
 Enum for search operator.
@@ -3547,8 +3428,14 @@ type SiteObjectType {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
-  page(id: ID, slug: String, urlPath: String, token: String, contentType: String): PageInterface
+  ): [WagtailPageInterface!]!
+  page(
+    id: ID
+    slug: String
+    urlPath: String
+    token: String
+    contentType: String
+  ): WagtailPageInterface
 }
 
 type SnippetChooserBlock implements StreamFieldInterface {
@@ -3564,7 +3451,7 @@ interface SnippetInterface {
   contentType: String!
 }
 
-type StandardPage implements PageInterface {
+type StandardPage implements WagtailCommentsInterface & WagtailPageInterface & WagtailNotificationsInterfaceInterface & WagtailReportsInterfaceInterface & WagtailReactionsInterface {
   id: ID
   path: String!
   depth: Int
@@ -3591,10 +3478,29 @@ type StandardPage implements PageInterface {
   searchDescription: String
   latestRevisionCreatedAt: DateTime
   aliasOf: Page
+  reportsCount: GenericScalar
+  reactionsCount: ReactionsCount
+  isReactionsEnabled: Boolean!
+  commentsCount: CommentsCount!
+  isCommentsEnabled: Boolean!
+  featuredImage: [StreamFieldInterface]
   body: [StreamFieldInterface]
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """
+    Ordering
+    """
+    orderBy: String
+  ): CommentConnection
   pageType: String
   url: String
-  parent: PageInterface
+  parent: WagtailPageInterface
   children(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3630,7 +3536,7 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   siblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3666,7 +3572,7 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   nextSiblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3702,7 +3608,7 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   previousSiblings(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3738,7 +3644,7 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   descendants(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3774,7 +3680,7 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   ancestors(
     """
     Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
@@ -3810,8 +3716,45 @@ type StandardPage implements PageInterface {
     Filter by ID
     """
     id: ID
-  ): [PageInterface!]!
+  ): [WagtailPageInterface!]!
   searchScore: Float
+  notificationsUnreadCount: Int
+  notifications(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    level: NotificationsNotificationLevelChoices
+    unread: Boolean
+    verbs: String
+  ): NotificationConnection
+  notificationSettings(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): NotificationSettingConnection
+  isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+  reports(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReportConnection
+  myReports: Report
+  reactions(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReactionConnection
+  myReaction(profileId: ID): Reaction
 }
 
 type StaticBlock implements StreamFieldInterface {
@@ -3857,8 +3800,8 @@ type Subscription {
   chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage
   chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
   chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
-  onCommentChange(targetObjectId: ID): OnCommentChange
   onNotificationChange: OnNotificationChange
+  onCommentChange(targetObjectId: ID): OnCommentChange
 }
 
 type TagObjectType {
@@ -3930,7 +3873,21 @@ type URLBlock implements StreamFieldInterface {
   value: String!
 }
 
-type User implements Node & PermissionsInterface & NotificationsInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
+type URLPath implements Node {
+  """
+  The ID of the object
+  """
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  path: String!
+  language: Languages
+  isActive: Boolean!
+  pk: Int!
+  target: PageInterface
+}
+
+type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
   lastLogin: DateTime
   isSuperuser: Boolean
   email: String
@@ -3969,6 +3926,14 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Rati
     """
     orderBy: String
   ): CommentConnection!
+  pages(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    status: PageStatus
+  ): BAPageConnection!
 
   """
   The ID of the object
@@ -3986,7 +3951,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Rati
     after: String
     first: Int
     last: Int
-    level: BaseappNotificationsNotificationLevelChoices
+    level: NotificationsNotificationLevelChoices
     unread: Boolean
     verbs: String
   ): NotificationConnection
@@ -3998,6 +3963,9 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Rati
     last: Int
   ): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
   ratingsCount: Int
   ratingsSum: Int
   ratingsAverage: Float
@@ -4097,4 +4065,311 @@ enum VisibilityTypes {
   internal
   """
   INTERNAL
+}
+
+interface WagtailCommentsInterface {
+  id: ID
+  commentsCount: CommentsCount!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """
+    Ordering
+    """
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+}
+
+interface WagtailNotificationsInterfaceInterface {
+  id: ID
+  notificationsUnreadCount: Int
+  notifications(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    level: NotificationsNotificationLevelChoices
+    unread: Boolean
+    verbs: String
+  ): NotificationConnection
+  notificationSettings(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+  ): NotificationSettingConnection
+  isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+}
+
+interface WagtailPageInterface {
+  id: ID
+  title: String!
+  slug: String!
+  contentType: String!
+  pageType: String
+  live: Boolean!
+  url: String
+  urlPath: String!
+  depth: Int
+  seoTitle: String!
+  searchDescription: String
+  showInMenus: Boolean!
+  locked: Boolean
+  firstPublishedAt: DateTime
+  lastPublishedAt: DateTime
+  parent: WagtailPageInterface
+  children(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  siblings(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  nextSiblings(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  previousSiblings(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  descendants(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  ancestors(
+    """
+    Filter pages by Page.show_in_menus property. That is, the 'show in menus' checkbox is checked in the page editor.
+    """
+    inMenu: Boolean
+
+    """
+    Limit a number of resulting objects.
+    """
+    limit: PositiveInt
+
+    """
+    Number of records skipped from the beginning of the results set.
+    """
+    offset: PositiveInt
+
+    """
+    Use the Django queryset order format.
+    """
+    order: String
+
+    """
+    Filter the results using Wagtail's search.
+    """
+    searchQuery: String
+
+    """
+    Specify search operator (and/or), see: https://docs.wagtail.org/en/stable/topics/search/searching.html#search-operator
+    """
+    searchOperator: SearchOperatorEnum = AND
+
+    """
+    Filter by ID
+    """
+    id: ID
+  ): [WagtailPageInterface!]!
+  searchScore: Float
+}
+
+interface WagtailReactionsInterface {
+  id: ID
+  reactionsCount: ReactionsCount
+  reactions(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReactionConnection
+  isReactionsEnabled: Boolean!
+  myReaction(profileId: ID): Reaction
+}
+
+interface WagtailReportsInterfaceInterface {
+  id: ID
+  reportsCount: GenericScalar
+  reports(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    id: ID
+  ): ReportConnection
+  myReports: Report
 }

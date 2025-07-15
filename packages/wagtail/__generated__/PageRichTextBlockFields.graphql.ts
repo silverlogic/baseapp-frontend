@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d01c9b117aa2345367ab7fecdbff913e>>
+ * @generated SignedSource<<5e22b7043860ebe071e1ae9c24d99320>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { Fragment, ReaderFragment } from 'relay-runtime'
+import { ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type PageRichTextBlockFields$data = {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<12274c03a8c1300e74568209f8917161>>
+ * @generated SignedSource<<882dd60051ef97e5b6384218c74c3817>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { Fragment, ReaderFragment } from 'relay-runtime'
+import { ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type PageCustomImageBlockFields$data = {

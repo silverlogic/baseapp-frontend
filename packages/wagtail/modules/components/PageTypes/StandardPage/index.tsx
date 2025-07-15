@@ -3,28 +3,29 @@
 import { FC } from 'react'
 
 import { Box, Container, Typography } from '@mui/material'
+import Image from 'next/image'
 
 import { PageLayoutProvider } from '../../../providers/PageLayoutProvider'
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import { PageType } from '../types'
+import { ImageBox } from './styled'
 
 const StandardPage: FC<PageType> = ({ children }) => {
   const { currentPage } = useWagtailPagesContext()
   return (
     <PageLayoutProvider>
       <Container sx={{ mb: 4, gap: 3, display: 'flex', flexDirection: 'column' }}>
-        {/* TODO: (wagtail) add the featured image */}
-        {/* {currentPage.featuredImage?.image?.imageSizes?.medium && (
+        {currentPage.featuredImage?.[0]?.image?.url && (
           <ImageBox>
             <Image
               loader={({ src, width }) => `${src}?w=${width}`}
-              src={currentPage.featuredImage.image.imageSizes.full.imageUrl}
-              alt={currentPage.featuredImage.image.altText ?? ''}
+              src={currentPage.featuredImage[0].image.url}
+              alt={currentPage.featuredImage[0].altText ?? ''}
               style={{ objectFit: 'cover' }}
               fill
             />
           </ImageBox>
-        )} */}
+        )}
         <Typography variant="h2" component="h1">
           {currentPage.title}
         </Typography>

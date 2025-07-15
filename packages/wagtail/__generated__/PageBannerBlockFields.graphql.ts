@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<b5ff4376972f2410e4bacb70c94e4f8f>>
+ * @generated SignedSource<<98db6bd351896be7247e382412c1d0d2>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,7 +8,7 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { Fragment, ReaderFragment } from 'relay-runtime'
+import { ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
 export type ImagePosition = 'left' | 'right' | '%future added value'

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6ace01761bbb57462671be5d6fd2edfd>>
+ * @generated SignedSource<<4511e67609f002ac7bee727e0b766bca>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,215 +8,117 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { ConcreteRequest, Query } from 'relay-runtime'
+import { ConcreteRequest } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
 
-export type PageURLPathQuery$variables = {
-  path: string
+export type PageWagtailTokenQuery$variables = {
+  contentType: string
+  token: string
 }
-export type PageURLPathQuery$data = {
+export type PageWagtailTokenQuery$data = {
   readonly page:
     | {
-        readonly ancestors: ReadonlyArray<{
-          readonly title: string
-          readonly urlPath: string
-        }>
-        readonly body?:
-          | ReadonlyArray<
-              | {
-                  readonly blockType: string
-                  readonly blocks?: ReadonlyArray<{
-                    readonly blockType: string
-                    readonly field: string
-                    readonly id: string | null | undefined
-                    readonly ' $fragmentSpreads': FragmentRefs<
-                      | 'PageBannerBlockFields'
-                      | 'PageCustomImageBlockFields'
-                      | 'PageRichTextBlockFields'
-                    >
-                  }>
-                  readonly field: string
-                  readonly id: string | null | undefined
-                }
-              | null
-              | undefined
-            >
-          | null
-          | undefined
-        readonly id: string | null | undefined
-        readonly pageType: string | null | undefined
-        readonly title: string
+        readonly ' $fragmentSpreads': FragmentRefs<'PageWagtailFieldsFragment'>
       }
     | null
     | undefined
 }
-export type PageURLPathQuery = {
-  response: PageURLPathQuery$data
-  variables: PageURLPathQuery$variables
+export type PageWagtailTokenQuery = {
+  response: PageWagtailTokenQuery$data
+  variables: PageWagtailTokenQuery$variables
 }
 
 const node: ConcreteRequest = (function () {
-  var v0 = [
-      {
-        defaultValue: null,
-        kind: 'LocalArgument',
-        name: 'path',
-      },
-    ],
-    v1 = [
+  var v0 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'contentType',
+    },
+    v1 = {
+      defaultValue: null,
+      kind: 'LocalArgument',
+      name: 'token',
+    },
+    v2 = [
       {
         kind: 'Variable',
-        name: 'urlPath',
-        variableName: 'path',
+        name: 'contentType',
+        variableName: 'contentType',
+      },
+      {
+        kind: 'Variable',
+        name: 'token',
+        variableName: 'token',
       },
     ],
-    v2 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'id',
-      storageKey: null,
-    },
     v3 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'title',
-      storageKey: null,
-    },
-    v4 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'pageType',
-      storageKey: null,
-    },
-    v5 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'urlPath',
-      storageKey: null,
-    },
-    v6 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'field',
-      storageKey: null,
-    },
-    v7 = {
-      alias: null,
-      args: null,
-      kind: 'ScalarField',
-      name: 'blockType',
-      storageKey: null,
-    },
-    v8 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: '__typename',
       storageKey: null,
     },
-    v9 = {
+    v4 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'id',
+      storageKey: null,
+    },
+    v5 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'title',
+      storageKey: null,
+    },
+    v6 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'altText',
+      storageKey: null,
+    },
+    v7 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
       name: 'url',
       storageKey: null,
     },
-    v10 = {
+    v8 = {
       alias: null,
       args: null,
       kind: 'ScalarField',
-      name: 'altText',
+      name: 'field',
+      storageKey: null,
+    },
+    v9 = {
+      alias: null,
+      args: null,
+      kind: 'ScalarField',
+      name: 'blockType',
       storageKey: null,
     }
   return {
     fragment: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v0 /*: any*/, v1 /*: any*/],
       kind: 'Fragment',
       metadata: null,
-      name: 'PageURLPathQuery',
+      name: 'PageWagtailTokenQuery',
       selections: [
         {
           alias: null,
-          args: v1 /*: any*/,
+          args: v2 /*: any*/,
           concreteType: null,
           kind: 'LinkedField',
           name: 'page',
           plural: false,
           selections: [
-            v2 /*: any*/,
-            v3 /*: any*/,
-            v4 /*: any*/,
             {
-              alias: null,
               args: null,
-              concreteType: null,
-              kind: 'LinkedField',
-              name: 'ancestors',
-              plural: true,
-              selections: [v5 /*: any*/, v3 /*: any*/],
-              storageKey: null,
-            },
-            {
-              kind: 'InlineFragment',
-              selections: [
-                {
-                  alias: null,
-                  args: null,
-                  concreteType: null,
-                  kind: 'LinkedField',
-                  name: 'body',
-                  plural: true,
-                  selections: [
-                    v2 /*: any*/,
-                    v6 /*: any*/,
-                    v7 /*: any*/,
-                    {
-                      kind: 'InlineFragment',
-                      selections: [
-                        {
-                          alias: null,
-                          args: null,
-                          concreteType: null,
-                          kind: 'LinkedField',
-                          name: 'blocks',
-                          plural: true,
-                          selections: [
-                            v2 /*: any*/,
-                            v6 /*: any*/,
-                            v7 /*: any*/,
-                            {
-                              args: null,
-                              kind: 'FragmentSpread',
-                              name: 'PageBannerBlockFields',
-                            },
-                            {
-                              args: null,
-                              kind: 'FragmentSpread',
-                              name: 'PageRichTextBlockFields',
-                            },
-                            {
-                              args: null,
-                              kind: 'FragmentSpread',
-                              name: 'PageCustomImageBlockFields',
-                            },
-                          ],
-                          storageKey: null,
-                        },
-                      ],
-                      type: 'StreamBlock',
-                      abstractKey: null,
-                    },
-                  ],
-                  storageKey: null,
-                },
-              ],
-              type: 'StandardPage',
-              abstractKey: null,
+              kind: 'FragmentSpread',
+              name: 'PageWagtailFieldsFragment',
             },
           ],
           storageKey: null,
@@ -227,22 +129,32 @@ const node: ConcreteRequest = (function () {
     },
     kind: 'Request',
     operation: {
-      argumentDefinitions: v0 /*: any*/,
+      argumentDefinitions: [v1 /*: any*/, v0 /*: any*/],
       kind: 'Operation',
-      name: 'PageURLPathQuery',
+      name: 'PageWagtailTokenQuery',
       selections: [
         {
           alias: null,
-          args: v1 /*: any*/,
+          args: v2 /*: any*/,
           concreteType: null,
           kind: 'LinkedField',
           name: 'page',
           plural: false,
           selections: [
-            v8 /*: any*/,
-            v2 /*: any*/,
             v3 /*: any*/,
+            {
+              kind: 'TypeDiscriminator',
+              abstractKey: '__isWagtailPageInterface',
+            },
             v4 /*: any*/,
+            v5 /*: any*/,
+            {
+              alias: null,
+              args: null,
+              kind: 'ScalarField',
+              name: 'pageType',
+              storageKey: null,
+            },
             {
               alias: null,
               args: null,
@@ -250,7 +162,18 @@ const node: ConcreteRequest = (function () {
               kind: 'LinkedField',
               name: 'ancestors',
               plural: true,
-              selections: [v8 /*: any*/, v5 /*: any*/, v3 /*: any*/, v2 /*: any*/],
+              selections: [
+                v3 /*: any*/,
+                {
+                  alias: null,
+                  args: null,
+                  kind: 'ScalarField',
+                  name: 'urlPath',
+                  storageKey: null,
+                },
+                v5 /*: any*/,
+                v4 /*: any*/,
+              ],
               storageKey: null,
             },
             {
@@ -261,13 +184,53 @@ const node: ConcreteRequest = (function () {
                   args: null,
                   concreteType: null,
                   kind: 'LinkedField',
+                  name: 'featuredImage',
+                  plural: true,
+                  selections: [
+                    v3 /*: any*/,
+                    {
+                      kind: 'InlineFragment',
+                      selections: [
+                        v6 /*: any*/,
+                        {
+                          alias: null,
+                          args: null,
+                          concreteType: 'CustomImage',
+                          kind: 'LinkedField',
+                          name: 'image',
+                          plural: false,
+                          selections: [
+                            v7 /*: any*/,
+                            {
+                              alias: null,
+                              args: null,
+                              kind: 'ScalarField',
+                              name: 'sizes',
+                              storageKey: null,
+                            },
+                            v4 /*: any*/,
+                          ],
+                          storageKey: null,
+                        },
+                      ],
+                      type: 'CustomImageBlock',
+                      abstractKey: null,
+                    },
+                  ],
+                  storageKey: null,
+                },
+                {
+                  alias: null,
+                  args: null,
+                  concreteType: null,
+                  kind: 'LinkedField',
                   name: 'body',
                   plural: true,
                   selections: [
+                    v3 /*: any*/,
+                    v4 /*: any*/,
                     v8 /*: any*/,
-                    v2 /*: any*/,
-                    v6 /*: any*/,
-                    v7 /*: any*/,
+                    v9 /*: any*/,
                     {
                       kind: 'InlineFragment',
                       selections: [
@@ -279,14 +242,14 @@ const node: ConcreteRequest = (function () {
                           name: 'blocks',
                           plural: true,
                           selections: [
+                            v3 /*: any*/,
+                            v4 /*: any*/,
                             v8 /*: any*/,
-                            v2 /*: any*/,
-                            v6 /*: any*/,
-                            v7 /*: any*/,
+                            v9 /*: any*/,
                             {
                               kind: 'InlineFragment',
                               selections: [
-                                v3 /*: any*/,
+                                v5 /*: any*/,
                                 {
                                   alias: null,
                                   args: null,
@@ -301,7 +264,7 @@ const node: ConcreteRequest = (function () {
                                   kind: 'LinkedField',
                                   name: 'featuredImage',
                                   plural: false,
-                                  selections: [v9 /*: any*/, v10 /*: any*/, v2 /*: any*/],
+                                  selections: [v7 /*: any*/, v6 /*: any*/, v4 /*: any*/],
                                   storageKey: null,
                                 },
                                 {
@@ -332,7 +295,7 @@ const node: ConcreteRequest = (function () {
                             {
                               kind: 'InlineFragment',
                               selections: [
-                                v10 /*: any*/,
+                                v6 /*: any*/,
                                 {
                                   alias: null,
                                   args: null,
@@ -341,7 +304,7 @@ const node: ConcreteRequest = (function () {
                                   name: 'image',
                                   plural: false,
                                   selections: [
-                                    v9 /*: any*/,
+                                    v7 /*: any*/,
                                     {
                                       alias: null,
                                       args: [
@@ -366,8 +329,8 @@ const node: ConcreteRequest = (function () {
                                       storageKey:
                                         'srcSet(format:"webp",preserveSvg:true,sizes:[300,600,900])',
                                     },
-                                    v10 /*: any*/,
-                                    v2 /*: any*/,
+                                    v6 /*: any*/,
+                                    v4 /*: any*/,
                                   ],
                                   storageKey: null,
                                 },
@@ -395,16 +358,16 @@ const node: ConcreteRequest = (function () {
       ],
     },
     params: {
-      cacheID: '3bdbe9da75de17d70757e04fe392c2cf',
+      cacheID: '8fb1d5d739ce4acd4c27ab35ed27a81a',
       id: null,
       metadata: {},
-      name: 'PageURLPathQuery',
+      name: 'PageWagtailTokenQuery',
       operationKind: 'query',
-      text: 'query PageURLPathQuery(\n  $path: String!\n) {\n  page(urlPath: $path) {\n    __typename\n    id\n    title\n    pageType\n    ancestors {\n      __typename\n      urlPath\n      title\n      id\n    }\n    ... on StandardPage {\n      body {\n        __typename\n        id\n        field\n        blockType\n        ... on StreamBlock {\n          blocks {\n            __typename\n            id\n            field\n            blockType\n            ...PageBannerBlockFields\n            ...PageRichTextBlockFields\n            ...PageCustomImageBlockFields\n          }\n        }\n      }\n    }\n  }\n}\n\nfragment PageBannerBlockFields on BannerBlock {\n  title\n  description\n  featuredImage {\n    url\n    altText\n    id\n  }\n  imagePosition\n}\n\nfragment PageCustomImageBlockFields on CustomImageBlock {\n  altText\n  image {\n    url\n    srcSet(sizes: [300, 600, 900], format: "webp", preserveSvg: true)\n    altText\n    id\n  }\n}\n\nfragment PageRichTextBlockFields on RichTextBlock {\n  value\n}\n',
+      text: 'query PageWagtailTokenQuery(\n  $token: String!\n  $contentType: String!\n) {\n  page(token: $token, contentType: $contentType) {\n    __typename\n    ...PageWagtailFieldsFragment\n    id\n  }\n}\n\nfragment PageBannerBlockFields on BannerBlock {\n  title\n  description\n  featuredImage {\n    url\n    altText\n    id\n  }\n  imagePosition\n}\n\nfragment PageCustomImageBlockFields on CustomImageBlock {\n  altText\n  image {\n    url\n    srcSet(sizes: [300, 600, 900], format: "webp", preserveSvg: true)\n    altText\n    id\n  }\n}\n\nfragment PageRichTextBlockFields on RichTextBlock {\n  value\n}\n\nfragment PageWagtailFieldsFragment on WagtailPageInterface {\n  __isWagtailPageInterface: __typename\n  id\n  title\n  pageType\n  ancestors {\n    __typename\n    urlPath\n    title\n    id\n  }\n  ... on StandardPage {\n    featuredImage {\n      __typename\n      ... on CustomImageBlock {\n        altText\n        image {\n          url\n          sizes\n          id\n        }\n      }\n    }\n    body {\n      __typename\n      id\n      field\n      blockType\n      ... on StreamBlock {\n        blocks {\n          __typename\n          id\n          field\n          blockType\n          ...PageBannerBlockFields\n          ...PageRichTextBlockFields\n          ...PageCustomImageBlockFields\n        }\n      }\n    }\n  }\n}\n',
     },
   }
 })()
 
-;(node as any).hash = 'e60fa22ab5be7827847c70af399a5587'
+;(node as any).hash = '1e60966c8bc7b89aa0245cc07721a768'
 
 export default node

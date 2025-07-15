@@ -1,9 +1,9 @@
 import type { FC } from 'react'
 
-import type { PageURLPathQuery$data } from '../../../__generated__/PageURLPathQuery.graphql'
+import type { PageWagtailFieldsFragment$data } from '../../../__generated__/PageWagtailFieldsFragment.graphql'
 import type { AvailableBlocksType } from '../Blocks/types'
 
-export type PageBody = NonNullable<NonNullable<PageURLPathQuery$data['page']>['body']>
+export type PageBody = NonNullable<NonNullable<PageWagtailFieldsFragment$data>['body']>
 export type PageBodySectionStreamBlock = NonNullable<PageBody[number]>
 export type PageBodyBlock = NonNullable<NonNullable<PageBodySectionStreamBlock['blocks']>[number]>
 export type PageBodyItem = PageBodySectionStreamBlock | PageBodyBlock

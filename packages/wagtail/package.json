@@ -13,7 +13,7 @@
     "relay:update-schema": "yarn relay:download-schema && yarn relay",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
-    "prettier": "prettier --write .",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "storybook": "pnpm relay && storybook dev -p 6007",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",

@@ -29,33 +29,56 @@ export const PageCustomImageBlockFields = graphql`
   }
 `
 
-export const getPageByURLPathQuery = graphql`
-  query PageURLPathQuery($path: String!) {
-    page(urlPath: $path) {
-      id
+export const PageWagtailFieldsFragment = graphql`
+  fragment PageWagtailFieldsFragment on WagtailPageInterface {
+    id
+    title
+    pageType
+    ancestors {
+      urlPath
       title
-      pageType
-      ancestors {
-        urlPath
-        title
-      }
-      ... on StandardPage {
-        body {
-          id
-          field
-          blockType
-          ... on StreamBlock {
-            blocks {
-              id
-              field
-              blockType
-              ...PageBannerBlockFields
-              ...PageRichTextBlockFields
-              ...PageCustomImageBlockFields
-            }
+    }
+    ... on StandardPage {
+      featuredImage {
+        ... on CustomImageBlock {
+          altText
+          image {
+            url
+            sizes
           }
         }
       }
+      body {
+        id
+        field
+        blockType
+        ... on StreamBlock {
+          blocks {
+            id
+            field
+            blockType
+            ...PageBannerBlockFields
+            ...PageRichTextBlockFields
+            ...PageCustomImageBlockFields
+          }
+        }
+      }
+    }
+  }
+`
+
+export const getPageWagtailByURLPathQuery = graphql`
+  query PageWagtailURLPathQuery($path: String!) {
+    page(urlPath: $path) {
+      ...PageWagtailFieldsFragment
+    }
+  }
+`
+
+export const getPageWagtailByTokenQuery = graphql`
+  query PageWagtailTokenQuery($token: String!, $contentType: String!) {
+    page(token: $token, contentType: $contentType) {
+      ...PageWagtailFieldsFragment
     }
   }
 `

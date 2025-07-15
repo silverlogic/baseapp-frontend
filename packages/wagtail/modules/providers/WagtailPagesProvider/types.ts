@@ -1,6 +1,6 @@
 import React from 'react'
 
-import type { PageURLPathQuery$data } from '../../../__generated__/PageURLPathQuery.graphql'
+import type { PageWagtailFieldsFragment$data } from '../../../__generated__/PageWagtailFieldsFragment.graphql'
 import type { AvailableBlocksType } from '../../components/Blocks/types'
 import type { AvailablePageTypesType } from '../../components/PageTypes/types'
 
@@ -10,7 +10,7 @@ export type WagtailPagesProviderProps = {
 }
 
 export type WagtailPagesContextState = {
-  currentPage: NonNullable<PageURLPathQuery$data['page']>
+  currentPage: NonNullable<PageWagtailFieldsFragment$data>
   availablePageTypes: AvailablePageTypesType
   availableBlocks: AvailableBlocksType
 }
