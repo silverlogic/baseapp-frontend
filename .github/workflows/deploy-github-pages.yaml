@@ -27,8 +27,21 @@ jobs:
         with:
           node-version: 20
 
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> "$GITHUB_ENV"
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile && pnpm install -w @baseapp-frontend/design-system
+        run: pnpm install --frozen-lockfile
 
       - name: Build Storybook
         run: pnpm --filter @baseapp-frontend/components storybook:build
@@ -38,5 +51,3 @@ jobs:
         with:
           path: packages/components/storybook-static
           checkout: false
-          install_command: pnpm install --frozen-lockfile
-          build_command: pnpm --filter @baseapp-frontend/components storybook:build
