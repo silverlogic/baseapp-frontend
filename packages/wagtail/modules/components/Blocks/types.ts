@@ -1,7 +1,7 @@
 import type { FC } from 'react'
 
-import type { PageBodyItem } from '../../services/Wagtail/PagesAPI/types'
+import type { PageBodyBlock, PageBodyItem, PageBodySectionStreamBlock } from '../StreamField/types'
 
 export type AvailableBlocksType = {
-  [key in PageBodyItem as key['type']]: FC<Extract<PageBodyItem, { type: key['type'] }>>
+  [field in PageBodyItem['field']]: FC<PageBodyBlock> | FC<PageBodySectionStreamBlock>
 }

@@ -4,7 +4,14 @@ import type { WagtailPagesContextState } from '../../providers/WagtailPagesProvi
 
 export interface PageParams {
   params: {
-    path: string[]
+    path?: string[]
+  }
+}
+
+export interface PageSearchParams {
+  searchParams: {
+    token: string
+    contentType: string
   }
 }
 

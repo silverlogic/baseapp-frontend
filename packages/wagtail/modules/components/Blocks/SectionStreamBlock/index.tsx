@@ -2,14 +2,15 @@
 
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import StreamField from '../../StreamField'
+import type { PageBodySectionStreamBlock } from '../../StreamField/types'
 import { StreamFieldWrapper } from './styled'
-import type { SectionStreamBlockProps } from './types'
 
-const SectionStreamBlock = ({ value }: SectionStreamBlockProps) => {
+const SectionStreamBlock = ({ blocks }: PageBodySectionStreamBlock) => {
   const { availableBlocks } = useWagtailPagesContext()
+  if (!blocks) return null
   return (
     <StreamFieldWrapper>
-      <StreamField body={value} availableBlocks={availableBlocks} />
+      <StreamField body={blocks} availableBlocks={availableBlocks} />
     </StreamFieldWrapper>
   )
 }

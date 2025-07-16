@@ -2,20 +2,17 @@
 
 import { FC } from 'react'
 
-import { PageBodyItem } from '../../services/Wagtail/PagesAPI/types'
-import { StreamFieldProps } from './types'
+import type { PageBodyItem, StreamFieldProps } from './types'
 
 const StreamField: FC<StreamFieldProps> = ({ body, availableBlocks }) => (
   <>
     {body.map((block) => {
-      const blockType = block.type
+      if (!block) return null
 
-      const BlockComponent = availableBlocks[blockType]
+      const BlockComponent = availableBlocks[block.field as PageBodyItem['field']]
 
       if (BlockComponent) {
-        const TypedComponent = BlockComponent as FC<
-          Extract<PageBodyItem, { type: typeof blockType }>
-        >
+        const TypedComponent = BlockComponent as FC<PageBodyItem>
 
         return <TypedComponent key={block.id} {...block} />
       }

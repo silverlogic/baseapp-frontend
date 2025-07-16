@@ -1,17 +1,16 @@
 import React from 'react'
 
+import type { PageWagtailFieldsFragment$data } from '../../../__generated__/PageWagtailFieldsFragment.graphql'
 import type { AvailableBlocksType } from '../../components/Blocks/types'
 import type { AvailablePageTypesType } from '../../components/PageTypes/types'
-import type { Page } from '../../services/Wagtail/PagesAPI/types'
-import type { PartialExcept } from '../../services/Wagtail/types'
 
 export type WagtailPagesProviderProps = {
   children: React.ReactNode
-  defaultSettings: PartialExcept<WagtailPagesContextState, 'currentPage'>
+  defaultSettings: Partial<Omit<WagtailPagesContextState, 'currentPage'>>
 }
 
 export type WagtailPagesContextState = {
-  currentPage: Page
+  currentPage: NonNullable<PageWagtailFieldsFragment$data>
   availablePageTypes: AvailablePageTypesType
   availableBlocks: AvailableBlocksType
 }

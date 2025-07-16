@@ -1,12 +1,9 @@
 import type { BoxProps } from '@mui/system'
 
-import type { PageBodyItem } from '../../../services/Wagtail/PagesAPI/types'
+import type { PageBodyBlock } from '../../StreamField/types'
 
-export interface RichTextBlockBodyItem extends PageBodyItem {
-  value: string
-  type: 'rich_text_block'
-}
+export type RichTextBlockBodyItem = PageBodyBlock
 
-export interface RichTextBlockProps extends Omit<RichTextBlockBodyItem, 'type'> {
+export interface RichTextBlockProps extends RichTextBlockBodyItem {
   WrapperProps?: BoxProps
 }
