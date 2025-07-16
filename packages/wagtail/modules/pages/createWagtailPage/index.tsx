@@ -29,7 +29,9 @@ const getCurrentPage = async (
   path?: string,
   token?: string,
   contentType?: string,
-): Promise<SerializablePreloadedQuery<ConcreteRequest, any>> => {
+): Promise<
+  SerializablePreloadedQuery<ConcreteRequest, PageWagtailURLPathQuery | PageWagtailTokenQuery>
+> => {
   let queryOptions: PageQueryOptions | null = null
 
   if (token !== undefined && contentType !== undefined) {
@@ -48,7 +50,10 @@ const getCurrentPage = async (
 
   const { node, variables } = queryOptions
 
-  const preloadedQuery = await loadSerializableQuery<typeof node, any>(node.params, variables)
+  const preloadedQuery = await loadSerializableQuery<
+    typeof node,
+    PageWagtailURLPathQuery | PageWagtailTokenQuery
+  >(node.params, variables)
 
   const response = (preloadedQuery.response as GraphQLResponseWithData).data
   const page = response?.page

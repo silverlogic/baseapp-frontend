@@ -33,7 +33,7 @@ const WagtailPagesProvider: FC<
   if (!currentPage?.page) {
     throw new Error('Current page not found in provider')
   }
-  const curretnPageFragment = useFragment(
+  const currentPageFragment = useFragment(
     PageWagtailFieldsFragment,
     currentPage.page,
   ) as PageWagtailFieldsFragment$data
@@ -41,7 +41,7 @@ const WagtailPagesProvider: FC<
   const [state, setState] = useState<WagtailPagesContextState>({
     ...PROVIDER_INITIAL_STATE,
     ...defaultSettings,
-    currentPage: curretnPageFragment,
+    currentPage: currentPageFragment,
     availablePageTypes: {
       ...PROVIDER_INITIAL_STATE.availablePageTypes,
       ...defaultSettings.availablePageTypes,

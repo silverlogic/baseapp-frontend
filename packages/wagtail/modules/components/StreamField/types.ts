@@ -14,4 +14,4 @@ export interface StreamFieldProps {
 }
 
 // helper type to transform PageBodyItem into FC<RichTextBlockProps> | FC<ImageBlockProps> | ...
-export type ExtractFC<T> = T extends { type: string } ? FC<T> : never
+export type ExtractFC<T> = T extends { field: string } ? FC<T> : never
