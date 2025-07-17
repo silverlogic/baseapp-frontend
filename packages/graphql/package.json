@@ -28,6 +28,7 @@
     "react": "catalog:react19"
   },
   "devDependencies": {
+    "@baseapp-frontend/authentication": "workspace:*",
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/js-cookie": "catalog:",
