@@ -1235,6 +1235,9 @@ importers:
         specifier: catalog:graphql
         version: 19.0.0
     devDependencies:
+      '@baseapp-frontend/authentication':
+        specifier: workspace:*
+        version: link:../authentication
       '@baseapp-frontend/config':
         specifier: workspace:*
         version: link:../config
