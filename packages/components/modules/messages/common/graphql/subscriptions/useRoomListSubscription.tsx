@@ -50,6 +50,8 @@ export const useRoomListSubscription = ({
 }) => {
   const { id: selectedRoom, resetChatRoom } = useChatRoom()
 
+  console.log('useRoomListSubscription')
+
   const config = useMemo(() => {
     const wasRemovedFromChatRoom = (data: useRoomListSubscription$data | null | undefined) =>
       data?.chatRoomOnRoomUpdate?.removedParticipants?.some(
