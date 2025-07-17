@@ -13,6 +13,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@baseapp-frontend/authentication": "workspace:*",
     "graphql": "catalog:graphql",
     "graphql-ws": "catalog:graphql",
     "isomorphic-ws": "catalog:graphql",
@@ -28,7 +29,6 @@
     "react": "catalog:react19"
   },
   "devDependencies": {
-    "@baseapp-frontend/authentication": "workspace:*",
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/js-cookie": "catalog:",
