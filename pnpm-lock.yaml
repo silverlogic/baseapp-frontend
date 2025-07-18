@@ -1201,6 +1201,9 @@ importers:
 
   packages/graphql:
     dependencies:
+      '@baseapp-frontend/authentication':
+        specifier: workspace:*
+        version: link:../authentication
       '@baseapp-frontend/utils':
         specifier: workspace:*
         version: link:../utils
