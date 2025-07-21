@@ -38,3 +38,9 @@ export const getCardIcon = (brand?: string) => {
       return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
   }
 }
+
+export const STATUS_COLORS = {
+  paid: 'success' as const,
+  failed: 'error' as const,
+  pending: 'warning' as const,
+}

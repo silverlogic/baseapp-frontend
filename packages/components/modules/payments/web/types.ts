@@ -23,14 +23,16 @@ export interface PaymentMethod {
     }
   }
 }
-interface DefaultPrice {
+
+interface MarketingFeatures {
+  name: string
+}
+
+export interface Price {
   id: string
   unitAmount: number
   currency?: string
   locale?: string
-}
-interface MarketingFeatures {
-  name: string
 }
 
 export interface Product {
@@ -38,7 +40,7 @@ export interface Product {
   name: string
   images: string[]
   description: string
-  defaultPrice: DefaultPrice
+  defaultPrice: Price
   marketingFeatures?: MarketingFeatures[]
 }
 
@@ -46,11 +48,13 @@ interface Plan {
   product: string
   amount: number
 }
+
 interface Items {
   data: {
     currentPeriodEnd: number
   }[]
 }
+
 export interface Subscription {
   id: string
   clientSecret?: string
@@ -63,9 +67,35 @@ export interface Subscription {
 }
 
 export interface CreateSubscriptionOptions {
-  customerId: string
+  entityId: number
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
   billingDetails?: BillingDetails
+}
+
+export interface SubscriptionRequestBody {
+  entityId: number
+  priceId: string
+  paymentMethodId?: string
+  allowIncomplete?: boolean
+  billingDetails?: CreateSubscriptionOptions['billingDetails']
+}
+
+export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
+  defaultPaymentMethodId?: string
+}
+
+export interface InvoiceLines {
+  description: string
+  amount: number
+}
+
+export interface Invoice {
+  id: string
+  amountDue: number
+  status: string
+  webhooksDeliveredAt: string
+  hostedInvoiceUrl: string
+  lines: InvoiceLines[]
 }
