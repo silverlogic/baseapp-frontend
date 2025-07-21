@@ -11,7 +11,7 @@ import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
 import { AddCardModalProps } from './types'
 
 const AddCardModal: FC<AddCardModalProps> = ({
-  customerId,
+  entityId,
   open,
   onClose,
   stripe,
@@ -111,7 +111,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
                   color="inherit"
                   sx={{ width: 'auto' }}
                   onClick={handleConfirmSetup}
-                  disabled={!customerId || isAddingCardPaymentProcessing}
+                  disabled={!entityId || isAddingCardPaymentProcessing}
                 >
                   Confirm
                 </Button>

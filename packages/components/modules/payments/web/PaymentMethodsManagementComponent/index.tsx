@@ -21,7 +21,7 @@ import {
 } from './types'
 
 const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentProps> = ({
-  customerId,
+  entityId,
 }) => {
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -40,7 +40,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useListPaymentMethods(customerId ?? '')
+  } = useListPaymentMethods(entityId ?? 0)
   const { mutate: deletePaymentMethod, isPending: isDeletingPaymentMethod } =
     useDeletePaymentMethod({
       onSuccess: () => {
@@ -65,7 +65,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     data: setupIntent,
     isPending: isCreatingSetupIntent,
     isError: isErrorCreatingSetupIntent,
-  } = useSetupIntent(customerId ?? '')
+  } = useSetupIntent(entityId ?? 0)
 
   const handleCloseModal = () => {
     setIsAddCardModalOpen(false)
@@ -79,7 +79,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     updatePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
       defaultPaymentMethodId: selectedPaymentMethodId ?? '',
-      customerId: customerId ?? '',
+      entityId: entityId ?? 0,
     })
   }
 
@@ -90,7 +90,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     }
     deletePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
-      customerId: customerId ?? '',
+      entityId: entityId ?? 0,
       isDefault:
         paymentMethods?.find((pm) => pm.id === selectedPaymentMethodId)?.isDefault ?? false,
     })
@@ -137,7 +137,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           variant="soft"
           color="inherit"
           onClick={() => {
-            createSetupIntent(customerId ?? '')
+            createSetupIntent(entityId ?? 0)
           }}
           startIcon={<Add />}
           disabled={isCreatingSetupIntent}
@@ -175,7 +175,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
       </Menu>
       {elements && stripe && setupIntent && (
         <AddCardModal
-          customerId={customerId}
+          entityId={entityId}
           stripe={stripe}
           elements={elements}
           open={isAddCardModalOpen}
@@ -217,11 +217,11 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 }
 
 const PaymentMethodsManagementComponentWithElements = ({
-  customerId,
+  entityId,
   stripePublishableKey,
 }: PaymentMethodsManagementComponentWithElementsProps) => (
   <Elements stripe={getStripePromise(stripePublishableKey)}>
-    <PaymentMethodsManagementComponent customerId={customerId} />
+    <PaymentMethodsManagementComponent entityId={entityId} />
   </Elements>
 )
 

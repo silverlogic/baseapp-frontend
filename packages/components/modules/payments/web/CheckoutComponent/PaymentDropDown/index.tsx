@@ -22,7 +22,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   elements,
   setIsAddCardModalOpen,
   isAddCardModalOpen,
-  customerId,
+  entityId,
   handleSetupSuccess,
 }) => {
   const isEmpty = !paymentMethods || paymentMethods.length === 0
@@ -108,7 +108,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
       )}
 
       <AddCardModal
-        customerId={customerId}
+        entityId={entityId}
         stripe={stripe}
         elements={elements}
         open={isAddCardModalOpen}
