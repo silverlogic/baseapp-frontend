@@ -1,4 +1,13 @@
-import { TableCellProps, TableProps, TableRowProps, TypographyProps } from '@mui/material'
+import { ChangeEvent } from 'react'
+
+import {
+  TableCellProps,
+  TableFooterProps,
+  TableHeadProps,
+  TableProps,
+  TableRowProps,
+  TypographyProps,
+} from '@mui/material'
 
 import { Invoice } from '../types'
 
@@ -8,6 +17,8 @@ export interface InvoiceListTableProps {
   tableProps?: TableProps
   rowProps?: TableRowProps
   cellProps?: TableCellProps
+  headerProps?: TableHeadProps
+  footerProps?: TableFooterProps
 }
 
 export interface InvoiceItemWrapperProps {
@@ -24,4 +35,16 @@ export interface InvoiceItemTableRowProps {
   formattedDate: string
   amountDue: string
   color: 'success' | 'error' | 'warning'
+}
+
+export interface InvoiceListTableFooterProps {
+  count?: number
+  page: number
+  onChange?: (event: ChangeEvent<unknown>, page: number) => void
+  footerProps?: TableFooterProps
+}
+
+export interface InvoiceListTableHeaderProps {
+  smDown: boolean
+  headerProps?: TableHeadProps
 }
