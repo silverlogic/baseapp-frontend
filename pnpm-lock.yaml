@@ -2486,7 +2486,7 @@ packages:
   '@gorhom/bottom-sheet@5.1.6':
     resolution: {integrity: sha512-0b5tQj4fTaZAjST1PnkCp0p7d8iRqMezibTcqc8Kkn3N23Vn6upORNTD1fH0bLfwRt6e0WnZ7DjAmq315lrcKQ==}
     peerDependencies:
-      '@types/react': '*'
+      '@types/react': ^19.1.4
       '@types/react-native': '*'
       react: '*'
       react-native: '*'
@@ -2857,7 +2857,7 @@ packages:
   '@mdx-js/react@3.1.0':
     resolution: {integrity: sha512-QjHtSaoameoalGnKDT3FoIl4+9RwyTmo9ZJGBdLOks/YOiWHoRDI3PUwEzOE7kEmGcV3AFcp9K6dYu9rEuKLAQ==}
     peerDependencies:
-      '@types/react': '>=16'
+      '@types/react': ^19.1.4
       react: '>=16'
 
   '@mischnic/json-sourcemap@0.1.1':
@@ -2903,7 +2903,7 @@ packages:
     engines: {node: '>=12.0.0'}
     deprecated: This package has been replaced by @base-ui-components/react
     peerDependencies:
-      '@types/react': ^19.1.4
+      '@types/react': ^17.0.0 || ^18.0.0
       react: ^17.0.0 || ^18.0.0
       react-dom: ^17.0.0 || ^18.0.0
     peerDependenciesMeta:
@@ -3048,7 +3048,7 @@ packages:
     resolution: {integrity: sha512-jEZ8FTqInt2WzxDV8bhImWBqeQRD99c/id/fq83H0ER9tFl+sfZlaAoCdznGvbSQQ9ividMxqSV2c7cC1vBcQg==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': ^17.0.0 || ^18.0.0 || ^19.0.0
+      '@types/react': ^19.1.4
       react: ^17.0.0 || ^18.0.0 || ^19.0.0
     peerDependenciesMeta:
       '@types/react':
