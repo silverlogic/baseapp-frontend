@@ -1,12 +1,12 @@
 import { PaymentMethod } from '../types'
 
 export interface PaymentMethodsManagementComponentProps {
-  customerId: string
+  entityId: number
 }
 
 export interface PaymentMethodsManagementComponentWithElementsProps
   extends PaymentMethodsManagementComponentProps {
-  customerId: string
+  entityId: number
   stripePublishableKey: string
 }
 
