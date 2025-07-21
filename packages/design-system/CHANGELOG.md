@@ -1,12 +1,5 @@
 # @baseapp-frontend/design-system
 
-## 1.0.21
-
-### Patch Changes
-
-- Updated dependencies
-  - @baseapp-frontend/graphql@1.3.2
-
 ## 1.0.20
 
 ### Patch Changes
