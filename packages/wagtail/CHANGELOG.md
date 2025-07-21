@@ -1,5 +1,13 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.34
+
+### Patch Changes
+
+- - Fix ECMAScript compatibility
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.21
+
 ## 1.0.33
 
 ### Patch Changes
