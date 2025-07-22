@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 1.2.6
+
+- Implements a new hook: `useMessagesListSubscriptionOnRn`
+- Handles real-time message updates via GraphQL subscription (chatRoomOnMessage)
+- Automatically subscribes/unsubscribes on screen focus using expo useFocusEffect. Ensures clean disposal of the subscription to avoid memory leaks or duplicate events
+- Uses Relay's ConnectionHandler.getConnectionID and append new messages to the proper connection
+
 ## 1.2.5
 
 ### Patch Changes
@@ -7,6 +14,7 @@
 - Updated dependencies
   - @baseapp-frontend/design-system@1.0.21
   - @baseapp-frontend/authentication@5.0.1
+
 
 ## 1.2.4
 
