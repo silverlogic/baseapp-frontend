@@ -1528,7 +1528,13 @@ importers:
       react-relay:
         specifier: catalog:graphql
         version: 19.0.0(react@19.1.0)
+      relay-runtime:
+        specifier: catalog:graphql
+        version: 19.0.0
     devDependencies:
+      '@babel/cli':
+        specifier: ^7.26.4
+        version: 7.27.2(@babel/core@7.27.4)
       '@babel/preset-env':
         specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.27.4)
@@ -1539,7 +1545,7 @@ importers:
         specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.27.4)
       '@baseapp-frontend/config':
-        specifier: workspace:*
+        specifier: workspace:^
         version: link:../config
       '@baseapp-frontend/test':
         specifier: workspace:*
@@ -1553,6 +1559,12 @@ importers:
       '@cypress/webpack-dev-server':
         specifier: catalog:test
         version: 3.10.1(webpack-cli@5.1.4)(webpack@5.93.0)
+      '@faker-js/faker':
+        specifier: catalog:test
+        version: 9.8.0
+      '@storybook/addon-docs':
+        specifier: catalog:storybook
+        version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.0))
       '@storybook/addon-essentials':
         specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.0))
@@ -1583,6 +1595,18 @@ importers:
       '@testing-library/cypress':
         specifier: catalog:test
         version: 10.0.2(cypress@13.16.1)
+      '@testing-library/jest-dom':
+        specifier: catalog:test
+        version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@24.0.4)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.12.6(@swc/helpers@0.5.17))(@types/node@24.0.4)(typescript@5.8.3)))
+      '@testing-library/react':
+        specifier: catalog:test
+        version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@testing-library/user-event':
+        specifier: catalog:test
+        version: 14.5.2(@testing-library/dom@10.4.0)
+      '@types/jest':
+        specifier: catalog:test
+        version: 29.5.12
       '@types/js-cookie':
         specifier: 'catalog:'
         version: 3.0.6
@@ -1598,18 +1622,30 @@ importers:
       '@types/react-relay':
         specifier: catalog:graphql
         version: 18.2.1
+      '@types/relay-runtime':
+        specifier: catalog:graphql
+        version: 19.0.1
       '@types/relay-test-utils':
         specifier: catalog:graphql
         version: 19.0.0
       autoprefixer:
         specifier: catalog:tailwind
         version: 10.4.19(postcss@8.4.38)
+      babel-jest:
+        specifier: catalog:test
+        version: 29.7.0(@babel/core@7.27.4)
       babel-loader:
         specifier: catalog:storybook
         version: 9.2.1(@babel/core@7.27.4)(webpack@5.93.0)
       babel-plugin-relay:
         specifier: catalog:graphql
         version: 19.0.0
+      chalk:
+        specifier: catalog:dev-tools
+        version: 5.4.1
+      chokidar:
+        specifier: catalog:dev-tools
+        version: 4.0.3
       css-loader:
         specifier: catalog:storybook
         version: 7.1.2(webpack@5.93.0)
@@ -1619,6 +1655,9 @@ importers:
       cypress-plugin-steps:
         specifier: catalog:test
         version: 1.1.1(cypress@13.16.1)
+      cypress-wait-until:
+        specifier: catalog:test
+        version: 3.0.2
       dotenv:
         specifier: ^16.4.5
         version: 16.5.0
@@ -1628,12 +1667,24 @@ importers:
       eslint-plugin-storybook:
         specifier: catalog:lint
         version: 0.8.0(eslint@8.57.1)(typescript@5.8.3)
+      execa:
+        specifier: catalog:dev-tools
+        version: 9.6.0
       get-graphql-schema:
         specifier: catalog:graphql
         version: 2.1.2
       html-webpack-plugin:
         specifier: catalog:storybook
         version: 5.6.0(webpack@5.93.0)
+      jest:
+        specifier: catalog:test
+        version: 29.7.0(@types/node@24.0.4)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.12.6(@swc/helpers@0.5.17))(@types/node@24.0.4)(typescript@5.8.3))
+      jest-environment-jsdom:
+        specifier: catalog:test
+        version: 29.7.0
+      jotai:
+        specifier: 'catalog:'
+        version: 2.12.4(@types/react@19.1.4)(react@19.1.0)
       msw:
         specifier: catalog:storybook
         version: 2.6.6(@types/node@24.0.4)(typescript@5.8.3)
@@ -1661,6 +1712,15 @@ importers:
       tailwindcss:
         specifier: catalog:tailwind
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.12.6(@swc/helpers@0.5.17))(@types/node@24.0.4)(typescript@5.8.3))
+      ts-jest:
+        specifier: catalog:test
+        version: 29.1.4(@babel/core@7.27.4)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.27.4))(esbuild@0.24.2)(jest@29.7.0(@types/node@24.0.4)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.12.6(@swc/helpers@0.5.17))(@types/node@24.0.4)(typescript@5.8.3)))(typescript@5.8.3)
+      ts-node:
+        specifier: catalog:test
+        version: 10.9.2(@swc/core@1.12.6(@swc/helpers@0.5.17))(@types/node@24.0.4)(typescript@5.8.3)
+      tsup:
+        specifier: 'catalog:'
+        version: 8.3.6(@swc/core@1.12.6(@swc/helpers@0.5.17))(jiti@1.21.7)(postcss@8.4.38)(typescript@5.8.3)(yaml@2.8.0)
       typescript:
         specifier: 'catalog:'
         version: 5.8.3
@@ -3966,7 +4026,7 @@ packages:
   '@radix-ui/react-slot@1.2.0':
     resolution: {integrity: sha512-ujc+V6r0HNDviYqIK3rW4ffgYiZ8g5DEHrGJVk4x7kTlLXRDILnKX9vAUYeIsLOoDpDJ0ujpqMkjH4w2ofuo6w==}
     peerDependencies:
-      '@types/react': '*'
+      '@types/react': ^19.1.4
       react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
     peerDependenciesMeta:
       '@types/react':

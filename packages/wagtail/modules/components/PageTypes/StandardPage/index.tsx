@@ -15,12 +15,12 @@ const StandardPage: FC<PageType> = ({ children }) => {
   return (
     <PageLayoutProvider>
       <Container sx={{ mb: 4, gap: 3, display: 'flex', flexDirection: 'column' }}>
-        {currentPage.featuredImage?.image?.imageSizes?.medium && (
+        {currentPage.featuredImage?.[0]?.image?.url && (
           <ImageBox>
             <Image
               loader={({ src, width }) => `${src}?w=${width}`}
-              src={currentPage.featuredImage.image.imageSizes.full.imageUrl}
-              alt={currentPage.featuredImage.image.altText ?? ''}
+              src={currentPage.featuredImage[0].image.url}
+              alt={currentPage.featuredImage[0].altText ?? ''}
               style={{ objectFit: 'cover' }}
               fill
             />
