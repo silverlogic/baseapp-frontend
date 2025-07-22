@@ -4,6 +4,7 @@ import { useFocusEffect } from 'expo-router'
 import {
   ConnectionHandler,
   Disposable,
+  Environment,
   graphql,
   requestSubscription,
   useSubscription,
@@ -44,7 +45,7 @@ export const useMessagesListSubscription = (roomId: string, profileId: string) =
 export const useMessagesListSubscriptionOnRn = (
   roomId: string,
   profileId: string,
-  environment: any,
+  environment: Environment,
 ) => {
   const disposableRef = useRef<Disposable | null>(null)
   const connectionID = useMemo(
