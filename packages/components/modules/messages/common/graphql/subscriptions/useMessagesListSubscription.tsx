@@ -74,12 +74,9 @@ export const useMessagesListSubscriptionOnRn = (
       disposableRef.current = requestSubscription(environment, config)
 
       return () => {
-        console.log('[MessagesListSubscription] Cleaning up subscription for', roomId)
         disposableRef.current?.dispose?.()
         disposableRef.current = null
       }
     }, [config, environment]),
   )
-
-  if (!environment) throw new Error('Relay environment is not defined')
 }
