@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.2.7
+
+### Minor Changes
+
+- Abstract `useMessagesListSubscriptionOnRn` hook to native interface so it doesn't break web version due to import problems.
+
 ## 1.2.6
 
 - Implements a new hook: `useMessagesListSubscriptionOnRn`
@@ -14,7 +20,6 @@
 - Updated dependencies
   - @baseapp-frontend/design-system@1.0.21
   - @baseapp-frontend/authentication@5.0.1
-
 
 ## 1.2.4
 
