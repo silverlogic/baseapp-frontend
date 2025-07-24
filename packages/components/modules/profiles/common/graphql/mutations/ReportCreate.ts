@@ -2,7 +2,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateMutation.graphql'
+import { ReportCreateMutation } from '__generated__/ReportCreateMutation.graphql'
 
 export const ReportCreateMutationQuery = graphql`
   mutation ReportCreateMutation($input: ReportCreateInput!) {

@@ -1,1 +1,1 @@
-module.exports = require('@baseapp-frontend/config/.eslintrc-with-restricted-paths.js')
+module.exports = require('../config/.eslintrc-with-restricted-paths.js')

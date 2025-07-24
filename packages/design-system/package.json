@@ -17,51 +17,8 @@
     "test:unit": "jest --config ./jest.config.ts",
     "prepublishOnly": "pnpm run build"
   },
-  "exports": {
-    "./components/*": {
-      "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.mjs",
-      "require": "./dist/components/*/index.js"
-    },
-    "./hooks/*": {
-      "types": "./dist/hooks/*/index.d.ts",
-      "import": "./dist/hooks/*/index.mjs",
-      "require": "./dist/hooks/*/index.js"
-    },
-    "./hooks/web/useUISettings/constants": {
-      "types": "./dist/hooks/web/useUISettings/constants.d.ts",
-      "import": "./dist/hooks/web/useUISettings/constants.mjs",
-      "require": "./dist/hooks/web/useUISettings/constants.js"
-    },
-    "./layouts/*": {
-      "types": "./dist/layouts/*/index.d.ts",
-      "import": "./dist/layouts/*/index.mjs",
-      "require": "./dist/layouts/*/index.js"
-    },
-    "./providers/*": {
-      "types": "./dist/providers/*/index.d.ts",
-      "import": "./dist/providers/*/index.mjs",
-      "require": "./dist/providers/*/index.js"
-    },
-    "./styles/*": {
-      "types": "./dist/styles/*/index.d.ts",
-      "import": "./dist/styles/*/index.mjs",
-      "require": "./dist/styles/*/index.js"
-    },
-    "./styles/web/globals.css": {
-      "default": "./dist/styles/web/index.css"
-    },
-    "./tests/*": {
-      "types": "./dist/tests/*/index.d.ts",
-      "import": "./dist/tests/*/index.mjs",
-      "require": "./dist/tests/*/index.js"
-    },
-    "./utils/*": {
-      "types": "./dist/utils/*/index.d.ts",
-      "import": "./dist/utils/*/index.mjs",
-      "require": "./dist/utils/*/index.js"
-    }
-  },
+  "main": "index.ts",
+  "types": "index.ts",
   "files": [
     "dist"
   ],

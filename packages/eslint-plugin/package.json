@@ -3,9 +3,9 @@
   "description": "Eslint custom rules for BaseApp.",
   "version": "0.0.4",
   "source": "index.ts",
-  "main": "dist/index.js",
-  "module": "dist/module.js",
-  "types": "dist/index.d.ts",
+  "main": "index.ts",
+  "module": "index.ts",
+  "types": "index.ts",
   "sideEffects": false,
   "scripts": {
     "build": "parcel build",

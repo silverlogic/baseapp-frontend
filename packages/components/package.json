@@ -25,53 +25,8 @@
     "test:unit": "jest --config ./jest.config.ts",
     "prepublishOnly": "pnpm run build"
   },
-  "exports": {
-    "./shared/*": {
-      "types": "./dist/__shared__/*/index.d.ts",
-      "import": "./dist/__shared__/*/index.mjs",
-      "require": "./dist/__shared__/*/index.js"
-    },
-    "./activity-log/*": {
-      "types": "./dist/activity-log/*/index.d.ts",
-      "import": "./dist/activity-log/*/index.mjs",
-      "require": "./dist/activity-log/*/index.js"
-    },
-    "./comments/*": {
-      "types": "./dist/comments/*/index.d.ts",
-      "import": "./dist/comments/*/index.mjs",
-      "require": "./dist/comments/*/index.js"
-    },
-    "./messages/*": {
-      "types": "./dist/messages/*/index.d.ts",
-      "import": "./dist/messages/*/index.mjs",
-      "require": "./dist/messages/*/index.js"
-    },
-    "./navigations/*": {
-      "types": "./dist/navigations/*/index.d.ts",
-      "import": "./dist/navigations/*/index.mjs",
-      "require": "./dist/navigations/*/index.js"
-    },
-    "./notifications/*": {
-      "types": "./dist/notifications/*/index.d.ts",
-      "import": "./dist/notifications/*/index.mjs",
-      "require": "./dist/notifications/*/index.js"
-    },
-    "./profiles/*": {
-      "types": "./dist/profiles/*/index.d.ts",
-      "import": "./dist/profiles/*/index.mjs",
-      "require": "./dist/profiles/*/index.js"
-    },
-    "./tests/*": {
-      "types": "./dist/tests/*/index.d.ts",
-      "import": "./dist/tests/*/index.mjs",
-      "require": "./dist/tests/*/index.js"
-    },
-    "./content-feed/*": {
-      "types": "./dist/content-feed/*/index.d.ts",
-      "import": "./dist/content-feed/*/index.mjs",
-      "require": "./dist/content-feed/*/index.js"
-    }
-  },
+  "main": "index.ts",
+  "types": "index.ts",
   "files": [
     "dist"
   ],

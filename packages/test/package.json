@@ -3,7 +3,7 @@
   "description": "Test utils that extends React Testing Library.",
   "version": "2.1.3",
   "main": "./index.ts",
-  "types": "dist/index.d.ts",
+  "types": "./index.ts",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
