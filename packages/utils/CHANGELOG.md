@@ -1,33 +1,34 @@
 # @baseapp-frontend/utils
 
+## 4.0.1
+
+### Minor Changes
+
+- Introduced a new `useAppStateSubscription` hook that allows developers to register a callback (onAppResume) which runs whenever the app returns to the foreground. E.g. after a user unlocks their device or switches back to the app.
+
 ## 4.0.0
 
 ### Major Changes
 
 - **BREAKING:** Removed SSR support from cookie and token functions
-
   - Added `'use client'` directive to `getCookie`, `getToken`, `setTokenAsync`, and `removeTokenAsync` - these are now client-side only
   - Removed `noSSR` parameter from `getCookie`, `getToken`, and related types
   - Removed `getCookieAsync` function entirely
   - For server-side token retrieval, use the new `getTokenSSR` function instead
 
 - **BREAKING:** Removed deprecated `getTokenAsync` function
-
   - Deleted `getTokenAsync` function and all related tests
 
 - **BREAKING:** Removed deprecated cookie constants
-
   - Deleted `ACCESS_COOKIE_NAME` and `REFRESH_COOKIE_NAME` constants
   - These were already deprecated in favor of `ACCESS_KEY_NAME` and `REFRESH_KEY_NAME`
 
 - **BREAKING:** Updated `refreshAccessToken` API
-
   - Now requires explicit `refreshToken` parameter object
   - Updated function signature: `refreshAccessToken({ refreshToken, accessKeyName, refreshKeyName })`
   - No longer retrieves refresh token internally
 
 - **BREAKING:** Removed `ServerSideRenderingOption` type
-
   - Deleted `types/server.ts` file entirely
   - Updated all function signatures to remove SSR-related options
 
