@@ -13,7 +13,6 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@baseapp-frontend/authentication": "workspace:*",
     "graphql": "catalog:graphql",
     "graphql-ws": "catalog:graphql",
     "isomorphic-ws": "catalog:graphql",
@@ -25,6 +24,7 @@
     "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
+    "@baseapp-frontend/authentication": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
     "react": "catalog:react19"
   },
