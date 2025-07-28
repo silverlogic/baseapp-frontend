@@ -1,7 +1,11 @@
 'use client'
 
+import { FC } from 'react'
+
 import { alpha, styled } from '@mui/material/styles'
 import SimpleBar from 'simplebar-react'
+
+import { ScrollbarProps } from './types'
 
 export const StyledRootScrollbar = styled('div')(() => ({
   flexGrow: 1,
@@ -9,7 +13,7 @@ export const StyledRootScrollbar = styled('div')(() => ({
   overflow: 'hidden',
 }))
 
-export const StyledScrollbar = styled(SimpleBar)(({ theme }) => ({
+export const StyledScrollbar: FC<ScrollbarProps> = styled(SimpleBar)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {
