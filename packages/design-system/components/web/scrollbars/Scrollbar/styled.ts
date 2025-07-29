@@ -1,5 +1,7 @@
 'use client'
 
+import { FC } from 'react'
+
 import { alpha, styled } from '@mui/material/styles'
 import SimpleBar from 'simplebar-react'
 
@@ -11,7 +13,8 @@ export const StyledRootScrollbar = styled('div')(() => ({
   overflow: 'hidden',
 }))
 
-export const StyledScrollbar = styled(SimpleBar)<ScrollbarProps>(({ theme }) => ({
+// TODO: type this better
+export const StyledScrollbar: FC<ScrollbarProps> = styled(SimpleBar)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {
