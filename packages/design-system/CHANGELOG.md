@@ -1,10 +1,17 @@
 # @baseapp-frontend/design-system
 
-## 1.0.21
+## 1.0.22
 
 ### Patch Changes
 
 - Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
+
+## 1.0.21
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
 
 ## 1.0.20
 

@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/wagtail",
   "description": "BaseApp Wagtail",
-  "version": "1.0.35",
+  "version": "1.0.36",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,

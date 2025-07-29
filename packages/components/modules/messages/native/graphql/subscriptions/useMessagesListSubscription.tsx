@@ -1,5 +1,7 @@
 import { useCallback, useMemo, useRef } from 'react'
 
+import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
+
 import { useFocusEffect } from 'expo-router'
 import { ConnectionHandler, Disposable, Environment, requestSubscription } from 'react-relay'
 
@@ -11,6 +13,7 @@ export const useMessagesListSubscription = (
   environment: Environment,
 ) => {
   const disposableRef = useRef<Disposable | null>(null)
+
   const connectionID = useMemo(
     () => ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages'),
     [roomId],
@@ -29,18 +32,27 @@ export const useMessagesListSubscription = (
     [roomId, profileId, connectionID],
   )
 
-  // Subscribe to the messages list subscription when the component is focused
-  // and clean up the subscription when the component is unfocused
+  const subscribe = useCallback(() => {
+    if (!roomId || !profileId) return
+    disposableRef.current?.dispose?.()
+    disposableRef.current = requestSubscription(environment, config)
+  }, [roomId, profileId, environment, config])
+
+  const unsubscribe = useCallback(() => {
+    disposableRef.current?.dispose?.()
+    disposableRef.current = null
+  }, [])
+
   useFocusEffect(
     useCallback(() => {
-      if (!roomId || !profileId) return undefined
-
-      disposableRef.current = requestSubscription(environment, config)
-
+      subscribe()
       return () => {
-        disposableRef.current?.dispose?.()
-        disposableRef.current = null
+        unsubscribe()
       }
-    }, [config, environment]),
+    }, [subscribe, unsubscribe]),
   )
+
+  useAppStateSubscription(() => {
+    subscribe()
+  })
 }

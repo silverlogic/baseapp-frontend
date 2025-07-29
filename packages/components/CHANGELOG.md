@@ -1,12 +1,26 @@
 # @baseapp-frontend/components
 
-## 1.2.8
+## 1.2.9
 
 ### Patch Changes
 
 - Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
 - Updated dependencies
   - @baseapp-frontend/design-system@1.0.21
+
+## 1.2.8
+
+### Minor Changes
+
+- Improved the `useMessagesListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground, or vice versa.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+  - @baseapp-frontend/authentication@5.0.2
+  - @baseapp-frontend/design-system@1.0.21
+  - @baseapp-frontend/graphql@1.3.3
 
 ## 1.2.7
 
