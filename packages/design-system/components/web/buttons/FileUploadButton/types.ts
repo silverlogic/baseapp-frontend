@@ -1,6 +1,6 @@
 import { RequireAllOrNone } from '@baseapp-frontend/utils'
 
-import { ButtonProps } from '@mui/material'
+import { ButtonProps, InputProps } from '@mui/material'
 import { Control, FieldValues, UseFormSetValue } from 'react-hook-form'
 
 type ControlProps = RequireAllOrNone<{
@@ -21,4 +21,6 @@ type FileInputProps = {
 
 type CustomButtonProps = Exclude<ButtonProps, 'name'>
 
-export type FileUploadButtonProps = CustomButtonProps & ControlProps & AvatarProps & FileInputProps
+export type FileUploadButtonProps = CustomButtonProps & ControlProps & AvatarProps & FileInputProps & {
+  'aria-label'?: string
+}

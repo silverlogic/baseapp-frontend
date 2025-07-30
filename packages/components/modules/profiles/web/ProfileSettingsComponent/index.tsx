@@ -150,6 +150,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     width={144}
                     height={144}
                     hasError={!!getFieldState('image').error}
+                    alt='Avatar image'
                   />
                   {getFieldState('image').error && (
                     <div className="text-center">
@@ -165,6 +166,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     accept={DEFAULT_IMAGE_FORMATS}
                     maxSize={DEFAULT_IMAGE_MAX_SIZE}
                     label={hasUploadedImage ? 'Change Image' : 'Upload Image'}
+                    aria-label='Avatar image'
                   />
                   {watchImage && (
                     <LoadingButton
@@ -173,6 +175,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                       loading={isMutationInFlight}
                       disabled={isMutationInFlight}
                       onClick={() => handleRemoveImage(PROFILE_FORM_VALUE.image)}
+                      aria-label='Remove avatar button'
                     >
                       Remove
                     </LoadingButton>
@@ -243,6 +246,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     maxSize={DEFAULT_BANNER_IMAGE_MAX_SIZE}
                     label={hasUploadedBannerImage ? 'Change Banner' : 'Upload Banner'}
                     sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
+                    aria-label='Banner image'
                   />
                   {watchBannerImage && (
                     <LoadingButton
@@ -252,6 +256,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                       loading={isMutationInFlight}
                       disabled={isMutationInFlight}
                       sx={{ maxWidth: 'fit-content' }}
+                      aria-label='Remove banner button'
                     >
                       Remove
                     </LoadingButton>

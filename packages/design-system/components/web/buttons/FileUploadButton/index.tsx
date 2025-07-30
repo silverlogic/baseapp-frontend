@@ -12,8 +12,9 @@ import { FileUploadButtonProps } from './types'
 const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
   const fileRef = useRef<HTMLInputElement | undefined>(undefined)
   const { sendToast } = useNotification()
-  const { accept, maxSize, ...fileUploadProps } = props
+  const { accept, maxSize, 'aria-label': ariaLabel, ...fileUploadProps } = props
   const { control, label, name, setFile } = fileUploadProps
+
   return (
     <>
       <Button
@@ -48,7 +49,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
           }
           return (
             <Input
-              inputProps={{ ref: fileRef, accept }}
+              inputProps={{ ref: fileRef, accept, 'aria-label': ariaLabel }}
               value={field.value?.filename}
               onChange={handleOnChange}
               type="file"
