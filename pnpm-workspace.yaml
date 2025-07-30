@@ -77,14 +77,14 @@ catalogs:
     tailwindcss: 3.4.4
 
   material-ui:
-    "@emotion/cache": 11.11.0
-    "@emotion/react": 11.11.4
-    "@emotion/styled": 11.11.5
-    "@mui/icons-material": 5.15.19
-    "@mui/lab": 5.0.0-alpha.170
-    "@mui/material": 5.15.19
+    "@emotion/cache": 11.14.0
+    "@emotion/react": 11.14.0
+    "@emotion/styled": 11.14.1
+    "@mui/icons-material": 5.18.0
+    "@mui/lab": 5.0.0-alpha.177
+    "@mui/material": 5.18.0
     "@mui/material-nextjs": 6.1.4
-    "@mui/system": 5.16.12
+    "@mui/system": 5.18.0
     "@mui/x-date-pickers": 7.6.2
 
   test:
