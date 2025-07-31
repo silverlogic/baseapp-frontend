@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.3.0
+
+### Minor Changes
+
+- Implements native version for `useRoomListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground
+
 ## 1.2.9
 
 ### Patch Changes
