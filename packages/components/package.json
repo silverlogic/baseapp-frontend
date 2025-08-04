@@ -61,6 +61,11 @@
       "import": "./dist/profiles/*/index.mjs",
       "require": "./dist/profiles/*/index.js"
     },
+    "./payments/*": {
+      "types": "./dist/payments/*/index.d.ts",
+      "import": "./dist/payments/*/index.mjs",
+      "require": "./dist/payments/*/index.js"
+    },
     "./tests/*": {
       "types": "./dist/tests/*/index.d.ts",
       "import": "./dist/tests/*/index.mjs",
