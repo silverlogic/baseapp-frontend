@@ -28,12 +28,13 @@ const InvoiceListTable = ({
   rowProps,
   cellProps,
   footerProps,
+  entityId,
 }: InvoiceListTableProps) => {
   const [page, setPage] = useState(1)
 
   const smDown = useResponsive('down', 'sm')
   const { useListInvoices } = useStripeHook()
-  const { data, isLoading, isFetching } = useListInvoices({ page })
+  const { data, isLoading, isFetching } = useListInvoices({ page, entityId })
 
   const receipts = data?.results ?? []
   const isResultsEmpty = receipts.length === 0

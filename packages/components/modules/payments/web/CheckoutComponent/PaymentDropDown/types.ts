@@ -10,6 +10,6 @@ export interface PaymentDropdownProps {
   elements: StripeElements
   setIsAddCardModalOpen: (isOpen: boolean) => void
   isAddCardModalOpen: boolean
-  entityId: number
+  entityId: string
   handleSetupSuccess: (id: string) => void
 }

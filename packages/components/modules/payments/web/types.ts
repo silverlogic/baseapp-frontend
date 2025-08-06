@@ -67,7 +67,7 @@ export interface Subscription {
 }
 
 export interface CreateSubscriptionOptions {
-  entityId: number
+  entityId: string
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
@@ -75,7 +75,7 @@ export interface CreateSubscriptionOptions {
 }
 
 export interface SubscriptionRequestBody {
-  entityId: number
+  entityId: string
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
@@ -83,6 +83,7 @@ export interface SubscriptionRequestBody {
 }
 
 export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
+  paymentMethodId?: string
   defaultPaymentMethodId?: string
 }
 
