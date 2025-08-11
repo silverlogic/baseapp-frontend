@@ -55,7 +55,7 @@ const InvoiceListTable = ({
               {isFetching && <CircularProgress sx={{ margin: 'auto' }} />}
               {isResultsEmpty ? (
                 <TableRow {...rowProps}>
-                  <TableCell colSpan={5} sx={{ p: 0, paddingX: 2 }}>
+                  <TableCell colSpan={5} sx={{ p: 4 }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                       No receipts found
                     </Typography>
