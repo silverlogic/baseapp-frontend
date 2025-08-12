@@ -8,7 +8,7 @@ const InvoiceListTableFooter = ({
   onChange,
   footerProps,
 }: InvoiceListTableFooterProps) => {
-  const itemsPerPage = 20
+  const itemsPerPage = 30
 
   return (
     <TableFooter {...footerProps}>
