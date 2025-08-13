@@ -28,12 +28,13 @@ const InvoiceListTable = ({
   rowProps,
   cellProps,
   footerProps,
+  entityId,
 }: InvoiceListTableProps) => {
   const [page, setPage] = useState(1)
 
   const smDown = useResponsive('down', 'sm')
   const { useListInvoices } = useStripeHook()
-  const { data, isLoading, isFetching } = useListInvoices({ page })
+  const { data, isLoading, isFetching } = useListInvoices({ page, entityId })
 
   const receipts = data?.results ?? []
   const isResultsEmpty = receipts.length === 0
@@ -54,7 +55,7 @@ const InvoiceListTable = ({
               {isFetching && <CircularProgress sx={{ margin: 'auto' }} />}
               {isResultsEmpty ? (
                 <TableRow {...rowProps}>
-                  <TableCell colSpan={5} sx={{ p: 0, paddingX: 2 }}>
+                  <TableCell colSpan={5} sx={{ p: 4 }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                       No receipts found
                     </Typography>

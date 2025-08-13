@@ -40,7 +40,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useListPaymentMethods(entityId ?? 0)
+  } = useListPaymentMethods(entityId ?? '')
   const { mutate: deletePaymentMethod, isPending: isDeletingPaymentMethod } =
     useDeletePaymentMethod({
       onSuccess: () => {
@@ -65,7 +65,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     data: setupIntent,
     isPending: isCreatingSetupIntent,
     isError: isErrorCreatingSetupIntent,
-  } = useSetupIntent(entityId ?? 0)
+  } = useSetupIntent(entityId ?? '')
 
   const handleCloseModal = () => {
     setIsAddCardModalOpen(false)
@@ -79,7 +79,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     updatePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
       defaultPaymentMethodId: selectedPaymentMethodId ?? '',
-      entityId: entityId ?? 0,
+      entityId: entityId ?? '',
     })
   }
 
@@ -90,7 +90,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     }
     deletePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
-      entityId: entityId ?? 0,
+      entityId: entityId ?? '',
       isDefault:
         paymentMethods?.find((pm) => pm.id === selectedPaymentMethodId)?.isDefault ?? false,
     })
@@ -137,7 +137,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           variant="soft"
           color="inherit"
           onClick={() => {
-            createSetupIntent(entityId ?? 0)
+            createSetupIntent(entityId ?? '')
           }}
           startIcon={<Add />}
           disabled={isCreatingSetupIntent}

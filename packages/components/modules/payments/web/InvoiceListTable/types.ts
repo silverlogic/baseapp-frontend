@@ -19,6 +19,7 @@ export interface InvoiceListTableProps {
   cellProps?: TableCellProps
   headerProps?: TableHeadProps
   footerProps?: TableFooterProps
+  entityId?: string
 }
 
 export interface InvoiceItemWrapperProps {

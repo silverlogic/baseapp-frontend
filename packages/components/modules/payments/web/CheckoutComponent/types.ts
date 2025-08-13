@@ -6,7 +6,7 @@ import { ConfirmationSubscriptionModalProps } from './ConfirmationSubscriptionMo
 export interface CheckoutProps {
   lastAddedPaymentMethodIdDuringSession: string | null
   isLoadingMethods: boolean
-  entityId: number
+  entityId: string
   paymentMethods: PaymentMethod[]
   product: Product
   setupClientSecret: string
@@ -16,7 +16,7 @@ export interface CheckoutProps {
 }
 
 export interface CheckoutComponentProps {
-  entityId: number
+  entityId: string
   checkoutProductId: string
   stripePublishableKey: string
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
