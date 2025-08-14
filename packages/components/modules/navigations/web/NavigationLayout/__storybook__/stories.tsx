@@ -2,7 +2,6 @@ import {
   BaseAppLogoCondensed,
   SendMessageIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
-import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
@@ -29,8 +28,6 @@ export const InvalidUser: Story = {
   },
   args: {
     navData: navDataMock,
-    settings: defaultTheme.settings,
-    setSettings: () => {},
     LogoIcon: BaseAppLogoCondensed,
     AccountMenuProps: {
       onRegisterClick: () => console.log('Register clicked'),
@@ -92,10 +89,6 @@ export const NavMini: Story = {
   },
   args: {
     ...ValidUser.args,
-    settings: {
-      ...defaultTheme.settings,
-      themeLayout: 'mini',
-    },
   },
 }
 
@@ -105,10 +98,6 @@ export const NavHorizontal: Story = {
   },
   args: {
     ...ValidUser.args,
-    settings: {
-      ...defaultTheme.settings,
-      themeLayout: 'horizontal',
-    },
   },
 }
 
@@ -118,9 +107,5 @@ export const NavCentered: Story = {
   },
   args: {
     ...ValidUser.args,
-    settings: {
-      ...defaultTheme.settings,
-      themeLayout: 'centered',
-    },
   },
 }

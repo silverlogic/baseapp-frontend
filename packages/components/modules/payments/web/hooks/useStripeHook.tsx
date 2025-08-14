@@ -1,43 +1,52 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
+import {
+  CANCEL_SUBSCRIPTION_API_KEY,
+  CONFIRM_CARD_PAYMENT_API_KEY,
+  CREATION_SUBSCRIPTION_API_KEY,
+  CUSTOMER_API_KEY,
+  INVOICE_API_KEY,
+  PAYMENT_METHOD_API_KEY,
+  PRODUCT_API_KEY,
+  SETUP_INTENT_API_KEY,
+  SUBSCRIPTION_API_KEY,
+  UPDATE_SUBSCRIPTION_API_KEY,
+} from '../services/keys'
 import StripeApi from '../services/stripe'
-import { CreateSubscriptionOptions } from '../types'
+import { CreateSubscriptionOptions, Subscription } from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
-  const useGetCustomer = ({ enabled = true }: { enabled?: boolean } = {}) =>
+  const useGetCustomer = (entityId?: string) =>
     useQuery({
-      queryKey: ['useGetCustomer'],
-      queryFn: () => StripeApi.getCustomer(),
-      enabled,
+      queryKey: [CUSTOMER_API_KEY.get(entityId?.toString() ?? 'me')],
+      queryFn: () => StripeApi.getCustomer(entityId),
     })
 
   const useCreateCustomer = () =>
     useMutation({
-      mutationFn: (userId?: string) => StripeApi.createCustomer(userId),
+      mutationFn: (entityId?: string) => StripeApi.createCustomer(entityId),
     })
 
-  const useSetupIntent = (customerId?: string) =>
+  const useSetupIntent = (entityId: string) =>
     useMutation({
-      mutationFn: (id: string = customerId || '') => StripeApi.createSetupIntent(id),
-      onSuccess: () => {
-        console.log('Setup intent created successfully:')
-      },
+      mutationFn: (id: string) => StripeApi.createSetupIntent(id),
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
-      mutationKey: ['useSetupIntent', customerId],
+      mutationKey: [SETUP_INTENT_API_KEY.get(), entityId],
     })
 
-  const useListPaymentMethods = (customerId: string) =>
+  const useListPaymentMethods = (entityId: string) =>
     useQuery({
-      queryKey: ['listPaymentMethods', customerId],
-      queryFn: () => StripeApi.listPaymentMethods(customerId),
-      enabled: !!customerId,
+      queryKey: [PAYMENT_METHOD_API_KEY.get(entityId.toString())],
+      queryFn: () => StripeApi.listPaymentMethods(entityId),
+      enabled: !!entityId,
     })
 
   const useUpdatePaymentMethod = (options: {
@@ -47,19 +56,18 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         defaultPaymentMethodId,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: string
         defaultPaymentMethodId?: string
       }) =>
-        StripeApi.updatePaymentMethod(paymentMethodId, {
-          customer_id: customerId,
-          default_payment_method_id: defaultPaymentMethodId,
+        StripeApi.updatePaymentMethod(entityId, paymentMethodId, {
+          defaultPaymentMethodId,
         }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -74,20 +82,46 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: ({
         paymentMethodId,
-        customerId,
+        entityId,
         isDefault,
       }: {
         paymentMethodId: string
-        customerId: string
+        entityId: string
         isDefault: boolean
-      }) => StripeApi.deletePaymentMethod(paymentMethodId, customerId, isDefault),
+      }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
+        queryClient.invalidateQueries({ queryKey: PAYMENT_METHOD_API_KEY.get() })
         options.onSuccess?.()
       },
       onError: (error) => {
         options.onError?.(error)
       },
+    })
+
+  const useConfirmCardPayment = (stripe: Stripe | null) =>
+    useMutation({
+      mutationFn: async ({
+        clientSecret,
+        paymentMethodId,
+      }: {
+        clientSecret: string
+        paymentMethodId: string
+      }) => {
+        if (!stripe) {
+          throw new Error('Stripe is not initialized.')
+        }
+        const result = await stripe.confirmCardPayment(clientSecret, {
+          payment_method: paymentMethodId,
+        })
+        if (result.error) {
+          throw new Error(result.error.message || 'Failed to confirm card payment.')
+        }
+        return result.paymentIntent
+      },
+      onError: (error) => {
+        sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
+      },
+      mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
   const useListProducts = () =>
@@ -96,11 +130,11 @@ const useStripeHook = () => {
       queryFn: () => StripeApi.listProducts(),
     })
 
-  const useGetProduct = (customerId: string) =>
+  const useGetProduct = (productId: string) =>
     useQuery({
-      queryKey: ['useGetProduct', customerId],
-      queryFn: () => StripeApi.getProduct(customerId),
-      enabled: !!customerId,
+      queryKey: [PRODUCT_API_KEY.get(productId)],
+      queryFn: () => StripeApi.getProduct(productId),
+      enabled: !!productId,
     })
 
   const useCreationSubscription = () =>
@@ -112,7 +146,58 @@ const useStripeHook = () => {
       onError: (error) => {
         sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
       },
-      mutationKey: ['useCreationSubscription'],
+      mutationKey: [CREATION_SUBSCRIPTION_API_KEY.get()],
+    })
+
+  const useGetSubscription = (subscriptionId: string) =>
+    useQuery({
+      queryKey: [SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      queryFn: () => StripeApi.getSubscription(subscriptionId),
+      enabled: !!subscriptionId,
+    })
+
+  const useCancelSubscription = (subscriptionId: string, refetch: () => void) =>
+    useMutation({
+      mutationFn: () => StripeApi.cancelSubscription(subscriptionId),
+      onSuccess: () => {
+        sendToast('Subscription cancelled successfully.', { type: 'success' })
+        refetch()
+      },
+      onError: () => {
+        sendToast(`Failed to cancel subscription`, { type: 'error' })
+      },
+      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+    })
+
+  const useUpdateSubscription = (
+    subscriptionId: string,
+    refetch: () => void,
+    options: {
+      onSuccess?: (response: any, variables: Partial<Subscription>, context: any) => void
+      onError?: (error: any, variables: Partial<Subscription>, context: any) => void
+    } = {},
+  ) =>
+    useMutation({
+      mutationFn: (updateData: Partial<Subscription>) =>
+        StripeApi.updateSubscription(subscriptionId, updateData),
+      onSuccess: (response, variables, context) => {
+        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+
+        sendToast('Subscription updated successfully.', { type: 'success' })
+        refetch()
+        options?.onSuccess?.(response, variables, context)
+      },
+      onError: (error, variables, context) => {
+        sendToast(`Failed to update subscription: ${error.message}`, { type: 'error' })
+        options?.onError?.(error, variables, context)
+      },
+      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+    })
+
+  const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
+    useQuery({
+      queryKey: [INVOICE_API_KEY.get(page.toString())],
+      queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 
   return {
@@ -122,9 +207,14 @@ const useStripeHook = () => {
     useUpdatePaymentMethod,
     useDeletePaymentMethod,
     useSetupIntent,
+    useConfirmCardPayment,
     useListProducts,
     useGetProduct,
     useCreationSubscription,
+    useGetSubscription,
+    useCancelSubscription,
+    useUpdateSubscription,
+    useListInvoices,
   }
 }
 

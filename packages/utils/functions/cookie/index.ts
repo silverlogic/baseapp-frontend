@@ -1,42 +1,24 @@
+'use client'
+
 import ClientCookies from 'js-cookie'
 
+import {
+  getCookieFromStore,
+  removeCookieFromStore,
+  setCookieInStore,
+} from '../../hooks/useCookie/store'
+import { DefaultBaseAppCookieName } from '../../types/cookies'
+import { parseString } from '../string'
 import type { GetCookieOptions, SetCookieOptions } from './types'
 
-const parseCookie = <T>(cookie: string) => {
-  try {
-    return JSON.parse(cookie) as T
-  } catch {
-    return cookie as T
-  }
-}
+export const getCookie = <T = string>(
+  key: DefaultBaseAppCookieName | (string & {}),
+  { parseJSON = false }: GetCookieOptions = {},
+): T | undefined => {
+  const cookieFromStore = getCookieFromStore<T>(key)
+  const cookie = ClientCookies.get(key as string) ?? cookieFromStore
 
-export const getCookie = <T>(
-  key: string,
-  { noSSR = false, parseJSON = false }: GetCookieOptions = {},
-) => {
-  let cookie
-  if (typeof window === typeof undefined && !noSSR) {
-    const { cookies: serverCookies } = require('next/headers')
-    cookie = serverCookies().get(key)?.value
-  } else {
-    cookie = ClientCookies.get(key)
-  }
-  return parseJSON ? parseCookie<T>(cookie as string) : (cookie as T)
-}
-
-export const getCookieAsync = async <T>(
-  key: string,
-  { noSSR = false, parseJSON = false }: GetCookieOptions = {},
-) => {
-  let cookie
-  if (typeof window === typeof undefined && !noSSR) {
-    // @ts-ignore
-    const { cookies: serverCookies } = await import('next/headers')
-    cookie = serverCookies().get(key)?.value
-  } else {
-    cookie = ClientCookies.get(key)
-  }
-  return parseJSON ? parseCookie<T>(cookie as string) : (cookie as T)
+  return parseJSON ? parseString<T>(cookie as string) : (cookie as T)
 }
 
 export const setCookie = (
@@ -47,6 +29,7 @@ export const setCookie = (
   try {
     const formattedValue = stringfyValue ? JSON.stringify(value) : value
     ClientCookies.set(key, formattedValue, config)
+    setCookieInStore(key, formattedValue)
   } catch (error) {
     console.error(error)
   }
@@ -55,6 +38,7 @@ export const setCookie = (
 export const removeCookie = (key: string) => {
   try {
     ClientCookies.remove(key)
+    removeCookieFromStore(key)
   } catch (error) {
     console.error(error)
   }

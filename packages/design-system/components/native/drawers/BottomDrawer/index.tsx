@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { RefObject, useCallback } from 'react'
 
 import {
   BottomSheetBackdrop,
@@ -29,7 +29,7 @@ const BottomDrawer = ({
 
   return (
     <BottomSheetModal
-      ref={bottomDrawerRef}
+      ref={bottomDrawerRef as RefObject<BottomSheetModal>}
       onChange={handleSheetChanges}
       snapPoints={snapPoints}
       style={styles.modal}

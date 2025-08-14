@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect } from 'react'
 
 import { ACCESS_KEY_NAME, getToken } from '@baseapp-frontend/utils'
@@ -11,22 +13,22 @@ import getUser from '../getUser'
 import type { UseJWTUserOptions } from './types'
 
 /**
- * Fetches the user data using the JWT token data as placeholder data.
+ * Fetches the most recent user data from the server with JWT token data as instant placeholder.
  *
- * This makes user data available before fetching it from the server.
+ * The key advantage of using this hook is automatic cache invalidation when user
+ * data is mutated, ensuring UI stays in sync with server state.
  *
- * Be aware that, by using `useJWTUser` with `noSSR` set to `false`, will make the Next.js page to opt-out from Static Rendering and be dynamically rendered.
+ * Use this when you need fresh user data and automatic updates after user mutations.
  */
 const useJWTUser = <TUser extends Partial<User> & JWTContent>({
   options,
   accessKeyName = ACCESS_KEY_NAME,
   ApiClass = UserApi,
-  noSSR = false,
 }: UseJWTUserOptions<TUser> = {}) => {
   // TODO: placeholderData generic type is not working as expected, open an issue on react-query github
   type NonFunctionGuard<T> = T extends Function ? never : T
-  const token = getToken(accessKeyName, { noSSR }) ?? ''
-  const placeholderData = getUser<TUser>({ accessKeyName, noSSR }) as NonFunctionGuard<TUser>
+  const token = getToken(accessKeyName) ?? ''
+  const placeholderData = getUser<TUser>({ accessKeyName }) as NonFunctionGuard<TUser>
 
   const queryClient = useQueryClient()
 

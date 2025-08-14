@@ -9,6 +9,7 @@ import {
 
 import { MFA_API_KEY } from '../../../../services/mfa'
 import { USER_API_KEY } from '../../../../services/user'
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useLogout from '../index'
 
 const mockResetQueries = jest.fn()
@@ -42,7 +43,7 @@ describe('useLogout hook', () => {
   test('should call the onLogout callback if provided', async () => {
     const mockOnLogout = jest.fn()
     const { result } = renderHook(() => useLogout({ onLogout: mockOnLogout }), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     await result.current.logout()
@@ -53,7 +54,7 @@ describe('useLogout hook', () => {
   test('should emit the logout event if the flag emitLogoutEvent is set to true', async () => {
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
     const { result } = renderHook(() => useLogout({ emitLogoutEvent: true }), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     await result.current.logout()
@@ -64,7 +65,7 @@ describe('useLogout hook', () => {
   test('should not emit the logout event if emitLogoutEvent is set to false', async () => {
     const emitSpy = jest.spyOn(eventEmitter, 'emit')
     const { result } = renderHook(() => useLogout({ emitLogoutEvent: false }), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     await result.current.logout()

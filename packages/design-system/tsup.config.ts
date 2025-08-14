@@ -8,12 +8,15 @@ export default defineConfig((options) => ({
   dts: false,
   entry: [
     './(components|hooks|layouts|providers|styles|utils|tests)/(common|web|native)/**/index.ts',
+    // custom entries
+    './hooks/web/useUISettings/constants.ts',
   ],
   esbuildOptions(esbuildOptions) {
     esbuildOptions.loader = {
       ...esbuildOptions.loader,
       '.css': 'file',
     }
+    esbuildOptions.keepNames = true
   },
   external: [
     'react',

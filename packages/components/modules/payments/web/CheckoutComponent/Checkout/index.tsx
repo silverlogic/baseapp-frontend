@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -10,27 +10,43 @@ import { AddressElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
 import useStripeHook from '../../hooks/useStripeHook'
-import ConfirmationSubscriptionModal from '../ConfirmationSubscriptionModal'
-import PaymentDropdown from '../paymentDropDown'
+import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
+import { formatPrice } from '../../utils'
+import DefaultConfirmationSubscriptionModal from '../ConfirmationSubscriptionModal'
+import PaymentDropdown from '../PaymentDropDown'
 import { CheckoutProps } from '../types'
 import { ProductContainer, StyledLoadingButton } from './styled'
 
 const Checkout: FC<CheckoutProps> = ({
-  checkoutCustomerId,
+  lastAddedPaymentMethodIdDuringSession,
+  ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
+  ConfirmationSubscriptionModalProps = {},
+  entityId,
   paymentMethods,
   product,
   isLoadingMethods,
   handleSetupSuccess,
 }) => {
-  const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
+  const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
+  const getInitialPaymentMethodId = () => {
+    if (paymentMethods.length > 0 && lastAddedPaymentMethodIdDuringSession !== null)
+      return lastAddedPaymentMethodIdDuringSession
+
+    if (paymentMethods.length > 0 && lastAddedPaymentMethodIdDuringSession == null) {
+      const defaultPaymentMethod = paymentMethods.find((pm) => pm.isDefault)
+      return defaultPaymentMethod ? defaultPaymentMethod.id : paymentMethods[0]?.id || ''
+    }
+    return ''
+  }
+
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>(
+    getInitialPaymentMethodId(),
+  )
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
-  const [isConfirmCardPaymentProcessing, setIsConfirmCardPaymentProcessing] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
   const { sendToast } = useNotification()
   const [isRetry, setIsRetry] = useState<boolean>(false)
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false)
-  const [hasMounted, setHasMounted] = useState<boolean>(false)
 
   const elements = useElements()
   const stripe = useStripe()
@@ -39,24 +55,13 @@ const Checkout: FC<CheckoutProps> = ({
   const { useCreationSubscription } = useStripeHook()
   const { mutate: createSubscription, isPending: isCreatingSubscription } =
     useCreationSubscription()
+  const { mutateAsync: confirmCardPayment, isPending: isConfirmCardPaymentProcessing } =
+    useStripeHook().useConfirmCardPayment(stripe)
 
   const selectedMethod = useMemo(
     () => paymentMethods.find((pm) => pm.id === selectedPaymentMethodId),
     [selectedPaymentMethodId, paymentMethods],
   )
-
-  useEffect(() => {
-    if (!hasMounted && paymentMethods.length > 0) {
-      const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
-      setSelectedPaymentMethodId(
-        defaultPaymentMethod ? defaultPaymentMethod.id : paymentMethods[0]?.id || '',
-      )
-      setHasMounted(true)
-    } else {
-      setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentMethods])
 
   const extractErrorMessage = (error: any): string =>
     error?.response?.data?.nonFieldErrors?.[0] ||
@@ -66,14 +71,12 @@ const Checkout: FC<CheckoutProps> = ({
 
   const handlePlaceOrder = async () => {
     if (!elements) {
-      console.error('Stripe elements not initialized')
       return
     }
 
     const addressElement = elements.getElement(AddressElement)
 
     if (!addressElement) {
-      console.error('AddressElement not found')
       return
     }
 
@@ -83,7 +86,7 @@ const Checkout: FC<CheckoutProps> = ({
     try {
       createSubscription(
         {
-          customerId: checkoutCustomerId || '',
+          entityId,
           priceId: product.defaultPrice.id,
           allowIncomplete: true,
           paymentMethodId: selectedPaymentMethodId,
@@ -91,7 +94,7 @@ const Checkout: FC<CheckoutProps> = ({
             name,
             address: {
               ...address,
-              line2: address.line2 ?? undefined,
+              line2: address.line2 ?? null,
             },
           },
         },
@@ -99,31 +102,30 @@ const Checkout: FC<CheckoutProps> = ({
           onSuccess: async (data) => {
             const { clientSecret } = data
             if (stripe && clientSecret) {
-              setIsConfirmCardPaymentProcessing(true)
-              const result = await stripe.confirmCardPayment(clientSecret, {
-                payment_method: selectedPaymentMethodId,
-              })
-              setIsConfirmCardPaymentProcessing(false)
-              const { paymentIntent } = result
-              setOrderNumber(paymentIntent?.id ?? null)
-              if (result.error) {
-                const message = extractErrorMessage(result.error)
-                sendToast(message, { type: 'error' })
+              let paymentIntent = null
+              try {
+                paymentIntent = await confirmCardPayment({
+                  clientSecret,
+                  paymentMethodId: selectedPaymentMethodId,
+                })
+              } catch (error) {
+                const message = extractErrorMessage(error)
+                sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
                 setIsRetry(true)
-              } else {
-                if (paymentMethods?.length > 0) {
-                  setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
-                }
-                queryClient.invalidateQueries({ queryKey: ['listPaymentMethods'] })
-                setConfirmationModalOpen(true)
-                setIsRetry(false)
+                return
               }
+              setOrderNumber(paymentIntent?.id ?? null)
+              if (paymentMethods?.length > 0) {
+                setSelectedPaymentMethodId(paymentMethods[0]?.id || '')
+              }
+              queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+              setConfirmationModalOpen(true)
+              setIsRetry(false)
             }
           },
           onError: (error: any) => {
             const message = extractErrorMessage(error)
             sendToast(message, { type: 'error' })
-            setIsConfirmCardPaymentProcessing(false)
             setIsRetry(true)
           },
         },
@@ -162,15 +164,21 @@ const Checkout: FC<CheckoutProps> = ({
     !isAddCardModalOpen && !isLoadingMethods && paymentMethods.length > 0
 
   return (
-    <Box sx={{ width: '100%', padding: 2 }}>
+    <Box width="100%" padding={2}>
+      <Box display="flex" justifyContent="space-between" alignItems="center" marginBottom={4}>
+        <Typography variant="h3" fontWeight={700}>
+          Checkout
+        </Typography>
+      </Box>
+
       <Grid
         container
-        spacing={3}
+        spacing={{ xs: 3, md: 8 }}
         direction={isMobile ? 'column' : 'row-reverse'}
         justifyContent="center"
       >
         <Grid item xs={12} sm={6}>
-          <Box sx={{ maxWidth: 400 }} display="flex" flexDirection="column" gap={2}>
+          <Box display="flex" flexDirection="column" gap={2}>
             <ProductContainer>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 {product?.images.length > 0 && (
@@ -187,12 +195,13 @@ const Checkout: FC<CheckoutProps> = ({
               </Box>
               <Box>
                 {Number.isFinite(product?.defaultPrice?.unitAmount) && (
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
+                  <Box display="flex" justifyContent="flex-end" gap={1}>
                     <Typography variant="body2" fontWeight={700}>
-                      {(product?.defaultPrice?.unitAmount || 0 / 100).toLocaleString('en-US', {
-                        style: 'currency',
-                        currency: 'USD',
-                      })}
+                      {formatPrice(
+                        product?.defaultPrice?.unitAmount,
+                        product?.defaultPrice?.locale,
+                        product?.defaultPrice?.currency,
+                      )}
                     </Typography>
                   </Box>
                 )}
@@ -228,19 +237,13 @@ const Checkout: FC<CheckoutProps> = ({
         </Grid>
 
         <Grid item xs={12} sm={6}>
-          <Box sx={{ maxWidth: 400 }}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
+          <Box minWidth={{ md: 400 }}>
+            <Box display="flex" flexDirection="column" gap={2}>
               <Typography variant="subtitle2">Payment</Typography>
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider' }} />
               {elements && stripe && (
                 <PaymentDropdown
-                  customerId={checkoutCustomerId}
+                  entityId={entityId}
                   paymentMethods={paymentMethods}
                   selectedPaymentMethodId={selectedPaymentMethodId}
                   setSelectedPaymentMethodId={setSelectedPaymentMethodId}
@@ -253,8 +256,12 @@ const Checkout: FC<CheckoutProps> = ({
               )}
               {shouldRenderAddressElement ? (
                 <>
-                  <Typography variant="subtitle2">Billing Address</Typography>
-
+                  <Box display="flex" flexDirection="column" gap="none">
+                    <Typography variant="subtitle2">Address</Typography>
+                    <Typography variant="caption" color="text.primary">
+                      Used to calculate taxes.
+                    </Typography>
+                  </Box>
                   <Divider
                     variant="fullWidth"
                     sx={{ backgroundColor: 'divider', color: 'divider' }}
@@ -272,6 +279,7 @@ const Checkout: FC<CheckoutProps> = ({
         </Grid>
       </Grid>
       <ConfirmationSubscriptionModal
+        {...ConfirmationSubscriptionModalProps}
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
         orderNumber={orderNumber}
@@ -279,5 +287,4 @@ const Checkout: FC<CheckoutProps> = ({
     </Box>
   )
 }
-
 export default Checkout

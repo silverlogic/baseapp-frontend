@@ -2,15 +2,18 @@ import { FC, useEffect, useState } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
-import { useNotification } from '@baseapp-frontend/utils'
+import { getApiErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Add } from '@mui/icons-material'
+import { LoadingButton } from '@mui/lab'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
+import { useQueryClient } from '@tanstack/react-query'
 
-import { getStripePromise } from '../utils/stripe'
 import AddCardModal from '../CheckoutComponent/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
+import { PRODUCT_API_KEY } from '../services/keys'
+import { getStripePromise } from '../utils/stripe'
 import PaymentMethodsItem from './components/PaymentMethodsItem'
 import {
   PaymentMethodsManagementComponentProps,
@@ -18,7 +21,7 @@ import {
 } from './types'
 
 const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentProps> = ({
-  customerId,
+  entityId,
 }) => {
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -31,19 +34,20 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     useStripeHook()
   const elements = useElements()
   const stripe = useStripe()
+  const queryClient = useQueryClient()
 
   const {
     data: paymentMethods,
     isLoading: isLoadingMethods,
     isError: isErrorMethods,
-  } = useListPaymentMethods(customerId ?? '')
+  } = useListPaymentMethods(entityId ?? '')
   const { mutate: deletePaymentMethod, isPending: isDeletingPaymentMethod } =
     useDeletePaymentMethod({
       onSuccess: () => {
         sendToast('Payment method removed successfully', { type: 'success' })
       },
       onError: (error: any) => {
-        const message = error?.response?.data?.error ?? error?.message ?? 'Please try again.'
+        const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
         sendToast(`Failed to delete payment method: ${message}`, { type: 'error' })
       },
     })
@@ -52,7 +56,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
       sendToast('Default payment method set successfully', { type: 'success' })
     },
     onError: (error: any) => {
-      const message = error?.response?.data?.error ?? error?.message ?? 'Please try again.'
+      const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
       sendToast(`Failed to set default payment method: ${message}`, { type: 'error' })
     },
   })
@@ -61,7 +65,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     data: setupIntent,
     isPending: isCreatingSetupIntent,
     isError: isErrorCreatingSetupIntent,
-  } = useSetupIntent(customerId ?? '')
+  } = useSetupIntent(entityId ?? '')
 
   const handleCloseModal = () => {
     setIsAddCardModalOpen(false)
@@ -75,7 +79,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     updatePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
       defaultPaymentMethodId: selectedPaymentMethodId ?? '',
-      customerId: customerId ?? '',
+      entityId: entityId ?? '',
     })
   }
 
@@ -86,7 +90,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     }
     deletePaymentMethod({
       paymentMethodId: selectedPaymentMethodId ?? '',
-      customerId: customerId ?? '',
+      entityId: entityId ?? '',
       isDefault:
         paymentMethods?.find((pm) => pm.id === selectedPaymentMethodId)?.isDefault ?? false,
     })
@@ -133,11 +137,11 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           variant="soft"
           color="inherit"
           onClick={() => {
-            createSetupIntent(customerId ?? '')
+            createSetupIntent(entityId ?? '')
           }}
           startIcon={<Add />}
-          sx={{ width: 'auto' }}
           disabled={isCreatingSetupIntent}
+          sx={{ width: 'auto' }}
         >
           Add payment method
         </Button>
@@ -171,13 +175,14 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
       </Menu>
       {elements && stripe && setupIntent && (
         <AddCardModal
-          customerId={customerId}
+          entityId={entityId}
           stripe={stripe}
           elements={elements}
           open={isAddCardModalOpen}
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
             setIsAddCardModalOpen(false)
+            queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
           }}
         />
       )}
@@ -194,7 +199,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
             </Typography>
           }
           action={
-            <Button
+            <LoadingButton
               variant="contained"
               color="error"
               disabled={isDeletingPaymentMethod}
@@ -203,7 +208,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
               }}
             >
               {isDeletingPaymentMethod ? 'Removing...' : 'Remove'}
-            </Button>
+            </LoadingButton>
           }
         />
       )}
@@ -212,11 +217,11 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 }
 
 const PaymentMethodsManagementComponentWithElements = ({
-  customerId,
+  entityId,
   stripePublishableKey,
 }: PaymentMethodsManagementComponentWithElementsProps) => (
   <Elements stripe={getStripePromise(stripePublishableKey)}>
-    <PaymentMethodsManagementComponent customerId={customerId} />
+    <PaymentMethodsManagementComponent entityId={entityId} />
   </Elements>
 )
 

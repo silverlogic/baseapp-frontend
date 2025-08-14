@@ -46,8 +46,9 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
     refetch: refetchProfiles,
   } = useAllProfilesList(allProfilesRef)
 
-  const formReturn = useForm({
+  const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: DEFAULT_FORM_VALUES,
+    // @ts-ignore TODO: check typing issue with zodResolver
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -63,6 +64,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
 
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
 
+  // @ts-ignore TODO: check typing issue with zodResolver
   const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     if (!roomId) return
 
@@ -82,6 +84,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
         const errors = response?.chatRoomUpdate?.errors
         if (errors) {
           sendToast('Something went wrong', { type: 'error' })
+          // @ts-ignore TODO: check typing issue with zodResolver
           setFormRelayErrors(formReturn, errors)
         } else {
           handleSubmitSuccess()

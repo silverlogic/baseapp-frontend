@@ -1,17 +1,17 @@
-import { IStripePaymentMethod } from '../types'
+import { PaymentMethod } from '../types'
 
 export interface PaymentMethodsManagementComponentProps {
-  customerId: string
+  entityId?: string
 }
 
 export interface PaymentMethodsManagementComponentWithElementsProps
   extends PaymentMethodsManagementComponentProps {
-  customerId: string
+  entityId: string
   stripePublishableKey: string
 }
 
 export interface PaymentMethodsItemProps {
-  paymentMethod: IStripePaymentMethod
+  paymentMethod: PaymentMethod
   setIsMenuOpen: (isMenuOpen: boolean) => void
   setSelectedPaymentMethodId: (selectedPaymentMethodId: string) => void
   setAnchorEl: (anchorEl: HTMLElement) => void

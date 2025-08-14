@@ -903,3 +903,288 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
     },
   },
 }
+
+export const commentsTestMockData = {
+  data: {
+    target: {
+      id: 'test-id',
+      __typename: 'Page',
+      __isCommentsInterface: 'Page',
+      isCommentsEnabled: true,
+      commentsCount: { total: 2 },
+      comments: {
+        edges: [
+          {
+            node: {
+              id: 'comment-1',
+              __typename: 'Comment',
+              pk: 1,
+              body: 'This is a pinned comment.',
+              isPinned: true,
+              created: '2024-04-11T17:08:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: true,
+              canDelete: true,
+              canReport: true,
+              canPin: true,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://cdn.example.com/avatar1.png',
+                },
+              },
+              reactionsCount: { total: 2 },
+              myReaction: null,
+              __isReactionsInterface: 'Comment',
+              __isCommentsInterface: 'Comment',
+            },
+          },
+          {
+            node: {
+              id: 'comment-2',
+              __typename: 'Comment',
+              pk: 2,
+              body: 'This is a regular comment.',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-2',
+                pk: 2,
+                fullName: 'Jane Smith',
+                avatar: {
+                  url: 'https://cdn.example.com/avatar2.png',
+                },
+              },
+              reactionsCount: { total: 3 },
+              myReaction: {
+                id: 'reaction-1',
+                reactionType: 'LIKE',
+              },
+              __isReactionsInterface: 'Comment',
+              __isCommentsInterface: 'Comment',
+            },
+          },
+        ],
+        pageInfo: {
+          endCursor: 'cursor-2',
+          hasNextPage: false,
+        },
+      },
+    },
+  },
+}
+
+export const commentsWithNextPageMockData = {
+  data: {
+    target: {
+      id: 'test-id',
+      __typename: 'Page',
+      __isCommentsInterface: 'Page',
+      isCommentsEnabled: true,
+      commentsCount: { total: 10 },
+      comments: {
+        edges: [
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-1',
+              pk: 1,
+              body: 'First comment',
+              isPinned: true,
+              created: '2024-04-11T17:08:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: true,
+              canDelete: true,
+              canReport: true,
+              canPin: true,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              reactionsCount: {
+                total: 0,
+              },
+              myReaction: null,
+            },
+            cursor: 'cursor-1',
+          },
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-2',
+              pk: 2,
+              body: 'Second comment',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              reactionsCount: {
+                total: 0,
+              },
+              myReaction: null,
+            },
+            cursor: 'cursor-2',
+          },
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-3',
+              pk: 3,
+              body: 'Third comment',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              reactionsCount: {
+                total: 0,
+              },
+              myReaction: null,
+            },
+            cursor: 'cursor-3',
+          },
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-4',
+              pk: 4,
+              body: 'Fourth comment',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              reactionsCount: {
+                total: 0,
+              },
+              myReaction: null,
+            },
+            cursor: 'cursor-4',
+          },
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-5',
+              pk: 5,
+              body: 'Fifth comment',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              reactionsCount: {
+                total: 0,
+              },
+              myReaction: null,
+            },
+            cursor: 'cursor-5',
+          },
+        ],
+        pageInfo: {
+          endCursor: 'cursor-5',
+          hasNextPage: true,
+        },
+      },
+    },
+  },
+}
+
+export const commentsWithElevenRepliesMockData = {
+  data: {
+    target: {
+      id: 'test-id',
+      __typename: 'Page',
+      __isCommentsInterface: 'Page',
+      isCommentsEnabled: true,
+      commentsCount: { total: 5 },
+      comments: {
+        edges: [
+          {
+            node: {
+              __typename: 'Comment',
+              id: 'comment-with-eleven-replies',
+              pk: 11,
+              body: 'This is comment with eleven replies.',
+              isPinned: false,
+              created: '2024-04-11T17:08:58.505961+00:00',
+              commentsCount: { total: 11 },
+              canChange: true,
+              canDelete: true,
+              canReport: true,
+              canPin: true,
+              user: {
+                id: 'user-1',
+                pk: 1,
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+              },
+              cursor: 'cursor-1',
+              reactionsCount: {
+                total: 2,
+              },
+              myReaction: null,
+            },
+          },
+        ],
+        pageInfo: {
+          endCursor: 'cursor-1',
+          hasNextPage: false,
+        },
+      },
+    },
+  },
+}

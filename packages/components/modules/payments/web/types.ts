@@ -1,74 +1,102 @@
-export interface ICustomer {
+import { BillingDetails, PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js'
+
+export interface Customer {
   remoteCustomerId: string
   entityType: string
   entityId: number
 }
 
-export interface ISetupIntent {
+export interface SetupIntent {
   clientSecret: string
 }
 
-export interface IStripePaymentMethod {
+export interface PaymentMethod {
   id: string
-  isDefault: boolean
-  card?: {
-    brand: string
-    last4: string
-    expMonth: number
-    expYear: number
+  isDefault?: boolean
+  card?: StripePaymentMethod.Card & {
+    expMonth?: number
+    expYear?: number
   }
-  billingDetails?: {
+  billingDetails?: BillingDetails & {
     address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
       postalCode?: string
-      country?: string
     }
-    name?: string
-    email?: string
-    phone?: string
   }
 }
 
-export interface IProduct {
+interface MarketingFeatures {
+  name: string
+}
+
+export interface Price {
+  id: string
+  unitAmount: number
+  currency?: string
+  locale?: string
+}
+
+export interface Product {
   id: string
   name: string
-  description: string
   images: string[]
-  defaultPrice: {
-    id: string
-    unitAmount: number
-    recurring: {
-      interval: string
-    }
-  }
-  marketingFeatures: {
-    name: string
+  description: string
+  defaultPrice: Price
+  marketingFeatures?: MarketingFeatures[]
+}
+
+interface Plan {
+  product: string
+  amount: number
+}
+
+interface Items {
+  data: {
+    currentPeriodEnd: number
   }[]
 }
 
-export interface ISubscription {
+export interface Subscription {
   id: string
   clientSecret?: string
+  defaultPaymentMethod?: string
+  remoteCustomerId: string
+  invoiceId: string
+  plan?: Plan
   status: string
+  items?: Items
 }
 
 export interface CreateSubscriptionOptions {
-  customerId: string
+  entityId: string
   priceId: string
   paymentMethodId?: string
   allowIncomplete?: boolean
-  billingDetails?: {
-    name?: string
-    address?: {
-      line1?: string
-      line2?: string
-      city?: string
-      state?: string
-      postalCode?: string
-      country?: string
-    }
-  }
+  billingDetails?: BillingDetails
+}
+
+export interface SubscriptionRequestBody {
+  entityId: string
+  priceId: string
+  paymentMethodId?: string
+  allowIncomplete?: boolean
+  billingDetails?: CreateSubscriptionOptions['billingDetails']
+}
+
+export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
+  paymentMethodId?: string
+  defaultPaymentMethodId?: string
+}
+
+export interface InvoiceLines {
+  description: string
+  amount: number
+}
+
+export interface Invoice {
+  id: string
+  amountDue: number
+  status: string
+  webhooksDeliveredAt: string
+  hostedInvoiceUrl: string
+  lines: InvoiceLines[]
 }

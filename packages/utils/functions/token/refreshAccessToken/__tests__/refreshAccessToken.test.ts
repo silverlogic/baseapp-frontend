@@ -36,28 +36,25 @@ describe('refreshAccessToken', () => {
     const refreshToken = 'valid-refresh-token'
     const newAccessToken = 'new-access-token'
 
-    mockGetToken.mockReturnValue(refreshToken)
     mockGetAccessToken.mockResolvedValue(newAccessToken)
 
-    await refreshAccessToken()
+    const result = await refreshAccessToken({ refreshToken })
 
-    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
     expect(mockSetTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME, newAccessToken, {
       secure: false,
     })
     expect(mockRemoveTokenAsync).not.toHaveBeenCalled()
+    expect(result).toBe(newAccessToken)
   })
 
   it('should remove tokens if refreshing the access token fails', async () => {
     const refreshToken = 'valid-refresh-token'
 
-    mockGetToken.mockReturnValue(refreshToken)
     mockGetAccessToken.mockRejectedValue(new Error('Failed to refresh token'))
 
-    await expect(refreshAccessToken()).rejects.toThrow('Failed to refresh token')
+    await expect(refreshAccessToken({ refreshToken })).rejects.toThrow('Failed to refresh token')
 
-    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
@@ -65,13 +62,34 @@ describe('refreshAccessToken', () => {
   })
 
   it('should remove tokens if no refresh token is available', async () => {
-    mockGetToken.mockReturnValue('')
+    const refreshToken = null
 
-    await expect(refreshAccessToken()).rejects.toThrow()
+    mockGetAccessToken.mockRejectedValue(new Error('No refresh token'))
 
-    expect(mockGetToken).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    await expect(refreshAccessToken({ refreshToken })).rejects.toThrow('No refresh token')
+
+    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockSetTokenAsync).not.toHaveBeenCalled()
+  })
+
+  it('should use custom key names when provided', async () => {
+    const refreshToken = 'valid-refresh-token'
+    const newAccessToken = 'new-access-token'
+    const customAccessKey = 'customAccess'
+    const customRefreshKey = 'customRefresh'
+
+    mockGetAccessToken.mockResolvedValue(newAccessToken)
+
+    await refreshAccessToken({
+      refreshToken,
+      accessKeyName: customAccessKey,
+      refreshKeyName: customRefreshKey,
+    })
+
+    expect(mockSetTokenAsync).toHaveBeenCalledWith(customAccessKey, newAccessToken, {
+      secure: false,
+    })
   })
 })
