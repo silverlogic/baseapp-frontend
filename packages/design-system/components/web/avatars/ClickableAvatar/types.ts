@@ -7,6 +7,7 @@ export interface CustomIconButtonProps
     Required<Pick<ClickableAvatarProps, 'width' | 'height' | 'isOpen'>> {}
 
 export type ClickableAvatarProps = AvatarWithPlaceholderProps & {
+  deletedUser?: boolean
   isOpen?: boolean
   onClick?: (param: any) => void
 }
