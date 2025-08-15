@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from 'react'
 
+import type { PageWagtailFieldsFragment$key } from '../../../__generated__/PageWagtailFieldsFragment.graphql'
 import type { WagtailPagesContextState } from '../../providers/WagtailPagesProvider/types'
 
 export interface PageParams {
@@ -13,6 +14,10 @@ export interface PageSearchParams {
     token: string
     contentType: string
   }
+}
+
+export interface CreateWagtailPageProviderParams {
+  pageFragment: PageWagtailFieldsFragment$key
 }
 
 export interface WagtailPageProps extends PropsWithChildren {
