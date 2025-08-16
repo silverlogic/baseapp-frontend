@@ -10,6 +10,8 @@ catalog:
   "@types/lodash": 4.17.7
   "@types/luxon": 3.6.2
   "@types/node": 22.7.2
+  "@parcel/packager-ts": ^2.14.1
+  "@parcel/transformer-typescript-types": ^2.14.1
   axios: 1.9.0
   jotai: 2.12.4
   js-cookie: 3.0.5
@@ -19,7 +21,7 @@ catalog:
   react-international-phone: 4.5.0
   react-hook-form: 7.56.4
   react-virtuoso: 4.12.7
-  simplebar-react: 3.2.5
+  simplebar-react: 3.3.1
   tsup: 8.3.6
   typescript: 5.8.3
   zod: 3.25.7
@@ -40,6 +42,7 @@ catalogs:
     react: 18.3.1
 
   react-native:
+    "@expo/vector-icons": ^14.0.4
     "@gorhom/bottom-sheet": ^5.1.4
     "@react-navigation/drawer": ^7.3.12
     "@react-navigation/native": ^7.1.9
@@ -103,6 +106,7 @@ catalogs:
     jest: 29.7.0
     ts-jest: 29.1.4
     ts-node: 10.9.2
+    axios-mock-adapter: ^1.22.0
 
   storybook:
     "@babel/preset-env": 7.26.0
@@ -158,3 +162,34 @@ catalogs:
     chalk: ^5.4.1
     chokidar: ^4.0.3
     execa: ^9.5.2
+
+
+  components:
+    framer-motion: ^11.5.4
+    numbro: ^2.5.0
+    slugify: ^1.6.6
+    use-long-press: ^3.2.0
+    "@babel/cli": ^7.26.4
+    dotenv: ^16.4.5
+    dotenv-cli: ^7.4.2
+
+  design-system:
+    "@iconify/react": ^5.0.1
+    "@shopify/flash-list": ^1.7.6
+    color: ^4.2.3
+    react-dropzone: ^14.2.3
+    react-lazy-load-image-component: ^1.6.2
+    "@types/color": "^4.2.0"
+    chokidar-cli: ^3.0.0
+
+  eslint-plugin:
+    parcel: ^2.12.0
+
+  utils:
+    events: ^3.3.0
+    humps: ^2.0.1
+    jwt-decode: ^4.0.0
+    qs: ^6.14.0
+    server-only: ^0.0.1
+    "@types/humps": ^2.0.6
+    "@types/qs": ^6.14.0
