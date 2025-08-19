@@ -22,25 +22,25 @@ const phoneInput = () => cy.findByLabelText(/phone number/i, { selector: 'input'
 const bioInput = () => cy.findByLabelText(/bio/i).as('bioInput')
 const avatarInput = () =>
   cy
-    .findByLabelText(/avatar image/i, { selector: 'button' })
+    .findByText(/change image/i)
     .parent()
     .find('input[type="file"]')
     .as('avatarInput')
 const bannerInput = () =>
   cy
-    .findByLabelText(/banner image/i, { selector: 'button' })
+    .findByText(/change banner/i)
     .parent()
     .find('input[type="file"]')
     .as('bannerInput')
 const avatarFallbackImage = () => cy.get('img, [title="Avatar Fallback"]').as('avatarFallbackImage')
 const avatarImage = () => cy.findByAltText('Avatar image').as('avatarImage')
 const bannerImage = () => cy.findByAltText('Home Banner').as('bannerImage')
-const changeAvatarButton = () =>
-  cy.findByLabelText(/avatar image/i, { selector: 'button' }).as('changeAvatarButton')
+// const changeAvatarButton = () =>
+//   cy.findByLabelText(/avatar image/i, { selector: 'button' }).as('changeAvatarButton')
+const changeAvatarButton = () => cy.findByText(/change image/i).as('changeAvatarButton')
 const removeAvatarButton = () =>
   cy.findByRole('button', { name: /remove avatar button/i }).as('removeAvatarButton')
-const changeBannerButton = () =>
-  cy.findByLabelText(/banner image/i, { selector: 'button' }).as('changeBannerButton')
+const changeBannerButton = () => cy.findByText(/change banner/i).as('changeBannerButton')
 const removeBannerButton = () =>
   cy.findByLabelText(/remove banner button/i).as('removeBannerButton')
 const saveChangesButton = () =>

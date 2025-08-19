@@ -21,9 +21,4 @@ type FileInputProps = {
 
 type CustomButtonProps = Exclude<ButtonProps, 'name'>
 
-export type FileUploadButtonProps = CustomButtonProps &
-  ControlProps &
-  AvatarProps &
-  FileInputProps & {
-    'aria-label'?: string
-  }
+export type FileUploadButtonProps = CustomButtonProps & ControlProps & AvatarProps & FileInputProps
