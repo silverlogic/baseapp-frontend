@@ -13,19 +13,19 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@tanstack/react-query": "catalog:",
-    "lodash": "catalog:"
+    "@tanstack/react-query": "5.76.1",
+    "lodash": "4.17.21"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react19"
+    "react": "19.1.0"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@types/lodash": "catalog:",
-    "@types/react": "catalog:react19",
-    "typescript": "catalog:"
+    "@types/lodash": "4.17.7",
+    "@types/react": "19.1.4",
+    "typescript": "5.8.3"
   },
   "license": "MIT",
   "repository": {
