@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { FC, useCallback } from 'react'
 
 import type { DrawerContentComponentProps } from '@react-navigation/drawer'
 import Drawer from 'expo-router/drawer'
@@ -13,12 +13,14 @@ const SidebarNavigationLayout: FC<SidebarNavigationLayoutProps> = ({
   Header = DefaultHeader,
   DrawerProps = {},
 }) => {
-  const renderDrawerContent = (props: DrawerContentComponentProps) => (
-    <DrawerContent {...DrawerContentProps} {...props} />
+  const renderDrawerContent = useCallback(
+    (props: DrawerContentComponentProps) => <DrawerContent {...DrawerContentProps} {...props} />,
+    [DrawerContent, DrawerContentProps],
   )
 
   return (
     <Drawer
+      // @ts-ignore TODO: double check this lint issue
       screenOptions={{
         drawerStyle: {
           width: '80%',

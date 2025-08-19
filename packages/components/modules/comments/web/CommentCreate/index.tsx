@@ -113,6 +113,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         onCompleted: (response, errors) => {
           if (errors) {
             // TODO: handle errors
+            // eslint-disable-next-line no-console
             console.error(errors)
             return
           }
@@ -132,6 +133,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
           }
         },
         // TODO: handle errors
+        // eslint-disable-next-line no-console
         onError: console.error,
       })
     }

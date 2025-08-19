@@ -25,17 +25,14 @@ Handles login/mfa form and execute the login. Extends all ReactQuery's useMutati
 #### **Parameters**
 
 - `validationSchema` (optional)
-
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `loginOptions` (optional)
-
   - This object is used to provide additional configuration to the useMutation hook from react-query that handles the login request. By default, it's an empty object {}.
 
 - `mfaOptions` (optional)
@@ -100,13 +97,11 @@ Handles password recovery form and sends a request for password recovery. Extend
 #### **Parameters**
 
 - `validationSchema` (optional)
-
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
@@ -145,13 +140,11 @@ Handles password reset form and sends a request for password reset. Extends all 
 #### **Parameters**
 
 - `validationSchema` (optional)
-
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
@@ -196,13 +189,11 @@ Handles sign-up form and sends a request for registration. Extends all ReactQuer
 #### **Parameters**
 
 - `validationSchema` (optional)
-
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-
   - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
 
 - `options` (optional)
@@ -238,42 +229,6 @@ return <form onSubmit={form.handleSubmit}>
 
   <button type="submit">Sign up</button>
 </form>
-```
-
-### **useUser**
-
-Retrieves the authenticated user's data. Extends all ReactQuery's useQuery's options on `options` field.
-
-#### **Parameters**
-
-- `options` (optional)
-  - This object is used to provide additional configuration to the useQuery hook from react-query that retrieves the user's data. By default, it's an empty object {}.
-
-#### **Returns**
-
-- `user`
-  - The data of the authenticated user.
-- `...rest`
-  - The rest of the properties returned by the useQuery hook, like `status`, `error`, `isFetching`, etc.
-
-This hook also removes the user's token cookie and invalidates the user data cache if a 401 Unauthorized error occurs.
-
-#### **Usage**
-
-- `useUser` usage example:
-
-```jsx
-const { user, isLoading, isError, error } = useUser()
-
-if (isLoading) {
-  return <div>Loading...</div>
-}
-
-if (isError) {
-  return <div>Error: {error.message}</div>
-}
-
-return <div>Hello, {user.name}</div>
 ```
 
 ### **useLogout**
@@ -326,17 +281,14 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 #### **Parameters**
 
 - `method`
-
   - This is the MFA method that the user selected for activation.
 
 - `validationSchema` (optional)
-
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
     The default value for validationSchema is `CODE_VALIDATION_SCHEMA`.
     This schema is used to validate the form values before submission.
 
 - `defaultValues` (optional)
-
   - This is an object representing the initial values for the form fields. The default value for defaultValues is `CODE_VALIDATION_INITIAL_VALUES`.
 
 - `options` (optional)
@@ -345,7 +297,6 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 #### **Returns**
 
 - `form` ([react-hook-form's instance](https://react-hook-form.com/api/useform))
-
   - This instance is important for building the form's inputs and already handles the onSubmit behavior.
 
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
@@ -383,7 +334,6 @@ Handles the fetching of the active MFA methods for the current user.
 #### **Returns**
 
 - `activeMethods`
-
   - This array contains the active MFA methods for the current user.
 
 - `...rest` (All remaining properties from useQuery's result)
@@ -428,7 +378,6 @@ Handles fetching the MFA configuration for the current user.
 #### **Returns**
 
 - `configuration`
-
   - This object contains the MFA configuration for the current user.
 
 - `...rest` (All remaining properties from useQuery's result)

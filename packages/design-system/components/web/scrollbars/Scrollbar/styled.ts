@@ -1,21 +1,20 @@
 'use client'
 
-import { HTMLAttributes } from 'react'
+import { FC } from 'react'
 
-import { StyledComponent } from '@emotion/styled'
 import { alpha, styled } from '@mui/material/styles'
 import SimpleBar from 'simplebar-react'
 
-export const StyledRootScrollbar: StyledComponent<HTMLAttributes<HTMLDivElement>> = styled('div')(
-  () => ({
-    flexGrow: 1,
-    height: 'fit-content',
-    overflow: 'hidden',
-  }),
-)
+import { ScrollbarProps } from './types'
 
-// @ts-ignore TODO: investigate import issue
-export const StyledScrollbar: StyledComponent = styled(SimpleBar)(({ theme }) => ({
+export const StyledRootScrollbar = styled('div')(() => ({
+  flexGrow: 1,
+  height: 'fit-content',
+  overflow: 'hidden',
+}))
+
+// TODO: type this better
+export const StyledScrollbar: FC<ScrollbarProps> = styled(SimpleBar)(({ theme }) => ({
   maxHeight: '100%',
   '& .simplebar-scrollbar': {
     '&:before': {

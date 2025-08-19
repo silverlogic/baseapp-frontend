@@ -3,7 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { defineConfig } from 'tsup'
 
-export default defineConfig((options) => ({
+export default defineConfig(() => ({
   clean: true,
   dts: false,
   entry: ['./modules/**/(common|web|native)/index.ts'],
@@ -12,6 +12,7 @@ export default defineConfig((options) => ({
       ...esbuildOptions.loader,
       '.css': 'file',
     }
+    esbuildOptions.external = ['react-multi-carousel', 'react-multi-carousel/lib/styles.css']
   },
   external: [
     'react',
@@ -23,9 +24,11 @@ export default defineConfig((options) => ({
     '@emotion/*',
     'zod',
     'zustand',
+    'react-multi-carousel',
+    'react-multi-carousel/lib/styles.css',
   ],
   format: ['esm', 'cjs'],
-  minify: !options.watch,
+  minify: false,
   outDir: 'dist',
   sourcemap: true,
   splitting: true,

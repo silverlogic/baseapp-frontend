@@ -22,5 +22,5 @@ export interface SocialInputProps {
   isReply?: boolean
   replyTargetName?: string | null
   onCancelReply?: () => void
-  form: UseFormReturn<SocialUpsertForm, any, undefined>
+  form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
 }
