@@ -176,8 +176,8 @@
       "default": "./styles/native/index.ts"
     },
     "./styles/*/*": {
-      "types": "./styles/*/*/index.{ts,tsx}",
-      "default": "./styles/*/*/index.{ts,tsx}"
+      "types": "./styles/*/*/*.ts",
+      "default": "./styles/*/*/*.ts"
     },
     "./providers/common": {
       "types": "./providers/common/index.ts",
