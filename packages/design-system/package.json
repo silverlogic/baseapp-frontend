@@ -157,8 +157,12 @@
       "types": "./hooks/web/useUISettings/constants.ts",
       "default": "./hooks/web/useUISettings/constants.ts"
     },
-    "./styles/web/tailwind/globals.css": "./styles/web/tailwind/globals.css",
-    "./styles/web/material/globals.css": "./styles/web/material/globals.css",
+    "./styles/web/tailwind/globals.css": {
+      "default": "./styles/web/tailwind/globals.css"
+    },
+    "./styles/web/material/globals.css": {
+      "default": "./styles/web/material/globals.css"
+    },
     "./styles/common": {
       "types": "./styles/common/index.ts",
       "default": "./styles/common/index.ts"

@@ -13,5 +13,4 @@ export { createContrast } from './material/options/contrast'
 export { createCustomShadows } from './material/custom-shadows'
 export * from './material/css'
 
-export * from './globals'
 export * from './types'
