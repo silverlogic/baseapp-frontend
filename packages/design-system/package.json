@@ -121,47 +121,21 @@
       "types": "./components/web/typographies/index.ts",
       "default": "./components/web/typographies/index.ts"
     },
-    "./components/native/*/*": {
-      "types": "./components/native/*/*/index.{ts,tsx}",
-      "default": "./components/native/*/*/index.{ts,tsx}"
-    },
-    "./components/web/*/*": {
-      "types": "./components/web/*/*/index.{ts,tsx}",
-      "default": "./components/web/*/*/index.{ts,tsx}"
-    },
-    "./hooks/native": {
-      "types": "./hooks/native/index.ts",
-      "default": "./hooks/native/index.ts"
+    "./hooks/common": {
+      "types": "./hooks/common/index.ts",
+      "default": "./hooks/common/index.ts"
     },
     "./hooks/web": {
       "types": "./hooks/web/index.ts",
       "default": "./hooks/web/index.ts"
     },
-    "./hooks/common": {
-      "types": "./hooks/common/index.ts",
-      "default": "./hooks/common/index.ts"
-    },
-    "./hooks/native/*": {
-      "types": "./hooks/native/*/index.ts",
-      "default": "./hooks/native/*/index.ts"
-    },
-    "./hooks/web/*": {
-      "types": "./hooks/web/*/index.ts",
-      "default": "./hooks/web/*/index.ts"
-    },
-    "./hooks/common/*": {
-      "types": "./hooks/common/*/index.ts",
-      "default": "./hooks/common/*/index.ts"
+    "./hooks/native": {
+      "types": "./hooks/native/index.ts",
+      "default": "./hooks/native/index.ts"
     },
     "./hooks/web/useUISettings/constants": {
       "types": "./hooks/web/useUISettings/constants.ts",
       "default": "./hooks/web/useUISettings/constants.ts"
-    },
-    "./styles/web/tailwind/globals.css": {
-      "default": "./styles/web/tailwind/globals.css"
-    },
-    "./styles/web/material/globals.css": {
-      "default": "./styles/web/material/globals.css"
     },
     "./styles/common": {
       "types": "./styles/common/index.ts",
@@ -175,9 +149,31 @@
       "types": "./styles/native/index.ts",
       "default": "./styles/native/index.ts"
     },
+    "./styles/web/tailwind/globals.css": {
+      "default": "./styles/web/tailwind/globals.css"
+    },
+    "./styles/web/material/globals.css": {
+      "default": "./styles/web/material/globals.css"
+    },
     "./styles/web/breakpoint": {
       "types": "./styles/web/breakpoint.ts",
       "default": "./styles/web/breakpoint.ts"
+    },
+    "./styles/web/typography": {
+      "types": "./styles/web/typography.ts",
+      "default": "./styles/web/typography.ts"
+    },
+    "./styles/web/palette": {
+      "types": "./styles/web/palette.ts",
+      "default": "./styles/web/palette.ts"
+    },
+    "./styles/web/shadow": {
+      "types": "./styles/web/shadow.ts",
+      "default": "./styles/web/shadow.ts"
+    },
+    "./styles/web/tailwind/plugins": {
+      "types": "./styles/web/tailwind/plugins/index.ts",
+      "default": "./styles/web/tailwind/plugins/index.ts"
     },
     "./providers/common": {
       "types": "./providers/common/index.ts",
@@ -191,10 +187,6 @@
       "types": "./providers/native/index.ts",
       "default": "./providers/native/index.ts"
     },
-    "./providers/*/*": {
-      "types": "./providers/*/*/index.{ts,tsx}",
-      "default": "./providers/*/*/index.{ts,tsx}"
-    },
     "./layouts/common": {
       "types": "./layouts/common/index.ts",
       "default": "./layouts/common/index.ts"
@@ -206,10 +198,6 @@
     "./layouts/native": {
       "types": "./layouts/native/index.ts",
       "default": "./layouts/native/index.ts"
-    },
-    "./layouts/*/*": {
-      "types": "./layouts/*/*/index.{ts,tsx}",
-      "default": "./layouts/*/*/index.{ts,tsx}"
     },
     "./utils/common": {
       "types": "./utils/common/index.ts",
@@ -223,10 +211,6 @@
       "types": "./utils/native/index.ts",
       "default": "./utils/native/index.ts"
     },
-    "./utils/*/*": {
-      "types": "./utils/*/*/index.{ts,tsx}",
-      "default": "./utils/*/*/index.{ts,tsx}"
-    },
     "./tests/common": {
       "types": "./tests/common/index.ts",
       "default": "./tests/common/index.ts"
@@ -238,10 +222,6 @@
     "./tests/native": {
       "types": "./tests/native/index.ts",
       "default": "./tests/native/index.ts"
-    },
-    "./tests/*/*": {
-      "types": "./tests/*/*/index.{ts,tsx}",
-      "default": "./tests/*/*/index.{ts,tsx}"
     }
   },
   "files": [
