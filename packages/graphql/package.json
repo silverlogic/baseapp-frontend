@@ -13,32 +13,32 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "graphql": "catalog:graphql",
-    "graphql-ws": "catalog:graphql",
-    "isomorphic-ws": "catalog:graphql",
-    "js-cookie": "catalog:",
-    "react-relay": "catalog:graphql",
-    "relay-connection-handler-plus": "catalog:graphql",
-    "relay-runtime": "catalog:graphql",
-    "relay-test-utils": "catalog:graphql",
-    "@storybook/react": "catalog:storybook"
+    "graphql": "16.11.0",
+    "graphql-ws": "6.0.5",
+    "isomorphic-ws": "5.0.0",
+    "js-cookie": "3.0.5",
+    "react-relay": "19.0.0",
+    "relay-connection-handler-plus": "0.1.2",
+    "relay-runtime": "19.0.0",
+    "relay-test-utils": "19.0.0",
+    "@storybook/react": "8.4.7"
   },
   "peerDependencies": {
     "@baseapp-frontend/authentication": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react19"
+    "react": "19.1.0"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@types/js-cookie": "catalog:",
-    "@types/react": "catalog:react19",
-    "@types/react-dom": "catalog:react19",
-    "@types/react-relay": "catalog:graphql",
-    "@types/relay-runtime": "catalog:graphql",
-    "@types/relay-test-utils": "catalog:graphql",
-    "relay-compiler": "catalog:graphql",
-    "typescript": "catalog:"
+    "@types/js-cookie": "3.0.6",
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "@types/react-relay": "18.2.1",
+    "@types/relay-runtime": "19.0.1",
+    "@types/relay-test-utils": "19.0.0",
+    "relay-compiler": "19.0.0",
+    "typescript": "5.8.3"
   },
   "license": "MIT",
   "repository": {
