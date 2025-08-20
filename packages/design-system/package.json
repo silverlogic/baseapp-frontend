@@ -171,6 +171,10 @@
       "types": "./styles/web/shadow.ts",
       "default": "./styles/web/shadow.ts"
     },
+    "./styles/web/customShadow": {
+      "types": "./styles/web/material/custom-shadows.ts",
+      "default": "./styles/web/material/custom-shadows.ts"
+    },
     "./styles/web/tailwind/plugins": {
       "types": "./styles/web/tailwind/plugins/index.ts",
       "default": "./styles/web/tailwind/plugins/index.ts"
