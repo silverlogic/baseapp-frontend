@@ -219,10 +219,13 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 const PaymentMethodsManagementComponentWithElements = ({
   entityId,
   stripePublishableKey,
-}: PaymentMethodsManagementComponentWithElementsProps) => (
-  <Elements stripe={getStripePromise(stripePublishableKey)}>
-    <PaymentMethodsManagementComponent entityId={entityId} />
-  </Elements>
-)
+}: PaymentMethodsManagementComponentWithElementsProps) => {
+  console.log('stripePublishableKey', stripePublishableKey)
+  return (
+    <Elements stripe={getStripePromise(stripePublishableKey)}>
+      <PaymentMethodsManagementComponent entityId={entityId} />
+    </Elements>
+  )
+}
 
 export default PaymentMethodsManagementComponentWithElements

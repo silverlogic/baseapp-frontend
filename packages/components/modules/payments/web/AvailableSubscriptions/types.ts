@@ -1,7 +1,7 @@
-import { IProduct } from '../types'
+import { Product } from '../types'
 
 export interface SubscriptionCardProps {
-  sub: IProduct
+  sub: Product
   isActive: boolean
   smDown: boolean
   selectedTerm: string

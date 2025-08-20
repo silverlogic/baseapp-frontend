@@ -1,6 +1,6 @@
 export { default as useStripeHook } from './hooks/useStripeHook'
 
-export { default as PaymentMethodsManagementComponentWithElements } from './PaymentMethodsManagementComponent'
+export { default as PaymentMethodsManagementComponent } from './PaymentMethodsManagementComponent'
 export type * from './PaymentMethodsManagementComponent/types'
 
 export { default as AvailableSubscriptions } from './AvailableSubscriptions'

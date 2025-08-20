@@ -6,24 +6,28 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { NextRouter } from 'next/router'
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import useStripeHook from '../hooks/useStripeHook'
 import SubscriptionCard from './SubscriptionCard'
 
-const AvailableSubscriptions = ({ router }: { router: NextRouter }) => {
+const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')
 
-  const { useListProducts } = useStripeHook()
+  const { useListProducts, useGetCustomer } = useStripeHook()
   const { data: products, isLoading: isLoadingProducts } = useListProducts()
+  const { data: customer, isLoading: isLoadingCustomer } = useGetCustomer()
   const smDown = useResponsive('down', 'sm')
 
-  const monthlySubs = products?.filter((sub) => sub.defaultPrice?.recurring?.interval === 'month')
-  const yearlySubs = products?.filter((sub) => sub.defaultPrice?.recurring?.interval === 'year')
-  const subs = selectedTerm === 'monthly' ? monthlySubs : yearlySubs
-  const isActive = true // TODO: implement this
+  const monthlySubs = products?.filter(
+    (product) => product.defaultPrice?.recurring?.interval === 'month',
+  )
+  const yearlySubs = products?.filter(
+    (product) => product.defaultPrice?.recurring?.interval === 'year',
+  )
+  const selectedProducts = selectedTerm === 'monthly' ? monthlySubs : yearlySubs
 
-  if (isLoadingProducts) {
+  if (isLoadingProducts || isLoadingCustomer) {
     return <LoadingState />
   }
 
@@ -48,17 +52,23 @@ const AvailableSubscriptions = ({ router }: { router: NextRouter }) => {
         </ToggleButtonGroup>
       </Box>
       <Box display="flex" gap={2} width="100%" height="100%" flexWrap="wrap">
-        {subs?.map((sub) => (
-          <SubscriptionCard
-            key={sub.id}
-            sub={sub}
-            isActive={isActive}
-            smDown={smDown}
-            selectedTerm={selectedTerm}
-            onManageClick={() => router.push('/user/settings?tab=subscription')}
-            onSubscribeClick={() => router.push(`/payments/checkout?product=${sub.id}`)}
-          />
-        ))}
+        {selectedProducts?.map((product) => {
+          const isActive = customer?.subscriptions?.find(
+            (subscription) =>
+              subscription.status === 'active' && subscription.productsIds.includes(product.id),
+          )
+          return (
+            <SubscriptionCard
+              key={product.id}
+              sub={product}
+              isActive={!!isActive}
+              smDown={smDown}
+              selectedTerm={selectedTerm}
+              onManageClick={() => router.push('/user/settings?tab=subscription')}
+              onSubscribeClick={() => router.push(`/subscriptions/checkout?product=${product.id}`)}
+            />
+          )
+        })}
       </Box>
     </>
   )

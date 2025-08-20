@@ -1,13 +1,13 @@
-export interface ManagementComponentProps {
-  subscriptionId: string
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+
+export interface SubscriptionManagementWithElementsProps {
+  stripePublishableKey: string
   entityId: string
-  handleSetupSuccess: (id: string) => void
-  lastAddedPaymentMethodIdDuringSession: string | null
+  router: AppRouterInstance
 }
 export interface SubscriptionManagementProps {
-  stripePublishableKey: string
-  subscriptionId: string
   entityId: string
+  router: AppRouterInstance
 }
 
 export interface CancelSubscriptionModalProps {
