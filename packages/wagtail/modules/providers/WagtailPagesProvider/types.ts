@@ -1,11 +1,15 @@
 import React from 'react'
 
-import type { PageWagtailFieldsFragment$data } from '../../../__generated__/PageWagtailFieldsFragment.graphql'
+import type {
+  PageWagtailFieldsFragment$data,
+  PageWagtailFieldsFragment$key,
+} from '../../../__generated__/PageWagtailFieldsFragment.graphql'
 import type { AvailableBlocksType } from '../../components/Blocks/types'
 import type { AvailablePageTypesType } from '../../components/PageTypes/types'
 
 export type WagtailPagesProviderProps = {
   children: React.ReactNode
+  currentPage: PageWagtailFieldsFragment$key
   defaultSettings: Partial<Omit<WagtailPagesContextState, 'currentPage'>>
 }
 

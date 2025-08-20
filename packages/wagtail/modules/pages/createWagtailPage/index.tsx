@@ -13,7 +13,13 @@ import PageQueryByPathNode, {
 } from '../../../__generated__/PageWagtailURLPathQuery.graphql'
 import { PageTypes } from '../../components'
 import WagtailPagesProvider from '../../providers/WagtailPagesProvider'
-import { PageParams, PageSearchParams, WagtailPageProps } from './types'
+import PreloadedWagtailPagesProvider from './PreloadedWagtailPagesProvider'
+import {
+  CreateWagtailPageProviderParams,
+  PageParams,
+  PageSearchParams,
+  WagtailPageProps,
+} from './types'
 
 type PageQueryOptions =
   | {
@@ -73,8 +79,22 @@ export const generateWagtailPageComponents = (
 ) => ({
   preloadedPageQueryRef,
   WagtailPagesProvider: ({ children, defaultSettings }: WagtailPageProps) => (
-    <WagtailPagesProvider
+    <PreloadedWagtailPagesProvider
       preloadedQuery={preloadedPageQueryRef}
+      defaultSettings={defaultSettings}
+    >
+      {children}
+    </PreloadedWagtailPagesProvider>
+  ),
+  WagtailPageTypes: PageTypes,
+})
+
+export const createWagtailPageProviderFromFragment = ({
+  pageFragment,
+}: CreateWagtailPageProviderParams) => ({
+  WagtailPagesProvider: ({ children, defaultSettings }: WagtailPageProps) => (
+    <WagtailPagesProvider
+      currentPage={pageFragment}
       defaultSettings={{
         ...(defaultSettings ?? {}),
       }}
