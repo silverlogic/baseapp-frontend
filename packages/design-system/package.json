@@ -175,9 +175,9 @@
       "types": "./styles/native/index.ts",
       "default": "./styles/native/index.ts"
     },
-    "./styles/*/*": {
-      "types": "./styles/*/*/*.ts",
-      "default": "./styles/*/*/*.ts"
+    "./styles/web/breakpoint": {
+      "types": "./styles/web/breakpoint.ts",
+      "default": "./styles/web/breakpoint.ts"
     },
     "./providers/common": {
       "types": "./providers/common/index.ts",
