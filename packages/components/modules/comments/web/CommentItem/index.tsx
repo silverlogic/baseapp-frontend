@@ -88,14 +88,17 @@ const CommentItem: FC<CommentItemProps> = ({
   }
 
   const replyToComment = () => {
-    onReplyClick?.()
-    setCommentReply({
-      commentItemRef,
-      inReplyToId: comment.id,
-      name: comment.user?.fullName,
-    })
+    if (hasUser) {
+      onReplyClick?.()
+      setCommentReply({
+        commentItemRef,
+        inReplyToId: comment.id,
+        name: comment.user?.fullName,
+      })
+    }
     showReplies()
   }
+
   const renderUserName = () => {
     if (!hasUser) return <Typography variant="subtitle2">Deleted User</Typography>
 
@@ -171,14 +174,12 @@ const CommentItem: FC<CommentItemProps> = ({
               <div className="flex justify-between">
                 <div className="grid grid-cols-[repeat(2,max-content)] gap-4">
                   <CommentReactionButton target={comment} />
-                  {hasUser && (
-                    <CommentReplyButton
-                      onReply={replyToComment}
-                      isLoadingReplies={isLoadingReplies}
-                      commentId={comment.id}
-                      totalCommentsCount={comment.commentsCount.total}
-                    />
-                  )}
+                  <CommentReplyButton
+                    onReply={replyToComment}
+                    isLoadingReplies={isLoadingReplies}
+                    commentId={comment.id}
+                    totalCommentsCount={comment.commentsCount.total}
+                  />
                 </div>
                 <Timestamp date={comment.created} />
               </div>
