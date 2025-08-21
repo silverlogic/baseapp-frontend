@@ -124,6 +124,12 @@ const useStripeHook = () => {
       mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
+  const useListProducts = () =>
+    useQuery({
+      queryKey: ['useListProducts'],
+      queryFn: () => StripeApi.listProducts(),
+    })
+
   const useGetProduct = (productId: string) =>
     useQuery({
       queryKey: [PRODUCT_API_KEY.get(productId)],
@@ -202,6 +208,7 @@ const useStripeHook = () => {
     useDeletePaymentMethod,
     useSetupIntent,
     useConfirmCardPayment,
+    useListProducts,
     useGetProduct,
     useCreationSubscription,
     useGetSubscription,

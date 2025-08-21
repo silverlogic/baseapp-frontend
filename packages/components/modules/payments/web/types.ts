@@ -1,9 +1,16 @@
 import { BillingDetails, PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js'
 
+export interface SimplifiedCustomerSubscription {
+  id: string
+  status: string
+  productsIds: string[]
+}
+
 export interface Customer {
   remoteCustomerId: string
   entityType: string
   entityId: number
+  subscriptions: SimplifiedCustomerSubscription[]
 }
 
 export interface SetupIntent {
@@ -33,6 +40,9 @@ export interface Price {
   unitAmount: number
   currency?: string
   locale?: string
+  recurring?: {
+    interval: string
+  }
 }
 
 export interface Product {
@@ -44,26 +54,17 @@ export interface Product {
   marketingFeatures?: MarketingFeatures[]
 }
 
-interface Plan {
-  product: string
-  amount: number
-}
-
-interface Items {
-  data: {
-    currentPeriodEnd: number
-  }[]
-}
-
 export interface Subscription {
   id: string
   clientSecret?: string
   defaultPaymentMethod?: string
-  remoteCustomerId: string
-  invoiceId: string
-  plan?: Plan
   status: string
-  items?: Items
+  product?: Product
+  currentPeriodEnd?: string
+  upcomingInvoice?: {
+    amountDue: number
+    nextPaymentAttempt: string
+  }
 }
 
 export interface CreateSubscriptionOptions {
