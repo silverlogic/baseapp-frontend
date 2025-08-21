@@ -14,6 +14,7 @@ module.exports = {
     },
   },
   ignorePatterns: [
+    '__generated__/',
     '__tests__/',
     '__mocks__/',
     'dist/',

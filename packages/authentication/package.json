@@ -14,39 +14,38 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@hookform/resolvers": "catalog:",
-    "@tanstack/react-query": "catalog:",
-    "jotai": "catalog:",
-    "js-cookie": "catalog:",
-    "react-hook-form": "catalog:",
-    "zod": "catalog:",
-    "@storybook/react": "catalog:storybook",
-    "zustand": "catalog:"
+    "@hookform/resolvers": "5.0.1",
+    "@tanstack/react-query": "5.76.1",
+    "js-cookie": "3.0.5",
+    "react-hook-form": "7.56.4",
+    "zod": "3.25.7",
+    "@storybook/react": "8.4.7",
+    "zustand": "5.0.4"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react19"
+    "react": "19.1.0"
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@faker-js/faker": "catalog:test",
-    "@testing-library/jest-dom": "catalog:test",
-    "@testing-library/react": "catalog:test",
-    "@testing-library/user-event": "catalog:test",
-    "@types/jest": "catalog:test",
-    "@types/js-cookie": "catalog:",
-    "@types/node": "catalog:",
-    "@types/react": "catalog:react19",
-    "@types/react-dom": "catalog:react19",
-    "babel-jest": "catalog:test",
-    "jest": "catalog:test",
-    "jest-environment-jsdom": "catalog:test",
-    "ts-jest": "catalog:test",
-    "ts-node": "catalog:test",
-    "typescript": "catalog:"
+    "@faker-js/faker": "^9.0.3",
+    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/react": "16.0.0",
+    "@testing-library/user-event": "14.5.2",
+    "@types/jest": "29.5.12",
+    "@types/js-cookie": "3.0.6",
+    "@types/node": "22.7.2",
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "babel-jest": "29.7.0",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "ts-jest": "29.1.4",
+    "ts-node": "10.9.2",
+    "typescript": "5.8.3"
   },
   "license": "MIT",
   "repository": {

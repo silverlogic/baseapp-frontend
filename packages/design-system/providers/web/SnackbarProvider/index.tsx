@@ -41,6 +41,7 @@ const SnackbarProvider: FC<SnackbarProviderProps> = ({
     // It always pauses its timer and restarts it at a (customizable fixed) value.
     // Therefore, if we show a 'progress bar', we explicitly set the timeout for closing the snackbar ourselves.
     if (shouldShowProgress && open && !timeoutID.current) {
+      // @ts-ignore TODO: check typing error
       timeoutID.current = setTimeout(() => {
         timeoutID.current = null
         handleClose()

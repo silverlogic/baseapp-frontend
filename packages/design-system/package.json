@@ -4,156 +4,330 @@
   "version": "1.0.22",
   "sideEffects": false,
   "scripts": {
-    "tsup:bundle": "tsup --tsconfig tsconfig.build.json",
-    "tsc:declaration": "tsc -p tsconfig.build.json --emitDeclarationOnly",
-    "copy:dts": "node ../../.scripts/copy-dts.js",
-    "clean:tmp": "rm -rf tmp-dts",
-    "build": "node .scripts/build-command.mjs",
-    "dev": "rm -rf dist && node .scripts/dev-command.mjs",
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
+    "dev": "rm -rf dist && tsc --watch",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "test:unit": "jest --config ./jest.config.ts",
-    "prepublishOnly": "pnpm run build"
+    "test:unit": "jest --config ./jest.config.ts"
   },
   "exports": {
-    "./components/*": {
-      "types": "./dist/components/*/index.d.ts",
-      "import": "./dist/components/*/index.mjs",
-      "require": "./dist/components/*/index.js"
+    "./package.json": "./package.json",
+    "./components/native/appbars": {
+      "types": "./components/native/appbars/index.ts",
+      "default": "./components/native/appbars/index.ts"
     },
-    "./hooks/*": {
-      "types": "./dist/hooks/*/index.d.ts",
-      "import": "./dist/hooks/*/index.mjs",
-      "require": "./dist/hooks/*/index.js"
+    "./components/native/avatars": {
+      "types": "./components/native/avatars/index.ts",
+      "default": "./components/native/avatars/index.ts"
+    },
+    "./components/native/badges": {
+      "types": "./components/native/badges/index.ts",
+      "default": "./components/native/badges/index.ts"
+    },
+    "./components/native/buttons": {
+      "types": "./components/native/buttons/index.ts",
+      "default": "./components/native/buttons/index.ts"
+    },
+    "./components/native/displays": {
+      "types": "./components/native/displays/index.ts",
+      "default": "./components/native/displays/index.ts"
+    },
+    "./components/native/drawers": {
+      "types": "./components/native/drawers/index.ts",
+      "default": "./components/native/drawers/index.ts"
+    },
+    "./components/native/icons": {
+      "types": "./components/native/icons/index.ts",
+      "default": "./components/native/icons/index.ts"
+    },
+    "./components/native/images": {
+      "types": "./components/native/images/index.ts",
+      "default": "./components/native/images/index.ts"
+    },
+    "./components/native/inputs": {
+      "types": "./components/native/inputs/index.ts",
+      "default": "./components/native/inputs/index.ts"
+    },
+    "./components/native/tabs": {
+      "types": "./components/native/tabs/index.ts",
+      "default": "./components/native/tabs/index.ts"
+    },
+    "./components/native/typographies": {
+      "types": "./components/native/typographies/index.ts",
+      "default": "./components/native/typographies/index.ts"
+    },
+    "./components/native/views": {
+      "types": "./components/native/views/index.ts",
+      "default": "./components/native/views/index.ts"
+    },
+    "./components/web/animate": {
+      "types": "./components/web/animate/index.ts",
+      "default": "./components/web/animate/index.ts"
+    },
+    "./components/web/avatars": {
+      "types": "./components/web/avatars/index.ts",
+      "default": "./components/web/avatars/index.ts"
+    },
+    "./components/web/buttons": {
+      "types": "./components/web/buttons/index.ts",
+      "default": "./components/web/buttons/index.ts"
+    },
+    "./components/web/dialogs": {
+      "types": "./components/web/dialogs/index.ts",
+      "default": "./components/web/dialogs/index.ts"
+    },
+    "./components/web/displays": {
+      "types": "./components/web/displays/index.ts",
+      "default": "./components/web/displays/index.ts"
+    },
+    "./components/web/drawers": {
+      "types": "./components/web/drawers/index.ts",
+      "default": "./components/web/drawers/index.ts"
+    },
+    "./components/web/dropzones": {
+      "types": "./components/web/dropzones/index.ts",
+      "default": "./components/web/dropzones/index.ts"
+    },
+    "./components/web/icons": {
+      "types": "./components/web/icons/index.ts",
+      "default": "./components/web/icons/index.ts"
+    },
+    "./components/web/illustrations": {
+      "types": "./components/web/illustrations/index.ts",
+      "default": "./components/web/illustrations/index.ts"
+    },
+    "./components/web/images": {
+      "types": "./components/web/images/index.ts",
+      "default": "./components/web/images/index.ts"
+    },
+    "./components/web/inputs": {
+      "types": "./components/web/inputs/index.ts",
+      "default": "./components/web/inputs/index.ts"
+    },
+    "./components/web/logos": {
+      "types": "./components/web/logos/index.ts",
+      "default": "./components/web/logos/index.ts"
+    },
+    "./components/web/popovers": {
+      "types": "./components/web/popovers/index.ts",
+      "default": "./components/web/popovers/index.ts"
+    },
+    "./components/web/scrollbars": {
+      "types": "./components/web/scrollbars/index.ts",
+      "default": "./components/web/scrollbars/index.ts"
+    },
+    "./components/web/typographies": {
+      "types": "./components/web/typographies/index.ts",
+      "default": "./components/web/typographies/index.ts"
+    },
+    "./hooks/common": {
+      "types": "./hooks/common/index.ts",
+      "default": "./hooks/common/index.ts"
+    },
+    "./hooks/web": {
+      "types": "./hooks/web/index.ts",
+      "default": "./hooks/web/index.ts"
+    },
+    "./hooks/native": {
+      "types": "./hooks/native/index.ts",
+      "default": "./hooks/native/index.ts"
     },
     "./hooks/web/useUISettings/constants": {
-      "types": "./dist/hooks/web/useUISettings/constants.d.ts",
-      "import": "./dist/hooks/web/useUISettings/constants.mjs",
-      "require": "./dist/hooks/web/useUISettings/constants.js"
+      "types": "./hooks/web/useUISettings/constants.ts",
+      "default": "./hooks/web/useUISettings/constants.ts"
     },
-    "./layouts/*": {
-      "types": "./dist/layouts/*/index.d.ts",
-      "import": "./dist/layouts/*/index.mjs",
-      "require": "./dist/layouts/*/index.js"
+    "./styles/common": {
+      "types": "./styles/common/index.ts",
+      "default": "./styles/common/index.ts"
     },
-    "./providers/*": {
-      "types": "./dist/providers/*/index.d.ts",
-      "import": "./dist/providers/*/index.mjs",
-      "require": "./dist/providers/*/index.js"
+    "./styles/web": {
+      "types": "./styles/web/index.ts",
+      "default": "./styles/web/index.ts"
     },
-    "./styles/*": {
-      "types": "./dist/styles/*/index.d.ts",
-      "import": "./dist/styles/*/index.mjs",
-      "require": "./dist/styles/*/index.js"
+    "./styles/native": {
+      "types": "./styles/native/index.ts",
+      "default": "./styles/native/index.ts"
     },
-    "./styles/web/globals.css": {
-      "default": "./dist/styles/web/index.css"
+    "./styles/web/tailwind/globals.css": {
+      "default": "./styles/web/tailwind/globals.css"
     },
-    "./tests/*": {
-      "types": "./dist/tests/*/index.d.ts",
-      "import": "./dist/tests/*/index.mjs",
-      "require": "./dist/tests/*/index.js"
+    "./styles/web/material/globals.css": {
+      "default": "./styles/web/material/globals.css"
     },
-    "./utils/*": {
-      "types": "./dist/utils/*/index.d.ts",
-      "import": "./dist/utils/*/index.mjs",
-      "require": "./dist/utils/*/index.js"
+    "./styles/web/breakpoint": {
+      "types": "./styles/web/breakpoint.ts",
+      "default": "./styles/web/breakpoint.ts"
+    },
+    "./styles/web/typography": {
+      "types": "./styles/web/typography.ts",
+      "default": "./styles/web/typography.ts"
+    },
+    "./styles/web/palette": {
+      "types": "./styles/web/palette.ts",
+      "default": "./styles/web/palette.ts"
+    },
+    "./styles/web/shadow": {
+      "types": "./styles/web/shadow.ts",
+      "default": "./styles/web/shadow.ts"
+    },
+    "./styles/web/customShadow": {
+      "types": "./styles/web/material/custom-shadows.ts",
+      "default": "./styles/web/material/custom-shadows.ts"
+    },
+    "./styles/web/tailwind/plugins": {
+      "types": "./styles/web/tailwind/plugins/index.ts",
+      "default": "./styles/web/tailwind/plugins/index.ts"
+    },
+    "./providers/common": {
+      "types": "./providers/common/index.ts",
+      "default": "./providers/common/index.ts"
+    },
+    "./providers/web": {
+      "types": "./providers/web/index.ts",
+      "default": "./providers/web/index.ts"
+    },
+    "./providers/native": {
+      "types": "./providers/native/index.ts",
+      "default": "./providers/native/index.ts"
+    },
+    "./layouts/common": {
+      "types": "./layouts/common/index.ts",
+      "default": "./layouts/common/index.ts"
+    },
+    "./layouts/web": {
+      "types": "./layouts/web/index.ts",
+      "default": "./layouts/web/index.ts"
+    },
+    "./layouts/native": {
+      "types": "./layouts/native/index.ts",
+      "default": "./layouts/native/index.ts"
+    },
+    "./utils/common": {
+      "types": "./utils/common/index.ts",
+      "default": "./utils/common/index.ts"
+    },
+    "./utils/web": {
+      "types": "./utils/web/index.ts",
+      "default": "./utils/web/index.ts"
+    },
+    "./utils/native": {
+      "types": "./utils/native/index.ts",
+      "default": "./utils/native/index.ts"
+    },
+    "./tests/common": {
+      "types": "./tests/common/index.ts",
+      "default": "./tests/common/index.ts"
+    },
+    "./tests/web": {
+      "types": "./tests/web/index.ts",
+      "default": "./tests/web/index.ts"
+    },
+    "./tests/native": {
+      "types": "./tests/native/index.ts",
+      "default": "./tests/native/index.ts"
     }
   },
   "files": [
-    "dist"
+    "components",
+    "hooks",
+    "layouts",
+    "providers",
+    "styles",
+    "tests",
+    "utils",
+    "tsconfig.json"
   ],
   "dependencies": {
-    "@emotion/cache": "catalog:material-ui",
-    "@emotion/react": "catalog:material-ui",
-    "@emotion/styled": "catalog:material-ui",
+    "@emotion/cache": "11.14.0",
+    "@emotion/react": "11.14.0",
+    "@emotion/styled": "11.14.1",
     "@expo/vector-icons": "^14.0.4",
-    "@gorhom/bottom-sheet": "catalog:react-native",
+    "@gorhom/bottom-sheet": "^5.1.4",
     "@iconify/react": "^5.0.1",
-    "@mui/icons-material": "catalog:material-ui",
-    "@mui/lab": "catalog:material-ui",
-    "@mui/material": "catalog:material-ui",
-    "@mui/material-nextjs": "catalog:material-ui",
-    "@mui/system": "catalog:material-ui",
-    "@mui/x-date-pickers": "catalog:material-ui",
-    "@react-native-async-storage/async-storage": "catalog:react-native",
-    "@react-navigation/drawer": "catalog:react-native",
-    "@react-navigation/native": "catalog:react-native",
+    "@mui/icons-material": "5.18.0",
+    "@mui/lab": "5.0.0-alpha.177",
+    "@mui/material": "5.18.0",
+    "@mui/material-nextjs": "6.1.4",
+    "@mui/system": "5.18.0",
+    "@mui/x-date-pickers": "7.6.2",
+    "@react-native-async-storage/async-storage": "^2.1.2",
+    "@react-navigation/drawer": "^7.3.12",
+    "@react-navigation/native": "^7.1.9",
     "@shopify/flash-list": "^1.7.6",
-    "@storybook/react": "catalog:storybook",
+    "@storybook/react": "8.4.7",
     "color": "^4.2.3",
-    "expo-image-picker": "catalog:react-native",
-    "expo-router": "catalog:react-native",
+    "expo-image-picker": "~16.1.4",
+    "expo-router": "~5.0.7",
     "framer-motion": "^11.2.10",
-    "jotai": "catalog:",
-    "js-cookie": "catalog:",
-    "lodash": "catalog:",
-    "next": "catalog:",
+    "jotai": "2.12.4",
+    "js-cookie": "3.0.5",
+    "lodash": "4.17.21",
+    "next": "^15.3.2",
     "react-dropzone": "^14.2.3",
-    "react-hook-form": "catalog:",
-    "react-international-phone": "catalog:",
+    "react-hook-form": "7.56.4",
+    "react-international-phone": "4.5.0",
     "react-lazy-load-image-component": "^1.6.2",
-    "react-native": "catalog:react-native",
-    "react-native-gesture-handler": "catalog:react-native",
-    "react-native-paper": "catalog:react-native",
-    "react-native-reanimated": "catalog:react-native",
-    "react-native-svg": "catalog:react-native",
-    "simplebar-react": "catalog:",
-    "zustand": "catalog:"
+    "react-native": "0.79.2",
+    "react-native-gesture-handler": "~2.24.0",
+    "react-native-paper": "^5.14.5",
+    "react-native-reanimated": "~3.17.4",
+    "react-native-svg": "15.11.2",
+    "simplebar-react": "3.2.5",
+    "zustand": "5.0.4"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
-    "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@babel/preset-env": "catalog:storybook",
-    "@babel/preset-react": "catalog:storybook",
-    "@babel/preset-typescript": "catalog:storybook",
+    "@babel/preset-env": "7.26.0",
+    "@babel/preset-react": "7.25.9",
+    "@babel/preset-typescript": "7.26.0",
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@chromatic-com/storybook": "catalog:storybook",
-    "@storybook/addon-docs": "catalog:storybook",
-    "@storybook/addon-essentials": "catalog:storybook",
-    "@storybook/addon-interactions": "catalog:storybook",
-    "@storybook/addon-links": "catalog:storybook",
-    "@storybook/addon-styling-webpack": "catalog:storybook",
-    "@storybook/addon-webpack5-compiler-babel": "catalog:storybook",
-    "@storybook/blocks": "catalog:storybook",
-    "@storybook/react-webpack5": "catalog:storybook",
-    "@storybook/test": "catalog:storybook",
-    "@tailwindcss/typography": "catalog:tailwind",
-    "@testing-library/jest-dom": "catalog:test",
-    "@testing-library/react": "catalog:test",
-    "@testing-library/user-event": "catalog:test",
+    "@chromatic-com/storybook": "3.2.3",
+    "@storybook/addon-docs": "8.4.7",
+    "@storybook/addon-essentials": "8.4.7",
+    "@storybook/addon-interactions": "8.4.7",
+    "@storybook/addon-links": "8.4.7",
+    "@storybook/addon-styling-webpack": "1.0.1",
+    "@storybook/addon-webpack5-compiler-babel": "3.0.3",
+    "@storybook/blocks": "8.4.7",
+    "@storybook/react-webpack5": "8.4.7",
+    "@storybook/test": "8.4.7",
+    "@tailwindcss/typography": "0.5.13",
+    "@testing-library/jest-dom": "6.4.6",
+    "@testing-library/react": "16.0.0",
+    "@testing-library/user-event": "14.5.2",
     "@types/color": "^4.2.0",
-    "@types/jest": "catalog:test",
-    "@types/js-cookie": "catalog:",
-    "@types/lodash": "catalog:",
-    "@types/react": "catalog:react19",
-    "@types/react-dom": "catalog:react19",
-    "autoprefixer": "catalog:tailwind",
-    "babel-jest": "catalog:test",
-    "chalk": "catalog:dev-tools",
-    "chokidar": "catalog:dev-tools",
+    "@types/jest": "29.5.12",
+    "@types/js-cookie": "3.0.6",
+    "@types/lodash": "4.17.7",
+    "@types/react": "19.1.4",
+    "@types/react-dom": "19.1.5",
+    "autoprefixer": "10.4.19",
+    "babel-jest": "29.7.0",
+    "chalk": "^5.4.1",
+    "chokidar": "^4.0.3",
     "chokidar-cli": "^3.0.0",
-    "css-loader": "catalog:storybook",
-    "eslint-plugin-storybook": "catalog:lint",
-    "execa": "catalog:dev-tools",
-    "jest": "catalog:test",
-    "jest-environment-jsdom": "catalog:test",
-    "postcss": "catalog:tailwind",
-    "postcss-loader": "catalog:storybook",
-    "storybook": "catalog:storybook",
-    "style-loader": "catalog:storybook",
-    "tailwindcss": "catalog:tailwind",
-    "ts-jest": "catalog:test",
-    "ts-node": "catalog:test",
-    "tsup": "catalog:",
-    "typescript": "catalog:"
+    "css-loader": "7.1.2",
+    "eslint-plugin-storybook": "^0.8.0",
+    "execa": "^9.5.2",
+    "jest": "29.7.0",
+    "jest-environment-jsdom": "29.7.0",
+    "postcss": "8.4.38",
+    "postcss-loader": "8.1.1",
+    "storybook": "8.4.7",
+    "style-loader": "4.0.0",
+    "tailwindcss": "3.4.4",
+    "ts-jest": "29.1.4",
+    "ts-node": "10.9.2",
+    "tsup": "8.3.6",
+    "typescript": "5.8.3"
   },
   "license": "MIT",
   "repository": {

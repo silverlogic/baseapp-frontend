@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 
-import { LoadingState } from '../../../../../components/web/displays'
+import { LoadingState } from '../../../../components/web/displays'
 import { ReactSuspenseWithLoadingProps } from './types'
 
 const ReactSuspenseWithLoading: FC<ReactSuspenseWithLoadingProps> = ({

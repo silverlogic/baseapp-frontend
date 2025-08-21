@@ -1,5 +1,5 @@
 import { withAuthenticationTestProviders } from '@baseapp-frontend/authentication'
-import { withDesignSystemTestProviders } from '@baseapp-frontend/design-system/tests/web/utils'
+import { withDesignSystemTestProviders } from '@baseapp-frontend/design-system/tests/web'
 import { withGraphqlTestProviders } from '@baseapp-frontend/graphql'
 import { compose } from '@baseapp-frontend/utils/functions/compose'
 

@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 
-import { UISettingsProviderProps } from '../../../../../hooks/web'
+import { UISettingsProviderProps } from '../../../../hooks/web'
 import { ReactSuspenseWithLoadingProps } from '../ReactSuspenseWithLoading/types'
 import { ThemeTestProviderProps } from '../ThemeTestProvider/types'
 
