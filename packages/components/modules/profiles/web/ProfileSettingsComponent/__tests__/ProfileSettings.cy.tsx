@@ -35,8 +35,6 @@ const bannerInput = () =>
 const avatarFallbackImage = () => cy.get('img, [title="Avatar Fallback"]').as('avatarFallbackImage')
 const avatarImage = () => cy.findByAltText('Avatar image').as('avatarImage')
 const bannerImage = () => cy.findByAltText('Home Banner').as('bannerImage')
-// const changeAvatarButton = () =>
-//   cy.findByLabelText(/avatar image/i, { selector: 'button' }).as('changeAvatarButton')
 const changeAvatarButton = () => cy.findByText(/change image/i).as('changeAvatarButton')
 const removeAvatarButton = () =>
   cy.findByRole('button', { name: /remove avatar button/i }).as('removeAvatarButton')
