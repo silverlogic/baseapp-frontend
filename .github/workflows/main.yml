@@ -75,7 +75,7 @@ jobs:
         with:
           version: 10.14.0
 
-      - name: Cache Cypress Binary
+      - name: Cache Cypress binary
         uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
@@ -86,8 +86,13 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Cypress Binary
-        run: pnpm cypress install
+      - name: Install Cypress binary (if needed)
+        run: npx cypress install
+        env:
+          CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
 
       - name: Component Test
         run: pnpm test:component
