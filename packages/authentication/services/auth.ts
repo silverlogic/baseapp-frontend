@@ -19,6 +19,10 @@ export default class AuthApi {
     return baseAppFetch(`/forgot-password`, { method: 'POST', body: { email } })
   }
 
+  static deleteAccount(): Promise<void> {
+    return baseAppFetch('/users/delete-account', { method: 'DELETE' })
+  }
+
   static resetPassword({ newPassword, token }: ResetPasswordRequest): Promise<void> {
     return baseAppFetch(`/forgot-password/reset`, { method: 'POST', body: { newPassword, token } })
   }

@@ -19,6 +19,7 @@ import {
 } from '../../../../../profiles/web'
 import CurrentProfileMenu from './CurrentProfileMenu'
 import DefaultCurrentUser from './CurrentUser'
+import DeleteAccountItem from './DeleteAccountItem'
 import LogoutItem from './LogoutItem'
 import DefaultMenuItems from './MenuItems'
 import { PopoverStyles as DefaultPopoverStyles } from './styled'
@@ -37,6 +38,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   AddProfileMenuItem = DefaultAddProfileMenuItem,
   AddProfileMenuItemProps = {},
   LogoutItemProps = {},
+  DeleteAccountItemProps = {},
 }) => {
   const { currentProfile: profile } = useCurrentProfile()
 
@@ -105,6 +107,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
             <DefaultAddProfileMenuItem {...AddProfileMenuItemProps} />
           )}
           <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps} />
+          <DeleteAccountItem
+            handlePopoverOnClose={handlePopoverOnClose}
+            {...DeleteAccountItemProps}
+          />
         </Box>
       </Popover>
     </>

@@ -4,6 +4,7 @@ import type { CSSProperties } from '@mui/material/styles/createMixins'
 
 import type { AddProfileMenuItemProps, ProfilesListProps } from '../../../../../profiles/web'
 import { CurrentProfileMenuProps } from './CurrentProfileMenu/types'
+import { DeleteAccountItemProps } from './DeleteAccountItem/types'
 import type { LogoutItemProps } from './LogoutItem/types'
 
 export interface AccountPopoverProps
@@ -14,6 +15,7 @@ export interface AccountPopoverProps
   AddProfileMenuItem?: FC<AddProfileMenuItemProps> | null
   AddProfileMenuItemProps?: Partial<AddProfileMenuItemProps>
   LogoutItemProps?: Partial<LogoutItemProps>
+  DeleteAccountItemProps?: Partial<DeleteAccountItemProps>
 }
 
 export interface SectionController {

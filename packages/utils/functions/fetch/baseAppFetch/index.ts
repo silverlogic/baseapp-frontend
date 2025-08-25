@@ -188,7 +188,20 @@ export const baseAppFetch: BaseAppFetch = async (
     }
 
     if (isJsonResponse) {
-      const data = await response.json()
+      const text = await response.text()
+
+      // If the body is empty, return null
+      if (!text || text.trim() === '') {
+        return null
+      }
+
+      // Parse as JSON only if not empty
+      const data = JSON.parse(text)
+
+      // Protect against empty object {}
+      if (data && Object.keys(data).length === 0 && data.constructor === Object) {
+        return null
+      }
 
       // camelize response data
       return camelizeResponseDataKeys ? humps.camelizeKeys(data) : data
