@@ -14,220 +14,64 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    "./components/native/appbars": {
-      "types": "./components/native/appbars/index.ts",
-      "default": "./components/native/appbars/index.ts"
-    },
-    "./components/native/avatars": {
-      "types": "./components/native/avatars/index.ts",
-      "default": "./components/native/avatars/index.ts"
-    },
-    "./components/native/badges": {
-      "types": "./components/native/badges/index.ts",
-      "default": "./components/native/badges/index.ts"
-    },
-    "./components/native/buttons": {
-      "types": "./components/native/buttons/index.ts",
-      "default": "./components/native/buttons/index.ts"
-    },
-    "./components/native/displays": {
-      "types": "./components/native/displays/index.ts",
-      "default": "./components/native/displays/index.ts"
-    },
-    "./components/native/drawers": {
-      "types": "./components/native/drawers/index.ts",
-      "default": "./components/native/drawers/index.ts"
-    },
-    "./components/native/icons": {
-      "types": "./components/native/icons/index.ts",
-      "default": "./components/native/icons/index.ts"
-    },
-    "./components/native/images": {
-      "types": "./components/native/images/index.ts",
-      "default": "./components/native/images/index.ts"
-    },
-    "./components/native/inputs": {
-      "types": "./components/native/inputs/index.ts",
-      "default": "./components/native/inputs/index.ts"
-    },
-    "./components/native/tabs": {
-      "types": "./components/native/tabs/index.ts",
-      "default": "./components/native/tabs/index.ts"
-    },
-    "./components/native/typographies": {
-      "types": "./components/native/typographies/index.ts",
-      "default": "./components/native/typographies/index.ts"
-    },
-    "./components/native/views": {
-      "types": "./components/native/views/index.ts",
-      "default": "./components/native/views/index.ts"
-    },
-    "./components/web/animate": {
-      "types": "./components/web/animate/index.ts",
-      "default": "./components/web/animate/index.ts"
-    },
-    "./components/web/avatars": {
-      "types": "./components/web/avatars/index.ts",
-      "default": "./components/web/avatars/index.ts"
-    },
-    "./components/web/buttons": {
-      "types": "./components/web/buttons/index.ts",
-      "default": "./components/web/buttons/index.ts"
-    },
-    "./components/web/dialogs": {
-      "types": "./components/web/dialogs/index.ts",
-      "default": "./components/web/dialogs/index.ts"
-    },
-    "./components/web/displays": {
-      "types": "./components/web/displays/index.ts",
-      "default": "./components/web/displays/index.ts"
-    },
-    "./components/web/drawers": {
-      "types": "./components/web/drawers/index.ts",
-      "default": "./components/web/drawers/index.ts"
-    },
-    "./components/web/dropzones": {
-      "types": "./components/web/dropzones/index.ts",
-      "default": "./components/web/dropzones/index.ts"
-    },
-    "./components/web/icons": {
-      "types": "./components/web/icons/index.ts",
-      "default": "./components/web/icons/index.ts"
-    },
-    "./components/web/illustrations": {
-      "types": "./components/web/illustrations/index.ts",
-      "default": "./components/web/illustrations/index.ts"
-    },
-    "./components/web/images": {
-      "types": "./components/web/images/index.ts",
-      "default": "./components/web/images/index.ts"
-    },
-    "./components/web/inputs": {
-      "types": "./components/web/inputs/index.ts",
-      "default": "./components/web/inputs/index.ts"
-    },
-    "./components/web/logos": {
-      "types": "./components/web/logos/index.ts",
-      "default": "./components/web/logos/index.ts"
-    },
-    "./components/web/popovers": {
-      "types": "./components/web/popovers/index.ts",
-      "default": "./components/web/popovers/index.ts"
-    },
-    "./components/web/scrollbars": {
-      "types": "./components/web/scrollbars/index.ts",
-      "default": "./components/web/scrollbars/index.ts"
-    },
-    "./components/web/typographies": {
-      "types": "./components/web/typographies/index.ts",
-      "default": "./components/web/typographies/index.ts"
-    },
-    "./hooks/common": {
-      "types": "./hooks/common/index.ts",
-      "default": "./hooks/common/index.ts"
-    },
-    "./hooks/web": {
-      "types": "./hooks/web/index.ts",
-      "default": "./hooks/web/index.ts"
-    },
-    "./hooks/native": {
-      "types": "./hooks/native/index.ts",
-      "default": "./hooks/native/index.ts"
-    },
-    "./hooks/web/useUISettings/constants": {
-      "types": "./hooks/web/useUISettings/constants.ts",
-      "default": "./hooks/web/useUISettings/constants.ts"
-    },
-    "./styles/common": {
-      "types": "./styles/common/index.ts",
-      "default": "./styles/common/index.ts"
-    },
-    "./styles/web": {
-      "types": "./styles/web/index.ts",
-      "default": "./styles/web/index.ts"
-    },
-    "./styles/native": {
-      "types": "./styles/native/index.ts",
-      "default": "./styles/native/index.ts"
-    },
+    "./components/native/appbars": "./components/native/appbars/index.ts",
+    "./components/native/avatars": "./components/native/avatars/index.ts",
+    "./components/native/badges": "./components/native/badges/index.ts",
+    "./components/native/buttons": "./components/native/buttons/index.ts",
+    "./components/native/displays": "./components/native/displays/index.ts",
+    "./components/native/drawers": "./components/native/drawers/index.ts",
+    "./components/native/icons": "./components/native/icons/index.ts",
+    "./components/native/images": "./components/native/images/index.ts",
+    "./components/native/inputs": "./components/native/inputs/index.ts",
+    "./components/native/tabs": "./components/native/tabs/index.ts",
+    "./components/native/typographies": "./components/native/typographies/index.ts",
+    "./components/native/views": "./components/native/views/index.ts",
+    "./components/web/animate": "./components/web/animate/index.ts",
+    "./components/web/avatars": "./components/web/avatars/index.ts",
+    "./components/web/buttons": "./components/web/buttons/index.ts",
+    "./components/web/dialogs": "./components/web/dialogs/index.ts",
+    "./components/web/displays": "./components/web/displays/index.ts",
+    "./components/web/drawers": "./components/web/drawers/index.ts",
+    "./components/web/dropzones": "./components/web/dropzones/index.ts",
+    "./components/web/icons": "./components/web/icons/index.ts",
+    "./components/web/illustrations": "./components/web/illustrations/index.ts",
+    "./components/web/images": "./components/web/images/index.ts",
+    "./components/web/inputs": "./components/web/inputs/index.ts",
+    "./components/web/logos": "./components/web/logos/index.ts",
+    "./components/web/popovers": "./components/web/popovers/index.ts",
+    "./components/web/scrollbars": "./components/web/scrollbars/index.ts",
+    "./components/web/typographies": "./components/web/typographies/index.ts",
+    "./hooks/common": "./hooks/common/index.ts",
+    "./hooks/web": "./hooks/web/index.ts",
+    "./hooks/native": "./hooks/native/index.ts",
+    "./hooks/web/useUISettings/constants": "./hooks/web/useUISettings/constants.ts",
+    "./styles/common": "./styles/common/index.ts",
+    "./styles/web": "./styles/web/index.ts",
+    "./styles/native": "./styles/native/index.ts",
     "./styles/web/tailwind/globals.css": {
       "default": "./styles/web/tailwind/globals.css"
     },
     "./styles/web/material/globals.css": {
       "default": "./styles/web/material/globals.css"
     },
-    "./styles/web/breakpoint": {
-      "types": "./styles/web/breakpoint.ts",
-      "default": "./styles/web/breakpoint.ts"
-    },
-    "./styles/web/typography": {
-      "types": "./styles/web/typography.ts",
-      "default": "./styles/web/typography.ts"
-    },
-    "./styles/web/palette": {
-      "types": "./styles/web/palette.ts",
-      "default": "./styles/web/palette.ts"
-    },
-    "./styles/web/shadow": {
-      "types": "./styles/web/shadow.ts",
-      "default": "./styles/web/shadow.ts"
-    },
-    "./styles/web/customShadow": {
-      "types": "./styles/web/material/custom-shadows.ts",
-      "default": "./styles/web/material/custom-shadows.ts"
-    },
-    "./styles/web/tailwind/plugins": {
-      "types": "./styles/web/tailwind/plugins/index.ts",
-      "default": "./styles/web/tailwind/plugins/index.ts"
-    },
-    "./providers/common": {
-      "types": "./providers/common/index.ts",
-      "default": "./providers/common/index.ts"
-    },
-    "./providers/web": {
-      "types": "./providers/web/index.ts",
-      "default": "./providers/web/index.ts"
-    },
-    "./providers/native": {
-      "types": "./providers/native/index.ts",
-      "default": "./providers/native/index.ts"
-    },
-    "./layouts/common": {
-      "types": "./layouts/common/index.ts",
-      "default": "./layouts/common/index.ts"
-    },
-    "./layouts/web": {
-      "types": "./layouts/web/index.ts",
-      "default": "./layouts/web/index.ts"
-    },
-    "./layouts/native": {
-      "types": "./layouts/native/index.ts",
-      "default": "./layouts/native/index.ts"
-    },
-    "./utils/common": {
-      "types": "./utils/common/index.ts",
-      "default": "./utils/common/index.ts"
-    },
-    "./utils/web": {
-      "types": "./utils/web/index.ts",
-      "default": "./utils/web/index.ts"
-    },
-    "./utils/native": {
-      "types": "./utils/native/index.ts",
-      "default": "./utils/native/index.ts"
-    },
-    "./tests/common": {
-      "types": "./tests/common/index.ts",
-      "default": "./tests/common/index.ts"
-    },
-    "./tests/web": {
-      "types": "./tests/web/index.ts",
-      "default": "./tests/web/index.ts"
-    },
-    "./tests/native": {
-      "types": "./tests/native/index.ts",
-      "default": "./tests/native/index.ts"
-    }
+    "./styles/web/breakpoint": "./styles/web/breakpoint.ts",
+    "./styles/web/typography": "./styles/web/typography.ts",
+    "./styles/web/palette": "./styles/web/palette.ts",
+    "./styles/web/shadow": "./styles/web/shadow.ts",
+    "./styles/web/customShadow": "./styles/web/material/custom-shadows.ts",
+    "./styles/web/tailwind/plugins": "./styles/web/tailwind/plugins/index.ts",
+    "./providers/common": "./providers/common/index.ts",
+    "./providers/web": "./providers/web/index.ts",
+    "./providers/native": "./providers/native/index.ts",
+    "./layouts/common": "./layouts/common/index.ts",
+    "./layouts/web": "./layouts/web/index.ts",
+    "./layouts/native": "./layouts/native/index.ts",
+    "./utils/common": "./utils/common/index.ts",
+    "./utils/web": "./utils/web/index.ts",
+    "./utils/native": "./utils/native/index.ts",
+    "./tests/common": "./tests/common/index.ts",
+    "./tests/web": "./tests/web/index.ts",
+    "./tests/native": "./tests/native/index.ts"
   },
   "files": [
     "components",

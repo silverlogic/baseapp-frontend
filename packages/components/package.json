@@ -21,114 +21,33 @@
   },
   "exports": {
     "./package.json": "./package.json",
-    "./shared/common": {
-      "types": "./modules/__shared__/common/index.ts",
-      "default": "./modules/__shared__/common/index.ts"
-    },
-    "./shared/web": {
-      "types": "./modules/__shared__/web/index.ts",
-      "default": "./modules/__shared__/web/index.ts"
-    },
-    "./shared/native": {
-      "types": "./modules/__shared__/native/index.ts",
-      "default": "./modules/__shared__/native/index.ts"
-    },
-    "./activity-log/common": {
-      "types": "./modules/activity-log/common/index.ts",
-      "default": "./modules/activity-log/common/index.ts"
-    },
-    "./activity-log/web": {
-      "types": "./modules/activity-log/web/index.ts",
-      "default": "./modules/activity-log/web/index.ts"
-    },
-    "./activity-log/native": {
-      "types": "./modules/activity-log/native/index.ts",
-      "default": "./modules/activity-log/native/index.ts"
-    },
-    "./comments/common": {
-      "types": "./modules/comments/common/index.ts",
-      "default": "./modules/comments/common/index.ts"
-    },
-    "./comments/web": {
-      "types": "./modules/comments/web/index.ts",
-      "default": "./modules/comments/web/index.ts"
-    },
-    "./comments/native": {
-      "types": "./modules/comments/native/index.ts",
-      "default": "./modules/comments/native/index.ts"
-    },
-    "./messages/common": {
-      "types": "./modules/messages/common/index.ts",
-      "default": "./modules/messages/common/index.ts"
-    },
-    "./messages/web": {
-      "types": "./modules/messages/web/index.ts",
-      "default": "./modules/messages/web/index.ts"
-    },
-    "./messages/native": {
-      "types": "./modules/messages/native/index.ts",
-      "default": "./modules/messages/native/index.ts"
-    },
-    "./navigations/common": {
-      "types": "./modules/navigations/common/index.ts",
-      "default": "./modules/navigations/common/index.ts"
-    },
-    "./navigations/web": {
-      "types": "./modules/navigations/web/index.ts",
-      "default": "./modules/navigations/web/index.ts"
-    },
-    "./navigations/native": {
-      "types": "./modules/navigations/native/index.ts",
-      "default": "./modules/navigations/native/index.ts"
-    },
-    "./notifications/common": {
-      "types": "./modules/notifications/common/index.ts",
-      "default": "./modules/notifications/common/index.ts"
-    },
-    "./notifications/web": {
-      "types": "./modules/notifications/web/index.ts",
-      "default": "./modules/notifications/web/index.ts"
-    },
-    "./notifications/native": {
-      "types": "./modules/notifications/native/index.ts",
-      "default": "./modules/notifications/native/index.ts"
-    },
-    "./profiles/common": {
-      "types": "./modules/profiles/common/index.ts",
-      "default": "./modules/profiles/common/index.ts"
-    },
-    "./profiles/web": {
-      "types": "./modules/profiles/web/index.ts",
-      "default": "./modules/profiles/web/index.ts"
-    },
-    "./profiles/native": {
-      "types": "./modules/profiles/native/index.ts",
-      "default": "./modules/profiles/native/index.ts"
-    },
-    "./tests/common": {
-      "types": "./modules/tests/common/index.ts",
-      "default": "./modules/tests/common/index.ts"
-    },
-    "./tests/web": {
-      "types": "./modules/tests/web/index.ts",
-      "default": "./modules/tests/web/index.ts"
-    },
-    "./tests/native": {
-      "types": "./modules/tests/native/index.ts",
-      "default": "./modules/tests/native/index.ts"
-    },
-    "./content-feed/common": {
-      "types": "./modules/content-feed/common/index.ts",
-      "default": "./modules/content-feed/common/index.ts"
-    },
-    "./content-feed/web": {
-      "types": "./modules/content-feed/web/index.ts",
-      "default": "./modules/content-feed/web/index.ts"
-    },
-    "./content-feed/native": {
-      "types": "./modules/content-feed/native/index.ts",
-      "default": "./modules/content-feed/native/index.ts"
-    }
+    "./shared/common": "./modules/__shared__/common/index.ts",
+    "./shared/web": "./modules/__shared__/web/index.ts",
+    "./shared/native": "./modules/__shared__/native/index.ts",
+    "./activity-log/common": "./modules/activity-log/common/index.ts",
+    "./activity-log/web": "./modules/activity-log/web/index.ts",
+    "./activity-log/native": "./modules/activity-log/native/index.ts",
+    "./comments/common": "./modules/comments/common/index.ts",
+    "./comments/web": "./modules/comments/web/index.ts",
+    "./comments/native": "./modules/comments/native/index.ts",
+    "./messages/common": "./modules/messages/common/index.ts",
+    "./messages/web": "./modules/messages/web/index.ts",
+    "./messages/native": "./modules/messages/native/index.ts",
+    "./navigations/common": "./modules/navigations/common/index.ts",
+    "./navigations/web": "./modules/navigations/web/index.ts",
+    "./navigations/native": "./modules/navigations/native/index.ts",
+    "./notifications/common": "./modules/notifications/common/index.ts",
+    "./notifications/web": "./modules/notifications/web/index.ts",
+    "./notifications/native": "./modules/notifications/native/index.ts",
+    "./profiles/common": "./modules/profiles/common/index.ts",
+    "./profiles/web": "./modules/profiles/web/index.ts",
+    "./profiles/native": "./modules/profiles/native/index.ts",
+    "./tests/common": "./modules/tests/common/index.ts",
+    "./tests/web": "./modules/tests/web/index.ts",
+    "./tests/native": "./modules/tests/native/index.ts",
+    "./content-feed/common": "./modules/content-feed/common/index.ts",
+    "./content-feed/web": "./modules/content-feed/web/index.ts",
+    "./content-feed/native": "./modules/content-feed/native/index.ts"
   },
   "files": [
     "modules",
