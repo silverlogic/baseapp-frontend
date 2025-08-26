@@ -80,6 +80,9 @@ catalogs:
       specifier: ^9.5.2
       version: 9.6.0
   graphql:
+    '@types/react-relay':
+      specifier: 18.2.1
+      version: 18.2.1
     '@types/relay-runtime':
       specifier: 19.0.1
       version: 19.0.1
@@ -743,6 +746,9 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
+      '@types/react-relay':
+        specifier: catalog:graphql
+        version: 18.2.1
       '@types/relay-runtime':
         specifier: catalog:graphql
         version: 19.0.1
@@ -1241,6 +1247,9 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
+      '@types/react-relay':
+        specifier: catalog:graphql
+        version: 18.2.1
       '@types/relay-runtime':
         specifier: catalog:graphql
         version: 19.0.1
@@ -1580,6 +1589,9 @@ importers:
       '@types/react-dom':
         specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
+      '@types/react-relay':
+        specifier: catalog:graphql
+        version: 18.2.1
       '@types/relay-test-utils':
         specifier: catalog:graphql
         version: 19.0.0
