@@ -64,6 +64,7 @@ const CommentItem: FC<CommentItemProps> = ({
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
   const profileUrl = `${profilePath}/${comment?.user?.pk}`
+  const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
     if (isReplyExpanded) return
@@ -87,15 +88,26 @@ const CommentItem: FC<CommentItemProps> = ({
   }
 
   const replyToComment = () => {
-    onReplyClick?.()
-    setCommentReply({
-      commentItemRef,
-      inReplyToId: comment.id,
-      name: comment.user?.fullName,
-    })
+    if (hasUser) {
+      onReplyClick?.()
+      setCommentReply({
+        commentItemRef,
+        inReplyToId: comment.id,
+        name: comment.user?.fullName,
+      })
+    }
     showReplies()
   }
 
+  const renderUserName = () => {
+    if (!hasUser) return <Typography variant="subtitle2">Deleted User</Typography>
+
+    return (
+      <Link href={profileUrl}>
+        <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
+      </Link>
+    )
+  }
   const renderCommentContent = () => {
     if (isEditMode)
       return (
@@ -143,18 +155,18 @@ const CommentItem: FC<CommentItemProps> = ({
         >
           <CommentContainer>
             <ClickableAvatar
+              deletedUser={!hasUser}
               width={40}
               height={40}
               alt={comment.user?.fullName ?? `Comment's user avatar`}
               src={comment.user?.avatar?.url}
               onClick={() => router.push(profileUrl)}
             />
+
             <div className="grid gap-3">
               <div className="grid grid-cols-1 justify-start">
                 <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
-                  <Link href={profileUrl}>
-                    <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
-                  </Link>
+                  {renderUserName()}
                   <CommentPinnedBadge isPinned={comment.isPinned} />
                 </div>
                 {renderCommentContent()}
