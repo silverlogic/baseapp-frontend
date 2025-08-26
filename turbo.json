@@ -3,7 +3,6 @@
   "ui": "tui",
   "tasks": {
     "dev": {
-      "env": ["BASEAPP_FRONTEND_TEMPLATE_PATH"],
       "cache": false,
       "persistent": true
     },

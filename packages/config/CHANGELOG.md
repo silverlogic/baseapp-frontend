@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.12
+
+### Patch Changes
+
+- Add `__generated__/`to `ignorePatterns`.
+
 ## 2.1.11
 
 ### Patch Changes

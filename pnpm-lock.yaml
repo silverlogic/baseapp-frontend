@@ -6,16 +6,168 @@ settings:
 
 catalogs:
   default:
+    '@hookform/resolvers':
+      specifier: 5.0.1
+      version: 5.0.1
+    '@tanstack/react-query':
+      specifier: 5.76.1
+      version: 5.76.1
+    '@types/js-cookie':
+      specifier: 3.0.6
+      version: 3.0.6
+    '@types/lodash':
+      specifier: 4.17.7
+      version: 4.17.7
+    '@types/luxon':
+      specifier: 3.6.2
+      version: 3.6.2
     '@types/node':
       specifier: 22.7.2
       version: 22.7.2
+    axios:
+      specifier: 1.9.0
+      version: 1.9.0
+    jotai:
+      specifier: 2.12.4
+      version: 2.12.4
+    js-cookie:
+      specifier: 3.0.5
+      version: 3.0.5
+    lodash:
+      specifier: 4.17.21
+      version: 4.17.21
+    luxon:
+      specifier: 3.6.1
+      version: 3.6.1
+    next:
+      specifier: ^15.3.2
+      version: 15.5.0
+    react-hook-form:
+      specifier: 7.56.4
+      version: 7.56.4
+    react-international-phone:
+      specifier: 4.5.0
+      version: 4.5.0
+    react-multi-carousel:
+      specifier: 2.8.6
+      version: 2.8.6
+    react-virtuoso:
+      specifier: 4.12.7
+      version: 4.12.7
+    simplebar-react:
+      specifier: 3.2.5
+      version: 3.2.5
+    tsup:
+      specifier: 8.3.6
+      version: 8.3.6
     typescript:
       specifier: 5.8.3
       version: 5.8.3
+    zod:
+      specifier: 3.25.7
+      version: 3.25.7
+    zustand:
+      specifier: 5.0.4
+      version: 5.0.4
+  dev-tools:
+    chalk:
+      specifier: ^5.4.1
+      version: 5.6.0
+    chokidar:
+      specifier: ^4.0.3
+      version: 4.0.3
+    execa:
+      specifier: ^9.5.2
+      version: 9.6.0
+  graphql:
+    '@types/react-relay':
+      specifier: 18.2.1
+      version: 18.2.1
+    '@types/relay-runtime':
+      specifier: 19.0.1
+      version: 19.0.1
+    '@types/relay-test-utils':
+      specifier: 19.0.0
+      version: 19.0.0
+    babel-plugin-relay:
+      specifier: 19.0.0
+      version: 19.0.0
+    get-graphql-schema:
+      specifier: 2.1.2
+      version: 2.1.2
+    graphql:
+      specifier: 16.11.0
+      version: 16.11.0
+    graphql-ws:
+      specifier: 6.0.5
+      version: 6.0.5
+    isomorphic-ws:
+      specifier: 5.0.0
+      version: 5.0.0
+    react-relay:
+      specifier: 19.0.0
+      version: 19.0.0
+    relay-compiler:
+      specifier: 19.0.0
+      version: 19.0.0
+    relay-connection-handler-plus:
+      specifier: 0.1.2
+      version: 0.1.2
+    relay-runtime:
+      specifier: 19.0.0
+      version: 19.0.0
+    relay-test-utils:
+      specifier: 19.0.0
+      version: 19.0.0
   lint:
+    '@emotion/eslint-plugin':
+      specifier: ^11.11.0
+      version: 11.12.0
+    '@next/eslint-plugin-next':
+      specifier: ^13.1.6
+      version: 13.5.11
+    '@trivago/prettier-plugin-sort-imports':
+      specifier: ^4.3.0
+      version: 4.3.0
+    '@types/eslint':
+      specifier: ^9.6.1
+      version: 9.6.1
+    '@typescript-eslint/eslint-plugin':
+      specifier: ^5.59.11
+      version: 5.62.0
+    '@typescript-eslint/parser':
+      specifier: ^5.29.0
+      version: 5.62.0
     eslint:
       specifier: ^8.42.0
       version: 8.57.1
+    eslint-config-airbnb:
+      specifier: ^19.0.4
+      version: 19.0.4
+    eslint-config-airbnb-typescript:
+      specifier: ^17.0.0
+      version: 17.1.0
+    eslint-config-next:
+      specifier: ^13.4.6
+      version: 13.5.11
+    eslint-config-prettier:
+      specifier: ^8.8.0
+      version: 8.10.2
+    eslint-plugin-import:
+      specifier: ^2.26.0
+      version: 2.32.0
+    eslint-plugin-jsx-a11y:
+      specifier: ^6.6.1
+      version: 6.10.2
+    eslint-plugin-react:
+      specifier: ^7.31.11
+      version: 7.37.5
+    eslint-plugin-react-hooks:
+      specifier: ^4.6.0
+      version: 4.6.2
+    eslint-plugin-storybook:
+      specifier: ^0.8.0
+      version: 0.8.0
     husky:
       specifier: ^9.1.6
       version: 9.1.7
@@ -25,6 +177,228 @@ catalogs:
     prettier:
       specifier: ^3.3.3
       version: 3.6.2
+    prettier-plugin-tailwindcss:
+      specifier: ^0.6.3
+      version: 0.6.14
+  material-ui:
+    '@emotion/cache':
+      specifier: 11.14.0
+      version: 11.14.0
+    '@emotion/react':
+      specifier: 11.14.0
+      version: 11.14.0
+    '@emotion/styled':
+      specifier: 11.14.1
+      version: 11.14.1
+    '@mui/icons-material':
+      specifier: 5.18.0
+      version: 5.18.0
+    '@mui/lab':
+      specifier: 5.0.0-alpha.177
+      version: 5.0.0-alpha.177
+    '@mui/material':
+      specifier: 5.18.0
+      version: 5.18.0
+    '@mui/material-nextjs':
+      specifier: 6.1.4
+      version: 6.1.4
+    '@mui/system':
+      specifier: 5.18.0
+      version: 5.18.0
+    '@mui/x-date-pickers':
+      specifier: 7.6.2
+      version: 7.6.2
+  react-native:
+    '@gorhom/bottom-sheet':
+      specifier: ^5.1.4
+      version: 5.2.3
+    '@react-native-async-storage/async-storage':
+      specifier: ^2.1.2
+      version: 2.2.0
+    '@react-navigation/drawer':
+      specifier: ^7.3.12
+      version: 7.5.7
+    '@react-navigation/native':
+      specifier: ^7.1.9
+      version: 7.1.17
+    expo-constants:
+      specifier: ~17.1.6
+      version: 17.1.7
+    expo-file-system:
+      specifier: ~18.1.10
+      version: 18.1.11
+    expo-image-picker:
+      specifier: ~16.1.4
+      version: 16.1.4
+    expo-router:
+      specifier: ~5.0.7
+      version: 5.0.7
+    expo-secure-store:
+      specifier: ~14.2.3
+      version: 14.2.3
+    react-native:
+      specifier: 0.79.2
+      version: 0.79.2
+    react-native-gesture-handler:
+      specifier: ~2.24.0
+      version: 2.24.0
+    react-native-paper:
+      specifier: ^5.14.5
+      version: 5.14.5
+    react-native-reanimated:
+      specifier: ~3.17.4
+      version: 3.17.5
+    react-native-svg:
+      specifier: 15.11.2
+      version: 15.11.2
+  react19:
+    '@types/react':
+      specifier: 19.1.4
+      version: 19.1.4
+    '@types/react-dom':
+      specifier: 19.1.5
+      version: 19.1.5
+    react:
+      specifier: 19.1.0
+      version: 19.1.0
+    react-dom:
+      specifier: 19.1.0
+      version: 19.1.0
+  storybook:
+    '@babel/preset-env':
+      specifier: 7.26.0
+      version: 7.26.0
+    '@babel/preset-react':
+      specifier: 7.25.9
+      version: 7.25.9
+    '@babel/preset-typescript':
+      specifier: 7.26.0
+      version: 7.26.0
+    '@chromatic-com/storybook':
+      specifier: 3.2.3
+      version: 3.2.3
+    '@storybook/addon-docs':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/addon-essentials':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/addon-interactions':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/addon-links':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/addon-styling-webpack':
+      specifier: 1.0.1
+      version: 1.0.1
+    '@storybook/addon-webpack5-compiler-babel':
+      specifier: 3.0.3
+      version: 3.0.3
+    '@storybook/blocks':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/react':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/react-webpack5':
+      specifier: 8.4.7
+      version: 8.4.7
+    '@storybook/test':
+      specifier: 8.4.7
+      version: 8.4.7
+    babel-loader:
+      specifier: 9.2.1
+      version: 9.2.1
+    css-loader:
+      specifier: 7.1.2
+      version: 7.1.2
+    html-webpack-plugin:
+      specifier: 5.6.0
+      version: 5.6.0
+    msw:
+      specifier: 2.6.6
+      version: 2.6.6
+    msw-storybook-addon:
+      specifier: 2.0.4
+      version: 2.0.4
+    postcss-loader:
+      specifier: 8.1.1
+      version: 8.1.1
+    storybook:
+      specifier: 8.4.7
+      version: 8.4.7
+    style-loader:
+      specifier: 4.0.0
+      version: 4.0.0
+    webpack:
+      specifier: 5.93.0
+      version: 5.93.0
+    webpack-cli:
+      specifier: 5.1.4
+      version: 5.1.4
+    webpack-dev-server:
+      specifier: 5.0.4
+      version: 5.0.4
+  tailwind:
+    '@tailwindcss/typography':
+      specifier: 0.5.13
+      version: 0.5.13
+    autoprefixer:
+      specifier: 10.4.19
+      version: 10.4.19
+    postcss:
+      specifier: 8.4.38
+      version: 8.4.38
+    tailwindcss:
+      specifier: 3.4.4
+      version: 3.4.4
+  test:
+    '@cypress/webpack-dev-server':
+      specifier: 3.10.1
+      version: 3.10.1
+    '@faker-js/faker':
+      specifier: ^9.0.3
+      version: 9.9.0
+    '@testing-library/cypress':
+      specifier: 10.0.2
+      version: 10.0.2
+    '@testing-library/jest-dom':
+      specifier: 6.4.6
+      version: 6.4.6
+    '@testing-library/react':
+      specifier: 16.0.0
+      version: 16.0.0
+    '@testing-library/user-event':
+      specifier: 14.5.2
+      version: 14.5.2
+    '@types/jest':
+      specifier: 29.5.12
+      version: 29.5.12
+    babel-jest:
+      specifier: 29.7.0
+      version: 29.7.0
+    cypress:
+      specifier: 13.16.1
+      version: 13.16.1
+    cypress-plugin-steps:
+      specifier: 1.1.1
+      version: 1.1.1
+    cypress-wait-until:
+      specifier: 3.0.2
+      version: 3.0.2
+    jest:
+      specifier: 29.7.0
+      version: 29.7.0
+    jest-environment-jsdom:
+      specifier: 29.7.0
+      version: 29.7.0
+    ts-jest:
+      specifier: 29.1.4
+      version: 29.1.4
+    ts-node:
+      specifier: 10.9.2
+      version: 10.9.2
 
 overrides:
   wrap-ansi: 7.0.0
@@ -83,28 +457,28 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@hookform/resolvers':
-        specifier: 5.0.1
+        specifier: 'catalog:'
         version: 5.0.1(react-hook-form@7.56.4(react@19.1.0))
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       '@tanstack/react-query':
-        specifier: 5.76.1
+        specifier: 'catalog:'
         version: 5.76.1(react@19.1.0)
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-hook-form:
-        specifier: 7.56.4
+        specifier: 'catalog:'
         version: 7.56.4(react@19.1.0)
       zod:
-        specifier: 3.25.7
+        specifier: 'catalog:'
         version: 3.25.7
       zustand:
-        specifier: 5.0.4
+        specifier: 'catalog:'
         version: 5.0.4(@types/react@19.1.4)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
     devDependencies:
       '@baseapp-frontend/config':
@@ -120,49 +494,49 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@faker-js/faker':
-        specifier: ^9.0.3
+        specifier: catalog:test
         version: 9.9.0
       '@testing-library/jest-dom':
-        specifier: 6.4.6
+        specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/react':
-        specifier: 16.0.0
+        specifier: catalog:test
         version: 16.0.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@testing-library/user-event':
-        specifier: 14.5.2
+        specifier: catalog:test
         version: 14.5.2(@testing-library/dom@10.4.1)
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/node':
-        specifier: 22.7.2
+        specifier: 'catalog:'
         version: 22.7.2
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       babel-jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@babel/core@7.28.3)
       jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       jest-environment-jsdom:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0
       ts-jest:
-        specifier: 29.1.4
+        specifier: catalog:test
         version: 29.1.4(@babel/core@7.28.3)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.3))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))(typescript@5.8.3)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/components:
@@ -180,97 +554,97 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@emotion/cache':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0
       '@emotion/react':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0(@types/react@19.1.4)(react@19.1.0)
       '@emotion/styled':
-        specifier: 11.14.1
+        specifier: catalog:material-ui
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@gorhom/bottom-sheet':
-        specifier: ^5.1.4
+        specifier: catalog:react-native
         version: 5.2.3(@types/react@19.1.4)(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.17.5(@babel/core@7.28.3)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@hookform/resolvers':
-        specifier: 5.0.1
+        specifier: 'catalog:'
         version: 5.0.1(react-hook-form@7.56.4(react@19.1.0))
       '@mui/icons-material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@mui/lab':
-        specifier: 5.0.0-alpha.177
+        specifier: catalog:material-ui
         version: 5.0.0-alpha.177(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mui/material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mui/system':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@mui/x-date-pickers':
-        specifier: 7.6.2
+        specifier: catalog:material-ui
         version: 7.6.2(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(dayjs@1.11.13)(luxon@3.6.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       '@tanstack/react-query':
-        specifier: 5.76.1
+        specifier: 'catalog:'
         version: 5.76.1(react@19.1.0)
       expo-file-system:
-        specifier: ~18.1.10
+        specifier: catalog:react-native
         version: 18.1.11(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(graphql@16.11.0)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))
       expo-image-picker:
-        specifier: ~16.1.4
+        specifier: catalog:react-native
         version: 16.1.4(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(graphql@16.11.0)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))
       expo-router:
-        specifier: ~5.0.7
+        specifier: catalog:react-native
         version: 5.0.7(e440f97e27903799cf0d088e42ee0f6f)
       framer-motion:
         specifier: ^11.5.4
         version: 11.18.2(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       graphql:
-        specifier: 16.11.0
+        specifier: catalog:graphql
         version: 16.11.0
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       luxon:
-        specifier: 3.6.1
+        specifier: 'catalog:'
         version: 3.6.1
       next:
-        specifier: ^15.3.2
+        specifier: 'catalog:'
         version: 15.5.0(@babel/core@7.28.3)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       numbro:
         specifier: ^2.5.0
         version: 2.5.0
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-dom:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0(react@19.1.0)
       react-hook-form:
-        specifier: 7.56.4
+        specifier: 'catalog:'
         version: 7.56.4(react@19.1.0)
       react-multi-carousel:
-        specifier: 2.8.6
+        specifier: 'catalog:'
         version: 2.8.6
       react-native:
-        specifier: 0.79.2
+        specifier: catalog:react-native
         version: 0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)
       react-native-gesture-handler:
-        specifier: ~2.24.0
+        specifier: catalog:react-native
         version: 2.24.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       react-relay:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0(react@19.1.0)
       react-virtuoso:
-        specifier: 4.12.7
+        specifier: 'catalog:'
         version: 4.12.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       relay-connection-handler-plus:
-        specifier: 0.1.2
+        specifier: catalog:graphql
         version: 0.1.2(relay-runtime@19.0.0)
       relay-runtime:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       slugify:
         specifier: ^1.6.6
@@ -279,23 +653,23 @@ importers:
         specifier: ^3.2.0
         version: 3.3.0(react@19.1.0)
       zod:
-        specifier: 3.25.7
+        specifier: 'catalog:'
         version: 3.25.7
       zustand:
-        specifier: 5.0.4
+        specifier: 'catalog:'
         version: 5.0.4(@types/react@19.1.4)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
     devDependencies:
       '@babel/cli':
         specifier: ^7.26.4
         version: 7.28.3(@babel/core@7.28.3)
       '@babel/preset-env':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@babel/preset-react':
-        specifier: 7.25.9
+        specifier: catalog:storybook
         version: 7.25.9(@babel/core@7.28.3)
       '@babel/preset-typescript':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@baseapp-frontend/config':
         specifier: workspace:^
@@ -307,109 +681,109 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: 3.2.3
+        specifier: catalog:storybook
         version: 3.2.3(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@cypress/webpack-dev-server':
-        specifier: 3.10.1
+        specifier: catalog:test
         version: 3.10.1(webpack-cli@5.1.4)(webpack@5.93.0)
       '@faker-js/faker':
-        specifier: ^9.0.3
+        specifier: catalog:test
         version: 9.9.0
       '@storybook/addon-docs':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-essentials':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-interactions':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-links':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-styling-webpack':
-        specifier: 1.0.1
+        specifier: catalog:storybook
         version: 1.0.1(storybook@8.4.7(prettier@3.6.2))(webpack@5.93.0)
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: 3.0.3
+        specifier: catalog:storybook
         version: 3.0.3(webpack@5.93.0)
       '@storybook/blocks':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/react-webpack5':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(@swc/core@1.13.3(@swc/helpers@0.5.17))(esbuild@0.24.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)(webpack-cli@5.1.4)
       '@storybook/test':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@tailwindcss/typography':
-        specifier: 0.5.13
+        specifier: catalog:tailwind
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/cypress':
-        specifier: 10.0.2
+        specifier: catalog:test
         version: 10.0.2(cypress@13.16.1)
       '@testing-library/jest-dom':
-        specifier: 6.4.6
+        specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/react':
-        specifier: 16.0.0
+        specifier: catalog:test
         version: 16.0.0(@testing-library/dom@10.4.0)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@testing-library/user-event':
-        specifier: 14.5.2
+        specifier: catalog:test
         version: 14.5.2(@testing-library/dom@10.4.0)
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/luxon':
-        specifier: 3.6.2
+        specifier: 'catalog:'
         version: 3.6.2
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       '@types/react-relay':
-        specifier: 18.2.1
+        specifier: catalog:graphql
         version: 18.2.1
       '@types/relay-runtime':
-        specifier: 19.0.1
+        specifier: catalog:graphql
         version: 19.0.1
       '@types/relay-test-utils':
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       autoprefixer:
-        specifier: 10.4.19
+        specifier: catalog:tailwind
         version: 10.4.19(postcss@8.4.38)
       babel-jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@babel/core@7.28.3)
       babel-loader:
-        specifier: 9.2.1
+        specifier: catalog:storybook
         version: 9.2.1(@babel/core@7.28.3)(webpack@5.93.0)
       babel-plugin-relay:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       chalk:
-        specifier: ^5.4.1
+        specifier: catalog:dev-tools
         version: 5.6.0
       chokidar:
-        specifier: ^4.0.3
+        specifier: catalog:dev-tools
         version: 4.0.3
       css-loader:
-        specifier: 7.1.2
+        specifier: catalog:storybook
         version: 7.1.2(webpack@5.93.0)
       cypress:
-        specifier: 13.16.1
+        specifier: catalog:test
         version: 13.16.1
       cypress-plugin-steps:
-        specifier: 1.1.1
+        specifier: catalog:test
         version: 1.1.1(cypress@13.16.1)
       cypress-wait-until:
-        specifier: 3.0.2
+        specifier: catalog:test
         version: 3.0.2
       dotenv:
         specifier: ^16.4.5
@@ -418,70 +792,70 @@ importers:
         specifier: ^7.4.2
         version: 7.4.4
       eslint-plugin-storybook:
-        specifier: ^0.8.0
+        specifier: catalog:lint
         version: 0.8.0(eslint@8.57.1)(typescript@5.8.3)
       execa:
-        specifier: ^9.5.2
+        specifier: catalog:dev-tools
         version: 9.6.0
       get-graphql-schema:
-        specifier: 2.1.2
+        specifier: catalog:graphql
         version: 2.1.2
       html-webpack-plugin:
-        specifier: 5.6.0
+        specifier: catalog:storybook
         version: 5.6.0(webpack@5.93.0)
       jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       jest-environment-jsdom:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0
       msw:
-        specifier: 2.6.6
+        specifier: catalog:storybook
         version: 2.6.6(@types/node@22.7.2)(typescript@5.8.3)
       msw-storybook-addon:
-        specifier: 2.0.4
+        specifier: catalog:storybook
         version: 2.0.4(msw@2.6.6(@types/node@22.7.2)(typescript@5.8.3))
       postcss:
-        specifier: 8.4.38
+        specifier: catalog:tailwind
         version: 8.4.38
       postcss-loader:
-        specifier: 8.1.1
+        specifier: catalog:storybook
         version: 8.1.1(postcss@8.4.38)(typescript@5.8.3)(webpack@5.93.0)
       relay-compiler:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       relay-test-utils:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       storybook:
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(prettier@3.6.2)
       style-loader:
-        specifier: 4.0.0
+        specifier: catalog:storybook
         version: 4.0.0(webpack@5.93.0)
       tailwindcss:
-        specifier: 3.4.4
+        specifier: catalog:tailwind
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       ts-jest:
-        specifier: 29.1.4
+        specifier: catalog:test
         version: 29.1.4(@babel/core@7.28.3)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.3))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))(typescript@5.8.3)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       tsup:
-        specifier: 8.3.6
+        specifier: 'catalog:'
         version: 8.3.6(@swc/core@1.13.3(@swc/helpers@0.5.17))(jiti@1.21.7)(postcss@8.4.38)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       webpack:
-        specifier: 5.93.0
+        specifier: catalog:storybook
         version: 5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17))(esbuild@0.24.2)(webpack-cli@5.1.4)
       webpack-cli:
-        specifier: 5.1.4
+        specifier: catalog:storybook
         version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
       webpack-dev-server:
-        specifier: 5.0.4
+        specifier: catalog:storybook
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.93.0)
 
   packages/config:
@@ -490,52 +864,52 @@ importers:
         specifier: workspace:*
         version: link:../eslint-plugin
       '@emotion/eslint-plugin':
-        specifier: ^11.11.0
+        specifier: catalog:lint
         version: 11.12.0(eslint@8.57.1)(typescript@5.8.3)
       '@next/eslint-plugin-next':
-        specifier: ^13.1.6
+        specifier: catalog:lint
         version: 13.5.11
       '@trivago/prettier-plugin-sort-imports':
-        specifier: ^4.3.0
+        specifier: catalog:lint
         version: 4.3.0(prettier@3.6.2)
       '@typescript-eslint/eslint-plugin':
-        specifier: ^5.59.11
+        specifier: catalog:lint
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3)
       '@typescript-eslint/parser':
-        specifier: ^5.29.0
+        specifier: catalog:lint
         version: 5.62.0(eslint@8.57.1)(typescript@5.8.3)
       eslint:
-        specifier: ^8.42.0
+        specifier: catalog:lint
         version: 8.57.1
       eslint-config-airbnb:
-        specifier: ^19.0.4
+        specifier: catalog:lint
         version: 19.0.4(eslint-plugin-import@2.32.0)(eslint-plugin-jsx-a11y@6.10.2(eslint@8.57.1))(eslint-plugin-react-hooks@4.6.2(eslint@8.57.1))(eslint-plugin-react@7.37.5(eslint@8.57.1))(eslint@8.57.1)
       eslint-config-airbnb-typescript:
-        specifier: ^17.0.0
+        specifier: catalog:lint
         version: 17.1.0(@typescript-eslint/eslint-plugin@5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint@8.57.1)(typescript@5.8.3))(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-plugin-import@2.32.0)(eslint@8.57.1)
       eslint-config-next:
-        specifier: ^13.4.6
+        specifier: catalog:lint
         version: 13.5.11(eslint@8.57.1)(typescript@5.8.3)
       eslint-config-prettier:
-        specifier: ^8.8.0
+        specifier: catalog:lint
         version: 8.10.2(eslint@8.57.1)
       eslint-plugin-import:
-        specifier: ^2.26.0
+        specifier: catalog:lint
         version: 2.32.0(@typescript-eslint/parser@5.62.0(eslint@8.57.1)(typescript@5.8.3))(eslint-import-resolver-typescript@3.10.1)(eslint@8.57.1)
       eslint-plugin-jsx-a11y:
-        specifier: ^6.6.1
+        specifier: catalog:lint
         version: 6.10.2(eslint@8.57.1)
       eslint-plugin-react:
-        specifier: ^7.31.11
+        specifier: catalog:lint
         version: 7.37.5(eslint@8.57.1)
       eslint-plugin-react-hooks:
-        specifier: ^4.6.0
+        specifier: catalog:lint
         version: 4.6.2(eslint@8.57.1)
       prettier:
-        specifier: ^3.3.3
+        specifier: catalog:lint
         version: 3.6.2
       prettier-plugin-tailwindcss:
-        specifier: ^0.6.3
+        specifier: catalog:lint
         version: 0.6.14(@trivago/prettier-plugin-sort-imports@4.3.0(prettier@3.6.2))(prettier@3.6.2)
 
   packages/design-system:
@@ -544,128 +918,128 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@emotion/cache':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0
       '@emotion/react':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0(@types/react@19.1.4)(react@19.1.0)
       '@emotion/styled':
-        specifier: 11.14.1
+        specifier: catalog:material-ui
         version: 11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@expo/vector-icons':
         specifier: ^14.0.4
         version: 14.1.0(expo-font@13.3.2(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@gorhom/bottom-sheet':
-        specifier: ^5.1.4
+        specifier: catalog:react-native
         version: 5.2.3(@types/react@19.1.4)(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.17.5(@babel/core@7.28.3)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@iconify/react':
         specifier: ^5.0.1
         version: 5.2.1(react@19.1.0)
       '@mui/icons-material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@mui/lab':
-        specifier: 5.0.0-alpha.177
+        specifier: catalog:material-ui
         version: 5.0.0-alpha.177(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mui/material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mui/material-nextjs':
-        specifier: 6.1.4
+        specifier: catalog:material-ui
         version: 6.1.4(@emotion/cache@11.14.0)(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(next@15.5.0(@babel/core@7.28.3)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       '@mui/system':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@mui/x-date-pickers':
-        specifier: 7.6.2
+        specifier: catalog:material-ui
         version: 7.6.2(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@mui/material@5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@types/react@19.1.4)(dayjs@1.11.13)(luxon@3.6.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@react-native-async-storage/async-storage':
-        specifier: ^2.1.2
+        specifier: catalog:react-native
         version: 2.2.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))
       '@react-navigation/drawer':
-        specifier: ^7.3.12
+        specifier: catalog:react-native
         version: 7.5.7(@react-navigation/native@7.1.17(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-gesture-handler@2.24.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-reanimated@3.17.5(@babel/core@7.28.3)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-safe-area-context@5.6.1(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native-screens@4.15.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@react-navigation/native':
-        specifier: ^7.1.9
+        specifier: catalog:react-native
         version: 7.1.17(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@shopify/flash-list':
         specifier: ^1.7.6
         version: 1.8.3(@babel/runtime@7.28.3)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       color:
         specifier: ^4.2.3
         version: 4.2.3
       expo-image-picker:
-        specifier: ~16.1.4
+        specifier: catalog:react-native
         version: 16.1.4(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))
       expo-router:
-        specifier: ~5.0.7
+        specifier: catalog:react-native
         version: 5.0.7(0af61e955b12d2c0dea75f2ac85a185e)
       framer-motion:
         specifier: ^11.2.10
         version: 11.18.2(@emotion/is-prop-valid@1.3.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       jotai:
-        specifier: 2.12.4
+        specifier: 'catalog:'
         version: 2.12.4(@types/react@19.1.4)(react@19.1.0)
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       lodash:
-        specifier: 4.17.21
+        specifier: 'catalog:'
         version: 4.17.21
       next:
-        specifier: ^15.3.2
+        specifier: 'catalog:'
         version: 15.5.0(@babel/core@7.28.3)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-dom:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0(react@19.1.0)
       react-dropzone:
         specifier: ^14.2.3
         version: 14.3.8(react@19.1.0)
       react-hook-form:
-        specifier: 7.56.4
+        specifier: 'catalog:'
         version: 7.56.4(react@19.1.0)
       react-international-phone:
-        specifier: 4.5.0
+        specifier: 'catalog:'
         version: 4.5.0(react@19.1.0)
       react-lazy-load-image-component:
         specifier: ^1.6.2
         version: 1.6.3(react@19.1.0)
       react-native:
-        specifier: 0.79.2
+        specifier: catalog:react-native
         version: 0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)
       react-native-gesture-handler:
-        specifier: ~2.24.0
+        specifier: catalog:react-native
         version: 2.24.0(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       react-native-paper:
-        specifier: ^5.14.5
+        specifier: catalog:react-native
         version: 5.14.5(react-native-safe-area-context@5.6.1(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       react-native-reanimated:
-        specifier: ~3.17.4
+        specifier: catalog:react-native
         version: 3.17.5(@babel/core@7.28.3)(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       react-native-svg:
-        specifier: 15.11.2
+        specifier: catalog:react-native
         version: 15.11.2(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0)
       simplebar-react:
-        specifier: 3.2.5
+        specifier: 'catalog:'
         version: 3.2.5(react@19.1.0)
       zustand:
-        specifier: 5.0.4
+        specifier: 'catalog:'
         version: 5.0.4(@types/react@19.1.4)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
     devDependencies:
       '@babel/preset-env':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@babel/preset-react':
-        specifier: 7.25.9
+        specifier: catalog:storybook
         version: 7.25.9(@babel/core@7.28.3)
       '@babel/preset-typescript':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -677,146 +1051,146 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: 3.2.3
+        specifier: catalog:storybook
         version: 3.2.3(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-docs':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-essentials':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-interactions':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-links':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-styling-webpack':
-        specifier: 1.0.1
+        specifier: catalog:storybook
         version: 1.0.1(storybook@8.4.7(prettier@3.6.2))(webpack@5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17)))
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: 3.0.3
+        specifier: catalog:storybook
         version: 3.0.3(webpack@5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17)))
       '@storybook/blocks':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/react-webpack5':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(@swc/core@1.13.3(@swc/helpers@0.5.17))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       '@storybook/test':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@tailwindcss/typography':
-        specifier: 0.5.13
+        specifier: catalog:tailwind
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/jest-dom':
-        specifier: 6.4.6
+        specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/react':
-        specifier: 16.0.0
+        specifier: catalog:test
         version: 16.0.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@testing-library/user-event':
-        specifier: 14.5.2
+        specifier: catalog:test
         version: 14.5.2(@testing-library/dom@10.4.1)
       '@types/color':
         specifier: ^4.2.0
         version: 4.2.0
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/lodash':
-        specifier: 4.17.7
+        specifier: 'catalog:'
         version: 4.17.7
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       autoprefixer:
-        specifier: 10.4.19
+        specifier: catalog:tailwind
         version: 10.4.19(postcss@8.4.38)
       babel-jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@babel/core@7.28.3)
       chalk:
-        specifier: ^5.4.1
+        specifier: catalog:dev-tools
         version: 5.6.0
       chokidar:
-        specifier: ^4.0.3
+        specifier: catalog:dev-tools
         version: 4.0.3
       chokidar-cli:
         specifier: ^3.0.0
         version: 3.0.0
       css-loader:
-        specifier: 7.1.2
+        specifier: catalog:storybook
         version: 7.1.2(webpack@5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17)))
       eslint-plugin-storybook:
-        specifier: ^0.8.0
+        specifier: catalog:lint
         version: 0.8.0(eslint@8.57.1)(typescript@5.8.3)
       execa:
-        specifier: ^9.5.2
+        specifier: catalog:dev-tools
         version: 9.6.0
       jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       jest-environment-jsdom:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0
       postcss:
-        specifier: 8.4.38
+        specifier: catalog:tailwind
         version: 8.4.38
       postcss-loader:
-        specifier: 8.1.1
+        specifier: catalog:storybook
         version: 8.1.1(postcss@8.4.38)(typescript@5.8.3)(webpack@5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17)))
       storybook:
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(prettier@3.6.2)
       style-loader:
-        specifier: 4.0.0
+        specifier: catalog:storybook
         version: 4.0.0(webpack@5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17)))
       tailwindcss:
-        specifier: 3.4.4
+        specifier: catalog:tailwind
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       ts-jest:
-        specifier: 29.1.4
+        specifier: catalog:test
         version: 29.1.4(@babel/core@7.28.3)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.3))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))(typescript@5.8.3)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       tsup:
-        specifier: 8.3.6
+        specifier: 'catalog:'
         version: 8.3.6(@swc/core@1.13.3(@swc/helpers@0.5.17))(jiti@1.21.7)(postcss@8.4.38)(typescript@5.8.3)(yaml@2.8.1)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/eslint-plugin:
     dependencies:
       eslint:
-        specifier: ^8.42.0
+        specifier: catalog:lint
         version: 8.57.1
     devDependencies:
       '@baseapp-frontend/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       '@types/eslint':
-        specifier: ^9.6.1
+        specifier: catalog:lint
         version: 9.6.1
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       parcel:
         specifier: ^2.12.0
         version: 2.15.4(@swc/helpers@0.5.17)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/graphql:
@@ -828,34 +1202,34 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       graphql:
-        specifier: 16.11.0
+        specifier: catalog:graphql
         version: 16.11.0
       graphql-ws:
-        specifier: 6.0.5
+        specifier: catalog:graphql
         version: 6.0.5(graphql@16.11.0)(ws@8.18.3)
       isomorphic-ws:
-        specifier: 5.0.0
+        specifier: catalog:graphql
         version: 5.0.0(ws@8.18.3)
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-relay:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0(react@19.1.0)
       relay-connection-handler-plus:
-        specifier: 0.1.2
+        specifier: catalog:graphql
         version: 0.1.2(relay-runtime@19.0.0)
       relay-runtime:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       relay-test-utils:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
     devDependencies:
       '@baseapp-frontend/config':
@@ -865,28 +1239,28 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       '@types/react-relay':
-        specifier: 18.2.1
+        specifier: catalog:graphql
         version: 18.2.1
       '@types/relay-runtime':
-        specifier: 19.0.1
+        specifier: catalog:graphql
         version: 19.0.1
       '@types/relay-test-utils':
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       relay-compiler:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/provider:
@@ -895,13 +1269,13 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@tanstack/react-query':
-        specifier: 5.76.1
+        specifier: 'catalog:'
         version: 5.76.1(react@19.1.0)
       lodash:
-        specifier: 4.17.21
+        specifier: 'catalog:'
         version: 4.17.21
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
     devDependencies:
       '@baseapp-frontend/config':
@@ -911,40 +1285,40 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@types/lodash':
-        specifier: 4.17.7
+        specifier: 'catalog:'
         version: 4.17.7
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/test:
     dependencies:
       '@emotion/cache':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0
       '@emotion/react':
-        specifier: 11.14.0
+        specifier: catalog:material-ui
         version: 11.14.0(@types/react@19.1.4)(react@19.1.0)
       '@mui/material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       '@tanstack/react-query':
-        specifier: 5.76.1
+        specifier: 'catalog:'
         version: 5.76.1(react@19.1.0)
       axios-mock-adapter:
         specifier: ^1.22.0
         version: 1.22.0(axios@1.9.0)
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
     devDependencies:
       '@baseapp-frontend/config':
@@ -954,46 +1328,46 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: 6.4.6
+        specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/react':
-        specifier: 16.0.0
+        specifier: catalog:test
         version: 16.0.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@testing-library/user-event':
-        specifier: 14.5.2
+        specifier: catalog:test
         version: 14.5.2(@testing-library/dom@10.4.1)
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/node':
-        specifier: 22.7.2
+        specifier: 'catalog:'
         version: 22.7.2
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       babel-jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@babel/core@7.28.3)
       jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       jest-environment-jsdom:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0
       ts-jest:
-        specifier: 29.1.4
+        specifier: catalog:test
         version: 29.1.4(@babel/core@7.28.3)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.3))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))(typescript@5.8.3)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/tsconfig: {}
@@ -1001,52 +1375,52 @@ importers:
   packages/utils:
     dependencies:
       axios:
-        specifier: 1.9.0
+        specifier: 'catalog:'
         version: 1.9.0
       events:
         specifier: ^3.3.0
         version: 3.3.0
       expo-constants:
-        specifier: ~17.1.6
+        specifier: catalog:react-native
         version: 17.1.7(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))
       expo-secure-store:
-        specifier: ~14.2.3
+        specifier: catalog:react-native
         version: 14.2.3(expo@53.0.20(@babel/core@7.28.3)(@expo/metro-runtime@5.0.4(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)))(react-native@0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0))(react@19.1.0))
       humps:
         specifier: ^2.0.1
         version: 2.0.1
       js-cookie:
-        specifier: 3.0.5
+        specifier: 'catalog:'
         version: 3.0.5
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
       lodash:
-        specifier: 4.17.21
+        specifier: 'catalog:'
         version: 4.17.21
       luxon:
-        specifier: 3.6.1
+        specifier: 'catalog:'
         version: 3.6.1
       next:
-        specifier: ^15.3.2
+        specifier: 'catalog:'
         version: 15.5.0(@babel/core@7.28.3)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       qs:
         specifier: ^6.14.0
         version: 6.14.0
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-hook-form:
-        specifier: 7.56.4
+        specifier: 'catalog:'
         version: 7.56.4(react@19.1.0)
       react-native:
-        specifier: 0.79.2
+        specifier: catalog:react-native
         version: 0.79.2(@babel/core@7.28.3)(@types/react@19.1.4)(react@19.1.0)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
       zustand:
-        specifier: 5.0.4
+        specifier: 'catalog:'
         version: 5.0.4(@types/react@19.1.4)(react@19.1.0)(use-sync-external-store@1.5.0(react@19.1.0))
     devDependencies:
       '@baseapp-frontend/config':
@@ -1059,58 +1433,58 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@testing-library/jest-dom':
-        specifier: 6.4.6
+        specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.12)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/react':
-        specifier: 16.0.0
+        specifier: catalog:test
         version: 16.0.0(@testing-library/dom@10.4.1)(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@testing-library/user-event':
-        specifier: 14.5.2
+        specifier: catalog:test
         version: 14.5.2(@testing-library/dom@10.4.1)
       '@types/humps':
         specifier: ^2.0.6
         version: 2.0.6
       '@types/jest':
-        specifier: 29.5.12
+        specifier: catalog:test
         version: 29.5.12
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/lodash':
-        specifier: 4.17.7
+        specifier: 'catalog:'
         version: 4.17.7
       '@types/luxon':
-        specifier: 3.6.2
+        specifier: 'catalog:'
         version: 3.6.2
       '@types/node':
-        specifier: 22.7.2
+        specifier: 'catalog:'
         version: 22.7.2
       '@types/qs':
         specifier: ^6.14.0
         version: 6.14.0
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       babel-jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@babel/core@7.28.3)
       jest:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       jest-environment-jsdom:
-        specifier: 29.7.0
+        specifier: catalog:test
         version: 29.7.0
       ts-jest:
-        specifier: 29.1.4
+        specifier: catalog:test
         version: 29.1.4(@babel/core@7.28.3)(@jest/transform@29.7.0)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.28.3))(esbuild@0.24.2)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))(typescript@5.8.3)
       ts-node:
-        specifier: 10.9.2
+        specifier: catalog:test
         version: 10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
 
   packages/wagtail:
@@ -1125,38 +1499,38 @@ importers:
         specifier: workspace:*
         version: link:../utils
       '@mui/material':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@mui/system':
-        specifier: 5.18.0
+        specifier: catalog:material-ui
         version: 5.18.0(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@emotion/styled@11.14.1(@emotion/react@11.14.0(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0))(@types/react@19.1.4)(react@19.1.0)
       '@storybook/react':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)
       axios:
-        specifier: 1.9.0
+        specifier: 'catalog:'
         version: 1.9.0
       graphql:
-        specifier: 16.11.0
+        specifier: catalog:graphql
         version: 16.11.0
       next:
-        specifier: ^15.3.2
+        specifier: 'catalog:'
         version: 15.5.0(@babel/core@7.28.3)(babel-plugin-macros@3.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       react:
-        specifier: 19.1.0
+        specifier: catalog:react19
         version: 19.1.0
       react-relay:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0(react@19.1.0)
     devDependencies:
       '@babel/preset-env':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@babel/preset-react':
-        specifier: 7.25.9
+        specifier: catalog:storybook
         version: 7.25.9(@babel/core@7.28.3)
       '@babel/preset-typescript':
-        specifier: 7.26.0
+        specifier: catalog:storybook
         version: 7.26.0(@babel/core@7.28.3)
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -1168,76 +1542,76 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@chromatic-com/storybook':
-        specifier: 3.2.3
+        specifier: catalog:storybook
         version: 3.2.3(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@cypress/webpack-dev-server':
-        specifier: 3.10.1
+        specifier: catalog:test
         version: 3.10.1(webpack-cli@5.1.4)(webpack@5.93.0)
       '@storybook/addon-essentials':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@types/react@19.1.4)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-interactions':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-links':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/addon-styling-webpack':
-        specifier: 1.0.1
+        specifier: catalog:storybook
         version: 1.0.1(storybook@8.4.7(prettier@3.6.2))(webpack@5.93.0)
       '@storybook/addon-webpack5-compiler-babel':
-        specifier: 3.0.3
+        specifier: catalog:storybook
         version: 3.0.3(webpack@5.93.0)
       '@storybook/blocks':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))
       '@storybook/react-webpack5':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(@storybook/test@8.4.7(storybook@8.4.7(prettier@3.6.2)))(@swc/core@1.13.3(@swc/helpers@0.5.17))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(storybook@8.4.7(prettier@3.6.2))(typescript@5.8.3)(webpack-cli@5.1.4)
       '@storybook/test':
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(storybook@8.4.7(prettier@3.6.2))
       '@tailwindcss/typography':
-        specifier: 0.5.13
+        specifier: catalog:tailwind
         version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3)))
       '@testing-library/cypress':
-        specifier: 10.0.2
+        specifier: catalog:test
         version: 10.0.2(cypress@13.16.1)
       '@types/js-cookie':
-        specifier: 3.0.6
+        specifier: 'catalog:'
         version: 3.0.6
       '@types/luxon':
-        specifier: 3.6.2
+        specifier: 'catalog:'
         version: 3.6.2
       '@types/react':
-        specifier: 19.1.4
+        specifier: catalog:react19
         version: 19.1.4
       '@types/react-dom':
-        specifier: 19.1.5
+        specifier: catalog:react19
         version: 19.1.5(@types/react@19.1.4)
       '@types/react-relay':
-        specifier: 18.2.1
+        specifier: catalog:graphql
         version: 18.2.1
       '@types/relay-test-utils':
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       autoprefixer:
-        specifier: 10.4.19
+        specifier: catalog:tailwind
         version: 10.4.19(postcss@8.4.38)
       babel-loader:
-        specifier: 9.2.1
+        specifier: catalog:storybook
         version: 9.2.1(@babel/core@7.28.3)(webpack@5.93.0)
       babel-plugin-relay:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       css-loader:
-        specifier: 7.1.2
+        specifier: catalog:storybook
         version: 7.1.2(webpack@5.93.0)
       cypress:
-        specifier: 13.16.1
+        specifier: catalog:test
         version: 13.16.1
       cypress-plugin-steps:
-        specifier: 1.1.1
+        specifier: catalog:test
         version: 1.1.1(cypress@13.16.1)
       dotenv:
         specifier: ^16.4.5
@@ -1246,52 +1620,52 @@ importers:
         specifier: ^7.4.2
         version: 7.4.4
       eslint-plugin-storybook:
-        specifier: ^0.8.0
+        specifier: catalog:lint
         version: 0.8.0(eslint@8.57.1)(typescript@5.8.3)
       get-graphql-schema:
-        specifier: 2.1.2
+        specifier: catalog:graphql
         version: 2.1.2
       html-webpack-plugin:
-        specifier: 5.6.0
+        specifier: catalog:storybook
         version: 5.6.0(webpack@5.93.0)
       msw:
-        specifier: 2.6.6
+        specifier: catalog:storybook
         version: 2.6.6(@types/node@22.7.2)(typescript@5.8.3)
       msw-storybook-addon:
-        specifier: 2.0.4
+        specifier: catalog:storybook
         version: 2.0.4(msw@2.6.6(@types/node@22.7.2)(typescript@5.8.3))
       postcss:
-        specifier: 8.4.38
+        specifier: catalog:tailwind
         version: 8.4.38
       postcss-loader:
-        specifier: 8.1.1
+        specifier: catalog:storybook
         version: 8.1.1(postcss@8.4.38)(typescript@5.8.3)(webpack@5.93.0)
       relay-compiler:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       relay-test-utils:
-        specifier: 19.0.0
+        specifier: catalog:graphql
         version: 19.0.0
       storybook:
-        specifier: 8.4.7
+        specifier: catalog:storybook
         version: 8.4.7(prettier@3.6.2)
       style-loader:
-        specifier: 4.0.0
+        specifier: catalog:storybook
         version: 4.0.0(webpack@5.93.0)
       tailwindcss:
-        specifier: 3.4.4
+        specifier: catalog:tailwind
         version: 3.4.4(ts-node@10.9.2(@swc/core@1.13.3(@swc/helpers@0.5.17))(@types/node@22.7.2)(typescript@5.8.3))
       typescript:
-        specifier: 5.8.3
+        specifier: 'catalog:'
         version: 5.8.3
       webpack:
-        specifier: 5.93.0
+        specifier: catalog:storybook
         version: 5.93.0(@swc/core@1.13.3(@swc/helpers@0.5.17))(webpack-cli@5.1.4)
       webpack-cli:
-        specifier: 5.1.4
+        specifier: catalog:storybook
         version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
       webpack-dev-server:
-        specifier: 5.0.4
+        specifier: catalog:storybook
         version: 5.0.4(webpack-cli@5.1.4)(webpack@5.93.0)
 
 packages:
@@ -10802,7 +11176,7 @@ snapshots:
 
   '@babel/generator@7.17.7':
     dependencies:
-      '@babel/types': 7.17.0
+      '@babel/types': 7.28.2
       jsesc: 2.5.2
       source-map: 0.5.7
 
