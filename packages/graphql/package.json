@@ -34,6 +34,7 @@
     "@types/js-cookie": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@types/react-relay": "catalog:graphql",
     "@types/relay-runtime": "catalog:graphql",
     "@types/relay-test-utils": "catalog:graphql",
     "relay-compiler": "catalog:graphql",
