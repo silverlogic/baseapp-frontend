@@ -35,4 +35,5 @@ const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
     )}
   </Dialog>
 )
+
 export default CancelSubscriptionModal

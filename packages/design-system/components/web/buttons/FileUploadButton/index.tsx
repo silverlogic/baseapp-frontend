@@ -14,6 +14,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
   const { sendToast } = useNotification()
   const { accept, maxSize, ...fileUploadProps } = props
   const { control, label, name, setFile } = fileUploadProps
+
   return (
     <>
       <Button
