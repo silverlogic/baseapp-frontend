@@ -1,12 +1,13 @@
-const {
-  responsiveTypography,
+import {
   hideScrollbar,
-  breakpoints,
-  typography,
-  createPalette,
-  createShadows,
-  createCustomShadows,
-} = require('@baseapp-frontend/design-system/styles/web')
+  responsiveTypography,
+} from '@baseapp-frontend/design-system/styles/web/tailwind/plugins'
+
+import { breakpoints } from '@baseapp-frontend/design-system/styles/web/breakpoint'
+import { createPalette } from '@baseapp-frontend/design-system/styles/web/palette'
+import { createCustomShadows } from '@baseapp-frontend/design-system/styles/web/customShadow'
+import { createShadows } from '@baseapp-frontend/design-system/styles/web/shadow'
+import { typography } from '@baseapp-frontend/design-system/styles/web/typography'
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

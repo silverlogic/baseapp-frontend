@@ -63,7 +63,3 @@ cypress/downloads
 # relay
 /__generated__
 !/__generated__/.keep
-
-# babel & tsc
-/tmp-babel
-/tmp-dts

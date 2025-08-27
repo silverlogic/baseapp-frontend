@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.1.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
 ## 1.0.22
 
 ### Patch Changes

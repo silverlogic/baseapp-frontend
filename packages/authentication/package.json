@@ -16,7 +16,6 @@
   "dependencies": {
     "@hookform/resolvers": "catalog:",
     "@tanstack/react-query": "catalog:",
-    "jotai": "catalog:",
     "js-cookie": "catalog:",
     "react-hook-form": "catalog:",
     "zod": "catalog:",

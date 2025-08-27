@@ -1,19 +1,4 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "incremental": false,
-    "skipLibCheck": true,
-    "composite": false,
-    "outDir": "tmp-dts",
-    "target": "es2022"
-  },
-  "include": ["modules/**/*"],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "**/*.cy.tsx",
-    "**/__tests__/**",
-    "**/__storybook__/**"
-  ]
+  "exclude": ["node_modules", "cypress", "jest", "**/*.test.ts", "**/*.test.tsx", "**/*.cy.tsx"]
 }

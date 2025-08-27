@@ -1,79 +1,61 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "sideEffects": false,
   "scripts": {
-    "babel:transpile": "babel modules -d tmp-babel --extensions .ts,.tsx --ignore '**/__tests__/**','**/__storybook__/**'",
-    "tsup:bundle": "tsup tmp-babel --tsconfig tsconfig.build.json",
-    "tsc:declaration": "tsc -p tsconfig.build.json --emitDeclarationOnly",
-    "copy:dts": "node ../../.scripts/copy-dts.js",
-    "clean:tmp": "rm -rf tmp-babel tmp-dts",
-    "build": "node .scripts/build-command.mjs",
-    "dev": "rm -rf dist && node .scripts/dev-command.mjs",
+    "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
+    "dev": "rm -rf dist && tsc --watch",
     "relay": "relay-compiler",
     "relay:download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay:update-schema": "pnpm relay:download-schema && pnpm relay",
-    "lint": "pnpm relay && eslint . --ext .tsx --ext .ts && tsc --noEmit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules",
     "prettier": "prettier --write .",
     "storybook": "pnpm relay && storybook dev -p 6007",
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
     "cypress:open": "cypress open --browser chrome",
-    "test:component": "cypress run --component --browser chrome --headed",
+    "test:component": "pnpm relay && cypress run --component --browser chrome --headed",
     "test:unit": "jest --config ./jest.config.ts",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
-    "./shared/*": {
-      "types": "./dist/__shared__/*/index.d.ts",
-      "import": "./dist/__shared__/*/index.mjs",
-      "require": "./dist/__shared__/*/index.js"
-    },
-    "./activity-log/*": {
-      "types": "./dist/activity-log/*/index.d.ts",
-      "import": "./dist/activity-log/*/index.mjs",
-      "require": "./dist/activity-log/*/index.js"
-    },
-    "./comments/*": {
-      "types": "./dist/comments/*/index.d.ts",
-      "import": "./dist/comments/*/index.mjs",
-      "require": "./dist/comments/*/index.js"
-    },
-    "./messages/*": {
-      "types": "./dist/messages/*/index.d.ts",
-      "import": "./dist/messages/*/index.mjs",
-      "require": "./dist/messages/*/index.js"
-    },
-    "./navigations/*": {
-      "types": "./dist/navigations/*/index.d.ts",
-      "import": "./dist/navigations/*/index.mjs",
-      "require": "./dist/navigations/*/index.js"
-    },
-    "./notifications/*": {
-      "types": "./dist/notifications/*/index.d.ts",
-      "import": "./dist/notifications/*/index.mjs",
-      "require": "./dist/notifications/*/index.js"
-    },
-    "./profiles/*": {
-      "types": "./dist/profiles/*/index.d.ts",
-      "import": "./dist/profiles/*/index.mjs",
-      "require": "./dist/profiles/*/index.js"
-    },
-    "./tests/*": {
-      "types": "./dist/tests/*/index.d.ts",
-      "import": "./dist/tests/*/index.mjs",
-      "require": "./dist/tests/*/index.js"
-    },
-    "./content-feed/*": {
-      "types": "./dist/content-feed/*/index.d.ts",
-      "import": "./dist/content-feed/*/index.mjs",
-      "require": "./dist/content-feed/*/index.js"
-    }
+    "./package.json": "./package.json",
+    "./shared/common": "./modules/__shared__/common/index.ts",
+    "./shared/web": "./modules/__shared__/web/index.ts",
+    "./shared/native": "./modules/__shared__/native/index.ts",
+    "./activity-log/common": "./modules/activity-log/common/index.ts",
+    "./activity-log/web": "./modules/activity-log/web/index.ts",
+    "./activity-log/native": "./modules/activity-log/native/index.ts",
+    "./comments/common": "./modules/comments/common/index.ts",
+    "./comments/web": "./modules/comments/web/index.ts",
+    "./comments/native": "./modules/comments/native/index.ts",
+    "./messages/common": "./modules/messages/common/index.ts",
+    "./messages/web": "./modules/messages/web/index.ts",
+    "./messages/native": "./modules/messages/native/index.ts",
+    "./navigations/common": "./modules/navigations/common/index.ts",
+    "./navigations/web": "./modules/navigations/web/index.ts",
+    "./navigations/native": "./modules/navigations/native/index.ts",
+    "./notifications/common": "./modules/notifications/common/index.ts",
+    "./notifications/web": "./modules/notifications/web/index.ts",
+    "./notifications/native": "./modules/notifications/native/index.ts",
+    "./profiles/common": "./modules/profiles/common/index.ts",
+    "./profiles/web": "./modules/profiles/web/index.ts",
+    "./profiles/native": "./modules/profiles/native/index.ts",
+    "./tests/common": "./modules/tests/common/index.ts",
+    "./tests/web": "./modules/tests/web/index.ts",
+    "./tests/native": "./modules/tests/native/index.ts",
+    "./content-feed/common": "./modules/content-feed/common/index.ts",
+    "./content-feed/web": "./modules/content-feed/web/index.ts",
+    "./content-feed/native": "./modules/content-feed/native/index.ts"
   },
   "files": [
-    "dist"
+    "modules",
+    "tsconfig.json",
+    "relay.config.js",
+    "schema.graphql",
+    "__generated__"
   ],
   "dependencies": {
     "@emotion/cache": "catalog:material-ui",
@@ -169,7 +151,6 @@
     "html-webpack-plugin": "catalog:storybook",
     "jest": "catalog:test",
     "jest-environment-jsdom": "catalog:test",
-    "jotai": "catalog:",
     "msw": "catalog:storybook",
     "msw-storybook-addon": "catalog:storybook",
     "postcss": "catalog:tailwind",

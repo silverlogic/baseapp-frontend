@@ -2,8 +2,8 @@
 
 import { FC } from 'react'
 
-import { ThemeProvider } from '../../../../../providers/web'
-import { defaultTheme } from '../../__mocks__/theme'
+import { ThemeProvider } from '../../../../providers/web'
+import { defaultTheme } from '../__mocks__/theme'
 import { ThemeTestProviderProps } from './types'
 
 const ThemeTestProvider: FC<ThemeTestProviderProps> = ({

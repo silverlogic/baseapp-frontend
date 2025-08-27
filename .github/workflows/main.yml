@@ -24,7 +24,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.12.0
+          version: 10.14.0
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -50,7 +50,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.12.0
+          version: 10.14.0
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -73,13 +73,34 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.12.0
+          version: 10.14.0
+
+      - name: Cache Cypress binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/Cypress
+          key: cypress-${{ runner.os }}-13.16.1
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build Packages
-        run: pnpm build
+      - name: Install Cypress binary (components workspace)
+        run: |
+          pnpm --filter @baseapp-frontend/components exec cypress cache path
+          pnpm --filter @baseapp-frontend/components exec cypress cache list || true
+          pnpm --filter @baseapp-frontend/components exec cypress install
+          pnpm --filter @baseapp-frontend/components exec cypress cache list
+        env:
+          CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Verify Cypress binary exists
+        run: |
+          ls -la ~/.cache/Cypress || true
+          ls -la ~/.cache/Cypress/13.16.1/Cypress || true
+          test -x ~/.cache/Cypress/13.16.1/Cypress/Cypress
 
       - name: Component Test
         run: pnpm test:component

@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.4.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.0
+
 ## 1.3.0
 
 ### Minor Changes
