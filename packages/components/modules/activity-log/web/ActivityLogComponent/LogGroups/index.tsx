@@ -35,6 +35,10 @@ const LogGroups: FC<LogGroupsProps> = ({
       />
     )
   }
+  const renderUserName = (group: LogGroup) => {
+    if (group.logs[0]?.user == null) return 'Deleted User'
+    return group.logs[0]?.user?.fullName
+  }
 
   const renderItemContent = (group: LogGroup) => (
     <Box
@@ -54,7 +58,7 @@ const LogGroups: FC<LogGroupsProps> = ({
           alt={group.logs[0]?.user?.fullName ?? 'User activity log avatar'}
         />
         <Typography variant="subtitle2" mb="6px">
-          {group.logs[0]?.user?.fullName}
+          {renderUserName(group)}
         </Typography>
       </Box>
       {group.logs.map((log: ActivityLogNode, index: number) =>

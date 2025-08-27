@@ -11,6 +11,7 @@ const CircledAvatar: FC<CircledAvatarProps> = ({
   height = 40,
   hasError,
   children,
+  alt,
   ...props
 }) => (
   <AvatarContainer width={width} height={height} hasError={hasError}>
@@ -18,6 +19,7 @@ const CircledAvatar: FC<CircledAvatarProps> = ({
       width={width}
       height={height}
       sx={({ palette }) => ({ border: `solid 8px ${palette.background.default}` })}
+      alt={alt}
       {...props}
     >
       {children}
