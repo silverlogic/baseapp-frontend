@@ -8,3 +8,7 @@ export interface SubscriptionCardProps {
   onManageClick: () => void
   onSubscribeClick: () => void
 }
+
+export interface SubscriptionCardWrapperProps {
+  smDown: boolean
+}
