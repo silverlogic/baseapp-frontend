@@ -3,8 +3,8 @@ import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/ic
 import { Box, Button, CardContent, Chip, Typography } from '@mui/material'
 import Image from 'next/image'
 
-import { SubscriptionCardWrapper } from './styled'
-import { SubscriptionCardProps } from './types'
+import { SubscriptionCardWrapper } from '../styled'
+import { SubscriptionCardProps } from '../types'
 
 const SubscriptionCard = ({
   sub,
@@ -16,6 +16,7 @@ const SubscriptionCard = ({
 }: SubscriptionCardProps) => {
   const dolarPrice = Math.floor((sub.defaultPrice?.unitAmount ?? 0) / 100)
   const centsPrice = ((sub.defaultPrice?.unitAmount ?? 0) % 100).toString().padStart(2, '0')
+  const marketingFeatures = sub.marketingFeatures ?? []
 
   return (
     <SubscriptionCardWrapper key={sub.id} smDown={smDown}>
@@ -48,7 +49,7 @@ const SubscriptionCard = ({
           </Button>
         )}
         <Box display="flex" flexDirection="column" gap={2}>
-          {sub.marketingFeatures?.map((feature) => (
+          {marketingFeatures.map((feature) => (
             <Typography variant="body2" color="text.secondary" key={feature.name}>
               <CheckMarkIcon color="inherit" /> {feature.name}
             </Typography>

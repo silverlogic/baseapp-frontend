@@ -10,7 +10,7 @@ import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import AddCardModal from '../CheckoutComponent/AddCardModal'
+import AddCardModal from '../components/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
 import { PRODUCT_API_KEY } from '../services/keys'
 import { getStripePromise } from '../utils/stripe'
@@ -219,13 +219,10 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 const PaymentMethodsManagementComponentWithElements = ({
   entityId,
   stripePublishableKey,
-}: PaymentMethodsManagementComponentWithElementsProps) => {
-  console.log('stripePublishableKey', stripePublishableKey)
-  return (
-    <Elements stripe={getStripePromise(stripePublishableKey)}>
-      <PaymentMethodsManagementComponent entityId={entityId} />
-    </Elements>
-  )
-}
+}: PaymentMethodsManagementComponentWithElementsProps) => (
+  <Elements stripe={getStripePromise(stripePublishableKey)}>
+    <PaymentMethodsManagementComponent entityId={entityId} />
+  </Elements>
+)
 
 export default PaymentMethodsManagementComponentWithElements
