@@ -3,9 +3,10 @@ import { axios } from '@baseapp-frontend/utils'
 import {
   CreateSubscriptionOptions,
   Customer,
-  Product,
-  SetupIntent,
   PaymentMethod,
+  Product,
+  Products,
+  SetupIntent,
   Subscription,
 } from '../types'
 import { SubscriptionRequestBody, UpdatePaymentMethodRequestBody } from './types'
@@ -46,6 +47,8 @@ class StripeApi {
 
   static getProduct = (productId: string): Promise<Product> =>
     axios.get(`${baseUrl}/stripe/products/${productId}`)
+
+  static listProducts = (): Promise<Products> => axios.get(`${baseUrl}/stripe/products`)
 
   static createSubscription = ({
     customerId,

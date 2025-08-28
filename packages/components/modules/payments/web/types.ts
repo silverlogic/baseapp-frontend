@@ -1,4 +1,4 @@
-import { BillingDetails, PaymentMethod as StripePaymentMethod} from '@stripe/stripe-js'
+import { BillingDetails, PaymentMethod as StripePaymentMethod } from '@stripe/stripe-js'
 
 export interface Customer {
   remoteCustomerId: string
@@ -34,6 +34,12 @@ export interface Product {
     currency?: string
     locale?: string
   }
+  description?: string | null
+}
+
+export interface Products {
+  objects: string
+  data: Product[]
 }
 
 export interface Subscription {
