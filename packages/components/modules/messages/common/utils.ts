@@ -37,6 +37,13 @@ const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefine
   const otherParticipant = header.participants.edges.find(
     (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
   )
+  if (otherParticipant === undefined) {
+    return {
+      title: 'Deleted User',
+      avatar: undefined,
+    }
+  }
+
   return {
     title: otherParticipant?.node?.profile?.name,
     avatar: otherParticipant?.node?.profile?.image?.url,
