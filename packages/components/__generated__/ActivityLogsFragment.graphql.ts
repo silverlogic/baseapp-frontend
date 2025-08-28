@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a0e0f33be280b1cb77648b563497e8ff>>
+ * @generated SignedSource<<3f449ebad643dc0754b6465939ef191a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -8,8 +8,10 @@
 
 /* eslint-disable */
 // @ts-nocheck
-import { ReaderFragment, RefetchableFragment } from 'relay-runtime'
+import { ReaderFragment } from 'relay-runtime'
 import { FragmentRefs } from 'relay-runtime'
+
+import ActivityLogsPaginationQuery_graphql from './ActivityLogsPaginationQuery.graphql'
 
 export type ActivityLogsFragment$data = {
   readonly activityLogs:
@@ -139,7 +141,7 @@ const node: ReaderFragment = (function () {
           path: v0 /*: any*/,
         },
         fragmentPathInResult: [],
-        operation: require('./ActivityLogsPaginationQuery.graphql'),
+        operation: ActivityLogsPaginationQuery_graphql,
       },
     },
     name: 'ActivityLogsFragment',

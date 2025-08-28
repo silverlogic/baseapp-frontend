@@ -21,7 +21,6 @@ pnpm install @baseapp-frontend/test
 In order to use this package you will need to:
 
 - create `__mocks__` folder at the root level and add these three files inside it:
-
   - console.ts
 
     ```ts

@@ -1,26 +1,27 @@
 import { FC } from 'react'
 
-import { Provider as JotaiProvider } from 'jotai'
+import { CookieProvider } from '@baseapp-frontend/utils/hooks/useCookie'
 
-import InitialProfileProviderForTesting from '../InitialProfileProviderForTesting'
+import { MinimalProfile } from '../../../../../types/profile'
+import { CURRENT_PROFILE_KEY_NAME, CurrentProfileProvider } from '../../../../profile'
 import { WithAuthenticationTestProvidersProps } from './types'
 
 const withAuthenticationTestProviders =
   <Props extends object>(Component: FC<Props>) =>
-  ({
-    context,
-    InitialProfileProviderForTestingProps,
-    ...props
-  }: Props & WithAuthenticationTestProvidersProps) => {
-    const currentProfile =
-      context?.parameters?.initialProfile || InitialProfileProviderForTestingProps?.initialProfile
+  ({ context, initialCookies, ...props }: Props & WithAuthenticationTestProvidersProps) => {
+    const currentProfile = context?.parameters?.initialProfile ?? null
 
     return (
-      <JotaiProvider>
-        <InitialProfileProviderForTesting initialProfile={currentProfile || null}>
+      <CookieProvider<{ [CURRENT_PROFILE_KEY_NAME]: MinimalProfile }>
+        initialCookies={{
+          [CURRENT_PROFILE_KEY_NAME]: currentProfile,
+          ...initialCookies,
+        }}
+      >
+        <CurrentProfileProvider initialCurrentProfile={currentProfile}>
           <Component {...(props as Props)} {...context} />
-        </InitialProfileProviderForTesting>
-      </JotaiProvider>
+        </CurrentProfileProvider>
+      </CookieProvider>
     )
   }
 

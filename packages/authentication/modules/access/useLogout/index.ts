@@ -10,6 +10,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { MFA_API_KEY } from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
+import { CURRENT_PROFILE_KEY_NAME } from '../../profile/useCurrentProfile/constants'
 import type { UseLogoutOptions } from './types'
 
 const useLogout = ({
@@ -23,6 +24,7 @@ const useLogout = ({
   const logout = async () => {
     await removeTokenAsync(accessKeyName)
     await removeTokenAsync(refreshKeyName)
+    await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
     queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     queryClient.resetQueries({ queryKey: MFA_API_KEY.default })
     onLogout?.()

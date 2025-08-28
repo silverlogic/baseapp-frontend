@@ -9,7 +9,7 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import {
   ACCESS_KEY_NAME,
   filterDirtyValues,
-  getTokenAsync,
+  getToken,
   setFormRelayErrors,
   useNotification,
 } from '@baseapp-frontend/utils'
@@ -40,7 +40,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   const theme = useTheme()
   const styles = createStyles(theme)
   const profile = useFragment(ProfileComponentFragment, profileRef)
-  const bottomDrawerRef = useRef<BottomSheetModal>(null)
+  const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commitMutation, isMutationInFlight] = useProfileMutation()
   const [fieldType, setFieldType] = useState<'image' | 'bannerImage'>('image')
   // const { updateProfileIfActive } = useCurrentProfile()
@@ -48,13 +48,14 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
 
   const formReturn = useForm<ProfileUpdateForm>({
     defaultValues: getProfileDefaultValues({ profile }),
+    // @ts-ignore TODO: check typing issue with zodResolver
     resolver: zodResolver(DEFAULT_PROFILE_FORM_VALIDATION),
     mode: 'onBlur',
   })
 
   const uploadFile = async (fileUri: string, fieldName: 'image' | 'bannerImage') => {
     try {
-      const authToken = await getTokenAsync(ACCESS_KEY_NAME)
+      const authToken = getToken(ACCESS_KEY_NAME)
       const fileInfo = await FileSystem.getInfoAsync(fileUri)
       if (!fileInfo.exists) {
         sendToast('File does not exist', { type: 'error' })
@@ -141,6 +142,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         const errors = response?.profileUpdate?.errors
         if (errors) {
           sendToast('Something went wrong', { type: 'error' })
+          // @ts-ignore TODO: check typing issue with zodResolver
           setFormRelayErrors(formReturn, errors)
         } else {
           sendToast('Profile updated', { type: 'success' })

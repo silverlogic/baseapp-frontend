@@ -13,7 +13,7 @@ export type ChangePasswordForm = {
 
 export interface UseChangePassword {
   token?: string
-  validationSchema?: z.ZodObject<z.ZodRawShape> | z.ZodEffects<z.ZodObject<z.ZodRawShape>>
+  validationSchema?: z.ZodType<ChangePasswordForm>
   defaultValues?: ChangePasswordForm
   options?: UseMutationOptions<void, unknown, ChangePasswordForm, any>
   ApiClass?: ApiClass

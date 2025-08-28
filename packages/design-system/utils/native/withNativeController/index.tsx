@@ -15,6 +15,7 @@ const withNativeController = <T extends TextInputProps>(Component: FC<T>) =>
         return (
           <Controller
             name={name}
+            // @ts-ignore TODO: check type inconsistency
             control={control}
             render={({ field, fieldState }) => {
               const handleOnChangeText = (text: string) => {

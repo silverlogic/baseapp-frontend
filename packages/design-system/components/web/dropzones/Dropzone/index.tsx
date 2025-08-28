@@ -11,7 +11,7 @@ import {
 import { Button, Card, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
 
-import DropzonePreview from './DropzonePreview'
+import DefaultDropzonePreview from './DropzonePreview'
 import {
   AddFileButton,
   AddFileWrapper,
@@ -39,6 +39,12 @@ const Dropzone: FC<DropzoneProps> = ({
   multiple = false,
   asBase64 = true,
   onFileClick,
+  DropzonePreview = DefaultDropzonePreview,
+  DropzonePreviewProps = {},
+  DropZoneIcon = InsertPhotoOutlinedIcon,
+  DropZoneIconProps = {},
+  DropZoneCancelIcon = CancelIcon,
+  DropZoneCancelIconProps = {},
 }) => {
   const [files, setFiles] = useState<DropzoneProps['storedImg']>(storedImg)
   const { sendToast } = useNotification()
@@ -96,7 +102,7 @@ const Dropzone: FC<DropzoneProps> = ({
             <input {...getInputProps()} aria-label={ariaLabel} {...InputProps} />
             {isDragReject ? (
               <>
-                <CancelIcon />
+                <DropZoneCancelIcon {...DropZoneCancelIconProps} />
                 <Typography variant="body2" color="error.main">
                   File not accepted, please choose the correct type
                 </Typography>
@@ -106,13 +112,14 @@ const Dropzone: FC<DropzoneProps> = ({
               </>
             ) : (
               <>
-                <InsertPhotoOutlinedIcon
+                <DropZoneIcon
                   sx={{
                     width: '36px',
                     height: '36px',
                     marginBottom: '4px',
                     color: 'text.secondary',
                   }}
+                  {...DropZoneIconProps}
                 />
                 <Typography textAlign="center" variant="body2" color="text.primary">
                   {title || (
@@ -145,6 +152,7 @@ const Dropzone: FC<DropzoneProps> = ({
                 file={file}
                 key={`${(file as File)?.name}_${index}`}
                 handleRemoveFile={() => handleRemove(index)}
+                {...DropzonePreviewProps}
               />
             ))}
           </DropzoneContainer>
@@ -159,6 +167,7 @@ const Dropzone: FC<DropzoneProps> = ({
               isMini={false}
               file={files as string | File}
               handleRemoveFile={() => handleRemove()}
+              {...DropzonePreviewProps}
             />
           </Card>
         )}

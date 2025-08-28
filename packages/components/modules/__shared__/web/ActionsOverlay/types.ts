@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 
 import { ConfirmDialogProps } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { SwipeableDrawerProps } from '@baseapp-frontend/design-system/components/web/drawers'
@@ -10,7 +10,7 @@ import { HOVER_OVERLAY_MODES } from './constants'
 
 export type OverlayAction = {
   label: string
-  icon: JSX.Element
+  icon: ReactNode
   onClick: () => void
   disabled?: boolean
   hasPermission?: boolean | null

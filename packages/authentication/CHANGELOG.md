@@ -1,5 +1,54 @@
 # @baseapp-frontend/authentication
 
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+
+## 5.0.1
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+
+## 5.0.0
+
+### Major Changes
+
+- **BREAKING:** Removed SSR support from authentication functions and hooks
+  - Added `'use client'` directive to `getUser` and `useJWTUser` - these are now client-side only
+  - Removed `noSSR` parameter from `getUser`, `useJWTUser`, and related types
+  - For server-side user retrieval, use the new `getUserSSR` function instead
+
+- **BREAKING:** Removed deprecated functions and hooks
+  - Deleted `getUserAsync` function and all related tests
+  - Deleted `useUser` hook (deprecated) and all related tests
+  - Deleted `withUser` HOC and all related tests
+  - Updated exports in main index file to reflect removals
+
+- **BREAKING:** Updated `useUpdateUser` token refresh API
+  - Now requires explicit `refreshToken` parameter for `refreshAccessToken` call
+  - Updated function signature to match new token utilities
+
+- Added new `getUserSSR` module for server-side user data retrieval
+- Rebuilt `useCurrentProfile` with new store-based architecture
+- Enhanced `useJWTUser` documentation to clarify usage patterns
+- Updated test providers to use `withAuthenticationTestProviders`
+- Updated several dependencies, including `react`, `zod`, and `zustand`to the latest versions
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.0
+
+### Migration Guide
+
+- Replace `getUser({ noSSR: true })` with `getUser()` (client-side) or `getUserSSR()` (server-side)
+- Replace `useJWTUser({ noSSR: true })` with `useJWTUser()`
+- Replace `getUserAsync()` calls with `getUser()` or `getUserSSR()`
+- Replace `useUser()` with `useJWTUser()` for reactive user data
+- Replace `withUser(Component)` with direct `useJWTUser()` usage in components
+- Update `useUpdateUser` implementations to handle new token refresh pattern
+
 ## 4.2.3
 
 ### Patch Changes
@@ -424,7 +473,6 @@
 ### Patch Changes
 
 - Redesigning `useLogout` hook
-
   - It now returns an object instead of a function
   - It now uses `resetQueries` instead of `invalidateQueries` in order to reset the user cache properly.
 

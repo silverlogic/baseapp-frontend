@@ -2,6 +2,7 @@
 
 import { FC } from 'react'
 
+import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { useBoolean } from '@baseapp-frontend/utils'
 
 import Box from '@mui/material/Box'
@@ -16,8 +17,6 @@ import { NavigationLayoutProps } from './types'
 
 const NavigationLayout: FC<NavigationLayoutProps> = ({
   navData,
-  settings,
-  setSettings,
   LogoIcon,
   LogoProps,
   AccountMenu,
@@ -27,6 +26,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
 }) => {
+  const { settings } = useUISettings()
   const nav = useBoolean()
 
   const isNavCentered = settings?.themeLayout === 'centered'
@@ -37,7 +37,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     return (
       <>
         <Header
-          settings={settings}
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
@@ -58,7 +57,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     return (
       <>
         <Header
-          settings={settings}
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
@@ -78,7 +76,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     return (
       <>
         <Header
-          settings={settings}
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
@@ -100,8 +97,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             onCloseNav={nav.onFalse}
             LogoIcon={LogoIcon}
             LogoProps={LogoProps}
-            settings={settings}
-            setSettings={setSettings}
           />
           <MainContainer isNavMini {...MainContainerProps}>
             {children}
@@ -114,7 +109,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   return (
     <>
       <Header
-        settings={settings}
         LogoIcon={LogoIcon}
         LogoProps={LogoProps}
         onOpenNav={nav.onTrue}
@@ -131,8 +125,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
       >
         <NavVertical
           navData={navData}
-          settings={settings}
-          setSettings={setSettings}
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           openNav={nav.value}

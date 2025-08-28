@@ -45,7 +45,7 @@ const CommentItem: FC<CommentItemProps> = ({
   const { setCommentReply } = useCommentReply()
   const router = useRouter()
 
-  const commentItemRef = useRef<HTMLDivElement>(null)
+  const commentItemRef = useRef<HTMLDivElement | undefined>(undefined)
 
   const [isEditMode, setIsEditMode] = useState(false)
   const [isReplyExpanded, setIsReplyExpanded] = useState(false)
@@ -75,6 +75,7 @@ const CommentItem: FC<CommentItemProps> = ({
           fetchPolicy: 'store-or-network',
           onComplete: (error) => {
             if (error) {
+              // eslint-disable-next-line no-console
               console.error(error)
             } else {
               setIsReplyExpanded(true)

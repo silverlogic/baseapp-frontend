@@ -15,10 +15,32 @@ describe('Members', () => {
   })
 
   it('renders MembersListItem correctly', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mount(<MembersForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ data: allRolesMembersListMockData })
+    const { environment, queueOperationResolver } = createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'UserMembersListPaginationQuery',
+      data: allRolesMembersListMockData,
     })
+
+    cy.mount(
+      <MembersForTesting
+        environment={environment}
+        context={{
+          parameters: {
+            initialProfile: {
+              pk: 1,
+              canChangeRole: true,
+              id: 'UHJvZmlsZTox',
+              name: 'Owner Profile',
+              image: {
+                url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
+              },
+              urlPath: null,
+            },
+          },
+        }}
+      />,
+    )
 
     cy.step('Pending Profile')
     cy.findByText('Pending Profile').should('exist')
@@ -94,10 +116,33 @@ describe('Members', () => {
   })
 
   it('can change role of MembersListItem and it shows confirm dialog', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mount(<MembersForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ data: simpleMembersListMockData })
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'UserMembersListPaginationQuery',
+      data: simpleMembersListMockData,
     })
+
+    cy.mount(
+      <MembersForTesting
+        environment={environment}
+        context={{
+          parameters: {
+            initialProfile: {
+              pk: 1,
+              canChangeRole: true,
+              id: 'UHJvZmlsZTox',
+              name: 'Owner Profile',
+              image: {
+                url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
+              },
+              urlPath: null,
+            },
+          },
+        }}
+      />,
+    )
 
     cy.step("it opens the role's dropdown")
     cy.findByText('Manager Profile').should('exist')
@@ -131,10 +176,14 @@ describe('Members', () => {
   })
 
   it('renders MembersList correctly', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mount(<MembersForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ data: fullMembersListMockData })
+    const { environment, queueOperationResolver, resolveMostRecentOperation } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'UserMembersListPaginationQuery',
+      data: fullMembersListMockData,
     })
+    cy.mount(<MembersForTesting environment={environment} />)
     const numberOfMembers = fullMembersListMockData.data.profile.members.edges.length + 1
 
     cy.step('should render the correct number of members and the search bar')
@@ -171,10 +220,12 @@ describe('Members', () => {
   })
 
   it('can filter members by name', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
-    cy.mount(<MembersForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({ data: simpleMembersListMockData })
+    const { environment, queueOperationResolver } = createTestEnvironment()
+    queueOperationResolver({
+      queryName: 'UserMembersListPaginationQuery',
+      data: simpleMembersListMockData,
     })
+    cy.mount(<MembersForTesting environment={environment} />)
 
     cy.step('show all members')
     cy.findByText('Manager Profile').should('exist')

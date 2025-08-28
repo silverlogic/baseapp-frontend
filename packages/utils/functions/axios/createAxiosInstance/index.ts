@@ -9,7 +9,6 @@ import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { eventEmitter } from '../../events'
 import { getExpoConstant } from '../../expo'
 import { buildQueryString } from '../../string'
-import { getTokenAsync } from '../../token'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
@@ -49,13 +48,29 @@ export const createAxiosInstance = ({
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
     const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
-    let authToken = await getTokenAsync(accessKeyName, { noSSR: false })
+    // token refresh logic
+    let accessAuthToken
+    let refreshAuthToken
+    // TODO: maybe find a better way to deal with RSC
+    if (typeof window === typeof undefined) {
+      const { getTokenSSR } = await import('../../token/getTokenSSR')
+      accessAuthToken = await getTokenSSR(accessKeyName)
+      refreshAuthToken = await getTokenSSR(refreshKeyName)
+    } else {
+      const { getToken } = await import('../../token/getToken')
+      accessAuthToken = getToken(accessKeyName)
+      refreshAuthToken = getToken(refreshKeyName)
+    }
 
-    if (authToken && isAuthTokenRequired && refreshToken) {
-      const isTokenValid = isUserTokenValid(decodeJWT(authToken))
+    if (accessAuthToken && isAuthTokenRequired && refreshToken) {
+      const isTokenValid = isUserTokenValid(decodeJWT(accessAuthToken))
       if (!isTokenValid) {
         try {
-          authToken = await refreshAccessToken(accessKeyName, refreshKeyName)
+          accessAuthToken = await refreshAccessToken({
+            refreshToken: refreshAuthToken,
+            accessKeyName,
+            refreshKeyName,
+          })
         } catch (error) {
           if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
             eventEmitter.emit(LOGOUT_EVENT)
@@ -65,8 +80,13 @@ export const createAxiosInstance = ({
       }
     }
 
-    if (request.headers && !request.headers.Authorization && authToken && isAuthTokenRequired) {
-      request.headers.Authorization = `${tokenType} ${authToken}`
+    if (
+      request.headers &&
+      !request.headers.Authorization &&
+      accessAuthToken &&
+      isAuthTokenRequired
+    ) {
+      request.headers.Authorization = `${tokenType} ${accessAuthToken}`
     }
 
     const language = Cookies.get(languageCookieName)

@@ -2,7 +2,6 @@ import {
   BaseAppLogoCondensed,
   SendMessageIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
-import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
@@ -25,10 +24,6 @@ export const InvalidUserHeader: Story = {
     userType: 'invalid',
   },
   args: {
-    settings: {
-      ...defaultTheme.settings,
-      themeLayout: 'centered',
-    },
     onOpenNav: () => {},
     LogoIcon: BaseAppLogoCondensed,
     AccountMenuProps: {

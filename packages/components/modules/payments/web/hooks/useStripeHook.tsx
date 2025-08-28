@@ -124,6 +124,12 @@ const useStripeHook = () => {
       enabled: !!customerId,
     })
 
+  const useListProducts = () =>
+    useQuery({
+      queryKey: ['products'],
+      queryFn: () => StripeApi.listProducts(),
+    })
+
   const useCreationSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
@@ -145,6 +151,7 @@ const useStripeHook = () => {
     useSetupIntent,
     useConfirmCardPayment,
     useGetProduct,
+    useListProducts,
     useCreationSubscription,
   }
 }

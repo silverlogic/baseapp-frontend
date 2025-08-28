@@ -1,10 +1,104 @@
 # @baseapp-frontend/components
 
+## 1.3.0
+
+### Minor Changes
+
+- Implements native version for `useRoomListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground
+
+## 1.2.9
+
+### Patch Changes
+
+- Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.21
+
+## 1.2.8
+
+### Minor Changes
+
+- Improved the `useMessagesListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground, or vice versa.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+  - @baseapp-frontend/authentication@5.0.2
+  - @baseapp-frontend/design-system@1.0.21
+  - @baseapp-frontend/graphql@1.3.3
+
+## 1.2.7
+
+### Minor Changes
+
+- Abstract `useMessagesListSubscriptionOnRn` hook to native interface so it doesn't break web version due to import problems.
+
+## 1.2.6
+
+- Implements a new hook: `useMessagesListSubscriptionOnRn`
+- Handles real-time message updates via GraphQL subscription (chatRoomOnMessage)
+- Automatically subscribes/unsubscribes on screen focus using expo useFocusEffect. Ensures clean disposal of the subscription to avoid memory leaks or duplicate events
+- Uses Relay's ConnectionHandler.getConnectionID and append new messages to the proper connection
+
+## 1.2.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.21
+  - @baseapp-frontend/authentication@5.0.1
+
+## 1.2.4
+
+### Minor Changes
+
+- Remove setProfileExpoStorage from web component ProfileSettingsComponent
+
+## 1.2.3
+
+### Patch Changes
+
+- Update config so websockets works properly on Native
+- Fix Error msg when missing ChatRoomProvider
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.3.1
+
+## 1.2.2
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.1
+  - @baseapp-frontend/design-system@1.0.19
+
+## 1.2.1
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
+## 1.2.0
+
+### Minor Changes
+
+- Refactored navigation system (`Header`, `AccountMenu`, `NavMini`, `NavVertical`) to use `useUISettings` hook
+- Migrated a few functions due to breaking changes in the authentication package
+- Updated `zustand` providers to match the latest version
+- Updated several dependencies, including `react`, `zod`, and `zustand`to the latest versions
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.0
+  - @baseapp-frontend/utils@4.0.0
+  - @baseapp-frontend/graphql@1.3.0
+  - @baseapp-frontend/design-system@1.0.18
+
 ## 1.1.2
 
 ### Patch Changes
 
-- add stripe checkout page
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.17
 
 ## 1.1.1
 

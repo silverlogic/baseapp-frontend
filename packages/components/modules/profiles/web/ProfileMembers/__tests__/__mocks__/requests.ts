@@ -9,7 +9,7 @@ const createNodeProfile = (
 ) => {
   return {
     node: {
-      id: `id-${index}`,
+      id: `role-id-${index}`,
       user: {
         profile: {
           id: `id-${index}`,
@@ -17,7 +17,7 @@ const createNodeProfile = (
           image: image || null,
           urlPath: null,
         },
-        id: `id-${index}`,
+        id: `user-id-${index}`,
       },
       role: 'MANAGER',
       status: status,

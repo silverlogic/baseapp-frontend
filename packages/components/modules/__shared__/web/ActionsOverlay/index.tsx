@@ -16,7 +16,7 @@ import { HOVER_OVERLAY_MODES } from './constants'
 import { IconButtonContentContainer } from './styled'
 import { ActionOverlayProps, LongPressHandler } from './types'
 
-const ActionsOverlay = forwardRef<HTMLDivElement, ActionOverlayProps>(
+const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps>(
   (
     {
       actions = [],

@@ -1,18 +1,13 @@
 import { RefObject } from 'react'
 
 export type CommentReplyState = {
-  commentItemRef?: RefObject<HTMLDivElement>
+  commentItemRef?: RefObject<HTMLDivElement | undefined>
   inReplyToId?: string
   name?: string | null
 }
 
 type CommentReplyFunctions = {
-  setCommentReply: (
-    partial:
-      | Partial<CommentReplyState>
-      | ((state: CommentReplyState) => Partial<CommentReplyState>),
-    replace?: boolean | undefined,
-  ) => void
+  setCommentReply: (state: CommentReplyState) => void
   resetCommentReply: () => void
 }
 

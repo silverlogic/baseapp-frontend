@@ -2,6 +2,7 @@ import { FC } from 'react'
 
 import { type GestureResponderEvent, Keyboard } from 'react-native'
 import { Button as PaperButton } from 'react-native-paper'
+import { IconSource } from 'react-native-paper/lib/typescript/components/Icon'
 
 import { useTheme } from '../../../../providers/native'
 import {
@@ -23,6 +24,7 @@ const Button: FC<ButtonProps> = ({
   style,
   contentStyle,
   labelStyle,
+  icon,
   compact = false,
   mode = 'contained',
   size = 'large',
@@ -73,6 +75,7 @@ const Button: FC<ButtonProps> = ({
       labelStyle={[variantStyles.text, labelStyle, sizeStyles.text]}
       style={[variantStyles.wrapper, style]}
       onPress={handlePress}
+      icon={icon as IconSource}
       {...props}
     />
   )

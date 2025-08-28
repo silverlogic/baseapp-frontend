@@ -21,19 +21,16 @@ We use a hybrid build pipeline combining `tsup`, and `TypeScript Compiler` to ba
 1. **Source Code:** Original TypeScript/React files.
 
 2. **tsup Bundling:**
+   - Bundling tool (using esbuild) consumes the `components`, `hooks`, `layouts`, `providers`, `styles` and `utils` modules.
 
-    * Bundling tool (using esbuild) consumes the `components`, `hooks`, `layouts`, `providers`, `styles` and `utils` modules.
-
-    * Generates ESM and CJS bundles in `dist`.
+   - Generates ESM and CJS bundles in `dist`.
 
 3. **TypeScript Compiler (tsc):**
+   - Runs in parallel to generate .d.ts type declarations.
 
-    * Runs in parallel to generate .d.ts type declarations.
-
-    * Outputs declarations to `tmp-dts`.
+   - Outputs declarations to `tmp-dts`.
 
 4. **Merge Outputs:**
+   - Copies type declarations from `tmp-dts` to `dist`.
 
-    * Copies type declarations from `tmp-dts` to `dist`.
-
-    * Final `dist` contains both runtime bundles and accurate type definitions.
+   - Final `dist` contains both runtime bundles and accurate type definitions.

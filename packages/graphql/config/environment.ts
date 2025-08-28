@@ -1,4 +1,5 @@
-import { getExpoConstant } from '@baseapp-frontend/utils'
+import { CURRENT_PROFILE_KEY_NAME, MinimalProfile } from '@baseapp-frontend/authentication'
+import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
@@ -99,9 +100,14 @@ const EXPO_PUBLIC_WS_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDP
 const wsClient = createClient({
   url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
   connectionParams: () => {
-    const Authorization = getToken()
+    const Authorization = getToken(ACCESS_KEY_NAME)
+    const CurrentProfileStr = getToken(CURRENT_PROFILE_KEY_NAME) || undefined
+    const CurrentProfile = parseString<MinimalProfile>(CurrentProfileStr)
     if (!Authorization) return {}
-    return { Authorization }
+    return {
+      Authorization,
+      'Current-Profile': CurrentProfile ? CurrentProfile.id : undefined,
+    }
   },
   retryAttempts: Infinity,
   webSocketImpl: WebSocket,

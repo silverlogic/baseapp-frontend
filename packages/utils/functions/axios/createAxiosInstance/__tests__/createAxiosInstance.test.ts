@@ -31,10 +31,24 @@ jest.mock('../../../token/isUserTokenValid', () => ({
 jest.mock('../../../token/refreshAccessToken', () => ({
   refreshAccessToken: jest.fn().mockResolvedValue('refreshedAuthToken'),
 }))
-jest.mock('../../../token', () => ({
-  ...jest.requireActual('../../../token'),
-  getTokenAsync: jest.fn().mockResolvedValue('someAuthToken'),
+jest.mock('../../../token/getToken', () => ({
+  getToken: jest.fn().mockReturnValue('someAuthToken'),
 }))
+jest.mock('../../../token/getTokenSSR', () => ({
+  getTokenSSR: jest.fn().mockResolvedValue('someAuthToken'),
+}))
+jest.mock('../../../events', () => ({
+  eventEmitter: {
+    emit: jest.fn(),
+    listenerCount: jest.fn().mockReturnValue(1),
+  },
+}))
+
+// Mock the global window object
+Object.defineProperty(global, 'window', {
+  value: {},
+  writable: true,
+})
 
 describe('createAxiosInstance', () => {
   afterEach(() => {
@@ -264,6 +278,188 @@ describe('createAxiosInstance', () => {
 
     expect(humps.decamelizeKeys).not.toHaveBeenCalled()
     expect(request.params).toEqual(params)
+  })
+
+  describe('SSR functionality', () => {
+    let originalWindow: any
+
+    beforeEach(() => {
+      originalWindow = global.window
+      delete (global as any).window
+    })
+
+    afterEach(() => {
+      global.window = originalWindow
+    })
+
+    it('should use getTokenSSR in SSR environment', async () => {
+      const { getTokenSSR } = require('../../../token/getTokenSSR')
+      const getTokenSSRMock = getTokenSSR as jest.Mock
+      getTokenSSRMock.mockResolvedValue('ssr-access-token')
+
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: 'someUrl',
+      }
+
+      await interceptorFn(request)
+
+      expect(getTokenSSRMock).toHaveBeenCalledWith('Authorization')
+      expect(getTokenSSRMock).toHaveBeenCalledWith('Refresh')
+      expect(request.headers.Authorization).toBe('Bearer ssr-access-token')
+    })
+
+    it('should handle SSR token refresh when token is invalid', async () => {
+      const { getTokenSSR } = require('../../../token/getTokenSSR')
+      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
+      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
+
+      const getTokenSSRMock = getTokenSSR as jest.Mock
+      getTokenSSRMock
+        .mockResolvedValueOnce('invalid-access-token') // access token
+        .mockResolvedValueOnce('ssr-refresh-token') // refresh token
+
+      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      isUserTokenValidMock.mockReturnValue(false)
+
+      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      refreshAccessTokenMock.mockResolvedValue('new-ssr-access-token')
+
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: 'someUrl',
+      }
+
+      await interceptorFn(request)
+
+      expect(getTokenSSRMock).toHaveBeenCalledWith('Authorization')
+      expect(getTokenSSRMock).toHaveBeenCalledWith('Refresh')
+      expect(refreshAccessToken).toHaveBeenCalledWith({
+        refreshToken: 'ssr-refresh-token',
+        accessKeyName: 'Authorization',
+        refreshKeyName: 'Refresh',
+      })
+      expect(request.headers.Authorization).toBe('Bearer new-ssr-access-token')
+    })
+
+    it('should not use getTokenSSR when no auth is required in SSR', async () => {
+      const { getTokenSSR } = require('../../../token/getTokenSSR')
+      const getTokenSSRMock = getTokenSSR as jest.Mock
+      getTokenSSRMock.mockResolvedValue('ssr-token')
+
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance({
+        servicesWithoutToken: [/\/public-endpoint/],
+      })
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: '/public-endpoint',
+      }
+
+      await interceptorFn(request)
+
+      expect(getTokenSSRMock).toHaveBeenCalled()
+      expect(request.headers.Authorization).toBeUndefined()
+    })
+
+    it('should handle SSR token refresh failure by emitting logout event', async () => {
+      const { getTokenSSR } = require('../../../token/getTokenSSR')
+      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
+      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
+      const { eventEmitter } = require('../../../events')
+
+      const getTokenSSRMock = getTokenSSR as jest.Mock
+      getTokenSSRMock
+        .mockResolvedValueOnce('invalid-access-token') // access token
+        .mockResolvedValueOnce('ssr-refresh-token') // refresh token
+
+      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      isUserTokenValidMock.mockReturnValue(false)
+
+      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      refreshAccessTokenMock.mockRejectedValue(new Error('Refresh failed'))
+
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: 'someUrl',
+      }
+
+      await expect(interceptorFn(request)).rejects.toThrow('Refresh failed')
+
+      expect(eventEmitter.emit).toHaveBeenCalledWith('logout')
+    })
+
+    it('should not attempt to refresh token if refreshToken is false in SSR', async () => {
+      const { getTokenSSR } = require('../../../token/getTokenSSR')
+      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
+      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
+
+      const getTokenSSRMock = getTokenSSR as jest.Mock
+      getTokenSSRMock.mockResolvedValue('invalid-access-token')
+
+      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      isUserTokenValidMock.mockReturnValue(false)
+
+      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance({ refreshToken: false })
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: 'someUrl',
+      }
+
+      await interceptorFn(request)
+
+      expect(refreshAccessTokenMock).not.toHaveBeenCalled()
+      expect(request.headers.Authorization).toBe('Bearer invalid-access-token')
+    })
   })
 
   // TODO: add tests for response interceptor
