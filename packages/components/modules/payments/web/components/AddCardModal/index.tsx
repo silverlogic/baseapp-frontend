@@ -23,25 +23,19 @@ const AddCardModal: FC<AddCardModalProps> = ({
   const [isAddingCardPaymentProcessing, setIsAddingCardPaymentProcessing] = useState(false)
 
   const handleConfirmSetup = async () => {
-    if (!stripe || !elements) {
-      return
-    }
-
+    if (!stripe || !elements) return
     const addressElement = elements.getElement(AddressElement)
     if (!addressElement) {
       sendToast('Address element is missing. Please try again.', { type: 'error' })
       return
     }
-
     const addressValue = await addressElement.getValue()
     if (!addressValue.complete) {
       sendToast('Error confirming card: Incomplete address', { type: 'error' })
       return
     }
-
     try {
       setIsAddingCardPaymentProcessing(true)
-
       const { setupIntent, error } = await stripe.confirmSetup({
         elements,
         confirmParams: {
@@ -49,7 +43,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
         },
         redirect: 'if_required',
       })
-
       if (error) {
         sendToast(`Error confirming card: ${error.message || 'Unknown error'}`, {
           type: 'error',
@@ -93,7 +86,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
             <>
               <PaymentElement />
               <Typography variant="subtitle2">Billing Address</Typography>
-
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
               <AddressElement options={{ mode: 'billing' }} />
               <Box

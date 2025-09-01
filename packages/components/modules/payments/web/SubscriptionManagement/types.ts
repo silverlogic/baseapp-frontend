@@ -5,6 +5,7 @@ export interface SubscriptionManagementWithElementsProps {
   entityId: string
   router: AppRouterInstance
 }
+
 export interface SubscriptionManagementProps {
   entityId: string
   router: AppRouterInstance

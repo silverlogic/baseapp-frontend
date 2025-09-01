@@ -16,7 +16,7 @@ import {
   UPDATE_SUBSCRIPTION_API_KEY,
 } from '../services/keys'
 import StripeApi from '../services/stripe'
-import { CreateSubscriptionOptions, Subscription } from '../types'
+import { CreateSubscriptionOptions, UpdateSubscriptionOptions } from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -35,7 +35,7 @@ const useStripeHook = () => {
 
   const useSetupIntent = (entityId: string) =>
     useMutation({
-      mutationFn: (id: string) => StripeApi.createSetupIntent(id),
+      mutationFn: () => StripeApi.createSetupIntent(entityId),
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
@@ -137,7 +137,7 @@ const useStripeHook = () => {
       enabled: !!productId,
     })
 
-  const useCreationSubscription = () =>
+  const useCreateSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
       onSuccess: () => {
@@ -156,6 +156,25 @@ const useStripeHook = () => {
       enabled: !!subscriptionId,
     })
 
+  const useUpdateSubscription = (
+    subscriptionId: string,
+    options: {
+      onSuccess?: () => void
+      onError?: (error: any) => void
+    } = {},
+  ) =>
+    useMutation({
+      mutationFn: (updateData: UpdateSubscriptionOptions) =>
+        StripeApi.updateSubscription(subscriptionId, updateData),
+      onSuccess: () => {
+        options?.onSuccess?.()
+      },
+      onError: (error) => {
+        options?.onError?.(error)
+      },
+      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+    })
+
   const useCancelSubscription = (subscriptionId: string, refetch: () => void) =>
     useMutation({
       mutationFn: () => StripeApi.cancelSubscription(subscriptionId),
@@ -167,31 +186,6 @@ const useStripeHook = () => {
         sendToast(`Failed to cancel subscription`, { type: 'error' })
       },
       mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(), subscriptionId],
-    })
-
-  const useUpdateSubscription = (
-    subscriptionId: string,
-    refetch: () => void,
-    options: {
-      onSuccess?: (response: any, variables: Partial<Subscription>, context: any) => void
-      onError?: (error: any, variables: Partial<Subscription>, context: any) => void
-    } = {},
-  ) =>
-    useMutation({
-      mutationFn: (updateData: Partial<Subscription>) =>
-        StripeApi.updateSubscription(subscriptionId, updateData),
-      onSuccess: (response, variables, context) => {
-        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
-
-        sendToast('Subscription updated successfully.', { type: 'success' })
-        refetch()
-        options?.onSuccess?.(response, variables, context)
-      },
-      onError: (error, variables, context) => {
-        sendToast(`Failed to update subscription: ${error.message}`, { type: 'error' })
-        options?.onError?.(error, variables, context)
-      },
-      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
     })
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
@@ -210,7 +204,7 @@ const useStripeHook = () => {
     useConfirmCardPayment,
     useListProducts,
     useGetProduct,
-    useCreationSubscription,
+    useCreateSubscription,
     useGetSubscription,
     useCancelSubscription,
     useUpdateSubscription,

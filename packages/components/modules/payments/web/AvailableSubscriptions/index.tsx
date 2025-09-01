@@ -65,7 +65,9 @@ const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
               smDown={smDown}
               selectedTerm={selectedTerm}
               onManageClick={() => router.push('/user/settings?tab=subscription')}
-              onSubscribeClick={() => router.push(`/subscriptions/checkout?product=${product.id}`)}
+              onSubscribeClick={() =>
+                router.push(`/subscriptions/checkout?productId=${product.id}`)
+              }
             />
           )
         })}

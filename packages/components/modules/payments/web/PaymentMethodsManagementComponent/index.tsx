@@ -10,7 +10,7 @@ import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import AddCardModal from '../CheckoutComponent/AddCardModal'
+import AddCardModal from '../components/AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
 import { PRODUCT_API_KEY } from '../services/keys'
 import { getStripePromise } from '../utils/stripe'
@@ -137,7 +137,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           variant="soft"
           color="inherit"
           onClick={() => {
-            createSetupIntent(entityId ?? '')
+            createSetupIntent()
           }}
           startIcon={<Add />}
           disabled={isCreatingSetupIntent}

@@ -2,8 +2,8 @@ import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Button, Typography } from '@mui/material'
 
-import { CancelSubscriptionModalContainer } from './styled'
-import { CancelSubscriptionModalProps } from './types'
+import { CancelSubscriptionModalContainer } from '../styled'
+import { CancelSubscriptionModalProps } from '../types'
 
 const CancelSubscriptionModal: React.FC<CancelSubscriptionModalProps> = ({
   isOpen,

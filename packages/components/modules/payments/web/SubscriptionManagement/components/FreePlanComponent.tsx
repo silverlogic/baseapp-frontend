@@ -2,7 +2,7 @@ import { Check } from '@mui/icons-material'
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
-import { RowFlexContainer, SubscriptionPlanContainer } from './styled'
+import { RowFlexContainer, SubscriptionPlanContainer } from '../styled'
 
 const FreePlanComponent = ({ router }: { router: AppRouterInstance }) => {
   const freeFeatures = [
