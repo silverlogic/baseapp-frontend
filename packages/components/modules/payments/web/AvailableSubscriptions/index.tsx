@@ -9,7 +9,7 @@ import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
 import useStripeHook from '../hooks/useStripeHook'
-import SubscriptionCard from './SubscriptionCard'
+import SubscriptionCard from './components/SubscriptionCard'
 
 const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')

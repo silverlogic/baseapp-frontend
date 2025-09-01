@@ -4,7 +4,6 @@ export { default as PaymentMethodsManagementComponent } from './PaymentMethodsMa
 export type * from './PaymentMethodsManagementComponent/types'
 
 export { default as AvailableSubscriptions } from './AvailableSubscriptions'
-export { default as SubscriptionCard } from './AvailableSubscriptions/SubscriptionCard'
 
 export { default as InvoiceListTable } from './InvoiceListTable'
 
