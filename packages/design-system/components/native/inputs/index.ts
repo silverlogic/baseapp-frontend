@@ -1,3 +1,5 @@
 export { default as PasswordInput } from './PasswordInput'
 export { default as TextInput } from './TextInput'
 export type * from './TextInput/types'
+export { default as SearchInput } from './SearchInput'
+export type * from './SearchInput/types'

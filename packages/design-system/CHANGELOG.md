@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.1.2
+
+### Minor Changes
+
+- Added roomslist components and illustrations
+
 ## 1.1.1
 
 ### Patch Changes
