@@ -18,7 +18,6 @@ const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
   const { data: products, isLoading: isLoadingProducts } = useListProducts()
   const { data: customer, isLoading: isLoadingCustomer } = useGetCustomer()
   const smDown = useResponsive('down', 'sm')
-  const isMobile = useResponsive('down', 'md')
 
   const monthlySubs = products?.filter(
     (product) => product.defaultPrice?.recurring?.interval === 'month',
@@ -58,7 +57,7 @@ const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
         width="100%"
         height="100%"
         flexWrap="wrap"
-        justifyContent={isMobile ? 'center' : 'flex-start'}
+        justifyContent="center"
       >
         {selectedProducts?.map((product) => {
           const isActive = customer?.subscriptions?.find(
