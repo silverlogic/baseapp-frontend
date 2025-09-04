@@ -18,7 +18,6 @@ export interface CheckoutProps {
 export interface CheckoutComponentProps {
   entityId: string
   checkoutProductId: string
-  stripePublishableKey: string
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
   ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
 }

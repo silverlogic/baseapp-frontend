@@ -15,7 +15,6 @@ import { CheckoutComponentProps } from './types'
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
   entityId,
   checkoutProductId,
-  stripePublishableKey,
   ConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
 }) => {
@@ -67,7 +66,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
 
   return (
     <Elements
-      stripe={getStripePromise(stripePublishableKey)}
+      stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}
       options={{ clientSecret: setupIntent?.clientSecret }}
     >
       <StyledContainer>

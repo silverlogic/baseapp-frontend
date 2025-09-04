@@ -15,10 +15,7 @@ import useStripeHook from '../hooks/useStripeHook'
 import { PRODUCT_API_KEY } from '../services/keys'
 import { getStripePromise } from '../utils/stripe'
 import PaymentMethodsItem from './components/PaymentMethodsItem'
-import {
-  PaymentMethodsManagementComponentProps,
-  PaymentMethodsManagementComponentWithElementsProps,
-} from './types'
+import { PaymentMethodsManagementComponentProps } from './types'
 
 const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentProps> = ({
   entityId,
@@ -218,9 +215,8 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 
 const PaymentMethodsManagementComponentWithElements = ({
   entityId,
-  stripePublishableKey,
-}: PaymentMethodsManagementComponentWithElementsProps) => (
-  <Elements stripe={getStripePromise(stripePublishableKey)}>
+}: PaymentMethodsManagementComponentProps) => (
+  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}>
     <PaymentMethodsManagementComponent entityId={entityId} />
   </Elements>
 )

@@ -34,7 +34,7 @@ import {
   RowFlexContainer,
   SubscriptionPlanContainer,
 } from './styled'
-import { SubscriptionManagementProps, SubscriptionManagementWithElementsProps } from './types'
+import { SubscriptionManagementProps } from './types'
 import { getChipLabelAndColorByStatus } from './utils'
 
 const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, router }) => {
@@ -250,12 +250,11 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   )
 }
 
-const SubscriptionManagementWithElements: FC<SubscriptionManagementWithElementsProps> = ({
-  stripePublishableKey,
+const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({
   entityId,
   router,
 }) => (
-  <Elements stripe={getStripePromise(stripePublishableKey)}>
+  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}>
     <SubscriptionManagement entityId={entityId} router={router} />
   </Elements>
 )
