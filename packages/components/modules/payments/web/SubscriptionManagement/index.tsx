@@ -46,7 +46,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
 
   const queryClient = useQueryClient()
   const invalidateCustomer = () => {
-    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(), entityId] })
+    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
   }
 
   const {
@@ -240,7 +240,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
             onClose={() => setIsCancelSubscriptionModalOpen(false)}
             onConfirm={() => {
               cancelSubscription()
-              queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(), entityId] })
+              queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
               setIsCancelSubscriptionModalOpen(false)
             }}
           />
