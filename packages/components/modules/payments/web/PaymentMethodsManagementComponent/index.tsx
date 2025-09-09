@@ -216,7 +216,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
 const PaymentMethodsManagementComponentWithElements = ({
   entityId,
 }: PaymentMethodsManagementComponentProps) => (
-  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}>
+  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}>
     <PaymentMethodsManagementComponent entityId={entityId} />
   </Elements>
 )

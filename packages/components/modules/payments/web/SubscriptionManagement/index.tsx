@@ -254,7 +254,7 @@ const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({
   entityId,
   router,
 }) => (
-  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}>
+  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}>
     <SubscriptionManagement entityId={entityId} router={router} />
   </Elements>
 )
