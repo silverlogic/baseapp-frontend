@@ -2,7 +2,8 @@ import { FC } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
-import { Grid, useMediaQuery } from '@mui/material'
+import { useMediaQuery } from '@mui/material'
+import Grid from '@mui/material/Unstable_Grid2'
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Product as ProductType } from '../types'
@@ -34,9 +35,18 @@ const ProductGallery: FC = () => {
   return (
     <>
       <GalleryContainer isMobile={isMobile}>
-        <Grid container spacing={1}>
+        <Grid container spacing={0} columnSpacing={0} rowSpacing={0}>
           {products.data.map((product: ProductType) => (
-            <Grid item xs={6} sm={4} md={4} key={product.id}>
+            <Grid
+              xs={6}
+              sm={4}
+              md={4}
+              key={product.id}
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              sx={{ padding: '8px', margin: '0px' }}
+            >
               <Product product={product} />
             </Grid>
           ))}

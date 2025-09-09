@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { Typography } from '@mui/material'
+import { Typography, useMediaQuery } from '@mui/material'
 
 import { Product as ProductType } from '../../types'
 import { formatPrice } from '../../utils'
@@ -9,8 +9,9 @@ import { Description, DescriptionContainer, Title } from './styled'
 
 const ProductDescription: FC<{ product: ProductType }> = ({ product }) => {
   const { setSelectedProduct } = useProductGalleryStore()
+  const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   return (
-    <DescriptionContainer onClick={() => setSelectedProduct(product)}>
+    <DescriptionContainer isMobile={isMobile} onClick={() => setSelectedProduct(product)}>
       <Title variant="caption" color="textPrimary">
         {product?.name ?? ''}
       </Title>

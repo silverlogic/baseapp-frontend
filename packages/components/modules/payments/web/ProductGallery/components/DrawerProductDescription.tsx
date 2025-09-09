@@ -5,16 +5,16 @@ import { Typography } from '@mui/material'
 import { Product as ProductType } from '../../types'
 import { formatPrice } from '../../utils'
 import { useProductGalleryStore } from '../store'
-import { DrawerDescriptionContainer, PackageContainer, StyledChip, Title } from './styled'
+import { DrawerDescriptionContainer, DrawerTitle, PackageContainer, StyledChip } from './styled'
 
 const DrawerProductDescription: FC = () => {
   const { selectedProduct } = useProductGalleryStore()
   const product: ProductType | null = selectedProduct
   return (
     <DrawerDescriptionContainer>
-      <Title sx={{ lineHeight: '28px' }} variant="h6" color="textPrimary">
+      <DrawerTitle sx={{ lineHeight: '28px' }} variant="h6" color="textPrimary">
         {product?.name ?? ''}
-      </Title>
+      </DrawerTitle>
       <PackageContainer>
         <Typography variant="subtitle2" color="textSecondary">
           {formatPrice(product?.defaultPrice?.unitAmount) ?? ''}

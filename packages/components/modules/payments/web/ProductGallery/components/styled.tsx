@@ -1,9 +1,11 @@
-import { Box, Button, Chip, Typography } from '@mui/material'
+import { Box, Button, Chip, Drawer, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
-export const CarouselContainer = styled(Box)(() => ({
-  width: 197,
-  height: 111,
+export const CarouselContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isMobile',
+})<{ isMobile?: boolean }>(({ isMobile }) => ({
+  width: isMobile ? 170 : 197,
+  height: isMobile ? 96 : 111,
   margin: '0 auto',
   position: 'relative',
   overflow: 'hidden',
@@ -93,11 +95,13 @@ export const Indicator = styled(Box, {
   transition: 'background-color 0.3s ease',
 }))
 
-export const DescriptionContainer = styled(Box)(() => ({
-  width: 197,
+export const DescriptionContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isMobile',
+})<{ isMobile?: boolean }>(({ isMobile }) => ({
+  width: isMobile ? 170 : 197,
   height: 106,
   display: 'flex',
-  padding: '12px 16px',
+  padding: isMobile ? '8px 12px' : '12px 16px',
   flexDirection: 'column',
   alignItems: 'flex-start',
   gap: '8px',
@@ -142,7 +146,10 @@ export const Title = styled(Typography)(() => ({
   WebkitLineClamp: 1,
 }))
 export const DrawerTitle = styled(Typography)(() => ({
-  lineHeight: '12px',
+  fontSize: '18px',
+  fontStyle: 'normal',
+  fontWeight: 700,
+  lineHeight: '155.55%',
 }))
 
 export const ButtonContainer = styled(Box)(() => ({
@@ -173,4 +180,13 @@ export const PackageContainer = styled(Box)(() => ({
 export const StyledChip = styled(Chip)(() => ({
   height: 24,
   fontSize: 13,
+}))
+
+export const StyledDrawer = styled(Drawer, {
+  shouldForwardProp: (prop) => prop !== 'isMobile',
+})<{ isMobile?: boolean }>(({ isMobile }) => ({
+  '& .MuiDrawer-paper': {
+    width: isMobile ? '100%' : 400,
+    boxSizing: 'border-box',
+  },
 }))

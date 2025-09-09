@@ -1,12 +1,14 @@
 import { FC } from 'react'
 
+import { useMediaQuery } from '@mui/material'
+
 import { useProductGalleryStore } from '../store'
 import { ImageCarouselProps } from '../types'
 import { CarouselContainer, ImageContainer } from './styled'
 
 const ImageCarousel: FC<ImageCarouselProps> = ({ product }) => {
   const { setSelectedProduct } = useProductGalleryStore()
-
+  const isMobile = useMediaQuery((theme: any) => theme.breakpoints.down('sm'))
   // TODO: enable carousel controls later when we decide how we want to handle uploading multiple images
 
   // const [activeIndex, setActiveIndex] = useState<number>(0)
@@ -19,7 +21,7 @@ const ImageCarousel: FC<ImageCarouselProps> = ({ product }) => {
   // }
 
   return (
-    <CarouselContainer>
+    <CarouselContainer isMobile={isMobile}>
       <ImageContainer src={product?.images[0]} onClick={() => setSelectedProduct(product)} />
       {/* TODO: enable carousel controls later when we decide how we want to handle uploading multiple images */}
       {/* <OverlayContainer>
