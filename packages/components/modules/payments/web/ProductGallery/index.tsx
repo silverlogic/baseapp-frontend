@@ -7,10 +7,10 @@ import Grid from '@mui/material/Unstable_Grid2'
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Product as ProductType } from '../types'
-import Product from './components/Product'
-import ProductDrawer from './components/ProductDrawer'
-import { GalleryContainer } from './components/styled'
+import Product from './Product'
+import ProductDrawer from './ProductDrawer'
 import { useProductGalleryStore } from './store'
+import { GalleryContainer } from './styled'
 
 const ProductGallery: FC = () => {
   const { setSelectedProduct, selectedProduct } = useProductGalleryStore()
