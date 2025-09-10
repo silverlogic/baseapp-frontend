@@ -60,7 +60,7 @@ catalogs:
 
   graphql:
     "@types/react-relay": 18.2.1
-    "@types/relay-runtime": 19.0.1 
+    "@types/relay-runtime": 19.0.1
     "@types/relay-test-utils": 19.0.0
     babel-plugin-relay: 19.0.0
     get-graphql-schema: 2.1.2
@@ -158,12 +158,6 @@ catalogs:
     prettier-plugin-tailwindcss: ^0.6.3
     prettier: ^3.3.3
 
-  dev-tools:
-    chalk: ^5.4.1
-    chokidar: ^4.0.3
-    execa: ^9.5.2
-
-
   components:
     framer-motion: ^11.5.4
     numbro: ^2.5.0
@@ -180,7 +174,6 @@ catalogs:
     react-dropzone: ^14.2.3
     react-lazy-load-image-component: ^1.6.2
     "@types/color": "^4.2.0"
-    chokidar-cli: ^3.0.0
 
   eslint-plugin:
     parcel: ^2.12.0

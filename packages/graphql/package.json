@@ -30,6 +30,7 @@
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/js-cookie": "catalog:",
     "@types/react": "catalog:react19",

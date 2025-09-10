@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "catalog:test",
     "@testing-library/react": "catalog:test",

@@ -3,6 +3,7 @@
 import { FC } from 'react'
 
 import { alpha, styled } from '@mui/material/styles'
+// @ts-ignore TODO: check typing
 import SimpleBar from 'simplebar-react'
 
 import { ScrollbarProps } from './types'

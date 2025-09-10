@@ -34,6 +34,7 @@ const Scrollbar = forwardRef<HTMLDivElement, ScrollbarProps>(({ children, sx, ..
   return (
     <StyledRootScrollbar>
       <StyledScrollbar
+        // @ts-ignore TODO: check typing
         scrollableNodeProps={{
           ref,
         }}
