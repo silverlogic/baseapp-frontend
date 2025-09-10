@@ -8,11 +8,17 @@ export const mockFetchError: MockFetchError = (url, options = {}) => {
     // - Full URL: http://api/v1/auth/login
     // - Relative URL: /auth/login
     // - Path only: auth/login
+    // - Undefined prefix: undefined/auth/login
     let normalizedRequestUrl = requestUrl
 
+    // Handle undefined prefix (when NEXT_PUBLIC_API_BASE_URL is undefined)
+    if (requestUrl.startsWith('undefined/')) {
+      normalizedRequestUrl = requestUrl.substring(9) // Remove 'undefined' prefix
+    }
+
     // Remove protocol and domain if present
-    if (requestUrl.includes('://')) {
-      const urlParts = requestUrl.split('/')
+    if (normalizedRequestUrl.includes('://')) {
+      const urlParts = normalizedRequestUrl.split('/')
       const pathStartIndex = urlParts.findIndex((_, index) => index > 2)
       normalizedRequestUrl = `/${urlParts.slice(pathStartIndex).join('/')}`
     }
