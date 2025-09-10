@@ -8,7 +8,7 @@ export interface MemberPersonalInformationProps extends BoxProps {
 }
 
 export interface MemberItemProps {
-  member: ProfileItemFragment$key | null | undefined
+  member: ProfileItemFragment$key | undefined
   memberRole: MemberItemFragment$data['role'] | 'owner'
   status: MemberItemFragment$data['status']
   avatarProps?: AvatarProps

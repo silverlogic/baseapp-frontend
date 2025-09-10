@@ -1,19 +1,19 @@
 import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { ProfileRoles } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
-import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
-import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
+import { ProfileRoles } from '../../../../../__generated__/ProfileUserRoleUpdateMutation.graphql'
+import { ProfileItemFragment, useProfileUserRoleUpdateMutation } from '../../../common'
+import { useRemoveMemberMutation } from '../../../common/graphql/mutations/ProfileUserRoleDelete'
+import MemberPersonalInfo from '../components/MemberPersonalInfo'
 import { MEMBER_ACTIONS, MEMBER_ROLES, MEMBER_STATUSES, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
-import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
+import { MemberItemContainer, Select } from './styled'
 import { MemberItemProps } from './types'
 
 const MemberItem: FC<MemberItemProps> = ({
@@ -33,7 +33,7 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const { currentProfile } = useCurrentProfile()
 
-  const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
+  const [changeUserRole, isChangingUserRole] = useProfileUserRoleUpdateMutation()
   const [removeMember, isRemovingMember] = useRemoveMemberMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
@@ -183,20 +183,13 @@ const MemberItem: FC<MemberItemProps> = ({
           </Button>
         }
       />
-      <MemberPersonalInformation isActive={status === MEMBER_STATUSES.active || false}>
-        <AvatarWithPlaceholder
-          width={avatarWidth}
-          height={avatarHeight}
-          src={memberProfile?.image?.url ?? ''}
-          alt="Profile avatar"
-          color="secondary"
-          {...avatarProps}
-        />
-        <Box>
-          <Typography variant="subtitle2">{memberProfile.name}</Typography>
-          <Typography variant="caption">{memberProfile?.urlPath?.path}</Typography>
-        </Box>
-      </MemberPersonalInformation>
+      <MemberPersonalInfo
+        avatarProps={avatarProps}
+        avatarWidth={avatarWidth}
+        avatarHeight={avatarHeight}
+        member={member}
+        status={status}
+      />
       {renderRoleButton()}
     </MemberItemContainer>
   )

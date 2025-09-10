@@ -1,9 +1,9 @@
-import { FC, useMemo, useTransition } from 'react'
+import { FC, useMemo, useState, useTransition } from 'react'
 
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useFragment, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
@@ -14,6 +14,7 @@ import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
+import AddMembersDialog from './components/AddMembersDialog'
 import { MembersListProps } from './types'
 
 const MembersList: FC<MembersListProps> = ({
@@ -24,6 +25,8 @@ const MembersList: FC<MembersListProps> = ({
   LoadingStateProps = {},
   membersContainerHeight = 400,
 }) => {
+  const [isAddMembersModalOpen, setIsAddMembersModalOpen] = useState(false)
+
   const [isPending, startTransition] = useTransition()
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
   const { data, loadNext, hasNext, isLoadingNext, refetch } = usePaginationFragment(
@@ -78,32 +81,6 @@ const MembersList: FC<MembersListProps> = ({
     />
   )
 
-  if (members.length === 0) {
-    return (
-      <>
-        <Searchbar
-          variant="outlined"
-          size="small"
-          isPending={isPending}
-          onChange={(e) => handleSearch(e.target.value)}
-          onClear={() => handleSearchClear()}
-          name="search"
-          control={control}
-          sx={{ mb: 4 }}
-        />
-        <Typography variant="subtitle2" mb={4}>
-          {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
-        </Typography>
-        <MemberItem
-          member={data}
-          memberRole="owner"
-          status={MEMBER_STATUSES.active}
-          searchQuery={watch('search')}
-        />
-      </>
-    )
-  }
-
   return (
     <>
       <Searchbar
@@ -116,21 +93,48 @@ const MembersList: FC<MembersListProps> = ({
         control={control}
         sx={{ mb: 4 }}
       />
-      <Typography variant="subtitle2" mb={4}>
-        {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
-      </Typography>
-      <Virtuoso
-        style={{ height: membersContainerHeight }}
-        data={members}
-        itemContent={(_index, member) => member && renderMemberItem(member, _index)}
-        components={{
-          Footer: renderLoadingState,
-        }}
-        endReached={() => {
-          if (hasNext) {
-            loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
-          }
-        }}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
+        <Typography variant="subtitle2">
+          {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
+        </Typography>
+        <Button
+          variant="contained"
+          color="inherit"
+          size="small"
+          sx={{ width: 'auto' }}
+          onClick={() => setIsAddMembersModalOpen(true)}
+        >
+          Add members
+        </Button>
+      </Box>
+      {resultsCount === 1 && isOwnerVisible ? (
+        <MemberItem
+          member={data}
+          memberRole="owner"
+          status={MEMBER_STATUSES.active}
+          searchQuery={watch('search')}
+        />
+      ) : (
+        <Virtuoso
+          style={{ height: membersContainerHeight }}
+          data={members}
+          itemContent={(_index, member) => member && renderMemberItem(member, _index)}
+          components={{
+            Footer: renderLoadingState,
+          }}
+          endReached={() => {
+            if (hasNext) {
+              loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
+            }
+          }}
+        />
+      )}
+      <AddMembersDialog
+        isOpen={isAddMembersModalOpen}
+        onClose={() => setIsAddMembersModalOpen(false)}
+        profileId={ownerProfile?.id}
+        refetchMembers={refetch}
+        LoadingStateProps={LoadingStateProps}
       />
     </>
   )

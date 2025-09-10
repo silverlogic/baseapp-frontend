@@ -829,8 +829,9 @@ type Mutation {
   profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
   profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
-  profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
-  profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
+  profileUserRoleCreate(input: ProfileUserRoleCreateInput!): ProfileUserRoleCreatePayload
+  profileUserRoleUpdate(input: ProfileUserRoleUpdateInput!): ProfileUserRoleUpdatePayload
+  profileUserRoleDelete(input: ProfileUserRoleDeleteInput!): ProfileUserRoleDeletePayload
 }
 
 """An object with an ID"""
@@ -1377,20 +1378,6 @@ interface ProfileInterface {
   profile: Profile
 }
 
-input ProfileRemoveMemberInput {
-  profileId: ID!
-  userId: ID!
-  clientMutationId: String
-}
-
-type ProfileRemoveMemberPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
 """An enumeration."""
 enum ProfileRoles {
   """admin"""
@@ -1476,6 +1463,37 @@ type ProfileUserRoleConnection {
   edgeCount: Int
 }
 
+input ProfileUserRoleCreateInput {
+  profileId: ID!
+  usersIds: [ID]!
+  roleType: ProfileRoles = null
+  emailsToInvite: [String]
+  exclude: [String]
+  clientMutationId: String
+}
+
+type ProfileUserRoleCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRoles: [ProfileUserRole]
+  clientMutationId: String
+}
+
+input ProfileUserRoleDeleteInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type ProfileUserRoleDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
 """A Relay edge containing a `ProfileUserRole` and its cursor."""
 type ProfileUserRoleEdge {
   """The item at the end of the edge"""
@@ -1483,6 +1501,22 @@ type ProfileUserRoleEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+input ProfileUserRoleUpdateInput {
+  profileId: ID!
+  userId: ID!
+  roleType: ProfileRoles = null
+  clientMutationId: String
+  exclude: [String]
+}
+
+type ProfileUserRoleUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
 }
 
 type Query {
@@ -1794,21 +1828,6 @@ type ReportTypeEdge {
   cursor: String!
 }
 
-input RoleUpdateInput {
-  profileId: ID!
-  userId: ID!
-  roleType: ProfileRoles = null
-  clientMutationId: String
-}
-
-type RoleUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileUserRole: ProfileUserRole
-  clientMutationId: String
-}
-
 type Subscription {
   chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage
   chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
@@ -1963,4 +1982,3 @@ enum VisibilityTypes {
   """internal"""
   INTERNAL
 }
-

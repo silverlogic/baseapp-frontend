@@ -1,0 +1,67 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/AutoCompleteField" />
+
+# Component Documentation
+
+## AutoCompleteField
+
+- **Purpose**: An autocomplete input component that provides suggestions as the user types.
+- **Expected Behavior**: Renders a text input field that shows a dropdown list of options based on user input, with support for single/multiple selection and free text entry.
+
+## Use Cases
+
+- **Current Usage**:
+  - Search with suggestions
+  - Form field with predefined options
+  - Tag selection
+  - User selection with search
+
+## Props
+
+- **options** (Array): Array of options to display in the dropdown
+- **isPending** (boolean): Shows loading state when fetching options
+- **onClear** (function): Callback fired when the clear button is clicked
+- **multiple** (boolean): Allow multiple selection
+- **freeSolo** (boolean): Allow free text input not limited to options
+- **renderInput** (function): Custom render function for the input field
+- **...AutocompleteProps**: All other props are passed to the underlying MUI Autocomplete component
+
+## Notes
+
+- **Related Components**:
+  - TextField: Used as the base input component via renderInput
+  - withController: HOC that provides form integration with debouncing
+  - MUI Autocomplete: The underlying autocomplete component
+
+## Example Usage
+
+```javascript
+import { AutoCompleteField } from '@baseapp-frontend/design-system/web'
+import { TextField } from '@mui/material'
+
+const MyComponent = () => {
+  const [value, setValue] = useState(null)
+  const options = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+  ]
+
+  return (
+    <AutoCompleteField
+      options={options}
+      isPending={false}
+      value={value}
+      onChange={(event, newValue) => setValue(newValue)}
+      renderInput={(params) => (
+        <TextField 
+          {...params} 
+          label="Select an option"
+          placeholder="Type to search..."
+        />
+      )}
+    />
+  )
+}
+export default MyComponent
+```
