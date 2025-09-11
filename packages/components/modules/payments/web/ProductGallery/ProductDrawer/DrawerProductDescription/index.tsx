@@ -2,10 +2,11 @@ import { FC } from 'react'
 
 import { Typography } from '@mui/material'
 
-import { Product as ProductType } from '../../types'
-import { formatPrice } from '../../utils'
-import { useProductGalleryStore } from '../store'
-import { DrawerDescriptionContainer, DrawerTitle, PackageContainer, StyledChip } from './styled'
+import { Product as ProductType } from '../../../types'
+import { formatPrice } from '../../../utils'
+import { useProductGalleryStore } from '../../store'
+import { DrawerTitle } from '../styled'
+import { DrawerDescriptionContainer, PackageContainer, StyledChip } from './styled'
 
 const DrawerProductDescription: FC = () => {
   const { selectedProduct } = useProductGalleryStore()

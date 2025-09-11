@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { useProductGalleryStore } from '../store'
+import { useProductGalleryStore } from '../../store'
 import { DrawerCarouselContainer, DrawerImageContainer } from './styled'
 
 const DrawerCarousel: FC = () => {

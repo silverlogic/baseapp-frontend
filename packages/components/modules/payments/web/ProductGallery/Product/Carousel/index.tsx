@@ -2,8 +2,8 @@ import { FC } from 'react'
 
 import { useMediaQuery } from '@mui/material'
 
-import { useProductGalleryStore } from '../store'
-import { ImageCarouselProps } from '../types'
+import { useProductGalleryStore } from '../../store'
+import { ImageCarouselProps } from '../../types'
 import { CarouselContainer, ImageContainer } from './styled'
 
 const ImageCarousel: FC<ImageCarouselProps> = ({ product }) => {

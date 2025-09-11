@@ -2,9 +2,9 @@ import { FC } from 'react'
 
 import { Typography, useMediaQuery } from '@mui/material'
 
-import { Product as ProductType } from '../../types'
-import { formatPrice } from '../../utils'
-import { useProductGalleryStore } from '../store'
+import { Product as ProductType } from '../../../types'
+import { formatPrice } from '../../../utils'
+import { useProductGalleryStore } from '../../store'
 import { Description, DescriptionContainer, Title } from './styled'
 
 const ProductDescription: FC<{ product: ProductType }> = ({ product }) => {
