@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactElement } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
@@ -6,7 +6,7 @@ import { PaymentMethod } from '../../types'
 
 const PaymentMethodDisplay: FC<{
   pm: PaymentMethod
-  getCardIcon: (brand?: string) => JSX.Element
+  getCardIcon: (brand?: string) => ReactElement
 }> = ({ pm, getCardIcon }) => (
   <Box display="flex" alignItems="center">
     <Box mr={2}>{getCardIcon(pm?.card?.brand)}</Box>

@@ -24,10 +24,10 @@ If one of the apps wants to consume any package feature, we could simply add tha
 And then just import the feature needed:
 
 ```jsx
-import { useUser } from '@baseapp-frontend/authentication'
+import { useJWTUser } from '@baseapp-frontend/authentication'
 
 export default function Docs() {
-  const {user} = useUser()
+  const {user} = useJWTUser()
 
   return (
     <div>
@@ -103,6 +103,7 @@ pnpm dev
 Each package in our monorepo enters a persistent watch mode.
 
 For example, when running dev mode for `@baseapp-frontend/components`, you might see output similar to the following:
+
 ```bash
 [@baseapp-frontend/components] Waiting for other packages to start...  # wait for other dependencies to be build
 [@baseapp-frontend/components] Starting build process...               # start the build process
@@ -122,6 +123,7 @@ For example, when running dev mode for `@baseapp-frontend/components`, you might
 [@baseapp-frontend/components] Syncing dist folder to consumer app...  # sync the build output with the consumer app (baseapp-frontend-template)
 [@baseapp-frontend/components] Sync completed successfully.
 ```
+
 **Disclaimer**
 
 The dev mode is a powerful tool that makes live testing of changes very convenient by automatically rebuilding packages as you edit files.
@@ -131,7 +133,6 @@ However, note that for packages like `@baseapp-frontend/design-system` and `@bas
 This continuous rebuild may lead to increased memory consumption and CPU usage if you’re making a lot of simultaneous changes.
 
 It is recommended to use this live mode only at appropriate times rather than throughout your entire development phase.
-
 
 ## **PNPM Catalog Overview**
 
@@ -143,23 +144,23 @@ Make sure to keep [`@baseapp-frontend's catalog`](https://github.com/silverlogic
 
 ### **Remove Catalog Entries**:
 
-  Before using a package from GitHub, remove its catalog entry. This is necessary because pnpm doesn't handle catalogs well when using non-published versions. To remove the catalogs for all packages, run the following command:
+Before using a package from GitHub, remove its catalog entry. This is necessary because pnpm doesn't handle catalogs well when using non-published versions. To remove the catalogs for all packages, run the following command:
 
-  ```bash
-  pnpm i # make sure the dependencies are installed
-  pnpm replace-catalogs
-  ```
+```bash
+pnpm i # make sure the dependencies are installed
+pnpm replace-catalogs
+```
 
 ### **Restore Catalog Entries**:
 
-  To restore the catalog entries to their original state, run the following command:
+To restore the catalog entries to their original state, run the following command:
 
-  ```bash
-  pnpm i # make sure the dependencies are installed
-  pnpm restore-catalogs
-  ```
+```bash
+pnpm i # make sure the dependencies are installed
+pnpm restore-catalogs
+```
 
-  This will update all package.json files to include catalog entries again.
+This will update all package.json files to include catalog entries again.
 
 ## **Using Package Versions from GitHub**
 
@@ -169,45 +170,45 @@ If you need to install a package version that hasn't been published yet, follow 
 
 1. **Remove Catalog Entries**:
 
-  Refer to the (Remove Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#remove-catalog-entries] section above to temporarily remove catalogs for the relevant packages.
+Refer to the (Remove Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#remove-catalog-entries] section above to temporarily remove catalogs for the relevant packages.
 
 2. **Commit and Push**:
 
-  After making the change, commit and push your code. This makes it easy to undo once the package has been published.
+After making the change, commit and push your code. This makes it easy to undo once the package has been published.
 
-  ```bash
-  git commit -m "Temporarily remove catalogs to use GitHub version"
-  ```
+```bash
+git commit -m "Temporarily remove catalogs to use GitHub version"
+```
 
 3. **Copy the Commit Hash**:
 
-  Push the code to GitHub and copy the last commit hash. You’ll need this hash to point your consumer app to the correct version of the package.   
+Push the code to GitHub and copy the last commit hash. You’ll need this hash to point your consumer app to the correct version of the package.
 
 4. **Update Consumer App**:
 
-  In the consumer app (the app that will use the non-published version), update the package entry to the GitHub source. Replace `<commit-hash>` with the actual commit hash you copied:
+In the consumer app (the app that will use the non-published version), update the package entry to the GitHub source. Replace `<commit-hash>` with the actual commit hash you copied:
 
-  ```json
-  "@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
-  ```
+```json
+"@baseapp-frontend/components": "git+https://github.com/silverlogic/baseapp-frontend.git#<commit-hash>&path:packages/components",
+```
 
 5. **Restore Catalog Entries and Merge**:
 
-  Once you’ve finished testing or using the non-published version, you can restore the catalog entries in one of two ways:
+Once you’ve finished testing or using the non-published version, you can restore the catalog entries in one of two ways:
 
-  - Option 1: Run the `restore-catalogs` script
+- Option 1: Run the `restore-catalogs` script
 
-    Refer to the (Restore Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#restore-catalog-entries] section to reapply catalog entries.
-  
-  - Option 2: Revert the Commit
+  Refer to the (Restore Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#restore-catalog-entries] section to reapply catalog entries.
 
-    Revert the commit that removed the catalogs to restore them to their previous state:
+- Option 2: Revert the Commit
 
-    ```bash
-    git revert <commit-hash>
-    ```
+  Revert the commit that removed the catalogs to restore them to their previous state:
 
-  Both options will effectively undo the catalog removal, restore the original entries, and allow you to proceed with committing and merging the changes.
+  ```bash
+  git revert <commit-hash>
+  ```
+
+Both options will effectively undo the catalog removal, restore the original entries, and allow you to proceed with committing and merging the changes.
 
 ## Packages Versioning and Publishing
 
@@ -246,6 +247,7 @@ Each component and page should have a corresponding Storybook story that showcas
 - **Conciseness**: Be thorough but concise, focusing on the most relevant states and interactions.
 
 **After creating the story**:
+
 - Add the story name to `storySort` in the `preview.ts` file to ensure it appears in the correct order. If you’re unsure where to add this, please ask a COP member for assistance.
 
 ### 2. Add MDX Documentation

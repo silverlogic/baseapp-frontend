@@ -16,7 +16,7 @@ const useChangePassword = ({
   enableFormApiErrors = true,
   options = {},
 }: UseChangePassword) => {
-  const form = useForm({
+  const form = useForm<ChangePasswordForm>({
     defaultValues,
     resolver: zodResolver(validationSchema),
     mode: 'onChange',
@@ -50,8 +50,7 @@ const useChangePassword = ({
   return {
     form: {
       ...form,
-      // TODO: improve types
-      handleSubmit: form.handleSubmit(handleSubmit) as any,
+      handleSubmit: form.handleSubmit(handleSubmit),
     },
     mutation,
   }

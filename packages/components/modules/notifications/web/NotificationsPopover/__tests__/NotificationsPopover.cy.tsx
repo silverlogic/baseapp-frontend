@@ -14,15 +14,17 @@ import {
 
 describe('Notifications', () => {
   it('should render show notification drawer with empty state', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
 
     cy.viewport(1024, 768)
 
-    cy.mount(<NotificationsPopoverForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({
-        data: unreadNotificationsEmptyMockData,
-      })
+    queueOperationResolver({
+      queryName: 'NotificationsPopoverQuery',
+      data: unreadNotificationsEmptyMockData,
     })
+
+    cy.mount(<NotificationsPopoverForTesting environment={environment} />)
 
     cy.step('See the notification bell and icon')
     cy.findByRole('presentation').should('not.exist')
@@ -55,14 +57,16 @@ describe('Notifications', () => {
   })
 
   it('should render notifications and be able to interact with it', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
 
     cy.viewport('iphone-x')
-    cy.mount(<NotificationsPopoverForTesting environment={environment} />).then(() => {
-      resolveMostRecentOperation({
-        data: unreadNotificationsMockData,
-      })
+
+    queueOperationResolver({
+      queryName: 'NotificationsPopoverQuery',
+      data: unreadNotificationsMockData,
     })
+    cy.mount(<NotificationsPopoverForTesting environment={environment} />)
 
     cy.step('See the notification bell and icon')
     cy.findByRole('presentation').should('not.exist')
@@ -138,7 +142,13 @@ describe('Notifications', () => {
   })
 
   it('should render custom components for list', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'NotificationsPopoverQuery',
+      data: unreadNotificationsMockData,
+    })
 
     cy.mount(
       <NotificationsPopoverForTesting
@@ -172,7 +182,13 @@ describe('Notifications', () => {
   })
 
   it('should render custom components for item', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'NotificationsPopoverQuery',
+      data: unreadNotificationsMockData,
+    })
 
     cy.mount(
       <NotificationsPopoverForTesting
@@ -181,11 +197,7 @@ describe('Notifications', () => {
           NotificationItem: CustomNotificationItemForTesting,
         }}
       />,
-    ).then(() => {
-      resolveMostRecentOperation({
-        data: unreadNotificationsMockData,
-      })
-    })
+    )
     cy.step('See the notification bell and icon')
     cy.findByRole('presentation').should('not.exist')
     cy.findByRole('button', { name: /see notifications/i })
@@ -217,7 +229,13 @@ describe('Notifications', () => {
   })
 
   it('should render custom components for list anditem', () => {
-    const { environment, resolveMostRecentOperation } = createTestEnvironment()
+    const { environment, resolveMostRecentOperation, queueOperationResolver } =
+      createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'NotificationsPopoverQuery',
+      data: unreadNotificationsMockData,
+    })
 
     cy.mount(
       <NotificationsPopoverForTesting
@@ -227,11 +245,7 @@ describe('Notifications', () => {
           NotificationItem: CustomNotificationItemForTesting,
         }}
       />,
-    ).then(() => {
-      resolveMostRecentOperation({
-        data: unreadNotificationsMockData,
-      })
-    })
+    )
     cy.step('See the notification bell and icon')
     cy.findByRole('presentation').should('not.exist')
     cy.findByRole('button', { name: /see notifications/i })

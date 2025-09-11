@@ -1,3 +1,5 @@
+'use client'
+
 import { setItemAsync } from 'expo-secure-store'
 
 import { setCookie } from '../../cookie'

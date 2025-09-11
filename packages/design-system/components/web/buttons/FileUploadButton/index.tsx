@@ -10,7 +10,7 @@ import { Controller } from 'react-hook-form'
 import { FileUploadButtonProps } from './types'
 
 const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
-  const fileRef = useRef<HTMLInputElement>()
+  const fileRef = useRef<HTMLInputElement | undefined>(undefined)
   const { sendToast } = useNotification()
   const { accept, maxSize, ...fileUploadProps } = props
   const { control, label, name, setFile } = fileUploadProps

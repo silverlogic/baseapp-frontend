@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import type { RegisterRequest } from '../../../../types/auth'
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
 
@@ -45,7 +46,7 @@ describe('useSignUp', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -83,7 +84,7 @@ describe('useSignUp', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -118,7 +119,7 @@ describe('useSignUp', () => {
           useNameField: true,
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
     result.current.form.handleSubmit()
@@ -150,7 +151,7 @@ describe('useSignUp', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -185,6 +186,7 @@ describe('useSignUp', () => {
         useSignUp<CustomRegisterRequest>({
           formOptions: {
             defaultValues: customDefaultValues,
+            // @ts-ignore TODO: Fix typing for zodResolver
             resolver: zodResolver(customValidationSchema),
           },
           useNameField: true,
@@ -195,7 +197,7 @@ describe('useSignUp', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 

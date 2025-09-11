@@ -9,6 +9,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useLogin from '../index'
 
 describe('useLogin', () => {
@@ -51,7 +52,7 @@ describe('useLogin', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -89,7 +90,7 @@ describe('useLogin', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 
@@ -130,7 +131,7 @@ describe('useLogin', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 

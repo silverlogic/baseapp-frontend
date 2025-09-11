@@ -1,5 +1,46 @@
 # @baseapp-frontend/design-system
 
+## 1.0.22
+
+### Patch Changes
+
+- Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
+
+## 1.0.21
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+
+## 1.0.20
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+
+## 1.0.19
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
+## 1.0.18
+
+### Patch Changes
+
+- Moved `useUISettings` hook from the template to this package
+- Fixed/ignored some typing issues
+- Updated several dependencies, including `react`, and `zustand`to the latest versions
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.0
+
+## 1.0.17
+
+### Patch Changes
+
+- Add dropzone customization props
+
 ## 1.0.16
 
 ### Patch Changes

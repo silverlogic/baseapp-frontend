@@ -106,12 +106,13 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
 
   useEffect(() => {
     if (profile) {
-      updateProfileIfActive({
+      const newProfile = {
         id: profile.id,
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
         image: profile.image?.url ?? null,
-      })
+      }
+      updateProfileIfActive(newProfile)
     }
   }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
@@ -128,6 +129,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
     <Card>
       <CardContent>
         <form
+          // @ts-ignore TODO: check typing issue with zodResolver
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-rows-[min-content_auto_auto_auto_auto] gap-8"
         >
@@ -219,7 +221,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                   alt="Home Banner"
                   width={868}
                   height={
-                    290 /* Some css height: auto takes precedence, 
+                    290 /* Some css height: auto takes precedence,
                     so also set as style below */
                   }
                   className="overflow-hidden rounded-lg"

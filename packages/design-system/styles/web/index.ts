@@ -1,5 +1,3 @@
-'use client'
-
 // exports web design-system styles
 
 export * from './breakpoint'

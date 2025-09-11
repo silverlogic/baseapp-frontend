@@ -104,7 +104,6 @@ The process for overriding and creating new blocks is quite similar. The baseapp
 
 1. Create the component inside `apps/web/components/wagtail/blocks/`. This ensures everything related to Wagtail is grouped within a Wagtail folder.
 2. The component interface must extend the `PageBodyItem` interface. Typically, two interfaces are needed. Using `RichTextBlock` as an example:
-
    - `RichTextBlock` extends `PageBodyItem`, defines the block type value, and is used by the blocks factory.
    - `RichTextBlockProps` is the second interface, extending `RichTextBlock` and omitting the type from props. This is the interface used by the component itself.
 

@@ -1,16 +1,15 @@
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { getAccessToken } from '../getAccessToken'
-import { getToken } from '../getToken'
 import { removeTokenAsync } from '../removeTokenAsync'
 import { setTokenAsync } from '../setTokenAsync'
+import { RefreshAccessTokenParams } from './types'
 
-export const refreshAccessToken = async (
+export const refreshAccessToken = async ({
+  refreshToken,
   accessKeyName = ACCESS_KEY_NAME,
   refreshKeyName = REFRESH_KEY_NAME,
-) => {
+}: RefreshAccessTokenParams) => {
   try {
-    const refreshToken = getToken(refreshKeyName) ?? ''
-
     const accessToken = await getAccessToken(refreshToken)
 
     await setTokenAsync(accessKeyName, accessToken, {
