@@ -39,7 +39,7 @@ const useStripeHook = () => {
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
-      mutationKey: [SETUP_INTENT_API_KEY.get(), entityId],
+      mutationKey: [SETUP_INTENT_API_KEY.get(entityId)],
     })
 
   const useListPaymentMethods = (entityId: string) =>
@@ -124,6 +124,12 @@ const useStripeHook = () => {
       mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
     })
 
+  const useListProducts = () =>
+    useQuery({
+      queryKey: ['useListProducts'],
+      queryFn: () => StripeApi.listProducts(),
+    })
+
   const useGetProduct = (productId: string) =>
     useQuery({
       queryKey: [PRODUCT_API_KEY.get(productId)],
@@ -145,7 +151,7 @@ const useStripeHook = () => {
 
   const useGetSubscription = (subscriptionId: string) =>
     useQuery({
-      queryKey: [SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      queryKey: [SUBSCRIPTION_API_KEY.get(subscriptionId)],
       queryFn: () => StripeApi.getSubscription(subscriptionId),
       enabled: !!subscriptionId,
     })
@@ -160,7 +166,7 @@ const useStripeHook = () => {
       onError: () => {
         sendToast(`Failed to cancel subscription`, { type: 'error' })
       },
-      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(subscriptionId)],
     })
 
   const useUpdateSubscription = (
@@ -185,7 +191,7 @@ const useStripeHook = () => {
         sendToast(`Failed to update subscription: ${error.message}`, { type: 'error' })
         options?.onError?.(error, variables, context)
       },
-      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(subscriptionId)],
     })
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
@@ -202,6 +208,7 @@ const useStripeHook = () => {
     useDeletePaymentMethod,
     useSetupIntent,
     useConfirmCardPayment,
+    useListProducts,
     useGetProduct,
     useCreationSubscription,
     useGetSubscription,
