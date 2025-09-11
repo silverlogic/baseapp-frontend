@@ -14,7 +14,7 @@ import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
-import AddMembersDialog from './components/AddMembersDialog'
+import AddMembersDialog from './AddMembersDialog'
 import { MembersListProps } from './types'
 
 const MembersList: FC<MembersListProps> = ({

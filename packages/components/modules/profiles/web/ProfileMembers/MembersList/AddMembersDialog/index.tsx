@@ -26,9 +26,10 @@ import { UsersListPaginationQuery } from '../../../../common/graphql/queries/Use
 import MemberPersonalInfo from '../../components/MemberPersonalInfo'
 import { MEMBER_STATUSES } from '../../constants'
 import { UserListItemContainer } from '../../styled'
-import UserCard from './UserCard'
-import VirtuosoListBox from './VirtuosoListBox'
-import { AddMembersDialogProps, NewEmail, User } from './types'
+import UserCard from '../UserCard'
+import VirtuosoListBox from '../VirtuosoListBox'
+import { EmailListItemContainer } from '../styled'
+import { AddMembersDialogProps, NewEmail, User } from '../types'
 
 const AddMembersDialog: FC<AddMembersDialogProps> = ({
   isOpen,
@@ -161,23 +162,14 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
         }}
       >
         {isNewEmail ? (
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: '100%',
-            }}
-          >
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                {option.email}
-              </Typography>
-            </Box>
+          <EmailListItemContainer>
+            <Typography variant="body2" color="text.secondary">
+              {option.email}
+            </Typography>
             <IconButton>
               <AddIcon />
             </IconButton>
-          </Box>
+          </EmailListItemContainer>
         ) : (
           <MemberPersonalInfo
             member={(option as User)?.profile ?? undefined}

@@ -9,7 +9,7 @@ import { ProfileItemFragment$key } from '../../../../../../__generated__/Profile
 import MemberPersonalInfo from '../../components/MemberPersonalInfo'
 import { MEMBER_STATUSES } from '../../constants'
 import { MemberCardContainer, MemberPersonalInformation } from '../../styled'
-import { UserCardProps } from './types'
+import { UserCardProps } from '../types'
 
 const UserCard: FC<UserCardProps> = ({ user, onRemove, avatarProps = {} }) => {
   if (!user) return null
