@@ -40,3 +40,13 @@ export interface UserCardProps {
 export interface UserListItemContainerProps extends ListItemProps {
   isEmpty?: boolean
 }
+
+export type VirtuosoListboxFunction = (
+  props: any,
+  autocompleteOptions: (User | NewEmail)[],
+  handleItemSelection: (option: User | NewEmail) => void,
+  renderLoadingState: () => React.ReactNode,
+  hasNext: boolean,
+  isLoadingNext: boolean,
+  loadNext: (count: number) => void,
+) => React.ReactElement

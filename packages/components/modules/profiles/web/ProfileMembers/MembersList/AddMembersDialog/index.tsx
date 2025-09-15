@@ -130,6 +130,12 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
     })
   }
 
+  const handleClose = () => {
+    onClose()
+    setSelectedUsers([])
+    setSelectedEmails([])
+  }
+
   const renderLoadingState = () => {
     if (!isLoadingNext) return null
 
@@ -155,7 +161,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   const CustomVirtuosoListbox = (props: any) =>
     VirtuosoListbox(
       props,
-      autocompleteOptions,
+      autocompleteOptions as (User | NewEmail)[],
       handleItemSelection,
       renderLoadingState,
       hasNext,
@@ -166,10 +172,10 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   if (!isOpen) return null
 
   return (
-    <Dialog open={isOpen} onClose={onClose} maxWidth="xs">
+    <Dialog open={isOpen} onClose={handleClose} maxWidth="xs">
       <AddMembersDialogHeader>
-        <Typography variant="h6">Add Members 6</Typography>
-        <IconButton aria-label="close" onClick={onClose}>
+        <Typography variant="h6">Add Members</Typography>
+        <IconButton aria-label="close" onClick={handleClose}>
           <CloseIcon />
         </IconButton>
       </AddMembersDialogHeader>

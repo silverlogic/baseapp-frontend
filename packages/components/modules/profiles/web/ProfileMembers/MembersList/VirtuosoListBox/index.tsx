@@ -8,16 +8,16 @@ import { Virtuoso } from 'react-virtuoso'
 import MemberPersonalInfo from '../../components/MemberPersonalInfo'
 import { MEMBER_STATUSES } from '../../constants'
 import { EmailListItemContainer, UserListItemContainer } from '../styled'
-import { NewEmail, User } from '../types'
+import { NewEmail, User, VirtuosoListboxFunction } from '../types'
 
-const VirtuosoListbox = (
-  props: any,
-  autocompleteOptions: any[],
-  handleItemSelection: (option: User | NewEmail) => void,
-  renderLoadingState: () => React.ReactNode,
-  hasNext: boolean,
-  isLoadingNext: boolean,
-  loadNext: (count: number) => void,
+const VirtuosoListbox: VirtuosoListboxFunction = (
+  props,
+  autocompleteOptions,
+  handleItemSelection,
+  renderLoadingState,
+  hasNext,
+  isLoadingNext,
+  loadNext,
 ) => {
   const { children, ...other } = props
   let options = React.Children.toArray(children)
@@ -81,6 +81,7 @@ const VirtuosoListbox = (
             loadNext(10)
           }
         }}
+        useWindowScroll={false}
       />
     </div>
   )
