@@ -41,7 +41,7 @@ export interface UserListItemContainerProps extends ListItemProps {
   isEmpty?: boolean
 }
 
-export type VirtuosoListboxFunction = (
+export type VirtuosoListboxProps = (
   props: any,
   autocompleteOptions: (User | NewEmail)[],
   handleItemSelection: (option: User | NewEmail) => void,

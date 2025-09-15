@@ -95,7 +95,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
       return [{ empty: true }]
     }
     return filtered
-  }, [filteredUsers, searchQuery])
+  }, [filteredUsers])
 
   const isEmailAlreadySelected = (currentEmail: NewEmail) =>
     selectedEmails.some((selectedEmail) => selectedEmail?.email === currentEmail?.email)
@@ -174,7 +174,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   return (
     <Dialog open={isOpen} onClose={handleClose} maxWidth="xs">
       <AddMembersDialogHeader>
-        <Typography variant="h6">Add Members</Typography>
+        <Typography variant="h6">Add Members 9</Typography>
         <IconButton aria-label="close" onClick={handleClose}>
           <CloseIcon />
         </IconButton>
