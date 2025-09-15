@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.1
+
+### Patch Changes
+
+- User Deletion - Remove User Info from Messages
+
 ## 1.4.0
 
 ### Minor Changes
