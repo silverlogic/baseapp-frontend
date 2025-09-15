@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { LoadingStateProps } from '@baseapp-frontend/design-system/components/web/displays'
 
-import { AvatarProps } from '@mui/material'
+import { AvatarProps, ListItemProps } from '@mui/material'
 import { RefetchFnDynamic } from 'react-relay'
 
 import { UserMembersListFragment$key } from '../../../../../__generated__/UserMembersListFragment.graphql'
@@ -35,4 +35,8 @@ export interface UserCardProps {
   user: User | NewEmail
   onRemove: () => void
   avatarProps?: AvatarProps
+}
+
+export interface UserListItemContainerProps extends ListItemProps {
+  isEmpty?: boolean
 }

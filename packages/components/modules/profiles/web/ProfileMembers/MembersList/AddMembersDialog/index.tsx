@@ -1,7 +1,7 @@
 import React, { FC, useMemo, useRef, useState, useTransition } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
-import { AddIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { AutoCompleteField } from '@baseapp-frontend/design-system/components/web/inputs'
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -23,12 +23,9 @@ import { UsersListPaginationQuery as UsersListPaginationQueryType } from '../../
 import { UsersListFragment } from '../../../../common'
 import { useProfileUserRoleCreateMutation } from '../../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { UsersListPaginationQuery } from '../../../../common/graphql/queries/UsersList'
-import MemberPersonalInfo from '../../components/MemberPersonalInfo'
-import { MEMBER_STATUSES } from '../../constants'
-import { UserListItemContainer } from '../../styled'
 import UserCard from '../UserCard'
-import VirtuosoListBox from '../VirtuosoListBox'
-import { EmailListItemContainer } from '../styled'
+import VirtuosoListbox from '../VirtuosoListbox'
+import { AddMembersDialogHeader } from '../styled'
 import { AddMembersDialogProps, NewEmail, User } from '../types'
 
 const AddMembersDialog: FC<AddMembersDialogProps> = ({
@@ -94,6 +91,9 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
     if (inputValue.includes('@') && filtered.length === 0) {
       return [{ email: inputValue, isNewEmail: true }]
     }
+    if (filtered.length === 0) {
+      return [{ empty: true }]
+    }
     return filtered
   }, [filteredUsers, searchQuery])
 
@@ -152,39 +152,11 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
     }
   }
 
-  const renderItem = (index: number, option: User | NewEmail) => {
-    const isNewEmail = 'isNewEmail' in option
-    return (
-      <UserListItemContainer
-        key={isNewEmail ? option.email : (option as User).id}
-        onClick={() => {
-          handleItemSelection(option)
-        }}
-      >
-        {isNewEmail ? (
-          <EmailListItemContainer>
-            <Typography variant="body2" color="text.secondary">
-              {option.email}
-            </Typography>
-            <IconButton>
-              <AddIcon />
-            </IconButton>
-          </EmailListItemContainer>
-        ) : (
-          <MemberPersonalInfo
-            member={(option as User)?.profile ?? undefined}
-            status={(option as User)?.isActive ? MEMBER_STATUSES.active : MEMBER_STATUSES.inactive}
-          />
-        )}
-      </UserListItemContainer>
-    )
-  }
-
-  const CustomVirtuosoListBox = (props: any) =>
-    VirtuosoListBox(
+  const CustomVirtuosoListbox = (props: any) =>
+    VirtuosoListbox(
       props,
       autocompleteOptions,
-      renderItem,
+      handleItemSelection,
       renderLoadingState,
       hasNext,
       isLoadingNext,
@@ -193,16 +165,16 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
 
   if (!isOpen) return null
 
+  console.log('autocompleteOptions', autocompleteOptions)
+
   return (
-    <Dialog open={isOpen} onClose={onClose}>
-      <Box
-        sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 3 }}
-      >
-        <Typography variant="h6">Add Members 1</Typography>
+    <Dialog open={isOpen} onClose={onClose} maxWidth="xs">
+      <AddMembersDialogHeader>
+        <Typography variant="h6">Add Members 6</Typography>
         <IconButton aria-label="close" onClick={onClose}>
           <CloseIcon />
         </IconButton>
-      </Box>
+      </AddMembersDialogHeader>
       <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
         <Typography variant="body1">
           Add users to your organization or send an invitation email.
@@ -213,7 +185,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           options={autocompleteOptions}
           control={control}
           isPending={isPending}
-          ListboxComponent={CustomVirtuosoListBox}
+          ListboxComponent={CustomVirtuosoListbox}
           value={null}
           inputValue={searchQuery}
           onInputChange={(event: any, newInputValue: string) => {
@@ -222,7 +194,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
             }
           }}
           renderInput={(params: any) => (
-            <TextField {...params} placeholder="Invite members by name or email" hideClearButton />
+            <TextField {...params} placeholder="Invite members by name or email" />
           )}
           filterOptions={(options: any) => options}
         />
@@ -245,8 +217,8 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           ))}
         </Box>
       </DialogContent>
-      <DialogActions>
-        <Button variant="outlined" color="inherit" onClick={onClose}>
+      <DialogActions sx={{ justifyContent: 'flex-end' }}>
+        <Button variant="outlined" color="inherit" onClick={onClose} sx={{ width: 'auto' }}>
           Cancel
         </Button>
         <Button
@@ -256,6 +228,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           disabled={
             (selectedUsers.length === 0 && selectedEmails.length === 0) || isMutationInFlight
           }
+          sx={{ width: 'auto' }}
         >
           Invite
         </Button>

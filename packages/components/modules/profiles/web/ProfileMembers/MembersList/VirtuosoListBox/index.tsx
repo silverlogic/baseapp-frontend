@@ -1,11 +1,19 @@
 import React from 'react'
 
+import { AddIcon } from '@baseapp-frontend/design-system/components/web/icons'
+
+import { IconButton, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
-const VirtuosoListBox = (
+import MemberPersonalInfo from '../../components/MemberPersonalInfo'
+import { MEMBER_STATUSES } from '../../constants'
+import { EmailListItemContainer, UserListItemContainer } from '../styled'
+import { NewEmail, User } from '../types'
+
+const VirtuosoListbox = (
   props: any,
   autocompleteOptions: any[],
-  renderItem: (index: number, option: any) => React.ReactNode,
+  handleItemSelection: (option: User | NewEmail) => void,
   renderLoadingState: () => React.ReactNode,
   hasNext: boolean,
   isLoadingNext: boolean,
@@ -15,11 +23,50 @@ const VirtuosoListBox = (
   let options = React.Children.toArray(children)
     .filter((child: any) => child && typeof child === 'object' && child.props)
     .map((child: any) => child.props.value)
-    .filter(Boolean) // Remove any undefined values
+    .filter(Boolean)
   if (options.length === 0) {
     options = autocompleteOptions
   }
   const height = options.length * 56 > 300 ? 300 : options.length * 56
+
+  const renderItem = (index: number, option: User | NewEmail) => {
+    const isNewEmail = 'isNewEmail' in option
+    const isEmpty = 'empty' in option
+    if (isEmpty) {
+      return (
+        <UserListItemContainer isEmpty>
+          <Typography variant="body2" color="text.secondary">
+            No users found
+          </Typography>
+        </UserListItemContainer>
+      )
+    }
+    return (
+      <UserListItemContainer
+        key={isNewEmail ? option.email : (option as User).id}
+        onClick={() => {
+          handleItemSelection(option)
+        }}
+      >
+        {isNewEmail ? (
+          <EmailListItemContainer>
+            <Typography variant="body2" color="text.secondary">
+              {option.email}
+            </Typography>
+            <IconButton>
+              <AddIcon />
+            </IconButton>
+          </EmailListItemContainer>
+        ) : (
+          <MemberPersonalInfo
+            member={(option as User)?.profile ?? undefined}
+            status={(option as User)?.isActive ? MEMBER_STATUSES.active : MEMBER_STATUSES.inactive}
+          />
+        )}
+      </UserListItemContainer>
+    )
+  }
+
   return (
     <div {...other}>
       <Virtuoso
@@ -39,4 +86,4 @@ const VirtuosoListBox = (
   )
 }
 
-export default VirtuosoListBox
+export default VirtuosoListbox
