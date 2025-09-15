@@ -126,7 +126,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   }
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
         <form
           // @ts-ignore TODO: check typing issue with zodResolver
