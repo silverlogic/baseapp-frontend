@@ -2,7 +2,7 @@ import React, { FC, useMemo, useRef, useState, useTransition } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { AutoCompleteField } from '@baseapp-frontend/design-system/components/web/inputs'
+import { AutocompleteField } from '@baseapp-frontend/design-system/components/web/inputs'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import {
@@ -165,8 +165,6 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
 
   if (!isOpen) return null
 
-  console.log('autocompleteOptions', autocompleteOptions)
-
   return (
     <Dialog open={isOpen} onClose={onClose} maxWidth="xs">
       <AddMembersDialogHeader>
@@ -179,7 +177,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
         <Typography variant="body1">
           Add users to your organization or send an invitation email.
         </Typography>
-        <AutoCompleteField
+        <AutocompleteField
           ref={autocompleteRef}
           name="search"
           options={autocompleteOptions}

@@ -4,10 +4,10 @@ import { withController } from '@baseapp-frontend/utils'
 
 import { Autocomplete } from '@mui/material'
 
-import { AutoCompleteFieldProps } from './types'
+import { AutocompleteFieldProps } from './types'
 
-const AutoCompleteField: FC<AutoCompleteFieldProps> = ({ ...props }) => (
+const AutocompleteField: FC<AutocompleteFieldProps> = ({ ...props }) => (
   <Autocomplete selectOnFocus handleHomeEndKeys disableClearable freeSolo {...props} />
 )
 
-export default withController(AutoCompleteField, { shouldDebounce: true })
+export default withController(AutocompleteField, { shouldDebounce: true })

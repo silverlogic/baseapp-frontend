@@ -23,9 +23,9 @@ export const EmailListItemContainer = styled(Box)(() => ({
   width: '100%',
 }))
 
-export const AddMembersDialogHeader = styled(Box)(() => ({
+export const AddMembersDialogHeader = styled(Box)(({ theme }) => ({
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: 3,
+  padding: theme.spacing(3),
 }))

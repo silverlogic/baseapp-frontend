@@ -1,17 +1,17 @@
 import { TextField } from '@mui/material'
 import { Meta, StoryObj } from '@storybook/react'
 
-import AutoCompleteField from '..'
-import { AutoCompleteFieldProps } from '../types'
+import AutocompleteField from '..'
+import { AutocompleteFieldProps } from '../types'
 
-const meta: Meta<typeof AutoCompleteField> = {
+const meta: Meta<typeof AutocompleteField> = {
   title: '@baseapp-frontend | designSystem/Inputs/AutoCompleteField',
-  component: AutoCompleteField,
+  component: AutocompleteField,
 }
 
 export default meta
 
-type Story = StoryObj<AutoCompleteFieldProps>
+type Story = StoryObj<AutocompleteFieldProps>
 
 const sampleOptions = [
   { label: 'Apple', value: 'apple' },
