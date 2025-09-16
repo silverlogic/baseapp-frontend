@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 4.0.2
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- on-demand import of next/headers to avoid importing it on client-side code
+
 ## 4.0.1
 
 ### Minor Changes

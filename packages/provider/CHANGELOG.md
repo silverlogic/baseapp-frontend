@@ -1,5 +1,13 @@
 # @baseapp-frontend/provider
 
+## 2.0.16
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
 ## 2.0.15
 
 ### Patch Changes

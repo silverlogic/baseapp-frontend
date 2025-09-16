@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.4.3
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.3
+  - @baseapp-frontend/design-system@1.1.1
+  - @baseapp-frontend/graphql@1.3.4
+  - @baseapp-frontend/utils@4.0.2
+
 ## 1.4.2
 
 ### Patch Changes
@@ -7,7 +18,6 @@
 - Fix UI incosistency for the `ProfileSettingsComponent` during page refreshes.
 - Remove incorrect border showing on the AccountPopover menu when the `SwitchProfileMenu`component is `null`.
 - Allow `SwitchProfileMenu`to be `null` (useful for opting-out of that feature).
-
 
 ## 1.4.1
 

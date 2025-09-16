@@ -1,5 +1,13 @@
 # @baseapp-frontend/test
 
+## 2.1.4
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- set NEXT_PUBLIC_API_BASE_URL if it is not defined
+- adapted mock functions to work with the template project
+
 ## 2.1.3
 
 ### Patch Changes

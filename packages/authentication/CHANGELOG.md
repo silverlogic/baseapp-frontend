@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 5.0.3
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
 ## 5.0.2
 
 ### Patch Changes
