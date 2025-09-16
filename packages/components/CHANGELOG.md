@@ -1,5 +1,20 @@
 # @baseapp-frontend/components
 
+## 1.4.2
+
+### Patch Changes
+
+- Fix UI incosistency for the `ProfileSettingsComponent` during page refreshes.
+- Remove incorrect border showing on the AccountPopover menu when the `SwitchProfileMenu`component is `null`.
+- Allow `SwitchProfileMenu`to be `null` (useful for opting-out of that feature).
+
+
+## 1.4.1
+
+### Patch Changes
+
+- User Deletion - Remove User Info from Messages
+
 ## 1.4.0
 
 ### Minor Changes

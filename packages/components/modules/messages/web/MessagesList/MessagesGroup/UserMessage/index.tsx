@@ -59,10 +59,10 @@ const UserMessage: FC<UserMessageProps> = ({
   }, [allMessages, allMessagesLastIndex, messageIndex])
 
   const isOwnMessage = currentProfile?.id === message?.profile?.id
-
+  const isProfileNullOrUndefined = message?.profile == null || message?.profile === undefined
   const flexAlignments = isOwnMessage ? 'flex-end' : 'flex-start'
-  const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
 
+  const canShowAvatar = isProfileNullOrUndefined || (isFirstGroupedMessage && !isOwnMessage)
   const canShowName = canShowAvatar && isGroup
 
   if (!message) return null
@@ -92,7 +92,7 @@ const UserMessage: FC<UserMessageProps> = ({
       >
         {canShowName && (
           <Typography variant="subtitle2" color="text.primary" marginBottom={1 / 2}>
-            {message?.profile?.name}
+            {isProfileNullOrUndefined ? 'Deleted User' : message?.profile?.name}
           </Typography>
         )}
         <MessageItem
