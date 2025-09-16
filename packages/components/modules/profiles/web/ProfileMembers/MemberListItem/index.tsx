@@ -42,7 +42,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
           {...memberItemComponentProps}
         />
         <MemberItemComponent
-          member={memberFragment?.user?.profile}
+          member={memberFragment?.user?.profile || undefined}
           memberRole={memberFragment?.role}
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
@@ -57,7 +57,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
     return (
       <>
         <MemberItemComponent
-          member={memberFragment?.user?.profile}
+          member={memberFragment?.user?.profile || undefined}
           memberRole={memberFragment?.role}
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
@@ -78,7 +78,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
 
   return (
     <MemberItemComponent
-      member={memberFragment?.user?.profile}
+      member={memberFragment?.user?.profile || undefined}
       memberRole={memberFragment?.role}
       status={memberFragment?.status}
       userId={memberFragment?.user?.id}

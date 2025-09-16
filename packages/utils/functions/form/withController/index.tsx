@@ -5,19 +5,28 @@ import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 import { Controller } from 'react-hook-form'
 
 import useDebounce from '../../../hooks/useDebounce'
-import type { DebouncedFunction, WithControllerProps } from './types'
+import type { WithControllerProps } from './types'
 
 function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceTime = 500 } = {}) {
   return ({ name, control, helperText, ...props }: WithControllerProps<T>) => {
     if (control) {
-      const { onChange, onBlur, ...restOfTheProps } = props
+      const { onChange, onBlur, onInputChange, ...restOfTheProps } = props
       const onChangeWithFallback = onChange ?? (() => {})
-      const { debouncedFunction: debouncedOnChange } = useDebounce<DebouncedFunction>(
-        onChangeWithFallback,
-        {
-          debounceTime,
-        },
-      )
+      const onInputChangeWithFallback = onInputChange ?? (() => {})
+      const onChangeWrapper = (params: any) => {
+        const [event] = params
+        onChangeWithFallback(event)
+      }
+      const { debouncedFunction: debouncedOnChange } = useDebounce(onChangeWrapper, {
+        debounceTime,
+      })
+      const onInputChangeWrapper = (params: any) => {
+        const [event, newInputValue] = params
+        onInputChangeWithFallback(event, newInputValue)
+      }
+      const { debouncedFunction: debouncedOnInputChange } = useDebounce(onInputChangeWrapper, {
+        debounceTime,
+      })
 
       return (
         <Controller
@@ -29,9 +38,17 @@ function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceT
             ) => {
               field.onChange(event)
               if (onChange && shouldDebounce) {
-                debouncedOnChange(event)
+                debouncedOnChange([event])
               } else {
                 onChange?.(event)
+              }
+            }
+            const handleOnInputChange = (event: any, newInputValue: any) => {
+              field.onChange({ target: { value: newInputValue } })
+              if (onInputChange && shouldDebounce) {
+                debouncedOnInputChange([event, newInputValue])
+              } else {
+                onInputChange?.(event, newInputValue)
               }
             }
             const handleOnBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
@@ -47,6 +64,7 @@ function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceT
                 error={!!fieldState.error}
                 name={name}
                 onChange={handleOnChange}
+                onInputChange={handleOnInputChange}
                 onBlur={handleOnBlur}
                 helperText={helperText || (!!fieldState.error && fieldState.error?.message)}
                 {...(restOfTheProps as any)}

@@ -2,11 +2,11 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { ChangeUserRoleMutation } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
+import { ProfileUserRoleUpdateMutation } from '../../../../../__generated__/ProfileUserRoleUpdateMutation.graphql'
 
-export const ChangeUserRoleMutationQuery = graphql`
-  mutation ChangeUserRoleMutation($input: RoleUpdateInput!) {
-    profileRoleUpdate(input: $input) {
+export const ProfileUserRoleUpdateMutationQuery = graphql`
+  mutation ProfileUserRoleUpdateMutation($input: ProfileUserRoleUpdateInput!) {
+    profileUserRoleUpdate(input: $input) {
       profileUserRole {
         id
         role
@@ -19,16 +19,16 @@ export const ChangeUserRoleMutationQuery = graphql`
   }
 `
 
-export const useChangeUserRoleMutation = (): [
-  (config: UseMutationConfig<ChangeUserRoleMutation>) => Disposable,
+export const useProfileUserRoleUpdateMutation = (): [
+  (config: UseMutationConfig<ProfileUserRoleUpdateMutation>) => Disposable,
   boolean,
 ] => {
   const { sendToast } = useNotification()
-  const [commitMutation, isMutationInFlight] = useMutation<ChangeUserRoleMutation>(
-    ChangeUserRoleMutationQuery,
+  const [commitMutation, isMutationInFlight] = useMutation<ProfileUserRoleUpdateMutation>(
+    ProfileUserRoleUpdateMutationQuery,
   )
 
-  const commit = (config: UseMutationConfig<ChangeUserRoleMutation>) =>
+  const commit = (config: UseMutationConfig<ProfileUserRoleUpdateMutation>) =>
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {

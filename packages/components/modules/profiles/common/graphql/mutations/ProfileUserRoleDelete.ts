@@ -2,26 +2,26 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
-import { RemoveMemberMutation } from '../../../../../__generated__/RemoveMemberMutation.graphql'
+import { ProfileUserRoleDeleteMutation } from '../../../../../__generated__/ProfileUserRoleDeleteMutation.graphql'
 
-export const ProfileRemoveMemberMutationQuery = graphql`
-  mutation RemoveMemberMutation($input: ProfileRemoveMemberInput!) {
-    profileRemoveMember(input: $input) {
+export const ProfileUserRoleDeleteMutationQuery = graphql`
+  mutation ProfileUserRoleDeleteMutation($input: ProfileUserRoleDeleteInput!) {
+    profileUserRoleDelete(input: $input) {
       deletedId @deleteRecord
     }
   }
 `
 
 export const useRemoveMemberMutation = (): [
-  (config: UseMutationConfig<RemoveMemberMutation>) => Disposable,
+  (config: UseMutationConfig<ProfileUserRoleDeleteMutation>) => Disposable,
   boolean,
 ] => {
   const { sendToast } = useNotification()
-  const [commitMutation, isMutationInFlight] = useMutation<RemoveMemberMutation>(
-    ProfileRemoveMemberMutationQuery,
+  const [commitMutation, isMutationInFlight] = useMutation<ProfileUserRoleDeleteMutation>(
+    ProfileUserRoleDeleteMutationQuery,
   )
 
-  const commit = (config: UseMutationConfig<RemoveMemberMutation>) =>
+  const commit = (config: UseMutationConfig<ProfileUserRoleDeleteMutation>) =>
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
