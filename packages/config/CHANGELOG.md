@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.13
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+
 ## 2.1.12
 
 ### Patch Changes

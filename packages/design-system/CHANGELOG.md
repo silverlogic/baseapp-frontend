@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.1.1
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
 ## 1.1.0
 
 ### Minor Changes

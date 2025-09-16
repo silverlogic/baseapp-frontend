@@ -1,5 +1,11 @@
 # @baseapp-frontend/eslint-plugin
 
+## 0.0.5
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+
 ## 0.0.4
 
 ### Patch Changes

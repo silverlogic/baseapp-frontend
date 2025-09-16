@@ -1,5 +1,15 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.38
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.1
+  - @baseapp-frontend/graphql@1.3.4
+  - @baseapp-frontend/utils@4.0.2
+
 ## 1.0.37
 
 ### Patch Changes

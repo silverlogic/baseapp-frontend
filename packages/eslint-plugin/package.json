@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/eslint-plugin",
   "description": "Eslint custom rules for BaseApp.",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "source": "index.ts",
   "main": "dist/index.js",
   "module": "dist/module.js",
