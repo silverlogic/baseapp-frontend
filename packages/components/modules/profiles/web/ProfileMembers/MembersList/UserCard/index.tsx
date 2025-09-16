@@ -6,7 +6,7 @@ import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { IconButton, Typography } from '@mui/material'
 
 import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
-import MemberPersonalInfo from '../../components/MemberPersonalInfo'
+import MemberPersonalInfo from '../../MemberPersonalInfo'
 import { MEMBER_STATUSES } from '../../constants'
 import { MemberCardContainer, MemberPersonalInformation } from '../../styled'
 import { UserCardProps } from '../types'

@@ -10,7 +10,7 @@ import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileIte
 import { ProfileRoles } from '../../../../../__generated__/ProfileUserRoleUpdateMutation.graphql'
 import { ProfileItemFragment, useProfileUserRoleUpdateMutation } from '../../../common'
 import { useRemoveMemberMutation } from '../../../common/graphql/mutations/ProfileUserRoleDelete'
-import MemberPersonalInfo from '../components/MemberPersonalInfo'
+import MemberPersonalInfo from '../MemberPersonalInfo'
 import { MEMBER_ACTIONS, MEMBER_ROLES, MEMBER_STATUSES, roleOptions } from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, Select } from './styled'
