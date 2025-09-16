@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
 import { useFragment } from 'react-relay'
@@ -27,35 +28,47 @@ const MemberItem: FC<MemberItemProps> = ({
   userId,
   searchQuery,
 }) => {
-  const theme = useTheme()
-
-  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
-
-  const { currentProfile } = useCurrentProfile()
-
-  const [changeUserRole, isChangingUserRole] = useProfileUserRoleUpdateMutation()
-  const [removeMember, isRemovingMember] = useRemoveMemberMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
+  const [isCancelInviteConfirmationDialogOpen, setIsCancelInviteConfirmationDialogOpen] =
+    useState(false)
+
+  const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
+  const { currentProfile } = useCurrentProfile()
+  const [changeUserRole, isChangingUserRole] = useProfileUserRoleUpdateMutation()
+  const [removeMember, isRemovingMember] = useRemoveMemberMutation()
+  const { sendToast } = useNotification()
+  const theme = useTheme()
 
   if (!memberProfile) return null
 
   const shouldRenderChangeRoleSelect =
     status === MEMBER_STATUSES.active && memberRole !== 'owner' && canChangeMember
-
   const haveMemberRoleAndStatus = memberRole && status
+  const isMemberInvited =
+    (status === MEMBER_STATUSES.pending ||
+      status === MEMBER_STATUSES.inactive ||
+      status === MEMBER_STATUSES.expired) &&
+    canChangeMember
 
-  const removeProfileMember = () => {
+  const removeProfileMember = (invite: boolean = false) => {
     if (currentProfile?.id && userId) {
       removeMember({
         variables: { input: { profileId: currentProfile.id, userId } },
+        onCompleted: () => {
+          if (invite) {
+            sendToast('Invite canceled successfully', { type: 'success' })
+          } else {
+            sendToast('Member removed successfully', { type: 'success' })
+          }
+        },
       })
     }
   }
 
-  const confirmRemoveProfileMember = () => {
+  const confirmRemoveProfileMember = (invite: boolean = false) => {
     if (currentProfile?.id && userId) {
-      removeProfileMember()
+      removeProfileMember(invite)
     }
     setOpenConfirmRemoveMember(false)
   }
@@ -96,7 +109,7 @@ const MemberItem: FC<MemberItemProps> = ({
   }
 
   const renderRoleButton = () => {
-    if (shouldRenderChangeRoleSelect) {
+    if (shouldRenderChangeRoleSelect)
       return (
         <Box>
           <Select
@@ -128,8 +141,44 @@ const MemberItem: FC<MemberItemProps> = ({
           </Select>
         </Box>
       )
-    }
-    if (haveMemberRoleAndStatus) {
+    if (isMemberInvited)
+      return (
+        <Box>
+          <Select
+            value=""
+            onChange={(event: SelectChangeEvent<unknown>) => {
+              const { value } = event.target
+              if (value === MEMBER_ACTIONS.remove) {
+                setIsCancelInviteConfirmationDialogOpen(true)
+              }
+            }}
+            displayEmpty
+            variant="filled"
+            size="small"
+            disabled={isRemovingMember}
+            renderValue={() => {
+              if (status === MEMBER_STATUSES.pending) return 'Invited'
+              return capitalizeFirstLetter(status)
+            }}
+          >
+            <MenuItem
+              key={MEMBER_ACTIONS.resendInvitation}
+              value={MEMBER_ACTIONS.resendInvitation}
+              sx={{ color: 'inherit' }}
+            >
+              Resend
+            </MenuItem>
+            <MenuItem
+              key={MEMBER_ACTIONS.remove}
+              value={MEMBER_ACTIONS.remove}
+              sx={{ color: theme.palette.error.main }}
+            >
+              Cancel Invite
+            </MenuItem>
+          </Select>
+        </Box>
+      )
+    if (haveMemberRoleAndStatus)
       return (
         <Box>
           <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
@@ -139,7 +188,6 @@ const MemberItem: FC<MemberItemProps> = ({
           </Button>
         </Box>
       )
-    }
     return null
   }
 
@@ -149,6 +197,27 @@ const MemberItem: FC<MemberItemProps> = ({
 
   return (
     <MemberItemContainer>
+      <ConfirmDialog
+        title="Cancel invite"
+        open={isCancelInviteConfirmationDialogOpen}
+        onClose={() => setIsCancelInviteConfirmationDialogOpen(false)}
+        content={
+          <Typography variant="body1">
+            Are you sure you want to cancel this invite? Once canceled, this member will no longer
+            be able to join. You can always resend the invite later if needed.
+          </Typography>
+        }
+        cancelText="Back"
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => confirmRemoveProfileMember(true)}
+          >
+            Cancel
+          </Button>
+        }
+      />
       <ConfirmDialog
         title="Change user permissions?"
         open={openConfirmChangeMember}
@@ -178,7 +247,11 @@ const MemberItem: FC<MemberItemProps> = ({
         }
         cancelText="Back"
         action={
-          <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => confirmRemoveProfileMember(false)}
+          >
             Remove
           </Button>
         }

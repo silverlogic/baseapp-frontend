@@ -25,7 +25,6 @@ export const useRemoveMemberMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        sendToast('Member removed successfully', { type: 'success' })
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

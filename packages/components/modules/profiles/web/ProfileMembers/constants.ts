@@ -7,6 +7,7 @@ export const MEMBER_STATUSES = {
   active: 'ACTIVE',
   pending: 'PENDING',
   inactive: 'INACTIVE',
+  expired: 'EXPIRED',
 } as const
 
 export const MEMBER_ROLES = {
@@ -15,6 +16,7 @@ export const MEMBER_ROLES = {
 } as const
 
 export const MEMBER_ACTIONS = {
+  resendInvitation: 'RESEND_INVITATION',
   remove: 'REMOVE',
 }
 
