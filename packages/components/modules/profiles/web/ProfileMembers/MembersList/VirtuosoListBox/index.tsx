@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 
 import { AddIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
@@ -36,22 +36,22 @@ const VirtuosoListbox: VirtuosoListboxProps = (
 
   const height = options.length * 56 > 300 ? 300 : options.length * 56
 
-  useEffect(() => {
-    console.log('useEffect')
-    console.log('isLoadingNext', isLoadingNext)
-    if (isLoadingNext) return
-    console.log('virtuosoRef.current', virtuosoRef.current)
-    if (virtuosoRef.current && options.length > 0) {
-      console.log('Attempting to scroll to index:', options.length - 1)
-      setTimeout(() => {
-        virtuosoRef.current.scrollToIndex({
-          index: options.length - 1,
-          align: 'end',
-          behavior: 'instant',
-        })
-      }, 100)
-    }
-  }, [isLoadingNext, options.length])
+  // useEffect(() => {
+  //   console.log('useEffect')
+  //   console.log('isLoadingNext', isLoadingNext)
+  //   if (isLoadingNext) return
+  //   console.log('virtuosoRef.current', virtuosoRef.current)
+  //   if (virtuosoRef.current && options.length > 0) {
+  //     console.log('Attempting to scroll to index:', options.length - 1)
+  //     setTimeout(() => {
+  //       virtuosoRef.current.scrollToIndex({
+  //         index: options.length - 1,
+  //         align: 'end',
+  //         behavior: 'instant',
+  //       })
+  //     }, 100)
+  //   }
+  // }, [isLoadingNext, options.length])
 
   const renderItem = (index: number, option: User | NewEmail) => {
     const isNewEmail = 'isNewEmail' in option
