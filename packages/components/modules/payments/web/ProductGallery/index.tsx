@@ -3,14 +3,13 @@ import { FC } from 'react'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { useMediaQuery } from '@mui/material'
-import Grid from '@mui/material/Unstable_Grid2'
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Product as ProductType } from '../types'
 import Product from './Product'
 import ProductDrawer from './ProductDrawer'
 import { useProductGalleryStore } from './store'
-import { GalleryContainer } from './styled'
+import { GalleryContainer, GridItem, StyledGrid } from './styled'
 
 const ProductGallery: FC = () => {
   const { setSelectedProduct, selectedProduct } = useProductGalleryStore()
@@ -35,22 +34,13 @@ const ProductGallery: FC = () => {
   return (
     <>
       <GalleryContainer isMobile={isMobile}>
-        <Grid container spacing={0} columnSpacing={0} rowSpacing={0}>
+        <StyledGrid isMobile={isMobile}>
           {products.data.map((product: ProductType) => (
-            <Grid
-              xs={6}
-              sm={4}
-              md={4}
-              key={product.id}
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              sx={{ padding: '8px', margin: '0px' }}
-            >
+            <GridItem key={product.id}>
               <Product product={product} />
-            </Grid>
+            </GridItem>
           ))}
-        </Grid>
+        </StyledGrid>
       </GalleryContainer>
       <ProductDrawer
         open={!!selectedProduct}
