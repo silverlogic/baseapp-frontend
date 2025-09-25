@@ -16,8 +16,6 @@ import { NAV_WIDTH } from '../constants'
 import { NavVerticalProps } from './types'
 
 const NavVertical: FC<NavVerticalProps> = ({
-  settings,
-  setSettings,
   navData,
   LogoIcon,
   LogoProps,
@@ -39,7 +37,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         display: { xs: 'none', lg: 'flex' },
       }}
     >
-      {!hideToggleButton && <NavToggleButton settings={settings} setSettings={setSettings} />}
+      {!hideToggleButton && <NavToggleButton />}
       <Stack
         sx={{
           height: 1,

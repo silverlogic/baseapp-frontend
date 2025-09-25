@@ -7,3 +7,5 @@ export { default as PaymentMethodsManagementComponentWithElements } from './Paym
 export type * from './PaymentMethodsManagementComponent/types'
 
 export type * from './types'
+
+export { default as ProductGallery } from './ProductGallery'

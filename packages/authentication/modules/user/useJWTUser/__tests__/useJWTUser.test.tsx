@@ -11,6 +11,7 @@ import type { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
 
 import type { User } from '../../../../types/user'
+import { withAuthenticationTestProviders } from '../../../tests/utils'
 import type { UseJWTUserOptions } from '../types'
 import request from './fixtures/request.json'
 
@@ -55,7 +56,7 @@ describe('useJWTUser', () => {
     })
 
     const { result } = renderHook(() => useJWTUser({ options: { placeholderData: undefined } }), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     expect(result.current.isLoading).toBe(true)
@@ -85,7 +86,7 @@ describe('useJWTUser', () => {
           },
         }),
       {
-        wrapper: ComponentWithProviders,
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
       },
     )
 

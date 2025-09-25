@@ -6,7 +6,7 @@ import ActionsOverlay from '..'
 import { HOVER_OVERLAY_MODES } from '../constants'
 import ActionsOverlayOnButton from './ActionsOverlayOnButton'
 
-const meta: Meta<typeof ActionsOverlay> = {
+const meta: Meta<typeof ActionsOverlayOnButton> = {
   title: '@baseapp-frontend | components/Shared/ActionsOverlay',
   component: ActionsOverlayOnButton,
 }

@@ -33,32 +33,29 @@ We use a hybrid build pipeline combining `Babel`, `tsup`, and `TypeScript Compil
 1. **Source Code:** Original TypeScript/React files with Relay GraphQL queries.
 
 2. **Babel Transformation:**
+   - Transpiles TypeScript to JavaScript.
 
-    * Transpiles TypeScript to JavaScript.
+   - Applies Relay compiler transformations (replaces graphql tags with artifact imports).
 
-    * Applies Relay compiler transformations (replaces graphql tags with artifact imports).
-
-    * Outputs processed files to a temporary directory `tmp-babel`.
+   - Outputs processed files to a temporary directory `tmp-babel`.
 
 3. **tsup Bundling:**
+   - Bundling tool (using esbuild) consumes the `tmp-babel` files.
 
-    * Bundling tool (using esbuild) consumes the `tmp-babel` files.
-
-    * Generates ESM and CJS bundles in `dist`.
+   - Generates ESM and CJS bundles in `dist`.
 
 4. **TypeScript Compiler (tsc):**
+   - Runs in parallel to generate .d.ts type declarations.
 
-    * Runs in parallel to generate .d.ts type declarations.
-
-    * Outputs declarations to `tmp-dts`.
+   - Outputs declarations to `tmp-dts`.
 
 5. **Merge Outputs:**
+   - Copies type declarations from `tmp-dts` to `dist`.
 
-    * Copies type declarations from `tmp-dts` to `dist`.
-
-    * Final `dist` contains both runtime bundles and accurate type definitions.
+   - Final `dist` contains both runtime bundles and accurate type definitions.
 
 ### Pros
+
 One of the biggest wins with this setup is that it leverages tsc to generate type declarations. It is both reliable and fast—even for large projects—so we get accurate types without the performance hit we might see with other solutions.
 
 On the Relay side, using Babel with the official Relay plugin is way more reliable, since it's battle-tested than any custom solution we might try, especially since tools like tsup or esbuild just aren’t built to handle Relay’s GraphQL transformations on their own.
@@ -66,6 +63,7 @@ On the Relay side, using Babel with the official Relay plugin is way more reliab
 Plus, we still benefit from dual module output (ESM and CJS) along with optimized, compact bundles produced by esbuild and other cool features tsup provides.
 
 ### Cons
+
 That said, the build process is a bit more complex since it involves multiple tools running in parallel—Babel for the Relay transformations, tsup for bundling, and tsc for type declarations.
 
 Coordinating these steps and managing temporary directories can add some overhead to our build process. Even though relying on tsc for declarations is much faster than using tsup’s dts process for large projects, the overall pipeline is still more intricate compared to a single-tool solution. This added complexity means there’s a bit more to maintain and tweak as any of these tools evolve.

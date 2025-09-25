@@ -34,12 +34,7 @@ describe('AccountPopover', () => {
   it('should render the account popover without profile and be able to interact with it', () => {
     const { environment } = createTestEnvironment()
 
-    cy.mount(
-      <AccountPopoverForTesting
-        environment={environment}
-        InitialProfileProviderForTestingProps={{ initialProfile: null }}
-      />,
-    )
+    cy.mount(<AccountPopoverForTesting environment={environment} />)
 
     cy.findByRole('button').click()
 
@@ -57,7 +52,11 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        InitialProfileProviderForTestingProps={{ initialProfile: mockUserProfileData }}
+        context={{
+          parameters: {
+            initialProfile: mockUserProfileData,
+          },
+        }}
       />,
     )
 
@@ -126,7 +125,11 @@ describe('AccountPopover', () => {
     cy.mount(
       <AccountPopoverForTesting
         environment={environment}
-        InitialProfileProviderForTestingProps={{ initialProfile: mockUserProfileData }}
+        context={{
+          parameters: {
+            initialProfile: mockUserProfileData,
+          },
+        }}
         MenuItemsProps={{
           menuItems: [
             {

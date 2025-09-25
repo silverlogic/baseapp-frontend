@@ -1,5 +1,54 @@
 # @baseapp-frontend/utils
 
+## 4.0.1
+
+### Minor Changes
+
+- Introduced a new `useAppStateSubscription` hook that allows developers to register a callback (onAppResume) which runs whenever the app returns to the foreground. E.g. after a user unlocks their device or switches back to the app.
+
+## 4.0.0
+
+### Major Changes
+
+- **BREAKING:** Removed SSR support from cookie and token functions
+  - Added `'use client'` directive to `getCookie`, `getToken`, `setTokenAsync`, and `removeTokenAsync` - these are now client-side only
+  - Removed `noSSR` parameter from `getCookie`, `getToken`, and related types
+  - Removed `getCookieAsync` function entirely
+  - For server-side token retrieval, use the new `getTokenSSR` function instead
+
+- **BREAKING:** Removed deprecated `getTokenAsync` function
+  - Deleted `getTokenAsync` function and all related tests
+
+- **BREAKING:** Removed deprecated cookie constants
+  - Deleted `ACCESS_COOKIE_NAME` and `REFRESH_COOKIE_NAME` constants
+  - These were already deprecated in favor of `ACCESS_KEY_NAME` and `REFRESH_KEY_NAME`
+
+- **BREAKING:** Updated `refreshAccessToken` API
+  - Now requires explicit `refreshToken` parameter object
+  - Updated function signature: `refreshAccessToken({ refreshToken, accessKeyName, refreshKeyName })`
+  - No longer retrieves refresh token internally
+
+- **BREAKING:** Removed `ServerSideRenderingOption` type
+  - Deleted `types/server.ts` file entirely
+  - Updated all function signatures to remove SSR-related options
+
+- Added new `getTokenSSR` module for server-side token retrieval
+- Added new `useCookie` hook with store-based architecture for client-side cookie management
+- Added new `parseString` utility function for safe JSON parsing
+- Enhanced token and cookie functions to work with React Server Components (RSC)
+- Updated `createAxiosInstance` and `baseAppFetch` to handle SSR/client-side token retrieval automatically
+- Updated `getLanguage` function to work with mobile platforms using expo-secure-store
+
+### Migration Guide
+
+- Replace `getCookie({ noSSR: true })` with `getCookie()` (client-side only)
+- Replace `getToken({ noSSR: true })` with `getToken()` (client-side) or `getTokenSSR()` (server-side)
+- Replace `getCookieAsync()` calls with `getCookie()` or server-side cookie retrieval (using `nextjs` headers)
+- Replace `getTokenAsync()` calls with `getToken()` or `getTokenSSR()`
+- Update `refreshAccessToken(accessKey, refreshKey)` to `refreshAccessToken({ refreshToken: token, accessKeyName: accessKey, refreshKeyName: refreshKey })`
+- Remove usage of deprecated `ACCESS_COOKIE_NAME` and `REFRESH_COOKIE_NAME` constants, use `ACCESS_KEY_NAME` and `REFRESH_KEY_NAME` instead
+- Use `useCookie` hook for reactive cookie state management in React components
+
 ## 3.1.6
 
 ### Patch Changes

@@ -1,5 +1,4 @@
 import { BaseAppLogoCondensed } from '@baseapp-frontend/design-system/components/web/icons'
-import { defaultTheme } from '@baseapp-frontend/design-system/tests/web/utils'
 
 import { Meta, StoryObj } from '@storybook/react'
 
@@ -21,7 +20,6 @@ type Story = StoryObj<NavMiniProps>
 export const DefaultNavMini: Story = {
   args: {
     navData: navDataMock,
-    settings: defaultTheme.settings,
     LogoIcon: BaseAppLogoCondensed,
     openNav: false,
     hideToggleButton: true,

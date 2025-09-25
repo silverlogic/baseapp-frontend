@@ -7,7 +7,7 @@ import type { ForgotPasswordRequest } from '../../../types/auth'
 type ApiClass = Pick<typeof AuthApi, 'recoverPassword'>
 
 export interface UseRecoverPasswordOptions {
-  validationSchema?: z.ZodObject<z.ZodRawShape>
+  validationSchema?: z.ZodType<ForgotPasswordRequest>
   defaultValues?: ForgotPasswordRequest
   options?: UseMutationOptions<void, unknown, ForgotPasswordRequest, any>
   ApiClass?: ApiClass
