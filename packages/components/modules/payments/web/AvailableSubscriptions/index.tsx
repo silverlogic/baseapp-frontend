@@ -6,18 +6,19 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { useRouter } from 'next/navigation'
 
 import useStripeHook from '../hooks/useStripeHook'
 import SubscriptionCard from './components/SubscriptionCard'
 
-const AvailableSubscriptions = ({ router }: { router: AppRouterInstance }) => {
+const AvailableSubscriptions = () => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')
 
   const { useListProducts, useGetCustomer } = useStripeHook()
   const { data: products, isLoading: isLoadingProducts } = useListProducts()
   const { data: customer, isLoading: isLoadingCustomer } = useGetCustomer()
   const smDown = useResponsive('down', 'sm')
+  const router = useRouter()
 
   const monthlySubs = products?.filter(
     (product) => product.defaultPrice?.recurring?.interval === 'month',

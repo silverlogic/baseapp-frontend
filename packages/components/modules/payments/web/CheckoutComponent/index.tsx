@@ -66,7 +66,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
 
   return (
     <Elements
-      stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)}
+      stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}
       options={{ clientSecret: setupIntent?.clientSecret }}
     >
       <StyledContainer>

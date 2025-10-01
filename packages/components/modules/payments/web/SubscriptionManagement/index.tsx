@@ -21,6 +21,7 @@ import {
 } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
 import PaymentDropdown from '../CheckoutComponent/PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
@@ -37,7 +38,7 @@ import {
 import { SubscriptionManagementProps } from './types'
 import { getChipLabelAndColorByStatus } from './utils'
 
-const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, router }) => {
+const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) => {
   const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
     useState<string | null>(null)
 
@@ -69,6 +70,8 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   const { sendToast } = useNotification()
   const elements = useElements()
   const stripe = useStripe()
+  const router = useRouter()
+
   const isLoading = isLoadingMethods || isLoadingSubscription
   const { mutateAsync: updateSubscription } = useUpdateSubscription(
     subscription?.id ?? '',
@@ -124,7 +127,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   }, [lastAddedPaymentMethodIdDuringSession])
 
   if (!hasActiveSubscription && !isLoading) {
-    return <FreePlanComponent router={router} />
+    return <FreePlanComponent onClickChangePlan={() => router.push('/subscriptions')} />
   }
 
   return (
@@ -250,12 +253,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   )
 }
 
-const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({
-  entityId,
-  router,
-}) => (
+const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({ entityId }) => (
   <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}>
-    <SubscriptionManagement entityId={entityId} router={router} />
+    <SubscriptionManagement entityId={entityId} />
   </Elements>
 )
 
