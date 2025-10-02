@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 import { type StoreApi, useStore } from 'zustand'
 
 import { Palette, PresetType, getPresetOptions } from '../../../styles/web'
-import { DEFAULT_UI_SETTINGS, MISSING_UI_SETTINGS_STORE_ERROR } from './constants'
+import { MISSING_UI_SETTINGS_STORE_ERROR } from './constants'
 import { initializeSettingsStore } from './store'
 import type { UISettingsProviderProps, UISettingsState } from './types'
 
@@ -35,8 +35,7 @@ export const UISettingsProvider = ({
   const storeRef = useRef<StoreApi<UISettingsState>>(undefined)
 
   if (!storeRef.current) {
-    const initialSettings = initialUISettings || DEFAULT_UI_SETTINGS
-    storeRef.current = initializeSettingsStore(initialSettings)
+    storeRef.current = initializeSettingsStore(initialUISettings)
   }
 
   const store = storeRef.current

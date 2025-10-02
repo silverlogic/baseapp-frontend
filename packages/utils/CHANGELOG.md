@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 4.0.3
+
+### Patch Changes
+
+- Enhanced cookie store to automatically load cookies from client-side when no initial cookies are provided
+
 ## 4.0.2
 
 ### Patch Changes
