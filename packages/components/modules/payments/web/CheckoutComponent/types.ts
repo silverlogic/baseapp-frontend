@@ -1,7 +1,5 @@
 import { FC } from 'react'
 
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
-
 import { ConfirmationSubscriptionModalProps } from './ConfirmationSubscriptionModal/types'
 
 export interface CheckoutComponentProps {
@@ -10,7 +8,6 @@ export interface CheckoutComponentProps {
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
   ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
   onSuccess?: () => void
-  router: AppRouterInstance
 }
 
 export interface CheckoutComponentWithElementProps {
@@ -20,5 +17,4 @@ export interface CheckoutComponentWithElementProps {
   ConfirmationSubscriptionModal?: FC<ConfirmationSubscriptionModalProps>
   ConfirmationSubscriptionModalProps?: ConfirmationSubscriptionModalProps
   onSuccess?: () => void
-  router: AppRouterInstance
 }

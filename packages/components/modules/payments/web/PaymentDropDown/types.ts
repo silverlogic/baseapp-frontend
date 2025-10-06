@@ -1,6 +1,6 @@
 import { Stripe, StripeElements } from '@stripe/stripe-js'
 
-import { PaymentMethod } from '../../types'
+import { PaymentMethod } from '../types'
 
 export interface PaymentDropdownProps {
   paymentMethods: PaymentMethod[]

@@ -39,7 +39,7 @@ const useStripeHook = () => {
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
-      mutationKey: [SETUP_INTENT_API_KEY.get(), entityId],
+      mutationKey: [SETUP_INTENT_API_KEY.get(entityId)],
     })
 
   const useListPaymentMethods = (entityId: string) =>
@@ -140,18 +140,12 @@ const useStripeHook = () => {
   const useCreateSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
-      onSuccess: () => {
-        console.log('Subscription created successfully:')
-      },
-      onError: (error) => {
-        sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
-      },
       mutationKey: [CREATION_SUBSCRIPTION_API_KEY.get()],
     })
 
   const useGetSubscription = (subscriptionId: string) =>
     useQuery({
-      queryKey: [SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      queryKey: [SUBSCRIPTION_API_KEY.get(subscriptionId)],
       queryFn: () => StripeApi.getSubscription(subscriptionId),
       enabled: !!subscriptionId,
     })
@@ -185,7 +179,7 @@ const useStripeHook = () => {
       onError: () => {
         sendToast(`Failed to cancel subscription`, { type: 'error' })
       },
-      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(subscriptionId)],
     })
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>

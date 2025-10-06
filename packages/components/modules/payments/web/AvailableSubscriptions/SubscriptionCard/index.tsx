@@ -25,7 +25,7 @@ const SubscriptionCard = ({
           <Image src={sub.images[0] ?? ''} alt={sub.name} width={28} height={28} />
         )}
         <Box display="flex" gap={1} alignItems="flex-end">
-          <Typography variant="h4">{sub.name}gb</Typography>
+          <Typography variant="h4">{sub.name}</Typography>
           {isActive && <Chip label="Active" color="success" variant="soft" />}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-end">

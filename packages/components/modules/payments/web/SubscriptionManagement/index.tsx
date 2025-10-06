@@ -21,23 +21,24 @@ import {
 } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
-import PaymentDropdown from '../components/PaymentDropDown'
+import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
-import { CUSTOMER_API_KEY, PAYMENT_METHOD_API_KEY } from '../services/keys'
+import { CUSTOMER_API_KEY, PAYMENT_METHOD_API_KEY, SUBSCRIPTION_API_KEY } from '../services/keys'
 import { getStripePromise } from '../utils/stripe'
-import CancelSubscriptionModal from './components/CancelSubscriptionModal'
-import FreePlanComponent from './components/FreePlanComponent'
+import CancelSubscriptionModal from './CancelSubscriptionModal'
+import FreePlanComponent from './FreePlanComponent'
 import {
   ColumnFlexContainer,
   PaymentMethodContainer,
   RowFlexContainer,
   SubscriptionPlanContainer,
 } from './styled'
-import { SubscriptionManagementProps, SubscriptionManagementWithElementsProps } from './types'
+import { SubscriptionManagementProps } from './types'
 import { getChipLabelAndColorByStatus } from './utils'
 
-const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, router }) => {
+const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) => {
   const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
     useState<string | null>(null)
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
@@ -45,7 +46,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
 
   const queryClient = useQueryClient()
   const invalidateCustomer = () => {
-    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(), entityId] })
+    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
   }
 
   const {
@@ -68,11 +69,14 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   const { sendToast } = useNotification()
   const elements = useElements()
   const stripe = useStripe()
+  const router = useRouter()
   const isLoading = isLoadingMethods || isLoadingSubscription
   const { mutateAsync: updateSubscription } = useUpdateSubscription(subscription?.id ?? '', {
     onSuccess: () => {
       invalidateCustomer()
-      queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+      queryClient.invalidateQueries({
+        queryKey: [PAYMENT_METHOD_API_KEY.get(), SUBSCRIPTION_API_KEY.get()],
+      })
       sendToast('Subscription updated successfully.', { type: 'success' })
     },
     onError: (error) => {
@@ -88,6 +92,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   const marketingFeatures = subscription?.product?.marketingFeatures ?? []
   const selectedPaymentMethodId = useMemo(() => {
     if (!paymentMethods || paymentMethods.length === 0) return ''
+    if (lastAddedPaymentMethodIdDuringSession) {
+      return lastAddedPaymentMethodIdDuringSession
+    }
     if (subscription?.defaultPaymentMethod) {
       const defaultPM = paymentMethods.find((pm) => pm.id === subscription.defaultPaymentMethod)
       if (defaultPM) return defaultPM.id
@@ -108,6 +115,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
       await updateSubscription({
         defaultPaymentMethod: paymentMethodId,
       })
+      setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
     } catch (error) {
       console.error('Error updating subscription:', error)
     }
@@ -120,7 +128,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   }, [lastAddedPaymentMethodIdDuringSession])
 
   if (!hasSubscription && !isLoading) {
-    return <FreePlanComponent router={router} />
+    return <FreePlanComponent onPlanChange={() => router.push('/subscriptions')} />
   }
 
   return (
@@ -234,7 +242,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
             onClose={() => setIsCancelSubscriptionModalOpen(false)}
             onConfirm={() => {
               cancelSubscription()
-              queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(), entityId] })
+              queryClient.invalidateQueries({
+                queryKey: [CUSTOMER_API_KEY.get(entityId), SUBSCRIPTION_API_KEY.get()],
+              })
               setIsCancelSubscriptionModalOpen(false)
             }}
           />
@@ -244,13 +254,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   )
 }
 
-const SubscriptionManagementWithElements: FC<SubscriptionManagementWithElementsProps> = ({
-  stripePublishableKey,
-  entityId,
-  router,
-}) => (
-  <Elements stripe={getStripePromise(stripePublishableKey)}>
-    <SubscriptionManagement entityId={entityId} router={router} />
+const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({ entityId }) => (
+  <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}>
+    <SubscriptionManagement entityId={entityId} />
   </Elements>
 )
 

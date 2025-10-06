@@ -4,11 +4,11 @@ import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/ic
 
 import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
 
-import useStripeHook from '../../hooks/useStripeHook'
-import { getCardIcon } from '../../utils'
 import AddCardModal from '../AddCardModal'
-import AddPaymentMethodItem from './components/AddPaymentMethodItem'
-import PaymentMethodDisplay from './components/PaymentMethodDisplay'
+import useStripeHook from '../hooks/useStripeHook'
+import { getCardIcon } from '../utils'
+import AddPaymentMethodItem from './AddPaymentMethodItem'
+import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
 

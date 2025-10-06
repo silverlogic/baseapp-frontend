@@ -7,7 +7,7 @@ import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
+import { PAYMENT_METHOD_API_KEY } from '../services/keys'
 import { AddCardModalProps } from './types'
 
 const AddCardModal: FC<AddCardModalProps> = ({

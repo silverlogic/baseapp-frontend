@@ -2,7 +2,7 @@ import { FC, ReactElement } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import { PaymentMethod } from '../../../types'
+import { PaymentMethod } from '../../types'
 
 const PaymentMethodDisplay: FC<{
   pm: PaymentMethod

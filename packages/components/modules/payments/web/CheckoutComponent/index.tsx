@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { useNotification } from '@baseapp-frontend/utils'
@@ -9,10 +9,11 @@ import { Divider, Grid, Typography } from '@mui/material'
 import { Box, Theme, useMediaQuery } from '@mui/system'
 import { AddressElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 
-import PaymentDropdown from '../components/PaymentDropDown'
+import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
-import { PAYMENT_METHOD_API_KEY } from '../services/keys'
+import { CUSTOMER_API_KEY, PAYMENT_METHOD_API_KEY } from '../services/keys'
 import { formatPrice } from '../utils'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
@@ -25,19 +26,20 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
   onSuccess,
-  router,
 }) => {
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
   const [isRetry, setIsRetry] = useState<boolean>(false)
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false)
   const [addressElementHasErrors, setAddressElementHasErrors] = useState<boolean>(false)
+  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
 
   const { sendToast } = useNotification()
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
   const elements = useElements()
   const stripe = useStripe()
   const queryClient = useQueryClient()
+  const router = useRouter()
   const {
     useListPaymentMethods,
     useGetProduct,
@@ -74,18 +76,6 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
         setIsRetry(true)
       },
     })
-
-  const getInitialPaymentMethodId = () => {
-    if (paymentMethods?.length && paymentMethods.length > 0) {
-      const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
-      return defaultPaymentMethod?.id ?? 'empty'
-    }
-    return 'empty'
-  }
-
-  const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>(
-    getInitialPaymentMethodId(),
-  )
 
   const selectedMethod = useMemo(
     () => paymentMethods?.find((pm) => pm.id === selectedPaymentMethodId),
@@ -180,16 +170,17 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               if (paymentMethods?.length && paymentMethods.length > 0) {
                 setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
               }
-              queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
-              setConfirmationModalOpen(true)
-              setIsRetry(false)
-              onSuccess?.()
+              queryClient.invalidateQueries({
+                queryKey: [PAYMENT_METHOD_API_KEY.get(), CUSTOMER_API_KEY.get(entityId)],
+              })
             }
+            setConfirmationModalOpen(true)
+            setIsRetry(false)
+            onSuccess?.()
           },
           onError: (error: any) => {
             console.error('Failed to create subscription', error)
             const message = extractErrorMessage(error)
-            console.log('message', message)
             sendToast(message, { type: 'error' })
             setIsRetry(true)
           },
@@ -221,6 +212,12 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
       setAddressElementHasErrors(false)
     }
   }
+
+  useEffect(() => {
+    if (!paymentMethods || paymentMethods.length === 0) return
+    const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
+    setSelectedPaymentMethodId(defaultPaymentMethod?.id ?? 'empty')
+  }, [paymentMethods])
 
   if (isNotReady) return <LoadingState />
 
@@ -353,7 +350,6 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
   stripePublishableKey,
   ConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
-  router,
   onSuccess,
 }) => (
   <Elements stripe={getStripePromise(stripePublishableKey)}>
@@ -362,7 +358,6 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
       productId={productId}
       ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
       ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
-      router={router}
       onSuccess={onSuccess}
     />
   </Elements>
