@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 5.0.4
+
+### Patch Changes
+
+- Enhanced current profile store to automatically load profile from client-side cookies when no initial profile is provided
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.3
+
 ## 5.0.3
 
 ### Patch Changes

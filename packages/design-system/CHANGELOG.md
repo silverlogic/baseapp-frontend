@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.1.2
+
+### Patch Changes
+
+- Enhanced UI settings store to automatically load settings from client-side cookies when no initial settings are provided
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.3
+
 ## 1.1.1
 
 ### Patch Changes
