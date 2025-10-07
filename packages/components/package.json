@@ -83,7 +83,7 @@
     "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
-    "react-native-paper": "^5.14.5",
+    "react-native-paper": "catalog:react-native",
     "react-native-safe-area-context": "5.4.1",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
