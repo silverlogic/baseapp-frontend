@@ -9,7 +9,6 @@ import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
 import { createStyles } from './styles'
 import type { SocialTextInputProps } from './types'
 
-// TODO: abstract to baseapp-frontend package
 const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
   ({ children, lineHeight = 22, maxLines = 3, toolStyle = {}, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)

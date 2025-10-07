@@ -1,8 +1,7 @@
-import { Theme } from '@baseapp-frontend/design-system/theme/native'
+import { Theme } from '@baseapp-frontend/design-system/styles/native'
 
 import { StyleSheet } from 'react-native'
 
-// TODO: abstract to baseapp-frontend package
 export const createStyles = (
   theme: Theme,
   {

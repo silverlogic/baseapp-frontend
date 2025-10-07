@@ -13,11 +13,11 @@ import { MessagesListFragment$key } from '../../../../../__generated__/MessagesL
 import {
   MESSAGE_TYPE,
   MessagesListFragment,
-  useMessagesListSubscription,
   useReadMessageMutation,
   withChatRoomProvider,
 } from '../../../common'
 import MessageCreate from '../../MessageCreate'
+import { useMessagesListSubscription } from '../../graphql/subscriptions/useMessagesListSubscription'
 import { MessagesGroup as DefaultMessagesGroup } from './MessagesGroup'
 import { createStyles } from './styles'
 import { MessagesListProps } from './types'

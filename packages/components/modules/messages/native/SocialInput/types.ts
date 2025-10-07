@@ -1,8 +1,8 @@
 import { FC } from 'react'
 
-import { SocialUpsertForm } from 'app/(protected-routes)/rooms/types'
 import { UseFormReturn } from 'react-hook-form'
 
+import { SocialUpsertForm } from '../../../__shared__/common'
 import { SocialTextInputProps } from '../SocialTextInput/types'
 import { SubmitActionsProps } from './SubmitActions/types'
 
