@@ -80,8 +80,11 @@
     "next": "catalog:",
     "numbro": "catalog:components",
     "react-hook-form": "catalog:",
+    "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
+    "react-native-paper": "^5.14.5",
+    "react-native-safe-area-context": "5.4.1",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",
@@ -89,7 +92,6 @@
     "slugify": "catalog:components",
     "use-long-press": "catalog:components",
     "zod": "catalog:",
-    "react-multi-carousel": "catalog:",
     "zustand": "catalog:"
   },
   "peerDependencies": {
