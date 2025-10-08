@@ -1,0 +1,244 @@
+import React, { FC, useMemo, useRef, useState, useTransition } from 'react'
+
+import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
+import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { AutocompleteField } from '@baseapp-frontend/design-system/components/web/inputs'
+import { useNotification } from '@baseapp-frontend/utils'
+
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { useForm } from 'react-hook-form'
+import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
+
+import { UsersListFragment$key } from '../../../../../../__generated__/UsersListFragment.graphql'
+import { UsersListPaginationQuery as UsersListPaginationQueryType } from '../../../../../../__generated__/UsersListPaginationQuery.graphql'
+import { UsersListFragment } from '../../../../common'
+import { useProfileUserRoleCreateMutation } from '../../../../common/graphql/mutations/ProfileUserRoleCreate'
+import { UsersListPaginationQuery } from '../../../../common/graphql/queries/UsersList'
+import UserCard from '../UserCard'
+import VirtuosoListbox from '../VirtuosoListbox'
+import { AddMembersDialogHeader } from '../styled'
+import { AddMembersDialogProps, NewEmail, User } from '../types'
+
+const AddMembersDialog: FC<AddMembersDialogProps> = ({
+  isOpen,
+  onClose,
+  profileId,
+  refetchMembers,
+  LoadingStateProps,
+}) => {
+  const [selectedUsers, setSelectedUsers] = useState<User[]>([])
+  const [selectedEmails, setSelectedEmails] = useState<NewEmail[]>([])
+  const autocompleteRef = useRef<HTMLInputElement>(null)
+
+  const [commitMutation, isMutationInFlight] = useProfileUserRoleCreateMutation()
+  const { sendToast } = useNotification()
+  const [isPending, startTransition] = useTransition()
+  const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
+  const searchQuery = watch('search')
+
+  const usersQueryData = useLazyLoadQuery<UsersListPaginationQueryType>(UsersListPaginationQuery, {
+    q: '',
+  })
+  const { data, refetch, isLoadingNext, hasNext, loadNext } = usePaginationFragment<
+    UsersListPaginationQueryType,
+    UsersListFragment$key
+  >(UsersListFragment, usersQueryData)
+
+  const handleSearch = (value: string) => {
+    startTransition(() => {
+      refetch({ q: value })
+    })
+  }
+
+  const handleSearchClear = () => {
+    startTransition(() => {
+      reset()
+      handleSearch('')
+    })
+  }
+
+  const users = useMemo(
+    () => data?.users?.edges?.map((edge) => edge?.node) || [],
+    [data?.users?.edges],
+  )
+  const filteredUsers = useMemo(
+    () =>
+      users
+        .filter((user) => !selectedUsers.some((selectedUser) => selectedUser?.id === user?.id))
+        .filter((user) => user?.profile?.id !== profileId),
+    [users, selectedUsers, profileId],
+  )
+  const autocompleteOptions = useMemo(() => {
+    const baseOptions = filteredUsers
+    const inputValue = searchQuery?.trim()
+    if (!inputValue) {
+      return baseOptions
+    }
+    const filtered = baseOptions.filter(
+      (option) =>
+        option?.fullName?.toLowerCase().includes(inputValue.toLowerCase()) ||
+        option?.email?.toLowerCase().includes(inputValue.toLowerCase()),
+    )
+    if (inputValue.includes('@') && filtered.length === 0) {
+      return [{ email: inputValue, isNewEmail: true }]
+    }
+    if (filtered.length === 0) {
+      return [{ empty: true }]
+    }
+    return filtered
+  }, [filteredUsers])
+
+  const isEmailAlreadySelected = (currentEmail: NewEmail) =>
+    selectedEmails.some((selectedEmail) => selectedEmail?.email === currentEmail?.email)
+
+  const onSelectUser = (event: any, newValue: User | NewEmail) => {
+    handleSearchClear()
+    if ('isNewEmail' in newValue) {
+      if (isEmailAlreadySelected(newValue)) {
+        sendToast('Email already added', { type: 'warning' })
+        return
+      }
+      setSelectedEmails([...selectedEmails, newValue])
+    } else {
+      setSelectedUsers([...selectedUsers, newValue as User])
+    }
+  }
+
+  const handleInvite = () => {
+    const usersIds = selectedUsers.map((user: User) => user?.id)
+    const emailsToInvite = selectedEmails.map((email: NewEmail) => email?.email)
+    commitMutation({
+      variables: { input: { profileId: profileId ?? '', usersIds, emailsToInvite } },
+      onCompleted: (response, errors) => {
+        if (!errors) {
+          sendToast('Members invited successfully', { type: 'success' })
+          refetchMembers?.({ q: '' })
+          setSelectedUsers([])
+          handleSearchClear()
+          onClose()
+        }
+      },
+    })
+  }
+
+  const handleClose = () => {
+    onClose()
+    setSelectedUsers([])
+    setSelectedEmails([])
+  }
+
+  const renderLoadingState = () => {
+    if (!isLoadingNext) return null
+
+    return (
+      <LoadingState
+        sx={{ paddingTop: 3, paddingBottom: 1 }}
+        CircularProgressProps={{ size: 15 }}
+        {...LoadingStateProps}
+      />
+    )
+  }
+
+  const handleItemSelection = (option: User | NewEmail) => {
+    onSelectUser(null, option)
+    if (autocompleteRef.current) {
+      const inputElement = autocompleteRef.current.querySelector('input')
+      if (inputElement) {
+        inputElement.blur()
+      }
+    }
+  }
+
+  const CustomVirtuosoListbox = (props: any) =>
+    VirtuosoListbox(
+      props,
+      autocompleteOptions as (User | NewEmail)[],
+      handleItemSelection,
+      renderLoadingState,
+      hasNext,
+      isLoadingNext,
+      loadNext,
+    )
+
+  if (!isOpen) return null
+
+  return (
+    <Dialog open={isOpen} onClose={handleClose} maxWidth="xs">
+      <AddMembersDialogHeader>
+        <Typography variant="h6">Add Members</Typography>
+        <IconButton aria-label="close" onClick={handleClose}>
+          <CloseIcon />
+        </IconButton>
+      </AddMembersDialogHeader>
+      <DialogContent sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <Typography variant="body1">
+          Add users to your organization or send an invitation email.
+        </Typography>
+        <AutocompleteField
+          ref={autocompleteRef}
+          name="search"
+          options={autocompleteOptions}
+          control={control}
+          isPending={isPending}
+          ListboxComponent={CustomVirtuosoListbox}
+          value={null}
+          inputValue={searchQuery}
+          onInputChange={(event: any, newInputValue: string) => {
+            if (event?.type === 'change') {
+              handleSearch(newInputValue)
+            }
+          }}
+          renderInput={(params: any) => (
+            <TextField {...params} placeholder="Invite members by name or email" />
+          )}
+          filterOptions={(options: any) => options}
+        />
+        <Box display="flex" flexDirection="column" gap={1}>
+          {selectedUsers.map((user: User) => (
+            <UserCard
+              key={user?.id}
+              user={user}
+              onRemove={() => setSelectedUsers(selectedUsers.filter((u) => u?.id !== user?.id))}
+            />
+          ))}
+          {selectedEmails.map((email: NewEmail) => (
+            <UserCard
+              key={email?.email}
+              user={email}
+              onRemove={() =>
+                setSelectedEmails(selectedEmails.filter((e) => e?.email !== email?.email))
+              }
+            />
+          ))}
+        </Box>
+      </DialogContent>
+      <DialogActions sx={{ justifyContent: 'flex-end' }}>
+        <Button variant="outlined" color="inherit" onClick={onClose} sx={{ width: 'auto' }}>
+          Cancel
+        </Button>
+        <Button
+          variant="contained"
+          color="inherit"
+          onClick={handleInvite}
+          disabled={
+            (selectedUsers.length === 0 && selectedEmails.length === 0) || isMutationInFlight
+          }
+          sx={{ width: 'auto' }}
+        >
+          Invite
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
+
+export default AddMembersDialog
