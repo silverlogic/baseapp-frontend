@@ -25,6 +25,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   children,
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
+  isHeaderVisible = true,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
@@ -56,14 +57,14 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavHorizontal) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        />
+        {isHeaderVisible && <Header
+            LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
+            onOpenNav={nav.onTrue}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={AccountMenuProps}
+            ToolbarProps={ToolbarProps}
+          />}
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}
@@ -75,14 +76,14 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavMini) {
     return (
       <>
-        <Header
+        {isHeaderVisible && <Header
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
           AccountMenu={AccountMenu}
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
-        />
+        />}
 
         <Box
           sx={{
@@ -108,14 +109,14 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
 
   return (
     <>
-      <Header
+      {isHeaderVisible && <Header
         LogoIcon={LogoIcon}
         LogoProps={LogoProps}
         onOpenNav={nav.onTrue}
         AccountMenu={AccountMenu}
         AccountMenuProps={AccountMenuProps}
         ToolbarProps={ToolbarProps}
-      />
+      />}
       <Box
         sx={{
           minHeight: 1,
