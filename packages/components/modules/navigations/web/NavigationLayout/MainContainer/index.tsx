@@ -11,6 +11,7 @@ const MainContainer: FC<MainContainerProps> = ({
   isNavCentered,
   isNavHorizontal,
   BoxProps,
+  isHeaderVisible,
 }) => {
   if (isNavCentered) {
     return (
@@ -29,7 +30,7 @@ const MainContainer: FC<MainContainerProps> = ({
   }
 
   return (
-    <NavVerticalContainer component="main" isNavMini={isNavMini} {...BoxProps}>
+    <NavVerticalContainer component="main" isNavMini={isNavMini} isHeaderVisible={isHeaderVisible} {...BoxProps}>
       {children}
     </NavVerticalContainer>
   )

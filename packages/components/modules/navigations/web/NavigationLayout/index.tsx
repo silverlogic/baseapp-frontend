@@ -25,7 +25,6 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   children,
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
-  isHeaderVisible = true,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
@@ -33,11 +32,12 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   const isNavCentered = settings?.themeLayout === 'centered'
   const isNavHorizontal = settings?.themeLayout === 'horizontal'
   const isNavMini = settings?.themeLayout === 'mini'
+  const {isHeaderVisible} = MainContainerProps
 
   if (isNavCentered) {
     return (
       <>
-        <Header
+        {isHeaderVisible && <Header
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}
           onOpenNav={nav.onTrue}
@@ -47,6 +47,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         >
           <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         </Header>
+        }
         <MainContainer isNavCentered {...MainContainerProps}>
           {children}
         </MainContainer>
@@ -58,13 +59,13 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
     return (
       <>
         {isHeaderVisible && <Header
-            LogoIcon={LogoIcon}
-            LogoProps={LogoProps}
-            onOpenNav={nav.onTrue}
-            AccountMenu={AccountMenu}
-            AccountMenuProps={AccountMenuProps}
-            ToolbarProps={ToolbarProps}
-          />}
+          LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
+          onOpenNav={nav.onTrue}
+          AccountMenu={AccountMenu}
+          AccountMenuProps={AccountMenuProps}
+          ToolbarProps={ToolbarProps}
+        />}
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}

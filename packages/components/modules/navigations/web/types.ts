@@ -31,6 +31,7 @@ export type NavItemBaseProps = {
   disabled?: boolean
   externalLink?: boolean
   children?: NavItemChildren[]
+  onClick?: () => void
 }
 
 export type NavItemProps = ListItemButtonProps &
@@ -47,6 +48,7 @@ export type NavListProps = {
 
 export type NavigationData = {
   subheader: string
+  bottomFixed?: boolean
   items: NavItemBaseProps[]
 }[]
 

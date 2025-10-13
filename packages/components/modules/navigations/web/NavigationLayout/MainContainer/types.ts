@@ -7,8 +7,9 @@ export interface MainContainerProps extends PropsWithChildren {
   isNavHorizontal?: boolean
   isNavCentered?: boolean
   BoxProps?: BoxProps
+  isHeaderVisible?: boolean
 }
 
 export interface NavVerticalContainerProps
   extends BoxProps,
-    Pick<MainContainerProps, 'isNavMini'> {}
+    Pick<MainContainerProps, 'isNavMini' | 'isHeaderVisible'> {}

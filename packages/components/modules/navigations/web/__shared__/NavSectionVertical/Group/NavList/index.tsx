@@ -30,8 +30,10 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
   const handleToggleMenu = useCallback(() => {
     if (data.children) {
       setOpenMenu((prev) => !prev)
+    } else if (data.onClick) {
+      data.onClick()
     }
-  }, [data.children])
+  }, [data])
 
   return (
     <>
