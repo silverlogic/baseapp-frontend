@@ -21,7 +21,7 @@ const NavSectionVertical: FC<NavSectionProps> = ({ navData, slotProps, ...other 
     ))}
     </Box>
 
-    <Box justifySelf="flex-end">
+    <Box justifySelf="flex-end" pb={3}>
     {navData.filter(({bottomFixed}) => bottomFixed).map((group, index) => (
       <Group
       key={group.subheader || index}

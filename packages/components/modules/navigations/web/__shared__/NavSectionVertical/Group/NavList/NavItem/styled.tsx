@@ -25,7 +25,7 @@ export const StyledNavItem = styled(ListItemButton, {
     item: {
       marginBottom: 4,
       borderRadius: 8,
-      color: theme.palette.text.secondary,
+      color: theme.palette.primary.main,
       padding: theme.spacing(0.5, 1, 0.5, 1.5),
     },
     icon: {
@@ -80,7 +80,7 @@ export const StyledNavItem = styled(ListItemButton, {
       },
       ...(active && {
         color:
-          theme.palette.mode === 'light' ? theme.palette.primary.main : theme.palette.primary.light,
+          theme.palette.mode === 'light' ? theme.palette.primary.dark : theme.palette.primary.main,
         backgroundColor: alpha(theme.palette.primary.main, 0.08),
         '&:hover': {
           backgroundColor: alpha(theme.palette.primary.main, 0.16),
@@ -137,11 +137,11 @@ export const StyledNavItem = styled(ListItemButton, {
     }),
     '&:hover': {
       svg: {
-        color: active ? theme.palette.primary.main : theme.palette.grey[600],
+        color: active ? theme.palette.primary.dark : theme.palette.primary.main,
       },
     },
     svg: {
-      color: active ? theme.palette.primary.main : theme.palette.grey[600],
+      color: active ? theme.palette.primary.dark : theme.palette.primary.main,
     },
 
     // Deep sub item
