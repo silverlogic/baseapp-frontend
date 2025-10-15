@@ -74,7 +74,19 @@ let nextClientMutationId = 0
  * ```
  */
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
-  ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
+  (
+    {
+      roomId,
+      chatRoomMembers = [],
+      loadNext,
+      isLoadingNext,
+      hasNext,
+      refetch,
+      SocialInput = DefaultSocialInput,
+      SocialInputProps = {},
+    },
+    ref,
+  ) => {
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
 
@@ -150,6 +162,11 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         form={form}
         submit={onSubmit}
         isLoading={isMutationInFlight}
+        profilesList={chatRoomMembers}
+        loadNextProfiles={loadNext}
+        isLoadingNextProfiles={isLoadingNext}
+        hasNextProfiles={hasNext}
+        refetchProfiles={refetch}
         {...SocialInputProps}
       />
     )

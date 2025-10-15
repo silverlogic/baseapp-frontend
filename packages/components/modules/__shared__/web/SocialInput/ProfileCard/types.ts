@@ -6,6 +6,7 @@ export type GroupMembersNode = NonNullable<GroupMembersEdge['node']>
 
 export interface ProfileCardProps {
   groupMember: GroupMembersNode
-  hasAdminPermissions: boolean
-  initiateRemoval: (id: string, name: string | null | undefined) => void
+  isSelected: boolean
+  tagUser: () => void
+  setName: (name: string | undefined | null) => void
 }

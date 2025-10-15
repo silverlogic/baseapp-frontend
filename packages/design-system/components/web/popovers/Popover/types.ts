@@ -15,7 +15,7 @@ export type MenuPopoverArrowValue =
   | 'right-bottom'
 
 export interface MenuPopoverProps extends Omit<PopoverProps, 'open'> {
-  open: HTMLElement | null
+  open: HTMLElement | boolean | null
   arrow?: MenuPopoverArrowValue
   hiddenArrow?: boolean
 }

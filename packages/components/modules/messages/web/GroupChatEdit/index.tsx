@@ -65,7 +65,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 
   const participants = useMemo(
     () =>
-      membersList?.participants?.edges?.map(
+      membersList?.memberList?.edges?.map(
         (edge: any) => edge?.node?.profile && edge.node.profile,
       ) as ProfileNode[],
     [membersList],

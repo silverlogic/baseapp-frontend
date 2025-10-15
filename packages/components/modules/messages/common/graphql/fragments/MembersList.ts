@@ -1,11 +1,17 @@
 import { graphql } from 'react-relay'
 
 export const MembersListFragment = graphql`
-  fragment MembersListFragment on ChatRoom
-  @argumentDefinitions(cursor: { type: "String" }, count: { type: "Int", defaultValue: 5 })
+  fragment MembersListFragment on ChatRooms
+  @argumentDefinitions(
+    cursor: { type: "String" }
+    count: { type: "Int", defaultValue: 5 }
+    q: { type: "String", defaultValue: "" }
+    orderBy: { type: "String", defaultValue: "name" }
+  )
   @refetchable(queryName: "ChatRoomParticipantsPaginationQuery") {
     id
-    participants(first: $count, after: $cursor) @connection(key: "ChatRoom_participants") {
+    memberList: participants(first: $count, after: $cursor, q: $q)
+      @connection(key: "ChatRoom_memberList") {
       edges {
         node {
           id

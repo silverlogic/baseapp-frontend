@@ -76,7 +76,7 @@ export const getChatRoomConnections: (
   return []
 }
 
-export const useCheckIsAdmin = (participants: MembersListFragment$data['participants']) => {
+export const useCheckIsAdmin = (participants: MembersListFragment$data['memberList']) => {
   const { currentProfile } = useCurrentProfile()
   const me = participants?.edges?.find((edge) => edge?.node?.profile?.id === currentProfile?.id)
   const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin

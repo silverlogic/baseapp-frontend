@@ -57,7 +57,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
     ChatRoomParticipantsPaginationQuery,
     MembersListFragment$key
   >(MembersListFragment, group)
-  const members = data?.participants
+  const members = data?.memberList
   const { isAdmin, isSoleAdmin } = useCheckIsAdmin(members)
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />

@@ -1,13 +1,14 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { useQueryLoader } from 'react-relay'
 
+import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
-import { GroupDetailsQuery, useChatRoom } from '../../common'
+import { ChatRoomQuery, GroupDetailsQuery, useChatRoom } from '../../common'
 import DefaultAllChatRoomsList from '../AllChatRoomsList'
 import ChatRoom from '../ChatRoom'
 import DefaultGroupChatCreate from '../GroupChatCreate'
@@ -39,19 +40,20 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
 
   const [groupDetailsQueryRef, loadGroupDetailsQuery] =
     useQueryLoader<GroupDetailsQueryType>(GroupDetailsQuery)
-  const { id: selectedRoom } = useChatRoom()
+  const [chatRoomQueryRef, loadChatRoomQuery] = useQueryLoader<ChatRoomQueryType>(ChatRoomQuery)
+  const { id: roomId } = useChatRoom()
 
   const displayGroupDetails = () => {
-    if (selectedRoom) {
+    if (roomId) {
       setLeftPanelContent(LEFT_PANEL_CONTENT.groupDetails)
-      loadGroupDetailsQuery({ roomId: selectedRoom }, { fetchPolicy: 'network-only' })
+      loadGroupDetailsQuery({ roomId }, { fetchPolicy: 'network-only' })
     }
   }
 
   const shouldRenderLeftPanel =
-    isUpToMd || leftPanelContent !== LEFT_PANEL_CONTENT.chatRoomList || !selectedRoom
+    isUpToMd || leftPanelContent !== LEFT_PANEL_CONTENT.chatRoomList || !roomId
   const shouldRenderRightPanel =
-    isUpToMd || (leftPanelContent === LEFT_PANEL_CONTENT.chatRoomList && !!selectedRoom)
+    isUpToMd || (leftPanelContent === LEFT_PANEL_CONTENT.chatRoomList && !!roomId)
 
   const renderLeftPanelContent = () => {
     switch (leftPanelContent) {
@@ -72,7 +74,7 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
             onRemovalFromGroup={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onValidSubmission={() => setLeftPanelContent(LEFT_PANEL_CONTENT.groupDetails)}
             queryRef={groupDetailsQueryRef}
-            roomId={selectedRoom}
+            roomId={roomId}
             allProfilesRef={chatRoomsQueryData}
             {...GroupChatEditComponentProps}
           />
@@ -111,10 +113,22 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   }
 
   const renderRightPanelContent = () => {
-    if (!selectedRoom) return <div />
+    if (!chatRoomQueryRef || !roomId) return <div />
 
-    return <ChatRoom roomId={selectedRoom} onDisplayGroupDetailsClicked={displayGroupDetails} />
+    return (
+      <ChatRoom
+        roomId={roomId}
+        roomRef={chatRoomQueryRef}
+        onDisplayGroupDetailsClicked={displayGroupDetails}
+      />
+    )
   }
+
+  useEffect(() => {
+    if (roomId) {
+      loadChatRoomQuery({ roomId }, { fetchPolicy: 'store-and-network' })
+    }
+  }, [roomId, loadChatRoomQuery])
 
   return (
     <ChatRoomsContainer themeLayout={settings.themeLayout}>
