@@ -39,6 +39,7 @@ const NavVertical: FC<NavVerticalProps> = ({
     >
       {!hideToggleButton && <NavToggleButton />}
       <Stack
+        id="nav-vertical-stack"
         sx={{
           height: 1,
           position: 'fixed',
@@ -47,8 +48,11 @@ const NavVertical: FC<NavVerticalProps> = ({
         }}
       >
         <Scrollbar
+          id="nav-vertical-scrollbar"
           sx={{
             height: 1,
+            display: 'flex',
+            flexDirection: 'column',
             '& .simplebar-content': {
               height: 1,
               display: 'flex',
