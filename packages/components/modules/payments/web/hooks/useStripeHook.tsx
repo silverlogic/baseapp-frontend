@@ -90,7 +90,7 @@ const useStripeHook = () => {
         isDefault: boolean
       }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: PAYMENT_METHOD_API_KEY.get() })
+        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
         options.onSuccess?.()
       },
       onError: (error) => {
