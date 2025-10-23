@@ -1,6 +1,9 @@
 import { FC, Suspense, useState, useTransition } from 'react'
 
-import { SearchInput } from '@baseapp-frontend/design-system/components/native/inputs'
+import {
+  DEFAULT_FORM_VALUES,
+  SearchInput,
+} from '@baseapp-frontend/design-system/components/native/inputs'
 import { Tab, Tabs } from '@baseapp-frontend/design-system/components/native/tabs'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { PageViewWithHeader, View } from '@baseapp-frontend/design-system/components/native/views'
@@ -24,7 +27,7 @@ import { createStyles } from './styles'
 const ChatRooms: FC = () => {
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { control, reset } = useForm({ defaultValues: { search: '' } })
+  const { control, reset } = useForm({ defaultValues: DEFAULT_FORM_VALUES })
   const [selectedTab, setSelectedTab] = useState<string>(CHAT_TAB_VALUES.active)
   const [searchParam, setSearchParam] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -44,7 +47,7 @@ const ChatRooms: FC = () => {
 
   const resetInput = () => {
     setSearchParam('')
-    reset({ search: '' })
+    reset(DEFAULT_FORM_VALUES)
   }
 
   const environment = useRelayEnvironment()
@@ -90,11 +93,6 @@ const ChatRooms: FC = () => {
             aria-label="Unread messages tab"
           />
           <Tab
-            label={CHAT_TAB_LABEL.groups}
-            value={CHAT_TAB_VALUES.groups}
-            aria-label="Groups messages tab"
-          />
-          <Tab
             label={CHAT_TAB_LABEL.archived}
             value={CHAT_TAB_VALUES.archived}
             aria-label="Archived messages tab"
@@ -119,7 +117,7 @@ const ChatRooms: FC = () => {
 }
 
 const SuspendedChatRooms = () => (
-  <Suspense>
+  <Suspense fallback={null}>
     <ChatRooms />
   </Suspense>
 )
