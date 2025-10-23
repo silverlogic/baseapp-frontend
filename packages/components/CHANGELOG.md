@@ -1,6 +1,6 @@
 # @baseapp-frontend/components
 
-## 1.4.4
+## 1.4.5
 
 ### Minor Changes
 
@@ -9,7 +9,17 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @baseapp-frontend/design-system@1.2.0
+  - @baseapp-frontend/design-system@1.1.3
+
+## 1.4.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.4
+  - @baseapp-frontend/design-system@1.1.2
+  - @baseapp-frontend/utils@4.0.3
+  - @baseapp-frontend/graphql@1.3.5
 
 ## 1.4.3
 

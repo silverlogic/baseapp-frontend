@@ -7,11 +7,26 @@ import type { CurrentProfileState } from './types'
 
 let profileStore: StoreApi<CurrentProfileState> | null = null
 
+const getClientSideCurrentProfile = (): MinimalProfile | null => {
+  const storedProfile = Cookies.get(CURRENT_PROFILE_KEY_NAME)
+  if (storedProfile) {
+    try {
+      return JSON.parse(storedProfile)
+    } catch {
+      return null
+    }
+  }
+  return null
+}
+
 const createProfileStore = (
-  initialProfile: MinimalProfile | null = null,
-): StoreApi<CurrentProfileState> =>
-  createStore<CurrentProfileState>()((set) => ({
-    currentProfile: initialProfile,
+  initialProfile?: MinimalProfile | null,
+): StoreApi<CurrentProfileState> => {
+  // If no initialProfile provided, try to get it from client-side cookies
+  const profileToUse = initialProfile || getClientSideCurrentProfile()
+
+  return createStore<CurrentProfileState>()((set) => ({
+    currentProfile: profileToUse,
     setCurrentProfile: (profile: MinimalProfile | null) => {
       Cookies.set(CURRENT_PROFILE_KEY_NAME, JSON.stringify(profile))
       set(() => ({ currentProfile: profile }))
@@ -26,6 +41,7 @@ const createProfileStore = (
       })
     },
   }))
+}
 
 export const initializeProfileStore = (
   initialProfile: MinimalProfile | null = null,
@@ -37,7 +53,6 @@ export const initializeProfileStore = (
     (initialProfile && Object.keys(initialProfile).length > 0)
   ) {
     profileStore = createProfileStore(initialProfile)
-    return profileStore
   }
 
   return profileStore
