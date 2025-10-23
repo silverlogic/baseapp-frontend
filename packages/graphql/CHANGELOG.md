@@ -1,5 +1,13 @@
 # @baseapp-frontend/graphql
 
+## 1.3.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.4
+  - @baseapp-frontend/utils@4.0.3
+
 ## 1.3.4
 
 ### Patch Changes
