@@ -6,6 +6,7 @@ import {
   useNameAndAvatar,
 } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
+import { Badge } from '@baseapp-frontend/design-system/components/native/badges'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
@@ -124,19 +125,12 @@ const ChatCard = ({
           </View>
         </View>
         <View style={styles.profileCounterContainer}>
-          {hasUnreadMessages && (
-            <View style={styles.profileCounter}>
-              <Text variant="caption" style={styles.profileCounterText}>
-                {unreadMessagesCountFragment?.unreadMessages?.count}
-              </Text>
-            </View>
-          )}
+          {hasUnreadMessages && <Badge>{unreadMessagesCountFragment?.unreadMessages?.count}</Badge>}
         </View>
       </View>
       <ChatCardOptions
         bottomDrawerRef={bottomDrawerRef}
         handleSheetChanges={() => {}}
-        // type={fieldType}
         handleArchiveChat={handleArchiveChat}
         handleMarkAsUnread={handleMarkAsUnread}
         handleChatDetails={handleChatDetails}

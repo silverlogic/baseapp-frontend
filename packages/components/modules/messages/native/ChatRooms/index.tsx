@@ -2,6 +2,7 @@ import { FC, Suspense, useState, useTransition } from 'react'
 
 import {
   DEFAULT_FORM_VALUES,
+  FORM_VALUES,
   SearchInput,
 } from '@baseapp-frontend/design-system/components/native/inputs'
 import { Tab, Tabs } from '@baseapp-frontend/design-system/components/native/tabs'
@@ -30,7 +31,7 @@ const ChatRooms: FC = () => {
   const { control, reset } = useForm({ defaultValues: DEFAULT_FORM_VALUES })
   const [selectedTab, setSelectedTab] = useState<string>(CHAT_TAB_VALUES.active)
   const [searchParam, setSearchParam] = useState('')
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const chatRoomQueryData = useLazyLoadQuery<ChatRoomsQueryType>(
     ChatRoomsQuery,
     {},
@@ -39,7 +40,6 @@ const ChatRooms: FC = () => {
   const { data, refetch } = useRoomsList(chatRoomQueryData?.me?.profile as RoomsListFragment$key)
 
   const handleSearchChange = (text: string) => {
-    if (isPending) return
     startTransition(() => {
       setSearchParam(text)
     })
@@ -76,7 +76,7 @@ const ChatRooms: FC = () => {
           placeholder="Search"
           onChangeText={handleSearchChange}
           control={control}
-          name="search"
+          name={FORM_VALUES.search}
           searchParam={searchParam}
           resetInput={resetInput}
         />
