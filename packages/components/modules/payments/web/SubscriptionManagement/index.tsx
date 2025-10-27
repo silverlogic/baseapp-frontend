@@ -21,7 +21,7 @@ import {
 } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
@@ -56,7 +56,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     useUpdateSubscription,
     useGetCustomer,
   } = useStripeHook()
-  const { data: customer } = useGetCustomer(entityId)
+  const { data: customer, refetch: refetchCustomer } = useGetCustomer(entityId)
   const subscriptionId = customer?.subscriptions?.[0]?.id
   const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscription(
     subscriptionId ?? '',
@@ -70,6 +70,8 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const elements = useElements()
   const stripe = useStripe()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const tabRedirect = searchParams.get('tab')
   const isLoading = isLoadingMethods || isLoadingSubscription
   const { mutateAsync: updateSubscription } = useUpdateSubscription(subscription?.id ?? '', {
     onSuccess: () => {
@@ -126,6 +128,11 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
       handleUpdateSubscription(lastAddedPaymentMethodIdDuringSession)
     }
   }, [lastAddedPaymentMethodIdDuringSession])
+
+  useEffect(() => {
+    if (!tabRedirect || tabRedirect !== 'subscription') return
+    refetchCustomer()
+  }, [tabRedirect])
 
   if (!hasSubscription && !isLoading) {
     return <FreePlanComponent onPlanChange={() => router.push('/subscriptions')} />

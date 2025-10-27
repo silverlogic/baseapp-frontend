@@ -140,8 +140,10 @@ const useStripeHook = () => {
   const useCreateSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
-      onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get()] })
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [CUSTOMER_API_KEY.get(), SUBSCRIPTION_API_KEY.get()],
+        })
       },
       mutationKey: [CREATION_SUBSCRIPTION_API_KEY.get()],
     })
@@ -164,7 +166,9 @@ const useStripeHook = () => {
       mutationFn: (updateData: UpdateSubscriptionOptions) =>
         StripeApi.updateSubscription(subscriptionId, updateData),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get()] })
+        queryClient.invalidateQueries({
+          queryKey: [CUSTOMER_API_KEY.get(), SUBSCRIPTION_API_KEY.get()],
+        })
         options?.onSuccess?.()
       },
       onError: (error) => {
