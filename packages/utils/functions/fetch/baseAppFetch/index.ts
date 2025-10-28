@@ -91,10 +91,20 @@ export const baseAppFetch: BaseAppFetch = async (
   const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
+  let currentProfile
+  if (typeof window === typeof undefined) {
+    const { getTokenSSR } = await import('../../token/getTokenSSR')
+    currentProfile = await getTokenSSR('CurrentProfile')
+  } else {
+    const { getToken } = await import('../../token/getToken')
+    currentProfile = getToken('CurrentProfile')
+  }
+
   const fetchOptions: RequestOptions = {
     ...options,
     headers: {
       Accept: 'application/json, text/plain, */*',
+      'Current-Profile': JSON.parse(currentProfile || '{}').id || '',
       ...options.headers,
     },
   }
