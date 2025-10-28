@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -19,7 +19,6 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { Card, CardContent, InputAdornment, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useFragment } from 'react-relay'
-import { twMerge } from 'tailwind-merge'
 
 import {
   DEFAULT_BANNER_IMAGE_FORMATS,
@@ -132,17 +131,23 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({
 
   const hiddenComponents = [hideBanner, hideBio].filter(Boolean).length
 
+  const formClassName = useMemo(() => {
+    let styles = 'grid grid-rows-[min-content_auto_auto_auto_auto] gap-8'
+    if (hiddenComponents === 1) {
+      styles = 'grid grid-rows-[min-content_auto_auto_auto] gap-8'
+    } else if (hiddenComponents === 2) {
+      styles = 'grid grid-rows-[min-content_auto_auto] gap-8'
+    }
+    return styles
+  }, [hiddenComponents])
+
   return (
     <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
         <form
           // @ts-ignore TODO: check typing issue with zodResolver
           onSubmit={handleSubmit(onSubmit)}
-          className={twMerge(
-            'grid grid-rows-[min-content_auto_auto_auto_auto] gap-8',
-            hiddenComponents === 1 && 'grid-rows-[min-content_auto_auto_auto]',
-            hiddenComponents === 2 && 'grid-rows-[min-content_auto_auto]',
-          )}
+          className={formClassName}
         >
           <div>
             <Typography component="h4" variant="h4" mb={1}>
