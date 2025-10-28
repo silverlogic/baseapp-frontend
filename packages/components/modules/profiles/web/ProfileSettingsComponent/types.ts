@@ -2,4 +2,6 @@ import { ProfileComponentFragment$key } from '../../../../__generated__/ProfileC
 
 export interface ProfileSettingsComponentProps {
   profile?: ProfileComponentFragment$key | null
+  hideBanner?: boolean
+  hideBio?: boolean
 }

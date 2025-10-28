@@ -19,6 +19,7 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import { Card, CardContent, InputAdornment, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useFragment } from 'react-relay'
+import { twMerge } from 'tailwind-merge'
 
 import {
   DEFAULT_BANNER_IMAGE_FORMATS,
@@ -37,7 +38,11 @@ import {
 import { BannerButtonsContainer } from './styled'
 import { ProfileSettingsComponentProps } from './types'
 
-const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: profileRef }) => {
+const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({
+  profile: profileRef,
+  hideBanner,
+  hideBio,
+}) => {
   const profile = useFragment(ProfileComponentFragment, profileRef)
 
   const { sendToast } = useNotification()
@@ -125,13 +130,19 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
     })
   }
 
+  const hiddenComponents = [hideBanner, hideBio].filter(Boolean).length
+
   return (
     <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
         <form
           // @ts-ignore TODO: check typing issue with zodResolver
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-rows-[min-content_auto_auto_auto_auto] gap-8"
+          className={twMerge(
+            'grid grid-rows-[min-content_auto_auto_auto_auto] gap-8',
+            hiddenComponents === 1 && 'grid-rows-[min-content_auto_auto_auto]',
+            hiddenComponents === 2 && 'grid-rows-[min-content_auto_auto]',
+          )}
         >
           <div>
             <Typography component="h4" variant="h4" mb={1}>
@@ -208,61 +219,65 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
               />
             </div>
           </div>
-          <TextareaField
-            label="Bio"
-            control={control}
-            name={PROFILE_FORM_VALUE.biography}
-            hideBorder={false}
-          />
-          <Card variant="outlined" sx={{ boxShadow: 'none' }}>
-            <CardContent sx={{ padding: '16px' }}>
-              <div className="grid grid-rows-[1fr_min-content] justify-center gap-4">
-                <ImageWithFallback
-                  src={bannerImageUrl}
-                  fallbackSrc="/png/profile-banner-edit-page-fallback.png"
-                  alt="Home Banner"
-                  width={868}
-                  height={
-                    290 /* Some css height: auto takes precedence,
+          {!hideBio && (
+            <TextareaField
+              label="Bio"
+              control={control}
+              name={PROFILE_FORM_VALUE.biography}
+              hideBorder={false}
+            />
+          )}
+          {!hideBanner && (
+            <Card variant="outlined" sx={{ boxShadow: 'none' }}>
+              <CardContent sx={{ padding: '16px' }}>
+                <div className="grid grid-rows-[1fr_min-content] justify-center gap-4">
+                  <ImageWithFallback
+                    src={bannerImageUrl}
+                    fallbackSrc="/png/profile-banner-edit-page-fallback.png"
+                    alt="Home Banner"
+                    width={868}
+                    height={
+                      290 /* Some css height: auto takes precedence,
                     so also set as style below */
-                  }
-                  className="overflow-hidden rounded-lg"
-                  style={{ height: '290px', objectFit: 'cover' }}
-                />
-                {getFieldState('bannerImage').error && (
-                  <div className="text-center">
-                    <Typography color="error.main" variant="caption">
-                      {getFieldState('bannerImage').error!.message}
-                    </Typography>
-                  </div>
-                )}
-                <BannerButtonsContainer enableRemove={!!watchBannerImage}>
-                  <FileUploadButton
-                    control={control}
-                    name={PROFILE_FORM_VALUE.bannerImage}
-                    setFile={setValue}
-                    accept={DEFAULT_BANNER_IMAGE_FORMATS}
-                    maxSize={DEFAULT_BANNER_IMAGE_MAX_SIZE}
-                    label={hasUploadedBannerImage ? 'Change Banner' : 'Upload Banner'}
-                    sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
+                    }
+                    className="overflow-hidden rounded-lg"
+                    style={{ height: '290px', objectFit: 'cover' }}
                   />
-                  {watchBannerImage && (
-                    <LoadingButton
-                      variant="text"
-                      color="error"
-                      onClick={() => handleRemoveImage(PROFILE_FORM_VALUE.bannerImage)}
-                      loading={isMutationInFlight}
-                      disabled={isMutationInFlight}
-                      sx={{ maxWidth: 'fit-content' }}
-                      aria-label="Remove banner button"
-                    >
-                      Remove
-                    </LoadingButton>
+                  {getFieldState('bannerImage').error && (
+                    <div className="text-center">
+                      <Typography color="error.main" variant="caption">
+                        {getFieldState('bannerImage').error!.message}
+                      </Typography>
+                    </div>
                   )}
-                </BannerButtonsContainer>
-              </div>
-            </CardContent>
-          </Card>
+                  <BannerButtonsContainer enableRemove={!!watchBannerImage}>
+                    <FileUploadButton
+                      control={control}
+                      name={PROFILE_FORM_VALUE.bannerImage}
+                      setFile={setValue}
+                      accept={DEFAULT_BANNER_IMAGE_FORMATS}
+                      maxSize={DEFAULT_BANNER_IMAGE_MAX_SIZE}
+                      label={hasUploadedBannerImage ? 'Change Banner' : 'Upload Banner'}
+                      sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
+                    />
+                    {watchBannerImage && (
+                      <LoadingButton
+                        variant="text"
+                        color="error"
+                        onClick={() => handleRemoveImage(PROFILE_FORM_VALUE.bannerImage)}
+                        loading={isMutationInFlight}
+                        disabled={isMutationInFlight}
+                        sx={{ maxWidth: 'fit-content' }}
+                        aria-label="Remove banner button"
+                      >
+                        Remove
+                      </LoadingButton>
+                    )}
+                  </BannerButtonsContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           <div className="flex flex-row justify-end gap-4">
             <LoadingButton
               color="inherit"
