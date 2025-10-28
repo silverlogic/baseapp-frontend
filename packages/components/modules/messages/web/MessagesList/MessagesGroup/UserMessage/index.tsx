@@ -21,6 +21,7 @@ const UserMessage: FC<UserMessageProps> = ({
   MessageItemProps = {},
 }) => {
   const { currentProfile } = useCurrentProfile()
+  const isProfileNullOrUndefined = message?.profile == null || message?.profile === undefined
 
   const renderLastMessageTime = useCallback(
     (index: number) => {
@@ -48,21 +49,22 @@ const UserMessage: FC<UserMessageProps> = ({
   const isFirstGroupedMessage = useMemo(() => {
     const currentMessage = allMessages?.[messageIndex]
     const previousMessage = allMessages?.[messageIndex + 1]
+    const isFirstMessageAtTheTop = previousMessage?.isRead === null
 
     const isPreviousMessageFromOtherParticipant =
       previousMessage?.profile?.id !== currentMessage?.profile?.id
     const roomHasOnlyOneMessage = allMessagesLastIndex === 0
-
-    if (isPreviousMessageFromOtherParticipant || roomHasOnlyOneMessage) return true
+    if (isPreviousMessageFromOtherParticipant || roomHasOnlyOneMessage || isFirstMessageAtTheTop)
+      return true
 
     return false
   }, [allMessages, allMessagesLastIndex, messageIndex])
 
   const isOwnMessage = currentProfile?.id === message?.profile?.id
-  const isProfileNullOrUndefined = message?.profile == null || message?.profile === undefined
   const flexAlignments = isOwnMessage ? 'flex-end' : 'flex-start'
 
-  const canShowAvatar = isProfileNullOrUndefined || (isFirstGroupedMessage && !isOwnMessage)
+  const canShowAvatar =
+    (isProfileNullOrUndefined && isFirstGroupedMessage) || (isFirstGroupedMessage && !isOwnMessage)
   const canShowName = canShowAvatar && isGroup
 
   if (!message) return null
