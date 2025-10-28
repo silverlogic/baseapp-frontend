@@ -10,6 +10,7 @@ import {
   Subscription,
   SubscriptionRequestBody,
   UpdatePaymentMethodRequestBody,
+  UpdateSubscriptionOptions,
 } from '../types'
 
 const baseUrl = '/payments'
@@ -57,7 +58,7 @@ class StripeApi {
   static listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products`)
 
   static getProduct = (productId: string): Promise<Product> =>
-    axios.get(`${baseUrl}/stripe/products`, { params: { productId } })
+    axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
     entityId,
@@ -85,7 +86,7 @@ class StripeApi {
 
   static updateSubscription = (
     subscriptionId: string,
-    updateData: Partial<Subscription>,
+    updateData: UpdateSubscriptionOptions,
   ): Promise<Subscription> =>
     axios.patch(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`, updateData)
 }

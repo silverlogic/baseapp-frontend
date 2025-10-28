@@ -12,13 +12,15 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
   open,
   onClose,
   orderNumber,
+  planDetails,
 }) => {
-  const handleViewPlanDetails = () => {
-    onClose()
-    // TODO: Add navigation to subscription details page
-  }
   const user = getUser()
   const maskedEmail = maskEmail(user?.email)
+
+  const handleViewPlanDetails = () => {
+    planDetails()
+    onClose()
+  }
 
   return (
     <ConfirmDialog

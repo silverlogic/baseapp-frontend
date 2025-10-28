@@ -30,12 +30,12 @@ export const SUBSCRIPTION_API_KEY = {
   get: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
 }
 export const CREATION_SUBSCRIPTION_API_KEY = {
-  default: ['useCreationSubscription'] as QueryKey,
+  default: ['useCreateSubscription'] as QueryKey,
   get: (...params: string[]) => [...CREATION_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
 }
 
 export const UPDATE_SUBSCRIPTION_API_KEY = {
-  default: ['useCreationSubscription'] as QueryKey,
+  default: ['useCreateSubscription'] as QueryKey,
   get: (...params: string[]) => [...UPDATE_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
 }
 export const CANCEL_SUBSCRIPTION_API_KEY = {

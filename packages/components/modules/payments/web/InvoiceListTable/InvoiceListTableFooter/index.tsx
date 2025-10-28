@@ -16,7 +16,7 @@ const InvoiceListTableFooter = ({
         <TableCell colSpan={5} sx={{ p: 0, paddingX: 2 }}>
           <Box display="flex" justifyContent="flex-end" width="100%">
             <Pagination
-              count={(count ?? 0) / itemsPerPage}
+              count={Math.ceil((count ?? 0) / itemsPerPage)}
               page={page}
               onChange={(event, value) => onChange?.(event, value)}
             />
