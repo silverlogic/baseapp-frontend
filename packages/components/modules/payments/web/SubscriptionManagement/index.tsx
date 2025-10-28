@@ -43,6 +43,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     useState<string | null>(null)
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [isCancelSubscriptionModalOpen, setIsCancelSubscriptionModalOpen] = useState(false)
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null)
 
   const queryClient = useQueryClient()
   const invalidateCustomer = () => {
@@ -57,10 +58,11 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     useGetCustomer,
   } = useStripeHook()
   const { data: customer, refetch: refetchCustomer } = useGetCustomer(entityId)
-  const subscriptionId = customer?.subscriptions?.[0]?.id
-  const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscription(
-    subscriptionId ?? '',
-  )
+  const {
+    data: subscription,
+    isLoading: isLoadingSubscription,
+    refetch: refetchSubscription,
+  } = useGetSubscription(subscriptionId ?? '')
   const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(
     subscription?.id ?? '',
@@ -128,6 +130,13 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
       handleUpdateSubscription(lastAddedPaymentMethodIdDuringSession)
     }
   }, [lastAddedPaymentMethodIdDuringSession])
+
+  useEffect(() => {
+    if (customer?.subscriptions?.[0]?.id) {
+      setSubscriptionId(customer.subscriptions[0].id)
+      refetchSubscription()
+    }
+  }, [customer])
 
   useEffect(() => {
     if (!tabRedirect || tabRedirect !== 'subscription') return
