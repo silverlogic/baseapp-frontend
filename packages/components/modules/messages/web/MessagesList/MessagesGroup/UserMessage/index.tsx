@@ -2,6 +2,7 @@ import { FC, useCallback, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { AvatarDeleteUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, Typography } from '@mui/material'
 import { DateTime } from 'luxon'
@@ -73,13 +74,17 @@ const UserMessage: FC<UserMessageProps> = ({
     <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}>
       {canShowAvatar && (
         <Box paddingRight="12px">
-          <AvatarWithPlaceholder
-            className="self-start justify-self-center"
-            width={32}
-            height={32}
-            src={message?.profile?.image?.url}
-            sx={{ border: 'none' }}
-          />
+          {isProfileNullOrUndefined ? (
+            <AvatarDeleteUserIcon sx={{ fontSize: 32 }} titleAccess="Deleted User Avatar" />
+          ) : (
+            <AvatarWithPlaceholder
+              className="self-start justify-self-center"
+              width={32}
+              height={32}
+              src={message?.profile?.image?.url}
+              sx={{ border: 'none' }}
+            />
+          )}
         </Box>
       )}
       <Box

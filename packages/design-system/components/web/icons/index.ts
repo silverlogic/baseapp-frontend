@@ -3,6 +3,7 @@
 export { default as AddIcon } from './AddIcon'
 export { default as AddMemberIcon } from './AddMemberIcon'
 export { default as ArchiveIcon } from './ArchiveIcon'
+export { default as AvatarDeleteUserIcon } from './AvatarDeleteUserIcon'
 export { default as AttachmentIcon } from './AttachmentIcon'
 export { default as BaseAppLogoCondensed } from './BaseAppLogoCondensed'
 export { default as BlockIcon } from './BlockIcon'
