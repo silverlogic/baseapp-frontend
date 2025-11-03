@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { AvatarDeleteUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { AvatarDeletedUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Avatar, Box, CircularProgress, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
@@ -42,7 +42,7 @@ const LogGroups: FC<LogGroupsProps> = ({
     return group.logs[0]?.user?.fullName
   }
   const renderAvatar = (group: LogGroup) => {
-    if (group.logs[0]?.user == null) return <AvatarDeleteUserIcon />
+    if (group.logs[0]?.user == null) return <AvatarDeletedUserIcon />
     return (
       <Avatar
         style={{ marginBottom: '4px' }}

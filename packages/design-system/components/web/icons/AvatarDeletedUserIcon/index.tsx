@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { SvgIcon, SvgIconProps } from '@mui/material'
 
-const AvatarDeleteUserIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
+const AvatarDeletedUserIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   <SvgIcon sx={{ fontSize: 40, color: 'action.active', ...sx }} {...props}>
 <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 20C0 8.95431 8.95431 0 20 0C31.0457 0 40 8.95431 40 20C40 31.0457 31.0457 40 20 40C8.95431 40 0 31.0457 0 20Z" fill="#DFE3E8"/>
@@ -12,4 +12,4 @@ const AvatarDeleteUserIcon: FC<SvgIconProps> = ({ sx, ...props }) => (
   </SvgIcon>
 )
 
-export default AvatarDeleteUserIcon
+export default AvatarDeletedUserIcon

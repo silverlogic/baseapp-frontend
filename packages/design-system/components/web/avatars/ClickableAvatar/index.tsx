@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { m } from 'framer-motion'
 
 import { varHover } from '../../animate/variants'
-import { AvatarDeleteUserIcon } from '../../icons'
+import { AvatarDeletedUserIcon } from '../../icons'
 import AvatarWithPlaceholder from '../AvatarWithPlaceholder'
 import { IconButtonStyled } from './styled'
 import { ClickableAvatarProps } from './types'
@@ -22,7 +22,7 @@ const ClickableAvatar: FC<ClickableAvatarProps> = ({
   if (deletedUser) {
     return (
       <AvatarWithPlaceholder width={width} height={height} {...props}>
-        <AvatarDeleteUserIcon sx={{ fontSize: width }} titleAccess="Avatar Fallback" />
+        <AvatarDeletedUserIcon sx={{ fontSize: width }} titleAccess="Avatar Fallback" />
       </AvatarWithPlaceholder>
     )
   }

@@ -179,7 +179,7 @@ const CommentItem: FC<CommentItemProps> = ({
                     isLoadingReplies={isLoadingReplies}
                     commentId={comment.id}
                     totalCommentsCount={totalCommentsCount}
-                    isDisabled={!hasUser && totalCommentsCount === 0}
+                    isDisabled={!hasUser && (totalCommentsCount ?? 0) === 0}
                   />
                 </div>
                 <Timestamp date={comment.created} />
