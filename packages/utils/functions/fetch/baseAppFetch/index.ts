@@ -1,12 +1,17 @@
+import { getItem } from 'expo-secure-store'
 import humps from 'humps'
 
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
+import { MinimalProfile } from '../../../types/profile'
+import { getCookie } from '../../cookie'
 import { eventEmitter } from '../../events'
 import { getExpoConstant } from '../../expo'
-import { buildQueryString } from '../../string'
+import { isMobilePlatform } from '../../os'
+import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
@@ -91,20 +96,38 @@ export const baseAppFetch: BaseAppFetch = async (
   const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
-  let currentProfile
-  if (typeof window === typeof undefined) {
-    const { getTokenSSR } = await import('../../token/getTokenSSR')
-    currentProfile = await getTokenSSR('CurrentProfile')
-  } else {
-    const { getToken } = await import('../../token/getToken')
-    currentProfile = getToken('CurrentProfile')
+  const getCurrentProfile = async () => {
+    const getToken = <T = string>(key = ACCESS_KEY_NAME) => {
+      if (isMobilePlatform()) {
+        const token = getItem(key)
+        return token
+      }
+
+      const token = getCookie<T>(key)
+      return token
+    }
+
+    const getTokenSSR = async <T = string>(key = ACCESS_KEY_NAME) => {
+      const { cookies } = await import('next/headers')
+      const cookieStore = await cookies()
+      const token = cookieStore.get(key)
+
+      return token?.value as T
+    }
+    const currentProfile =
+      typeof window === typeof undefined
+        ? await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
+        : getToken(CURRENT_PROFILE_KEY_NAME)
+    return currentProfile
   }
+
+  const parsedCurrentProfile = parseString<MinimalProfile>((await getCurrentProfile()) ?? undefined)
 
   const fetchOptions: RequestOptions = {
     ...options,
     headers: {
       Accept: 'application/json, text/plain, */*',
-      'Current-Profile': JSON.parse(currentProfile || '{}').id || '',
+      'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
       ...options.headers,
     },
   }
