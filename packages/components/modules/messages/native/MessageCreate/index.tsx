@@ -40,10 +40,9 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
     const body = form.watch(SOCIAL_UPSERT_FORM.body)
 
-    const { isFocused, onFocusChange, textHeight, onTextHeightChange, keyboardHeight } =
+    const { onFocusChange, textHeight, onTextHeightChange, keyboardHeight } =
       SocialInputDrawer.useTextInputProperties()
-    const showHandle = isFocused || body !== ''
-
+    const showHandle = false
     if (!targetObjectId) {
       return null
     }
