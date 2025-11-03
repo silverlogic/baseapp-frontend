@@ -8,7 +8,6 @@ export const createStyles = (theme: Theme) =>
       marginTop: 12,
       marginBottom: 12,
       backgroundColor: theme.colors.surface.active,
-      outlineColor: theme.colors.surface.active,
       height: 45,
     },
   })
