@@ -16,7 +16,7 @@ import {
   UPDATE_SUBSCRIPTION_API_KEY,
 } from '../services/keys'
 import StripeApi from '../services/stripe'
-import { CreateSubscriptionOptions, UpdateSubscriptionOptions } from '../types'
+import { CreateSubscriptionOptions, SetupIntent, UpdateSubscriptionOptions } from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -33,11 +33,21 @@ const useStripeHook = () => {
       mutationFn: (entityId?: string) => StripeApi.createCustomer(entityId),
     })
 
-  const useSetupIntent = (entityId: string) =>
+  const useSetupIntent = (
+    entityId: string,
+    options: {
+      onSuccess?: (setupIntent: SetupIntent) => void
+      onError?: (error: any) => void
+    } = {},
+  ) =>
     useMutation({
       mutationFn: () => StripeApi.createSetupIntent(entityId),
+      onSuccess: (setupIntent: SetupIntent) => {
+        options.onSuccess?.(setupIntent)
+      },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
+        options.onError?.(error)
       },
       mutationKey: [SETUP_INTENT_API_KEY.get(entityId)],
     })

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
 import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
@@ -6,6 +6,7 @@ import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/mate
 
 import AddCardModal from '../AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
+import { SetupIntent } from '../types'
 import { getCardIcon } from '../utils'
 import AddPaymentMethodItem from './AddPaymentMethodItem'
 import PaymentMethodDisplay from './PaymentMethodDisplay'
@@ -24,12 +25,16 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   handleSetupSuccess,
 }) => {
   const { useSetupIntent } = useStripeHook()
-  const {
-    mutate: createSetupIntent,
-    data: setupIntent,
-    isPending: isCreatingSetupIntent,
-    isError: isErrorCreatingSetupIntent,
-  } = useSetupIntent(entityId)
+  const { mutate: createSetupIntent } = useSetupIntent(entityId, {
+    onSuccess: (setupIntent: SetupIntent) => {
+      // @ts-ignore
+      elements?.update({ clientSecret: setupIntent.clientSecret })
+      setIsAddCardModalOpen(true)
+    },
+    onError: (error) => {
+      console.error('Error creating setup intent:', error)
+    },
+  })
 
   const isEmpty = !paymentMethods || paymentMethods.length === 0
 
@@ -49,15 +54,6 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
       setSelectedPaymentMethodId(selectedId)
     }
   }
-
-  useEffect(() => {
-    if (isCreatingSetupIntent || isErrorCreatingSetupIntent) return
-    if (setupIntent) {
-      // @ts-ignore
-      elements?.update({ clientSecret: setupIntent.clientSecret })
-      setIsAddCardModalOpen(true)
-    }
-  }, [setupIntent, isCreatingSetupIntent, isErrorCreatingSetupIntent])
 
   if (isEmpty)
     return (
