@@ -18,7 +18,7 @@ export const createStyles = (theme: Theme) =>
     },
     textWrapper: {
       flex: 1,
-      width: 393,
+      maxWidth: '100%',
       padding: 16,
       justifyContent: 'flex-end',
       alignItems: 'center',

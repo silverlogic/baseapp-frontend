@@ -1,6 +1,10 @@
 import { FC, Suspense, useState, useTransition } from 'react'
 
-import { SearchInput } from '@baseapp-frontend/design-system/components/native/inputs'
+import {
+  DEFAULT_FORM_VALUES,
+  FORM_VALUES,
+  SearchInput,
+} from '@baseapp-frontend/design-system/components/native/inputs'
 import { Tab, Tabs } from '@baseapp-frontend/design-system/components/native/tabs'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { PageViewWithHeader, View } from '@baseapp-frontend/design-system/components/native/views'
@@ -24,10 +28,10 @@ import { createStyles } from './styles'
 const ChatRooms: FC = () => {
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { control, reset } = useForm({ defaultValues: { search: '' } })
+  const { control, reset } = useForm({ defaultValues: DEFAULT_FORM_VALUES })
   const [selectedTab, setSelectedTab] = useState<string>(CHAT_TAB_VALUES.active)
   const [searchParam, setSearchParam] = useState('')
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const chatRoomQueryData = useLazyLoadQuery<ChatRoomsQueryType>(
     ChatRoomsQuery,
     {},
@@ -36,7 +40,6 @@ const ChatRooms: FC = () => {
   const { data, refetch } = useRoomsList(chatRoomQueryData?.me?.profile as RoomsListFragment$key)
 
   const handleSearchChange = (text: string) => {
-    if (isPending) return
     startTransition(() => {
       setSearchParam(text)
     })
@@ -44,7 +47,7 @@ const ChatRooms: FC = () => {
 
   const resetInput = () => {
     setSearchParam('')
-    reset({ search: '' })
+    reset(DEFAULT_FORM_VALUES)
   }
 
   const environment = useRelayEnvironment()
@@ -73,7 +76,7 @@ const ChatRooms: FC = () => {
           placeholder="Search"
           onChangeText={handleSearchChange}
           control={control}
-          name="search"
+          name={FORM_VALUES.search}
           searchParam={searchParam}
           resetInput={resetInput}
         />
@@ -88,11 +91,6 @@ const ChatRooms: FC = () => {
             label={CHAT_TAB_LABEL.unread}
             value={CHAT_TAB_VALUES.unread}
             aria-label="Unread messages tab"
-          />
-          <Tab
-            label={CHAT_TAB_LABEL.groups}
-            value={CHAT_TAB_VALUES.groups}
-            aria-label="Groups messages tab"
           />
           <Tab
             label={CHAT_TAB_LABEL.archived}
@@ -119,7 +117,7 @@ const ChatRooms: FC = () => {
 }
 
 const SuspendedChatRooms = () => (
-  <Suspense>
+  <Suspense fallback={null}>
     <ChatRooms />
   </Suspense>
 )
