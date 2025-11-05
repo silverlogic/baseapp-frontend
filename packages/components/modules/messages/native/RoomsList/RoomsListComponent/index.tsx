@@ -57,19 +57,15 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
 
   return (
     <FlatList
-      data={data?.chatRooms?.edges ?? []}
+      data={(data?.chatRooms?.edges ?? []).filter((e) => e?.node)}
       renderItem={({ item }) => {
-        if (!item?.node) return null
-        return (
-          <ChatCard roomRef={item.node} isArchived={selectedTab === CHAT_TAB_VALUES.archived} />
-        )
+        const node = item!.node!
+        return <ChatCard roomRef={node} isArchived={selectedTab === CHAT_TAB_VALUES.archived} />
       }}
-      onContentSizeChange={(width, height) => loadNextBasedOnHeight(height)}
-      keyExtractor={(item) => item?.node?.id as string}
+      onContentSizeChange={(_width, height) => loadNextBasedOnHeight(height)}
+      keyExtractor={(item, index) => item?.node?.id ?? `room-edge-${index}`}
       onEndReached={() => {
-        if (hasNext) {
-          loadNext(10)
-        }
+        if (hasNext && !isPending) loadNext(10)
       }}
       ListEmptyComponent={handleEmptyState}
     />

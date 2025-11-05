@@ -5,6 +5,7 @@ import { TextInput } from 'react-native-paper'
 
 import { useTheme } from '../../../../providers/native'
 import { withNativeController } from '../../../../utils/native'
+import { CloseIcon } from '../../icons'
 import { createStyles } from './styles'
 import { SearchInputProps } from './types'
 
@@ -26,12 +27,7 @@ const SearchInput: FC<SearchInputProps> = ({
   const renderClearIcon = useCallback(
     () =>
       searchParam && searchParam.length > 0 ? (
-        <Ionicons
-          name="close"
-          size={24}
-          color={theme.colors.object.disabled}
-          onPress={resetInput}
-        />
+        <CloseIcon color={theme.colors.object.disabled} onPress={resetInput} />
       ) : null,
     [resetInput, searchParam, theme.colors.object.disabled],
   )
