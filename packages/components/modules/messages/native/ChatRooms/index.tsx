@@ -4,6 +4,7 @@ import {
   DEFAULT_FORM_VALUES,
   FORM_VALUES,
   SearchInput,
+  SearchInputFormValues,
 } from '@baseapp-frontend/design-system/components/native/inputs'
 import { Tab, Tabs } from '@baseapp-frontend/design-system/components/native/tabs'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -28,9 +29,11 @@ import { createStyles } from './styles'
 const ChatRooms: FC = () => {
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { control, reset } = useForm({ defaultValues: DEFAULT_FORM_VALUES })
+  const { control, watch, setValue, reset } = useForm<SearchInputFormValues>({
+    defaultValues: DEFAULT_FORM_VALUES,
+  })
+  const searchParam = watch(FORM_VALUES.search)
   const [selectedTab, setSelectedTab] = useState<string>(CHAT_TAB_VALUES.active)
-  const [searchParam, setSearchParam] = useState('')
   const [, startTransition] = useTransition()
   const chatRoomQueryData = useLazyLoadQuery<ChatRoomsQueryType>(
     ChatRoomsQuery,
@@ -41,12 +44,12 @@ const ChatRooms: FC = () => {
 
   const handleSearchChange = (text: string) => {
     startTransition(() => {
-      setSearchParam(text)
+      setValue(FORM_VALUES.search, text)
     })
   }
 
   const resetInput = () => {
-    setSearchParam('')
+    setValue(FORM_VALUES.search, DEFAULT_FORM_VALUES.search)
     reset(DEFAULT_FORM_VALUES)
   }
 
