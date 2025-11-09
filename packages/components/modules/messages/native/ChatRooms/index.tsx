@@ -82,6 +82,8 @@ const ChatRooms: FC = () => {
           name={FORM_VALUES.search}
           searchParam={searchParam}
           resetInput={resetInput}
+          autoComplete="off"
+          autoCorrect={false}
         />
 
         <Tabs value={selectedTab} onChange={handleChange} style={styles.tabs}>
