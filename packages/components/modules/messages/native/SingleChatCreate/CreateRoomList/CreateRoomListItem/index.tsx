@@ -9,6 +9,7 @@ import { Pressable } from 'react-native'
 import { ConnectionHandler, useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
+import { formatHandle } from '../../../../../__shared__/common'
 import { ProfileItemFragment } from '../../../../../profiles/common'
 import { useCreateChatRoomMutation } from '../../../../common'
 import { createStyles } from './styles'
@@ -57,9 +58,9 @@ const ChatRoomListItem = ({ profile: profileRef }: { profile: ProfileItemFragmen
         </View>
         <View>
           <Text variant="subtitle2">{node?.name}</Text>
-          <Text variant="caption">
-            {node?.urlPath?.path && `@${node?.urlPath.path?.replace('/', '')}`}
-          </Text>
+          {node?.urlPath?.path && (
+            <Text variant="caption">{formatHandle(node?.urlPath?.path)}</Text>
+          )}
         </View>
       </View>
     </Pressable>
