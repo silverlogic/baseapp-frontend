@@ -27,9 +27,9 @@ const SearchInput: FC<SearchInputProps> = ({
   const renderClearIcon = useCallback(
     () =>
       searchParam && searchParam.length > 0 ? (
-        <CloseIcon color={theme.colors.object.disabled} onPress={resetInput} />
+        <CloseIcon color={theme.colors.object.disabled} />
       ) : null,
-    [resetInput, searchParam, theme.colors.object.disabled],
+    [searchParam, theme.colors.object.disabled],
   )
 
   return (
