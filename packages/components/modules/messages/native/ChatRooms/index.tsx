@@ -1,5 +1,6 @@
 import { FC, Suspense, useState, useTransition } from 'react'
 
+import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import {
   DEFAULT_FORM_VALUES,
   FORM_VALUES,
@@ -122,7 +123,13 @@ const ChatRooms: FC = () => {
 }
 
 const SuspendedChatRooms = () => (
-  <Suspense fallback={null}>
+  <Suspense
+    fallback={
+      <View style={{ flex: 1 }}>
+        <LoadingScreen />
+      </View>
+    }
+  >
     <ChatRooms />
   </Suspense>
 )
