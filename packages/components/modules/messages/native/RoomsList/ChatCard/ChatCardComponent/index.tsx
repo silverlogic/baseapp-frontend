@@ -10,6 +10,7 @@ import { Badge } from '@baseapp-frontend/design-system/components/native/badges'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
+import { formatRelativeTime } from '@baseapp-frontend/utils'
 
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useRouter } from 'expo-router'
@@ -112,17 +113,18 @@ const ChatCard = ({
         <AvatarWithPlaceholder imgSource={avatar} size={48} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1">{title}</Text>
-          <View style={styles.lastMessageContainer}>
-            {/* TODO: fix lastMessageTime after date formatting fixes */}
-            <Text
-              variant="caption"
-              style={styles.lastMessageText}
-              numberOfLines={1}
-              ellipsizeMode="tail"
-            >
-              {lastMessageTime} • {lastMessage}
-            </Text>
-          </View>
+          {lastMessage && lastMessageTime ? (
+            <View style={styles.lastMessageContainer}>
+              <Text
+                variant="caption"
+                style={styles.lastMessageText}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {formatRelativeTime(lastMessageTime)} • {lastMessage}
+              </Text>
+            </View>
+          ) : null}
         </View>
         <View style={styles.profileCounterContainer}>
           {hasUnreadMessages && <Badge>{unreadMessagesCountFragment?.unreadMessages?.count}</Badge>}
