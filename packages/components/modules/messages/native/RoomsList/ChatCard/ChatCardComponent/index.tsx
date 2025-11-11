@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { FC, useRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
@@ -18,7 +18,6 @@ import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../../__generated__/LastMessageFragment.graphql'
-import { RoomsListFragment$key } from '../../../../../../__generated__/RoomsListFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
@@ -26,14 +25,9 @@ import { TitleFragment } from '../../../../common/graphql/fragments/Title'
 import { UnreadMessagesCountFragment } from '../../../../common/graphql/fragments/UnreadMessagesCount'
 import ChatCardOptions from '../ChatCardOptions'
 import { createStyles } from './styles'
+import { ChatCardComponentProps } from './type'
 
-const ChatCard = ({
-  roomRef,
-  isArchived,
-}: {
-  roomRef: RoomsListFragment$key
-  isArchived: boolean
-}) => {
+const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   const router = useRouter()
@@ -145,4 +139,4 @@ const ChatCard = ({
   )
 }
 
-export { ChatCard }
+export default ChatCardComponent
