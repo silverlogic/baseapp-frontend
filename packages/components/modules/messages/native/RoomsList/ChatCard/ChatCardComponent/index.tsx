@@ -81,25 +81,21 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   }
 
   const handleMarkAsUnread = () => {
-    alert('Mark as Unread functionality not implemented yet.')
     bottomDrawerRef.current?.close()
   }
   const handleChatDetails = () => {
-    alert('Chat Details functionality not implemented yet.')
     bottomDrawerRef.current?.close()
   }
   const handleGoToProfile = () => {
-    alert('Go to Profile functionality not implemented yet.')
     bottomDrawerRef.current?.close()
   }
   const handleDeleteChat = () => {
-    alert('Delete Chat functionality not implemented yet.')
     bottomDrawerRef.current?.close()
   }
 
   return (
     <Pressable
-      key={`chat-card-${roomRef}`}
+      key={`chat-card-${roomId}`}
       onPress={onChatCardPress}
       onLongPress={onChatCardLongPress}
     >
