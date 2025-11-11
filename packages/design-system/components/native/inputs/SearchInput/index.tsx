@@ -39,9 +39,14 @@ const SearchInput: FC<SearchInputProps> = ({
       style={styles.searchInput}
       outlineColor={theme.colors.surface.active}
       left={<TextInput.Icon icon={renderSearchIcon} />}
-      right={<TextInput.Icon icon={renderClearIcon} />}
       onChangeText={onChangeText}
       {...props}
+      value={searchParam ?? ''}
+      right={
+        searchParam && searchParam.length ? (
+          <TextInput.Icon icon={renderClearIcon} onPress={resetInput} />
+        ) : undefined
+      }
     />
   )
 }

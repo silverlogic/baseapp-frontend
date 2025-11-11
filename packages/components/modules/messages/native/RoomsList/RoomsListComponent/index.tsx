@@ -14,7 +14,7 @@ import { RoomsListProps } from '../types'
 import { CHAT_TAB_VALUES } from './constants'
 
 const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => {
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
   const { data, loadNext, hasNext, isLoadingNext, refetch } = useRoomsList(
     targetRef?.me?.profile as RoomsListFragment$key,
   )
@@ -42,7 +42,6 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
   useFocusEffect(
     useCallback(() => {
       layoutTriggeredRef.current = false
-      if (isPending) return
       startTransition(() => {
         refetch(
           {
@@ -53,7 +52,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
           { fetchPolicy: 'store-and-network' },
         )
       })
-    }, [refetch, searchParam, selectedTab, isPending]),
+    }, [refetch, searchParam, selectedTab, startTransition]),
   )
 
   return (
@@ -66,7 +65,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
       onContentSizeChange={(_width, height) => loadNextBasedOnHeight(height)}
       keyExtractor={(item, index) => item?.node?.id ?? `room-edge-${index}`}
       onEndReached={() => {
-        if (hasNext && !isPending) loadNext(10)
+        if (hasNext && !isLoadingNext) loadNext(10)
       }}
       ListEmptyComponent={handleEmptyState}
       isLoading={isLoadingNext}
