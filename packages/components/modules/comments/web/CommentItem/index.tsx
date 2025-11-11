@@ -140,7 +140,7 @@ const CommentItem: FC<CommentItemProps> = ({
     deleteComment({ variables: { id: comment.id } })
     resetCommentReply()
   }
-
+  const totalCommentsCount = comment.commentsCount.total
   return (
     <div>
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
@@ -178,7 +178,8 @@ const CommentItem: FC<CommentItemProps> = ({
                     onReply={replyToComment}
                     isLoadingReplies={isLoadingReplies}
                     commentId={comment.id}
-                    totalCommentsCount={comment.commentsCount.total}
+                    totalCommentsCount={totalCommentsCount}
+                    isDisabled={!hasUser && (totalCommentsCount ?? 0) === 0}
                   />
                 </div>
                 <Timestamp date={comment.created} />
