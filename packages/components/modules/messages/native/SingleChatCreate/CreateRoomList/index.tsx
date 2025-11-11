@@ -1,10 +1,9 @@
 import React, { Suspense, useEffect, useRef, useTransition } from 'react'
 
-import { View } from '@baseapp-frontend/design-system/components/native/views'
+import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { Dimensions } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 
 import { useAllProfilesList } from '../../../../profiles/common'
 import { withChatRoomProvider } from '../../../common'
@@ -18,7 +17,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
   const styles = createStyles(theme)
 
   const [isPending, startTransition] = useTransition()
-  const { data, refetch, loadNext, hasNext } = useAllProfilesList(targetRef)
+  const { data, refetch, loadNext, isLoadingNext, hasNext } = useAllProfilesList(targetRef)
 
   const profiles = data?.allProfiles?.edges ?? []
   const layoutTriggeredRef = useRef(false)
@@ -47,7 +46,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
 
   return (
     <View style={styles.flatListWrapper}>
-      <FlatList
+      <InfiniteScrollerView
         data={profiles}
         keyExtractor={(item, i) => (item && item.node?.id) || i.toString()}
         renderItem={({ item }) => (item?.node ? <ChatRoomListItem profile={item.node} /> : null)}
@@ -60,6 +59,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
         style={styles.flatList}
         keyboardShouldPersistTaps="handled"
         ListEmptyComponent={handleEmptySearch}
+        isLoading={isLoadingNext}
       />
     </View>
   )
