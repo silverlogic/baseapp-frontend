@@ -1,8 +1,9 @@
 import { FC, useCallback, useRef, useTransition } from 'react'
 
+import { InfiniteScrollerView } from '@baseapp-frontend/design-system/components/native/views'
+
 import { useFocusEffect } from 'expo-router'
 import { Dimensions } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
 
 import { RoomsListFragment$key } from '../../../../../__generated__/RoomsListFragment.graphql'
 import { useRoomsList } from '../../../common'
@@ -14,7 +15,7 @@ import { CHAT_TAB_VALUES } from './constants'
 
 const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => {
   const [isPending, startTransition] = useTransition()
-  const { data, loadNext, hasNext, refetch } = useRoomsList(
+  const { data, loadNext, hasNext, isLoadingNext, refetch } = useRoomsList(
     targetRef?.me?.profile as RoomsListFragment$key,
   )
   const layoutTriggeredRef = useRef(false)
@@ -56,7 +57,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
   )
 
   return (
-    <FlatList
+    <InfiniteScrollerView
       data={(data?.chatRooms?.edges ?? []).filter((e) => e?.node)}
       renderItem={({ item }) => {
         const node = item!.node!
@@ -68,6 +69,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
         if (hasNext && !isPending) loadNext(10)
       }}
       ListEmptyComponent={handleEmptyState}
+      isLoading={isLoadingNext}
     />
   )
 }

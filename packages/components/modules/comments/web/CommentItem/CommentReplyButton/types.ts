@@ -3,4 +3,5 @@ export interface CommentReplyButtonProps {
   isLoadingReplies: boolean
   totalCommentsCount?: number | null
   commentId: string
+  isDisabled?: boolean
 }
