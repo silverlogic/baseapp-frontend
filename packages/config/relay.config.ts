@@ -7,6 +7,7 @@ module.exports = {
     '**/__generated__/**',
     '**/.app-templates/**',
     '**/cypress/**',
+    '**/dist/**',
   ],
   language: 'typescript',
   artifactDirectory: './__generated__',
