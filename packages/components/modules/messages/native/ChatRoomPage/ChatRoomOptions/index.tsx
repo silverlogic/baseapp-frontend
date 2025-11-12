@@ -28,7 +28,11 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
       <Menu
         visible={visible}
         onDismiss={closeMenu}
-        anchor={<IconButton icon="dots-vertical" size={22} onPress={openMenu} />}
+        anchor={
+          <View>
+            <IconButton icon="dots-vertical" size={22} onPress={openMenu} />
+          </View>
+        }
         anchorPosition="bottom"
         contentStyle={styles.menuContentStyle}
         style={styles.menuStyle}
