@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC } from 'react'
 
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
@@ -13,10 +13,11 @@ import ChatRoom from '../ChatRoom'
 import DefaultGroupChatCreate from '../GroupChatCreate'
 import DefaultGroupChatDetails from '../GroupChatDetails'
 import DefaultGroupChatEdit from '../GroupChatEdit'
+import DefaultProfileSummary from '../ProfileSummary'
 import DefaultSingleChatCreate from '../SingleChatCreate'
 import { LEFT_PANEL_CONTENT } from './constants'
 import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
-import { ChatRoomsComponentProps, LeftPanelContentValues } from './types'
+import { ChatRoomsComponentProps } from './types'
 
 const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   chatRoomsQueryData,
@@ -31,15 +32,14 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   GroupChatEditComponentProps = {},
   SingleChatCreateComponent = DefaultSingleChatCreate,
   SingleChatCreateComponentProps = {},
+  ProfileSummaryComponent = DefaultProfileSummary,
 }) => {
   const isUpToMd = useResponsive('up', 'md')
-  const [leftPanelContent, setLeftPanelContent] = useState<LeftPanelContentValues>(
-    LEFT_PANEL_CONTENT.chatRoomList,
-  )
 
   const [groupDetailsQueryRef, loadGroupDetailsQuery] =
     useQueryLoader<GroupDetailsQueryType>(GroupDetailsQuery)
-  const { id: selectedRoom } = useChatRoom()
+
+  const { id: selectedRoom, leftPanelContent, setLeftPanelContent } = useChatRoom()
 
   const displayGroupDetails = () => {
     if (selectedRoom) {
@@ -97,6 +97,12 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
               setLeftPanelContent(LEFT_PANEL_CONTENT.createGroupChat)
             }
             {...SingleChatCreateComponentProps}
+          />
+        )
+      case LEFT_PANEL_CONTENT.profileSummary:
+        return (
+          <ProfileSummaryComponent
+            onBackButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
           />
         )
       default:

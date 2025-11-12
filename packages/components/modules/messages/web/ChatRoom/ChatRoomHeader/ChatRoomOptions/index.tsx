@@ -11,10 +11,14 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   onArchiveClicked,
   onDetailsClicked,
   onLeaveClicked,
+  onContactDetailsClicked,
 }) => (
   <MenuList>
     <MenuItem onClick={onArchiveClicked} disabled={isArchiveMutationInFlight}>
       <Typography variant="body2">{isArchived ? 'Unarchive Chat' : 'Archive Chat'}</Typography>
+    </MenuItem>
+    <MenuItem onClick={onContactDetailsClicked}>
+      <Typography variant="body2">Contact Details</Typography>
     </MenuItem>
     {isGroup ? (
       <>

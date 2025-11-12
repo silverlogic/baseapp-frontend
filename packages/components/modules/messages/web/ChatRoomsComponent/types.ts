@@ -10,6 +10,7 @@ import { AllChatRoomsListProps } from '../AllChatRoomsList/types'
 import { GroupChatCreateProps } from '../GroupChatCreate/types'
 import { GroupChatDetailsProps } from '../GroupChatDetails/types'
 import { GroupChatEditProps } from '../GroupChatEdit/types'
+import { ProfileSummaryProps } from '../ProfileSummary/types'
 import { SingleChatCreateProps } from '../SingleChatCreate/types'
 import { LEFT_PANEL_CONTENT } from './constants'
 
@@ -32,4 +33,6 @@ export interface ChatRoomsComponentProps {
   GroupChatEditComponentProps?: Partial<GroupChatEditProps>
   SingleChatCreateComponent?: FC<SingleChatCreateProps>
   SingleChatCreateComponentProps?: Partial<SingleChatCreateProps>
+  ProfileSummaryComponent?: FC<ProfileSummaryProps>
+  ProfileSummaryComponentProps?: Partial<ProfileSummaryProps>
 }

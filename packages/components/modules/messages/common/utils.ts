@@ -20,12 +20,15 @@ export const useGroupNameAndAvatar = (
     headerRef as GroupTitleFragment$key,
   )
   return {
+    pk: undefined,
+    path: undefined,
+    biography: undefined,
     title: header?.title,
     avatar: header?.image?.url,
   }
 }
 
-const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefined) => {
+export const useSingleChatDetails = (headerRef: RoomTitleFragment$key | null | undefined) => {
   const { currentProfile } = useCurrentProfile()
   const header = useFragment<RoomTitleFragment$key>(RoomTitleFragment, headerRef)
   if (!header?.participants) {
@@ -39,22 +42,28 @@ const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefine
   )
   if (otherParticipant === undefined) {
     return {
+      pk: undefined,
       title: 'Deleted User',
       avatar: undefined,
+      path: undefined,
+      biography: undefined,
     }
   }
 
   return {
+    pk: otherParticipant?.node?.profile?.pk,
     title: otherParticipant?.node?.profile?.name,
     avatar: otherParticipant?.node?.profile?.image?.url,
+    path: otherParticipant?.node?.profile?.urlPath?.path,
+    biography: otherParticipant?.node?.profile?.biography,
   }
 }
 
-export const useNameAndAvatar = (roomHeader: TitleFragment$data) => {
-  const roomNameAndAvatar = useRoomNameAndAvatar(roomHeader)
+export const useChatroomDetails = (roomHeader: TitleFragment$data) => {
+  const singleChatDetails = useSingleChatDetails(roomHeader)
   const groupNameAndAvatar = useGroupNameAndAvatar(roomHeader)
   if (roomHeader.isGroup) return groupNameAndAvatar
-  return roomNameAndAvatar
+  return singleChatDetails
 }
 
 export const getParticipantCountString = (participantCount: number | null | undefined) => {

@@ -14,8 +14,11 @@ const ChatRoomProvider: FC<PropsWithChildren> = ({ children }) => {
   if (!storeRef.current) {
     storeRef.current = create<UseChatRoom>((set) => ({
       ...INITIAL_CHAT_ROOM_STATE,
+
       setChatRoom: (state: ChatRoomState) => set(state),
       resetChatRoom: () => set({ ...INITIAL_CHAT_ROOM_STATE }),
+      setLeftPanelContent: (content: number) => set({ leftPanelContent: content }),
+      setSingleChatProfileDetails: (details) => set({ singleChatProfileDetails: { ...details } }),
     }))
   }
   return <ChatRoomContext.Provider value={storeRef.current}>{children}</ChatRoomContext.Provider>
