@@ -12,9 +12,11 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
   isLoadingReplies,
   totalCommentsCount,
   commentId,
+  isDisabled = false,
 }) => (
   <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
     <IconButton
+      disabled={isDisabled}
       onClick={onReply}
       isLoading={isLoadingReplies}
       aria-label={`reply to comment ${commentId}`}
