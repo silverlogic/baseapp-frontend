@@ -63,7 +63,7 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
-  const profileUrl = `${profilePath}/${comment?.user?.pk}`
+  const profileUrl = `${profilePath}/${comment?.user?.id}`
   const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
