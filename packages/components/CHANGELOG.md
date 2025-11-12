@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.4.5
+
+### Patch Changes
+
+- update to comments, posts, messages and reactions to show the current profile selected for these interactions
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.5
+  - @baseapp-frontend/graphql@1.3.6
+  - @baseapp-frontend/utils@4.0.4
+  - @baseapp-frontend/design-system@1.1.3
+
 ## 1.4.4
 
 ### Patch Changes
