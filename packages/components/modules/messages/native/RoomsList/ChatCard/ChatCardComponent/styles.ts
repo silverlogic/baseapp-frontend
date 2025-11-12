@@ -7,11 +7,15 @@ export const createStyles = (theme: Theme) =>
     profileCard: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 12,
+      justifyContent: 'space-between',
       paddingVertical: 12,
+      paddingHorizontal: 12,
+      gap: 12,
     },
     profileInfo: {
-      flex: 1,
+      flexGrow: 1,
+      flexShrink: 1,
+      overflow: 'hidden',
     },
     lastMessageContainer: {
       flexDirection: 'row',
@@ -20,20 +24,13 @@ export const createStyles = (theme: Theme) =>
     profileCounterContainer: {
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 4,
+      paddingHorizontal: 8,
+      paddingVertical: 4,
+      borderRadius: 12,
+      minWidth: 24,
+      flexShrink: 0,
     },
     lastMessageText: {
       color: theme.colors.object.low,
-    },
-    profileCounter: {
-      backgroundColor: theme.colors.error.main,
-      width: 20,
-      height: 20,
-      borderRadius: 12,
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    profileCounterText: {
-      color: theme.colors.error.contrast,
     },
   })
