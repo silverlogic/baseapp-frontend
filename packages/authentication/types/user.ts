@@ -12,6 +12,8 @@ export interface User {
   profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
+  company: number | null
+  isSuperuser: boolean
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
