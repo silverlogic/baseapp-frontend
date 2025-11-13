@@ -3,7 +3,6 @@ export const replytoCommentMockData = {
     node: {
       __typename: 'Comment',
       id: 'comment-2',
-      pk: 2,
       body: 'This is a regular comment.',
       isPinned: false,
       created: '2024-04-21T19:18:58.505961+00:00',
@@ -14,7 +13,6 @@ export const replytoCommentMockData = {
       canPin: false,
       user: {
         id: 'user-2',
-        pk: 2,
         fullName: 'Jane Smith',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
@@ -31,11 +29,9 @@ export const replytoCommentMockData = {
             node: {
               id: 'Q29tbWVudDoyMTg=',
               isPinned: false,
-              pk: 218,
               body: 'Some reply',
               user: {
                 id: 'VXNlcjo0',
-                pk: 4,
                 fullName: 'Alexandre Anicio',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -159,11 +155,9 @@ export const commentEditMockData = {
               node: {
                 id: 'Q29tbWVudDoyMjA=',
                 isPinned: false,
-                pk: 220,
                 body: 'reply',
                 user: {
                   id: 'VXNlcjo0',
-                  pk: 4,
                   fullName: 'Alexandre Anicio',
                   avatar: {
                     url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -191,11 +185,9 @@ export const commentEditMockData = {
               node: {
                 id: 'Q29tbWVudDoyMTg=',
                 isPinned: false,
-                pk: 218,
                 body: 'Some reply',
                 user: {
                   id: 'VXNlcjo0',
-                  pk: 4,
                   fullName: 'Alexandre Anicio',
                   avatar: {
                     url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -264,7 +256,6 @@ export const commentsNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-6',
-              pk: 6,
               body: 'Sixth comment',
               isPinned: false,
               created: '2024-04-22T19:18:58.505961+00:00',
@@ -277,7 +268,6 @@ export const commentsNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -296,7 +286,6 @@ export const commentsNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-7',
-              pk: 7,
               body: 'Seventh comment',
               isPinned: false,
               created: '2024-04-22T19:18:58.505961+00:00',
@@ -309,7 +298,6 @@ export const commentsNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -328,7 +316,6 @@ export const commentsNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-8',
-              pk: 8,
               body: 'Eighth comment',
               isPinned: false,
               created: '2024-04-22T19:18:58.505961+00:00',
@@ -341,7 +328,6 @@ export const commentsNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -360,7 +346,6 @@ export const commentsNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-9',
-              pk: 9,
               body: 'Ninth comment',
               isPinned: false,
               created: '2024-04-22T19:18:58.505961+00:00',
@@ -373,7 +358,6 @@ export const commentsNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -392,7 +376,6 @@ export const commentsNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-10',
-              pk: 10,
               body: 'Tenth comment',
               isPinned: false,
               created: '2024-04-22T19:18:58.505961+00:00',
@@ -405,7 +388,6 @@ export const commentsNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -431,12 +413,10 @@ export const replytoCommentWithElevenRepliesMockData = {
     node: {
       __typename: 'Comment',
       id: 'comment-with-eleven-replies',
-      pk: 11,
       body: 'This is comment with eleven replies.',
       isPinned: false,
       user: {
         id: 'user-1',
-        pk: 1,
         fullName: 'John Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -461,11 +441,9 @@ export const replytoCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-1',
               isPinned: false,
-              pk: 221,
               body: 'Newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -493,11 +471,9 @@ export const replytoCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-2',
               isPinned: false,
-              pk: 202,
               body: 'Second newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -525,11 +501,9 @@ export const replytoCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-3',
               isPinned: false,
-              pk: 200,
               body: 'Third newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -557,11 +531,9 @@ export const replytoCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-4',
               isPinned: false,
-              pk: 141,
               body: 'Fourth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -589,11 +561,9 @@ export const replytoCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-5',
               isPinned: false,
-              pk: 134,
               body: 'Fifth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -633,12 +603,10 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
     node: {
       __typename: 'Comment',
       id: 'comment-with-eleven-replies',
-      pk: 11,
       body: 'This is comment with eleven replies.',
       isPinned: false,
       user: {
         id: 'user-1',
-        pk: 1,
         fullName: 'John Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -663,11 +631,9 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-6',
               isPinned: false,
-              pk: 221,
               body: 'Sixth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -695,11 +661,9 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-7',
               isPinned: false,
-              pk: 222,
               body: 'Seventh newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -727,11 +691,9 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-8',
               isPinned: false,
-              pk: 223,
               body: 'Eighth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -759,11 +721,9 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-9',
               isPinned: false,
-              pk: 224,
               body: 'Ninth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -791,11 +751,9 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-10',
               isPinned: false,
-              pk: 225,
               body: 'Tenth newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -835,12 +793,10 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
     node: {
       __typename: 'Comment',
       id: 'comment-with-eleven-replies',
-      pk: 11,
       body: 'This is comment with eleven replies.',
       isPinned: false,
       user: {
         id: 'user-1',
-        pk: 1,
         fullName: 'John Doe',
         avatar: {
           url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -865,11 +821,9 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
             node: {
               id: 'comment-11',
               isPinned: false,
-              pk: 226,
               body: 'Eleventh newest reply',
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -918,7 +872,6 @@ export const commentsTestMockData = {
             node: {
               id: 'comment-1',
               __typename: 'Comment',
-              pk: 1,
               body: 'This is a pinned comment.',
               isPinned: true,
               created: '2024-04-11T17:08:58.505961+00:00',
@@ -929,7 +882,6 @@ export const commentsTestMockData = {
               canPin: true,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://cdn.example.com/avatar1.png',
@@ -945,7 +897,6 @@ export const commentsTestMockData = {
             node: {
               id: 'comment-2',
               __typename: 'Comment',
-              pk: 2,
               body: 'This is a regular comment.',
               isPinned: false,
               created: '2024-04-21T19:18:58.505961+00:00',
@@ -956,7 +907,6 @@ export const commentsTestMockData = {
               canPin: false,
               user: {
                 id: 'user-2',
-                pk: 2,
                 fullName: 'Jane Smith',
                 avatar: {
                   url: 'https://cdn.example.com/avatar2.png',
@@ -995,7 +945,6 @@ export const commentsWithNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-1',
-              pk: 1,
               body: 'First comment',
               isPinned: true,
               created: '2024-04-11T17:08:58.505961+00:00',
@@ -1006,7 +955,6 @@ export const commentsWithNextPageMockData = {
               canPin: true,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -1023,7 +971,6 @@ export const commentsWithNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-2',
-              pk: 2,
               body: 'Second comment',
               isPinned: false,
               created: '2024-04-21T19:18:58.505961+00:00',
@@ -1034,7 +981,6 @@ export const commentsWithNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -1051,7 +997,6 @@ export const commentsWithNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-3',
-              pk: 3,
               body: 'Third comment',
               isPinned: false,
               created: '2024-04-21T19:18:58.505961+00:00',
@@ -1062,7 +1007,6 @@ export const commentsWithNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -1079,7 +1023,6 @@ export const commentsWithNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-4',
-              pk: 4,
               body: 'Fourth comment',
               isPinned: false,
               created: '2024-04-21T19:18:58.505961+00:00',
@@ -1090,7 +1033,6 @@ export const commentsWithNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -1107,7 +1049,6 @@ export const commentsWithNextPageMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-5',
-              pk: 5,
               body: 'Fifth comment',
               isPinned: false,
               created: '2024-04-21T19:18:58.505961+00:00',
@@ -1118,7 +1059,6 @@ export const commentsWithNextPageMockData = {
               canPin: false,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -1155,7 +1095,6 @@ export const commentsWithElevenRepliesMockData = {
             node: {
               __typename: 'Comment',
               id: 'comment-with-eleven-replies',
-              pk: 11,
               body: 'This is comment with eleven replies.',
               isPinned: false,
               created: '2024-04-11T17:08:58.505961+00:00',
@@ -1166,7 +1105,6 @@ export const commentsWithElevenRepliesMockData = {
               canPin: true,
               user: {
                 id: 'user-1',
-                pk: 1,
                 fullName: 'John Doe',
                 avatar: {
                   url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',

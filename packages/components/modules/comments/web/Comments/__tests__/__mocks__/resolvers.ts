@@ -23,12 +23,10 @@ export const commentCreateResolver: MockResolvers = {
             },
           },
           inReplyTo: null,
-          pk: commentIdCounter,
           body: input.body,
           isPinned: false,
           user: {
             id: 'VXNlcjo0',
-            pk: 4,
             fullName: 'Alexandre Anicio',
             avatar: {
               url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
@@ -78,12 +76,10 @@ export const commentReplyResolver: MockResolvers = {
               replies: 2,
             },
           },
-          pk: commentIdCounter,
           body: input.body,
           isPinned: false,
           user: {
             id: 'VXNlcjo0',
-            pk: 4,
             fullName: 'Alexandre Anicio',
             avatar: {
               url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
