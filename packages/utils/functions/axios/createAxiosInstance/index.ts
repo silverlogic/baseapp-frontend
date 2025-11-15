@@ -2,7 +2,8 @@ import _axios from 'axios'
 import humps from 'humps'
 import Cookies from 'js-cookie'
 
-import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
+import { LANGUAGE_COOKIE_NAME } from '@baseapp-frontend/i18n'
+
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'

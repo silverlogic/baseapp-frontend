@@ -14,6 +14,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@baseapp-frontend/i18n": "workspace:*",
     "axios": "catalog:",
     "events": "catalog:utils",
     "expo-constants": "catalog:react-native",
@@ -23,6 +24,8 @@
     "jwt-decode": "catalog:utils",
     "lodash": "catalog:",
     "luxon": "catalog:",
+    "@formatjs/intl": "catalog:",
+    "react-intl": "catalog:",
     "next": "catalog:",
     "qs": "catalog:utils",
     "react-hook-form": "catalog:",
