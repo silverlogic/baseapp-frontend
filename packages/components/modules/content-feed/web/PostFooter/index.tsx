@@ -6,13 +6,13 @@ import { ReplyIcon, SharePostIcon } from '@baseapp-frontend/design-system/compon
 
 import { Circle as CircleIcon } from '@mui/icons-material'
 import { IconButton, Stack, Typography } from '@mui/material'
-import { DateTime } from 'luxon'
+import { format, parseISO } from 'date-fns'
 
 import PostReactionButton from '../PostReactionButton'
 import { PostFooterProps } from './types'
 
 const PostFooter: FC<PostFooterProps> = ({ post }) => {
-  const created = DateTime.fromISO(post.created)
+  const created = parseISO(post.created)
   return (
     <Stack p={1.5} gap={1.5} direction="row" justifyContent="space-between">
       <Stack direction="row" gap={1.5}>
@@ -25,8 +25,8 @@ const PostFooter: FC<PostFooterProps> = ({ post }) => {
         </IconButton>
       </Stack>
       <Typography variant="caption">
-        {created.toFormat('hh:mm a')} <CircleIcon color="disabled" sx={{ fontSize: 4 }} />{' '}
-        {created.toFormat('DDD')}
+        {format(created, 'hh:mm a')} <CircleIcon color="disabled" sx={{ fontSize: 4 }} />{' '}
+        {format(created, 'DDD')}
       </Typography>
     </Stack>
   )

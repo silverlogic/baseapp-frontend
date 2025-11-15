@@ -1,4 +1,14 @@
-import { DateTime } from 'luxon'
+import {
+  add,
+  format,
+  parseISO,
+  startOfDay,
+  sub,
+  subDays,
+  subHours,
+  subMinutes,
+  subMonths,
+} from 'date-fns'
 
 import {
   datesDontHaveSameDay,
@@ -18,14 +28,14 @@ describe('Date formatting utilities', () => {
       expect(formatDate(null)).toBe('')
     })
 
-    it('should format DateTime object correctly', () => {
-      const date = DateTime.fromISO('2021-09-01T15:30:45')
+    it('should format Date object correctly', () => {
+      const date = parseISO('2021-09-01T15:30:45')
       expect(formatDate(date, {})).toBe('09/01/21')
       expect(formatDate(date, { toFormat: TIME_FORMAT[1] })).toBe('15:30')
     })
 
     it('should format string date correctly with default or custom formats', () => {
-      expect(formatDate('2021-09-01')).toBe('09/01/21')
+      expect(formatDate('2021-09-01', { fromFormat: DATE_FORMAT.api })).toBe('09/01/21')
       expect(
         formatDate('09/01/2021', {
           fromFormat: DATE_FORMAT[1],
@@ -53,8 +63,8 @@ describe('Date formatting utilities', () => {
   })
 
   describe('formatDateToApi function', () => {
-    it('should return API formatted date for DateTime input', () => {
-      const date = DateTime.fromISO('2021-09-01T15:30:45')
+    it('should return API formatted date for Date input', () => {
+      const date = parseISO('2021-09-01T15:30:45')
       expect(formatDateToApi(date)).toBe('2021-09-01')
     })
 
@@ -71,56 +81,56 @@ describe('Date formatting utilities', () => {
     })
 
     it('should return correct relative time for minutes ago', () => {
-      const date = DateTime.now().minus({ minutes: 10 }).toISO()
+      const date = subMinutes(new Date(), 10).toISOString()
       expect(formatRelativeTime(date)).toBe('10 minutes ago')
 
-      const dateOneMinute = DateTime.now().minus({ minutes: 1 }).toISO()
+      const dateOneMinute = subMinutes(new Date(), 1).toISOString()
       expect(formatRelativeTime(dateOneMinute)).toBe('1 minute ago')
     })
 
     it('should return correct relative time for hours ago', () => {
-      const date = DateTime.now().minus({ hours: 2 }).toISO()
+      const date = subHours(new Date(), 2).toISOString()
       expect(formatRelativeTime(date)).toBe('2 hours ago')
 
-      const dateOneHour = DateTime.now().minus({ hours: 1 }).toISO()
+      const dateOneHour = subHours(new Date(), 1).toISOString()
       expect(formatRelativeTime(dateOneHour)).toBe('1 hour ago')
     })
 
     it('should return correct relative time for days ago', () => {
-      const date = DateTime.now().minus({ days: 5 }).toISO()
+      const date = subDays(new Date(), 5).toISOString()
       expect(formatRelativeTime(date)).toBe('5 days ago')
 
-      const dateOneDay = DateTime.now().minus({ days: 1 }).toISO()
+      const dateOneDay = subDays(new Date(), 1).toISOString()
       expect(formatRelativeTime(dateOneDay)).toBe('1 day ago')
     })
 
     it('should return formatted date for months ago', () => {
-      const date = DateTime.now().minus({ months: 3 }).toISO()
+      const date = subMonths(new Date(), 3).toISOString()
       expect(formatRelativeTime(date, { toFormat: DATE_FORMAT[0] })).toBe(
-        DateTime.fromISO(date).toFormat(DATE_FORMAT[0]),
+        format(parseISO(date), 'MM/dd/yy'),
       )
     })
 
     it('should handle custom reference date correctly', () => {
-      const reference = DateTime.fromISO('2021-09-01T15:30:45')
-      const date = DateTime.fromISO('2021-08-31T15:30:45').toISO()
+      const reference = parseISO('2021-09-01T15:30:45')
+      const date = parseISO('2021-08-31T15:30:45').toISOString()
       expect(formatRelativeTime(date, { reference })).toBe('1 day ago')
     })
   })
 
   describe('isToday function', () => {
     it("should return true for today's date", () => {
-      const today = DateTime.now().toISO()
+      const today = new Date().toISOString()
       expect(isToday(today)).toBe(true)
     })
 
     it('should return false for a date in the past', () => {
-      const pastDate = DateTime.now().minus({ days: 1 }).toISO()
+      const pastDate = subDays(new Date(), 1).toISOString()
       expect(isToday(pastDate)).toBe(false)
     })
 
     it('should return false for a date in the future', () => {
-      const futureDate = DateTime.now().plus({ days: 1 }).toISO()
+      const futureDate = add(new Date(), { days: 1 }).toISOString()
       expect(isToday(futureDate)).toBe(false)
     })
 
@@ -129,37 +139,37 @@ describe('Date formatting utilities', () => {
     })
 
     it('should handle date strings with different time zones correctly', () => {
-      const dateInUTC = DateTime.utc().toISO()
+      const dateInUTC = new Date().toISOString()
       expect(isToday(dateInUTC)).toBe(true)
     })
 
     it('should handle dates at the edge of the day correctly', () => {
-      const endOfYesterday = DateTime.now().startOf('day').minus({ milliseconds: 1 }).toISO()
+      const endOfYesterday = subDays(new Date(), 1).toISOString()
       expect(isToday(endOfYesterday)).toBe(false)
 
-      const startOfToday = DateTime.now().startOf('day').toISO()
+      const startOfToday = startOfDay(new Date()).toISOString()
       expect(isToday(startOfToday)).toBe(true)
     })
   })
 
   describe('isYesterday function', () => {
     it("should return true for yesterday's date", () => {
-      const yesterday = DateTime.now().minus({ days: 1 }).toISO()
+      const yesterday = subDays(new Date(), 1).toISOString()
       expect(isYesterday(yesterday)).toBe(true)
     })
 
     it("should return false for today's date", () => {
-      const today = DateTime.now().toISO()
+      const today = new Date().toISOString()
       expect(isYesterday(today)).toBe(false)
     })
 
     it('should return false for dates older than yesterday', () => {
-      const twoDaysAgo = DateTime.now().minus({ days: 2 }).toISO()
+      const twoDaysAgo = subDays(new Date(), 2).toISOString()
       expect(isYesterday(twoDaysAgo)).toBe(false)
     })
 
     it('should return false for future dates', () => {
-      const tomorrow = DateTime.now().plus({ days: 1 }).toISO()
+      const tomorrow = add(new Date(), { days: 1 }).toISOString()
       expect(isYesterday(tomorrow)).toBe(false)
     })
 
@@ -168,15 +178,15 @@ describe('Date formatting utilities', () => {
     })
 
     it('should handle date strings with different time zones correctly', () => {
-      const yesterdayInUTC = DateTime.utc().minus({ days: 1 }).toISO()
+      const yesterdayInUTC = subDays(new Date(), 1).toISOString()
       expect(isYesterday(yesterdayInUTC)).toBe(true)
     })
 
     it('should handle dates at the edge of the day correctly', () => {
-      const endOfYesterday = DateTime.now().minus({ days: 1 }).endOf('day').toISO()
+      const endOfYesterday = sub(startOfDay(new Date()), { seconds: 1 }).toISOString()
       expect(isYesterday(endOfYesterday)).toBe(true)
 
-      const startOfToday = DateTime.now().startOf('day').toISO()
+      const startOfToday = startOfDay(new Date()).toISOString()
       expect(isYesterday(startOfToday)).toBe(false)
     })
   })
@@ -212,10 +222,8 @@ describe('Date formatting utilities', () => {
     })
 
     it('should return false when dates are the same day but different time zones', () => {
-      const date1 = DateTime.fromISO('2021-09-01T12:00:00', { zone: 'UTC' }).toISO() as string
-      const date2 = DateTime.fromISO('2021-09-01T08:00:00', {
-        zone: 'America/New_York',
-      }).toISO() as string
+      const date1 = '2021-09-01T12:00:00Z'
+      const date2 = '2021-09-01T08:00:00-04:00'
       expect(datesDontHaveSameDay(date1, date2)).toBe(false)
     })
 

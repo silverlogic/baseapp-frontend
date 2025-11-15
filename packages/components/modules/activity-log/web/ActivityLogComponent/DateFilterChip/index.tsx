@@ -5,7 +5,7 @@ import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
 
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { Box, Chip, Divider, Menu, Theme, Typography, useMediaQuery } from '@mui/material'
-import { DateTime } from 'luxon'
+import { parse } from 'date-fns'
 
 import DateFilterComponent from '../DateFilterComponent'
 import { DateFilterChipProps } from './types'
@@ -22,8 +22,8 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
   const { createdFrom, createdTo } = fetchParameters
   const hasDateSelected = createdFrom || createdTo
 
-  const parseDate = (date: string | null): DateTime | null =>
-    date ? DateTime.fromFormat(date, DATE_FORMAT.api) : null
+  const parseDate = (date: string | null): Date | null =>
+    date ? parse(date, DATE_FORMAT.api, new Date()) : null
 
   const formatLabelDate = (date: string | null): string | null =>
     date ? formatDate(date, { toFormat: DATE_FORMAT[3] }) : null

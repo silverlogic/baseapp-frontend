@@ -3,12 +3,12 @@ import { FC } from 'react'
 import { TIME_FORMAT, formatDate } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
-import { DateTime } from 'luxon'
+import { parseISO } from 'date-fns'
 
 import { TimestampProps } from './types'
 
 const Timestamp: FC<TimestampProps> = ({ date }) => {
-  const dateTime = DateTime.fromISO(date)
+  const dateTime = parseISO(date)
 
   return (
     <Typography

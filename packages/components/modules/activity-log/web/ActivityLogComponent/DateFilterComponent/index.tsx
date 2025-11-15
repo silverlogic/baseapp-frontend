@@ -2,9 +2,9 @@ import React, { FC, useState } from 'react'
 
 import { Box, Button } from '@mui/material'
 import { DateValidationError, LocalizationProvider } from '@mui/x-date-pickers'
-import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { DateTime } from 'luxon'
+import { formatISO } from 'date-fns'
 
 import { DateFilterComponentProps } from './types'
 
@@ -15,8 +15,8 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   onApply,
   onClearFilter,
 }) => {
-  const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(createdFrom ?? null)
-  const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(createdTo ?? null)
+  const [tempCreatedFrom, setTempCreatedFrom] = useState<Date | null>(createdFrom ?? null)
+  const [tempCreatedTo, setTempCreatedTo] = useState<Date | null>(createdTo ?? null)
 
   const [error, setError] = useState<DateValidationError | null>(null)
 
@@ -39,8 +39,8 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
 
     setError(null)
     executeRefetch({
-      createdFrom: tempCreatedFrom ? tempCreatedFrom.toISODate() : null,
-      createdTo: tempCreatedTo ? tempCreatedTo.toISODate() : null,
+      createdFrom: tempCreatedFrom ? formatISO(tempCreatedFrom, { representation: 'date' }) : null,
+      createdTo: tempCreatedTo ? formatISO(tempCreatedTo, { representation: 'date' }) : null,
     })
     onApply?.()
   }
@@ -57,13 +57,13 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
     onClearFilter?.()
   }
 
-  const disableStartDate = (date: DateTime) => (tempCreatedTo ? date > tempCreatedTo : false)
+  const disableStartDate = (date: Date) => (tempCreatedTo ? date > tempCreatedTo : false)
 
-  const disableEndDate = (date: DateTime) => (tempCreatedFrom ? date < tempCreatedFrom : false)
+  const disableEndDate = (date: Date) => (tempCreatedFrom ? date < tempCreatedFrom : false)
 
   return (
     <Box display="flex" gap={2} flexDirection="column">
-      <LocalizationProvider dateAdapter={AdapterLuxon}>
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           label="Start date"
           onChange={(newValue) => setTempCreatedFrom(newValue)}

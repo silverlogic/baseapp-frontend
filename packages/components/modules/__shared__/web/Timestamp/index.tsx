@@ -3,13 +3,13 @@ import { FC } from 'react'
 import { DATE_FORMAT, TIME_FORMAT, formatDate } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
-import { DateTime } from 'luxon'
+import { isToday as dateFnsIsToday, parseISO } from 'date-fns'
 
 import { TimestampProps } from './types'
 
 const Timestamp: FC<TimestampProps> = ({ date }) => {
-  const dateTime = DateTime.fromISO(date)
-  const isToday = dateTime.hasSame(DateTime.now(), 'day')
+  const dateTime = parseISO(date)
+  const isToday = dateFnsIsToday(dateTime)
 
   return (
     <Typography variant="caption" color="text.secondary" display="flex" alignItems="center">

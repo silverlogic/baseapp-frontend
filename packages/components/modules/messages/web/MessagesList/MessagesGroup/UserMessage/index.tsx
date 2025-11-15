@@ -4,7 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Typography } from '@mui/material'
-import { DateTime } from 'luxon'
+import { differenceInMinutes, parseISO } from 'date-fns'
 
 import { MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME } from '../../../../common'
 import DefaultMessageItem from './MessageItem'
@@ -31,9 +31,9 @@ const UserMessage: FC<UserMessageProps> = ({
       const isNextMessageFromOtherParticipant =
         nextMessage?.profile?.id !== currentMessage?.profile?.id
 
-      const { minutes: dateDiff } = DateTime.fromISO(nextMessage?.created).diff(
-        DateTime.fromISO(currentMessage?.created),
-        'minutes',
+      const dateDiff = differenceInMinutes(
+        parseISO(nextMessage?.created),
+        parseISO(currentMessage?.created),
       )
       const isDateDiffAboveMaximumInterval = dateDiff > MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME
 

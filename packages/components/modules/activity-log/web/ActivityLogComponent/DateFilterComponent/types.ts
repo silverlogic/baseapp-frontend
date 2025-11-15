@@ -1,10 +1,8 @@
-import { DateTime } from 'luxon'
-
 import { FetchParameters } from '../../../common/types'
 
 export interface DateFilterComponentProps {
-  createdFrom: DateTime | null
-  createdTo: DateTime | null
+  createdFrom: Date | null
+  createdTo: Date | null
   executeRefetch: (params: Partial<FetchParameters>) => void
   onApply?: () => void
   onClearFilter?: () => void

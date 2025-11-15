@@ -54,7 +54,6 @@
     "@tailwindcss/typography": "catalog:tailwind",
     "@testing-library/cypress": "catalog:test",
     "@types/js-cookie": "catalog:",
-    "@types/luxon": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
     "@types/react-relay": "catalog:graphql",

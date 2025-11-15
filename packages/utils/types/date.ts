@@ -1,5 +1,3 @@
-import { DateTime } from 'luxon'
-
 import { DATE_FORMAT, TIME_FORMAT } from '../constants/date'
 import { ValueOf } from './typescript'
 
@@ -20,7 +18,7 @@ export type FormatDateToApiOptions = {
 }
 
 export type FormatRelativeTimeOptions = {
-  reference?: DateTime
+  reference?: Date
   toFormat?: DateFormat | TimeFormat
   lowerCaseTimeIndicator?: boolean
 }
