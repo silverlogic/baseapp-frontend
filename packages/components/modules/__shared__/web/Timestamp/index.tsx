@@ -8,6 +8,8 @@ import { isToday as dateFnsIsToday, parseISO } from 'date-fns'
 import { TimestampProps } from './types'
 
 const Timestamp: FC<TimestampProps> = ({ date }) => {
+  if (!date) return null
+
   const dateTime = parseISO(date)
   const isToday = dateFnsIsToday(dateTime)
 

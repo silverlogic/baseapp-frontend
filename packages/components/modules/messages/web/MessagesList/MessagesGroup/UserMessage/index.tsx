@@ -31,9 +31,13 @@ const UserMessage: FC<UserMessageProps> = ({
       const isNextMessageFromOtherParticipant =
         nextMessage?.profile?.id !== currentMessage?.profile?.id
 
+      if (!nextMessage?.created || !currentMessage?.created) {
+        return <Timestamp date={currentMessage?.created} />
+      }
+
       const dateDiff = differenceInMinutes(
-        parseISO(nextMessage?.created),
-        parseISO(currentMessage?.created),
+        parseISO(nextMessage.created),
+        parseISO(currentMessage.created),
       )
       const isDateDiffAboveMaximumInterval = dateDiff > MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME
 

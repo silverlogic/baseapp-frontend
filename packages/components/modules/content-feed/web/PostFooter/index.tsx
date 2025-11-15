@@ -12,6 +12,8 @@ import PostReactionButton from '../PostReactionButton'
 import { PostFooterProps } from './types'
 
 const PostFooter: FC<PostFooterProps> = ({ post }) => {
+  if (!post.created) return null
+
   const created = parseISO(post.created)
   return (
     <Stack p={1.5} gap={1.5} direction="row" justifyContent="space-between">

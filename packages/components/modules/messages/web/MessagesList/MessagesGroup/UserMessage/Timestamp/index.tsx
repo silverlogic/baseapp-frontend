@@ -8,6 +8,8 @@ import { parseISO } from 'date-fns'
 import { TimestampProps } from './types'
 
 const Timestamp: FC<TimestampProps> = ({ date }) => {
+  if (!date) return null
+
   const dateTime = parseISO(date)
 
   return (
