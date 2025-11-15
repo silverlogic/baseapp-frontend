@@ -1,9 +1,9 @@
+import { getCookie, isMobilePlatform } from '@baseapp-frontend/utils'
+
 import { getItem } from 'expo-secure-store'
 
 import { getLanguage } from '..'
-import { LANGUAGE_COOKIE_NAME } from '../../../../constants/cookie'
-import { getCookie } from '../../../cookie'
-import { isMobilePlatform } from '../../../os'
+import { LANGUAGE_COOKIE_NAME } from '../../../types'
 
 const clientCookieValue = 'client-language-value'
 const mobileLanguageValue = 'mobile-language-value'
@@ -12,11 +12,8 @@ jest.mock('expo-secure-store', () => ({
   getItem: jest.fn(),
 }))
 
-jest.mock('../../../cookie', () => ({
+jest.mock('@baseapp-frontend/utils', () => ({
   getCookie: jest.fn(),
-}))
-
-jest.mock('../../../os', () => ({
   isMobilePlatform: jest.fn(),
 }))
 
