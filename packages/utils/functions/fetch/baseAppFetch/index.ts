@@ -1,6 +1,7 @@
 import humps from 'humps'
 
-import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
+import { LANGUAGE_COOKIE_NAME } from '@baseapp-frontend/i18n'
+
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
@@ -167,8 +168,8 @@ export const baseAppFetch: BaseAppFetch = async (
     const cookieStore = await cookies()
     language = cookieStore.get(languageCookieName)?.value
   } else {
-    const { getLanguage } = await import('../../language/getLanguage')
-    language = getLanguage(languageCookieName)
+    const { getLanguage } = await import('@baseapp-frontend/i18n')
+    language = await getLanguage(languageCookieName)
   }
   if (language) {
     fetchOptions.headers!['Accept-Language'] = language

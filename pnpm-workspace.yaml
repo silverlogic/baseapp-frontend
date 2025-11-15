@@ -3,6 +3,7 @@ packages:
   - packages/*
 
 catalog:
+  "@formatjs/intl": 2.10.10
   "@hookform/resolvers": 5.0.1
   "@tanstack/react-query": 5.76.1
   "@tanstack/react-query-devtools": 5.76.1
@@ -18,15 +19,16 @@ catalog:
   lodash: 4.17.21
   luxon: 3.6.1
   next: ^15.3.2
-  react-international-phone: 4.5.0
   react-hook-form: 7.56.4
+  react-intl: 7.1.14
+  react-international-phone: 4.5.0
+  react-multi-carousel: 2.8.6
   react-virtuoso: 4.12.7
   simplebar-react: 3.2.5
   tsup: 8.3.6
   typescript: 5.8.3
   zod: 3.25.7
   zustand: 5.0.4
-  react-multi-carousel: 2.8.6
 
 catalogs:
   react19:

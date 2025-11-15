@@ -26,6 +26,9 @@ export const CookieProvider = <T extends Record<string, any> = {}>({
 }
 
 const useCookie = <T extends Record<string, any> = {}>(): CookieState<T> => {
+  // TODO: I think we should change this because seems a little misleading,
+  // it says `useCookie` but it's returning a zustand store which is not persistent in cookies
+
   const store = useContext(CookieContext)
 
   if (!store) {

@@ -1,4 +1,3 @@
-export * from './constants/cookie'
 export * from './constants/date'
 export * from './constants/django'
 export * from './constants/events'
@@ -18,6 +17,7 @@ export * from './functions/expo'
 export * from './functions/fetch'
 export * from './functions/file'
 export * from './functions/form'
+export * from './functions/os'
 export * from './functions/string'
 export * from './functions/token'
 
