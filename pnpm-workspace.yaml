@@ -8,15 +8,14 @@ catalog:
   "@tanstack/react-query-devtools": 5.76.1
   "@types/js-cookie": 3.0.6
   "@types/lodash": 4.17.7
-  "@types/luxon": 3.6.2
   "@types/node": 22.7.2
   "@parcel/packager-ts": ^2.14.1
   "@parcel/transformer-typescript-types": ^2.14.1
   axios: 1.9.0
+  date-fns: 4.1.0
   jotai: 2.12.4
   js-cookie: 3.0.5
   lodash: 4.17.21
-  luxon: 3.6.1
   next: ^15.3.2
   react-international-phone: 4.5.0
   react-hook-form: 7.56.4

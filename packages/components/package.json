@@ -77,7 +77,6 @@
     "graphql": "catalog:graphql",
     "js-cookie": "catalog:",
     "date-fns": "catalog:",
-    "@formatjs/intl": "catalog:",
     "next": "catalog:",
     "numbro": "catalog:components",
     "react-hook-form": "catalog:",

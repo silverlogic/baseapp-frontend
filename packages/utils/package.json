@@ -23,7 +23,6 @@
     "jwt-decode": "catalog:utils",
     "lodash": "catalog:",
     "date-fns": "catalog:",
-    "@formatjs/intl": "catalog:",
     "next": "catalog:",
     "qs": "catalog:utils",
     "react-hook-form": "catalog:",
