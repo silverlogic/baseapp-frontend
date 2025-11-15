@@ -12,6 +12,18 @@ export const replytoCommentMockData = {
       canDelete: false,
       canReport: true,
       canPin: false,
+      profile: {
+        id: 'UHJvZm12345671111',
+        pk: 73,
+        name: 'Jane Profile',
+        image: {
+          url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+        },
+        urlPath: {
+          path: '/82385163',
+          id: 'VVJMUGF12323445667',
+        },
+      },
       user: {
         id: 'user-2',
         pk: 2,
@@ -33,6 +45,18 @@ export const replytoCommentMockData = {
               isPinned: false,
               pk: 218,
               body: 'Some reply',
+              profile: {
+                id: 'UHJvZm1234567',
+                pk: 73,
+                name: 'AA Profile',
+                image: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+                urlPath: {
+                  path: '/82385163',
+                  id: 'VVJMUGF12323445667',
+                },
+              },
               user: {
                 id: 'VXNlcjo0',
                 pk: 4,
@@ -161,6 +185,18 @@ export const commentEditMockData = {
                 isPinned: false,
                 pk: 220,
                 body: 'reply',
+                profile: {
+                  id: 'UHJvZm1234567',
+                  pk: 73,
+                  name: 'Some Profile',
+                  image: {
+                    url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                  },
+                  urlPath: {
+                    path: '/82385163',
+                    id: 'VVJMUGF12323445667',
+                  },
+                },
                 user: {
                   id: 'VXNlcjo0',
                   pk: 4,
@@ -193,6 +229,18 @@ export const commentEditMockData = {
                 isPinned: false,
                 pk: 218,
                 body: 'Some reply',
+                profile: {
+                  id: 'UHJvZm1234567',
+                  pk: 73,
+                  name: 'Some Profile',
+                  image: {
+                    url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                  },
+                  urlPath: {
+                    path: '/82385163',
+                    id: 'VVJMUGF12323445667',
+                  },
+                },
                 user: {
                   id: 'VXNlcjo0',
                   pk: 4,
@@ -275,6 +323,18 @@ export const commentsNextPageMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
+              profile: {
+                id: 'UHJvZm12345671111122',
+                pk: 73,
+                name: 'User 1 Profile',
+                image: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+                urlPath: {
+                  path: '/82385163',
+                  id: 'VVJMUGF12323445667',
+                },
+              },
               user: {
                 id: 'user-1',
                 pk: 1,
@@ -307,6 +367,18 @@ export const commentsNextPageMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
+              profile: {
+                id: 'UHJvZm12345671111122',
+                pk: 73,
+                name: 'User 1 Profile',
+                image: {
+                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+                },
+                urlPath: {
+                  path: '/82385163',
+                  id: 'VVJMUGF12323445667',
+                },
+              },
               user: {
                 id: 'user-1',
                 pk: 1,
@@ -954,6 +1026,18 @@ export const commentsTestMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
+              profile: {
+                id: 'UHJvZmlaegraeewa1111',
+                pk: 73,
+                name: 'Jane Profile',
+                image: {
+                  url: 'https://cdn.example.com/avatar2.png',
+                },
+                urlPath: {
+                  path: '/82385163',
+                  id: 'VVJMUGF0aDo2NQ==',
+                },
+              },
               user: {
                 id: 'user-2',
                 pk: 2,

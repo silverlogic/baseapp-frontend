@@ -29,6 +29,7 @@ describe('AccountPopover', () => {
     cy.stub(utilsPackage, 'useNotification').callsFake(() => ({
       sendToast: sendToastSpy,
     }))
+    cy.stub(window.location, 'reload').as('reloadStub')
   })
 
   it('should render the account popover without profile and be able to interact with it', () => {
@@ -86,6 +87,7 @@ describe('AccountPopover', () => {
 
     cy.findByLabelText(`Switch to ${profileListData.data.me.profiles.edges[9]?.node.name}`).click()
     cy.get('@sendToastSpy').should('have.been.calledOnce')
+    cy.get('@reloadStub').should('have.been.calledOnce')
 
     // Step 2.
     cy.step('should show 5 profiles and allow scrolling thru the profiles list')
