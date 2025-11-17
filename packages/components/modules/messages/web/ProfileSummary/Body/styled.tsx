@@ -22,11 +22,16 @@ export const TitleContainer = styled(Box)(() => ({
 export const SubheaderContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
-  padding: theme.spacing(2),
   gap: theme.spacing(1),
 }))
 
+export const ButtonContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+  padding: theme.spacing(2),
+}))
+
 export const Subheader = styled(Box)(({ theme }) => ({
-  paddingTop: theme.spacing(2),
-  paddingBottom: theme.spacing(2),
+  padding: theme.spacing(2),
 }))

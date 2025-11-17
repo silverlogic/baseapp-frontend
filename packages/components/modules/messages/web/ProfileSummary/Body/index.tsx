@@ -8,9 +8,15 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 
-import { HeaderContainer, Subheader, SubheaderContainer, TitleContainer } from './styled'
+import {
+  ButtonContainer,
+  HeaderContainer,
+  Subheader,
+  SubheaderContainer,
+  TitleContainer,
+} from './styled'
 import { BodyProps } from './types'
 
 const Body: FC<BodyProps> = ({ avatar, avatarSize = 144, biography, username, name, pk }) => {
@@ -30,37 +36,44 @@ const Body: FC<BodyProps> = ({ avatar, avatarSize = 144, biography, username, na
         </TitleContainer>
       </HeaderContainer>
       <SubheaderContainer>
-        <IconButton
-          size="small"
-          aria-label="go to profile"
-          onClick={() => window.open(profilePath, '_blank')}
-          sx={{ maxWidth: 'fit-content', gap: '8px' }}
-        >
-          <ProfileNoCircleIcon sx={{ fontSize: '18px' }} />
-          <Typography variant="subtitle2" color="text.primary">
-            Go to profile
-          </Typography>
-        </IconButton>
+        <ButtonContainer>
+          <IconButton
+            size="small"
+            aria-label="go to profile"
+            onClick={() => window.open(profilePath, '_blank')}
+            sx={{ maxWidth: 'fit-content', gap: '8px' }}
+          >
+            <ProfileNoCircleIcon sx={{ fontSize: '18px' }} />
+            <Typography variant="subtitle2" color="text.primary">
+              Go to profile
+            </Typography>
+          </IconButton>
 
-        <IconButton
-          size="small"
-          aria-label="edit group chat"
-          sx={{ maxWidth: 'fit-content', gap: '8px' }}
-        >
-          <NewGroupIcon sx={{ fontSize: '18px', color: 'text.primary' }} />
-          <Typography variant="subtitle2" color="text.primary">
-            Add contact to a group
-          </Typography>
-        </IconButton>
-
+          <IconButton
+            size="small"
+            aria-label="edit group chat"
+            sx={{ maxWidth: 'fit-content', gap: '8px' }}
+          >
+            <NewGroupIcon sx={{ fontSize: '18px', color: 'text.primary' }} />
+            <Typography variant="subtitle2" color="text.primary">
+              Add contact to a group
+            </Typography>
+          </IconButton>
+        </ButtonContainer>
         <Subheader>
           <Typography variant="subtitle2" color="text.primary">
             About
           </Typography>
         </Subheader>
+        <Divider />
         <Subheader>
           <Typography variant="caption" color="text.secondary">
-            {biography}
+            {biography?.split('\n').map((line, index) => (
+              <span key={index}>
+                {line}
+                {index < biography.split('\n').length - 1 && <br />}
+              </span>
+            ))}
           </Typography>
         </Subheader>
       </SubheaderContainer>
