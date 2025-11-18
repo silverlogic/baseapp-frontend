@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.5
+
+### Patch Changes
+
+- Hide block and report buttons for own profile, to prevent self-blocking and reporting
+
 ## 1.4.4
 
 ### Patch Changes
