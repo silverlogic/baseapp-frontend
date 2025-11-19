@@ -4,11 +4,14 @@ import {
   PinIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { useIntl } from 'react-intl'
+
 import { OverlayAction } from '../../../../__shared__/web'
 import { useCommentPinMutation } from '../../../common'
 import { UseCommentOptionsParams } from './types'
 
 const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): OverlayAction[] => {
+  const intl = useIntl()
   const [pinComment, isPinningComment] = useCommentPinMutation()
   const handlePinComment = () => {
     pinComment({ variables: { id: comment!.id } })
@@ -22,7 +25,7 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
     {
       disabled: true,
       icon: <LinkIcon />,
-      label: 'Share Comment',
+      label: intl.formatMessage({ id: 'comments.actions.share' }),
       onClick: () => {},
       hasPermission: true,
       closeOnClick: true,
@@ -30,7 +33,9 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
     {
       disabled: isPinningComment,
       icon: <PinIcon sx={{ color: comment?.isPinned ? 'info.main' : 'action.active' }} />,
-      label: `${comment?.isPinned ? 'Unpin' : 'Pin'} Comment`,
+      label: intl.formatMessage({
+        id: comment?.isPinned ? 'comments.actions.unpin' : 'comments.actions.pin',
+      }),
       onClick: handlePinComment,
       hasPermission: comment?.canPin,
       closeOnClick: true,
@@ -38,7 +43,7 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
     {
       disabled: false,
       icon: <PenEditIcon />,
-      label: 'Edit Comment',
+      label: intl.formatMessage({ id: 'comments.actions.edit' }),
       onClick: handleEditComment,
       hasPermission: comment?.canChange,
       closeOnClick: true,

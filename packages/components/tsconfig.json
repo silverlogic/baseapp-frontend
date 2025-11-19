@@ -24,7 +24,8 @@
     "cypress.config.ts",
     "webpack.config.ts",
     ".storybook/**/*",
-    ".storybook/**/*.json"
+    ".storybook/**/*.json",
+    "locales/**/*.json"
   ],
   "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }

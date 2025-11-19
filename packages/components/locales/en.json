@@ -1,0 +1,12 @@
+{
+  "comments.create.placeholder": "Comment...",
+  "comments.actions.share": "Share Comment",
+  "comments.actions.pin": "Pin Comment",
+  "comments.actions.unpin": "Unpin Comment",
+  "comments.actions.edit": "Edit Comment",
+  "comments.loading.more": "loading more comments",
+  "comments.reply.ariaLabel": "reply to comment {commentId}",
+  "comments.reply.count.ariaLabel": "replies count {commentId}",
+  "comments.replies.showMore": "Show more replies ({count})",
+  "comments.pinned.badge": "Pinned"
+}
