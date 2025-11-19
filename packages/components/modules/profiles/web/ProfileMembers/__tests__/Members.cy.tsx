@@ -28,7 +28,6 @@ describe('Members', () => {
         context={{
           parameters: {
             initialProfile: {
-              pk: 1,
               canChangeRole: true,
               id: 'UHJvZmlsZTox',
               name: 'Owner Profile',
@@ -130,7 +129,6 @@ describe('Members', () => {
         context={{
           parameters: {
             initialProfile: {
-              pk: 1,
               canChangeRole: true,
               id: 'UHJvZmlsZTox',
               name: 'Owner Profile',
