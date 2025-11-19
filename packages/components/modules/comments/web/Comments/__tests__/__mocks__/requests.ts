@@ -165,7 +165,6 @@ export const commentEditMockData = {
                 isPinned: false,
                 pk: 220,
                 body: 'reply',
-                profile: MOCK_PROFILE,
                 user: {
                   id: 'VXNlcjo0',
                   pk: 4,
@@ -198,7 +197,6 @@ export const commentEditMockData = {
                 isPinned: false,
                 pk: 218,
                 body: 'Some reply',
-                profile: MOCK_PROFILE,
                 user: {
                   id: 'VXNlcjo0',
                   pk: 4,
@@ -281,7 +279,6 @@ export const commentsNextPageMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
-              profile: MOCK_PROFILE,
               user: {
                 id: 'user-1',
                 pk: 1,
@@ -314,7 +311,6 @@ export const commentsNextPageMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
-              profile: MOCK_PROFILE,
               user: {
                 id: 'user-1',
                 pk: 1,
@@ -962,7 +958,6 @@ export const commentsTestMockData = {
               canDelete: false,
               canReport: true,
               canPin: false,
-              profile: MOCK_PROFILE,
               user: {
                 id: 'user-2',
                 pk: 2,
