@@ -22,6 +22,7 @@
   },
   "exports": {
     "./package.json": "./package.json",
+    "./locales": "./locales/index.ts",
     "./shared/common": "./modules/__shared__/common/index.ts",
     "./shared/web": "./modules/__shared__/web/index.ts",
     "./shared/native": "./modules/__shared__/native/index.ts",
@@ -52,6 +53,7 @@
     "./pages/common": "./modules/pages/common/index.ts"
   },
   "files": [
+    "locales",
     "modules",
     "tsconfig.json",
     "relay.config.js",
@@ -80,6 +82,7 @@
     "luxon": "catalog:",
     "next": "catalog:",
     "react-hook-form": "catalog:",
+    "react-intl": "catalog:",
     "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
