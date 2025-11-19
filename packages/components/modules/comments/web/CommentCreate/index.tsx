@@ -7,6 +7,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { ConnectionHandler } from 'react-relay'
 
 import {
@@ -78,6 +79,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     { targetObjectId, autoFocusInput, SocialInput = DefaultSocialInput, SocialInputProps = {} },
     ref,
   ) => {
+    const intl = useIntl()
     const { currentProfile } = useCurrentProfile()
     const commentReply = useCommentReply()
     const isReply = !!commentReply.inReplyToId
@@ -141,7 +143,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     return (
       <SocialInput
         ref={ref}
-        placeholder="Comment..."
+        placeholder={intl.formatMessage({ id: 'comments.create.placeholder' })}
         autoFocusInput={autoFocusInput}
         form={form}
         formId="comment-create"
