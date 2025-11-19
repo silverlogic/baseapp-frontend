@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -20,10 +20,11 @@ import {
   getParticipantCountString,
   useArchiveChatRoomMutation,
   useChatRoom,
+  useChatroomDetails,
   useCheckIsAdmin,
-  useNameAndAvatar,
 } from '../../../common'
 import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
+import { LEFT_PANEL_CONTENT } from '../../ChatRoomsComponent/constants'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
@@ -37,14 +38,28 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   roomId,
 }) => {
   const roomHeader = useFragment(TitleFragment, roomTitleRef)
+
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
 
   const isUpToMd = useResponsive('up', 'md')
-  const { resetChatRoom } = useChatRoom()
+  const { resetChatRoom, setSingleChatProfileDetails, setLeftPanelContent } = useChatRoom()
 
   const { isGroup } = roomHeader
-  const { title, avatar } = useNameAndAvatar(roomHeader)
+  const { title, avatar, path, pk, biography } = useChatroomDetails(roomHeader)
+
+  useEffect(() => {
+    if (!isGroup) {
+      setSingleChatProfileDetails({
+        pk: pk ?? undefined,
+        name: title ?? '',
+        username: path ?? '',
+        imageUrl: avatar ?? '',
+        biography: biography ?? '',
+      })
+    }
+  }, [pk, title, path, avatar, biography])
+
   const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
   const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
   const members = getParticipantCountString(participantsCount)
@@ -147,6 +162,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
                 onLeaveClicked={() => {
                   popover.onClose()
                   setOpen(true)
+                }}
+                onContactDetailsClicked={() => {
+                  popover.onClose()
+                  setLeftPanelContent(LEFT_PANEL_CONTENT.profileSummary)
                 }}
               />
             </Popover>
