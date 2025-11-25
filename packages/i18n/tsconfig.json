@@ -4,6 +4,14 @@
     "types": ["node"],
     "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", "**/*.json", ".eslintrc.js", "*.ts", "*.tsx"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    "locales/**/*.json",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx"
+  ],
   "exclude": ["node_modules", "dist", "scripts", "docs", "**/*.test.ts", "**/*.test.tsx"]
 }

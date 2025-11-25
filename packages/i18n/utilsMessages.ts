@@ -1,26 +1,23 @@
 import { IntlShape } from 'react-intl'
 
-import { DEFAULT_LOCALE, Locale } from './types'
+import { Locale } from './types'
 
 /**
  * Get utils-specific messages for a locale
- * @deprecated Use loadLocales with registered packages instead
+ * @deprecated Use loadLocales with '@baseapp-frontend/utils/locales' instead
+ * This function is kept for backward compatibility but should not be used in new code
  */
 export const getUtilsMessages = (
-  locale: Locale,
+  _locale: Locale,
   additionalMessages?: Record<string, string>,
 ): Record<string, string> => {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  const messages: Record<Locale, Record<string, string>> = {
-    en: require('@baseapp-frontend/utils/locales/en.json'),
-    es: require('@baseapp-frontend/utils/locales/es.json'),
-    pt: require('@baseapp-frontend/utils/locales/pt.json'),
-  }
-
-  const baseMessages = messages[locale] || messages[DEFAULT_LOCALE]
-
-  // Merge with additional messages if provided
-  return additionalMessages ? { ...baseMessages, ...additionalMessages } : baseMessages
+  // eslint-disable-next-line no-console
+  console.warn(
+    'getUtilsMessages is deprecated. Use loadLocales with "@baseapp-frontend/utils/locales" instead.',
+  )
+  // Return only additional messages or empty object to avoid circular dependency
+  // Users should migrate to the new loadLocales system
+  return additionalMessages || {}
 }
 
 /**
