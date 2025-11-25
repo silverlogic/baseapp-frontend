@@ -9,19 +9,6 @@ import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, SUPPORTED_LOCALES } from 
 import { getMessages } from '../../utils'
 import { IntlProviderWrapperProps } from './types'
 
-// Dynamically import app-specific messages
-let getAppMessages: ((locale: Locale) => Record<string, string>) | null = null
-
-try {
-  // Try to import from the app's i18n directory
-  // This will be resolved by the build tool (webpack/next.js)
-  const i18nModule = require('i18n')
-  getAppMessages = i18nModule.getWebMessages || null
-} catch (error) {
-  // No app-specific messages available, will use base messages only
-  getAppMessages = null
-}
-
 const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   children,
   locale: initialLocale,
@@ -46,18 +33,8 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
-  // Get additional messages based on locale (from app or prop)
-  const mergedAdditionalMessages = useMemo(() => {
-    // Prefer app-specific messages loader if available
-    if (getAppMessages) {
-      return getAppMessages(locale)
-    }
-    // Fall back to prop-provided messages
-    return additionalMessages
-  }, [locale, additionalMessages])
-
   const [messages, setMessages] = useState<Record<string, string>>(
-    getMessages(locale, mergedAdditionalMessages),
+    getMessages(locale, additionalMessages),
   )
 
   useEffect(() => {
@@ -65,10 +42,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
     if (!initialLocale && !initialCookies) {
       getCurrentLocale().then((currentLocale) => {
         setLocale(currentLocale)
-        const newAdditionalMessages = getAppMessages
-          ? getAppMessages(currentLocale)
-          : additionalMessages
-        setMessages(getMessages(currentLocale, newAdditionalMessages))
+        setMessages(getMessages(currentLocale, additionalMessages))
       })
     }
   }, [initialLocale, initialCookies, additionalMessages])
@@ -76,10 +50,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   useEffect(() => {
     if (initialLocale && initialLocale !== locale) {
       setLocale(initialLocale)
-      const newAdditionalMessages = getAppMessages
-        ? getAppMessages(initialLocale)
-        : additionalMessages
-      setMessages(getMessages(initialLocale, newAdditionalMessages))
+      setMessages(getMessages(initialLocale, additionalMessages))
     }
   }, [initialLocale, locale, additionalMessages])
 
