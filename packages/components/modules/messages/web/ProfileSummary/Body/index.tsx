@@ -70,7 +70,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
             size="small"
             aria-label="go to profile"
             onClick={() => window.open(profilePath, '_blank')}
-            sx={{ maxWidth: 'fit-content', gap: '8px' }}
+            disabled={!profilePath}
           >
             <ProfileNoCircleIcon sx={{ fontSize: '18px' }} />
             <Typography variant="subtitle2" color="text.primary">
