@@ -12,11 +12,20 @@ export async function loadLocaleFromPackage(
 ): Promise<Record<string, string>> {
   try {
     // Dynamic import of the locale module
-    const localeModule = await import(/* webpackChunkName: "[request]" */ `${packagePath}`)
+    // Using Function constructor to prevent TypeScript from trying to resolve at compile time
+    // This is necessary to avoid 14+ minute build hangs when TypeScript tries to resolve
+    // all possible module paths with workspace dependencies
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
+    const dynamicImport = new Function('path', 'return import(path)')
+    const localeModule = (await dynamicImport(packagePath)) as Record<
+      string,
+      Record<string, string>
+    >
 
     // Return the specific locale
     return localeModule[locale] || {}
   } catch (error) {
+    // eslint-disable-next-line no-console
     console.error(`Failed to load locale "${locale}" from package "${packagePath}":`, error)
     return {}
   }
