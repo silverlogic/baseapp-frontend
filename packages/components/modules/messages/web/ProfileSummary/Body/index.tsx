@@ -80,7 +80,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
 
           <IconButton
             size="small"
-            aria-label="edit group chat"
+            aria-label="add contact to a group"
             sx={{ maxWidth: 'fit-content', gap: '8px' }}
           >
             <NewGroupIcon sx={{ fontSize: '18px', color: 'text.primary' }} />
