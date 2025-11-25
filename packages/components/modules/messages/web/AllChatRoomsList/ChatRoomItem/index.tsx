@@ -21,7 +21,7 @@ import {
   TitleFragment,
   UnreadMessagesCountFragment,
   useArchiveChatRoomMutation,
-  useChatroomDetails,
+  useNameAndAvatar,
   useUnreadChatMutation,
 } from '../../../common'
 import { StyledChatCard } from './styled'
@@ -52,7 +52,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { currentProfile } = useCurrentProfile()
-  const { title, avatar } = useChatroomDetails(headerFragment)
+  const { title, avatar } = useNameAndAvatar(headerFragment)
 
   const { lastMessageTime } = lastMessageFragment
   const lastMessage = lastMessageFragment.lastMessage?.content

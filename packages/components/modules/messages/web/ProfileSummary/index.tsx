@@ -4,25 +4,23 @@ import { FC, Suspense } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
-import { useChatRoom } from '../../common'
+import { usePreloadedQuery } from 'react-relay'
+
+import { GroupDetailsQuery } from '../../common'
 import Body from './Body'
 import Header from './Header'
 import { ProfileSummaryProps } from './types'
 
-const ProfileSummary: FC<ProfileSummaryProps> = ({ onBackButtonClicked }) => {
-  const { singleChatProfileDetails } = useChatRoom()
-  const { imageUrl, name, username, biography, pk } = singleChatProfileDetails || {}
+const ProfileSummary: FC<ProfileSummaryProps> = ({ onBackButtonClicked, queryRef }) => {
+  const data = usePreloadedQuery(GroupDetailsQuery, queryRef)
 
+  if (!data.chatRoom) {
+    return <LoadingState />
+  }
   return (
     <>
       <Header onBackButtonClicked={onBackButtonClicked} />
-      <Body
-        name={name}
-        avatar={imageUrl ?? ''}
-        username={username ?? ''}
-        biography={biography ?? ''}
-        pk={pk ?? undefined}
-      />
+      <Body chatRoomRef={data.chatRoom} />
     </>
   )
 }

@@ -1,15 +1,14 @@
+import { ValueOf } from '@baseapp-frontend/utils'
+
+import { LEFT_PANEL_CONTENT } from '../useChatRoom/constants'
+
 export type ChatRoomState = {
   id?: string
   participants?: (string | null | undefined)[]
   leftPanelContent?: number
-  singleChatProfileDetails?: {
-    pk: number | undefined
-    name: string | null | undefined
-    username: string | null | undefined
-    imageUrl: string | null | undefined
-    biography?: string | null | undefined
-  }
 }
+
+export type LeftPanelContentValues = ValueOf<typeof LEFT_PANEL_CONTENT>
 
 type ChatRoomFunctions = {
   setChatRoom: (
@@ -17,14 +16,7 @@ type ChatRoomFunctions = {
     replace?: boolean | undefined,
   ) => void
   resetChatRoom: () => void
-  setLeftPanelContent: (content: number) => void
-  setSingleChatProfileDetails: (details: {
-    pk: number | undefined
-    name: string | undefined
-    username: string | undefined
-    imageUrl: string | undefined
-    biography?: string | undefined
-  }) => void
+  setLeftPanelContent: (content: LeftPanelContentValues) => void
 }
 
 export type UseChatRoom = ChatRoomState & ChatRoomFunctions

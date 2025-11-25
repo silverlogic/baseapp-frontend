@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import {
@@ -9,7 +10,10 @@ import {
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Divider, Typography } from '@mui/material'
+import { useFragment } from 'react-relay'
 
+import { ProfileSummaryFragment$key } from '../../../../../__generated__/ProfileSummaryFragment.graphql'
+import { ProfileSummaryFragment } from '../../../common/graphql/fragments/ProfileSummary'
 import {
   ButtonContainer,
   HeaderContainer,
@@ -19,9 +23,32 @@ import {
 } from './styled'
 import { BodyProps } from './types'
 
-const Body: FC<BodyProps> = ({ avatar, avatarSize = 144, biography, username, name, pk }) => {
+const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
+  const { currentProfile } = useCurrentProfile()
+  const profileSummary = useFragment<ProfileSummaryFragment$key>(
+    ProfileSummaryFragment,
+    chatRoomRef,
+  )
+  const getSingleChatDetails = () => {
+    const details = profileSummary?.participants?.edges?.map((edge) => {
+      if (edge?.node?.profile?.id !== currentProfile?.id) {
+        return {
+          name: edge?.node?.profile?.name,
+          avatar: edge?.node?.profile?.image?.url,
+          username: edge?.node?.profile?.urlPath?.path,
+          biography: edge?.node?.profile?.biography,
+          pk: edge?.node?.profile?.pk,
+        }
+      }
+      return null
+    })
+    return details?.find((detail) => detail !== null)
+  }
+
+  const { name, avatar, username, biography, pk } = getSingleChatDetails() || {}
   const formattedUsername = username ? username.replace(/^\/+/, '') : ''
-  const profilePath = username ?? `/profile/${pk}`
+  const profilePath = username ?? (pk ? `/profile/${pk}` : undefined)
+
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <HeaderContainer>
@@ -30,9 +57,11 @@ const Body: FC<BodyProps> = ({ avatar, avatarSize = 144, biography, username, na
           <TypographyWithEllipsis variant="subtitle1" color="text.primary">
             {name}
           </TypographyWithEllipsis>
-          <TypographyWithEllipsis variant="body2" color="text.secondary">
-            {`@${formattedUsername}`}
-          </TypographyWithEllipsis>
+          {formattedUsername && (
+            <TypographyWithEllipsis variant="body2" color="text.secondary">
+              {`@${formattedUsername}`}
+            </TypographyWithEllipsis>
+          )}
         </TitleContainer>
       </HeaderContainer>
       <SubheaderContainer>

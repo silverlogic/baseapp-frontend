@@ -8,6 +8,7 @@ import { useQueryLoader } from 'react-relay'
 
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import { GroupDetailsQuery, useChatRoom } from '../../common'
+import { LEFT_PANEL_CONTENT } from '../../common/context/useChatRoom/constants'
 import DefaultAllChatRoomsList from '../AllChatRoomsList'
 import ChatRoom from '../ChatRoom'
 import DefaultGroupChatCreate from '../GroupChatCreate'
@@ -15,7 +16,6 @@ import DefaultGroupChatDetails from '../GroupChatDetails'
 import DefaultGroupChatEdit from '../GroupChatEdit'
 import DefaultProfileSummary from '../ProfileSummary'
 import DefaultSingleChatCreate from '../SingleChatCreate'
-import { LEFT_PANEL_CONTENT } from './constants'
 import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
 import { ChatRoomsComponentProps } from './types'
 
@@ -44,6 +44,13 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   const displayGroupDetails = () => {
     if (selectedRoom) {
       setLeftPanelContent(LEFT_PANEL_CONTENT.groupDetails)
+      loadGroupDetailsQuery({ roomId: selectedRoom }, { fetchPolicy: 'network-only' })
+    }
+  }
+
+  const displayProfileSummary = () => {
+    if (selectedRoom) {
+      setLeftPanelContent(LEFT_PANEL_CONTENT.profileSummary)
       loadGroupDetailsQuery({ roomId: selectedRoom }, { fetchPolicy: 'network-only' })
     }
   }
@@ -100,8 +107,10 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
           />
         )
       case LEFT_PANEL_CONTENT.profileSummary:
+        if (!groupDetailsQueryRef) return null
         return (
           <ProfileSummaryComponent
+            queryRef={groupDetailsQueryRef}
             onBackButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
           />
         )
@@ -119,7 +128,13 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   const renderRightPanelContent = () => {
     if (!selectedRoom) return <div />
 
-    return <ChatRoom roomId={selectedRoom} onDisplayGroupDetailsClicked={displayGroupDetails} />
+    return (
+      <ChatRoom
+        roomId={selectedRoom}
+        onDisplayGroupDetailsClicked={displayGroupDetails}
+        onDisplayProfileSummaryClicked={displayProfileSummary}
+      />
+    )
   }
 
   return (

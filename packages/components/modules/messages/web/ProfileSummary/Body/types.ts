@@ -1,10 +1,8 @@
 import { PropsWithChildren } from 'react'
 
+import { ProfileSummaryFragment$key } from '../../../../../__generated__/ProfileSummaryFragment.graphql'
+
 export interface BodyProps extends PropsWithChildren {
-  avatar?: string
   avatarSize?: number
-  biography?: string | null
-  name?: string | null
-  username?: string | null
-  pk?: number | undefined
+  chatRoomRef: ProfileSummaryFragment$key
 }

@@ -9,14 +9,9 @@ export const RoomTitleFragment = graphql`
         node {
           profile {
             id
-            pk
             name
-            image(width: 128, height: 128) {
+            image(width: 100, height: 128) {
               url
-            }
-            biography
-            urlPath {
-              path
             }
           }
           role
