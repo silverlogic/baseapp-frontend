@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.4.7
+
+### Patch Changes
+
+- Updated messages to show additional detail regarding chat participant in non group chats
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.4
+
 ## 1.4.6
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.1.4
+
+### Patch Changes
+
+- Added new icon ProfileNoCircleIcon
+
 ## 1.1.3
 
 ### Patch Changes
