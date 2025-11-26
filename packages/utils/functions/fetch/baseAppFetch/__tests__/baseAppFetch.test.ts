@@ -425,6 +425,7 @@ describe('baseAppFetch', () => {
     it('should handle SSR token refresh when token is invalid', async () => {
       const getTokenSSRMock = getTokenSSR as jest.Mock
       getTokenSSRMock
+        .mockResolvedValueOnce('Current-Profile')
         .mockResolvedValueOnce('invalid-access-token') // access token
         .mockResolvedValueOnce('ssr-refresh-token') // refresh token
 

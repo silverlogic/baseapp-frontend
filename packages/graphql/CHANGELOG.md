@@ -1,5 +1,14 @@
 # @baseapp-frontend/graphql
 
+## 1.3.6
+
+### Patch Changes
+
+- update 'CURRENT_PROFILE_KEY_NAME' import on environment.ts
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.5
+  - @baseapp-frontend/utils@4.0.4
+
 ## 1.3.5
 
 ### Patch Changes
