@@ -69,7 +69,13 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
             })
           }}
         >
-          {intl.formatMessage({ id: 'comments.replies.showMore' }, { count: commentsLeft })}
+          {intl.formatMessage(
+            {
+              id: 'comments.replies.showMore',
+              defaultMessage: 'Show more replies ({count})',
+            },
+            { count: commentsLeft },
+          )}
         </LoadMoreRepliesButton>
       </Box>
     )

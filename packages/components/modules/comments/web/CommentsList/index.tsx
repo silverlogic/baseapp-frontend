@@ -56,7 +56,10 @@ const CommentsList: FC<CommentsListProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label={intl.formatMessage({ id: 'comments.loading.more' })}
+        aria-label={intl.formatMessage({
+          id: 'comments.loading.more',
+          defaultMessage: 'loading more comments',
+        })}
       />
     )
   }

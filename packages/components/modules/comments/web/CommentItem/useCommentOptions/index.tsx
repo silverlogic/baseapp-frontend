@@ -25,7 +25,10 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
     {
       disabled: true,
       icon: <LinkIcon />,
-      label: intl.formatMessage({ id: 'comments.actions.share' }),
+      label: intl.formatMessage({
+        id: 'comments.actions.share',
+        defaultMessage: 'Share Comment',
+      }),
       onClick: () => {},
       hasPermission: true,
       closeOnClick: true,
@@ -35,6 +38,7 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
       icon: <PinIcon sx={{ color: comment?.isPinned ? 'info.main' : 'action.active' }} />,
       label: intl.formatMessage({
         id: comment?.isPinned ? 'comments.actions.unpin' : 'comments.actions.pin',
+        defaultMessage: comment?.isPinned ? 'Unpin Comment' : 'Pin Comment',
       }),
       onClick: handlePinComment,
       hasPermission: comment?.canPin,
@@ -43,7 +47,10 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
     {
       disabled: false,
       icon: <PenEditIcon />,
-      label: intl.formatMessage({ id: 'comments.actions.edit' }),
+      label: intl.formatMessage({
+        id: 'comments.actions.edit',
+        defaultMessage: 'Edit Comment',
+      }),
       onClick: handleEditComment,
       hasPermission: comment?.canChange,
       closeOnClick: true,

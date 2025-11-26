@@ -16,7 +16,10 @@ const CommentPinnedBadge: FC<CommentPinnedBadgeProps> = ({ isPinned }) => {
     <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-1">
       <PinIcon />
       <Typography variant="body2" color="text.secondary">
-        {intl.formatMessage({ id: 'comments.pinned.badge' })}
+        {intl.formatMessage({
+          id: 'comments.pinned.badge',
+          defaultMessage: 'Pinned',
+        })}
       </Typography>
     </div>
   )

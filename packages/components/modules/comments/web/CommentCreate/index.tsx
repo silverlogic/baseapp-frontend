@@ -143,7 +143,10 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     return (
       <SocialInput
         ref={ref}
-        placeholder={intl.formatMessage({ id: 'comments.create.placeholder' })}
+        placeholder={intl.formatMessage({
+          id: 'comments.create.placeholder',
+          defaultMessage: 'Comment...',
+        })}
         autoFocusInput={autoFocusInput}
         form={form}
         formId="comment-create"
