@@ -71,7 +71,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
           <IconButton
             size="small"
             aria-label="go to profile"
-            onClick={() => window.open(profilePath, '_blank')}
+            onClick={() => window.open(profilePath, '_blank', 'noopener,noreferrer')}
             disabled={!profilePath}
           >
             <ProfileNoCircleIcon sx={{ fontSize: '18px' }} />
