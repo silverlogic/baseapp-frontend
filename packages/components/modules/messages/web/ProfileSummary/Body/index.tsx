@@ -31,6 +31,8 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
   )
   const getSingleChatDetails = () => {
     const details = profileSummary?.participants?.edges?.map((edge) => {
+      const profileId = edge?.node?.profile?.id
+      if (!profileId) return null
       if (edge?.node?.profile?.id !== currentProfile?.id) {
         return {
           name: edge?.node?.profile?.name,
@@ -97,10 +99,10 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
         <Divider />
         <Subheader>
           <Typography variant="caption" color="text.secondary">
-            {biography?.split('\n').map((line, index) => (
-              <span key={index}>
+            {biography?.split('\n').map((line, index, lines) => (
+              <span key={`${line}-${index}`}>
                 {line}
-                {index < biography.split('\n').length - 1 && <br />}
+                {index < lines.length - 1 && <br />}
               </span>
             ))}
           </Typography>

@@ -28,6 +28,7 @@ export const SubheaderContainer = styled(Box)(({ theme }) => ({
 export const ButtonContainer = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
+  alignItems: 'flex-start',
   gap: theme.spacing(1),
   padding: theme.spacing(2),
 }))
