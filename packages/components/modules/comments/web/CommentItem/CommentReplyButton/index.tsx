@@ -23,14 +23,26 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
         disabled={isDisabled}
         onClick={onReply}
         isLoading={isLoadingReplies}
-        aria-label={intl.formatMessage({ id: 'comments.reply.ariaLabel' }, { commentId })}
+        aria-label={intl.formatMessage(
+          {
+            id: 'comments.reply.ariaLabel',
+            defaultMessage: 'reply to comment {commentId}',
+          },
+          { commentId },
+        )}
       >
         <CommentReplyIcon />
       </IconButton>
       <Typography
         variant="caption"
         color="text.secondary"
-        aria-label={intl.formatMessage({ id: 'comments.reply.count.ariaLabel' }, { commentId })}
+        aria-label={intl.formatMessage(
+          {
+            id: 'comments.reply.count.ariaLabel',
+            defaultMessage: 'replies count {commentId}',
+          },
+          { commentId },
+        )}
       >
         {totalCommentsCount ?? 0}
       </Typography>
