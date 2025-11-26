@@ -51,10 +51,10 @@ export const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | u
 }
 
 export const useNameAndAvatar = (roomHeader: TitleFragment$data) => {
-  const singleChatDetails = useRoomNameAndAvatar(roomHeader)
+  const roomNameAndAvatar = useRoomNameAndAvatar(roomHeader)
   const groupNameAndAvatar = useGroupNameAndAvatar(roomHeader)
   if (roomHeader.isGroup) return groupNameAndAvatar
-  return singleChatDetails
+  return roomNameAndAvatar
 }
 
 export const getParticipantCountString = (participantCount: number | null | undefined) => {

@@ -5,7 +5,7 @@ import { FC, PropsWithChildren, createContext, useRef } from 'react'
 import { StoreApi, create } from 'zustand'
 
 import { INITIAL_CHAT_ROOM_STATE } from './constants'
-import { ChatRoomState, UseChatRoom } from './types'
+import { ChatRoomState, LeftPanelContentValues, UseChatRoom } from './types'
 
 export const ChatRoomContext = createContext<StoreApi<UseChatRoom> | null>(null)
 
@@ -17,7 +17,7 @@ const ChatRoomProvider: FC<PropsWithChildren> = ({ children }) => {
 
       setChatRoom: (state: ChatRoomState) => set(state),
       resetChatRoom: () => set({ ...INITIAL_CHAT_ROOM_STATE }),
-      setLeftPanelContent: (content: number) => set({ leftPanelContent: content }),
+      setLeftPanelContent: (content: LeftPanelContentValues) => set({ leftPanelContent: content }),
     }))
   }
   return <ChatRoomContext.Provider value={storeRef.current}>{children}</ChatRoomContext.Provider>

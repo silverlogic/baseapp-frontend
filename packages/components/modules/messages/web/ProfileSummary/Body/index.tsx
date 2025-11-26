@@ -29,7 +29,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
     ProfileSummaryFragment,
     chatRoomRef,
   )
-  const getSingleChatDetails = () => {
+  const getroomNameAndAvatar = () => {
     const details = profileSummary?.participants?.edges?.map((edge) => {
       const profileId = edge?.node?.profile?.id
       if (!profileId) return null
@@ -47,7 +47,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
     return details?.find((detail) => detail !== null)
   }
 
-  const { name, avatar, username, biography, pk } = getSingleChatDetails() || {}
+  const { name, avatar, username, biography, pk } = getroomNameAndAvatar() || {}
   const formattedUsername = username ? username.replace(/^\/+/, '') : ''
   const profilePath = username ?? (pk ? `/profile/${pk}` : undefined)
 

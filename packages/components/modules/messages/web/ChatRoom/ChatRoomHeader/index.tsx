@@ -47,7 +47,6 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
 
   const { isGroup } = roomHeader
   const { title, avatar } = useNameAndAvatar(roomHeader)
-
   const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
   const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
   const members = getParticipantCountString(participantsCount)
