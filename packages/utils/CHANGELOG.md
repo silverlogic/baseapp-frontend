@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 4.0.4
+
+### Patch Changes
+
+- update to baseAppFetch and tests to include 'Current-Profile' in request headers
+
 ## 4.0.3
 
 ### Patch Changes

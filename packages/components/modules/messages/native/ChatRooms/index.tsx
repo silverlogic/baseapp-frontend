@@ -1,5 +1,6 @@
 import { FC, Suspense, useState, useTransition } from 'react'
 
+import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import {
   DEFAULT_FORM_VALUES,
@@ -36,12 +37,13 @@ const ChatRooms: FC = () => {
   const searchParam = watch(FORM_VALUES.search)
   const [selectedTab, setSelectedTab] = useState<string>(CHAT_TAB_VALUES.active)
   const [, startTransition] = useTransition()
+  const { currentProfile } = useCurrentProfile()
   const chatRoomQueryData = useLazyLoadQuery<ChatRoomsQueryType>(
     ChatRoomsQuery,
-    {},
+    { profileId: currentProfile?.id || '' },
     { fetchPolicy: 'store-and-network' },
   )
-  const { data, refetch } = useRoomsList(chatRoomQueryData?.me?.profile as RoomsListFragment$key)
+  const { data, refetch } = useRoomsList(chatRoomQueryData?.profile as RoomsListFragment$key)
 
   const handleSearchChange = (text: string) => {
     startTransition(() => {

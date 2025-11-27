@@ -42,7 +42,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
 
   const [isRefetchPending, startRefetchTransition] = useTransition()
   const { data, loadNext, isLoadingNext, hasNext, refetch } = useRoomsList(
-    targetRef?.me?.profile as RoomsListFragment$key,
+    targetRef?.profile as RoomsListFragment$key,
   )
 
   const [isPending, startTransition] = useTransition()
