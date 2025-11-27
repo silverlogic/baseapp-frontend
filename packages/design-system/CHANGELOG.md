@@ -1,10 +1,23 @@
 # @baseapp-frontend/design-system
 
-## 1.1.3
+## 1.1.5
 
 ### Minor Changes
 
 - Added roomslist components and illustrations
+
+## 1.1.4
+
+### Patch Changes
+
+- Added new icon ProfileNoCircleIcon
+
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
 
 ## 1.1.2
 
