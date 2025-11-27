@@ -9,11 +9,7 @@
 ### Patch Changes
 
 - Updated dependencies
-  - @baseapp-frontend/design-system@1.1.3
-
-### Patch Changes
-
-- Hide block and report buttons for own profile, to prevent self-blocking and reporting
+  - @baseapp-frontend/design-system@1.1.5
 
 ## 1.4.7
 
