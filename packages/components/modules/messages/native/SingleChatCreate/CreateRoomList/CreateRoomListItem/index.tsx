@@ -24,6 +24,7 @@ const ChatRoomListItem = ({ profile: profileRef }: { profile: ProfileItemFragmen
   const { currentProfile } = useCurrentProfile()
 
   const handleRoomCompleted = (roomRef: string) => {
+    router.replace('/messages') // ensures RoomsList is behind
     router.push(`/rooms/${roomRef}`)
   }
 
