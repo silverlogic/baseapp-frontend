@@ -110,7 +110,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
         Share profile
       </MenuItem>
       {smDown && <Divider />}
-      {profile && (
+      {profile && currentProfileId !== profile?.id && (
         <>
           <BlockButtonWithDialog
             target={profile}

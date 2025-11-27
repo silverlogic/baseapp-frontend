@@ -16,7 +16,7 @@ import { CHAT_TAB_VALUES } from './constants'
 const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => {
   const [, startTransition] = useTransition()
   const { data, loadNext, hasNext, isLoadingNext, refetch } = useRoomsList(
-    targetRef?.me?.profile as RoomsListFragment$key,
+    targetRef?.profile as RoomsListFragment$key,
   )
   const layoutTriggeredRef = useRef(false)
   const screenHeight = Dimensions.get('window').height

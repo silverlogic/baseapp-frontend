@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 5.0.5
+
+### Patch Changes
+
+- moved 'CURRENT_PROFILE_KEY_NAME' constant to utils
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
 ## 5.0.4
 
 ### Patch Changes

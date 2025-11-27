@@ -1,10 +1,26 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.42
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.5
+
+## 1.0.41
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.4
+
 ## 1.0.40
 
 ### Patch Changes
 
 - Updated dependencies
+  - @baseapp-frontend/graphql@1.3.6
+  - @baseapp-frontend/utils@4.0.4
   - @baseapp-frontend/design-system@1.1.3
 
 ## 1.0.39
