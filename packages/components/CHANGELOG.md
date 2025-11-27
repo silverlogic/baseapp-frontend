@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.4.8
+
+### Minor Changes
+
+- Added roomslist components and illustrations
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.5
+
 ## 1.4.7
 
 ### Patch Changes
