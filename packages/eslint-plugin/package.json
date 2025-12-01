@@ -13,7 +13,7 @@
     "test": "ts-node ./rules/**/*.test.ts",
     "storybook": "echo Eslint Plugin: No storybook found",
     "clean": "rm -rf node_modules dist",
-    "prepare": "pnpm build"
+    "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "eslint": "catalog:lint"
