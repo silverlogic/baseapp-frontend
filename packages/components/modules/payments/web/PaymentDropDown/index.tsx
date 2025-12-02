@@ -13,6 +13,8 @@ import PaymentMethodDisplay from './PaymentMethodDisplay'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
 
+const ADD_NEW_PAYMENT_METHOD = 'add-new'
+
 const PaymentDropdown: FC<PaymentDropdownProps> = ({
   paymentMethods,
   selectedPaymentMethodId,
@@ -48,7 +50,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
 
   const handleSelectPaymentMethod = (e: SelectChangeEvent<string>) => {
     const selectedId = e.target.value as string
-    if (selectedId === 'add-new') {
+    if (selectedId === ADD_NEW_PAYMENT_METHOD) {
       handleOpenModal()
     } else {
       setSelectedPaymentMethodId(selectedId)
@@ -98,7 +100,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
               </Box>
             </MenuItem>
           ))}
-          <MenuItem value="add-new">
+          <MenuItem value={ADD_NEW_PAYMENT_METHOD}>
             <AddPaymentMethodItem />
           </MenuItem>
         </Select>

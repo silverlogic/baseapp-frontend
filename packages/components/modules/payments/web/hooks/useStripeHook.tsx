@@ -4,18 +4,15 @@ import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 import {
-  CANCEL_SUBSCRIPTION_API_KEY,
   CONFIRM_CARD_PAYMENT_API_KEY,
-  CREATION_SUBSCRIPTION_API_KEY,
   CUSTOMER_API_KEY,
   INVOICE_API_KEY,
   PAYMENT_METHOD_API_KEY,
   PRODUCT_API_KEY,
   SETUP_INTENT_API_KEY,
   SUBSCRIPTION_API_KEY,
-  UPDATE_SUBSCRIPTION_API_KEY,
-} from '../services/keys'
-import StripeApi from '../services/stripe'
+  StripeApi,
+} from '../services/stripe'
 import { CreateSubscriptionOptions, SetupIntent, UpdateSubscriptionOptions } from '../types'
 
 const useStripeHook = () => {
@@ -54,7 +51,7 @@ const useStripeHook = () => {
 
   const useListPaymentMethods = (entityId: string) =>
     useQuery({
-      queryKey: [PAYMENT_METHOD_API_KEY.get(entityId.toString())],
+      queryKey: [PAYMENT_METHOD_API_KEY.list(entityId.toString())],
       queryFn: () => StripeApi.listPaymentMethods(entityId),
       enabled: !!entityId,
     })
@@ -77,7 +74,7 @@ const useStripeHook = () => {
           defaultPaymentMethodId,
         }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.default] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -100,7 +97,7 @@ const useStripeHook = () => {
         isDefault: boolean
       }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.default] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -136,7 +133,7 @@ const useStripeHook = () => {
 
   const useListProducts = () =>
     useQuery({
-      queryKey: ['useListProducts'],
+      queryKey: [PRODUCT_API_KEY.list()],
       queryFn: () => StripeApi.listProducts(),
     })
 
@@ -152,10 +149,10 @@ const useStripeHook = () => {
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [CUSTOMER_API_KEY.get(), SUBSCRIPTION_API_KEY.get()],
+          queryKey: [CUSTOMER_API_KEY.default, SUBSCRIPTION_API_KEY.default],
         })
       },
-      mutationKey: [CREATION_SUBSCRIPTION_API_KEY.get()],
+      mutationKey: [SUBSCRIPTION_API_KEY.create()],
     })
 
   const useGetSubscription = (subscriptionId: string) =>
@@ -184,7 +181,7 @@ const useStripeHook = () => {
       onError: (error) => {
         options?.onError?.(error)
       },
-      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(), subscriptionId],
+      mutationKey: [SUBSCRIPTION_API_KEY.update(subscriptionId)],
     })
 
   const useCancelSubscription = (subscriptionId: string, refetch: () => void) =>
@@ -197,12 +194,12 @@ const useStripeHook = () => {
       onError: () => {
         sendToast(`Failed to cancel subscription`, { type: 'error' })
       },
-      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(subscriptionId)],
+      mutationKey: [SUBSCRIPTION_API_KEY.cancel(subscriptionId)],
     })
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
     useQuery({
-      queryKey: [INVOICE_API_KEY.get(page.toString())],
+      queryKey: [INVOICE_API_KEY.list(page.toString())],
       queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 
