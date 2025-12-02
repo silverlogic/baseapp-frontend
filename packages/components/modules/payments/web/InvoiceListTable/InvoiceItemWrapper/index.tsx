@@ -1,9 +1,9 @@
 import { DATE_FORMAT, formatDateFromApi } from '@baseapp-frontend/utils'
 
 import { STATUS_COLORS } from '../../utils'
+import InvoiceItemTableRow from '../InvoiceItemTableRow'
+import MobileInvoiceItemTableRow from '../MobileInvoiceItemTableRow'
 import { InvoiceItemWrapperProps } from '../types'
-import InvoiceItemTableRow from './InvoiceItemTableRow'
-import MobileInvoiceItemTableRow from './MobileInvoiceItemTableRow'
 
 const InvoiceItemWrapper = ({ row, rowProps, cellProps, smDown }: InvoiceItemWrapperProps) => {
   const amountDue = (row.amountDue / 100).toFixed(2) ?? ''
