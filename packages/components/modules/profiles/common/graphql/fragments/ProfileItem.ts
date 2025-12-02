@@ -11,5 +11,8 @@ export const ProfileItemFragment = graphql`
     urlPath {
       path
     }
+    user {
+      email
+    }
   }
 `

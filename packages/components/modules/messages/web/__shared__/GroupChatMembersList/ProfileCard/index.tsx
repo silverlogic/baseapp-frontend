@@ -18,7 +18,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
   handleRemoveMember,
   isMember = false,
 }) => {
-  const { id, name, image, urlPath } = useFragment(
+  const { id, name, image, urlPath, user } = useFragment(
     ProfileItemFragment,
     profile as ProfileItemFragment$key,
   )
@@ -34,7 +34,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
         <Typography variant="subtitle2">{name}</Typography>
         <Typography variant="caption" color="text.secondary">
-          {urlPath?.path && `@${urlPath.path}`}
+          {urlPath?.path ? `@${urlPath.path.replace(/^\/+/, '')}` : user?.email}
         </Typography>
       </Box>
       <Button
