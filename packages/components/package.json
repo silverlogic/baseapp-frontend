@@ -18,6 +18,8 @@
     "cypress:open": "cypress open --browser chrome",
     "test:component": "pnpm relay && cypress run --component --browser chrome --headed",
     "test:unit": "jest --config ./jest.config.ts",
+    "i18n:extract": "formatjs extract 'modules/**/*.ts*' --out-file locales/en.json --format simple",
+    "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
@@ -82,9 +84,10 @@
     "next": "catalog:",
     "numbro": "catalog:components",
     "react-hook-form": "catalog:",
+    "react-intl": "catalog:",
+    "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
-    "react-intl": "catalog:",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",
@@ -92,7 +95,6 @@
     "slugify": "catalog:components",
     "use-long-press": "catalog:components",
     "zod": "catalog:",
-    "react-multi-carousel": "catalog:",
     "zustand": "catalog:"
   },
   "peerDependencies": {
@@ -115,6 +117,7 @@
     "@chromatic-com/storybook": "catalog:storybook",
     "@cypress/webpack-dev-server": "catalog:test",
     "@faker-js/faker": "catalog:test",
+    "@formatjs/cli": "^6.7.4",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",
