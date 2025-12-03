@@ -24,7 +24,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
   groupMember,
   initiateRemoval,
 }) => {
-  const { id, image, name, urlPath, user } = useFragment<ProfileItemFragment$key>(
+  const { id, image, name, urlPath } = useFragment<ProfileItemFragment$key>(
     ProfileItemFragment,
     groupMember.profile!,
   )
@@ -88,7 +88,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
           }}
         >
           <Typography variant="caption" color="text.secondary">
-            {showUrlPath ? `@${urlPath.path.replace(/^\/+/, '')}` : user?.email}
+            {showUrlPath && `@${urlPath.path.replace(/^\/+/, '')}`}
           </Typography>
           {showAdminLabel && showUrlPath && (
             <Box
