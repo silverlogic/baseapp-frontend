@@ -25,6 +25,16 @@ const useCommentOptions = ({
     onEdit()
   }
 
+  // Extract pin/unpin messages separately to allow formatjs to detect both IDs
+  const pinMessage = intl.formatMessage({
+    id: 'comments.actions.pin',
+    defaultMessage: 'Pin Comment',
+  })
+  const unpinMessage = intl.formatMessage({
+    id: 'comments.actions.unpin',
+    defaultMessage: 'Unpin Comment',
+  })
+
   return [
     {
       disabled: true,
@@ -40,10 +50,7 @@ const useCommentOptions = ({
     {
       disabled: isPinningComment,
       icon: <PinIcon sx={{ color: comment?.isPinned ? 'info.main' : 'action.active' }} />,
-      label: intl.formatMessage({
-        id: comment?.isPinned ? 'comments.actions.unpin' : 'comments.actions.pin',
-        defaultMessage: comment?.isPinned ? 'Unpin Comment' : 'Pin Comment',
-      }),
+      label: comment?.isPinned ? unpinMessage : pinMessage,
       onClick: handlePinComment,
       hasPermission: comment?.canPin,
       closeOnClick: true,
