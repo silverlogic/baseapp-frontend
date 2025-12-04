@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.14
+
+### Patch Changes
+
+- hotfix: exclude dist/ and schemas from relay compiler
+
 ## 2.1.13
 
 ### Patch Changes
