@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.11
+
+### Patch Changes
+
+- Added graphql queries for notifications, profile and pages
+
 ## 1.4.10
 
 ### Patch Changes
