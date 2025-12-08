@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.4.10
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.6
+
 ## 1.4.9
 
 ### Patch Changes

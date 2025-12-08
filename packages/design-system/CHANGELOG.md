@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.1.6
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+
 ## 1.1.5
 
 ### Patch Changes
