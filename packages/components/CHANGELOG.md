@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.8
+
+### Patch Changes
+
+- Fix for posts images being deformed if too big
+
 ## 1.4.7
 
 ### Patch Changes
