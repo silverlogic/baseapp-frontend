@@ -1,8 +1,9 @@
 import { FC } from 'react'
 
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { AvatarDeletedUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
-import { Avatar, Box, CircularProgress, Typography } from '@mui/material'
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Timestamp } from '../../../../__shared__/web'
@@ -44,11 +45,12 @@ const LogGroups: FC<LogGroupsProps> = ({
   const renderAvatar = (group: LogGroup) => {
     if (group.logs[0]?.user == null) return <AvatarDeletedUserIcon />
     return (
-      <Avatar
-        style={{ marginBottom: '4px' }}
-        sizes="small"
+      <AvatarWithPlaceholder
+        width={40}
+        height={40}
+        className="self-start justify-self-center"
         src={group.logs[0]?.user?.avatar?.url ?? ''}
-        alt={group.logs[0]?.user?.fullName ?? 'User activity log avatar'}
+        sx={{ border: 'none', marginBottom: '4px' }}
       />
     )
   }
