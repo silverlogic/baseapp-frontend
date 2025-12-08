@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 1.4.9
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.6
+  - @baseapp-frontend/design-system@1.1.5
+  - @baseapp-frontend/graphql@1.3.7
+  - @baseapp-frontend/utils@4.0.5
+
 ## 1.4.8
 
 ### Patch Changes

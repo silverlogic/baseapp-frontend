@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 4.0.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+
 ## 4.0.4
 
 ### Patch Changes

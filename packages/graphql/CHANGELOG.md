@@ -1,5 +1,14 @@
 # @baseapp-frontend/graphql
 
+## 1.3.7
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.6
+  - @baseapp-frontend/utils@4.0.5
+
 ## 1.3.6
 
 ### Patch Changes
