@@ -8,6 +8,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
+import { formatHandle } from '../../../../../__shared__/common/utils'
 import { ProfileItemFragment } from '../../../../../profiles/common'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
@@ -34,7 +35,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
         <Typography variant="subtitle2">{name}</Typography>
         <Typography variant="caption" color="text.secondary">
-          {urlPath?.path && `@${urlPath.path.replace(/^\/+/, '')}`}
+          {urlPath?.path && formatHandle(urlPath.path)}
         </Typography>
       </Box>
       <Button

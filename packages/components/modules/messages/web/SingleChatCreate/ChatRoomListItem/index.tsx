@@ -10,6 +10,7 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { ConnectionHandler, useFragment } from 'react-relay'
 
+import { formatHandle } from '../../../../__shared__/common/utils'
 import { ProfileItemFragment } from '../../../../profiles/common'
 import { useCreateChatRoomMutation } from '../../../common'
 import { MainContainer } from './styled'
@@ -32,7 +33,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onCh
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
         <TypographyWithEllipsis variant="subtitle2">{name}</TypographyWithEllipsis>
         <Typography variant="caption" color="text.secondary">
-          {urlPath?.path && `@${urlPath.path?.replace(/^\/+/, '')}`}
+          {urlPath?.path && formatHandle(urlPath.path)}
         </Typography>
       </Box>
       <LoadingButton

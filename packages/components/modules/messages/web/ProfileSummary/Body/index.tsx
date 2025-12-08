@@ -13,6 +13,7 @@ import { Box, Divider, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ProfileSummaryFragment$key } from '../../../../../__generated__/ProfileSummaryFragment.graphql'
+import { formatHandle } from '../../../../__shared__/common/utils'
 import { ProfileSummaryFragment } from '../../../common/graphql/fragments/ProfileSummary'
 import {
   ButtonContainer,
@@ -48,7 +49,6 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
   }
 
   const { name, avatar, username, biography, pk } = getroomNameAndAvatar() || {}
-  const formattedUsername = username ? username.replace(/^\/+/, '') : ''
   const profilePath = username ?? (pk ? `/profile/${pk}` : undefined)
 
   return (
@@ -59,9 +59,9 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
           <TypographyWithEllipsis variant="subtitle1" color="text.primary">
             {name}
           </TypographyWithEllipsis>
-          {formattedUsername && (
+          {username && (
             <TypographyWithEllipsis variant="body2" color="text.secondary">
-              {`@${formattedUsername}`}
+              {formatHandle(username)}
             </TypographyWithEllipsis>
           )}
         </TitleContainer>
