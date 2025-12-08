@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 1.1.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
 ## 1.1.4
 
 ### Patch Changes
