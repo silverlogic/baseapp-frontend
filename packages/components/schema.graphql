@@ -903,7 +903,7 @@ type Notification implements Node {
   emailed: Boolean!
   data: GenericScalar
   pk: Int!
-  actor: Profile
+  actor: Node
   target: Node
   actionObject: Node
 }

@@ -13,9 +13,13 @@ export const NotificationItemFragment = graphql`
 
     actor {
       id
-      name
-      image(width: 48, height: 48) {
-        url
+      __typename
+      ... on Profile {
+        id
+        name
+        image(width: 48, height: 48) {
+          url
+        }
       }
     }
 
