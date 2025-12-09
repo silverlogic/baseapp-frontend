@@ -23,7 +23,6 @@ const ReactionCreated: FC<GenericItemProps> = ({ notification }) => {
           actorName={notification.actor?.name}
           unread={notification.unread}
         />
-        <NotificationContent.Body content={notification.target?.body} />
       </NotificationContent>
     </Notification.Root>
   )
