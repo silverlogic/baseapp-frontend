@@ -1,7 +1,6 @@
 import { capitalizeFirstLetter } from './utils'
 
 export const NUMBER_OF_MEMBERS_TO_LOAD_NEXT = 5
-export const NUMBER_OF_MEMBERS_ON_FIRST_LOAD = 10
 
 export const MEMBER_STATUSES = {
   active: 'ACTIVE',
@@ -12,6 +11,7 @@ export const MEMBER_STATUSES = {
 export const MEMBER_ROLES = {
   admin: 'ADMIN',
   manager: 'MANAGER',
+  owner: 'OWNER',
 } as const
 
 export const MEMBER_ACTIONS = {

@@ -14,6 +14,12 @@ describe('Members', () => {
     cy.viewport(1280, 720)
   })
 
+  const profileMemberVariables = (profileId: string) => ({
+    profileId,
+    count: 10,
+    orderBy: 'status',
+  })
+
   it('renders MembersListItem correctly', () => {
     const { environment, queueOperationResolver } = createTestEnvironment()
 
@@ -24,6 +30,7 @@ describe('Members', () => {
 
     cy.mount(
       <MembersForTesting
+        variables={profileMemberVariables('UHJvZmlsZTox')}
         environment={environment}
         context={{
           parameters: {
@@ -126,6 +133,7 @@ describe('Members', () => {
 
     cy.mount(
       <MembersForTesting
+        variables={profileMemberVariables('UHJvZmlsZTox')}
         environment={environment}
         context={{
           parameters: {
@@ -183,7 +191,13 @@ describe('Members', () => {
       queryName: 'UserMembersListPaginationQuery',
       data: fullMembersListMockData,
     })
-    cy.mount(<MembersForTesting environment={environment} />)
+
+    cy.mount(
+      <MembersForTesting
+        variables={profileMemberVariables('owner-id')}
+        environment={environment}
+      />,
+    )
     const numberOfMembers = fullMembersListMockData.data.profile.members.edges.length + 1
 
     cy.step('should render the correct number of members and the search bar')
@@ -221,11 +235,18 @@ describe('Members', () => {
 
   it('can filter members by name', () => {
     const { environment, queueOperationResolver } = createTestEnvironment()
+
     queueOperationResolver({
       queryName: 'UserMembersListPaginationQuery',
       data: simpleMembersListMockData,
     })
-    cy.mount(<MembersForTesting environment={environment} />)
+
+    cy.mount(
+      <MembersForTesting
+        variables={profileMemberVariables('UHJvZmlsZTox')}
+        environment={environment}
+      />,
+    )
 
     cy.step('show all members')
     cy.findByText('Manager Profile').should('exist')
