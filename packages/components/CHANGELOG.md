@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.12
+
+### Patch Changes
+
+- Improved error handling for profile and organization creation workflows. Validation errors now display as field-specific alerts and a dismissible notification, providing clearer feedback during form submission failures
+
 ## 1.4.11
 
 ### Patch Changes
