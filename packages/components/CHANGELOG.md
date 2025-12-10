@@ -1,5 +1,25 @@
 # @baseapp-frontend/components
 
+## 1.4.12
+
+### Patch Changes
+
+- Improved error handling for profile and organization creation workflows. Validation errors now display as field-specific alerts and a dismissible notification, providing clearer feedback during form submission failures
+
+## 1.4.11
+
+### Patch Changes
+
+- Added graphql queries for notifications, profile and pages
+
+## 1.4.10
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.6
+
 ## 1.4.9
 
 ### Patch Changes
