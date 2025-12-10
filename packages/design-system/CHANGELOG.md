@@ -1,5 +1,26 @@
 # @baseapp-frontend/design-system
 
+## 1.1.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.1.4
+
+### Patch Changes
+
+- Added new icon ProfileNoCircleIcon
+
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
 ## 1.1.2
 
 ### Patch Changes

@@ -10,4 +10,5 @@ export interface ChatRoomProps {
   SendMessage?: FC<SendMessageProps>
   SendMessageProps?: Partial<SendMessageProps>
   onDisplayGroupDetailsClicked: () => void
+  onDisplayProfileSummaryClicked: () => void
 }

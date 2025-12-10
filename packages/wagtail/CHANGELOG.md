@@ -1,5 +1,31 @@
 # @baseapp-frontend/wagtail
 
+## 1.0.42
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.5
+  - @baseapp-frontend/graphql@1.3.7
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.0.41
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.4
+
+## 1.0.40
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.3.6
+  - @baseapp-frontend/utils@4.0.4
+  - @baseapp-frontend/design-system@1.1.3
+
 ## 1.0.39
 
 ### Patch Changes

@@ -1,5 +1,20 @@
 # @baseapp-frontend/provider
 
+## 2.0.19
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
+## 2.0.18
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
 ## 2.0.17
 
 ### Patch Changes
