@@ -2,7 +2,11 @@ import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 
 import { UISettings } from '../../../styles/web'
-import { MISSING_UI_SETTINGS_STORE_ERROR, UI_SETTINGS_KEY_NAME } from './constants'
+import {
+  DEFAULT_UI_SETTINGS,
+  MISSING_UI_SETTINGS_STORE_ERROR,
+  UI_SETTINGS_KEY_NAME,
+} from './constants'
 import type { UISettingsState } from './types'
 
 const handleTailwindThemeMode = (themeMode: string) => {
@@ -13,9 +17,25 @@ const handleTailwindThemeMode = (themeMode: string) => {
 
 let settingsStore: StoreApi<UISettingsState> | null = null
 
-const createSettingsStore = (initialSettings: UISettings): StoreApi<UISettingsState> =>
-  createStore<UISettingsState>()((set) => ({
-    settings: initialSettings,
+const getClientSideUISettings = (initialSettings?: UISettings): UISettings => {
+  const storedSettings = Cookies.get(UI_SETTINGS_KEY_NAME)
+  const defaultSettings = { ...DEFAULT_UI_SETTINGS, ...initialSettings }
+
+  if (storedSettings) {
+    try {
+      return { ...defaultSettings, ...JSON.parse(storedSettings) }
+    } catch {
+      return defaultSettings
+    }
+  }
+  return defaultSettings
+}
+
+const createSettingsStore = (initialSettings?: UISettings): StoreApi<UISettingsState> => {
+  const settingsToUse = getClientSideUISettings(initialSettings)
+
+  return createStore<UISettingsState>()((set) => ({
+    settings: settingsToUse,
     setSettings: (newSettings: Partial<UISettings>) =>
       set((state) => {
         const settings = { ...state.settings, ...newSettings }
@@ -26,11 +46,17 @@ const createSettingsStore = (initialSettings: UISettings): StoreApi<UISettingsSt
         }
       }),
   }))
+}
 
-export const initializeSettingsStore = (initialSettings: UISettings): StoreApi<UISettingsState> => {
-  // Create a new store in dev mode to prevent HMR from preserving stale data
-  if (process.env.NODE_ENV === 'development' || !settingsStore) {
-    return createSettingsStore(initialSettings)
+export const initializeSettingsStore = (
+  initialSettings?: UISettings,
+): StoreApi<UISettingsState> => {
+  if (
+    // Create a new store in dev mode to prevent HMR from preserving stale data
+    process.env.NODE_ENV === 'development' ||
+    !settingsStore
+  ) {
+    settingsStore = createSettingsStore(initialSettings)
   }
 
   return settingsStore

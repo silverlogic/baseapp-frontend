@@ -88,50 +88,11 @@ pnpm build --filter=@baseapp-frontend/authentication
 
 ## Develop
 
-Our development mode is designed to provide immediate feedback as you work on our monorepo apps and packages. In dev mode, each package automatically watches for changes in its source files, rebuilds itself using a custom build process, and synchronizes its output (bundled code, type declarations, etc.) to the consumer app.
-
-This ensures that any changes you make are quickly reflected in the running application without the need to manually rebuild or restart servers.
-
-### What Happens in Dev Mode
-
-Some of our packages—like `@baseapp-frontend/components` and `@baseapp-frontend/design-system`—have a multi-step build process. When you run:
+To develop all apps and packages, run the following command:
 
 ```bash
 pnpm dev
 ```
-
-Each package in our monorepo enters a persistent watch mode.
-
-For example, when running dev mode for `@baseapp-frontend/components`, you might see output similar to the following:
-```bash
-[@baseapp-frontend/components] Waiting for other packages to start...  # wait for other dependencies to be build
-[@baseapp-frontend/components] Starting build process...               # start the build process
-[@baseapp-frontend/components] Running Relay Compiler...               # since this package uses relay, run the relay compiler
-[@baseapp-frontend/components] Relay compilation completed.
-[@baseapp-frontend/components] Running Babel transpiling...            # run babel step to transpile the code
-[@baseapp-frontend/components] Babel transpilation completed.
-[@baseapp-frontend/components] Running tsup bundling...                # run tsup step to bunle the code
-[@baseapp-frontend/components] Running type declaration generation...  # run tsc step to create type declarations
-[@baseapp-frontend/components] tsup Bundling completed.
-[@baseapp-frontend/components] Type declarations generated.
-[@baseapp-frontend/components] Copying DTS files...                    # merge the declaration files with the bundled files
-[@baseapp-frontend/components] DTS files copied.
-[@baseapp-frontend/components] Cleaning temporary files...             # remove temporary folders
-[@baseapp-frontend/components] Temporary files cleaned.
-[@baseapp-frontend/components] Build completed successfully.           # build completed
-[@baseapp-frontend/components] Syncing dist folder to consumer app...  # sync the build output with the consumer app (baseapp-frontend-template)
-[@baseapp-frontend/components] Sync completed successfully.
-```
-**Disclaimer**
-
-The dev mode is a powerful tool that makes live testing of changes very convenient by automatically rebuilding packages as you edit files.
-
-However, note that for packages like `@baseapp-frontend/design-system` and `@baseapp-frontend/components`, the watch process can trigger multiple build tasks upon every file change.
-
-This continuous rebuild may lead to increased memory consumption and CPU usage if you’re making a lot of simultaneous changes.
-
-It is recommended to use this live mode only at appropriate times rather than throughout your entire development phase.
-
 
 ## **PNPM Catalog Overview**
 
@@ -181,7 +142,7 @@ If you need to install a package version that hasn't been published yet, follow 
 
 3. **Copy the Commit Hash**:
 
-  Push the code to GitHub and copy the last commit hash. You’ll need this hash to point your consumer app to the correct version of the package.   
+  Push the code to GitHub and copy the last commit hash. You’ll need this hash to point your consumer app to the correct version of the package.
 
 4. **Update Consumer App**:
 
@@ -198,7 +159,7 @@ If you need to install a package version that hasn't been published yet, follow 
   - Option 1: Run the `restore-catalogs` script
 
     Refer to the (Restore Catalog Entries)[https://github.com/silverlogic/baseapp-frontend/blob/master/README.md#restore-catalog-entries] section to reapply catalog entries.
-  
+
   - Option 2: Revert the Commit
 
     Revert the commit that removed the catalogs to restore them to their previous state:

@@ -5,3 +5,5 @@ export type * from './types'
 
 export { default as ReactionButton } from './ReactionButton'
 export type * from './ReactionButton/types'
+
+export * from './utils'

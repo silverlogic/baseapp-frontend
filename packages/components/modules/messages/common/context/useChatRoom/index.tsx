@@ -9,7 +9,7 @@ const useChatRoom = () => {
   const store = useContext(ChatRoomContext)
 
   if (!store) {
-    throw new Error('Missing CommentReplyProvider')
+    throw new Error('Missing ChatRoomProvider')
   }
 
   return useStore(store, (state) => state)

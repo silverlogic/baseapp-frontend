@@ -29,6 +29,7 @@ import {
 } from '../../../utils/login'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useCurrentProfile } from '../../profile'
+import { setProfileExpoStorage } from '../../profile/utils'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { ApiClass, LoginParams, UseLoginOptions } from './types'
 
@@ -54,23 +55,28 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
       return
     }
 
-    // TODO: adapt this flow to work with mobile
-    if (!isMobilePlatform()) {
-      const user = decodeJWT<User>(response.access)
-      if (user) {
-        // TODO: handle the absolute image path on the backend
-        const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/v1', '')
-        let absoluteImagePath = null
-        if (user?.profile?.image) {
-          absoluteImagePath = user.profile.image.startsWith('http')
-            ? user.profile.image
-            : `${baseUrl}${user.profile.image}`
-        }
-        setCurrentProfile({
-          ...user.profile,
-          image: absoluteImagePath,
-        })
+    const isWebPlatform = !isMobilePlatform()
+
+    const user = decodeJWT<User>(response.access)
+    if (user) {
+      const API_BASE_URL = isWebPlatform
+        ? process.env.NEXT_PUBLIC_API_BASE_URL
+        : process.env.EXPO_PUBLIC_API_BASE_URL
+      const baseUrl = API_BASE_URL?.replace('/v1', '')
+      let absoluteImagePath = null
+      if (user?.profile?.image) {
+        absoluteImagePath = user.profile.image.startsWith('http')
+          ? user.profile.image
+          : `${baseUrl}${user.profile.image}`
       }
+
+      const currentProfile = {
+        ...user.profile,
+        image: absoluteImagePath,
+      }
+
+      setCurrentProfile(currentProfile)
+      await setProfileExpoStorage(currentProfile)
     }
 
     await setTokenAsync(accessKeyName, response.access, {

@@ -5,6 +5,7 @@ import {
   eventEmitter,
   removeTokenAsync,
 } from '@baseapp-frontend/utils'
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -23,6 +24,7 @@ const useLogout = ({
   const logout = async () => {
     await removeTokenAsync(accessKeyName)
     await removeTokenAsync(refreshKeyName)
+    await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
     queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     queryClient.resetQueries({ queryKey: MFA_API_KEY.default })
     onLogout?.()

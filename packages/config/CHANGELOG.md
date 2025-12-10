@@ -1,5 +1,23 @@
 # @baseapp-frontend/config
 
+## 2.1.14
+
+### Patch Changes
+
+- hotfix: exclude dist/ and schemas from relay compiler
+
+## 2.1.13
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+
+## 2.1.12
+
+### Patch Changes
+
+- Add `__generated__/`to `ignorePatterns`.
+
 ## 2.1.11
 
 ### Patch Changes

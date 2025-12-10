@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/provider",
   "description": "Providers for React Query and Emotion.",
-  "version": "2.0.14",
+  "version": "2.0.19",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@types/lodash": "catalog:",
     "@types/react": "catalog:react19",

@@ -1,5 +1,192 @@
 # @baseapp-frontend/components
 
+## 1.4.12
+
+### Patch Changes
+
+- Improved error handling for profile and organization creation workflows. Validation errors now display as field-specific alerts and a dismissible notification, providing clearer feedback during form submission failures
+
+## 1.4.11
+
+### Patch Changes
+
+- Added graphql queries for notifications, profile and pages
+
+## 1.4.10
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.6
+
+## 1.4.9
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.6
+  - @baseapp-frontend/design-system@1.1.5
+  - @baseapp-frontend/graphql@1.3.7
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.4.8
+
+### Patch Changes
+
+- Fix for posts images being deformed if too big
+
+## 1.4.7
+
+### Patch Changes
+
+- Updated messages to show additional detail regarding chat participant in non group chats
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.4
+
+## 1.4.6
+
+### Patch Changes
+
+- update to comments, posts, messages and reactions to show the current profile selected for these interactions
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.5
+  - @baseapp-frontend/graphql@1.3.6
+  - @baseapp-frontend/utils@4.0.4
+  - @baseapp-frontend/design-system@1.1.3
+
+## 1.4.5
+
+### Patch Changes
+
+- Hide block and report buttons for own profile, to prevent self-blocking and reporting
+
+## 1.4.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.4
+  - @baseapp-frontend/design-system@1.1.2
+  - @baseapp-frontend/utils@4.0.3
+  - @baseapp-frontend/graphql@1.3.5
+
+## 1.4.3
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.3
+  - @baseapp-frontend/design-system@1.1.1
+  - @baseapp-frontend/graphql@1.3.4
+  - @baseapp-frontend/utils@4.0.2
+
+## 1.4.2
+
+### Patch Changes
+
+- Fix UI incosistency for the `ProfileSettingsComponent` during page refreshes.
+- Remove incorrect border showing on the AccountPopover menu when the `SwitchProfileMenu`component is `null`.
+- Allow `SwitchProfileMenu`to be `null` (useful for opting-out of that feature).
+
+## 1.4.1
+
+### Patch Changes
+
+- User Deletion - Remove User Info from Messages
+
+## 1.4.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.0
+
+## 1.3.0
+
+### Minor Changes
+
+- Implements native version for `useRoomListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground
+
+## 1.2.9
+
+### Patch Changes
+
+- Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.21
+
+## 1.2.8
+
+### Minor Changes
+
+- Improved the `useMessagesListSubscription` hook to subscribe and unsubscribe based on the application's state — e.g., when the app goes inactive and then returns to the foreground, or vice versa.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+  - @baseapp-frontend/authentication@5.0.2
+  - @baseapp-frontend/design-system@1.0.21
+  - @baseapp-frontend/graphql@1.3.3
+
+## 1.2.7
+
+### Minor Changes
+
+- Abstract `useMessagesListSubscriptionOnRn` hook to native interface so it doesn't break web version due to import problems.
+
+## 1.2.6
+
+- Implements a new hook: `useMessagesListSubscriptionOnRn`
+- Handles real-time message updates via GraphQL subscription (chatRoomOnMessage)
+- Automatically subscribes/unsubscribes on screen focus using expo useFocusEffect. Ensures clean disposal of the subscription to avoid memory leaks or duplicate events
+- Uses Relay's ConnectionHandler.getConnectionID and append new messages to the proper connection
+
+## 1.2.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.0.21
+  - @baseapp-frontend/authentication@5.0.1
+
+## 1.2.4
+
+### Minor Changes
+
+- Remove setProfileExpoStorage from web component ProfileSettingsComponent
+
+## 1.2.3
+
+### Patch Changes
+
+- Update config so websockets works properly on Native
+- Fix Error msg when missing ChatRoomProvider
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.3.1
+
+## 1.2.2
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.1
+  - @baseapp-frontend/design-system@1.0.19
+
+## 1.2.1
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
 ## 1.2.0
 
 ### Minor Changes

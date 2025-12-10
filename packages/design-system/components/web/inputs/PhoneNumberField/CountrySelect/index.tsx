@@ -20,11 +20,11 @@ export const CountrySelect: FC<CountrySelectProps> = ({
   countryDialCodeProps,
   optionProps,
 }) => {
-  const handleChange = (event: SelectChangeEvent<CountryIso2>) => {
+  const handleChange = (event: SelectChangeEvent<unknown>) => {
     setCountry(event.target.value as CountryIso2)
   }
 
-  const renderValue = (value: CountryIso2) => <FlagImage iso2={value} />
+  const renderValue = (value: unknown) => <FlagImage iso2={value as CountryIso2} />
 
   return (
     <StyledSelect

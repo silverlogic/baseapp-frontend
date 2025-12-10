@@ -1,24 +1,66 @@
 # @baseapp-frontend/authentication
 
+## 5.0.6
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
+## 5.0.5
+
+### Patch Changes
+
+- moved 'CURRENT_PROFILE_KEY_NAME' constant to utils
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
+## 5.0.4
+
+### Patch Changes
+
+- Enhanced current profile store to automatically load profile from client-side cookies when no initial profile is provided
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.3
+
+## 5.0.3
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
+## 5.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+
+## 5.0.1
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+
 ## 5.0.0
 
 ### Major Changes
 
 - **BREAKING:** Removed SSR support from authentication functions and hooks
-
   - Added `'use client'` directive to `getUser` and `useJWTUser` - these are now client-side only
   - Removed `noSSR` parameter from `getUser`, `useJWTUser`, and related types
   - For server-side user retrieval, use the new `getUserSSR` function instead
 
 - **BREAKING:** Removed deprecated functions and hooks
-
   - Deleted `getUserAsync` function and all related tests
   - Deleted `useUser` hook (deprecated) and all related tests
   - Deleted `withUser` HOC and all related tests
   - Updated exports in main index file to reflect removals
 
 - **BREAKING:** Updated `useUpdateUser` token refresh API
-
   - Now requires explicit `refreshToken` parameter for `refreshAccessToken` call
   - Updated function signature to match new token utilities
 
@@ -463,7 +505,6 @@
 ### Patch Changes
 
 - Redesigning `useLogout` hook
-
   - It now returns an object instead of a function
   - It now uses `resetQueries` instead of `invalidateQueries` in order to reset the user cache properly.
 

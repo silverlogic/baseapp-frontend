@@ -106,12 +106,13 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
 
   useEffect(() => {
     if (profile) {
-      updateProfileIfActive({
+      const newProfile = {
         id: profile.id,
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
         image: profile.image?.url ?? null,
-      })
+      }
+      updateProfileIfActive(newProfile)
     }
   }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
 
@@ -125,7 +126,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   }
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
         <form
           // @ts-ignore TODO: check typing issue with zodResolver
@@ -149,6 +150,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     width={144}
                     height={144}
                     hasError={!!getFieldState('image').error}
+                    alt="Avatar image"
                   />
                   {getFieldState('image').error && (
                     <div className="text-center">
@@ -172,6 +174,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                       loading={isMutationInFlight}
                       disabled={isMutationInFlight}
                       onClick={() => handleRemoveImage(PROFILE_FORM_VALUE.image)}
+                      aria-label="Remove avatar button"
                     >
                       Remove
                     </LoadingButton>
@@ -251,6 +254,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                       loading={isMutationInFlight}
                       disabled={isMutationInFlight}
                       sx={{ maxWidth: 'fit-content' }}
+                      aria-label="Remove banner button"
                     >
                       Remove
                     </LoadingButton>

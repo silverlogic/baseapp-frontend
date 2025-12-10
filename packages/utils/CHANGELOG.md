@@ -1,33 +1,59 @@
 # @baseapp-frontend/utils
 
+## 4.0.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+
+## 4.0.4
+
+### Patch Changes
+
+- update to baseAppFetch and tests to include 'Current-Profile' in request headers
+
+## 4.0.3
+
+### Patch Changes
+
+- Enhanced cookie store to automatically load cookies from client-side when no initial cookies are provided
+
+## 4.0.2
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- on-demand import of next/headers to avoid importing it on client-side code
+
+## 4.0.1
+
+### Minor Changes
+
+- Introduced a new `useAppStateSubscription` hook that allows developers to register a callback (onAppResume) which runs whenever the app returns to the foreground. E.g. after a user unlocks their device or switches back to the app.
+
 ## 4.0.0
 
 ### Major Changes
 
 - **BREAKING:** Removed SSR support from cookie and token functions
-
   - Added `'use client'` directive to `getCookie`, `getToken`, `setTokenAsync`, and `removeTokenAsync` - these are now client-side only
   - Removed `noSSR` parameter from `getCookie`, `getToken`, and related types
   - Removed `getCookieAsync` function entirely
   - For server-side token retrieval, use the new `getTokenSSR` function instead
 
 - **BREAKING:** Removed deprecated `getTokenAsync` function
-
   - Deleted `getTokenAsync` function and all related tests
 
 - **BREAKING:** Removed deprecated cookie constants
-
   - Deleted `ACCESS_COOKIE_NAME` and `REFRESH_COOKIE_NAME` constants
   - These were already deprecated in favor of `ACCESS_KEY_NAME` and `REFRESH_KEY_NAME`
 
 - **BREAKING:** Updated `refreshAccessToken` API
-
   - Now requires explicit `refreshToken` parameter object
   - Updated function signature: `refreshAccessToken({ refreshToken, accessKeyName, refreshKeyName })`
   - No longer retrieves refresh token internally
 
 - **BREAKING:** Removed `ServerSideRenderingOption` type
-
   - Deleted `types/server.ts` file entirely
   - Updated all function signatures to remove SSR-related options
 

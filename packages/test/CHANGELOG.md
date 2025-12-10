@@ -1,5 +1,19 @@
 # @baseapp-frontend/test
 
+## 2.1.5
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+
+## 2.1.4
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- set NEXT_PUBLIC_API_BASE_URL if it is not defined
+- adapted mock functions to work with the template project
+
 ## 2.1.3
 
 ### Patch Changes

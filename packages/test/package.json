@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/test",
   "description": "Test utils that extends React Testing Library.",
-  "version": "2.1.3",
+  "version": "2.1.5",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -18,7 +18,7 @@
     "@emotion/react": "catalog:material-ui",
     "@mui/material": "catalog:material-ui",
     "@tanstack/react-query": "catalog:",
-    "axios-mock-adapter": "^1.22.0",
+    "axios-mock-adapter": "catalog:test",
     "js-cookie": "catalog:",
     "@storybook/react": "catalog:storybook"
   },
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@testing-library/jest-dom": "catalog:test",
     "@testing-library/react": "catalog:test",

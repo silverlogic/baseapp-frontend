@@ -1,5 +1,81 @@
 # @baseapp-frontend/design-system
 
+## 1.1.6
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+
+## 1.1.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.1.4
+
+### Patch Changes
+
+- Added new icon ProfileNoCircleIcon
+
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
+## 1.1.2
+
+### Patch Changes
+
+- Enhanced UI settings store to automatically load settings from client-side cookies when no initial settings are provided
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.3
+
+## 1.1.1
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
+## 1.1.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
+## 1.0.22
+
+### Patch Changes
+
+- Updating minor version of MUI packages, adjust typing of SelectChangeEvents to stay compatible
+
+## 1.0.21
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.1
+
+## 1.0.20
+
+### Patch Changes
+
+- Fix component tests after dependencies update.
+
+## 1.0.19
+
+### Patch Changes
+
+- Content Feed Posts list with images and reactions
+
 ## 1.0.18
 
 ### Patch Changes

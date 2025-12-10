@@ -10,27 +10,30 @@ catalog:
   "@types/lodash": 4.17.7
   "@types/luxon": 3.6.2
   "@types/node": 22.7.2
+  "@parcel/packager-ts": ^2.14.1
+  "@parcel/transformer-typescript-types": ^2.14.1
   axios: 1.9.0
   jotai: 2.12.4
   js-cookie: 3.0.5
   lodash: 4.17.21
   luxon: 3.6.1
-  next: ^15.3.2
+  next: 15.3.6
   react-international-phone: 4.5.0
   react-hook-form: 7.56.4
   react-virtuoso: 4.12.7
-  simplebar-react: 3.3.1
+  simplebar-react: 3.2.5
   tsup: 8.3.6
   typescript: 5.8.3
   zod: 3.25.7
   zustand: 5.0.4
+  react-multi-carousel: 2.8.6
 
 catalogs:
   react19:
     "@types/react": 19.1.4
     "@types/react-dom": 19.1.5
-    react-dom: 19.1.0
-    react: 19.1.0
+    react-dom: 19.1.2
+    react: 19.1.2
 
   react18:
     "@types/react": 18.3.3
@@ -39,6 +42,7 @@ catalogs:
     react: 18.3.1
 
   react-native:
+    "@expo/vector-icons": ^14.0.4
     "@gorhom/bottom-sheet": ^5.1.4
     "@react-navigation/drawer": ^7.3.12
     "@react-navigation/native": ^7.1.9
@@ -57,7 +61,7 @@ catalogs:
 
   graphql:
     "@types/react-relay": 18.2.1
-    "@types/relay-runtime": 19.0.1 
+    "@types/relay-runtime": 19.0.1
     "@types/relay-test-utils": 19.0.0
     babel-plugin-relay: 19.0.0
     get-graphql-schema: 2.1.2
@@ -77,14 +81,14 @@ catalogs:
     tailwindcss: 3.4.4
 
   material-ui:
-    "@emotion/cache": 11.11.0
-    "@emotion/react": 11.11.4
-    "@emotion/styled": 11.11.5
-    "@mui/icons-material": 5.15.19
-    "@mui/lab": 5.0.0-alpha.170
-    "@mui/material": 5.15.19
+    "@emotion/cache": 11.14.0
+    "@emotion/react": 11.14.0
+    "@emotion/styled": 11.14.1
+    "@mui/icons-material": 5.18.0
+    "@mui/lab": 5.0.0-alpha.177
+    "@mui/material": 5.18.0
     "@mui/material-nextjs": 6.1.4
-    "@mui/system": 5.16.12
+    "@mui/system": 5.18.0
     "@mui/x-date-pickers": 7.6.2
 
   test:
@@ -103,6 +107,7 @@ catalogs:
     jest: 29.7.0
     ts-jest: 29.1.4
     ts-node: 10.9.2
+    axios-mock-adapter: ^1.22.0
 
   storybook:
     "@babel/preset-env": 7.26.0
@@ -154,7 +159,31 @@ catalogs:
     prettier-plugin-tailwindcss: ^0.6.3
     prettier: ^3.3.3
 
-  dev-tools:
-    chalk: ^5.4.1
-    chokidar: ^4.0.3
-    execa: ^9.5.2
+  components:
+    framer-motion: ^11.5.4
+    numbro: ^2.5.0
+    slugify: ^1.6.6
+    use-long-press: ^3.2.0
+    "@babel/cli": ^7.26.4
+    dotenv: ^16.4.5
+    dotenv-cli: ^7.4.2
+
+  design-system:
+    "@iconify/react": ^5.0.1
+    "@shopify/flash-list": ^1.7.6
+    color: ^4.2.3
+    react-dropzone: ^14.2.3
+    react-lazy-load-image-component: ^1.6.2
+    "@types/color": "^4.2.0"
+
+  eslint-plugin:
+    parcel: ^2.12.0
+
+  utils:
+    events: ^3.3.0
+    humps: ^2.0.1
+    jwt-decode: ^4.0.0
+    qs: ^6.14.0
+    server-only: ^0.0.1
+    "@types/humps": ^2.0.6
+    "@types/qs": ^6.14.0
