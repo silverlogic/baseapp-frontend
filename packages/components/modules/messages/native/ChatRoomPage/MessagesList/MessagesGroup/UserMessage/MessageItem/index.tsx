@@ -17,6 +17,7 @@ const MessageItem: FC<MessageItemProps> = ({ messageRef }) => {
   const styles = createStyles(theme)
 
   const message = useFragment(MessageItemFragment, messageRef)
+  /* TODO: Extract into functions and reuse on web and mobile */
   const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   const renderMessageContent = () => (

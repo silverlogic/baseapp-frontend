@@ -6,7 +6,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { FlatList, TextInput as NativeTextInput } from 'react-native'
-import { usePaginationFragment, useRelayEnvironment } from 'react-relay'
+import { usePaginationFragment } from 'react-relay'
 
 import { ChatRoomMessagesListPaginationQuery } from '../../../../../__generated__/ChatRoomMessagesListPaginationQuery.graphql'
 import { MessagesListFragment$key } from '../../../../../__generated__/MessagesListFragment.graphql'
@@ -95,10 +95,9 @@ const MessagesList: FC<MessagesListProps> = ({
         })
       }, 1000)
     }
-  }, [room?.id, room?.unreadMessages?.count, currentProfile])
+  }, [room?.id, room?.unreadMessages?.count, currentProfile?.id])
 
-  const environment = useRelayEnvironment()
-  useMessagesListSubscription(room.id, currentProfile?.id!, environment)
+  useMessagesListSubscription(room.id, currentProfile?.id!)
 
   const renderMessagesGroup = useCallback(
     (index: number) => {

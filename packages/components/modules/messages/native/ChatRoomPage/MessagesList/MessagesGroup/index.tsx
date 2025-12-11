@@ -58,8 +58,6 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   return (
     <View>
       {renderUnreadMessagesDivider(messageIndex)}
-
-      {/* TODO: fix this after react native luxon problem gets fixed */}
       {message.messageType === MESSAGE_TYPE.system ? (
         <SystemMessage messageRef={message} {...SystemMessageProps} />
       ) : (

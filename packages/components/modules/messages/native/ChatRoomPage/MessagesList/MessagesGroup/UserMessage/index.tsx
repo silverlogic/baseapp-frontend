@@ -34,6 +34,7 @@ const UserMessage: FC<UserMessageProps> = ({
   }, [allMessages, allMessagesLastIndex, messageIndex])
 
   const isOwnMessage = currentProfile?.id === message?.profile?.id
+  /* TODO: Extract into functions and reuse on web and mobile */
   const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
 
   if (!message) return null
