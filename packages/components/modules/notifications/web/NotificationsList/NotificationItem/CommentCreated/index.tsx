@@ -12,14 +12,14 @@ const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
   return (
     <Notification.Root>
       <Notification.Avatar
-        actorAvatar={notification.actor?.avatar?.url}
-        actorName={notification.actor?.fullName}
+        actorAvatar={notification.actor?.image?.url}
+        actorName={notification.actor?.name}
       />
       <Notification.Content>
         <Notification.Content.Header
           message={message}
           timestamp={formatRelativeTime(notification.timestamp)}
-          actorName={notification.actor?.fullName}
+          actorName={notification.actor?.name}
           unread={notification.unread}
         />
         <Notification.Content.Body content={notification.actionObject?.body} />
