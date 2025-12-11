@@ -3,17 +3,18 @@ import { useCallback, useMemo, useRef } from 'react'
 import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
 
 import { useFocusEffect } from 'expo-router'
-import { ConnectionHandler, Disposable, Environment, requestSubscription } from 'react-relay'
+import {
+  ConnectionHandler,
+  Disposable,
+  requestSubscription,
+  useRelayEnvironment,
+} from 'react-relay'
 
 import { newMessageSubscription } from '../../../common'
 
-export const useMessagesListSubscription = (
-  roomId: string,
-  profileId: string,
-  environment: Environment,
-) => {
+export const useMessagesListSubscription = (roomId: string, profileId: string) => {
   const disposableRef = useRef<Disposable | null>(null)
-
+  const environment = useRelayEnvironment()
   const connectionID = useMemo(
     () => ConnectionHandler.getConnectionID(roomId, 'chatRoom_allMessages'),
     [roomId],
