@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.4.10",
+  "version": "1.4.12",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -48,7 +48,8 @@
     "./tests/native": "./modules/tests/native/index.ts",
     "./content-feed/common": "./modules/content-feed/common/index.ts",
     "./content-feed/web": "./modules/content-feed/web/index.ts",
-    "./content-feed/native": "./modules/content-feed/native/index.ts"
+    "./content-feed/native": "./modules/content-feed/native/index.ts",
+    "./pages/common": "./modules/pages/common/index.ts"
   },
   "files": [
     "modules",

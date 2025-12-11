@@ -9,6 +9,7 @@ module.exports = {
     '**/cypress/**',
     '**/dist/**', // Exclude built artifacts
     '**/schema.graphql', // Exclude schemas
+    'out/**',
   ],
   language: 'typescript',
   artifactDirectory: './__generated__',
