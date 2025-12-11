@@ -1,9 +1,15 @@
-import { UserMembersListFragment$key } from '../../../../__generated__/UserMembersListFragment.graphql'
+import type { FC } from 'react'
+
 import { MembersListProps } from './MembersList/types'
 
-export interface ProfileMembersProps {
+export interface ProfileMembersSuspendedProps {
   MembersListProps?: Partial<MembersListProps>
   title?: string
   subtitle?: string
-  userRef: UserMembersListFragment$key
+  InitialLoadingState?: FC
 }
+
+export interface ProfileMembersProps extends Omit<
+  ProfileMembersSuspendedProps,
+  'title' | 'subtitle' | 'InitialLoadingState'
+> {}
