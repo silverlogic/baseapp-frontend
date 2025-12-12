@@ -20,8 +20,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
-    "@parcel/packager-ts": "catalog:",
-    "@parcel/transformer-typescript-types": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",
@@ -36,8 +34,11 @@
       "eslint --fix",
       "prettier --write"
     ],
-    "packages/**/*.{js,ts,jsx,tsx}": [
+    "packages/!(eslint-plugin)/**/*.{js,ts,jsx,tsx}": [
       "eslint --fix",
+      "prettier --write"
+    ],
+    "packages/eslint-plugin/**/*.{js,ts,jsx,tsx}": [
       "prettier --write"
     ],
     "*.json": [
