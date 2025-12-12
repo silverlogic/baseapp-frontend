@@ -12,6 +12,7 @@ export const MEMBER_STATUSES = {
 export const MEMBER_ROLES = {
   admin: 'ADMIN',
   manager: 'MANAGER',
+  owner: 'OWNER',
 } as const
 
 export const MEMBER_ACTIONS = {

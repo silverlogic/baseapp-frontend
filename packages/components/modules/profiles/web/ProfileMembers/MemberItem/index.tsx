@@ -41,7 +41,7 @@ const MemberItem: FC<MemberItemProps> = ({
   if (!memberProfile) return null
 
   const shouldRenderChangeRoleSelect =
-    status === MEMBER_STATUSES.active && memberRole !== 'owner' && canChangeMember
+    status === MEMBER_STATUSES.active && memberRole !== MEMBER_ROLES.owner && canChangeMember
 
   const haveMemberRoleAndStatus = memberRole && status
 
