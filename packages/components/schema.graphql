@@ -105,7 +105,7 @@ type ChatRoom implements Node {
   lastMessageTime: DateTime
   participantsCount: Int!
   isGroup: Boolean!
-  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
+  participants(q: String, offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
