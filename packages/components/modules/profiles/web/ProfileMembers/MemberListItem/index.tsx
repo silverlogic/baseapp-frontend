@@ -4,7 +4,7 @@ import { Divider } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { MemberItemFragment } from '../../../common'
-import { MEMBER_STATUSES } from '../constants'
+import { MEMBER_ROLES, MEMBER_STATUSES } from '../constants'
 import { MemberListItemProps } from './types'
 
 const MemberListItem: FC<MemberListItemProps> = ({
@@ -13,7 +13,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
   prevMember,
   nextMember,
   MemberItemComponent,
-  memberItemComponentProps,
+  MemberItemComponentProps,
   searchQuery,
 }) => {
   const memberFragment = useFragment(MemberItemFragment, member)
@@ -36,10 +36,10 @@ const MemberListItem: FC<MemberListItemProps> = ({
         <Divider />
         <MemberItemComponent
           member={data}
-          memberRole="owner"
+          memberRole={MEMBER_ROLES.owner}
           status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}
-          {...memberItemComponentProps}
+          {...MemberItemComponentProps}
         />
         <MemberItemComponent
           member={memberFragment?.user?.profile}
@@ -47,7 +47,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
           canChangeMember={data?.canChangeRole || false}
-          {...memberItemComponentProps}
+          {...MemberItemComponentProps}
         />
       </>
     )
@@ -62,15 +62,15 @@ const MemberListItem: FC<MemberListItemProps> = ({
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
           canChangeMember={data?.canChangeRole || false}
-          {...memberItemComponentProps}
+          {...MemberItemComponentProps}
         />
         <Divider />
         <MemberItemComponent
           member={data}
-          memberRole="owner"
+          memberRole={MEMBER_ROLES.owner}
           status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}
-          {...memberItemComponentProps}
+          {...MemberItemComponentProps}
         />
       </>
     )
@@ -83,7 +83,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
       status={memberFragment?.status}
       userId={memberFragment?.user?.id}
       canChangeMember={data?.canChangeRole || false}
-      {...memberItemComponentProps}
+      {...MemberItemComponentProps}
     />
   )
 }

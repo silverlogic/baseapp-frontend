@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.14
+
+### Patch Changes
+
+- Consolidated hardcoded role values to use centralized constants for improved consistency and maintainability. Also updated component property naming for improved code clarity.
+
 ## 1.4.13
 
 ### Patch Changes
