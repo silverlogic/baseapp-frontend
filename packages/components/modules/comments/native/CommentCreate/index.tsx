@@ -3,18 +3,11 @@ import { forwardRef } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
 import { TextInput as NativeTextInput, ScrollView } from 'react-native'
 import { ConnectionHandler } from 'react-relay'
 
-import {
-  DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
-  SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
-  SocialUpsertForm,
-} from '../../../__shared__/common'
 import { SocialInputDrawer as DefaultSocialInputDrawer } from '../../../__shared__/native'
-import { useCommentCreateMutation } from '../../common'
+import { useCommentCreateMutation, useCommentUpdateMutation } from '../../common'
 import { createStyles } from './styles'
 import { CommentCreateProps } from './types'
 
@@ -26,6 +19,8 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
       children,
       drawerStyle = {},
       targetObjectId,
+      form,
+      isEdit,
       SocialInputDrawer = DefaultSocialInputDrawer,
       SocialInputDrawerProps = { DrawerProps: {}, PlaceholderProps: {} },
     },
@@ -33,15 +28,13 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
   ) => {
     const { currentProfile } = useCurrentProfile()
 
-    const form = useForm<SocialUpsertForm>({
-      defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
-      resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
-    })
     const body = form.watch('body')
+    const id = form.watch('id')
 
-    const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
+    const [commitMutation, isCreateMutationInFlight] = useCommentCreateMutation()
+    const [commitUpdate, isUpdateMutationInFlight] = useCommentUpdateMutation()
     const onSubmit = () => {
-      if (isMutationInFlight) return
+      if (isCreateMutationInFlight || isUpdateMutationInFlight) return
 
       nextClientMutationId += 1
       const clientMutationId = nextClientMutationId.toString()
@@ -50,6 +43,26 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         targetObjectId,
         'CommentsList_comments',
       )
+      if (isEdit?.isEditMode) {
+        commitUpdate({
+          variables: {
+            input: {
+              id: id ?? '',
+              body,
+            },
+          },
+          onCompleted: (response, errors) => {
+            if (errors) {
+              console.error(errors)
+              return
+            }
+            form.reset()
+            if (ref && 'current' in ref) ref.current?.blur()
+          },
+        })
+        isEdit?.onEditCancel()
+        return
+      }
 
       commitMutation({
         variables: {
@@ -96,7 +109,7 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         </ScrollView>
         <SocialInputDrawer.Drawer
           form={form}
-          isLoading={isMutationInFlight}
+          isLoading={isCreateMutationInFlight || isUpdateMutationInFlight}
           keyboardHeight={keyboardHeight}
           onFocusChange={onFocusChange}
           onTextHeightChange={onTextHeightChange}
@@ -104,6 +117,7 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           ref={ref}
           style={drawerStyle}
           submit={onSubmit}
+          isEdit={isEdit}
           {...SocialInputDrawerProps.DrawerProps}
         />
       </>
