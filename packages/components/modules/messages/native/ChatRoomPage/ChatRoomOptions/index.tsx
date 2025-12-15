@@ -51,6 +51,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             handleChatDetails()
           }}
           title="Chat Details"
+          disabled
         />
         <Menu.Item
           onPress={() => {
@@ -58,6 +59,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             handleGoToProfile()
           }}
           title="Go to Profile"
+          disabled
         />
         <Menu.Item
           onPress={() => {
@@ -66,6 +68,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
           }}
           title="Delete Chat"
           titleStyle={styles.deleteTitleStyle}
+          disabled
         />
       </Menu>
     </View>
