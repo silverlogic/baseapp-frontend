@@ -8,7 +8,6 @@ import { createStyles } from './styles'
 import type { CommentsListProps } from './types'
 
 const CommentsList: FC<CommentsListProps> = ({
-  onEdit,
   target: targetRef,
   subscriptionsEnabled,
   CommentItem = DefaultCommentItem,
@@ -29,7 +28,6 @@ const CommentsList: FC<CommentsListProps> = ({
         target={target}
         key={`comment-${comment.id}`}
         comment={comment}
-        onEdit={onEdit}
         {...CommentItemProps}
       />
     )
