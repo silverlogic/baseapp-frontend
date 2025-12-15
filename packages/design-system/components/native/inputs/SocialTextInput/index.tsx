@@ -1,16 +1,26 @@
 import { forwardRef, useCallback, useState } from 'react'
 
-import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
+import { LayoutChangeEvent, TextInput as NativeTextInput, Pressable } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
 import { withNativeController } from '../../../../utils/native'
+import { CloseIcon, ReplyIcon } from '../../icons'
+import { Text } from '../../typographies'
 import View from '../../views/View'
 import { createStyles } from './styles'
 import type { SocialTextInputProps } from './types'
 
 const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
   (
-    { children, lineHeight = 22, maxLines = 3, contentStyle = {}, toolStyle = {}, ...props },
+    {
+      children,
+      lineHeight = 22,
+      maxLines = 3,
+      contentStyle = {},
+      toolStyle = {},
+      isEdit = {},
+      ...props
+    },
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -50,6 +60,17 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     return (
       <View style={[contentStyle, styles.container]}>
         {/* TODO: Replies */}
+        {isEdit?.isEditMode && (
+          <View style={styles.editModeContainer}>
+            <View style={styles.editModeLabelContainer}>
+              <ReplyIcon width={20} height={20} />
+              <Text style={styles.editModeLabel}>{isEdit?.label}</Text>
+            </View>
+            <Pressable onPress={isEdit?.onEditCancel}>
+              <CloseIcon width={20} height={20} />
+            </Pressable>
+          </View>
+        )}
         <NativeTextInput
           multiline
           onLayout={onLayout}
