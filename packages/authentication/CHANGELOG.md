@@ -1,5 +1,21 @@
 # @baseapp-frontend/authentication
 
+## 5.0.7
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.6
+
+## 5.0.6
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
 ## 5.0.5
 
 ### Patch Changes
