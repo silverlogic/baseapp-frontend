@@ -2,7 +2,6 @@ import { ReactNode } from 'react'
 
 export type SocialUpsertForm = {
   body: string
-  id?: string
 }
 
 export interface SearchNotFoundStateProps {

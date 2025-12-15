@@ -23,7 +23,6 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputProps>(
       onTextHeightChange,
       shouldUseBottomSheetSafeComponents = false,
       submit,
-      isEdit,
     },
     ref,
   ) => {
@@ -36,7 +35,6 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputProps>(
         onFocusChange={onFocusChange}
         onTextHeightChange={onTextHeightChange}
         ref={ref}
-        isEdit={isEdit}
         {...SocialTextInputProps}
       >
         <SocialUpsertActions />
