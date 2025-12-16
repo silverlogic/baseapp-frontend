@@ -28,7 +28,6 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   membersLoadNext,
   membersHasNext,
   membersIsLoadingNext,
-  onRemoveMember,
   ProfilesContainer = DefaultProfilesContainer,
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
@@ -70,19 +69,15 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   }
 
   const handleRemoveMember = (profile: ProfileNode) => {
-    if (onRemoveMember) {
-      onRemoveMember(profile)
-    } else {
-      setValue(
-        FORM_VALUE.participants,
-        currentParticipants.filter((member: ProfileNode) => member?.id !== profile?.id),
-        {
-          shouldValidate: true,
-          shouldDirty: true,
-          shouldTouch: true,
-        },
-      )
-    }
+    setValue(
+      FORM_VALUE.participants,
+      currentParticipants.filter((member: ProfileNode) => member?.id !== profile?.id),
+      {
+        shouldValidate: true,
+        shouldDirty: true,
+        shouldTouch: true,
+      },
+    )
   }
 
   const renderItem = (profile: ProfileNode, isMember = false) => {

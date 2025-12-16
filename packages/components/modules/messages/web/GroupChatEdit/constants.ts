@@ -4,17 +4,16 @@ import {
   CREATE_OR_EDIT_GROUP_FORM_VALUE,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION,
 } from '../__shared__/constants'
-import { CreateOrEditGroup, ProfileNode } from '../__shared__/types'
+import { CreateOrEditGroup } from '../__shared__/types'
 
 export const getDefaultFormValues = (
   title: string,
   image: string | undefined,
-  participants: ProfileNode[] = [],
 ): CreateOrEditGroup => ({
   title,
   addParticipants: [],
   removeParticipants: [],
-  participants,
+  participants: [],
   image,
 })
 

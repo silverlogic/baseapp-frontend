@@ -52,7 +52,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
-  const [removedMemberIds, setRemovedMemberIds] = useState<string[]>([])
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
@@ -71,16 +70,14 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 
   const participants = useMemo(
     () =>
-      membersList?.participants?.edges
-        ?.map((edge: any) => edge?.node?.profile && edge.node.profile)
-        ?.filter(
-          (profile: ProfileNode) => !removedMemberIds.includes(profile?.id || ''),
-        ) as ProfileNode[],
-    [membersList, removedMemberIds],
+      membersList?.participants?.edges?.map(
+        (edge: any) => edge?.node?.profile && edge.node.profile,
+      ) as ProfileNode[],
+    [membersList],
   )
 
   const formReturn = useForm<CreateOrEditGroup>({
-    defaultValues: getDefaultFormValues(title || '', avatar, participants),
+    defaultValues: getDefaultFormValues(title || '', avatar),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -96,8 +93,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
 
   const handleCancel = () => {
-    reset(getDefaultFormValues(title || '', avatar, participants))
-    setRemovedMemberIds([])
+    reset(getDefaultFormValues(title || '', avatar))
     onCancellation()
   }
 
@@ -117,14 +113,11 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     }
     delete dirtyValues.participants
 
-    const removedParticipantIds = removedMemberIds
-
     commit({
       variables: {
         input: {
           roomId,
           profileId,
-          removeParticipants: removedParticipantIds,
           ...dirtyValues,
         },
         connections: [],
@@ -136,7 +129,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           sendToast('Something went wrong', { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
-          setRemovedMemberIds([])
           refetch(
             { count: REFETCH_MEMBERS_PARTICIPANTS_COUNT },
             { fetchPolicy: REFETCH_MEMBERS_NETWORK_CONFIG },
@@ -147,15 +139,8 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     })
   })
 
-  const hasRemovedMembers = removedMemberIds.length > 0
-  const isEditButtonDisabled = !isValid || (!isDirty && !hasRemovedMembers)
+  const isEditButtonDisabled = !isValid || !isDirty
   const [isPending, startTransition] = useTransition()
-
-  const handleRemoveMember = (profile: ProfileNode) => {
-    if (profile?.id) {
-      setRemovedMemberIds((prev) => [...prev, profile.id])
-    }
-  }
 
   const handleAddMemberSuccess = () => {
     setOpen(false)
@@ -209,7 +194,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           setValue={setValue}
           watch={watch}
           currentParticipants={participants}
-          onRemoveMember={handleRemoveMember}
           refetch={refetch}
           membersLoadNext={loadNext}
           membersHasNext={hasNext}
