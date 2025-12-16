@@ -82,15 +82,19 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
 
   const handleMarkAsUnread = () => {
     bottomDrawerRef.current?.close()
+    console.log('Not implemented yet.')
   }
   const handleChatDetails = () => {
     bottomDrawerRef.current?.close()
+    console.log('Not implemented yet.')
   }
   const handleGoToProfile = () => {
     bottomDrawerRef.current?.close()
+    console.log('Not implemented yet.')
   }
   const handleDeleteChat = () => {
     bottomDrawerRef.current?.close()
+    console.log('Not implemented yet.')
   }
 
   return (

@@ -41,6 +41,7 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
             {isArchived ? 'Unarchive Chat' : 'Archive Chat'}
           </Text>
         </Pressable>
+        {/* TODO Not implemented yet */}
         <Pressable onPress={handleMarkAsUnread} style={styles.modalItem}>
           <Text variant="body2" color="high">
             Mark as Unread

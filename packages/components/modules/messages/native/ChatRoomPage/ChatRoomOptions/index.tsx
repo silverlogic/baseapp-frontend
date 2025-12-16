@@ -45,13 +45,13 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
           disabled={isArchiveMutationInFlight}
           title={isArchived ? 'Unarchive Chat' : 'Archive Chat'}
         />
+        {/* TODO: Not implemented yet */}
         <Menu.Item
           onPress={() => {
             closeMenu()
             handleChatDetails()
           }}
           title="Chat Details"
-          disabled
         />
         <Menu.Item
           onPress={() => {
@@ -59,7 +59,6 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             handleGoToProfile()
           }}
           title="Go to Profile"
-          disabled
         />
         <Menu.Item
           onPress={() => {
@@ -68,7 +67,6 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
           }}
           title="Delete Chat"
           titleStyle={styles.deleteTitleStyle}
-          disabled
         />
       </Menu>
     </View>
