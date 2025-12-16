@@ -86,16 +86,10 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     setValue,
     watch,
     handleSubmit,
-    reset,
     formState: { isValid, isDirty, dirtyFields },
   } = formReturn
 
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
-
-  const handleCancel = () => {
-    reset(getDefaultFormValues(title || '', avatar))
-    onCancellation()
-  }
 
   const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     if (!roomId) return
@@ -179,7 +173,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
       <Header
         isEditButtonDisabled={isEditButtonDisabled}
         isMutationInFlight={isMutationInFlight}
-        onCancellation={handleCancel}
+        onCancellation={onCancellation}
         onSubmit={onSubmit}
         {...HeaderProps}
       />
