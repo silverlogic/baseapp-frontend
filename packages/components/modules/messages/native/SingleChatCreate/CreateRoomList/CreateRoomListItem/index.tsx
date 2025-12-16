@@ -29,10 +29,10 @@ const ChatRoomListItem = ({ profile: profileRef }: { profile: ProfileItemFragmen
   }
 
   const handleRoomCreation = () => {
-    if (currentProfile?.id) {
+    if (currentProfile?.id && node?.id) {
       commit({
         variables: {
-          input: { profileId: currentProfile.id, participants: [node?.id] },
+          input: { profileId: currentProfile.id, participants: [node.id] },
           connections: [
             ConnectionHandler.getConnectionID(currentProfile.id, 'roomsList_chatRooms', {
               unreadMessages: false,
@@ -46,6 +46,9 @@ const ChatRoomListItem = ({ profile: profileRef }: { profile: ProfileItemFragmen
           if (roomId) {
             handleRoomCompleted(roomId)
           }
+        },
+        onError: (error) => {
+          console.error('Failed to create chat room:', error)
         },
       })
     }

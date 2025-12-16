@@ -58,6 +58,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     !!unreadMessagesCountFragment?.unreadMessages?.count
 
   const onChatCardPress = () => {
+    if (!roomId) return
     router.push(`/rooms/${roomId}`)
   }
 
@@ -121,7 +122,9 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
           ) : null}
         </View>
         <View style={styles.profileCounterContainer}>
-          {hasUnreadMessages && <Badge>{unreadMessagesCountFragment?.unreadMessages?.count}</Badge>}
+          {hasUnreadMessages && (
+            <Badge>{unreadMessagesCountFragment?.unreadMessages?.count || ''}</Badge>
+          )}
         </View>
       </View>
       <ChatCardOptions

@@ -94,7 +94,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
 
-          if (mutationErrors) {
+          if (mutationErrors && mutationErrors.length > 0) {
             setFormRelayErrors(form, mutationErrors)
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
