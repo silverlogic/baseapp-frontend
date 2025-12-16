@@ -24,7 +24,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
         const componentHeight = Math.floor(nativeEvent.layout.height)
         props.onTextHeightChange?.(componentHeight)
       },
-      [lineHeight, maxLines, props.onTextHeightChange],
+      [props.onTextHeightChange],
     )
 
     const handleBlur = useCallback(

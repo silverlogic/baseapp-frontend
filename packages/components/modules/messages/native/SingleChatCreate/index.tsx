@@ -1,5 +1,6 @@
 import { Suspense, useTransition } from 'react'
 
+import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import {
   DEFAULT_FORM_VALUES,
   FORM_VALUES,
@@ -62,9 +63,19 @@ const CreateRoomPage = () => {
   )
 }
 
-const SupendedCreateRoomPage = () => (
-  <Suspense>
-    <CreateRoomPage />
-  </Suspense>
-)
+const SupendedCreateRoomPage = () => {
+  const theme = useTheme()
+  const styles = createStyles(theme)
+  return (
+    <Suspense
+      fallback={
+        <View style={styles.container}>
+          <LoadingScreen />
+        </View>
+      }
+    >
+      <CreateRoomPage />
+    </Suspense>
+  )
+}
 export default SupendedCreateRoomPage

@@ -1,5 +1,6 @@
 import React, { Suspense, useEffect, useRef, useTransition } from 'react'
 
+import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
@@ -51,7 +52,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
         keyExtractor={(item, i) => (item && item.node?.id) || i.toString()}
         renderItem={({ item }) => (item?.node ? <ChatRoomListItem profile={item.node} /> : null)}
         onEndReached={() => {
-          if (hasNext) loadNext(10)
+          if (hasNext && !isLoadingNext) loadNext(10)
         }}
         onEndReachedThreshold={0.8}
         onContentSizeChange={(width, height) => loadNextBasedOnHeight(height)}
@@ -68,7 +69,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
 const CreateRoomListWithProvider = withChatRoomProvider(CreateRoomList)
 
 const SuspendedCreateRoomList = (props: CreateRoomListProps) => (
-  <Suspense>
+  <Suspense fallback={<LoadingScreen />}>
     <CreateRoomListWithProvider {...props} />
   </Suspense>
 )

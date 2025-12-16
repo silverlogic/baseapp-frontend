@@ -65,7 +65,7 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
-        snapPoints={[80 + keyboardHeight, 200 + keyboardHeight]}
+        snapPoints={[80 + keyboardHeight, 200 + keyboardHeight, 350 + keyboardHeight]}
         onChange={handleSheetChange}
         onAnimate={handleAnimate}
         handleComponent={showHandle ? DrawerHandle : null}
