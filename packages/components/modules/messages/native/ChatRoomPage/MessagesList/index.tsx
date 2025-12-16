@@ -83,13 +83,17 @@ const MessagesList: FC<MessagesListProps> = ({
   const [commitMutation] = useReadMessageMutation()
 
   useEffect(() => {
-    if (room?.unreadMessages?.count !== 0 || room?.unreadMessages.markedUnread) {
+    if (
+      (room?.unreadMessages?.count !== 0 || room?.unreadMessages?.markedUnread) &&
+      room?.id &&
+      currentProfile?.id
+    ) {
       setTimeout(() => {
         commitMutation({
           variables: {
             input: {
-              roomId: room?.id as string,
-              profileId: currentProfile?.id as string,
+              roomId: room?.id,
+              profileId: currentProfile?.id,
             },
           },
         })
@@ -97,7 +101,7 @@ const MessagesList: FC<MessagesListProps> = ({
     }
   }, [room?.id, room?.unreadMessages?.count, currentProfile?.id])
 
-  useMessagesListSubscription(room.id, currentProfile?.id!)
+  useMessagesListSubscription(room.id, currentProfile?.id ?? '')
 
   const renderMessagesGroup = useCallback(
     (index: number) => {
