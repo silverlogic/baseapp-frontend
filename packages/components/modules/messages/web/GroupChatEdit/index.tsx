@@ -29,7 +29,12 @@ import { CreateOrEditGroup } from '../__shared__/types'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import DefaultHeader from './Header'
-import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
+import {
+  DEFAULT_FORM_VALIDATION,
+  REFETCH_MEMBERS_NETWORK_CONFIG,
+  REFETCH_MEMBERS_PARTICIPANTS_COUNT,
+  getDefaultFormValues,
+} from './constants'
 import { GroupChatEditProps } from './types'
 
 const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
@@ -47,6 +52,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
+  const [removedMemberIds, setRemovedMemberIds] = useState<string[]>([])
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
@@ -65,14 +71,16 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 
   const participants = useMemo(
     () =>
-      membersList?.participants?.edges?.map(
-        (edge: any) => edge?.node?.profile && edge.node.profile,
-      ) as ProfileNode[],
-    [membersList],
+      membersList?.participants?.edges
+        ?.map((edge: any) => edge?.node?.profile && edge.node.profile)
+        ?.filter(
+          (profile: ProfileNode) => !removedMemberIds.includes(profile?.id || ''),
+        ) as ProfileNode[],
+    [membersList, removedMemberIds],
   )
 
   const formReturn = useForm<CreateOrEditGroup>({
-    defaultValues: getDefaultFormValues(title || '', avatar),
+    defaultValues: getDefaultFormValues(title || '', avatar, participants),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
@@ -81,10 +89,17 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     setValue,
     watch,
     handleSubmit,
+    reset,
     formState: { isValid, isDirty, dirtyFields },
   } = formReturn
 
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
+
+  const handleCancel = () => {
+    reset(getDefaultFormValues(title || '', avatar, participants))
+    setRemovedMemberIds([])
+    onCancellation()
+  }
 
   const onSubmit = handleSubmit((data: CreateOrEditGroup) => {
     if (!roomId) return
@@ -102,11 +117,14 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     }
     delete dirtyValues.participants
 
+    const removedParticipantIds = removedMemberIds
+
     commit({
       variables: {
         input: {
           roomId,
           profileId,
+          removeParticipants: removedParticipantIds,
           ...dirtyValues,
         },
         connections: [],
@@ -118,21 +136,36 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           sendToast('Something went wrong', { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
+          setRemovedMemberIds([])
+          refetch(
+            { count: REFETCH_MEMBERS_PARTICIPANTS_COUNT },
+            { fetchPolicy: REFETCH_MEMBERS_NETWORK_CONFIG },
+          )
           onValidSubmission()
         }
       },
     })
   })
 
-  const isEditButtonDisabled = !isValid || !isDirty
+  const hasRemovedMembers = removedMemberIds.length > 0
+  const isEditButtonDisabled = !isValid || (!isDirty && !hasRemovedMembers)
   const [isPending, startTransition] = useTransition()
+
+  const handleRemoveMember = (profile: ProfileNode) => {
+    if (profile?.id) {
+      setRemovedMemberIds((prev) => [...prev, profile.id])
+    }
+  }
+
   const handleAddMemberSuccess = () => {
     setOpen(false)
     startTransition(() => {
-      refetch?.({})
+      refetch(
+        { count: REFETCH_MEMBERS_PARTICIPANTS_COUNT },
+        { fetchPolicy: REFETCH_MEMBERS_NETWORK_CONFIG },
+      )
     })
   }
-
   if (smDown && open)
     return (
       <AddMembersMobile
@@ -161,7 +194,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
       <Header
         isEditButtonDisabled={isEditButtonDisabled}
         isMutationInFlight={isMutationInFlight}
-        onCancellation={onCancellation}
+        onCancellation={handleCancel}
         onSubmit={onSubmit}
         {...HeaderProps}
       />
@@ -176,6 +209,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           setValue={setValue}
           watch={watch}
           currentParticipants={participants}
+          onRemoveMember={handleRemoveMember}
           refetch={refetch}
           membersLoadNext={loadNext}
           membersHasNext={hasNext}
