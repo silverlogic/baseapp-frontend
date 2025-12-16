@@ -9,8 +9,6 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 12,
       borderRadius: 16,
       overflow: 'hidden',
-      fontSize: 16,
-      color: '#000',
     },
     ownBubble: {
       backgroundColor: theme.colors.surface.active,

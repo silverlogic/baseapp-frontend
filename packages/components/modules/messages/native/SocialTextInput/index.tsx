@@ -10,7 +10,7 @@ import { createStyles } from './styles'
 import type { SocialTextInputProps } from './types'
 
 const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
-  ({ children, lineHeight = 22, maxLines = 3, toolStyle = {}, ...props }, ref) => {
+  ({ children, lineHeight = 22, maxLines = 3, toolStyle = {}, containerStyle, ...props }, ref) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const theme = useTheme()
     const styles = createStyles(theme, {
@@ -46,7 +46,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     )
 
     return (
-      <View style={[styles.container]}>
+      <View style={[styles.container, containerStyle]}>
         {/* TODO: Replies */}
         <NativeTextInput
           multiline
