@@ -26,7 +26,7 @@ const CreateRoomPage = () => {
   })
 
   const searchParam = watch(FORM_VALUES.search)
-  const [isPending, startTransition] = useTransition()
+  const [, startTransition] = useTransition()
 
   const queryData = useLazyLoadQuery<CreateRoomPageQuery>(profilesListQuery, {
     count: 10,
@@ -34,14 +34,12 @@ const CreateRoomPage = () => {
   })
 
   const handleSearchChange = (text: string) => {
-    if (isPending) return
     startTransition(() => {
       setValue(FORM_VALUES.search, text)
     })
   }
 
   const resetInput = () => {
-    setValue(FORM_VALUES.search, DEFAULT_FORM_VALUES.search)
     reset(DEFAULT_FORM_VALUES)
   }
 
@@ -63,7 +61,7 @@ const CreateRoomPage = () => {
   )
 }
 
-const SupendedCreateRoomPage = () => {
+const SuspendedCreateRoomPage = () => {
   const theme = useTheme()
   const styles = createStyles(theme)
   return (
@@ -78,4 +76,4 @@ const SupendedCreateRoomPage = () => {
     </Suspense>
   )
 }
-export default SupendedCreateRoomPage
+export default SuspendedCreateRoomPage

@@ -4,13 +4,29 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { withNativeController } from '@baseapp-frontend/design-system/utils/native'
 
-import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
+import {
+  LayoutChangeEvent,
+  NativeSyntheticEvent,
+  TextInput as NativeTextInput,
+  TextInputFocusEventData,
+} from 'react-native'
 
 import { createStyles } from './styles'
 import type { SocialTextInputProps } from './types'
 
 const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
-  ({ children, lineHeight = 22, maxLines = 3, toolStyle = {}, containerStyle, ...props }, ref) => {
+  (
+    {
+      children,
+      containerStyle,
+      lineHeight = 22,
+      maxLines = 3,
+      toolStyle = {},
+      placeholder = 'Message...',
+      ...props
+    },
+    ref,
+  ) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const theme = useTheme()
     const styles = createStyles(theme, {
@@ -28,21 +44,21 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     )
 
     const handleBlur = useCallback(
-      (args: any) => {
+      (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
         props.onBlur?.(args)
         props.onFocusChange?.(false)
         setIsFocused(false)
       },
-      [props.onBlur, props.onFocusChange, setIsFocused],
+      [props.onBlur, props.onFocusChange],
     )
 
     const handleFocus = useCallback(
-      (args: any) => {
+      (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
         props.onFocus?.(args)
         props.onFocusChange?.(true)
         setIsFocused(true)
       },
-      [props.onFocus, props.onFocusChange, setIsFocused],
+      [props.onFocus, props.onFocusChange],
     )
 
     return (
@@ -51,7 +67,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
         <NativeTextInput
           multiline
           onLayout={onLayout}
-          placeholder="Message..."
+          placeholder={placeholder}
           placeholderTextColor={theme.colors.object.low}
           ref={ref}
           style={styles.input}

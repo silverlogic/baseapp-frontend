@@ -25,7 +25,7 @@ const CreateRoomList = ({ targetRef, searchParam }: CreateRoomListProps) => {
   const screenHeight = Dimensions.get('window').height
 
   const loadNextBasedOnHeight = (height: number) => {
-    if (!layoutTriggeredRef.current && hasNext && height < screenHeight) {
+    if (!layoutTriggeredRef.current && hasNext && !isLoadingNext && height < screenHeight) {
       layoutTriggeredRef.current = true
       loadNext(10)
     }
