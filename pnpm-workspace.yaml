@@ -14,7 +14,7 @@ catalog:
   jotai: 2.12.4
   js-cookie: 3.0.5
   lodash: 4.17.21
-  luxon: 3.6.1
+  luxon: 3.7.2
   next: 15.3.8
   react-international-phone: 4.5.0
   react-hook-form: 7.56.4
@@ -167,7 +167,7 @@ catalogs:
 
   design-system:
     "@iconify/react": ^5.0.1
-    "@shopify/flash-list": ^1.7.6
+    "@shopify/flash-list": 2.2.0
     color: ^4.2.3
     react-dropzone: ^14.2.3
     react-lazy-load-image-component: ^1.6.2
