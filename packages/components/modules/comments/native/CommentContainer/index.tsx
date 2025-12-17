@@ -31,8 +31,8 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
     const body = form.watch('body')
     const id = form.watch('id')
 
-    const [commitMutation, isCreateMutationInFlight] = useCommentCreateMutation()
-    const [commitUpdate, isUpdateMutationInFlight] = useCommentUpdateMutation()
+    const [commitCreateMutation, isCreateMutationInFlight] = useCommentCreateMutation()
+    const [commitUpdateMutation, isUpdateMutationInFlight] = useCommentUpdateMutation()
     const onSubmit = () => {
       if (isCreateMutationInFlight || isUpdateMutationInFlight) return
 
@@ -44,7 +44,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
         'CommentsList_comments',
       )
       if (isEdit?.isEditMode) {
-        commitUpdate({
+        commitUpdateMutation({
           variables: {
             input: {
               id: id ?? '',
@@ -56,15 +56,19 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
               console.error(errors)
               return
             }
-            form.reset()
-            if (ref && 'current' in ref) ref.current?.blur()
+            const mutationErrors = response?.commentUpdate?.errors
+            setFormRelayErrors(form, mutationErrors)
+            if (!mutationErrors?.length) {
+              form.reset()
+              if (ref && 'current' in ref) ref.current?.blur()
+            }
           },
         })
         isEdit?.onEditCancel()
         return
       }
 
-      commitMutation({
+      commitCreateMutation({
         variables: {
           input: {
             body,
