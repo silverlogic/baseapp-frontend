@@ -8,7 +8,7 @@ import { StyleProp, ViewStyle } from 'react-native'
 import { SocialUpsertForm } from '../../../__shared__/common'
 import type { SocialInputDrawerProps, SocialInputDrawerType } from '../../../__shared__/native'
 
-export interface CommentCreateProps extends PropsWithChildren {
+export interface CommentContainerProps extends PropsWithChildren {
   drawerStyle?: StyleProp<ViewStyle>
   targetObjectId: string
   SocialInputDrawer?: SocialInputDrawerType

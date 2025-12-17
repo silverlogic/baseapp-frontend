@@ -137,61 +137,67 @@ const CommentItem: FC<CommentItemProps> = ({
               Share Comment
             </Text>
           </Pressable>
-          <Pressable
-            onPress={() => handleMenuAction('pin')}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              gap: 8,
-              padding: 8,
-            }}
-          >
-            <PinIcon width={20} height={20} color={theme.colors.object.high} />
-            <Text variant="body2" color="high">
-              Pin Comment
-            </Text>
-          </Pressable>
-          <Pressable
-            onPress={() => handleMenuAction('edit')}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              gap: 8,
-              padding: 8,
-            }}
-          >
-            <EditIcon width={20} height={20} color={theme.colors.object.high} />
-            <Text variant="body2" color="high">
-              Edit Comment
-            </Text>
-          </Pressable>
+          {comment.canPin && (
+            <Pressable
+              onPress={() => handleMenuAction('pin')}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                gap: 8,
+                padding: 8,
+              }}
+            >
+              <PinIcon width={20} height={20} color={theme.colors.object.high} />
+              <Text variant="body2" color="high">
+                Pin Comment
+              </Text>
+            </Pressable>
+          )}
+          {comment.canChange && (
+            <Pressable
+              onPress={() => handleMenuAction('edit')}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                gap: 8,
+                padding: 8,
+              }}
+            >
+              <EditIcon width={20} height={20} color={theme.colors.object.high} />
+              <Text variant="body2" color="high">
+                Edit Comment
+              </Text>
+            </Pressable>
+          )}
         </View>
-        <View
-          style={{
-            paddingHorizontal: 16,
-            paddingVertical: 12,
-            gap: 4,
-            borderBottomWidth: 0,
-          }}
-        >
-          <Pressable
-            onPress={() => handleMenuAction('delete')}
+        {comment.canDelete && (
+          <View
             style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'flex-start',
-              gap: 8,
-              padding: 8,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              gap: 4,
+              borderBottomWidth: 0,
             }}
           >
-            <TrashIcon width={20} height={20} color={theme.colors.error.main} />
-            <Text variant="body2" style={{ color: theme.colors.error.main }}>
-              Delete Comment
-            </Text>
-          </Pressable>
-        </View>
+            <Pressable
+              onPress={() => handleMenuAction('delete')}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                gap: 8,
+                padding: 8,
+              }}
+            >
+              <TrashIcon width={20} height={20} color={theme.colors.error.main} />
+              <Text variant="body2" style={{ color: theme.colors.error.main }}>
+                Delete Comment
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </BottomDrawer>
     </>
   )

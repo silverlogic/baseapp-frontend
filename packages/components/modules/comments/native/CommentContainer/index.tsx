@@ -9,11 +9,11 @@ import { ConnectionHandler } from 'react-relay'
 import { SocialInputDrawer as DefaultSocialInputDrawer } from '../../../__shared__/native'
 import { useCommentCreateMutation, useCommentUpdateMutation } from '../../common'
 import { createStyles } from './styles'
-import { CommentCreateProps } from './types'
+import { CommentContainerProps } from './types'
 
 let nextClientMutationId = 0
 
-const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
+const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
   (
     {
       children,
@@ -125,4 +125,4 @@ const CommentCreate = forwardRef<NativeTextInput, CommentCreateProps>(
   },
 )
 
-export default CommentCreate
+export default CommentContainer

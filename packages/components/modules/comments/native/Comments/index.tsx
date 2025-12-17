@@ -14,7 +14,7 @@ import {
   SocialUpsertForm,
 } from '../../../__shared__/common'
 import { CommentsFragmentQuery } from '../../common'
-import DefaultCommentCreate from '../CommentCreate'
+import DefaultCommentContainer from '../CommentContainer'
 import DefaultCommentsList from '../CommentsList'
 import { createStyles } from './styles'
 import { CommentsProps } from './types'
@@ -25,8 +25,8 @@ const WithComments: FC<CommentsProps> = ({
   target: targetRef,
   CommentsList = DefaultCommentsList,
   CommentsListProps = {},
-  CommentCreate = DefaultCommentCreate,
-  CommentCreateProps = {},
+  CommentContainer = DefaultCommentContainer,
+  CommentContainerProps = {},
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
 
@@ -57,7 +57,7 @@ const WithComments: FC<CommentsProps> = ({
 
   return (
     <View style={[styles.rootContainer, styles.transparent]}>
-      <CommentCreate
+      <CommentContainer
         ref={commentCreateRef}
         targetObjectId={target.id}
         form={form}
@@ -66,7 +66,7 @@ const WithComments: FC<CommentsProps> = ({
           label: 'Editing your comment',
           onEditCancel: handleEditCancel,
         }}
-        {...CommentCreateProps}
+        {...CommentContainerProps}
       >
         <View style={styles.transparent}>{children}</View>
         <CommentsList
@@ -75,7 +75,7 @@ const WithComments: FC<CommentsProps> = ({
           onEdit={handleEdit}
           {...CommentsListProps}
         />
-      </CommentCreate>
+      </CommentContainer>
     </View>
   )
 }

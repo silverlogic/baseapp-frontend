@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from 'react'
 
 import type { CommentsFragment$key } from '../../../../__generated__/CommentsFragment.graphql'
-import type { CommentCreateProps } from '../CommentCreate/types'
+import type { CommentContainerProps } from '../CommentContainer/types'
 import type { CommentsListProps } from '../CommentsList/types'
 
 export interface CommentsProps extends PropsWithChildren {
@@ -9,6 +9,6 @@ export interface CommentsProps extends PropsWithChildren {
   target: CommentsFragment$key
   CommentsList?: FC<CommentsListProps>
   CommentsListProps?: Partial<CommentsListProps>
-  CommentCreate?: FC<CommentCreateProps>
-  CommentCreateProps?: Partial<CommentCreateProps>
+  CommentContainer?: FC<CommentContainerProps>
+  CommentContainerProps?: Partial<CommentContainerProps>
 }
