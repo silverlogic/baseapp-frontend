@@ -58,7 +58,6 @@ import { InfiniteScrollerViewProps } from './types'
 
 const InfiniteScrollerView = <TItem,>({
   isLoading,
-  estimatedItemSize = 200,
   ListFooterComponent,
   ...props
 }: InfiniteScrollerViewProps<TItem>) => {
@@ -70,11 +69,7 @@ const InfiniteScrollerView = <TItem,>({
 
   return (
     <View style={styles.container}>
-      <FlashList
-        estimatedItemSize={estimatedItemSize}
-        ListFooterComponent={ListFooterComponent ?? renderFooterLoadingState}
-        {...props}
-      />
+      <FlashList ListFooterComponent={ListFooterComponent ?? renderFooterLoadingState} {...props} />
     </View>
   )
 }
