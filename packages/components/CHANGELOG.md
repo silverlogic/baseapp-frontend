@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.16
+
+### Patch Changes
+
+- Notifications shows actor's information correctly
+
 ## 1.4.15
 
 ### Minor Changes
