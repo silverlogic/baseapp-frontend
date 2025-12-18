@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/utils",
   "description": "Util functions, constants and types.",
-  "version": "4.0.4",
+  "version": "4.0.6",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,

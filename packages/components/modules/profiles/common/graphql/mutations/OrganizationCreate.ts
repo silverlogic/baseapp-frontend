@@ -45,7 +45,6 @@ export const useOrganizationCreateMutation = (): [
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {
-        sendToast(error.message, { type: 'error' })
         config?.onError?.(error)
       },
     })

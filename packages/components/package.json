@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.4.7",
+  "version": "1.4.15",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -48,7 +48,8 @@
     "./tests/native": "./modules/tests/native/index.ts",
     "./content-feed/common": "./modules/content-feed/common/index.ts",
     "./content-feed/web": "./modules/content-feed/web/index.ts",
-    "./content-feed/native": "./modules/content-feed/native/index.ts"
+    "./content-feed/native": "./modules/content-feed/native/index.ts",
+    "./pages/common": "./modules/pages/common/index.ts"
   },
   "files": [
     "modules",
@@ -80,8 +81,11 @@
     "next": "catalog:",
     "numbro": "catalog:components",
     "react-hook-form": "catalog:",
+    "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
+    "react-native-paper": "catalog:react-native",
+    "react-native-safe-area-context": "5.4.1",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",
@@ -89,7 +93,6 @@
     "slugify": "catalog:components",
     "use-long-press": "catalog:components",
     "zod": "catalog:",
-    "react-multi-carousel": "catalog:",
     "zustand": "catalog:"
   },
   "peerDependencies": {
