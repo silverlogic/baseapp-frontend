@@ -20,7 +20,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
       drawerStyle = {},
       targetObjectId,
       form,
-      isEdit,
+      editVariables,
       SocialInputDrawer = DefaultSocialInputDrawer,
       SocialInputDrawerProps = { DrawerProps: {}, PlaceholderProps: {} },
     },
@@ -43,7 +43,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
         targetObjectId,
         'CommentsList_comments',
       )
-      if (isEdit?.isEditMode) {
+      if (editVariables?.isEditMode) {
         commitUpdateMutation({
           variables: {
             input: {
@@ -64,7 +64,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
             }
           },
         })
-        isEdit?.onEditCancel()
+        editVariables?.onEditCancel()
         return
       }
 
@@ -121,7 +121,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
           ref={ref}
           style={drawerStyle}
           submit={onSubmit}
-          isEdit={isEdit}
+          editVariables={editVariables}
           {...SocialInputDrawerProps.DrawerProps}
         />
       </>

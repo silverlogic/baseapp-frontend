@@ -14,10 +14,10 @@ export type SocialTextInputProps = PaperTextInputProps &
     onTextHeightChange?: (height: number) => void
     containerStyle?: StyleProp<ViewStyle>
     toolStyle?: StyleProp<ViewStyle>
-    isEdit?: SocialTextInputIsEditProps
+    editVariables?: SocialTextInputEditVariablesProps
   }
 
-export interface SocialTextInputIsEditProps {
+export interface SocialTextInputEditVariablesProps {
   isEditMode: boolean
   label: string
   onEditCancel: () => void

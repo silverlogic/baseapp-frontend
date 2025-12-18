@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 
-import type { SocialTextInputIsEditProps } from '@baseapp-frontend/design-system/components/native/inputs'
+import type { SocialTextInputEditVariablesProps } from '@baseapp-frontend/design-system/components/native/inputs'
 
 import { UseFormReturn } from 'react-hook-form'
 import { StyleProp, ViewStyle } from 'react-native'
@@ -14,5 +14,5 @@ export interface CommentContainerProps extends PropsWithChildren {
   SocialInputDrawer?: SocialInputDrawerType
   SocialInputDrawerProps?: SocialInputDrawerProps
   form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
-  isEdit: SocialTextInputIsEditProps
+  editVariables: SocialTextInputEditVariablesProps
 }

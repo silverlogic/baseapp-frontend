@@ -61,7 +61,7 @@ const WithComments: FC<CommentsProps> = ({
         ref={commentCreateRef}
         targetObjectId={target.id}
         form={form}
-        isEdit={{
+        editVariables={{
           isEditMode,
           label: 'Editing your comment',
           onEditCancel: handleEditCancel,

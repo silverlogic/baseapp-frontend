@@ -18,7 +18,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
       maxLines = 3,
       contentStyle = {},
       toolStyle = {},
-      isEdit = {},
+      editVariables = {},
       ...props
     },
     ref,
@@ -60,13 +60,13 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     return (
       <View style={[contentStyle, styles.container]}>
         {/* TODO: Replies */}
-        {isEdit?.isEditMode && (
+        {editVariables?.isEditMode && (
           <View style={styles.editModeContainer}>
             <View style={styles.editModeLabelContainer}>
               <ReplyIcon width={20} height={20} />
-              <Text style={styles.editModeLabel}>{isEdit?.label}</Text>
+              <Text style={styles.editModeLabel}>{editVariables?.label}</Text>
             </View>
-            <Pressable onPress={isEdit?.onEditCancel}>
+            <Pressable onPress={editVariables?.onEditCancel}>
               <CloseIcon width={20} height={20} />
             </Pressable>
           </View>

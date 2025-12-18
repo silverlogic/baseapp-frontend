@@ -1,7 +1,7 @@
 import { FC } from 'react'
 
 import {
-  SocialTextInputIsEditProps,
+  SocialTextInputEditVariablesProps,
   SocialTextInputProps,
 } from '@baseapp-frontend/design-system/components/native/inputs'
 
@@ -22,5 +22,5 @@ export interface SocialInputProps {
   onTextHeightChange?: (height: number) => void
   shouldUseBottomSheetSafeComponents?: boolean
   submit: VoidFunction
-  isEdit?: SocialTextInputIsEditProps
+  editVariables?: SocialTextInputEditVariablesProps
 }
