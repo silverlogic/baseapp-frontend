@@ -105,7 +105,7 @@ type ChatRoom implements Node {
   lastMessageTime: DateTime
   participantsCount: Int!
   isGroup: Boolean!
-  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
+  participants(offset: Int, before: String, after: String, first: Int, last: Int, q: String): ChatRoomParticipantConnection
   pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
@@ -287,6 +287,7 @@ interface ChatRoomsInterface {
 
     """Ordering"""
     orderBy: String
+    isGroup: Boolean
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
@@ -1266,7 +1267,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
-  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection!
   unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
@@ -1306,6 +1307,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
 
     """Ordering"""
     orderBy: String
+    isGroup: Boolean
     profileId: String
     unreadMessages: Boolean
     archived: Boolean

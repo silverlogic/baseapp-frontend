@@ -69,6 +69,7 @@ const ChatRooms: FC = () => {
         q: searchParam,
         unreadMessages: selectedTab === CHAT_TAB_VALUES.unread,
         archived: selectedTab === CHAT_TAB_VALUES.archived,
+        isGroup: selectedTab === CHAT_TAB_VALUES.groups,
       },
       { fetchPolicy: 'store-and-network' },
     )
@@ -101,24 +102,22 @@ const ChatRooms: FC = () => {
             aria-label="Unread messages tab"
           />
           <Tab
+            label={CHAT_TAB_LABEL.groups}
+            value={CHAT_TAB_VALUES.groups}
+            aria-label="Groups messages tab"
+          />
+          <Tab
             label={CHAT_TAB_LABEL.archived}
             value={CHAT_TAB_VALUES.archived}
             aria-label="Archived messages tab"
           />
         </Tabs>
-        {
-          // TODO: Handle groups tab separately will be implemented later
-          selectedTab === CHAT_TAB_VALUES.groups ? (
-            <Text>Groups tab is not implemented yet.</Text>
-          ) : (
-            <RoomsList
-              targetRef={chatRoomQueryData}
-              searchParam={searchParam}
-              selectedTab={selectedTab}
-            />
-          )
-        }
-        <NewChatButton />
+        <RoomsList
+          targetRef={chatRoomQueryData}
+          searchParam={searchParam}
+          selectedTab={selectedTab}
+        />
+        <NewChatButton isGroup={selectedTab === CHAT_TAB_VALUES.groups} />
       </View>
     </PageViewWithHeader>
   )

@@ -1,8 +1,14 @@
 import { FC } from 'react'
 
+import { Pressable } from 'react-native'
+
 import { useTheme } from '../../../../providers/native'
 import { IconButton } from '../../buttons'
-import { ChevronIcon as DefaultBackIcon, CloseIcon as DefaultCloseIcon } from '../../icons'
+import {
+  ChevronIcon,
+  ChevronIcon as DefaultBackIcon,
+  CloseIcon as DefaultCloseIcon,
+} from '../../icons'
 import { Text } from '../../typographies'
 import { View } from '../../views'
 import { createStyles } from './styles'
@@ -12,6 +18,9 @@ const AppBar: FC<AppBarProps> = ({
   title,
   titleComponent,
   onBack,
+  onNext,
+  nextLabel,
+  nextIcon,
   onClose,
   BackIcon = DefaultBackIcon,
   CloseIcon = DefaultCloseIcon,
@@ -34,14 +43,26 @@ const AppBar: FC<AppBarProps> = ({
           {title}
         </Text>
       )}
-      <View style={styles.buttonContainer}>
-        {closeComponent ||
-          (onClose && (
+      {onNext && (
+        <Pressable onPress={onNext}>
+          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+            {nextLabel && (
+              <Text variant="subtitle2" color="high" style={{ fontWeight: '500' }}>
+                {nextLabel}
+              </Text>
+            )}
+            {nextIcon || <ChevronIcon direction="right" color="high" />}
+          </View>
+        </Pressable>
+      )}
+      {closeComponent ||
+        (onClose && (
+          <View style={styles.buttonContainer}>
             <IconButton onPress={onClose}>
               <CloseIcon />
             </IconButton>
-          ))}
-      </View>
+          </View>
+        ))}
     </View>
   )
 }
