@@ -25,22 +25,15 @@ const ProfileCard: FC<ProfileCardProps> = ({
   groupMember,
   initiateRemoval,
 }) => {
-  const profileData = useFragment<ProfileItemFragment$key>(
+  const { id, image, name, urlPath } = useFragment<ProfileItemFragment$key>(
     ProfileItemFragment,
-    groupMember.profile ?? null,
+    groupMember.profile!,
   )
-  const { currentProfile } = useCurrentProfile()
-  const popover = usePopover()
-
-  if (!profileData) {
-    console.warn('ProfileCard: Missing profile data for member', groupMember.id)
-    return null
-  }
-
-  const { id, image, name, urlPath } = profileData
   const showUrlPath = !!urlPath?.path
   const showAdminLabel = groupMember?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
   const showMenu = hasAdminPermissions
+  const { currentProfile } = useCurrentProfile()
+  const popover = usePopover()
   const isMe = currentProfile?.id === id
 
   const handleRemoveClicked = () => {
