@@ -10,7 +10,6 @@ export const CommentItemFragmentQuery = graphql`
 
     profile {
       id
-      pk
       name
       image(width: 50, height: 50) {
         url
