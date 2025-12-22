@@ -1,9 +1,10 @@
 import { FC } from 'react'
 
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { CookieProvider } from '@baseapp-frontend/utils/hooks/useCookie'
 
 import { MinimalProfile } from '../../../../../types/profile'
-import { CURRENT_PROFILE_KEY_NAME, CurrentProfileProvider } from '../../../../profile'
+import { CurrentProfileProvider } from '../../../../profile'
 import { WithAuthenticationTestProvidersProps } from './types'
 
 const withAuthenticationTestProviders =

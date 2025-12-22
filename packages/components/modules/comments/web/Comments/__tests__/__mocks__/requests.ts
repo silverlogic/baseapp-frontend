@@ -1,3 +1,5 @@
+import { MOCK_PROFILE } from './constants'
+
 export const replytoCommentMockData = {
   data: {
     node: {
@@ -11,6 +13,7 @@ export const replytoCommentMockData = {
       canDelete: false,
       canReport: true,
       canPin: false,
+      profile: MOCK_PROFILE,
       user: {
         id: 'user-2',
         fullName: 'Jane Smith',
@@ -30,6 +33,7 @@ export const replytoCommentMockData = {
               id: 'Q29tbWVudDoyMTg=',
               isPinned: false,
               body: 'Some reply',
+              profile: MOCK_PROFILE,
               user: {
                 id: 'VXNlcjo0',
                 fullName: 'Alexandre Anicio',
