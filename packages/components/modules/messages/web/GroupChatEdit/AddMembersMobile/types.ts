@@ -10,7 +10,6 @@ export interface AddMembersMobileProps {
   handleSubmitSuccess: VoidFunction
   profileId: string
   roomId?: string
-  isPending: boolean
   GroupChatMembersList?: FC<GroupChatMembersListProps>
   GroupChatMembersListProps?: Partial<GroupChatMembersListProps>
   existingMembers: ProfileNode[]

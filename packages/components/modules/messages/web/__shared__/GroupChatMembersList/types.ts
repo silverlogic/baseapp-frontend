@@ -24,6 +24,7 @@ export interface GroupChatMembersListProps extends PropsWithChildren {
   membersLoadNext?: LoadMoreFn<any>
   membersHasNext?: boolean
   membersIsLoadingNext?: boolean
+  onRemoveMember?: (profile: ProfileNode) => void
   ProfilesContainer?: FC<BoxProps>
   Searchbar?: FC<SearchbarProps> | ((props: WithControllerProps<SearchbarProps>) => ReactElement)
   SearchbarProps?: Partial<SearchbarProps>

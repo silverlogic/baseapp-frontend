@@ -6,10 +6,9 @@ export const ProfileSummaryFragment = graphql`
     avatarSize: { type: "Int", defaultValue: 100 }
     cursor: { type: "String" }
     count: { type: "Int", defaultValue: 5 }
-    q: { type: "String", defaultValue: null }
   ) {
     id
-    participants(first: $count, after: $cursor, q: $q)
+    participants(first: $count, after: $cursor)
       @connection(key: "ProfileSummaryFragment_participants") {
       edges {
         node {
