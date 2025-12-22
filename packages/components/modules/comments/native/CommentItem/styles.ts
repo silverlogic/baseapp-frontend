@@ -1,6 +1,8 @@
+import { Theme } from '@baseapp-frontend/design-system/styles/native'
+
 import { StyleSheet } from 'react-native'
 
-export const createStyles = () =>
+export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     rootContainer: {
       backgroundColor: 'transparent',
@@ -49,7 +51,7 @@ export const createStyles = () =>
       paddingVertical: 12,
       gap: 4,
       borderBottomWidth: 1,
-      borderBottomColor: 'surface.disabled',
+      borderBottomColor: theme.colors.surface.disabled,
     },
     bottomDrawerDivider: {
       paddingHorizontal: 16,
@@ -63,5 +65,15 @@ export const createStyles = () =>
       justifyContent: 'flex-start',
       gap: 8,
       padding: 8,
+    },
+    threadDepthContainer: {
+      flexDirection: 'row',
+      backgroundColor: 'transparent',
+    },
+    threadDepthDivider: {
+      width: 2,
+      backgroundColor: theme.colors.surface.disabled,
+      marginRight: 12,
+      alignSelf: 'stretch',
     },
   })

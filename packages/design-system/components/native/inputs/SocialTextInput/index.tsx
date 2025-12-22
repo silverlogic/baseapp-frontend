@@ -19,6 +19,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
       contentStyle = {},
       toolStyle = {},
       editVariables = {},
+      replyVariables = {},
       ...props
     },
     ref,
@@ -67,6 +68,20 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
               <Text style={styles.editModeLabel}>{editVariables?.label}</Text>
             </View>
             <Pressable onPress={editVariables?.onEditCancel}>
+              <CloseIcon width={20} height={20} />
+            </Pressable>
+          </View>
+        )}
+        {replyVariables?.isReplyMode && (
+          <View style={styles.replyModeContainer}>
+            <View style={styles.replyModeLabelContainer}>
+              <ReplyIcon width={20} height={20} />
+              <Text style={styles.replyModeLabel}>
+                {replyVariables?.label}
+                <Text style={styles.replyModeTargetName}>{replyVariables?.targetName}</Text>
+              </Text>
+            </View>
+            <Pressable onPress={replyVariables?.onReplyCancel}>
               <CloseIcon width={20} height={20} />
             </Pressable>
           </View>

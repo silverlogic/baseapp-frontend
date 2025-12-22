@@ -21,6 +21,8 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
       targetObjectId,
       form,
       editVariables,
+      replyVariables,
+      onReplySuccess,
       SocialInputDrawer = DefaultSocialInputDrawer,
       SocialInputDrawerProps = { DrawerProps: {}, PlaceholderProps: {} },
     },
@@ -72,7 +74,8 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
         variables: {
           input: {
             body,
-            targetObjectId,
+            inReplyToId: replyVariables?.isReplyMode ? id : undefined,
+            targetObjectId: replyVariables?.isReplyMode ? targetObjectId : (id ?? ''),
             profileId: currentProfile?.id,
             clientMutationId,
           },
@@ -85,7 +88,12 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
           }
           const mutationErrors = response?.commentCreate?.errors
           setFormRelayErrors(form, mutationErrors)
-
+          if (replyVariables?.isReplyMode) {
+            replyVariables?.onReplyCancel()
+            if (!mutationErrors?.length && id) {
+              onReplySuccess?.(id)
+            }
+          }
           if (!mutationErrors?.length) {
             form.reset()
             if (ref && 'current' in ref) ref.current?.blur()
@@ -122,6 +130,7 @@ const CommentContainer = forwardRef<NativeTextInput, CommentContainerProps>(
           style={drawerStyle}
           submit={onSubmit}
           editVariables={editVariables}
+          replyVariables={replyVariables}
           {...SocialInputDrawerProps.DrawerProps}
         />
       </>

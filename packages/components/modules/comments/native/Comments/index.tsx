@@ -29,6 +29,9 @@ const WithComments: FC<CommentsProps> = ({
   CommentContainerProps = {},
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isReplyMode, setIsReplyMode] = useState(false)
+  const [replyTargetName, setReplyTargetName] = useState('')
+  const [commentIdToExpand, setCommentIdToExpand] = useState<string | null>(null)
 
   const form = useForm<SocialUpsertForm>({
     defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -39,6 +42,18 @@ const WithComments: FC<CommentsProps> = ({
     setIsEditMode(true)
     form.setValue('body', comment.body ?? '')
     form.setValue('id', comment.id ?? '')
+  }
+
+  const handleReply = (comment: CommentItem_comment$data) => {
+    setIsReplyMode(true)
+    form.reset()
+    form.setValue('id', comment.id ?? '')
+    setReplyTargetName(comment.profile?.name ?? '')
+  }
+
+  const handleReplyCancel = () => {
+    setIsReplyMode(false)
+    form.reset()
   }
 
   const handleEditCancel = () => {
@@ -66,6 +81,16 @@ const WithComments: FC<CommentsProps> = ({
           label: 'Editing your comment',
           onEditCancel: handleEditCancel,
         }}
+        replyVariables={{
+          isReplyMode,
+          label: 'Replying to ',
+          onReplyCancel: handleReplyCancel,
+          targetName: replyTargetName,
+        }}
+        onReplySuccess={(commentId) => {
+          setCommentIdToExpand(commentId)
+          setTimeout(() => setCommentIdToExpand(null), 100)
+        }}
         {...CommentContainerProps}
       >
         <View style={styles.transparent}>{children}</View>
@@ -73,6 +98,8 @@ const WithComments: FC<CommentsProps> = ({
           target={target}
           subscriptionsEnabled={subscriptionsEnabled}
           onEdit={handleEdit}
+          onReply={handleReply}
+          commentIdToExpand={commentIdToExpand}
           {...CommentsListProps}
         />
       </CommentContainer>
