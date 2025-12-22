@@ -1,5 +1,39 @@
 # @baseapp-frontend/components
 
+## 1.4.16
+
+### Patch Changes
+
+- Notifications shows actor's information correctly
+
+## 1.4.15
+
+### Minor Changes
+
+- Added roomslist components and illustrations
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.8
+
+## 1.4.14
+
+### Patch Changes
+
+- Consolidated hardcoded role values to use centralized constants for improved consistency and maintainability. Also updated component property naming for improved code clarity.
+
+## 1.4.13
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.7
+  - @baseapp-frontend/design-system@1.1.7
+  - @baseapp-frontend/graphql@1.3.8
+  - @baseapp-frontend/utils@4.0.6
+
 ## 1.4.12
 
 ### Patch Changes
