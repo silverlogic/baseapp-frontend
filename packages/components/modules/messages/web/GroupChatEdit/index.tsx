@@ -14,6 +14,7 @@ import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../../__generated__/MembersListFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileNode } from '../../../profiles/common'
 import {
   GroupDetailsQuery,
@@ -54,7 +55,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
-  const [memberToRemove, setMemberToRemove] = useState<ProfileNode | null>(null)
+  const [memberToRemove, setMemberToRemove] = useState<ProfileItemFragment$key | null>(null)
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
@@ -139,7 +140,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 
   const isEditButtonDisabled = !isValid || !isDirty
 
-  const handleRemoveMember = (profile: ProfileNode) => {
+  const handleRemoveMember = (profile: ProfileItemFragment$key) => {
     setMemberToRemove(profile)
   }
 
