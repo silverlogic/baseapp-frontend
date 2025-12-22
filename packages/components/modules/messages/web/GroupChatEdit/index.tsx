@@ -32,12 +32,7 @@ import { CreateOrEditGroup } from '../__shared__/types'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import DefaultHeader from './Header'
-import {
-  DEFAULT_FORM_VALIDATION,
-  REFETCH_MEMBERS_NETWORK_CONFIG,
-  REFETCH_MEMBERS_PARTICIPANTS_COUNT,
-  getDefaultFormValues,
-} from './constants'
+import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
 import { GroupChatEditProps } from './types'
 
 const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
@@ -128,10 +123,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           sendToast('Something went wrong', { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
-          refetch(
-            { count: REFETCH_MEMBERS_PARTICIPANTS_COUNT },
-            { fetchPolicy: REFETCH_MEMBERS_NETWORK_CONFIG },
-          )
           onValidSubmission()
         }
       },

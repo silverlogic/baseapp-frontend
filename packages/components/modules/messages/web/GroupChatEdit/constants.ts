@@ -13,7 +13,6 @@ export const getDefaultFormValues = (
   title,
   addParticipants: [],
   removeParticipants: [],
-  participants: [],
   image,
 })
 
@@ -21,6 +20,3 @@ export const DEFAULT_FORM_VALIDATION = z.object({
   ...DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION.shape,
   [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any(),
 }) as any // TODO: fix typing issue with zodResolver
-
-export const REFETCH_MEMBERS_PARTICIPANTS_COUNT = 5
-export const REFETCH_MEMBERS_NETWORK_CONFIG = 'network-only'
