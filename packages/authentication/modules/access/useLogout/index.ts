@@ -5,12 +5,12 @@ import {
   eventEmitter,
   removeTokenAsync,
 } from '@baseapp-frontend/utils'
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MFA_API_KEY } from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
-import { CURRENT_PROFILE_KEY_NAME } from '../../profile/useCurrentProfile/constants'
 import type { UseLogoutOptions } from './types'
 
 const useLogout = ({

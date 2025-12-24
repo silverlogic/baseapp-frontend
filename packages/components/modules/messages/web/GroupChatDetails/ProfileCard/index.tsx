@@ -12,6 +12,7 @@ import { Box, IconButton, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { formatHandle } from '../../../../__shared__/common/utils'
 import { ProfileItemFragment } from '../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import AdminOptionsMenu from './AdminOptionsMenu'
@@ -88,7 +89,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
           }}
         >
           <Typography variant="caption" color="text.secondary">
-            {showUrlPath && `@${urlPath.path}`}
+            {showUrlPath && formatHandle(urlPath.path)}
           </Typography>
           {showAdminLabel && showUrlPath && (
             <Box

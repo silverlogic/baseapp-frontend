@@ -26,6 +26,7 @@ const ChatRoomWithQuery = () => {
     <SuspendedChatRoom
       roomId={data.chatRoom.id}
       onDisplayGroupDetailsClicked={() => alert('Group details clicked')}
+      onDisplayProfileSummaryClicked={() => alert('Profile summary clicked')}
       MessagesListProps={{ roomRef: data.chatRoom as MessagesListFragment$key }}
     />
   )

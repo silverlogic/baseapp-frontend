@@ -25,7 +25,7 @@ export const useGroupNameAndAvatar = (
   }
 }
 
-const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefined) => {
+export const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefined) => {
   const { currentProfile } = useCurrentProfile()
   const header = useFragment<RoomTitleFragment$key>(RoomTitleFragment, headerRef)
   if (!header?.participants) {

@@ -80,7 +80,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
           renderItem={({ item, index }: { item: NotificationsNode; index: number }) =>
             renderNotificationItem(item, index)
           }
-          estimatedItemSize={134}
           onEndReached={() => {
             if (hasNext) {
               loadNext(NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT)

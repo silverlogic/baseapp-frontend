@@ -2,12 +2,13 @@ import React from 'react'
 
 import { act, renderHook } from '@baseapp-frontend/test'
 import { CookieProvider } from '@baseapp-frontend/utils'
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
 import Cookies from 'js-cookie'
 
 import { CurrentProfileProvider } from '..'
 import useCurrentProfile from '..'
-import { CURRENT_PROFILE_KEY_NAME, MISSING_PROFILE_STORE_ERROR } from '../constants'
+import { MISSING_PROFILE_STORE_ERROR } from '../constants'
 import {
   getCurrentProfileFromStore,
   resetProfileStore,

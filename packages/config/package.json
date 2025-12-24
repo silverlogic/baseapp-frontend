@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/config",
   "description": "Reusable configurations for eslint, prettier, jest and relay",
-  "version": "2.1.13",
+  "version": "2.1.15",
   "files": [
     ".eslintrc.js",
     ".eslintrc-with-restricted-paths.js",

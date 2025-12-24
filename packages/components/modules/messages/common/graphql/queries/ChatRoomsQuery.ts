@@ -1,14 +1,11 @@
 import { graphql } from 'react-relay'
 
 export const ChatRoomsQuery = graphql`
-  query ChatRoomsQuery {
+  query ChatRoomsQuery($profileId: ID!) {
     ...AllProfilesListFragment
-    me {
+    profile(id: $profileId) {
       id
-      profile {
-        id
-        ...RoomsListFragment
-      }
+      ...RoomsListFragment
     }
   }
 `

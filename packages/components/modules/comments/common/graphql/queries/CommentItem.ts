@@ -8,6 +8,16 @@ export const CommentItemFragmentQuery = graphql`
     body
     isPinned
 
+    profile {
+      id
+      name
+      image(width: 50, height: 50) {
+        url
+      }
+      urlPath {
+        path
+      }
+    }
     user {
       id
       fullName

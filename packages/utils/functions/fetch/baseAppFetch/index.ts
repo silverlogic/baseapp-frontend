@@ -4,9 +4,11 @@ import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
+import { MinimalProfile } from '../../../types/profile'
 import { eventEmitter } from '../../events'
 import { getExpoConstant } from '../../expo'
-import { buildQueryString } from '../../string'
+import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
@@ -91,10 +93,22 @@ export const baseAppFetch: BaseAppFetch = async (
   const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
+  let currentProfile
+  if (typeof window === typeof undefined) {
+    const { getTokenSSR } = await import('../../token/getTokenSSR')
+    currentProfile = await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
+  } else {
+    const { getToken } = await import('../../token/getToken')
+    currentProfile = getToken(CURRENT_PROFILE_KEY_NAME)
+  }
+
+  const parsedCurrentProfile = parseString<MinimalProfile>(currentProfile ?? undefined)
+
   const fetchOptions: RequestOptions = {
     ...options,
     headers: {
       Accept: 'application/json, text/plain, */*',
+      'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
       ...options.headers,
     },
   }

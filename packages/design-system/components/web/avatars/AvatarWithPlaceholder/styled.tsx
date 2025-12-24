@@ -14,4 +14,5 @@ export const AvatarStyled: ComponentType<AvatarWithPlaceholderProps> = styled(
   width,
   height,
   border: `solid 2px ${theme.palette.background.default}`,
+  backgroundColor: theme.palette.grey[300],
 })) as OverridableComponent<AvatarTypeMap<AvatarWithPlaceholderProps, 'div'>>

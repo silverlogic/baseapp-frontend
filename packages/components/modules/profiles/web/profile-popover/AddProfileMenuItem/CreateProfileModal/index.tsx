@@ -7,6 +7,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton } from '@mui/lab'
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -55,6 +56,37 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
     onClose?.()
   }
 
+  const parseErrorMessage = (
+    error: Error,
+  ): { field: 'name' | 'urlPath' | 'root'; message: string } => {
+    const errorMessage = error.message.toLowerCase()
+
+    if (errorMessage.includes('duplicate key') && errorMessage.includes('urlpath')) {
+      return {
+        field: 'urlPath',
+        message: 'This URL path is already taken. Please choose a different one.',
+      }
+    }
+    if (errorMessage.includes('duplicate key') && errorMessage.includes('name')) {
+      return {
+        field: 'name',
+        message: 'An organization with this name already exists. Please choose a different name.',
+      }
+    }
+    if (errorMessage.includes('invalid') && errorMessage.includes('urlpath')) {
+      return {
+        field: 'urlPath',
+        message:
+          'Invalid URL path format. Please use only lowercase letters, numbers, and hyphens.',
+      }
+    }
+    return {
+      field: 'root',
+      message:
+        'Unable to create organization. Please try again or contact support if the problem persists.',
+    }
+  }
+
   const onSubmit = (data: OrganizationCreateForm) => {
     if (isMutationInFlight) return
 
@@ -72,6 +104,7 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
         },
         connections: [connections],
       },
+
       onCompleted: (response, errors) => {
         if (errors) {
           console.error(errors)
@@ -84,7 +117,22 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
           handleClose()
         }
       },
-      onError: console.error,
+      onError: (error) => {
+        console.error('Organization creation error:', error)
+        const { field, message } = parseErrorMessage(error)
+
+        if (field === 'root') {
+          form.setError('root', {
+            type: 'manual',
+            message,
+          })
+        } else {
+          form.setError(field, {
+            type: 'manual',
+            message,
+          })
+        }
+      },
     })
   }
 
@@ -121,6 +169,13 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
           id="organization-modal-description"
         >
           <Typography color="text.secondary">{addNewProfileDescription}</Typography>
+
+          {form.formState.errors.root && (
+            <Alert severity="error" onClose={() => form.clearErrors('root')}>
+              {form.formState.errors.root.message}
+            </Alert>
+          )}
+
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
               label="Name"

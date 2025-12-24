@@ -1,8 +1,10 @@
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
+
 import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 
 import { MinimalProfile } from '../../../types/profile'
-import { CURRENT_PROFILE_KEY_NAME, MISSING_PROFILE_STORE_ERROR } from './constants'
+import { MISSING_PROFILE_STORE_ERROR } from './constants'
 import type { CurrentProfileState } from './types'
 
 let profileStore: StoreApi<CurrentProfileState> | null = null

@@ -7,6 +7,7 @@ export interface ChatRoomHeaderProps {
   participantsCount: number
   roomTitleRef: TitleFragment$key
   onDisplayGroupDetailsClicked: VoidFunction
+  onDisplayProfileSummaryClicked: VoidFunction
   roomId?: string
 }
 
