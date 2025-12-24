@@ -13,6 +13,7 @@ export const UpdateChatRoomMutationQuery = graphql`
           ...LastMessageFragment
           ...TitleFragment
           ...UnreadMessagesCountFragment
+          ...MembersListFragment @arguments(count: 5)
         }
       }
       removedParticipants {

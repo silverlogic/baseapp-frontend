@@ -80,7 +80,6 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         onClose={() => setOpen(false)}
         profileId={currentProfile?.id ?? ''}
         roomId={roomId}
-        removingParticipantId={currentProfile?.id ?? ''}
         isSoleAdmin={isSoleAdmin}
       />
       <ChatHeaderContainer>

@@ -11,7 +11,6 @@ export interface AddMembersDialogProps {
   open: boolean
   profileId: string
   roomId?: string
-  isPending: boolean
   GroupChatMembersList?: FC<GroupChatMembersListProps>
   GroupChatMembersListProps?: Partial<GroupChatMembersListProps>
   existingMembers: ProfileNode[]
