@@ -12,8 +12,8 @@ import type { CommentReplyButtonProps } from './CommentReplyButton/types'
 export interface CommentItemProps {
   comment: CommentItem_comment$key
   target: CommentItem_target$key
+  onLongPress?: (comment: CommentItem_comment$data) => void
   CommentReactionButton?: FC<CommentReactionButtonProps>
   CommentReplyButton?: FC<CommentReplyButtonProps>
   Timestamp?: FC<TimestampProps>
-  onEdit?: (comment: CommentItem_comment$data) => void
 }
