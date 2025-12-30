@@ -20,8 +20,6 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",
-    "@parcel/packager-ts": "catalog:",
-    "@parcel/transformer-typescript-types": "catalog:",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",

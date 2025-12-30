@@ -25,6 +25,8 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
       showHandle,
       style = {},
       submit,
+      editVariables,
+      replyVariables,
     },
     ref,
   ) => {
@@ -79,6 +81,8 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
             ref={ref}
             shouldUseBottomSheetSafeComponents
             submit={submit}
+            editVariables={editVariables}
+            replyVariables={replyVariables}
             {...SocialInputProps}
           />
           {

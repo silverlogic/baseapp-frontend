@@ -21,7 +21,6 @@ import { InfiniteScrollerViewProps } from './types'
  *
  * @param {InfiniteScrollerViewProps<T>} props - The props for configuring the infinite scrolling behavior.
  * @param {boolean} [props.isLoading] - Indicates if the list is currently loading more items (required if ListFooterComponent is not provided).
- * @param {number} [props.estimatedItemSize=200] - The estimated size per list item.
  * @param {React.ComponentType<any> | React.ReactNode} [props.ListFooterComponent] - A custom component to display as the list footer.
  * @param {...any} props - Additional properties are passed down to the underlying FlashList component, all of FlashList's props are supported.
  *
@@ -30,7 +29,6 @@ import { InfiniteScrollerViewProps } from './types'
  * <InfiniteScrollerView
  *   data={data}
  *   renderItem={({ item }) => <ItemComponent item={item} />}
- *   estimatedItemSize={134}
  *   onEndReached={() => {
  *     if (hasNext) {
  *       loadNext(5)
@@ -44,7 +42,6 @@ import { InfiniteScrollerViewProps } from './types'
  * <InfiniteScrollerView
  *   data={data}
  *   renderItem={({ item }) => <ItemComponent item={item} />}
- *   estimatedItemSize={134}
  *   onEndReached={() => {
  *     if (hasNext) {
  *       loadNext(5)
