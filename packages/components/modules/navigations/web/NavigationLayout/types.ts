@@ -17,4 +17,5 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   ToolbarProps?: MuiToolbarProps
   MainContainerProps?: Partial<MainContainerProps>
   MainContainer?: FC<MainContainerProps>
+  enableHeader?: boolean
 }

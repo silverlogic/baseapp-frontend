@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
+import { useResponsive, useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { useBoolean } from '@baseapp-frontend/utils'
 
 import Box from '@mui/material/Box'
@@ -25,9 +25,11 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   children,
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
+  enableHeader = true,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
+  const isMobileOrTablet = useResponsive('down', 'lg')
 
   const isNavCentered = settings?.themeLayout === 'centered'
   const isNavHorizontal = settings?.themeLayout === 'horizontal'
@@ -36,16 +38,19 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavCentered) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        >
-          <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
-        </Header>
+        {enableHeader ||
+          (isMobileOrTablet && (
+            <Header
+              LogoIcon={LogoIcon}
+              LogoProps={LogoProps}
+              onOpenNav={nav.onTrue}
+              AccountMenu={AccountMenu}
+              AccountMenuProps={AccountMenuProps}
+              ToolbarProps={ToolbarProps}
+            >
+              <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
+            </Header>
+          ))}
         <MainContainer isNavCentered {...MainContainerProps}>
           {children}
         </MainContainer>
@@ -56,14 +61,17 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavHorizontal) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        />
+        {enableHeader ||
+          (isMobileOrTablet && (
+            <Header
+              LogoIcon={LogoIcon}
+              LogoProps={LogoProps}
+              onOpenNav={nav.onTrue}
+              AccountMenu={AccountMenu}
+              AccountMenuProps={AccountMenuProps}
+              ToolbarProps={ToolbarProps}
+            />
+          ))}
         <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
         <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}
@@ -75,14 +83,17 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavMini) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        />
+        {enableHeader ||
+          (isMobileOrTablet && (
+            <Header
+              LogoIcon={LogoIcon}
+              LogoProps={LogoProps}
+              onOpenNav={nav.onTrue}
+              AccountMenu={AccountMenu}
+              AccountMenuProps={AccountMenuProps}
+              ToolbarProps={ToolbarProps}
+            />
+          ))}
 
         <Box
           sx={{
@@ -97,6 +108,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             onCloseNav={nav.onFalse}
             LogoIcon={LogoIcon}
             LogoProps={LogoProps}
+            AccountMenu={!enableHeader ? AccountMenu : undefined}
+            AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
           />
           <MainContainer isNavMini {...MainContainerProps}>
             {children}
@@ -108,14 +121,17 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
 
   return (
     <>
-      <Header
-        LogoIcon={LogoIcon}
-        LogoProps={LogoProps}
-        onOpenNav={nav.onTrue}
-        AccountMenu={AccountMenu}
-        AccountMenuProps={AccountMenuProps}
-        ToolbarProps={ToolbarProps}
-      />
+      {enableHeader ||
+        (isMobileOrTablet && (
+          <Header
+            LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
+            onOpenNav={nav.onTrue}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={AccountMenuProps}
+            ToolbarProps={ToolbarProps}
+          />
+        ))}
       <Box
         sx={{
           minHeight: 1,
@@ -129,6 +145,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           LogoProps={LogoProps}
           openNav={nav.value}
           onCloseNav={nav.onFalse}
+          AccountMenu={!enableHeader ? AccountMenu : undefined}
+          AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
         />
         <MainContainer {...MainContainerProps}>{children}</MainContainer>
       </Box>

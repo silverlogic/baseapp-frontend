@@ -12,7 +12,7 @@ const ChevronIcon: FC<ChevronIconProps> = ({ isOpen, position = 'bottom', sx, ..
     <SvgIcon
       sx={{
         fontSize: 24,
-        color: 'grey.800',
+        color: 'grey.500',
         transform: `rotate(${POSITION_DEGREE[dynamicPosition]}deg)`,
         transition: 'all 0.25s linear',
         ...sx,
