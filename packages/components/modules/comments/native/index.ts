@@ -1,7 +1,7 @@
 // exports native comments components
 
-export { default as CommentCreate } from './CommentCreate'
-export type * from './CommentCreate/types'
+export { default as CommentContainer } from './CommentContainer'
+export type * from './CommentContainer/types'
 
 export { default as CommentItem } from './CommentItem'
 export type * from './CommentItem/types'

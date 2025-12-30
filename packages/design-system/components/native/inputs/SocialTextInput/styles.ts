@@ -41,4 +41,26 @@ export const createStyles = (
       fontSize: 14,
       color: theme.colors.object.high,
     },
+    editModeContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      padding: 8,
+      borderRadius: 8,
+      backgroundColor: theme.colors.surface.active,
+    },
+    editModeLabelContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      backgroundColor: 'transparent',
+    },
+    editModeLabel: {
+      fontSize: 14,
+      lineHeight: lineHeight ?? 22,
+      color: theme.colors.object.low,
+    },
   })

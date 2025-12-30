@@ -1,5 +1,11 @@
 # @baseapp-frontend/config
 
+## 2.1.15
+
+### Patch Changes
+
+- exclude out/ Next.js build output from relay.config.js
+
 ## 2.1.14
 
 ### Patch Changes
