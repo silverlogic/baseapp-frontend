@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useRef } from 'react'
 
+import { FileUpload } from '@baseapp-frontend/components/files/web'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -129,21 +130,34 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   }, [inputRef])
 
   return (
-    <SocialInput
-      ref={inputRef}
-      submit={onSubmit}
-      isLoading={isMutationInFlight}
-      form={form}
-      formId="comment-update"
-      autoFocusInput
-      SubmitActions={UpdateSubmitActions}
-      SubmitActionsProps={{
-        handleEditCancel,
-        formId: 'comment-update',
-        disabled: isMutationInFlight,
-      }}
-      {...SocialInputProps}
-    />
+    <>
+      <SocialInput
+        ref={inputRef}
+        submit={onSubmit}
+        isLoading={isMutationInFlight}
+        form={form}
+        formId="comment-update"
+        autoFocusInput
+        SubmitActions={UpdateSubmitActions}
+        SubmitActionsProps={{
+          handleEditCancel,
+          formId: 'comment-update',
+          disabled: isMutationInFlight,
+        }}
+        {...SocialInputProps}
+      />
+      <FileUpload
+        target={comment} // Works with any FilesInterface implementer
+        maxFiles={5}
+        maxFileSize={100 * 1024 * 1024} // 100MB
+        acceptedFileTypes={{
+          'image/*': ['.png', '.jpg'],
+          'application/pdf': ['.pdf'],
+        }}
+        autoAttach
+        onUploadComplete={(fileIds) => console.log('Uploaded:', fileIds)}
+      />
+    </>
   )
 }
 

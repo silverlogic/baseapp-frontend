@@ -1,1496 +1,14 @@
-"""Exposes a URL that specifies the behaviour of this scalar."""
-directive @specifiedBy(
-  """The URL that specifies the behaviour of this scalar."""
-  url: String!
-) on SCALAR
-
-type ActivityLog implements Node {
-  """The ID of the object"""
-  id: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  user: User
-  ipAddress: String
-  verb: String
-  visibility: VisibilityTypes
-  url: String
-  pk: Int!
-  metadata: GenericScalar
-  events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
-  profile: Profile
-}
-
-type ActivityLogConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ActivityLogEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `ActivityLog` and its cursor."""
-type ActivityLogEdge {
-  """The item at the end of the edge"""
-  node: ActivityLog
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type Block implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  actor: Profile
-  target: Profile
-  user: User
-  pk: Int!
-}
-
-type BlockConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [BlockEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Block` and its cursor."""
-type BlockEdge {
-  """The item at the end of the edge"""
-  node: Block
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface BlocksInterface {
-  """The ID of the object"""
-  id: ID!
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockersCount: Int
-  blockingCount: Int
-  isBlockedByMe(profileId: ID): Boolean
-}
-
-input BlockToggleInput {
-  actorObjectId: ID!
-  targetObjectId: ID!
-  clientMutationId: String
-}
-
-type BlockTogglePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  block: BlockEdge
-  target: BlocksInterface
-  actor: BlocksInterface
-  blockDeletedId: ID
-  clientMutationId: String
-}
-
-type ChatRoom implements Node {
-  """The ID of the object"""
-  id: ID!
-  title: String
-  image(width: Int!, height: Int!): File
-  lastMessage: Message
-  lastMessageTime: DateTime
-  participantsCount: Int!
-  isGroup: Boolean!
-  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
-  pk: Int!
-  allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
-  unreadMessages(profileId: ID): UnreadMessageCount
-  isArchived(profileId: ID): Boolean
-}
-
-input ChatRoomArchiveInput {
-  roomId: ID!
-  profileId: ID!
-  archive: Boolean!
-  clientMutationId: String
-}
-
-type ChatRoomArchivePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  room: ChatRoom
-  clientMutationId: String
-}
-
-type ChatRoomConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ChatRoomEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input ChatRoomCreateInput {
-  profileId: ID!
-  participants: [ID]!
-  isGroup: Boolean = false
-  title: String
-  clientMutationId: String
-}
-
-type ChatRoomCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  room: ChatRoomEdge
-  profile: Profile
-  clientMutationId: String
-}
-
-input ChatRoomDeleteMessageInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type ChatRoomDeleteMessagePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedMessage: MessageEdge
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `ChatRoom` and its cursor."""
-type ChatRoomEdge {
-  """The item at the end of the edge"""
-  node: ChatRoom
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input ChatRoomEditMessageInput {
-  id: ID!
-  content: String!
-  clientMutationId: String
-}
-
-type ChatRoomEditMessagePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  message: MessageEdge
-  clientMutationId: String
-}
-
-type ChatRoomOnMessage {
-  message: MessageEdge
-}
-
-type ChatRoomOnMessagesCountUpdate {
-  profile: Profile
-}
-
-type ChatRoomOnRoomUpdate {
-  room: ChatRoomEdge
-  removedParticipants: [ChatRoomParticipant]
-  addedParticipants: [ChatRoomParticipant]
-}
-
-type ChatRoomParticipant implements Node {
-  """The ID of the object"""
-  id: ID!
-  profile: Profile
-  role: ChatRoomParticipantRoles
-  hasArchivedRoom: Boolean!
-  pk: Int!
-}
-
-type ChatRoomParticipantConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ChatRoomParticipantEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `ChatRoomParticipant` and its cursor."""
-type ChatRoomParticipantEdge {
-  """The item at the end of the edge"""
-  node: ChatRoomParticipant
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""An enumeration."""
-enum ChatRoomParticipantRoles {
-  """member"""
-  MEMBER
-
-  """admin"""
-  ADMIN
-}
-
-input ChatRoomReadMessagesInput {
-  roomId: ID!
-  profileId: ID!
-  messageIds: [ID]
-  clientMutationId: String
-}
-
-type ChatRoomReadMessagesPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  room: ChatRoom
-  profile: Profile
-  messages: [Message]
-  clientMutationId: String
-}
-
-input ChatRoomSendMessageInput {
-  roomId: ID!
-  profileId: ID!
-  content: String!
-  inReplyToId: ID
-  clientMutationId: String
-}
-
-type ChatRoomSendMessagePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  message: MessageEdge
-  clientMutationId: String
-}
-
-interface ChatRoomsInterface {
-  """The ID of the object"""
-  id: ID!
-  chatRooms(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-    profileId: String
-    unreadMessages: Boolean
-    archived: Boolean
-  ): ChatRoomConnection
-  unreadMessagesCount: Int
-}
-
-input ChatRoomUnreadInput {
-  roomId: ID!
-  profileId: ID!
-  clientMutationId: String
-}
-
-type ChatRoomUnreadPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  room: ChatRoom
-  profile: Profile
-  clientMutationId: String
-}
-
-input ChatRoomUpdateInput {
-  roomId: ID!
-  profileId: ID!
-  title: String
-  deleteImage: Boolean = false
-  addParticipants: [ID] = []
-  removeParticipants: [ID] = []
-  clientMutationId: String
-}
-
-type ChatRoomUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  room: ChatRoomEdge
-  removedParticipants: [ChatRoomParticipant]
-  addedParticipants: [ChatRoomParticipant]
-  clientMutationId: String
-}
-
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
-  created: DateTime!
-  modified: DateTime!
-  user: User
-  profile: Profile
-  body: String
-
-  """languaged used in the comment"""
-  language: String
-  isEdited: Boolean!
-  isPinned: Boolean!
-  inReplyTo: Comment
-  status: CommentStatus
-
-  """The ID of the object"""
-  id: ID!
-  commentsCount: CommentsCount!
-  comments(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection
-  isCommentsEnabled: Boolean!
-  reactionsCount: ReactionsCount
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
-  isReactionsEnabled: Boolean!
-  myReaction(profileId: ID): Reaction
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-  pk: Int!
-  target: CommentsInterface
-}
-
-type CommentConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [CommentEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input CommentCreateInput {
-  targetObjectId: ID!
-  inReplyToId: ID
-  profileId: ID
-  body: String!
-  clientMutationId: String
-}
-
-type CommentCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  comment: CommentEdge
-  clientMutationId: String
-}
-
-input CommentDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type CommentDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  target: CommentsInterface
-  inReplyTo: Comment
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Comment` and its cursor."""
-type CommentEdge {
-  """The item at the end of the edge"""
-  node: Comment
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input CommentPinInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type CommentPinPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  comment: Comment
-  clientMutationId: String
-}
-
-type CommentsCount {
-  total: Int
-  main: Int
-  replies: Int
-  pinned: Int
-  reported: Int
-}
-
-interface CommentsInterface {
-  """The ID of the object"""
-  id: ID!
-  commentsCount: CommentsCount!
-  comments(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection
-  isCommentsEnabled: Boolean!
-}
-
-"""An enumeration."""
-enum CommentStatus {
-  DELETED
-  PUBLISHED
-}
-
-input CommentUpdateInput {
-  id: ID!
-  body: String!
-  clientMutationId: String
-}
-
-type CommentUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  comment: Comment
-  clientMutationId: String
-}
-
-type ContentPost implements Node & ReactionsInterface {
-  created: DateTime!
-  modified: DateTime!
-  isReactionsEnabled: Boolean!
-  user: User!
-  profile: Profile
-  content: String!
-  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
-
-  """The ID of the object"""
-  id: ID!
-  reactionsCount: ReactionsCount
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
-  myReaction(profileId: ID): Reaction
-  pk: Int!
-}
-
-type ContentPostConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ContentPostEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input ContentPostCreateInput {
-  content: String!
-  isReactionsEnabled: Boolean!
-  clientMutationId: String
-}
-
-type ContentPostCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  contentPost: ContentPostEdge
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `ContentPost` and its cursor."""
-type ContentPostEdge {
-  """The item at the end of the edge"""
-  node: ContentPost
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type ContentPostImage implements Node {
-  image(width: Int!, height: Int!): File
-  post: ContentPost!
-
-  """The ID of the object"""
-  id: ID!
-  pk: Int!
-}
-
-type ContentPostImageConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ContentPostImageEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `ContentPostImage` and its cursor."""
-type ContentPostImageEdge {
-  """The item at the end of the edge"""
-  node: ContentPostImage
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""
-The `Date` scalar type represents a Date
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar Date
-
-"""
-The `DateTime` scalar type represents a DateTime
-value as specified by
-[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
-"""
-scalar DateTime
-
-"""The `Decimal` scalar type represents a python Decimal."""
-scalar Decimal
-
-input DeleteNodeInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type DeleteNodePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedID: ID!
-  clientMutationId: String
-}
-
-"""Debugging information for the current query."""
-type DjangoDebug {
-  """Executed SQL queries for this API query."""
-  sql: [DjangoDebugSQL]
-
-  """Raise exceptions for this API query."""
-  exceptions: [DjangoDebugException]
-}
-
-"""Represents a single exception raised."""
-type DjangoDebugException {
-  """The class of the exception"""
-  excType: String!
-
-  """The message of the exception"""
-  message: String!
-
-  """The stack trace"""
-  stack: String!
-}
-
-"""Represents a single database query made to a Django managed DB."""
-type DjangoDebugSQL {
-  """The type of database being used (e.g. postrgesql, mysql, sqlite)."""
-  vendor: String!
-
-  """The Django database alias (e.g. 'default')."""
-  alias: String!
-
-  """The actual SQL sent to this database."""
-  sql: String
-
-  """Duration of this database query in seconds."""
-  duration: Float!
-
-  """The raw SQL of this query, without params."""
-  rawSql: String!
-
-  """JSON encoded database query parameters."""
-  params: String!
-
-  """Start time of this database query."""
-  startTime: Float!
-
-  """Stop time of this database query."""
-  stopTime: Float!
-
-  """Whether this database query took more than 10 seconds."""
-  isSlow: Boolean!
-
-  """Whether this database query was a SELECT."""
-  isSelect: Boolean!
-
-  """Postgres transaction ID if available."""
-  transId: String
-
-  """Postgres transaction status if available."""
-  transStatus: String
-
-  """Postgres isolation level if available."""
-  isoLevel: String
-
-  """Postgres connection encoding if available."""
-  encoding: String
-}
-
-type ErrorType {
-  field: String!
-  messages: [String!]!
-}
-
-type File {
-  url: String!
-}
-
-type Follow implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User
-  actor: Profile!
-  targetIsFollowingBack: Boolean!
-  target: Profile!
-  pk: Int!
-}
-
-type FollowConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [FollowEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Follow` and its cursor."""
-type FollowEdge {
-  """The item at the end of the edge"""
-  node: Follow
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface FollowsInterface {
-  """The ID of the object"""
-  id: ID!
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  followersCount: Int
-  followingCount: Int
-  isFollowedByMe(profileId: ID): Boolean
-}
-
-input FollowToggleInput {
-  actorObjectId: ID!
-  targetObjectId: ID!
-  clientMutationId: String
-}
-
-type FollowTogglePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  follow: FollowEdge
-  target: FollowsInterface
-  actor: FollowsInterface
-  followDeletedId: ID
-  clientMutationId: String
-}
-
-"""
-The `GenericScalar` scalar type represents a generic
-GraphQL scalar value that could be:
-String, Boolean, Int, Float, List or Object.
-"""
-scalar GenericScalar
-
-"""
-Allows use of a JSON String for input / output from the GraphQL schema.
-
-Use of this type is *not recommended* as you lose the benefits of having a defined, static
-schema (one of the key benefits of GraphQL).
-"""
-scalar JSONString
-
-"""Languages available"""
-enum Languages {
-  en
-  es
-  pt
-}
-
-type Message implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  content(profileId: ID): String
-  user: User
-  profile: Profile
-  messageType: MessageType
-  verb: Verbs
-  room: ChatRoom
-  inReplyTo: Message
-  deleted: Boolean!
-  extraData: JSONString
-  pk: Int!
-  actionObject: Node
-  isRead(profileId: ID): Boolean
-}
-
-type MessageConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [MessageEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Message` and its cursor."""
-type MessageEdge {
-  """The item at the end of the edge"""
-  node: Message
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-"""An enumeration."""
-enum MessageType {
-  USER_MESSAGE
-  SYSTEM_GENERATED
-}
-
-type Metadata {
-  created: DateTime!
-  modified: DateTime!
-  targetObjectId: Int
-  language: Languages
-  metaTitle: String
-  metaDescription: String
-  metaRobots: String
-  metaOgType: String
-  metaOgImage(width: Int!, height: Int!): File
-  pk: Int!
-}
-
-type Mutation {
-  rateCreate(input: RateCreateInput!): RateCreatePayload
-  organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
-  chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
-  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
-  chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
-  chatRoomEditMessage(input: ChatRoomEditMessageInput!): ChatRoomEditMessagePayload
-  chatRoomDeleteMessage(input: ChatRoomDeleteMessageInput!): ChatRoomDeleteMessagePayload
-  chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
-  chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
-  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
-  reportCreate(input: ReportCreateInput!): ReportCreatePayload
-  followToggle(input: FollowToggleInput!): FollowTogglePayload
-  blockToggle(input: BlockToggleInput!): BlockTogglePayload
-  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
-  notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
-  notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
-  notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
-  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
-  commentCreate(input: CommentCreateInput!): CommentCreatePayload
-  commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
-  commentPin(input: CommentPinInput!): CommentPinPayload
-  commentDelete(input: CommentDeleteInput!): CommentDeletePayload
-  pageCreate(input: PageCreateInput!): PageCreatePayload
-  pageEdit(input: PageEditInput!): PageEditPayload
-  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
-  profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
-  profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
-  profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
-  profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
-  profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
-}
-
-"""An object with an ID"""
-interface Node {
-  """The ID of the object"""
-  id: ID!
-}
-
-interface NodeActivityLogInterface {
-  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-}
-
-type NodeLogEvent implements Node {
-  """The user associated with the event."""
-  user: User
-
-  """The ID of the object"""
-  id: ID!
-  pk: Int!
-
-  """The object of the event."""
-  obj: Node
-
-  """The event label."""
-  label: String
-
-  """The raw data of the event."""
-  data: GenericScalar
-
-  """The diff between the previous event of the same label."""
-  diff: GenericScalar
-
-  """When the event was created."""
-  createdAt: DateTime
-}
-
-type NodeLogEventConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [NodeLogEventEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `NodeLogEvent` and its cursor."""
-type NodeLogEventEdge {
-  """The item at the end of the edge"""
-  node: NodeLogEvent
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type Notification implements Node {
-  """The ID of the object"""
-  id: ID!
-  level: NotificationsNotificationLevelChoices!
-  recipient: User!
-  unread: Boolean!
-  actorObjectId: String!
-  verb: String!
-  description: String
-  targetObjectId: String
-  actionObjectObjectId: String
-  timestamp: DateTime!
-  public: Boolean!
-  deleted: Boolean!
-  emailed: Boolean!
-  data: GenericScalar
-  pk: Int!
-  actor: Node
-  target: Node
-  actionObject: Node
-}
-
-"""An enumeration."""
-enum NotificationChannelTypes {
-  """All"""
-  ALL
-
-  """Email"""
-  EMAIL
-
-  """Push"""
-  PUSH
-
-  """In-App"""
-  IN_APP
-}
-
-type NotificationConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [NotificationEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Notification` and its cursor."""
-type NotificationEdge {
-  """The item at the end of the edge"""
-  node: Notification
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type NotificationSetting implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User!
-  channel: NotificationChannelTypes
-  verb: String!
-  isActive: Boolean!
-  pk: Int!
-}
-
-type NotificationSettingConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [NotificationSettingEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `NotificationSetting` and its cursor."""
-type NotificationSettingEdge {
-  """The item at the end of the edge"""
-  node: NotificationSetting
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input NotificationSettingToggleInput {
-  verb: String!
-  channel: NotificationChannelTypes!
-  clientMutationId: String
-}
-
-type NotificationSettingTogglePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  notificationSetting: NotificationSetting
-  clientMutationId: String
-}
-
-interface NotificationsInterface {
-  """The ID of the object"""
-  id: ID!
-  notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
-  notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
-  isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
-}
-
-input NotificationsMarkAllAsReadInput {
-  """Mark as read or unread"""
-  read: Boolean!
-  clientMutationId: String
-}
-
-type NotificationsMarkAllAsReadPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  recipient: NotificationsInterface
-  clientMutationId: String
-}
-
-input NotificationsMarkAsReadInput {
-  """Mark as read or unread"""
-  read: Boolean!
-  notificationIds: [ID!]
-  clientMutationId: String
-}
-
-type NotificationsMarkAsReadPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  recipient: NotificationsInterface
-  notifications: [Notification]
-  clientMutationId: String
-}
-
-"""An enumeration."""
-enum NotificationsNotificationLevelChoices {
-  """success"""
-  SUCCESS
-
-  """info"""
-  INFO
-
-  """warning"""
-  WARNING
-
-  """error"""
-  ERROR
-}
-
-type OnCommentChange {
-  createdComment: CommentEdge
-  updatedComment: Comment
-  deletedCommentId: ID
-}
-
-type OnNotificationChange {
-  createdNotification: NotificationEdge
-  updatedNotification: Notification
-  deletedNotificationId: ID
-}
-
-type Organization implements Node & PermissionsInterface {
-  profile: Profile
-
-  """The ID of the object"""
-  id: ID!
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  pk: Int!
-}
-
-input OrganizationCreateInput {
-  name: String!
-  urlPath: String
-  clientMutationId: String
-}
-
-type OrganizationCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  organization: OrganizationEdge
-  profile: ProfileEdge
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Organization` and its cursor."""
-type OrganizationEdge {
-  """The item at the end of the edge"""
-  node: Organization
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type Page implements Node & PageInterface & PermissionsInterface & CommentsInterface {
-  created: DateTime!
-  modified: DateTime!
-  user: User
-  status: PageStatus
-
-  """The ID of the object"""
-  id: ID!
-  urlPath: URLPath
-  urlPaths: [URLPath]
-  metadata: Metadata
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  commentsCount: CommentsCount!
-  comments(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection
-  isCommentsEnabled: Boolean!
-  pk: Int!
-  title: String
-  body: String
-}
-
-type PageConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [PageEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input PageCreateInput {
-  user: String
-  title: String
-  body: String
-  urlPath: String
-  clientMutationId: String
-}
-
-type PageCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  page: PageEdge
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Page` and its cursor."""
-type PageEdge {
-  """The item at the end of the edge"""
-  node: Page
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input PageEditInput {
-  id: ID!
-  user: String
-  title: String
-  body: String
-  urlPath: String
-  clientMutationId: String
-}
-
-type PageEditPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  page: Page
-  clientMutationId: String
-}
-
-"""
-The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
-"""
-type PageInfo {
-  """When paginating forwards, are there more items?"""
-  hasNextPage: Boolean!
-
-  """When paginating backwards, are there more items?"""
-  hasPreviousPage: Boolean!
-
-  """When paginating backwards, the cursor to continue."""
-  startCursor: String
-
-  """When paginating forwards, the cursor to continue."""
-  endCursor: String
-}
-
-interface PageInterface {
-  """The ID of the object"""
-  id: ID!
-  urlPath: URLPath
-  urlPaths: [URLPath]
-  metadata: Metadata
-}
-
-"""An enumeration."""
-enum PageStatus {
-  """Draft"""
-  DRAFT
-
-  """Published"""
-  PUBLISHED
-}
-
-interface PermissionsInterface {
-  """The ID of the object"""
-  id: ID!
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-}
-
-type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  blockersCount: Int
-  blockingCount: Int
-  followersCount: Int
-  followingCount: Int
-  reportsCount: GenericScalar
-  commentsCount: JSONString!
-  isCommentsEnabled: Boolean!
-  name: String
-  image(width: Int!, height: Int!): File
-  bannerImage(width: Int!, height: Int!): File
-  biography: String
-  targetObjectId: Int
-  status: ProfilesProfileStatusChoices!
-  owner: User!
-  comments(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection!
-  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
-  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
-  user: User
-  activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
-  members(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    role: ProfileRoles
-
-    """Ordering"""
-    orderBy: String
-    q: String
-  ): ProfileUserRoleConnection
-  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, profile_TargetContentType: ID): ChatRoomParticipantConnection!
-  unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
-  linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  contentPosts(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-
-    """Ordering"""
-    orderBy: String
-  ): ContentPostConnection!
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  organization: Organization
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  urlPath: URLPath
-  urlPaths: [URLPath]
-  metadata: Metadata
-  isFollowedByMe(profileId: ID): Boolean
-  isBlockedByMe(profileId: ID): Boolean
-  chatRooms(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-    profileId: String
-    unreadMessages: Boolean
-    archived: Boolean
-  ): ChatRoomConnection
-  unreadMessagesCount: Int
-  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
-  pk: Int!
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-  target: ProfileInterface
-}
-
-type ProfileConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ProfileEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input ProfileCreateInput {
-  owner: String
-  name: String!
-  image: String
-  bannerImage: String
-  biography: String
-  urlPath: String
-  target: String
-  targetContentType: String!
-  targetObjectId: Int!
-  clientMutationId: String
-}
-
-type ProfileCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profile: ProfileEdge
-  clientMutationId: String
-}
-
-input ProfileDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type ProfileDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Profile` and its cursor."""
-type ProfileEdge {
-  """The item at the end of the edge"""
-  node: Profile
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface ProfileInterface {
-  """The ID of the object"""
-  id: ID!
-  profile: Profile
-}
-
-input ProfileRemoveMemberInput {
-  profileId: ID!
-  userId: ID!
-  clientMutationId: String
-}
-
-type ProfileRemoveMemberPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-"""An enumeration."""
-enum ProfileRoles {
-  """admin"""
-  ADMIN
-
-  """manager"""
-  MANAGER
-}
-
-"""An enumeration."""
-enum ProfileRoleStatus {
-  """active"""
-  ACTIVE
-
-  """pending"""
-  PENDING
-
-  """inactive"""
-  INACTIVE
-}
-
-interface ProfilesInterface {
-  """The ID of the object"""
-  id: ID!
-  profiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
-}
-
-"""An enumeration."""
-enum ProfilesProfileStatusChoices {
-  """public"""
-  A_1
-
-  """private"""
-  A_2
-}
-
-input ProfileUpdateInput {
-  id: ID!
-  owner: String
-  name: String
-  image: String
-  bannerImage: String
-  biography: String
-  urlPath: String
-  phoneNumber: String
-  clientMutationId: String
-}
-
-type ProfileUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profile: Profile
-  clientMutationId: String
-}
-
-type ProfileUserRole implements Node {
-  """The ID of the object"""
-  id: ID!
-  user: User!
-  role: ProfileRoles
-  status: ProfileRoleStatus
-  pk: Int!
-}
-
-type ProfileUserRoleConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ProfileUserRoleEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `ProfileUserRole` and its cursor."""
-type ProfileUserRoleEdge {
-  """The item at the end of the edge"""
-  node: ProfileUserRole
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
 type Query {
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   organization(
     """The ID of the object"""
     id: ID!
   ): Organization
+  myFiles(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
+  file(
+    """The ID of the object"""
+    id: ID!
+  ): File
   chatRoom(
     """The ID of the object"""
     id: ID!
@@ -1581,281 +99,70 @@ type Query {
   _debug: DjangoDebug
 }
 
-type Rate implements Node {
+type ActivityLogConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ActivityLogEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""
+The Relay compliant `PageInfo` type, containing data necessary to paginate this connection.
+"""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""A Relay edge containing a `ActivityLog` and its cursor."""
+type ActivityLogEdge {
+  """The item at the end of the edge"""
+  node: ActivityLog
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ActivityLog implements Node {
   """The ID of the object"""
   id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  user: User
+  ipAddress: String
+  verb: String
+  visibility: VisibilityTypes
+  url: String
+  pk: Int!
+  metadata: GenericScalar
+  events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
   profile: Profile
-  value: Int!
-  pk: Int!
-  target: Node
 }
 
-type RateConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [RateEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input RateCreateInput {
-  targetObjectId: ID!
-  profileId: ID
-  value: Int!
-  clientMutationId: String
-}
-
-type RateCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  rate: RateEdge
-  target: RatingsInterface
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Rate` and its cursor."""
-type RateEdge {
-  """The item at the end of the edge"""
-  node: Rate
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface RatingsInterface {
+"""An object with an ID"""
+interface Node {
   """The ID of the object"""
   id: ID!
-  ratingsCount: Int
-  ratingsSum: Int
-  ratingsAverage: Float
-  ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection
-  isRatingsEnabled: Boolean!
-  myRating(profileId: ID): Rate
 }
 
-type Reaction implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User!
-  reactionType: ReactionTypes
-  pk: Int!
-  target: Node
-}
-
-type ReactionConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ReactionEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Reaction` and its cursor."""
-type ReactionEdge {
-  """The item at the end of the edge"""
-  node: Reaction
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type ReactionsCount {
-  LIKE: Int
-  DISLIKE: Int
-  total: Int
-}
-
-interface ReactionsInterface {
-  """The ID of the object"""
-  id: ID!
-  reactionsCount: ReactionsCount
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
-  isReactionsEnabled: Boolean!
-  myReaction(profileId: ID): Reaction
-}
-
-input ReactionToggleInput {
-  targetObjectId: ID!
-  profileObjectId: ID
-  reactionType: ReactionTypes!
-  clientMutationId: String
-}
-
-type ReactionTogglePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  reaction: ReactionEdge
-  target: ReactionsInterface
-  reactionDeletedId: ID
-  clientMutationId: String
-}
-
-"""An enumeration."""
-enum ReactionTypes {
-  """like"""
-  LIKE
-
-  """dislike"""
-  DISLIKE
-}
-
-type Report implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User!
-  reportType: ReportType
-  reportSubject: String
-  pk: Int!
-  target: Node
-}
-
-type ReportConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ReportEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input ReportCreateInput {
-  targetObjectId: ID!
-  reportTypeId: ID!
-  reportSubject: String
-  clientMutationId: String
-}
-
-type ReportCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  report: ReportEdge
-  target: ReportsInterface
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Report` and its cursor."""
-type ReportEdge {
-  """The item at the end of the edge"""
-  node: Report
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface ReportsInterface {
-  """The ID of the object"""
-  id: ID!
-  reportsCount: GenericScalar
-  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
-}
-
-type ReportType implements Node {
-  """The ID of the object"""
-  id: ID!
-  key: String!
-  label: String!
-  parentType: ReportType
-  subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
-  pk: Int!
-}
-
-type ReportTypeConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ReportTypeEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `ReportType` and its cursor."""
-type ReportTypeEdge {
-  """The item at the end of the edge"""
-  node: ReportType
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input RoleUpdateInput {
-  profileId: ID!
-  userId: ID!
-  roleType: ProfileRoles = null
-  clientMutationId: String
-}
-
-type RoleUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileUserRole: ProfileUserRole
-  clientMutationId: String
-}
-
-type Subscription {
-  chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage
-  chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
-  chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
-  onNotificationChange: OnNotificationChange
-  onCommentChange(targetObjectId: ID): OnCommentChange
-}
-
-type UnreadMessageCount implements Node {
-  markedUnread: Boolean!
-  count: Int!
-
-  """The ID of the object"""
-  id: ID!
-  pk: Int!
-}
-
-type UnreadMessageCountConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [UnreadMessageCountEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `UnreadMessageCount` and its cursor."""
-type UnreadMessageCountEdge {
-  """The item at the end of the edge"""
-  node: UnreadMessageCount
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type URLPath implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  path: String!
-  language: Languages
-  isActive: Boolean!
-  pk: Int!
-  target: PageInterface
-}
+"""
+The `DateTime` scalar type represents a DateTime
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar DateTime
 
 type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
   lastLogin: DateTime
@@ -1925,7 +232,1223 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
-  avatar(width: Int!, height: Int!): File
+  avatar(width: Int!, height: Int!): Thumbnail
+}
+
+interface PermissionsInterface {
+  """The ID of the object"""
+  id: ID!
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+}
+
+interface NotificationsInterface {
+  """The ID of the object"""
+  id: ID!
+  notificationsUnreadCount: Int
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
+  isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+}
+
+type NotificationConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [NotificationEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Notification` and its cursor."""
+type NotificationEdge {
+  """The item at the end of the edge"""
+  node: Notification
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Notification implements Node {
+  """The ID of the object"""
+  id: ID!
+  level: NotificationsNotificationLevelChoices!
+  recipient: User!
+  unread: Boolean!
+  actorObjectId: String!
+  verb: String!
+  description: String
+  targetObjectId: String
+  actionObjectObjectId: String
+  timestamp: DateTime!
+  public: Boolean!
+  deleted: Boolean!
+  emailed: Boolean!
+  data: GenericScalar
+  pk: Int!
+  actor: Node
+  target: Node
+  actionObject: Node
+}
+
+"""An enumeration."""
+enum NotificationsNotificationLevelChoices {
+  """success"""
+  SUCCESS
+
+  """info"""
+  INFO
+
+  """warning"""
+  WARNING
+
+  """error"""
+  ERROR
+}
+
+"""
+The `GenericScalar` scalar type represents a generic
+GraphQL scalar value that could be:
+String, Boolean, Int, Float, List or Object.
+"""
+scalar GenericScalar
+
+type NotificationSettingConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [NotificationSettingEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `NotificationSetting` and its cursor."""
+type NotificationSettingEdge {
+  """The item at the end of the edge"""
+  node: NotificationSetting
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type NotificationSetting implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User!
+  channel: NotificationChannelTypes
+  verb: String!
+  isActive: Boolean!
+  pk: Int!
+}
+
+"""An enumeration."""
+enum NotificationChannelTypes {
+  """All"""
+  ALL
+
+  """Email"""
+  EMAIL
+
+  """Push"""
+  PUSH
+
+  """In-App"""
+  IN_APP
+}
+
+interface PageInterface {
+  """The ID of the object"""
+  id: ID!
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
+}
+
+type URLPath implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  path: String!
+  language: Languages
+  isActive: Boolean!
+  pk: Int!
+  target: PageInterface
+}
+
+"""Languages available"""
+enum Languages {
+  en
+  es
+  pt
+}
+
+type Metadata {
+  created: DateTime!
+  modified: DateTime!
+  targetObjectId: Int
+  language: Languages
+  metaTitle: String
+  metaDescription: String
+  metaRobots: String
+  metaOgType: String
+  metaOgImage(width: Int!, height: Int!): Thumbnail
+  pk: Int!
+}
+
+type Thumbnail implements FileInterface {
+  url: String
+}
+
+interface FileInterface {
+  url: String
+}
+
+interface RatingsInterface {
+  """The ID of the object"""
+  id: ID!
+  ratingsCount: Int
+  ratingsSum: Int
+  ratingsAverage: Float
+  ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection
+  isRatingsEnabled: Boolean!
+  myRating(profileId: ID): Rate
+}
+
+type RateConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [RateEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Rate` and its cursor."""
+type RateEdge {
+  """The item at the end of the edge"""
+  node: Rate
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Rate implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User!
+  profile: Profile
+  value: Int!
+  pk: Int!
+  target: Node
+}
+
+type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  blockersCount: Int
+  blockingCount: Int
+  followersCount: Int
+  followingCount: Int
+  reportsCount: GenericScalar
+  commentsCount: JSONString!
+  isCommentsEnabled: Boolean!
+  name: String
+  image(width: Int!, height: Int!): Thumbnail
+  bannerImage(width: Int!, height: Int!): Thumbnail
+  biography: String
+  targetObjectId: Int
+  status: ProfilesProfileStatusChoices!
+  owner: User!
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
+  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
+  user: User
+  activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
+  members(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    role: ProfileRoles
+
+    """Ordering"""
+    orderBy: String
+    q: String
+  ): ProfileUserRoleConnection
+  profileCreatedRooms(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+    unreadMessages: Boolean
+    archived: Boolean
+  ): ChatRoomConnection!
+  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection!
+  unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
+  linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  files(first: Int, last: Int, offset: Int, after: String, before: String, noParent: Boolean): FileConnection!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  organization: Organization
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
+  isFollowedByMe(profileId: ID): Boolean
+  isBlockedByMe(profileId: ID): Boolean
+  chatRooms(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+    unreadMessages: Boolean
+    archived: Boolean
+  ): ChatRoomConnection
+  unreadMessagesCount: Int
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReports: Report
+  pk: Int!
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  target: ProfileInterface
+}
+
+interface FollowsInterface {
+  """The ID of the object"""
+  id: ID!
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followersCount: Int
+  followingCount: Int
+  isFollowedByMe(profileId: ID): Boolean
+}
+
+type FollowConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FollowEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Follow` and its cursor."""
+type FollowEdge {
+  """The item at the end of the edge"""
+  node: Follow
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Follow implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User
+  actor: Profile!
+  targetIsFollowingBack: Boolean!
+  target: Profile!
+  pk: Int!
+}
+
+interface BlocksInterface {
+  """The ID of the object"""
+  id: ID!
+  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockersCount: Int
+  blockingCount: Int
+  isBlockedByMe(profileId: ID): Boolean
+}
+
+type BlockConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [BlockEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Block` and its cursor."""
+type BlockEdge {
+  """The item at the end of the edge"""
+  node: Block
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Block implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  actor: Profile
+  target: Profile
+  user: User
+  pk: Int!
+}
+
+interface ChatRoomsInterface {
+  """The ID of the object"""
+  id: ID!
+  chatRooms(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+    unreadMessages: Boolean
+    archived: Boolean
+  ): ChatRoomConnection
+  unreadMessagesCount: Int
+}
+
+type ChatRoomConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ChatRoomEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ChatRoom` and its cursor."""
+type ChatRoomEdge {
+  """The item at the end of the edge"""
+  node: ChatRoom
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ChatRoom implements Node {
+  """The ID of the object"""
+  id: ID!
+  title: String
+  image(width: Int!, height: Int!): Thumbnail
+  lastMessage: Message
+  lastMessageTime: DateTime
+  participantsCount: Int!
+  isGroup: Boolean!
+  participants(offset: Int, before: String, after: String, first: Int, last: Int, q: String): ChatRoomParticipantConnection
+  pk: Int!
+  allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
+  unreadMessages(profileId: ID): UnreadMessageCount
+  isArchived(profileId: ID): Boolean
+}
+
+type Message implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  content(profileId: ID): String
+  user: User
+  profile: Profile
+  messageType: MessageType
+  verb: Verbs
+  room: ChatRoom
+  inReplyTo: Message
+  deleted: Boolean!
+  extraData: JSONString
+  pk: Int!
+  actionObject: Node
+  isRead(profileId: ID): Boolean
+}
+
+"""An enumeration."""
+enum MessageType {
+  USER_MESSAGE
+  SYSTEM_GENERATED
+}
+
+"""An enumeration."""
+enum Verbs {
+  SENT_MESSAGE
+}
+
+"""
+Allows use of a JSON String for input / output from the GraphQL schema.
+
+Use of this type is *not recommended* as you lose the benefits of having a defined, static
+schema (one of the key benefits of GraphQL).
+"""
+scalar JSONString
+
+type ChatRoomParticipantConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ChatRoomParticipantEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ChatRoomParticipant` and its cursor."""
+type ChatRoomParticipantEdge {
+  """The item at the end of the edge"""
+  node: ChatRoomParticipant
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ChatRoomParticipant implements Node {
+  """The ID of the object"""
+  id: ID!
+  profile: Profile
+  role: ChatRoomParticipantRoles
+  hasArchivedRoom: Boolean!
+  pk: Int!
+}
+
+"""An enumeration."""
+enum ChatRoomParticipantRoles {
+  """member"""
+  MEMBER
+
+  """admin"""
+  ADMIN
+}
+
+type MessageConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MessageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Message` and its cursor."""
+type MessageEdge {
+  """The item at the end of the edge"""
+  node: Message
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type UnreadMessageCount implements Node {
+  markedUnread: Boolean!
+  count: Int!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
+interface ReportsInterface {
+  """The ID of the object"""
+  id: ID!
+  reportsCount: GenericScalar
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReports: Report
+}
+
+type ReportConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ReportEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Report` and its cursor."""
+type ReportEdge {
+  """The item at the end of the edge"""
+  node: Report
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Report implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User!
+  reportType: ReportType
+  reportSubject: String
+  pk: Int!
+  target: Node
+}
+
+type ReportType implements Node {
+  """The ID of the object"""
+  id: ID!
+  key: String!
+  label: String!
+  parentType: ReportType
+  subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
+  pk: Int!
+}
+
+type ReportTypeConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ReportTypeEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ReportType` and its cursor."""
+type ReportTypeEdge {
+  """The item at the end of the edge"""
+  node: ReportType
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""An enumeration."""
+enum ProfilesProfileStatusChoices {
+  """public"""
+  A_1
+
+  """private"""
+  A_2
+}
+
+type CommentConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CommentEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Comment` and its cursor."""
+type CommentEdge {
+  """The item at the end of the edge"""
+  node: Comment
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface & FilesInterface {
+  created: DateTime!
+  modified: DateTime!
+  user: User
+  profile: Profile
+  body: String
+
+  """languaged used in the comment"""
+  language: String
+  isEdited: Boolean!
+  isPinned: Boolean!
+  inReplyTo: Comment
+  status: CommentStatus
+
+  """The ID of the object"""
+  id: ID!
+  commentsCount: CommentsCount!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  isReactionsEnabled: Boolean!
+  myReaction(profileId: ID): Reaction
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  filesCount: GenericScalar
+  isFilesEnabled: Boolean
+  files(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
+  pk: Int!
+  target: CommentsInterface
+}
+
+interface CommentsInterface {
+  """The ID of the object"""
+  id: ID!
+  commentsCount: CommentsCount!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+}
+
+type CommentsCount {
+  total: Int
+  main: Int
+  replies: Int
+  pinned: Int
+  reported: Int
+}
+
+interface ReactionsInterface {
+  """The ID of the object"""
+  id: ID!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  isReactionsEnabled: Boolean!
+  myReaction(profileId: ID): Reaction
+}
+
+type ReactionsCount {
+  LIKE: Int
+  DISLIKE: Int
+  total: Int
+}
+
+type ReactionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ReactionEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Reaction` and its cursor."""
+type ReactionEdge {
+  """The item at the end of the edge"""
+  node: Reaction
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Reaction implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User!
+  reactionType: ReactionTypes
+  pk: Int!
+  target: Node
+}
+
+"""An enumeration."""
+enum ReactionTypes {
+  """like"""
+  LIKE
+
+  """dislike"""
+  DISLIKE
+}
+
+interface NodeActivityLogInterface {
+  nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+}
+
+"""An enumeration."""
+enum VisibilityTypes {
+  """public"""
+  PUBLIC
+
+  """private"""
+  PRIVATE
+
+  """internal"""
+  INTERNAL
+}
+
+"""
+The `Date` scalar type represents a Date
+value as specified by
+[iso8601](https://en.wikipedia.org/wiki/ISO_8601).
+"""
+scalar Date
+
+"""The `Decimal` scalar type represents a python Decimal."""
+scalar Decimal
+
+interface FilesInterface {
+  filesCount: GenericScalar
+  isFilesEnabled: Boolean
+  files(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
+}
+
+type FileConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FileEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `File` and its cursor."""
+type FileEdge {
+  """The item at the end of the edge"""
+  node: File
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type File implements Node & PermissionsInterface & FileInterface & CommentsInterface & ReactionsInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  reportsCount: JSONString!
+  reactionsCount: ReactionsCount
+  isReactionsEnabled: Boolean!
+  commentsCount: CommentsCount!
+  isCommentsEnabled: Boolean!
+  parentObjectId: Int
+  fileContentType: String
+  fileName: String
+
+  """File size in bytes"""
+  fileSize: Int
+  file: String!
+  name: String
+  description: String
+  createdBy: User
+  profile: Profile
+
+  """Status of the file upload"""
+  uploadStatus: FilesFileUploadStatusChoices!
+
+  """S3 multipart upload ID for in-progress uploads"""
+  uploadId: String
+
+  """Total number of parts for multipart upload"""
+  totalParts: Int
+
+  """Tracking uploaded parts with ETags"""
+  uploadedParts: JSONString
+
+  """Expiration time for pending uploads"""
+  uploadExpiresAt: DateTime
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  url: String
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  myReaction(profileId: ID): Reaction
+  pk: Int!
+  parent: Node
+}
+
+"""An enumeration."""
+enum FilesFileUploadStatusChoices {
+  """Pending Upload"""
+  PENDING
+
+  """Upload in Progress"""
+  UPLOADING
+
+  """Upload Completed"""
+  COMPLETED
+
+  """Upload Failed"""
+  FAILED
+
+  """Upload Aborted"""
+  ABORTED
+}
+
+"""An enumeration."""
+enum CommentStatus {
+  DELETED
+  PUBLISHED
+}
+
+type ProfileUserRoleConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ProfileUserRoleEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ProfileUserRole` and its cursor."""
+type ProfileUserRoleEdge {
+  """The item at the end of the edge"""
+  node: ProfileUserRole
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ProfileUserRole implements Node {
+  """The ID of the object"""
+  id: ID!
+  user: User!
+  role: ProfileRoles
+  status: ProfileRoleStatus
+  pk: Int!
+}
+
+"""An enumeration."""
+enum ProfileRoles {
+  """admin"""
+  ADMIN
+
+  """manager"""
+  MANAGER
+}
+
+"""An enumeration."""
+enum ProfileRoleStatus {
+  """active"""
+  ACTIVE
+
+  """pending"""
+  PENDING
+
+  """inactive"""
+  INACTIVE
+}
+
+type UnreadMessageCountConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [UnreadMessageCountEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `UnreadMessageCount` and its cursor."""
+type UnreadMessageCountEdge {
+  """The item at the end of the edge"""
+  node: UnreadMessageCount
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentPostConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentPostEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ContentPost` and its cursor."""
+type ContentPostEdge {
+  """The item at the end of the edge"""
+  node: ContentPost
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentPost implements Node & ReactionsInterface {
+  created: DateTime!
+  modified: DateTime!
+  isReactionsEnabled: Boolean!
+  user: User!
+  profile: Profile
+  content: String!
+  images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
+
+  """The ID of the object"""
+  id: ID!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  myReaction(profileId: ID): Reaction
+  pk: Int!
+}
+
+type ContentPostImageConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ContentPostImageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `ContentPostImage` and its cursor."""
+type ContentPostImageEdge {
+  """The item at the end of the edge"""
+  node: ContentPostImage
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type ContentPostImage implements Node {
+  image(width: Int!, height: Int!): Thumbnail
+  post: ContentPost!
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+}
+
+type Organization implements Node & PermissionsInterface {
+  profile: Profile
+
+  """The ID of the object"""
+  id: ID!
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  pk: Int!
+}
+
+interface ProfileInterface {
+  """The ID of the object"""
+  id: ID!
+  profile: Profile
+}
+
+interface ProfilesInterface {
+  """The ID of the object"""
+  id: ID!
+  profiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+}
+
+type ProfileConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ProfileEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Profile` and its cursor."""
+type ProfileEdge {
+  """The item at the end of the edge"""
+  node: Profile
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type PageConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [PageEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Page` and its cursor."""
+type PageEdge {
+  """The item at the end of the edge"""
+  node: Page
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Page implements Node & PageInterface & PermissionsInterface & CommentsInterface {
+  created: DateTime!
+  modified: DateTime!
+  user: User
+  status: PageStatus
+
+  """The ID of the object"""
+  id: ID!
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  commentsCount: CommentsCount!
+  comments(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+  pk: Int!
+  title: String
+  body: String
+}
+
+"""An enumeration."""
+enum PageStatus {
+  """Draft"""
+  DRAFT
+
+  """Published"""
+  PUBLISHED
+}
+
+type NodeLogEventConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [NodeLogEventEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `NodeLogEvent` and its cursor."""
+type NodeLogEventEdge {
+  """The item at the end of the edge"""
+  node: NodeLogEvent
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type NodeLogEvent implements Node {
+  """The user associated with the event."""
+  user: User
+
+  """The ID of the object"""
+  id: ID!
+  pk: Int!
+
+  """The object of the event."""
+  obj: Node
+
+  """The event label."""
+  label: String
+
+  """The raw data of the event."""
+  data: GenericScalar
+
+  """The diff between the previous event of the same label."""
+  diff: GenericScalar
+
+  """When the event was created."""
+  createdAt: DateTime
 }
 
 type UserConnection {
@@ -1947,20 +1470,686 @@ type UserEdge {
   cursor: String!
 }
 
-"""An enumeration."""
-enum Verbs {
-  SENT_MESSAGE
+"""Debugging information for the current query."""
+type DjangoDebug {
+  """Executed SQL queries for this API query."""
+  sql: [DjangoDebugSQL]
+
+  """Raise exceptions for this API query."""
+  exceptions: [DjangoDebugException]
 }
 
-"""An enumeration."""
-enum VisibilityTypes {
-  """public"""
-  PUBLIC
+"""Represents a single database query made to a Django managed DB."""
+type DjangoDebugSQL {
+  """The type of database being used (e.g. postrgesql, mysql, sqlite)."""
+  vendor: String!
 
-  """private"""
-  PRIVATE
+  """The Django database alias (e.g. 'default')."""
+  alias: String!
 
-  """internal"""
-  INTERNAL
+  """The actual SQL sent to this database."""
+  sql: String
+
+  """Duration of this database query in seconds."""
+  duration: Float!
+
+  """The raw SQL of this query, without params."""
+  rawSql: String!
+
+  """JSON encoded database query parameters."""
+  params: String!
+
+  """Start time of this database query."""
+  startTime: Float!
+
+  """Stop time of this database query."""
+  stopTime: Float!
+
+  """Whether this database query took more than 10 seconds."""
+  isSlow: Boolean!
+
+  """Whether this database query was a SELECT."""
+  isSelect: Boolean!
+
+  """Postgres transaction ID if available."""
+  transId: String
+
+  """Postgres transaction status if available."""
+  transStatus: String
+
+  """Postgres isolation level if available."""
+  isoLevel: String
+
+  """Postgres connection encoding if available."""
+  encoding: String
 }
 
+"""Represents a single exception raised."""
+type DjangoDebugException {
+  """The class of the exception"""
+  excType: String!
+
+  """The message of the exception"""
+  message: String!
+
+  """The stack trace"""
+  stack: String!
+}
+
+type Mutation {
+  rateCreate(input: RateCreateInput!): RateCreatePayload
+  organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
+
+  """
+  Attach one or more files to a target object.
+  
+  Usage:
+      mutation {
+          fileAttachToTarget(input: {
+              fileRelayIds: ["RmlsZU9iamVjdFR5cGU6MQ==", "RmlsZU9iamVjdFR5cGU6Mg=="]
+              targetObjectId: "Q29tbWVudE9iamVjdFR5cGU6MQ=="
+          }) {
+              attachedFiles {
+                  node {
+                      id
+                      fileName
+                  }
+              }
+              target {
+                  ... on CommentsInterface {
+                      filesCount
+                      isFilesEnabled
+                  }
+              }
+          }
+      }
+  """
+  fileAttachToTarget(input: FileAttachToTargetInput!): FileAttachToTargetPayload
+  chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
+  chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
+  chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
+  chatRoomEditMessage(input: ChatRoomEditMessageInput!): ChatRoomEditMessagePayload
+  chatRoomDeleteMessage(input: ChatRoomDeleteMessageInput!): ChatRoomDeleteMessagePayload
+  chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
+  chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
+  chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
+  reportCreate(input: ReportCreateInput!): ReportCreatePayload
+  followToggle(input: FollowToggleInput!): FollowTogglePayload
+  blockToggle(input: BlockToggleInput!): BlockTogglePayload
+  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
+  notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
+  notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
+  notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
+  commentCreate(input: CommentCreateInput!): CommentCreatePayload
+  commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
+  commentPin(input: CommentPinInput!): CommentPinPayload
+  commentDelete(input: CommentDeleteInput!): CommentDeletePayload
+  pageCreate(input: PageCreateInput!): PageCreatePayload
+  pageEdit(input: PageEditInput!): PageEditPayload
+  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
+  profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
+  profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
+  profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
+  profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
+  profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
+}
+
+type RateCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  rate: RateEdge
+  target: RatingsInterface
+  clientMutationId: String
+}
+
+type ErrorType {
+  field: String!
+  messages: [String!]!
+}
+
+input RateCreateInput {
+  targetObjectId: ID!
+  profileId: ID
+  value: Int!
+  clientMutationId: String
+}
+
+type OrganizationCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  organization: OrganizationEdge
+  profile: ProfileEdge
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `Organization` and its cursor."""
+type OrganizationEdge {
+  """The item at the end of the edge"""
+  node: Organization
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input OrganizationCreateInput {
+  name: String!
+  urlPath: String
+  clientMutationId: String
+}
+
+"""
+Attach one or more files to a target object.
+
+Usage:
+    mutation {
+        fileAttachToTarget(input: {
+            fileRelayIds: ["RmlsZU9iamVjdFR5cGU6MQ==", "RmlsZU9iamVjdFR5cGU6Mg=="]
+            targetObjectId: "Q29tbWVudE9iamVjdFR5cGU6MQ=="
+        }) {
+            attachedFiles {
+                node {
+                    id
+                    fileName
+                }
+            }
+            target {
+                ... on CommentsInterface {
+                    filesCount
+                    isFilesEnabled
+                }
+            }
+        }
+    }
+"""
+type FileAttachToTargetPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  attachedFiles: [FileEdge!]!
+  target: FilesInterface!
+  clientMutationId: String
+}
+
+input FileAttachToTargetInput {
+  fileRelayIds: [ID]!
+  targetObjectId: ID!
+  clientMutationId: String
+}
+
+type ChatRoomCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoomEdge
+  profile: Profile
+  clientMutationId: String
+}
+
+input ChatRoomCreateInput {
+  profileId: ID!
+  participants: [ID]!
+  isGroup: Boolean = false
+  title: String
+  clientMutationId: String
+}
+
+type ChatRoomUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoomEdge
+  removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
+  clientMutationId: String
+}
+
+input ChatRoomUpdateInput {
+  roomId: ID!
+  profileId: ID!
+  title: String
+  deleteImage: Boolean = false
+  addParticipants: [ID] = []
+  removeParticipants: [ID] = []
+  clientMutationId: String
+}
+
+type ChatRoomSendMessagePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  message: MessageEdge
+  clientMutationId: String
+}
+
+input ChatRoomSendMessageInput {
+  roomId: ID!
+  profileId: ID!
+  content: String!
+  inReplyToId: ID
+  clientMutationId: String
+}
+
+type ChatRoomEditMessagePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  message: MessageEdge
+  clientMutationId: String
+}
+
+input ChatRoomEditMessageInput {
+  id: ID!
+  content: String!
+  clientMutationId: String
+}
+
+type ChatRoomDeleteMessagePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedMessage: MessageEdge
+  clientMutationId: String
+}
+
+input ChatRoomDeleteMessageInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type ChatRoomReadMessagesPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  profile: Profile
+  messages: [Message]
+  clientMutationId: String
+}
+
+input ChatRoomReadMessagesInput {
+  roomId: ID!
+  profileId: ID!
+  messageIds: [ID]
+  clientMutationId: String
+}
+
+type ChatRoomUnreadPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  profile: Profile
+  clientMutationId: String
+}
+
+input ChatRoomUnreadInput {
+  roomId: ID!
+  profileId: ID!
+  clientMutationId: String
+}
+
+type ChatRoomArchivePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  room: ChatRoom
+  clientMutationId: String
+}
+
+input ChatRoomArchiveInput {
+  roomId: ID!
+  profileId: ID!
+  archive: Boolean!
+  clientMutationId: String
+}
+
+type ReportCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  report: ReportEdge
+  target: ReportsInterface
+  clientMutationId: String
+}
+
+input ReportCreateInput {
+  targetObjectId: ID!
+  reportTypeId: ID!
+  reportSubject: String
+  clientMutationId: String
+}
+
+type FollowTogglePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  follow: FollowEdge
+  target: FollowsInterface
+  actor: FollowsInterface
+  followDeletedId: ID
+  clientMutationId: String
+}
+
+input FollowToggleInput {
+  actorObjectId: ID!
+  targetObjectId: ID!
+  clientMutationId: String
+}
+
+type BlockTogglePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  block: BlockEdge
+  target: BlocksInterface
+  actor: BlocksInterface
+  blockDeletedId: ID
+  clientMutationId: String
+}
+
+input BlockToggleInput {
+  actorObjectId: ID!
+  targetObjectId: ID!
+  clientMutationId: String
+}
+
+type ReactionTogglePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  reaction: ReactionEdge
+  target: ReactionsInterface
+  reactionDeletedId: ID
+  clientMutationId: String
+}
+
+input ReactionToggleInput {
+  targetObjectId: ID!
+  profileObjectId: ID
+  reactionType: ReactionTypes!
+  clientMutationId: String
+}
+
+type NotificationsMarkAsReadPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  recipient: NotificationsInterface
+  notifications: [Notification]
+  clientMutationId: String
+}
+
+input NotificationsMarkAsReadInput {
+  """Mark as read or unread"""
+  read: Boolean!
+  notificationIds: [ID!]
+  clientMutationId: String
+}
+
+type NotificationsMarkAllAsReadPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  recipient: NotificationsInterface
+  clientMutationId: String
+}
+
+input NotificationsMarkAllAsReadInput {
+  """Mark as read or unread"""
+  read: Boolean!
+  clientMutationId: String
+}
+
+type NotificationSettingTogglePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  notificationSetting: NotificationSetting
+  clientMutationId: String
+}
+
+input NotificationSettingToggleInput {
+  verb: String!
+  channel: NotificationChannelTypes!
+  clientMutationId: String
+}
+
+type ContentPostCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
+}
+
+input ContentPostCreateInput {
+  content: String!
+  isReactionsEnabled: Boolean!
+  clientMutationId: String
+}
+
+type CommentCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  comment: CommentEdge
+  clientMutationId: String
+}
+
+input CommentCreateInput {
+  targetObjectId: ID!
+  inReplyToId: ID
+  profileId: ID
+  body: String!
+  fileIds: [ID!]
+  clientMutationId: String
+}
+
+type CommentUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  comment: Comment
+  clientMutationId: String
+}
+
+input CommentUpdateInput {
+  id: ID!
+  body: String!
+  fileIds: [ID!]
+  clientMutationId: String
+}
+
+type CommentPinPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  comment: Comment
+  clientMutationId: String
+}
+
+input CommentPinInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type CommentDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  target: CommentsInterface
+  inReplyTo: Comment
+  clientMutationId: String
+}
+
+input CommentDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type PageCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  page: PageEdge
+  clientMutationId: String
+}
+
+input PageCreateInput {
+  user: String
+  title: String
+  body: String
+  urlPath: String
+  clientMutationId: String
+}
+
+type PageEditPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  page: Page
+  clientMutationId: String
+}
+
+input PageEditInput {
+  id: ID!
+  user: String
+  title: String
+  body: String
+  urlPath: String
+  clientMutationId: String
+}
+
+type DeleteNodePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedID: ID!
+  clientMutationId: String
+}
+
+input DeleteNodeInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type ProfileCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profile: ProfileEdge
+  clientMutationId: String
+}
+
+input ProfileCreateInput {
+  owner: String
+  name: String!
+  image: String
+  bannerImage: String
+  biography: String
+  urlPath: String
+  target: String
+  targetContentType: String!
+  targetObjectId: Int!
+  clientMutationId: String
+}
+
+type ProfileUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profile: Profile
+  clientMutationId: String
+}
+
+input ProfileUpdateInput {
+  id: ID!
+  owner: String
+  name: String
+  image: String
+  bannerImage: String
+  biography: String
+  urlPath: String
+  phoneNumber: String
+  clientMutationId: String
+}
+
+type ProfileDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+input ProfileDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type RoleUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
+}
+
+input RoleUpdateInput {
+  profileId: ID!
+  userId: ID!
+  roleType: ProfileRoles = null
+  clientMutationId: String
+}
+
+type ProfileRemoveMemberPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+input ProfileRemoveMemberInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type Subscription {
+  chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage
+  chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
+  chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
+  onNotificationChange: OnNotificationChange
+  onCommentChange(targetObjectId: ID): OnCommentChange
+}
+
+type ChatRoomOnMessage {
+  message: MessageEdge
+}
+
+type ChatRoomOnRoomUpdate {
+  room: ChatRoomEdge
+  removedParticipants: [ChatRoomParticipant]
+  addedParticipants: [ChatRoomParticipant]
+}
+
+type ChatRoomOnMessagesCountUpdate {
+  profile: Profile
+}
+
+type OnNotificationChange {
+  createdNotification: NotificationEdge
+  updatedNotification: Notification
+  deletedNotificationId: ID
+}
+
+type OnCommentChange {
+  createdComment: CommentEdge
+  updatedComment: Comment
+  deletedCommentId: ID
+}
