@@ -52,6 +52,8 @@ export const CommentItemFragmentQuery = graphql`
     ...ReactionButton_target
 
     ...CommentItem_target
+
+    ...FilesList_target
   }
 `
 
