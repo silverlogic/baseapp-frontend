@@ -128,12 +128,12 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
     <div className="flex h-full w-full justify-center">
       <ProfileContainer>
         <ImageWithFallback
-          src={profile?.bannerImage?.url ?? ''}
+          src={profile?.bannerImage ?? ''}
           fallbackSrc="/png/profile-banner-fallback.png"
           alt="Home Banner"
           width={868}
           height={
-            290 /* Some css height: auto takes precedence, 
+            290 /* Some css height: auto takes precedence,
             so also set as style below */
           }
           className="overflow-hidden rounded-lg"
@@ -144,7 +144,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
             className="self-start justify-self-center"
             width={96}
             height={96}
-            src={profile?.image?.url}
+            src={profile?.image}
           />
           <ProfileDescriptionContainer>
             <ProfileNameContainer>

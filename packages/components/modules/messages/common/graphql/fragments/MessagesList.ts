@@ -19,9 +19,7 @@ export const MessagesListFragment = graphql`
           profile {
             id
             name
-            image(height: 32, width: 32) {
-              url
-            }
+            image(height: 32, width: 32)
           }
           isRead
           messageType

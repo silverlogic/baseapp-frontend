@@ -232,7 +232,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
-  avatar(width: Int!, height: Int!): Thumbnail
+  avatar(width: Int!, height: Int!): String
 }
 
 interface PermissionsInterface {
@@ -399,16 +399,8 @@ type Metadata {
   metaDescription: String
   metaRobots: String
   metaOgType: String
-  metaOgImage(width: Int!, height: Int!): Thumbnail
+  metaOgImage(width: Int!, height: Int!): String
   pk: Int!
-}
-
-type Thumbnail implements FileInterface {
-  url: String
-}
-
-interface FileInterface {
-  url: String
 }
 
 interface RatingsInterface {
@@ -466,8 +458,8 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
   name: String
-  image(width: Int!, height: Int!): Thumbnail
-  bannerImage(width: Int!, height: Int!): Thumbnail
+  image(width: Int!, height: Int!): String
+  bannerImage(width: Int!, height: Int!): String
   biography: String
   targetObjectId: Int
   status: ProfilesProfileStatusChoices!
@@ -690,7 +682,7 @@ type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
   title: String
-  image(width: Int!, height: Int!): Thumbnail
+  image(width: Int!, height: Int!): String
   lastMessage: Message
   lastMessageTime: DateTime
   participantsCount: Int!
@@ -1134,6 +1126,11 @@ type File implements Node & PermissionsInterface & FileInterface & CommentsInter
   myReaction(profileId: ID): Reaction
   pk: Int!
   parent: Node
+  thumbnail(width: Int!, height: Int!): String
+}
+
+interface FileInterface {
+  url: String
 }
 
 """An enumeration."""
@@ -1284,7 +1281,7 @@ type ContentPostImageEdge {
 }
 
 type ContentPostImage implements Node {
-  image(width: Int!, height: Int!): Thumbnail
+  image(width: Int!, height: Int!): String
   post: ContentPost!
 
   """The ID of the object"""

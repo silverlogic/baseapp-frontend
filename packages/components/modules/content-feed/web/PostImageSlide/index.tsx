@@ -11,9 +11,9 @@ import { PostImageSlideProps } from './types'
 const PostImageSlide: FC<PostImageSlideProps> = ({ imagesRef }) => {
   const target = useFragment(ContentPostImageFragment, imagesRef)
 
-  if (!target?.image?.url) return null
+  if (!target?.image) return null
 
-  return <ImageSlide draggable={false} src={target.image.url} alt="Post Image" />
+  return <ImageSlide draggable={false} src={target.image} alt="Post Image" />
 }
 
 export default PostImageSlide

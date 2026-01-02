@@ -45,9 +45,7 @@ export const ActivityLogsFragmentQuery = graphql`
             id
             fullName
             email
-            avatar(width: 48, height: 48) {
-              url
-            }
+            avatar(width: 48, height: 48)
           }
         }
       }

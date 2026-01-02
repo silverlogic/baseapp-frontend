@@ -187,7 +187,7 @@ const MemberItem: FC<MemberItemProps> = ({
         <AvatarWithPlaceholder
           width={avatarWidth}
           height={avatarHeight}
-          src={memberProfile?.image?.url ?? ''}
+          src={memberProfile?.image ?? ''}
           alt="Profile avatar"
           color="secondary"
           {...avatarProps}

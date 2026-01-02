@@ -16,9 +16,7 @@ export const ProfileSummaryFragment = graphql`
             id
             pk
             name
-            image(width: $avatarSize, height: $avatarSize) {
-              url
-            }
+            image(width: $avatarSize, height: $avatarSize)
             biography
             urlPath {
               path

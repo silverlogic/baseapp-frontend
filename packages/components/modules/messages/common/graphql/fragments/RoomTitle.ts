@@ -11,9 +11,7 @@ export const RoomTitleFragment = graphql`
           profile {
             id
             name
-            image(width: 100, height: 100) {
-              url
-            }
+            image(width: 100, height: 100)
           }
           role
         }

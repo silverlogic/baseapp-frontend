@@ -7,8 +7,6 @@ export const MetadataFragment = graphql`
     metaDescription
     metaRobots
     metaOgType
-    metaOgImage(width: 1000, height: 1000) {
-      url
-    }
+    metaOgImage(width: 1000, height: 1000)
   }
 `

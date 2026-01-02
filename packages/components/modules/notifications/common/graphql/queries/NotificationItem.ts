@@ -17,9 +17,7 @@ export const NotificationItemFragment = graphql`
       ... on Profile {
         id
         name
-        image(width: 48, height: 48) {
-          url
-        }
+        image(width: 48, height: 48)
       }
     }
 

@@ -159,7 +159,7 @@ const CommentItem: FC<CommentItemProps> = ({
               width={40}
               height={40}
               alt={comment.profile?.name ?? `Comment's user avatar`}
-              src={comment.profile?.image?.url}
+              src={comment.profile?.image || ''}
               onClick={() => router.push(profileUrl)}
             />
 
