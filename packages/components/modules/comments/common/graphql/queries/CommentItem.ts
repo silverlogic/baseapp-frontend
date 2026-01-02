@@ -11,9 +11,7 @@ export const CommentItemFragmentQuery = graphql`
     profile {
       id
       name
-      image(width: 50, height: 50) {
-        url
-      }
+      image(width: 50, height: 50)
       urlPath {
         path
       }
@@ -21,9 +19,7 @@ export const CommentItemFragmentQuery = graphql`
     user {
       id
       fullName
-      avatar(width: 50, height: 50) {
-        url
-      }
+      avatar(width: 50, height: 50)
     }
 
     created

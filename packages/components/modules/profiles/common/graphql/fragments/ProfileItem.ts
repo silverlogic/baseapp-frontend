@@ -5,9 +5,7 @@ export const ProfileItemFragment = graphql`
   @argumentDefinitions(avatarSize: { type: "Int", defaultValue: 100 }) {
     id
     name
-    image(width: $avatarSize, height: $avatarSize) {
-      url
-    }
+    image(width: $avatarSize, height: $avatarSize)
     urlPath {
       path
     }
