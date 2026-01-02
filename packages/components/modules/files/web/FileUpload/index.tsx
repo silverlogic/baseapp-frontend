@@ -1,7 +1,7 @@
 'use client'
 
 import type { FC } from 'react'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import { ConnectionHandler, useFragment } from 'react-relay'
 
@@ -28,6 +28,7 @@ const FileUpload: FC<FileUploadProps> = ({
   const { uploadFile } = useChunkedUpload()
   const [attachFiles, isAttaching] = useFileAttachToTargetMutation()
   const { clearCompleted } = useFileUploadStore()
+  const [dropzoneKey, setDropzoneKey] = useState(0)
 
   const handleFilesSelected = useCallback(
     async (selectedFiles: File[]) => {
@@ -57,6 +58,8 @@ const FileUpload: FC<FileUploadProps> = ({
             onCompleted: () => {
               // Clear completed files from upload state after successful attachment
               clearCompleted()
+              // Reset dropzone by changing its key to force remount
+              setDropzoneKey((prev) => prev + 1)
               onAttachComplete?.()
             },
             onError: (error) => {
@@ -66,6 +69,8 @@ const FileUpload: FC<FileUploadProps> = ({
         } else if (!autoAttach) {
           // If not auto-attaching, clear completed files after upload
           clearCompleted()
+          // Reset dropzone by changing its key to force remount
+          setDropzoneKey((prev) => prev + 1)
         }
       } catch (error) {
         onError?.(error instanceof Error ? error : new Error('Upload failed'))
@@ -90,6 +95,7 @@ const FileUpload: FC<FileUploadProps> = ({
   return (
     <div>
       <FileUploadDropzone
+        key={dropzoneKey}
         onFilesSelected={handleFilesSelected}
         maxFiles={maxFiles}
         maxFileSize={maxFileSize}
