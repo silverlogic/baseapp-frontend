@@ -41,7 +41,7 @@ const CommentsList: FC<CommentsListProps> = ({
         threadDepth={threadDepth}
         onReply={onReply}
         commentIdToExpand={commentIdToExpand}
-        CommentsListProps={CommentsListProps}
+        RepliesListProps={CommentsListProps}
         onLongPress={onLongPress}
         {...CommentItemProps}
       />
