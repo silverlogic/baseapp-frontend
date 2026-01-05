@@ -9,5 +9,5 @@ export interface CommentsListProps {
   subscriptionsEnabled: boolean
   CommentItem?: FC<CommentItemProps>
   CommentItemProps?: Partial<CommentItemProps>
-  onEdit?: (comment: CommentItem_comment$data) => void
+  onLongPress?: (comment: CommentItem_comment$data) => void
 }
