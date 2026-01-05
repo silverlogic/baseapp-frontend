@@ -1,37 +1,23 @@
+import { Theme } from '@baseapp-frontend/design-system/styles/native'
+
 import { StyleSheet } from 'react-native'
 
-export const createStyles = () =>
+export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     listContainer: {
       backgroundColor: 'transparent',
-    },
-    bottomDrawerActionContainer: {
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      gap: 4,
-      borderBottomWidth: 1,
-      borderBottomColor: 'surface.disabled',
-    },
-    bottomDrawerDivider: {
-      paddingHorizontal: 16,
-      paddingVertical: 12,
-      gap: 4,
-      borderBottomWidth: 0,
-    },
-    bottomDrawerPressable: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      gap: 8,
-      padding: 8,
+      flex: 1,
+      alignSelf: 'stretch',
     },
     threadDepthContainer: {
       flexDirection: 'row',
       backgroundColor: 'transparent',
+      flex: 1,
+      alignSelf: 'stretch',
     },
     threadDepthDivider: {
       width: 2,
-      backgroundColor: 'surface.disabled',
+      backgroundColor: theme.colors.surface.disabled,
       marginRight: 12,
       alignSelf: 'stretch',
     },

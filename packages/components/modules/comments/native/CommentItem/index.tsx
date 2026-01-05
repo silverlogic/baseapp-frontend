@@ -22,7 +22,6 @@ const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
   onLongPress,
   threadDepth = 0,
-  onEdit,
   onReply,
   commentIdToExpand,
   RepliesList: RepliesListProp,
@@ -101,8 +100,8 @@ const CommentItem: FC<CommentItemProps> = ({
         target={comment as CommentsList_comments$key}
         subscriptionsEnabled
         threadDepth={threadDepth + 1}
-        onEdit={onEdit}
         onReply={onReply}
+        onLongPress={onLongPress}
         {...RepliesListProps}
       />
     )
