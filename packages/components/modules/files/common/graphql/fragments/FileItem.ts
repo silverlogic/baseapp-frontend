@@ -15,5 +15,6 @@ export const FileItemFragment = graphql`
       fullName
     }
     hasPerm(perm: "change_file")
+    thumbnail(width: 100, height: 100)
   }
 `

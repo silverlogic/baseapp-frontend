@@ -54,7 +54,9 @@ const FileUploadList: FC<FileUploadListProps> = ({
           </Typography>
           {target.files.edges.map((edge: any) => {
             if (!edge?.node) return null
-            return <AttachedFileItem key={edge.node.id} file={edge.node} />
+            return (
+              <AttachedFileItem key={edge.node.id} file={edge.node} targetObjectId={target.id} />
+            )
           })}
         </Box>
       )}
