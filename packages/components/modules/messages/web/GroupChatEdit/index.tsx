@@ -170,22 +170,24 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
         FORM_VALUE={FORM_VALUE}
         isMutationInFlight={isMutationInFlight}
       />
-      <GroupChatMembersList
-        FORM_VALUE={FORM_VALUE}
-        setValue={setValue}
-        watch={watch}
-        currentParticipants={participants}
-        refetch={refetch}
-        membersLoadNext={loadNext}
-        membersHasNext={hasNext}
-        membersIsLoadingNext={isLoadingNext}
-        MembersListProps={{
-          allowAddMember: true,
-          onAddMemberClick: () => setOpen(true),
-          ...(GroupChatMembersListProps?.MembersListProps ?? {}),
-        }}
-        {...GroupChatMembersListProps}
-      />
+      <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
+        <GroupChatMembersList
+          FORM_VALUE={FORM_VALUE}
+          setValue={setValue}
+          watch={watch}
+          currentParticipants={participants}
+          refetch={refetch}
+          membersLoadNext={loadNext}
+          membersHasNext={hasNext}
+          membersIsLoadingNext={isLoadingNext}
+          MembersListProps={{
+            allowAddMember: true,
+            onAddMemberClick: () => setOpen(true),
+            ...(GroupChatMembersListProps?.MembersListProps ?? {}),
+          }}
+          {...GroupChatMembersListProps}
+        />
+      </Box>
     </Box>
   )
 }

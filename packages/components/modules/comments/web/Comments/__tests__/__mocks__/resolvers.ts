@@ -1,5 +1,7 @@
 import type { MockPayloadGenerator } from 'relay-test-utils'
 
+import { MOCK_PROFILE } from './constants'
+
 type MockResolvers = MockPayloadGenerator.MockResolvers
 type MockResolverContext = MockPayloadGenerator.MockResolverContext
 
@@ -25,6 +27,7 @@ export const commentCreateResolver: MockResolvers = {
           inReplyTo: null,
           body: input.body,
           isPinned: false,
+          profile: MOCK_PROFILE,
           user: {
             id: 'VXNlcjo0',
             fullName: 'Alexandre Anicio',
@@ -78,6 +81,7 @@ export const commentReplyResolver: MockResolvers = {
           },
           body: input.body,
           isPinned: false,
+          profile: MOCK_PROFILE,
           user: {
             id: 'VXNlcjo0',
             fullName: 'Alexandre Anicio',

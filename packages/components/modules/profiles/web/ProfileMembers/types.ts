@@ -9,5 +9,7 @@ export interface ProfileMembersSuspendedProps {
   InitialLoadingState?: FC
 }
 
-export interface ProfileMembersProps
-  extends Omit<ProfileMembersSuspendedProps, 'title' | 'subtitle' | 'InitialLoadingState'> {}
+export interface ProfileMembersProps extends Omit<
+  ProfileMembersSuspendedProps,
+  'title' | 'subtitle' | 'InitialLoadingState'
+> {}
