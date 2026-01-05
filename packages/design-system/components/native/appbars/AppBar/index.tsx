@@ -10,10 +10,12 @@ import { AppBarProps } from './types'
 
 const AppBar: FC<AppBarProps> = ({
   title,
+  titleComponent,
   onBack,
   onClose,
   BackIcon = DefaultBackIcon,
   CloseIcon = DefaultCloseIcon,
+  closeComponent,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -27,15 +29,18 @@ const AppBar: FC<AppBarProps> = ({
           </IconButton>
         )}
       </View>
-      <Text variant="subtitle2" style={styles.title}>
-        {title}
-      </Text>
+      {titleComponent || (
+        <Text variant="subtitle2" style={styles.title}>
+          {title}
+        </Text>
+      )}
       <View style={styles.buttonContainer}>
-        {onClose && (
-          <IconButton onPress={onClose}>
-            <CloseIcon />
-          </IconButton>
-        )}
+        {closeComponent ||
+          (onClose && (
+            <IconButton onPress={onClose}>
+              <CloseIcon />
+            </IconButton>
+          ))}
       </View>
     </View>
   )

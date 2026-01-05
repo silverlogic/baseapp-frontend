@@ -8,13 +8,14 @@ import { createStyles } from './styles'
 import type { CommentsListProps } from './types'
 
 const CommentsList: FC<CommentsListProps> = ({
+  onLongPress,
   target: targetRef,
   subscriptionsEnabled,
   CommentItem = DefaultCommentItem,
   CommentItemProps,
 }) => {
+  const styles = createStyles()
   const { data: target } = useCommentList(targetRef)
-
   const comments = useMemo(
     () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [target?.comments?.edges],
@@ -28,12 +29,11 @@ const CommentsList: FC<CommentsListProps> = ({
         target={target}
         key={`comment-${comment.id}`}
         comment={comment}
+        onLongPress={onLongPress}
         {...CommentItemProps}
       />
     )
   }
-
-  const styles = createStyles()
 
   return (
     <>
