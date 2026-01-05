@@ -30,7 +30,6 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
   open,
   profileId,
   roomId,
-  isPending,
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
   existingMembers,
@@ -234,7 +233,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
         <LoadingButton
           onClick={() => onSubmit()}
           disabled={isMutationInFlight || isEditButtonDisabled}
-          loading={isMutationInFlight || isPending}
+          loading={isMutationInFlight}
         >
           Confirm
         </LoadingButton>

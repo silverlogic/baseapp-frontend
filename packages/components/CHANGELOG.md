@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.17
+
+### Patch Changes
+
+- Updated group chat editing to improve UX for adding and removing members
+
 ## 1.4.16
 
 ### Patch Changes

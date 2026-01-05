@@ -38,7 +38,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
 
   const handleRemoveClicked = () => {
     popover.onClose()
-    initiateRemoval(id, name)
+    initiateRemoval(groupMember.profile!)
   }
 
   const renderMenuItems = () => {
