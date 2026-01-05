@@ -8,17 +8,20 @@ import {
   InsertDriveFile as FileIcon,
 } from '@mui/icons-material'
 import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material'
-import { useFragment } from 'react-relay'
+import { ConnectionHandler, useFragment } from 'react-relay'
 
 import type { FileItem_file$key } from '../../../../__generated__/FileItem_file.graphql'
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
+import { useFileDeleteMutation } from '../../common/graphql/mutations/FileDelete'
 
 interface AttachedFileItemProps {
   file: FileItem_file$key
+  targetObjectId?: string
 }
 
-const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef }) => {
+const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObjectId }) => {
   const file = useFragment(FileItemFragment, fileRef)
+  const [deleteFile, isDeletingFile] = useFileDeleteMutation()
 
   const canChangeFile = file.hasPerm || false
 
@@ -41,7 +44,21 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef }) => {
   }
 
   const handleDelete = () => {
-    // TODO: Implement delete functionality
+    if (!targetObjectId) {
+      console.error('Target object ID is required for deleting file')
+      return
+    }
+
+    const connectionID = ConnectionHandler.getConnectionID(targetObjectId, 'FilesList_files')
+
+    deleteFile({
+      variables: {
+        input: {
+          id: file.id,
+        },
+        connections: [connectionID],
+      },
+    })
   }
 
   const getFileIcon = () => {
@@ -59,14 +76,34 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef }) => {
     return <FileIcon />
   }
 
+  const isImage = file.fileContentType?.startsWith('image/')
+
   return (
     <Card sx={{ mb: 1 }}>
       <CardContent>
         <Stack spacing={1}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', flex: 1, mr: 2 }}>
-              <Box sx={{ mr: 1, mt: 0.5 }}>{getFileIcon()}</Box>
-              <Box>
+            <Box sx={{ display: 'flex', alignItems: 'flex-start', flex: 1, mr: 2, minWidth: 0 }}>
+              <Box sx={{ mr: 1, mt: 0.5, flexShrink: 0 }}>
+                {isImage && file.thumbnail ? (
+                  <Box
+                    component="img"
+                    src={file.thumbnail}
+                    alt={file.fileName || 'File preview'}
+                    sx={{
+                      width: 100,
+                      height: 100,
+                      objectFit: 'cover',
+                      borderRadius: 1,
+                      border: '1px solid',
+                      borderColor: 'divider',
+                    }}
+                  />
+                ) : (
+                  getFileIcon()
+                )}
+              </Box>
+              <Box sx={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                 <Typography variant="body2" noWrap>
                   {file.fileName}
                 </Typography>
@@ -87,7 +124,13 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef }) => {
               </IconButton>
 
               {canChangeFile && (
-                <IconButton size="small" onClick={handleDelete} color="error" title="Delete">
+                <IconButton
+                  size="small"
+                  onClick={handleDelete}
+                  color="error"
+                  title="Delete"
+                  disabled={isDeletingFile}
+                >
                   <DeleteIcon fontSize="small" />
                 </IconButton>
               )}

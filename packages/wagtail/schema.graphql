@@ -1562,6 +1562,7 @@ type Mutation {
       }
   """
   fileAttachToTarget(input: FileAttachToTargetInput!): FileAttachToTargetPayload
+  fileDelete(input: FileDeleteInput!): FileDeletePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
@@ -1673,6 +1674,20 @@ type FileAttachToTargetPayload {
 input FileAttachToTargetInput {
   fileRelayIds: [ID]!
   targetObjectId: ID!
+  clientMutationId: String
+}
+
+type FileDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  parent: FilesInterface
+  clientMutationId: String
+}
+
+input FileDeleteInput {
+  id: ID!
   clientMutationId: String
 }
 

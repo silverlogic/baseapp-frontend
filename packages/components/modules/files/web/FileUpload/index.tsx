@@ -10,7 +10,6 @@ import { useFileAttachToTargetMutation } from '../../common/graphql/mutations/Fi
 import { FilesListFragment } from '../../common/graphql/queries/FilesList'
 import { useChunkedUpload } from '../../common/hooks/useChunkedUpload'
 import FileUploadDropzone from '../FileUploadDropzone'
-import FileUploadList from '../FileUploadList'
 import type { FileUploadProps } from './types'
 
 const FileUpload: FC<FileUploadProps> = ({
@@ -93,17 +92,14 @@ const FileUpload: FC<FileUploadProps> = ({
   }
 
   return (
-    <div>
-      <FileUploadDropzone
-        key={dropzoneKey}
-        onFilesSelected={handleFilesSelected}
-        maxFiles={maxFiles}
-        maxFileSize={maxFileSize}
-        acceptedFileTypes={acceptedFileTypes}
-        disabled={disabled || isAttaching}
-      />
-      <FileUploadList target={targetRef} />
-    </div>
+    <FileUploadDropzone
+      key={dropzoneKey}
+      onFilesSelected={handleFilesSelected}
+      maxFiles={maxFiles}
+      maxFileSize={maxFileSize}
+      acceptedFileTypes={acceptedFileTypes}
+      disabled={disabled || isAttaching}
+    />
   )
 }
 
