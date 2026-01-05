@@ -7,15 +7,22 @@ import { Scrollbar } from '@baseapp-frontend/design-system/components/web/scroll
 
 import Box from '@mui/material/Box'
 import Drawer from '@mui/material/Drawer'
+import { useTheme } from '@mui/material/styles'
 import { usePathname } from 'next/navigation'
 
 import { NAV_WIDTH } from '../../constants'
 import NavSectionVertical from '../NavSectionVertical'
 import { VerticalDrawerProps } from './types'
 
-const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, onCloseNav }) => {
+const VerticalDrawer: FC<VerticalDrawerProps> = ({
+  navData,
+  LogoIcon,
+  LogoProps,
+  openNav,
+  onCloseNav,
+}) => {
   const pathname = usePathname()
-
+  const theme = useTheme()
   useEffect(() => {
     if (openNav) {
       onCloseNav()
@@ -30,6 +37,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, o
         sx: {
           width: NAV_WIDTH.VERTICAL,
           height: '100% !important',
+          backgroundColor: `${theme.palette.grey[900]} !important`,
         },
       }}
     >
@@ -44,7 +52,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, o
         }}
       >
         {LogoIcon && (
-          <Logo sx={{ mt: 3, ml: 4, mb: 1 }}>
+          <Logo {...LogoProps} sx={{ mt: 3, ml: 4, mb: 1, ...LogoProps?.sx }}>
             <LogoIcon />
           </Logo>
         )}

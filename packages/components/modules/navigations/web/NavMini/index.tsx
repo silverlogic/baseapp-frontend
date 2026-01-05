@@ -29,7 +29,15 @@ const NavMini: FC<NavMiniProps> = ({
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        LogoIcon={LogoIcon}
+        LogoProps={{ ...LogoProps, sx: { ...LogoProps?.sx, marginLeft: '0px', width: '100%' } }}
+      />
+    )
   }
 
   return (

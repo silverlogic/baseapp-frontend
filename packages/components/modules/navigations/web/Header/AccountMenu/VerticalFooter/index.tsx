@@ -116,7 +116,7 @@ const VerticalFooter: FC<Pick<AccountMenuProps, 'AccountPopoverProps'>> = ({ Acc
             <Typography
               component="p"
               variant="subtitle2"
-              color="text.secondary"
+              color="common.white"
               noWrap
               sx={{
                 fontWeight: 590,
@@ -131,7 +131,7 @@ const VerticalFooter: FC<Pick<AccountMenuProps, 'AccountPopoverProps'>> = ({ Acc
               variant="body2"
               noWrap
               sx={{
-                color: 'text.secondary',
+                color: 'common.white',
                 lineHeight: 1.571,
               }}
             >

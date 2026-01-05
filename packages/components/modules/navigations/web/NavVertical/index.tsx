@@ -29,7 +29,15 @@ const NavVertical: FC<NavVerticalProps> = ({
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        LogoIcon={LogoIcon}
+        LogoProps={LogoProps}
+      />
+    )
   }
 
   return (
