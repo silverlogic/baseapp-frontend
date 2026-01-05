@@ -1,5 +1,11 @@
 # @baseapp-frontend/test
 
+## 2.1.6
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+
 ## 2.1.5
 
 ### Patch Changes

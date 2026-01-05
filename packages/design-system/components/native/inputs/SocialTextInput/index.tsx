@@ -1,16 +1,27 @@
 import { forwardRef, useCallback, useState } from 'react'
 
-import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
+import { LayoutChangeEvent, TextInput as NativeTextInput, Pressable } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
 import { withNativeController } from '../../../../utils/native'
+import { CloseIcon, ReplyIcon } from '../../icons'
+import { Text } from '../../typographies'
 import View from '../../views/View'
 import { createStyles } from './styles'
 import type { SocialTextInputProps } from './types'
 
 const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
   (
-    { children, lineHeight = 22, maxLines = 3, contentStyle = {}, toolStyle = {}, ...props },
+    {
+      children,
+      lineHeight = 22,
+      maxLines = 3,
+      contentStyle = {},
+      toolStyle = {},
+      editVariables = {},
+      replyVariables = {},
+      ...props
+    },
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -50,6 +61,31 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     return (
       <View style={[contentStyle, styles.container]}>
         {/* TODO: Replies */}
+        {editVariables?.isEditMode && (
+          <View style={styles.editModeContainer}>
+            <View style={styles.editModeLabelContainer}>
+              <ReplyIcon width={20} height={20} />
+              <Text style={styles.editModeLabel}>{editVariables?.label}</Text>
+            </View>
+            <Pressable onPress={editVariables?.onEditCancel}>
+              <CloseIcon width={20} height={20} />
+            </Pressable>
+          </View>
+        )}
+        {replyVariables?.isReplyMode && (
+          <View style={styles.replyModeContainer}>
+            <View style={styles.replyModeLabelContainer}>
+              <ReplyIcon width={20} height={20} />
+              <Text style={styles.replyModeLabel}>
+                {replyVariables?.label}
+                <Text style={styles.replyModeTargetName}>{replyVariables?.targetName}</Text>
+              </Text>
+            </View>
+            <Pressable onPress={replyVariables?.onReplyCancel}>
+              <CloseIcon width={20} height={20} />
+            </Pressable>
+          </View>
+        )}
         <NativeTextInput
           multiline
           onLayout={onLayout}
