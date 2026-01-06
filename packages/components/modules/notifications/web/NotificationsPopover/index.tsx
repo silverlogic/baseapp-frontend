@@ -73,7 +73,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
             <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
           </Badge>
         </IconButton>
-        {showLabel && labelComponent && labelComponent}
+        {(showLabel && labelComponent) && labelComponent}
       </div>
       <Drawer
         anchor={smDown ? 'bottom' : 'right'}
@@ -101,15 +101,25 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
 }
 
 const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => {
-  const { NotificationBellIcon = DefaultNotificationBellIcon, NotificationBellIconProps = {} } =
-    props
+  const {
+    NotificationBellIcon = DefaultNotificationBellIcon,
+    NotificationBellIconProps = {},
+    showLabel = true,
+    labelComponent,
+    currentLayout,
+  } = props
 
   return (
     <Suspense
       fallback={
-        <IconButton disabled>
-          <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
-        </IconButton>
+        <div
+          className={`flex w-full flex-wrap items-center gap-2 ${currentLayout === 'mini' ? 'justify-center gap-0' : ''}`}
+        >
+          <IconButton disabled>
+            <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+          </IconButton>
+          {showLabel && labelComponent && labelComponent}
+        </div>
       }
     >
       <NotificationsPopover {...props} />
