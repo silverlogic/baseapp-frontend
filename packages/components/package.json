@@ -85,7 +85,7 @@
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
     "react-native-paper": "catalog:react-native",
-    "react-native-safe-area-context": "5.4.1",
+    "react-native-safe-area-context": "catalog:react-native",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",

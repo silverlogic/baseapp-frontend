@@ -1,4 +1,4 @@
-import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -30,7 +30,6 @@ const CommentItem: FC<CommentItemProps> = ({
   CommentReplyButton = DefaultCommentReplyButton,
   CommentReactionButton = DefaultCommentReactionButton,
 }) => {
-  // Lazy load CommentsList as default, memoized to prevent recreation on each render
   const DefaultCommentsList = useMemo(() => lazy(() => import('../CommentsList')), [])
 
   const RepliesList = RepliesListProp ?? DefaultCommentsList
@@ -43,7 +42,9 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const styles = createStyles()
 
-  const hasReplies = (comment.commentsCount?.total ?? 0) > 0
+  // const canReply = comment.canReply
+  const replyCount = comment.commentsCount?.total ?? 0
+  const hasReplies = replyCount > 0
 
   const showReplies = useCallback(() => {
     if (isRepliesExpanded) {
@@ -68,6 +69,10 @@ const CommentItem: FC<CommentItemProps> = ({
       },
     )
   }, [isRepliesExpanded, refetch])
+
+  const hideReplies = useCallback(() => {
+    setIsRepliesExpanded(false)
+  }, [])
 
   const replyToComment = () => {
     onReply?.(comment)
@@ -97,11 +102,13 @@ const CommentItem: FC<CommentItemProps> = ({
   const renderCommentsReplies = () => {
     const CommentsListComponent = (
       <RepliesList
-        target={comment as CommentsList_comments$key}
+        target={comment}
         subscriptionsEnabled
         threadDepth={threadDepth + 1}
         onReply={onReply}
         onLongPress={onLongPress}
+        isReplyList
+        onHideReplies={hideReplies}
         {...RepliesListProps}
       />
     )
@@ -109,13 +116,18 @@ const CommentItem: FC<CommentItemProps> = ({
     if (!RepliesListProp) {
       return <Suspense fallback={null}>{CommentsListComponent}</Suspense>
     }
-
     return CommentsListComponent
   }
 
   if (!comment) {
     return null
   }
+
+  // if (comment.id === 'Q29tbWVudDo3') {
+  //   console.log('--------------------------------')
+  //   console.log('comment', comment)
+  //   console.log('threadDepth', threadDepth)
+  // }
 
   return (
     <>
@@ -142,25 +154,27 @@ const CommentItem: FC<CommentItemProps> = ({
             <View style={styles.footerContainer}>
               <View style={styles.buttonContainer}>
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
+                {/* {canReply && ( */}
                 <CommentReplyButton
                   onReply={replyToComment}
                   commentId={comment.id}
                   shouldUseBottomSheetSafeComponents
                 />
+                {/* )} */}
               </View>
               <View style={styles.timestampContainer}>
                 <Timestamp date={comment.created} />
               </View>
             </View>
-            {hasReplies && (
+            {threadDepth === 0 && hasReplies && !isRepliesExpanded && (
               <CommentShowRepliesButton
                 onShowReplies={showReplies}
                 totalRepliesCount={comment.commentsCount?.total ?? 0}
               />
             )}
+            </View>
           </View>
-        </View>
-      </Pressable>
+        </Pressable>
       {isRepliesExpanded && !isLoadingReplies && renderCommentsReplies()}
     </>
   )

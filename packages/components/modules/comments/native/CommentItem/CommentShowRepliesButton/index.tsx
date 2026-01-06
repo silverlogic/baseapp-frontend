@@ -12,6 +12,8 @@ import { CommentShowRepliesButtonProps } from './types'
 const CommentShowRepliesButton: FC<CommentShowRepliesButtonProps> = ({
   onShowReplies,
   totalRepliesCount,
+  body = 'Show replies',
+  showTotalRepliesCount = true,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -19,7 +21,7 @@ const CommentShowRepliesButton: FC<CommentShowRepliesButtonProps> = ({
   return (
     <View style={styles.showRepliesButtonContainer}>
       <Pressable onPress={onShowReplies} style={styles.showRepliesButton}>
-        <Text style={styles.showRepliesButtonText}>Show replies ({totalRepliesCount})</Text>
+        <Text style={styles.showRepliesButtonText}>{body} {showTotalRepliesCount && `(${totalRepliesCount})`}</Text>
       </Pressable>
     </View>
   )
