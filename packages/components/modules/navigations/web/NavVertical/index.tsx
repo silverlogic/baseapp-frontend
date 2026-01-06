@@ -82,6 +82,9 @@ const NavVertical: FC<NavVerticalProps> = ({
                 pb: 0,
                 display: 'flex',
                 flexDirection: 'column',
+                position: 'fixed',
+                bottom: 0,
+                width: NAV_WIDTH.VERTICAL,
               }}
             >
               <AccountMenu {...AccountMenuProps} vertical />
