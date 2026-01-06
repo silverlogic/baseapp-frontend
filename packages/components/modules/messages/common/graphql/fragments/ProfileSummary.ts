@@ -14,7 +14,6 @@ export const ProfileSummaryFragment = graphql`
         node {
           profile {
             id
-            pk
             name
             image(width: $avatarSize, height: $avatarSize) {
               url

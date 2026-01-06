@@ -34,7 +34,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyNQ==',
               unread: true,
-              pk: 225,
               timestamp: '2024-10-25T19:46:09.288290+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -63,7 +62,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyNA==',
               unread: true,
-              pk: 224,
               timestamp: '2024-10-25T19:46:05.469607+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -92,7 +90,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyMw==',
               unread: true,
-              pk: 223,
               timestamp: '2024-10-25T19:45:37.278737+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -121,7 +118,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyMg==',
               unread: true,
-              pk: 222,
               timestamp: '2024-10-25T19:44:54.738158+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -150,7 +146,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyMQ==',
               unread: true,
-              pk: 221,
               timestamp: '2024-10-25T19:44:51.597059+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -179,7 +174,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIyMA==',
               unread: true,
-              pk: 220,
               timestamp: '2024-10-25T19:44:43.404373+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -208,7 +202,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIxOQ==',
               unread: true,
-              pk: 219,
               timestamp: '2024-10-25T19:44:40.187542+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -237,7 +230,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIxOA==',
               unread: true,
-              pk: 218,
               timestamp: '2024-10-25T19:44:37.056281+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -266,7 +258,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIxNw==',
               unread: true,
-              pk: 217,
               timestamp: '2024-10-25T19:44:32.462967+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -295,7 +286,6 @@ export const notificationsListMockData = {
             node: {
               id: 'Tm90aWZpY2F0aW9uOjIxNg==',
               unread: true,
-              pk: 216,
               timestamp: '2024-10-25T19:44:23.109884+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -342,7 +332,6 @@ export const notificationsListNextPageMockData = {
             node: {
               id: 'notification-11',
               unread: true,
-              pk: 215,
               timestamp: '2024-10-25T19:44:04.842468+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
@@ -371,7 +360,6 @@ export const notificationsListNextPageMockData = {
             node: {
               id: 'notification-12',
               unread: true,
-              pk: 214,
               timestamp: '2024-10-25T19:43:25.029654+00:00',
               level: 'INFO',
               verb: 'COMMENTS.COMMENT_REPLY_CREATED',
