@@ -8,6 +8,7 @@ export const ChatRoomQuery = graphql`
       participantsCount
       ...TitleFragment
       ...MessagesListFragment
+      ...ChatRoomFragment
     }
   }
 `
