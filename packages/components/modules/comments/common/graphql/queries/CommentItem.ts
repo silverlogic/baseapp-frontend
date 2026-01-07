@@ -30,6 +30,7 @@ export const CommentItemFragmentQuery = graphql`
       total
     }
 
+    canReply
     canChange: hasPerm(perm: "change")
     canDelete: hasPerm(perm: "delete")
     canReport: hasPerm(perm: "report")
