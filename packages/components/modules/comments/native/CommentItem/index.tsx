@@ -123,11 +123,13 @@ const CommentItem: FC<CommentItemProps> = ({
     return null
   }
 
-  // if (comment.id === 'Q29tbWVudDo3') {
-  //   console.log('--------------------------------')
-  //   console.log('comment', comment)
-  //   console.log('threadDepth', threadDepth)
-  // }
+  if (comment.id === 'Q29tbWVudDo3') {
+    console.log('--------------------------------')
+    console.log('comment', comment)
+    console.log('threadDepth', threadDepth)
+    console.log('canReply', comment?.canReply)
+    console.log('----------------X---------------')
+  }
 
   return (
     <>

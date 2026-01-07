@@ -338,6 +338,7 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
 
   """languaged used in the comment"""
   language: String
+  canReply: Boolean!
   isEdited: Boolean!
   isPinned: Boolean!
   inReplyTo: Comment

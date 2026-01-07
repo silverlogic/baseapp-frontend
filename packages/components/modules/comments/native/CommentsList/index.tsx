@@ -47,22 +47,20 @@ const CommentsList: FC<CommentsListProps> = ({
   const shouldShowHideRepliesButton = isReplyList && remainingRepliesCount === 0
   const shouldShowShowMoreRepliesButton = isReplyList && remainingRepliesCount > 0
 
-  // if (target?.id === 'Q29tbWVudDo3' && isReplyList) {
-  //   console.log('--------------------------------')
-  //   console.log('target', target)
+  if (target?.id === 'Q29tbWVudDo3' && isReplyList) {
+    console.log('--------------------------------')
+    console.log('target', target)
   //   console.log('comments', comments)
   //   console.log('hasNext', hasNext)
   //   console.log('hasMorePages', hasMorePages)
   //   console.log('remainingRepliesCount', remainingRepliesCount)
   //   console.log('shouldShowShowMoreRepliesButton', shouldShowShowMoreRepliesButton)
-  //   console.log('----------------X---------------')
-  // }
+    console.log('----------------X---------------')
+  }
 
   const showMoreReplies = useCallback(() => {
-    if (remainingRepliesCount > 0 && loadNext) {
       loadNext(NUMBER_OF_COMMENTS_TO_LOAD_NEXT)
-    }
-  }, [remainingRepliesCount, loadNext])
+  }, [loadNext])
 
   const renderCommentItem = (comment: any) => {
     if (!comment) return null
@@ -99,12 +97,13 @@ const CommentsList: FC<CommentsListProps> = ({
         </View>
         {shouldShowShowMoreRepliesButton && (
           <CommentShowRepliesButton
-            // onShowReplies={() => {
-            //   console.log('--------------------------------')
-            //   console.log('show more replies')
-            //   console.log('----------------X---------------')
-            // }}
-            onShowReplies={showMoreReplies}
+            onShowReplies={() => {
+              console.log('--------------------------------')
+              console.log('show more replies')
+              showMoreReplies()
+              console.log('----------------X---------------')
+            }}
+            // onShowReplies={showMoreReplies}
             totalRepliesCount={remainingRepliesCount}
             body="Show more replies"
           />
