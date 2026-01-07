@@ -16,6 +16,7 @@ import { FileUploadStatus } from '../../../common/constants'
 import { useFileUpload } from '../../../common/context/useFileUpload'
 import { useChunkedUpload } from '../../../common/hooks/useChunkedUpload'
 import type { FileUploadProgress } from '../../../common/types'
+import { calculateProgress, formatFileSize, isImageFile } from '../../../common/utils/formatters'
 import FileProgress from './FileProgress'
 
 interface UploadingFileItemProps {
@@ -32,16 +33,9 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   const { removeFile, pauseFile, resumeFile } = useFileUpload()
   const { resumeUpload, retryUpload } = useChunkedUpload()
 
-  const formatFileSize = (bytes: number): string => {
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
-  }
-
   const getProgress = (): number => {
     if (fileProgress.status === FileUploadStatus.COMPLETED) return 100
-    if (fileProgress.fileSize === 0) return 0
-    return (fileProgress.uploadedBytes / fileProgress.fileSize) * 100
+    return calculateProgress(fileProgress.uploadedBytes, fileProgress.fileSize)
   }
 
   const handleRemove = () => {
@@ -76,7 +70,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
 
   const canResume = fileProgress.status === FileUploadStatus.PAUSED
 
-  const isImage = fileProgress.file?.type.startsWith('image/')
+  const isImage = isImageFile(fileProgress.file?.type)
 
   const thumbnailUrl = useMemo(() => {
     if (isImage && fileProgress.file) {

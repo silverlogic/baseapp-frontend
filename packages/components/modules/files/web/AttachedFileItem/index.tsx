@@ -8,11 +8,13 @@ import {
   InsertDriveFile as FileIcon,
 } from '@mui/icons-material'
 import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material'
-import { ConnectionHandler, useFragment } from 'react-relay'
+import { useFragment } from 'react-relay'
 
 import type { FileItem_file$key } from '../../../../__generated__/FileItem_file.graphql'
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
-import { useFileDeleteMutation } from '../../common/graphql/mutations/FileDelete'
+import { useFileDeleteLogic } from '../../common/hooks/useFileDeleteLogic'
+import { useFileDownloadLogic } from '../../common/hooks/useFileDownloadLogic'
+import { formatDate, formatFileSize, getFileType, isImageFile } from '../../common/utils/formatters'
 
 interface AttachedFileItemProps {
   file: FileItem_file$key
@@ -21,62 +23,33 @@ interface AttachedFileItemProps {
 
 const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObjectId }) => {
   const file = useFragment(FileItemFragment, fileRef)
-  const [deleteFile, isDeletingFile] = useFileDeleteMutation()
+
+  const { handleDelete, isDeletingFile } = useFileDeleteLogic({ targetObjectId })
+
+  const { handleDownload } = useFileDownloadLogic({
+    downloadHandler: (url) => {
+      window.open(url, '_blank')
+    },
+  })
 
   const canChangeFile = file.hasPerm || false
 
-  const formatFileSize = (bytes: number | null | undefined): string => {
-    if (!bytes) return '0 B'
-    if (bytes < 1024) return `${bytes} B`
-    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(2)} KB`
-    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`
-  }
-
-  const formatDate = (dateString: string): string => {
-    const date = new Date(dateString)
-    return date.toLocaleDateString()
-  }
-
-  const handleDownload = () => {
-    if (file.file) {
-      window.open(file.file, '_blank')
-    }
-  }
-
-  const handleDelete = () => {
-    if (!targetObjectId) {
-      console.error('Target object ID is required for deleting file')
-      return
-    }
-
-    const connectionID = ConnectionHandler.getConnectionID(targetObjectId, 'FilesList_files')
-
-    deleteFile({
-      variables: {
-        input: {
-          id: file.id,
-        },
-        connections: [connectionID],
-      },
-    })
-  }
-
   const getFileIcon = () => {
-    const contentType = file.fileContentType || ''
+    const fileType = getFileType(file.fileContentType)
 
-    if (contentType.startsWith('image/')) {
-      return <FileIcon color="primary" />
+    switch (fileType) {
+      case 'image':
+        return <FileIcon color="primary" />
+      case 'video':
+        return <FileIcon color="secondary" />
+      case 'pdf':
+        return <FileIcon color="error" />
+      default:
+        return <FileIcon />
     }
-    if (contentType.startsWith('video/')) {
-      return <FileIcon color="secondary" />
-    }
-    if (contentType === 'application/pdf') {
-      return <FileIcon color="error" />
-    }
-    return <FileIcon />
   }
 
-  const isImage = file.fileContentType?.startsWith('image/')
+  const isImage = isImageFile(file.fileContentType)
 
   return (
     <Card sx={{ mb: 1 }}>
@@ -119,14 +92,14 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObje
             </Box>
 
             <Stack direction="row" spacing={0.5}>
-              <IconButton size="small" onClick={handleDownload} title="Download">
+              <IconButton size="small" onClick={() => handleDownload(file.file)} title="Download">
                 <DownloadIcon fontSize="small" />
               </IconButton>
 
               {canChangeFile && (
                 <IconButton
                   size="small"
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(file.id)}
                   color="error"
                   title="Delete"
                   disabled={isDeletingFile}
