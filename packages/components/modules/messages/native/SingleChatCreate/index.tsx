@@ -18,7 +18,7 @@ import { profilesListQuery } from '../graphql/queries/CreateRoomPageQuery'
 import CreateRoomList from './CreateRoomList'
 import { createStyles } from './styles'
 
-const CreateRoomPage = () => {
+const CreateRoomPage = ({ isGroup }: { isGroup?: boolean }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   const { control, watch, setValue, reset } = useForm<SearchInputFormValues>({
@@ -56,12 +56,12 @@ const CreateRoomPage = () => {
         autoCorrect={false}
         autoFocus
       />
-      <CreateRoomList targetRef={queryData} searchParam={searchParam} />
+      <CreateRoomList targetRef={queryData} searchParam={searchParam} isGroup={isGroup} />
     </View>
   )
 }
 
-const SuspendedCreateRoomPage = () => {
+const SuspendedCreateRoomPage = (props: { isGroup?: boolean }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   return (
@@ -72,7 +72,7 @@ const SuspendedCreateRoomPage = () => {
         </View>
       }
     >
-      <CreateRoomPage />
+      <CreateRoomPage {...props} />
     </Suspense>
   )
 }
