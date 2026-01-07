@@ -1,4 +1,4 @@
-import { FC, lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -9,7 +9,6 @@ import { useRefetchableFragment } from 'react-relay'
 
 import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
-import { CommentsList_comments$key } from '../../../../__generated__/CommentsList_comments.graphql'
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
 import DefaultCommentReactionButton from './CommentReactionButton'
@@ -21,9 +20,10 @@ import { CommentItemProps } from './types'
 const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
   onLongPress,
-  threadDepth = 0,
   onReply,
   commentIdToExpand,
+  threadDepth = 0,
+  maxThreadDepth = 5,
   RepliesList: RepliesListProp,
   RepliesListProps,
   Timestamp = DefaultTimestamp,
@@ -42,9 +42,9 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const styles = createStyles()
 
-  // const canReply = comment.canReply
   const replyCount = comment.commentsCount?.total ?? 0
   const hasReplies = replyCount > 0
+  const canReply = threadDepth < maxThreadDepth
 
   const showReplies = useCallback(() => {
     if (isRepliesExpanded) {
@@ -104,9 +104,10 @@ const CommentItem: FC<CommentItemProps> = ({
       <RepliesList
         target={comment}
         subscriptionsEnabled
-        threadDepth={threadDepth + 1}
         onReply={onReply}
         onLongPress={onLongPress}
+        threadDepth={threadDepth + 1}
+        maxThreadDepth={maxThreadDepth}
         isReplyList
         onHideReplies={hideReplies}
         {...RepliesListProps}
@@ -121,14 +122,6 @@ const CommentItem: FC<CommentItemProps> = ({
 
   if (!comment) {
     return null
-  }
-
-  if (comment.id === 'Q29tbWVudDo3') {
-    console.log('--------------------------------')
-    console.log('comment', comment)
-    console.log('threadDepth', threadDepth)
-    console.log('canReply', comment?.canReply)
-    console.log('----------------X---------------')
   }
 
   return (
@@ -156,28 +149,28 @@ const CommentItem: FC<CommentItemProps> = ({
             <View style={styles.footerContainer}>
               <View style={styles.buttonContainer}>
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
-                {/* {canReply && ( */}
-                <CommentReplyButton
-                  onReply={replyToComment}
-                  commentId={comment.id}
-                  shouldUseBottomSheetSafeComponents
-                />
-                {/* )} */}
+                {canReply && (
+                  <CommentReplyButton
+                    onReply={replyToComment}
+                    commentId={comment.id}
+                    shouldUseBottomSheetSafeComponents
+                  />
+                )}
               </View>
               <View style={styles.timestampContainer}>
                 <Timestamp date={comment.created} />
               </View>
             </View>
-            {threadDepth === 0 && hasReplies && !isRepliesExpanded && (
+            {hasReplies && !isRepliesExpanded && (
               <CommentShowRepliesButton
                 onShowReplies={showReplies}
                 totalRepliesCount={comment.commentsCount?.total ?? 0}
               />
             )}
-            </View>
           </View>
-        </Pressable>
-      {isRepliesExpanded && !isLoadingReplies && renderCommentsReplies()}
+        </View>
+      </Pressable>
+      {isRepliesExpanded && !isLoadingReplies && canReply && renderCommentsReplies()}
     </>
   )
 }

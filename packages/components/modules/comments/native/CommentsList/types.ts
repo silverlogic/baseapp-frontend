@@ -17,4 +17,5 @@ export interface CommentsListProps {
   isReplyList?: boolean
   onHideReplies?: () => void
   currentReplyCount?: number
+  maxThreadDepth?: number
 }

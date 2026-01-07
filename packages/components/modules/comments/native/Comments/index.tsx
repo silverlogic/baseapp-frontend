@@ -46,6 +46,7 @@ const WithComments: FC<CommentsProps> = ({
   SocialInputDrawer = DefaultSocialInputDrawer,
   SocialInputDrawerProps = { DrawerProps: {}, PlaceholderProps: {} },
   drawerStyle = {},
+  maxThreadDepth = 5,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isReplyMode, setIsReplyMode] = useState(false)
@@ -76,7 +77,6 @@ const WithComments: FC<CommentsProps> = ({
   const showHandle = isFocused || body !== ''
 
   const handleReply = (comment: CommentItem_comment$data) => {
-    console.log('handleReply', comment)
     setIsReplyMode(true)
     form.reset()
     form.setValue('id', comment.id ?? '')
@@ -221,6 +221,7 @@ const WithComments: FC<CommentsProps> = ({
           commentIdToExpand={commentIdToExpand}
           onLongPress={handleLongPress}
           onReply={handleReply}
+          maxThreadDepth={maxThreadDepth}
           {...CommentsListProps}
         />
         <SocialInputDrawer.Placeholder

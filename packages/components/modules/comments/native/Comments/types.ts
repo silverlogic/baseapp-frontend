@@ -14,4 +14,5 @@ export interface CommentsProps extends PropsWithChildren {
   SocialInputDrawer?: SocialInputDrawerType
   SocialInputDrawerProps?: SocialInputDrawerProps
   drawerStyle?: StyleProp<ViewStyle>
+  maxThreadDepth?: number
 }
