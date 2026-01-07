@@ -1,14 +1,11 @@
 'use client'
 
 import type { FC } from 'react'
-import { useCallback, useState } from 'react'
 
-import { ConnectionHandler, useFragment } from 'react-relay'
+import { useFragment } from 'react-relay'
 
-import { useFileUploadStore } from '../../common/context/FileUploadProvider'
-import { useFileAttachToTargetMutation } from '../../common/graphql/mutations/FileAttachToTarget'
 import { FilesListFragment } from '../../common/graphql/queries/FilesList'
-import { useChunkedUpload } from '../../common/hooks/useChunkedUpload'
+import { useFileUploadLogic } from '../../common/hooks/useFileUploadLogic'
 import FileUploadDropzone from '../FileUploadDropzone'
 import type { FileUploadProps } from './types'
 
@@ -24,68 +21,14 @@ const FileUpload: FC<FileUploadProps> = ({
   onError,
 }) => {
   const target = useFragment(FilesListFragment, targetRef)
-  const { uploadFile } = useChunkedUpload()
-  const [attachFiles, isAttaching] = useFileAttachToTargetMutation()
-  const { clearCompleted } = useFileUploadStore()
-  const [dropzoneKey, setDropzoneKey] = useState(0)
 
-  const handleFilesSelected = useCallback(
-    async (selectedFiles: File[]) => {
-      if (!target.id) {
-        onError?.(new Error('Target object ID is required'))
-        return
-      }
-
-      try {
-        const uploadPromises = selectedFiles.map((file) => uploadFile(file))
-
-        const fileRelayIds = await Promise.all(uploadPromises)
-
-        onUploadComplete?.(fileRelayIds)
-
-        if (autoAttach && fileRelayIds.length > 0) {
-          const connectionID = ConnectionHandler.getConnectionID(target.id, 'FilesList_files')
-
-          attachFiles({
-            variables: {
-              input: {
-                fileRelayIds,
-                targetObjectId: target.id,
-              },
-              connections: [connectionID],
-            },
-            onCompleted: () => {
-              // Clear completed files from upload state after successful attachment
-              clearCompleted()
-              // Reset dropzone by changing its key to force remount
-              setDropzoneKey((prev) => prev + 1)
-              onAttachComplete?.()
-            },
-            onError: (error) => {
-              onError?.(error)
-            },
-          })
-        } else if (!autoAttach) {
-          // If not auto-attaching, clear completed files after upload
-          clearCompleted()
-          // Reset dropzone by changing its key to force remount
-          setDropzoneKey((prev) => prev + 1)
-        }
-      } catch (error) {
-        onError?.(error instanceof Error ? error : new Error('Upload failed'))
-      }
-    },
-    [
-      uploadFile,
-      autoAttach,
-      target.id,
-      attachFiles,
-      onUploadComplete,
-      onAttachComplete,
-      onError,
-      clearCompleted,
-    ],
-  )
+  const { handleFilesSelected, isAttaching, resetKey } = useFileUploadLogic({
+    targetObjectId: target.id,
+    autoAttach,
+    onUploadComplete,
+    onAttachComplete,
+    onError,
+  })
 
   if (!target.isFilesEnabled) {
     return null
@@ -93,7 +36,7 @@ const FileUpload: FC<FileUploadProps> = ({
 
   return (
     <FileUploadDropzone
-      key={dropzoneKey}
+      key={resetKey}
       onFilesSelected={handleFilesSelected}
       maxFiles={maxFiles}
       maxFileSize={maxFileSize}
