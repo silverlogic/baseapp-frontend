@@ -1,6 +1,5 @@
 import { FC } from 'react'
 
-import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { MessageItemFragment } from '@baseapp-frontend/components/messages/common'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
@@ -11,14 +10,11 @@ import { useFragment } from 'react-relay'
 import { createStyles } from './styles'
 import { MessageItemProps } from './types'
 
-const MessageItem: FC<MessageItemProps> = ({ messageRef }) => {
-  const { currentProfile } = useCurrentProfile()
+const MessageItem: FC<MessageItemProps> = ({ messageRef, isOwnMessage }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
 
   const message = useFragment(MessageItemFragment, messageRef)
-  /* TODO: Extract into functions and reuse on web and mobile */
-  const isOwnMessage = currentProfile?.id === message?.profile?.id
 
   const renderMessageContent = () => (
     <Text

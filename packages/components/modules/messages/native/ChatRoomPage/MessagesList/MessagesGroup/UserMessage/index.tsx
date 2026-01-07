@@ -1,10 +1,14 @@
 import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { ProfileCurrentUserQuery } from '@baseapp-frontend/components/profiles/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useLazyLoadQuery } from 'react-relay'
+
+import { ProfileCurrentUserQuery as ProfileCurrentUserQueryType } from '../../../../../../../__generated__/ProfileCurrentUserQuery.graphql'
 import { MessageItem as DefaultMessageItem } from './MessageItem'
 import { createStyles } from './styles'
 import { UserMessageProps } from './types'
@@ -32,8 +36,14 @@ const UserMessage: FC<UserMessageProps> = ({
 
     return isPreviousMessageFromOtherParticipant || roomHasOnlyOneMessage
   }, [allMessages, allMessagesLastIndex, messageIndex])
-
-  const isOwnMessage = currentProfile?.id === message?.profile?.id
+  const { me } = useLazyLoadQuery<ProfileCurrentUserQueryType>(
+    ProfileCurrentUserQuery,
+    {},
+    {
+      fetchPolicy: 'store-and-network',
+    },
+  )
+  const isOwnMessage = [me?.profile?.id, currentProfile?.id].includes(message?.profile?.id)
   /* TODO: Extract into functions and reuse on web and mobile */
   const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
 
@@ -59,6 +69,7 @@ const UserMessage: FC<UserMessageProps> = ({
           messageRef={message}
           isGroup={isGroup}
           isFirstGroupedMessage={isFirstGroupedMessage}
+          isOwnMessage={isOwnMessage}
           {...MessageItemProps}
         />
       </View>

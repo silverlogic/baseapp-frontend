@@ -4,4 +4,5 @@ export interface MessageItemProps {
   messageRef: MessageItemFragment$key
   isFirstGroupedMessage?: boolean
   isGroup?: boolean
+  isOwnMessage?: boolean
 }
