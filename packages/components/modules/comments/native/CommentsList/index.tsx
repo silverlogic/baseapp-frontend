@@ -4,8 +4,8 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
-import CommentHideRepliesButton from '../CommentItem/CommentHideRepliesButton'
-import CommentShowRepliesButton from '../CommentItem/CommentShowRepliesButton'
+import CommentShowRepliesButton from '../CommentShowRepliesButton'
+import CommentHideRepliesButton from './CommentHideRepliesButton'
 import { createStyles } from './styles'
 import type { CommentsListProps } from './types'
 

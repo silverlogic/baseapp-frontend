@@ -21,7 +21,9 @@ const CommentShowRepliesButton: FC<CommentShowRepliesButtonProps> = ({
   return (
     <View style={styles.showRepliesButtonContainer}>
       <Pressable onPress={onShowReplies} style={styles.showRepliesButton}>
-        <Text style={styles.showRepliesButtonText}>{body} {showTotalRepliesCount && `(${totalRepliesCount})`}</Text>
+        <Text style={styles.showRepliesButtonText}>
+          {body} {showTotalRepliesCount && `(${totalRepliesCount})`}
+        </Text>
       </Pressable>
     </View>
   )

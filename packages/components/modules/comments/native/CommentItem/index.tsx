@@ -11,9 +11,9 @@ import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRe
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
+import CommentShowRepliesButton from '../CommentShowRepliesButton'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
-import CommentShowRepliesButton from './CommentShowRepliesButton'
 import { createStyles } from './styles'
 import { CommentItemProps } from './types'
 

@@ -9,9 +9,7 @@ import { Pressable } from 'react-native'
 import { createStyles } from './styles'
 import { CommentHideRepliesButtonProps } from './types'
 
-const CommentHideRepliesButton: FC<CommentHideRepliesButtonProps> = ({
-  onHideReplies,
-}) => {
+const CommentHideRepliesButton: FC<CommentHideRepliesButtonProps> = ({ onHideReplies }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
 
