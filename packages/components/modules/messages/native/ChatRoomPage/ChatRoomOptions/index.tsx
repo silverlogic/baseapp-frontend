@@ -17,11 +17,14 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   handleGoToProfile,
   handleDeleteChat,
   isArchiveMutationInFlight,
+  isGroup = false,
 }) => {
   const openMenu = () => setVisible(true)
   const closeMenu = () => setVisible(false)
   const theme = useTheme()
   const styles = createStyles(theme)
+
+  const chatOrGroup = isGroup ? 'Group' : 'Chat'
 
   return (
     <View>
@@ -43,7 +46,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             handleArchiveChat()
           }}
           disabled={isArchiveMutationInFlight}
-          title={isArchived ? 'Unarchive Chat' : 'Archive Chat'}
+          title={isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
         />
         {/* TODO: Not implemented yet */}
         <Menu.Item
@@ -51,21 +54,23 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             closeMenu()
             handleChatDetails()
           }}
-          title="Chat Details"
+          title={`${chatOrGroup} Details`}
         />
-        <Menu.Item
-          onPress={() => {
-            closeMenu()
-            handleGoToProfile()
-          }}
-          title="Go to Profile"
-        />
+        {!isGroup && (
+          <Menu.Item
+            onPress={() => {
+              closeMenu()
+              handleGoToProfile()
+            }}
+            title="Go to Profile"
+          />
+        )}
         <Menu.Item
           onPress={() => {
             closeMenu()
             handleDeleteChat()
           }}
-          title="Delete Chat"
+          title={isGroup ? 'Leave Group' : 'Delete Chat'}
           titleStyle={styles.deleteTitleStyle}
         />
       </Menu>

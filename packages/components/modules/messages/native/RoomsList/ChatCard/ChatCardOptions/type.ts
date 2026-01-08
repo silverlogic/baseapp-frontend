@@ -12,4 +12,5 @@ export type ChatCardOptionsProps = {
   handleDeleteChat: () => void
   isArchived: boolean
   isArchiveMutationInFlight: boolean
+  isGroup?: boolean
 }
