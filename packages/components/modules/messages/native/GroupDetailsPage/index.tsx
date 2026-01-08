@@ -29,7 +29,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
   const router = useRouter()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
-  const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
+  const [commitMarkAsRead, isMutationInFlight] = useArchiveChatRoomMutation()
 
   const chatRoomRef = useLazyLoadQuery<ChatRoomQueryType>(
     ChatRoomQuery,
@@ -48,7 +48,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
 
   const handleArchiveChat = () => {
     if (currentProfile?.id && roomId) {
-      commit({
+      commitMarkAsRead({
         variables: {
           input: {
             roomId,
