@@ -23,7 +23,9 @@ export const createStyles = (theme: Theme) =>
       gap: 12,
     },
     addMemberButton: {
-      position: 'static',
+      position: 'relative',
+      alignItems: 'center',
+      alignSelf: 'baseline',
       width: 48,
       height: 48,
       shadowOffset: {

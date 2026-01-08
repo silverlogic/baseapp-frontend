@@ -20,11 +20,9 @@ const GroupProfile: FC<GroupProfileProps> = ({ roomHeader, participantsCount }) 
           <Text variant="subtitle1" color="high">
             {title}
           </Text>
-          {participantsCount && (
-            <Text variant="body2" color="low">
-              {participantsCount} members
-            </Text>
-          )}
+          <Text variant="body2" color="low">
+            {participantsCount ?? 0} {participantsCount === 1 ? 'member' : 'members'}
+          </Text>
         </View>
       </View>
     </View>

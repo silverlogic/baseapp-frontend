@@ -157,14 +157,16 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
         isArchived={isArchived}
         isGroup={isGroup}
       />
-      <LeaveGroupDialog
-        open={openConfirmLeaveGroupDialog}
-        onClose={() => setOpenConfirmLeaveGroupDialog(false)}
-        profileId={currentProfile?.id ?? ''}
-        roomId={roomId}
-        removingParticipantId={currentProfile?.id ?? ''}
-        isSoleAdmin={isSoleAdmin}
-      />
+      {currentProfile?.id && (
+        <LeaveGroupDialog
+          open={openConfirmLeaveGroupDialog}
+          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          profileId={currentProfile?.id}
+          roomId={roomId}
+          removingParticipantId={currentProfile?.id}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
     </Pressable>
   )
 }
