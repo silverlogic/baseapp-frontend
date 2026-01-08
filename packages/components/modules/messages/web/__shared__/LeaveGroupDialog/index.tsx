@@ -28,7 +28,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
 
   const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
     profileId,
-    removingParticipantId: removingParticipantData?.id,
+    removingParticipantId: removingParticipantData?.id ?? profileId,
     roomId,
     isSoleAdmin,
     onClose,

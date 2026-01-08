@@ -40,7 +40,7 @@ const UseLeaveGroup = ({
   }
 
   const onRemoveConfirmed = () => {
-    if (!roomId || !profileId) return
+    if (!roomId || !profileId || !removingParticipantId) return
     commit({
       variables: {
         input: {
@@ -57,8 +57,8 @@ const UseLeaveGroup = ({
           !response?.chatRoomUpdate?.errors
         ) {
           sendToast('Member was successfully removed')
+          onClose()
         }
-        onClose()
       },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })

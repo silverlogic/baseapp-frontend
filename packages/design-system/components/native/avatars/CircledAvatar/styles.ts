@@ -10,7 +10,7 @@ export const createStyles = (theme: Theme, size: number) =>
       height: size + 16,
       alignItems: 'center',
       justifyContent: 'center',
-      borderRadius: '50%',
+      borderRadius: (size + 16) / 2,
       borderColor: theme.colors.surface.border,
       borderWidth: 1,
     },

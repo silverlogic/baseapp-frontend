@@ -95,16 +95,26 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     console.log('Not implemented yet.')
   }
 
+  const handleDeleteChat = () => {
+    if (data.isGroup) {
+      setOpenConfirmLeaveGroupDialog(true)
+      return
+    }
+    console.log('Not implemented yet.')
+  }
+
   const renderRightAction = (
     <>
-      <LeaveGroupDialog
-        open={openConfirmLeaveGroupDialog}
-        onClose={() => setOpenConfirmLeaveGroupDialog(false)}
-        profileId={currentProfile?.id ?? ''}
-        roomId={roomId}
-        removingParticipantId={currentProfile?.id ?? ''}
-        isSoleAdmin={isSoleAdmin}
-      />
+      {currentProfile?.id && (
+        <LeaveGroupDialog
+          open={openConfirmLeaveGroupDialog}
+          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          profileId={currentProfile?.id}
+          roomId={roomId}
+          removingParticipantId={currentProfile?.id}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
       <ChatRoomOptions
         visible={visible}
         setVisible={setVisible}
@@ -114,7 +124,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
         isArchiveMutationInFlight={isMutationInFlight}
         handleChatDetails={handleChatDetails}
         handleGoToProfile={() => console.log('Not implemented.')}
-        handleDeleteChat={() => setOpenConfirmLeaveGroupDialog(true)}
+        handleDeleteChat={handleDeleteChat}
       />
     </>
   )

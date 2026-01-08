@@ -67,16 +67,20 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
         onBack={() => router.back()}
         BackIcon={CloseIcon}
         CloseIcon={EditIcon}
-        onClose={() => console.log('edit action')}
+        onClose={() => {
+          /* TODO: Implement edit action */
+        }}
       />
-      <LeaveGroupDialog
-        open={openConfirmLeaveGroupDialog}
-        onClose={() => setOpenConfirmLeaveGroupDialog(false)}
-        profileId={currentProfile?.id ?? ''}
-        roomId={roomId}
-        removingParticipantId={currentProfile?.id ?? ''}
-        isSoleAdmin={isSoleAdmin}
-      />
+      {currentProfile?.id && (
+        <LeaveGroupDialog
+          open={openConfirmLeaveGroupDialog}
+          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          profileId={currentProfile?.id}
+          roomId={roomId}
+          removingParticipantId={currentProfile?.id}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
       <GroupProfile roomHeader={roomHeader} participantsCount={chatRoom?.participantsCount} />
       <Members participantsCount={chatRoom?.participantsCount} />
       <Options

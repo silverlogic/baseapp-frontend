@@ -18,11 +18,9 @@ const Members: FC<MembersProps> = ({ participantsCount }) => {
         <Text variant="subtitle2" color="high">
           Members
         </Text>
-        {participantsCount && (
-          <Text variant="body2" color="low">
-            {participantsCount}
-          </Text>
-        )}
+        <Text variant="body2" color="low">
+          {participantsCount ?? 0}
+        </Text>
       </View>
       <View style={styles.addMemberContainer}>
         <FabButton
