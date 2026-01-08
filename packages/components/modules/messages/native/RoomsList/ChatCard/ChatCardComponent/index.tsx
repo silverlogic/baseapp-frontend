@@ -1,10 +1,11 @@
-import { FC, useRef, useState } from 'react'
+import { FC, useCallback, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   useArchiveChatRoomMutation,
   useCheckIsAdmin,
   useNameAndAvatar,
+  useUnreadChatMutation,
 } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Badge } from '@baseapp-frontend/design-system/components/native/badges'
@@ -41,6 +42,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
+  const [commitMutation] = useUnreadChatMutation()
 
   const lastMessageFragment = useFragment<LastMessageFragment$key>(
     LastMessageFragment,
@@ -91,13 +93,22 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     bottomDrawerRef.current?.close()
   }
 
-  const handleMarkAsUnread = () => {
+  const handleMarkAsUnread = useCallback(() => {
     bottomDrawerRef.current?.close()
-    console.log('Not implemented yet.')
-  }
+    if (!roomId || !currentProfile?.id) return
+    commitMutation({
+      variables: {
+        input: {
+          roomId,
+          profileId: currentProfile?.id,
+        },
+      },
+    })
+  }, [roomId, currentProfile])
+
   const handleChatDetails = () => {
     bottomDrawerRef.current?.close()
-    if (isGroup) {
+    if (isGroup && roomId) {
       router.push(`/group-details/${roomId}`)
       return
     }
