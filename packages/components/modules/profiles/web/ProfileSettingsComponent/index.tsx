@@ -111,7 +111,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
         image: profile.image?.url ?? null,
-        pk: profile.pk,
+        pk: profile.pk ?? null,
       }
       updateProfileIfActive(newProfile)
     }
