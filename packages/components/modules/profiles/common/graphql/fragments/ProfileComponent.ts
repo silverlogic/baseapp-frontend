@@ -2,6 +2,7 @@ import { graphql } from 'react-relay'
 
 export const ProfileComponentFragment = graphql`
   fragment ProfileComponentFragment on Profile {
+    pk
     id
     status
     name
