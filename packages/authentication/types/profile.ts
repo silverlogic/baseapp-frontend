@@ -3,4 +3,5 @@ export type MinimalProfile = {
   name: string | null
   image: string | null
   urlPath: string | null
+  pk: number | null
 }
