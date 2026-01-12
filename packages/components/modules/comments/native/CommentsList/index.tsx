@@ -38,9 +38,7 @@ const CommentsList: FC<CommentsListProps> = ({
   }, [refetch])
 
   const refetchWithOrder = useCallback(() => {
-    requestAnimationFrame(() => {
-      refetchRef.current({ orderBy: '-is_pinned,-created' }, { fetchPolicy: 'store-and-network' })
-    })
+    refetchRef.current({ orderBy: '-is_pinned,-created' }, { fetchPolicy: 'store-and-network' })
   }, [])
 
   const onRefetchReadyRef = useRef(onRefetchReady)
