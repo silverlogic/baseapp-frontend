@@ -1,4 +1,4 @@
-import { FC, useCallback, useRef, useState } from 'react'
+import { FC, useCallback, useRef, useState, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { BottomDrawer } from '@baseapp-frontend/design-system/components/native/drawers'
@@ -59,6 +59,8 @@ const WithComments: FC<CommentsProps> = ({
   const [selectedComment, setSelectedComment] = useState<CommentItem_comment$data | undefined>(
     undefined,
   )
+  const commentsListRefetchRef = useRef<(() => void) | null>(null)
+  const [, startTransition] = useTransition()
 
   const form = useForm<SocialUpsertForm>({
     defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -73,7 +75,6 @@ const WithComments: FC<CommentsProps> = ({
   const styles = createStyles(theme)
   const commentCreateRef = useRef<NativeTextInput>(null)
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
-  const commentsListRefetchRef = useRef<(() => void) | null>(null)
 
   const body = form.watch('body')
   const id = form.watch('id')
@@ -98,10 +99,6 @@ const WithComments: FC<CommentsProps> = ({
     setIsEditMode(false)
     form.reset()
   }
-
-  const handleRefetchReady = useCallback((refetch: () => void) => {
-    commentsListRefetchRef.current = refetch
-  }, [])
 
   const editVariables = {
     isEditMode,
@@ -201,14 +198,14 @@ const WithComments: FC<CommentsProps> = ({
         variables: { id: comment.id },
         onCompleted: (response, errors) => {
           if (!errors && commentsListRefetchRef.current) {
-            requestAnimationFrame(() => {
+            startTransition(() => {
               commentsListRefetchRef.current?.()
             })
           }
         },
       })
     },
-    [commitPinMutation],
+    [commitPinMutation, startTransition],
   )
 
   const openDeleteDialog = useCallback(() => {
@@ -273,7 +270,9 @@ const WithComments: FC<CommentsProps> = ({
             onReply={handleReply}
             maxThreadDepth={maxThreadDepth}
             ListHeaderComponent={ListHeaderComponent}
-            onRefetchReady={handleRefetchReady}
+            onRefetchReady={(refetch) => {
+              commentsListRefetchRef.current = refetch
+            }}
             {...CommentsListProps}
           />
           <SocialInputDrawer.Placeholder
