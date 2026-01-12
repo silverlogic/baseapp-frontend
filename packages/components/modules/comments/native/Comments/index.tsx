@@ -29,6 +29,7 @@ import { SocialInputDrawer as DefaultSocialInputDrawer } from '../../../__shared
 import {
   CommentsFragmentQuery,
   useCommentCreateMutation,
+  useCommentPinMutation,
   useCommentUpdateMutation,
 } from '../../common'
 import CommentDeleteDialog from '../CommentDeleteDialog'
@@ -67,10 +68,12 @@ const WithComments: FC<CommentsProps> = ({
   const target = useFragment(CommentsFragmentQuery, targetRef)
   const [commitCreateMutation, isCreateMutationInFlight] = useCommentCreateMutation()
   const [commitUpdateMutation, isUpdateMutationInFlight] = useCommentUpdateMutation()
+  const [commitPinMutation] = useCommentPinMutation()
   const theme = useTheme()
   const styles = createStyles(theme)
   const commentCreateRef = useRef<NativeTextInput>(null)
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
+  const commentsListRefetchRef = useRef<(() => void) | null>(null)
 
   const body = form.watch('body')
   const id = form.watch('id')
@@ -95,6 +98,10 @@ const WithComments: FC<CommentsProps> = ({
     setIsEditMode(false)
     form.reset()
   }
+
+  const handleRefetchReady = useCallback((refetch: () => void) => {
+    commentsListRefetchRef.current = refetch
+  }, [])
 
   const editVariables = {
     isEditMode,
@@ -188,6 +195,22 @@ const WithComments: FC<CommentsProps> = ({
     [form],
   )
 
+  const handlePin = useCallback(
+    (comment: CommentItem_comment$data) => {
+      commitPinMutation({
+        variables: { id: comment.id },
+        onCompleted: (response, errors) => {
+          if (!errors && commentsListRefetchRef.current) {
+            requestAnimationFrame(() => {
+              commentsListRefetchRef.current?.()
+            })
+          }
+        },
+      })
+    },
+    [commitPinMutation],
+  )
+
   const openDeleteDialog = useCallback(() => {
     setIsDeleting(true)
   }, [])
@@ -219,8 +242,13 @@ const WithComments: FC<CommentsProps> = ({
       if (_action === 'delete') {
         openDeleteDialog()
       }
+
+      if (_action === 'pin') {
+        handlePin(selectedComment as CommentItem_comment$data)
+        setSelectedComment(undefined)
+      }
     },
-    [selectedComment, handleEdit],
+    [selectedComment, handleEdit, handlePin],
   )
 
   if (!target.isCommentsEnabled) {
@@ -245,6 +273,7 @@ const WithComments: FC<CommentsProps> = ({
             onReply={handleReply}
             maxThreadDepth={maxThreadDepth}
             ListHeaderComponent={ListHeaderComponent}
+            onRefetchReady={handleRefetchReady}
             {...CommentsListProps}
           />
           <SocialInputDrawer.Placeholder
@@ -291,7 +320,7 @@ const WithComments: FC<CommentsProps> = ({
                 >
                   <PinIcon width={20} height={20} color={theme.colors.object.high} />
                   <Text variant="body2" color="high">
-                    Pin Comment
+                    {selectedComment.isPinned ? 'Unpin Comment' : 'Pin Comment'}
                   </Text>
                 </Pressable>
               )}
