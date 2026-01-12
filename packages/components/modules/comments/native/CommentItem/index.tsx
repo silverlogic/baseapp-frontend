@@ -12,6 +12,7 @@ import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_c
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
+import CommentPinBadge from './CommentPinBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
 import { createStyles } from './styles'
@@ -132,9 +133,12 @@ const CommentItem: FC<CommentItemProps> = ({
             <AvatarWithPlaceholder imgSource={comment.user?.avatar?.url} />
           </View>
           <View style={styles.bodyContainer}>
-            <Text variant="subtitle2" color="high">
-              {comment.user?.fullName}
-            </Text>
+            <View style={styles.headerContainer}>
+              <Text variant="subtitle2" color="high">
+                {comment.user?.fullName}
+              </Text>
+              {comment.isPinned && <CommentPinBadge />}
+            </View>
             <Text variant="body2" color="high">
               {comment.body}
               {comment.isEdited ? (

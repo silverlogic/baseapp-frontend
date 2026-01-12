@@ -18,4 +18,5 @@ export interface CommentsListProps {
   onHideReplies?: () => void
   currentReplyCount?: number
   maxThreadDepth?: number
+  onRefetchReady?: (refetch: () => void) => void
 }

@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
@@ -25,11 +25,34 @@ const CommentsList: FC<CommentsListProps> = ({
   CommentItem,
   CommentItemProps,
   CommentsListProps = {},
+  onRefetchReady,
 }) => {
   const CommentItemComponent = CommentItem ?? getDefaultCommentItem()
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { data: target, loadNext, hasNext } = useCommentList(targetRef)
+  const { data: target, loadNext, hasNext, refetch } = useCommentList(targetRef)
+  const refetchRef = useRef(refetch)
+
+  useEffect(() => {
+    refetchRef.current = refetch
+  }, [refetch])
+
+  const refetchWithOrder = useCallback(() => {
+    requestAnimationFrame(() => {
+      refetchRef.current({ orderBy: '-is_pinned,-created' }, { fetchPolicy: 'store-and-network' })
+    })
+  }, [])
+
+  const onRefetchReadyRef = useRef(onRefetchReady)
+  onRefetchReadyRef.current = onRefetchReady
+
+  useEffect(() => {
+    if (onRefetchReadyRef.current) {
+      onRefetchReadyRef.current(refetchWithOrder)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const comments = useMemo(
     () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [target?.comments?.edges],
