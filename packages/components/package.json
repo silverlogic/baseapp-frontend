@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.4.15",
+  "version": "1.4.17",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -85,7 +85,7 @@
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
     "react-native-paper": "catalog:react-native",
-    "react-native-safe-area-context": "5.4.1",
+    "react-native-safe-area-context": "catalog:react-native",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
     "relay-connection-handler-plus": "catalog:graphql",

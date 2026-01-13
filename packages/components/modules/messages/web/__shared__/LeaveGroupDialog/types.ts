@@ -1,3 +1,5 @@
+import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+
 export interface LeaveGroupDialogProps {
   customContent?: string
   customTitle?: string
@@ -5,6 +7,6 @@ export interface LeaveGroupDialogProps {
   onClose: VoidFunction
   open: boolean
   profileId: string
-  removingParticipantId: string
+  removingParticipantFragmentRef?: ProfileItemFragment$key | null
   roomId?: string
 }

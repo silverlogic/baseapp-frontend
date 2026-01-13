@@ -3,7 +3,6 @@ import { graphql } from 'react-relay'
 export const NotificationItemFragment = graphql`
   fragment NotificationItemFragment on Notification {
     id
-    pk
     unread
     timestamp
     level
@@ -13,12 +12,13 @@ export const NotificationItemFragment = graphql`
 
     actor {
       id
-
-      ... on User {
-        avatar(width: 48, height: 48) {
+      __typename
+      ... on Profile {
+        id
+        name
+        image(width: 48, height: 48) {
           url
         }
-        fullName
       }
     }
 
