@@ -14,10 +14,10 @@ type ActivityLog implements Node {
   verb: String
   visibility: VisibilityTypes
   url: String
-  pk: Int!
   metadata: GenericScalar
   events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
   profile: Profile
+  pk: Int
 }
 
 type ActivityLogConnection {
@@ -47,7 +47,7 @@ type Block implements Node {
   actor: Profile
   target: Profile
   user: User
-  pk: Int!
+  pk: Int
 }
 
 type BlockConnection {
@@ -106,7 +106,6 @@ type ChatRoom implements Node {
   participantsCount: Int!
   isGroup: Boolean!
   participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
-  pk: Int!
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
   isArchived(profileId: ID): Boolean
@@ -210,7 +209,6 @@ type ChatRoomParticipant implements Node {
   profile: Profile
   role: ChatRoomParticipantRoles
   hasArchivedRoom: Boolean!
-  pk: Int!
 }
 
 type ChatRoomParticipantConnection {
@@ -368,8 +366,8 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   """
   hasPerm(perm: String!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-  pk: Int!
   target: CommentsInterface
+  pk: Int
 }
 
 type CommentConnection {
@@ -495,7 +493,7 @@ type ContentPost implements Node & ReactionsInterface {
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   myReaction(profileId: ID): Reaction
-  pk: Int!
+  pk: Int
 }
 
 type ContentPostConnection {
@@ -537,7 +535,7 @@ type ContentPostImage implements Node {
 
   """The ID of the object"""
   id: ID!
-  pk: Int!
+  pk: Int
 }
 
 type ContentPostImageConnection {
@@ -673,7 +671,7 @@ type Follow implements Node {
   actor: Profile!
   targetIsFollowingBack: Boolean!
   target: Profile!
-  pk: Int!
+  pk: Int
 }
 
 type FollowConnection {
@@ -757,7 +755,6 @@ type Message implements Node {
   inReplyTo: Message
   deleted: Boolean!
   extraData: JSONString
-  pk: Int!
   actionObject: Node
   isRead(profileId: ID): Boolean
 }
@@ -797,7 +794,7 @@ type Metadata {
   metaRobots: String
   metaOgType: String
   metaOgImage(width: Int!, height: Int!): File
-  pk: Int!
+  pk: Int
 }
 
 type Mutation {
@@ -833,7 +830,6 @@ type Mutation {
   profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
 }
 
-"""An object with an ID"""
 interface Node {
   """The ID of the object"""
   id: ID!
@@ -849,7 +845,6 @@ type NodeLogEvent implements Node {
 
   """The ID of the object"""
   id: ID!
-  pk: Int!
 
   """The object of the event."""
   obj: Node
@@ -902,10 +897,10 @@ type Notification implements Node {
   deleted: Boolean!
   emailed: Boolean!
   data: GenericScalar
-  pk: Int!
   actor: Node
   target: Node
   actionObject: Node
+  pk: Int
 }
 
 """An enumeration."""
@@ -951,7 +946,7 @@ type NotificationSetting implements Node {
   channel: NotificationChannelTypes
   verb: String!
   isActive: Boolean!
-  pk: Int!
+  pk: Int
 }
 
 type NotificationSettingConnection {
@@ -1063,7 +1058,7 @@ type Organization implements Node & PermissionsInterface {
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
-  pk: Int!
+  pk: Int
 }
 
 input OrganizationCreateInput {
@@ -1119,9 +1114,9 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
     orderBy: String
   ): CommentConnection
   isCommentsEnabled: Boolean!
-  pk: Int!
   title: String
   body: String
+  pk: Int
 }
 
 type PageConnection {
@@ -1313,9 +1308,9 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
   myReports: Report
-  pk: Int!
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
+  pk: Int
 }
 
 type ProfileConnection {
@@ -1463,7 +1458,7 @@ type ProfileUserRole implements Node {
   user: User!
   role: ProfileRoles
   status: ProfileRoleStatus
-  pk: Int!
+  pk: Int
 }
 
 type ProfileUserRoleConnection {
@@ -1589,7 +1584,6 @@ type Rate implements Node {
   user: User!
   profile: Profile
   value: Int!
-  pk: Int!
   target: Node
 }
 
@@ -1646,7 +1640,6 @@ type Reaction implements Node {
   modified: DateTime!
   user: User!
   reactionType: ReactionTypes
-  pk: Int!
   target: Node
 }
 
@@ -1718,7 +1711,6 @@ type Report implements Node {
   user: User!
   reportType: ReportType
   reportSubject: String
-  pk: Int!
   target: Node
 }
 
@@ -1772,7 +1764,6 @@ type ReportType implements Node {
   label: String!
   parentType: ReportType
   subTypes(first: Int, last: Int, offset: Int, after: String, before: String, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection!
-  pk: Int!
 }
 
 type ReportTypeConnection {
@@ -1823,7 +1814,6 @@ type UnreadMessageCount implements Node {
 
   """The ID of the object"""
   id: ID!
-  pk: Int!
 }
 
 type UnreadMessageCountConnection {
@@ -1853,8 +1843,8 @@ type URLPath implements Node {
   path: String!
   language: Languages
   isActive: Boolean!
-  pk: Int!
   target: PageInterface
+  pk: Int
 }
 
 type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
@@ -1921,11 +1911,11 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
     orderBy: String
   ): ProfileConnection
   profile: Profile
-  pk: Int!
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   isAuthenticated: Boolean
   fullName: String
   avatar(width: Int!, height: Int!): File
+  pk: Int
 }
 
 type UserConnection {
