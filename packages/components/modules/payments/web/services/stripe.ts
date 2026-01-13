@@ -17,59 +17,33 @@ import {
 
 const baseUrl = '/payments'
 
-export const CUSTOMER_API_KEY = {
-  default: ['customer'] as QueryKey,
-  get: (...params: string[]) => [...CUSTOMER_API_KEY.default, ...params] as QueryKey,
-}
-
-export const PAYMENT_METHOD_API_KEY = {
-  default: ['paymentMethod'] as QueryKey,
-  get: (...params: string[]) => [...PAYMENT_METHOD_API_KEY.default, ...params] as QueryKey,
-  list: (...params: string[]) => [...PAYMENT_METHOD_API_KEY.default, ...params] as QueryKey,
-}
-
-export const PRODUCT_API_KEY = {
-  default: ['product'] as QueryKey,
-  get: (...params: string[]) => [...PRODUCT_API_KEY.default, ...params] as QueryKey,
-  list: (...params: string[]) => [...PRODUCT_API_KEY.default, ...params] as QueryKey,
-}
-
-export const CONFIRM_CARD_PAYMENT_API_KEY = {
-  default: ['confirmCardPayment'] as QueryKey,
-  get: (...params: string[]) => [...CONFIRM_CARD_PAYMENT_API_KEY.default, ...params] as QueryKey,
-}
-
-export const INVOICE_API_KEY = {
-  default: ['invoice'] as QueryKey,
-  get: (...params: string[]) => [...INVOICE_API_KEY.default, ...params] as QueryKey,
-  list: (...params: string[]) => [...INVOICE_API_KEY.default, ...params] as QueryKey,
-}
-
-export const SUBSCRIPTION_API_KEY = {
-  default: ['subscription'] as QueryKey,
-  get: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-  create: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-  update: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-  cancel: (...params: string[]) => [...SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-}
-
-// export const CREATION_SUBSCRIPTION_API_KEY = {
-//   default: ['useCreateSubscription'] as QueryKey,
-//   get: (...params: string[]) => [...CREATION_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-// }
-
-// export const UPDATE_SUBSCRIPTION_API_KEY = {
-//   default: ['useCreateSubscription'] as QueryKey,
-//   get: (...params: string[]) => [...UPDATE_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-// }
-// export const CANCEL_SUBSCRIPTION_API_KEY = {
-//   default: ['useCancelSubscription'] as QueryKey,
-//   get: (...params: string[]) => [...CANCEL_SUBSCRIPTION_API_KEY.default, ...params] as QueryKey,
-// }
-
-export const SETUP_INTENT_API_KEY = {
-  default: ['useSetupIntent'] as QueryKey,
-  get: (...params: string[]) => [...SETUP_INTENT_API_KEY.default, ...params] as QueryKey,
+export const STRIPE_API_KEY = {
+  default: ['stripe'],
+  getCustomer: (entityId?: string) =>
+    [...STRIPE_API_KEY.default, 'getCustomer', entityId ?? 'me'] as QueryKey,
+  createSetupIntent: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'createSetupIntent', ...params] as QueryKey,
+  listPaymentMethods: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'listPaymentMethods', ...params] as QueryKey,
+  getPaymentMethod: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getPaymentMethod', ...params] as QueryKey,
+  getProduct: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getProduct', ...params] as QueryKey,
+  listProducts: () => [...STRIPE_API_KEY.default, 'listProducts'] as QueryKey,
+  confirmCardPayment: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'confirmCardPayment', ...params] as QueryKey,
+  getSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getSubscription', ...params] as QueryKey,
+  createSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'createSubscription', ...params] as QueryKey,
+  updateSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'updateSubscription', ...params] as QueryKey,
+  cancelSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'cancelSubscription', ...params] as QueryKey,
+  getInvoice: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getInvoice', ...params] as QueryKey,
+  listInvoices: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'listInvoices', ...params] as QueryKey,
 }
 
 export class StripeApi {

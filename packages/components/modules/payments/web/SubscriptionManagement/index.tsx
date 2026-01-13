@@ -25,7 +25,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
-import { CUSTOMER_API_KEY, PAYMENT_METHOD_API_KEY, SUBSCRIPTION_API_KEY } from '../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
 import CancelSubscriptionModal from './CancelSubscriptionModal'
 import FreePlanComponent from './FreePlanComponent'
@@ -47,7 +47,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
 
   const queryClient = useQueryClient()
   const invalidateCustomer = () => {
-    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
+    queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer(entityId)] })
   }
 
   const {
@@ -79,7 +79,10 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     onSuccess: () => {
       invalidateCustomer()
       queryClient.invalidateQueries({
-        queryKey: [PAYMENT_METHOD_API_KEY.get(), SUBSCRIPTION_API_KEY.get()],
+        queryKey: [
+          STRIPE_API_KEY.listPaymentMethods(),
+          STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
+        ],
       })
       sendToast('Subscription updated successfully.', { type: 'success' })
     },
@@ -259,7 +262,10 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
             onConfirm={() => {
               cancelSubscription()
               queryClient.invalidateQueries({
-                queryKey: [CUSTOMER_API_KEY.get(entityId), SUBSCRIPTION_API_KEY.get()],
+                queryKey: [
+                  STRIPE_API_KEY.getCustomer(entityId),
+                  STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
+                ],
               })
               setIsCancelSubscriptionModalOpen(false)
             }}

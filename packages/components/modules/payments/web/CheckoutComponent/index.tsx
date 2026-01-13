@@ -13,7 +13,7 @@ import { useRouter } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
-import { CUSTOMER_API_KEY, PAYMENT_METHOD_API_KEY } from '../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
@@ -171,7 +171,10 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                 setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
               }
               queryClient.invalidateQueries({
-                queryKey: [PAYMENT_METHOD_API_KEY.get(), CUSTOMER_API_KEY.get(entityId)],
+                queryKey: [
+                  STRIPE_API_KEY.listPaymentMethods(entityId),
+                  STRIPE_API_KEY.getCustomer(entityId),
+                ],
               })
             }
             setConfirmationModalOpen(true)

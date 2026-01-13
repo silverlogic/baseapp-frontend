@@ -7,7 +7,7 @@ import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { PAYMENT_METHOD_API_KEY } from '../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { AddCardModalProps } from './types'
 
 const AddCardModal: FC<AddCardModalProps> = ({
@@ -50,7 +50,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
         setIsAddingCardPaymentProcessing(false)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: [PAYMENT_METHOD_API_KEY.get()],
+          queryKey: [STRIPE_API_KEY.listPaymentMethods()],
         })
         // renew the session is required to get the new payment method
         if (handleSetupSuccess) {
