@@ -6,6 +6,5 @@ export const mockUserProfileFactory = (id: string) => {
     name: faker.person.fullName(),
     image: faker.image.avatar(),
     urlPath: faker.internet.url(),
-    pk: faker.number.int(),
   }
 }

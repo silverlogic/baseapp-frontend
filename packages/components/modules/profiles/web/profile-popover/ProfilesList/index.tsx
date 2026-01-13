@@ -53,7 +53,6 @@ const ProfilesList: FC<ProfilesListProps> = ({
         name: profile.name ?? null,
         image: absoluteImagePath,
         urlPath: profile.urlPath?.path ?? null,
-        pk: profile.pk ?? null,
       })
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
