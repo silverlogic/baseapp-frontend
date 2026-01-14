@@ -24,14 +24,14 @@ describe('getAccessToken', () => {
     process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
 
     const refreshToken = 'test-refresh-token'
-    const expectedUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/refresh`
+    const expectedUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/_allauth/app/v1/tokens/refresh`
     mockFetchResponse({ access: 'test-access-token' })
 
     await getAccessToken(refreshToken)
 
     expect(fetch).toHaveBeenCalledWith(expectedUrl, {
       method: 'POST',
-      body: JSON.stringify({ refresh: refreshToken }),
+      body: JSON.stringify({ refresh_token: refreshToken }),
       cache: 'no-store',
       headers: {
         'Content-Type': 'application/json',

@@ -1,0 +1,57 @@
+'use client'
+
+import { setFormApiErrors } from '@baseapp-frontend/utils'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useMutation } from '@tanstack/react-query'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+
+import AllAuthApi from '../../../../services/allauth'
+import type { ForgotPasswordRequest } from '../../../../types/auth'
+import { RECOVER_PASSWORD_INITIAL_VALUES, RECOVER_PASSWORD_VALIDATION_SCHEMA } from '../constants'
+import type { UseAllAuthRecoverPasswordOptions } from '../types'
+
+const useAllAuthRecoverPassword = ({
+  validationSchema = RECOVER_PASSWORD_VALIDATION_SCHEMA,
+  defaultValues = RECOVER_PASSWORD_INITIAL_VALUES,
+  enableFormApiErrors = true,
+  options = {},
+}: UseAllAuthRecoverPasswordOptions = {}) => {
+  const form = useForm<ForgotPasswordRequest>({
+    defaultValues,
+    resolver: zodResolver(validationSchema),
+    mode: 'onChange',
+  })
+
+  const mutation = useMutation({
+    mutationFn: ({ email }) => AllAuthApi.recoverPassword({ email }),
+    ...options,
+    onError: (err, variables, context) => {
+      options?.onError?.(err, variables, context)
+      if (enableFormApiErrors) {
+        setFormApiErrors(form, err)
+      }
+    },
+    onSuccess: (response, variables, context) => {
+      options?.onSuccess?.(response, variables, context)
+    },
+  })
+
+  const handleSubmit: SubmitHandler<ForgotPasswordRequest> = async (values) => {
+    try {
+      await mutation.mutateAsync(values)
+    } catch (error) {
+      // mutateAsync will raise an error if there's an API error
+    }
+  }
+
+  return {
+    form: {
+      ...form,
+      handleSubmit: form.handleSubmit(handleSubmit),
+    },
+    mutation,
+  }
+}
+
+export default useAllAuthRecoverPassword
