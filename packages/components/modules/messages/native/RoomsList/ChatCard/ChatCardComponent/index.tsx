@@ -168,7 +168,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
         isArchived={isArchived}
         isGroup={isGroup}
       />
-      {currentProfile?.id && (
+      {currentProfile?.id && roomId && (
         <LeaveGroupDialog
           open={openConfirmLeaveGroupDialog}
           onClose={() => setOpenConfirmLeaveGroupDialog(false)}

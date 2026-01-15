@@ -52,27 +52,29 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           </TouchableOpacity>
         </View>
         <Dialog.Content>
-          <View style={styles.confirmationContent}>
-            <Text variant="body1" color="low">
-              {getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)}
-            </Text>
-          </View>
+          <Text variant="body1" color="low">
+            {getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)}
+          </Text>
         </Dialog.Content>
-
         <Dialog.Actions style={styles.dialogActions}>
           <View>
             <View style={styles.actionButtons}>
-              <Button mode="text" color="inherit" onPress={onClose} style={styles.cancelButton}>
-                Cancel
+              <Button mode="text" size="medium" onPress={onClose}>
+                <Text variant="buttonMedium" color="high">
+                  Cancel
+                </Text>
               </Button>
               <Button
                 color="error"
-                textColor="white"
+                mode="contained"
                 loading={isMutationInFlight}
                 disabled={isMutationInFlight}
                 onPress={onRemoveConfirmed}
+                size="medium"
               >
-                Leave Group
+                <Text variant="buttonMedium" color="contrast">
+                  Leave Group
+                </Text>
               </Button>
             </View>
           </View>
