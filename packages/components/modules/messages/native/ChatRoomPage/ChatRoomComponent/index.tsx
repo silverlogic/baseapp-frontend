@@ -71,7 +71,17 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     return null
   }
 
-  const renderTitleComponent = () => <ChatRoomHeader roomHeader={roomHeader} />
+  const handleChatDetails = () => {
+    if (data.isGroup) {
+      router.push(`/group-details/${roomId}`)
+      return
+    }
+    console.log('Not implemented yet.')
+  }
+
+  const renderTitleComponent = () => (
+    <ChatRoomHeader roomHeader={roomHeader} onChatDetailsClicked={handleChatDetails} />
+  )
 
   const handleArchiveChat = () => {
     if (currentProfile?.id && roomId) {
@@ -85,14 +95,6 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
         },
       })
     }
-  }
-
-  const handleChatDetails = () => {
-    if (data.isGroup) {
-      router.push(`/group-details/${roomId}`)
-      return
-    }
-    console.log('Not implemented yet.')
   }
 
   const handleDeleteChat = () => {
