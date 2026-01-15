@@ -48,7 +48,6 @@ const Options: FC<OptionsProps> = ({
           </View>
         </Button>
       </View>
-      {/* TODO: Implement Options List here */}
     </View>
   )
 }
