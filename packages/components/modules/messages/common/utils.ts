@@ -63,14 +63,6 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
   const chatDetails = useFragment<SingleChatDetailsFragment$key>(SingleChatDetailsFragment, chatRef)
 
   const { id, isGroup, isSoleAdmin, title, image, otherParticipant: participant } = chatDetails
-  if (!participant) {
-    return {
-      roomId: id,
-      isGroup,
-      title: 'Deleted User',
-      avatar: undefined,
-    }
-  }
   if (isGroup) {
     return {
       roomId: id,
@@ -78,6 +70,14 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       isSoleAdmin,
       title,
       avatar: image?.url,
+    }
+  }
+  if (!participant) {
+    return {
+      roomId: id,
+      isGroup,
+      title: 'Deleted User',
+      avatar: undefined,
     }
   }
   return {
