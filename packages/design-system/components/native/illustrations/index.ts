@@ -1,3 +1,5 @@
+export { default as NewsletterImage } from './NewsletterImage'
 export { default as SearchingImage } from './SearchingImage'
 export { default as SocialMediaDiscussionImage } from './SocialMediaDiscussionImage'
+export { default as WeGotAProblemImage } from './WeGotAProblemImage'
 export * from './types'
