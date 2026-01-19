@@ -1,7 +1,9 @@
 import { FC, PropsWithChildren } from 'react'
 
+import { StyleProp, ViewStyle } from 'react-native'
+
 import type { CommentsFragment$key } from '../../../../__generated__/CommentsFragment.graphql'
-import type { CommentCreateProps } from '../CommentCreate/types'
+import type { SocialInputDrawerProps, SocialInputDrawerType } from '../../../__shared__/native'
 import type { CommentsListProps } from '../CommentsList/types'
 
 export interface CommentsProps extends PropsWithChildren {
@@ -9,6 +11,7 @@ export interface CommentsProps extends PropsWithChildren {
   target: CommentsFragment$key
   CommentsList?: FC<CommentsListProps>
   CommentsListProps?: Partial<CommentsListProps>
-  CommentCreate?: FC<CommentCreateProps>
-  CommentCreateProps?: Partial<CommentCreateProps>
+  SocialInputDrawer?: SocialInputDrawerType
+  SocialInputDrawerProps?: SocialInputDrawerProps
+  drawerStyle?: StyleProp<ViewStyle>
 }
