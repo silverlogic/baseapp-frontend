@@ -7,6 +7,7 @@ import { BoxProps } from '@mui/material'
 import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { LoadMoreFn, RefetchFnDynamic } from 'react-relay'
 
+import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { CreateOrEditGroup, ProfileNode } from '../types'
 import { ProfileCardProps } from './ProfileCard/types'
 import { ProfilesListProps } from './ProfilesList/types'
@@ -24,6 +25,7 @@ export interface GroupChatMembersListProps extends PropsWithChildren {
   membersLoadNext?: LoadMoreFn<any>
   membersHasNext?: boolean
   membersIsLoadingNext?: boolean
+  onRemoveMember?: (profile: ProfileItemFragment$key) => void
   ProfilesContainer?: FC<BoxProps>
   Searchbar?: FC<SearchbarProps> | ((props: WithControllerProps<SearchbarProps>) => ReactElement)
   SearchbarProps?: Partial<SearchbarProps>
