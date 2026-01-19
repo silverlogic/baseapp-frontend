@@ -35,7 +35,7 @@ describe('useRequestEmailChange', () => {
           defaultValues: {
             newEmail,
           },
-          options: {
+          requestEmailChangeOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -62,7 +62,7 @@ describe('useRequestEmailChange', () => {
           defaultValues: {
             newEmail,
           },
-          options: {
+          requestEmailChangeOptions: {
             onError: () => {
               hasOnErrorRan = true
             },
@@ -93,7 +93,7 @@ describe('useRequestEmailChange', () => {
           defaultValues: {
             newEmail: 'invalid-email',
           },
-          options: {
+          requestEmailChangeOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -131,7 +131,7 @@ describe('useRequestEmailChange', () => {
         useRequestEmailChange({
           defaultValues: customDefaultValues,
           validationSchema: customValidationSchema,
-          options: {
+          requestEmailChangeOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
