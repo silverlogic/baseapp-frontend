@@ -40,7 +40,7 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
           avatar: edge?.node?.profile?.image?.url,
           username: edge?.node?.profile?.urlPath?.path,
           biography: edge?.node?.profile?.biography,
-          pk: edge?.node?.profile?.pk,
+          id: edge?.node?.profile?.id,
         }
       }
       return null
@@ -48,8 +48,8 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
     return details?.find((detail) => detail !== null)
   }
 
-  const { name, avatar, username, biography, pk } = getroomNameAndAvatar() || {}
-  const profilePath = username ?? (pk ? `/profile/${pk}` : undefined)
+  const { name, avatar, username, biography, id } = getroomNameAndAvatar() || {}
+  const profilePath = username ?? (id ? `/profile/${id}` : undefined)
 
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>

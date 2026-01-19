@@ -8,7 +8,6 @@ export const mockResolvers = {
     extraData: null,
     inReplyTo: null,
     isRead: false,
-    pk: 1,
     verb: 'SENT_MESSAGE',
     profile: {
       id: 'profile-123',

@@ -3,7 +3,6 @@ import { graphql } from 'react-relay'
 export const NotificationItemFragment = graphql`
   fragment NotificationItemFragment on Notification {
     id
-    pk
     unread
     timestamp
     level
