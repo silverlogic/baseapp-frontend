@@ -11,19 +11,13 @@ import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Typography } from '@mui/material'
-import { useFragment } from 'react-relay'
 
-import { MembersListFragment$data } from '../../../../../__generated__/MembersListFragment.graphql'
-import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
 import {
-  TitleFragment,
   getParticipantCountString,
   useArchiveChatRoomMutation,
   useChatRoom,
-  useCheckIsAdmin,
-  useNameAndAvatar,
+  useSingleChatDetails,
 } from '../../../common'
-import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
@@ -37,18 +31,13 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   onDisplayProfileSummaryClicked,
   roomId,
 }) => {
-  const roomHeader = useFragment(TitleFragment, roomTitleRef)
-
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
-  const { isGroup } = roomHeader
-  const { title, avatar } = useNameAndAvatar(roomHeader)
-  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
-  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
+  const { isGroup, isSoleAdmin, title, avatar } = useSingleChatDetails(roomTitleRef)
   const members = getParticipantCountString(participantsCount)
   const popover = usePopover()
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
@@ -80,7 +69,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         onClose={() => setOpen(false)}
         profileId={currentProfile?.id ?? ''}
         roomId={roomId}
-        isSoleAdmin={isSoleAdmin}
+        isSoleAdmin={isSoleAdmin ?? false}
       />
       <ChatHeaderContainer>
         {isUpToMd ? (

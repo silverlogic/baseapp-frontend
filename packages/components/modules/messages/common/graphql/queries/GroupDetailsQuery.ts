@@ -7,7 +7,6 @@ export const GroupDetailsQuery = graphql`
       participantsCount
       ...GroupTitleFragment
       ...MembersListFragment
-      ...ProfileSummaryFragment
     }
   }
 `

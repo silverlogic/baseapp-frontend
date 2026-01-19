@@ -7,10 +7,12 @@ import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime
 import { GroupTitleFragment$key } from '../../../__generated__/GroupTitleFragment.graphql'
 import { MembersListFragment$data } from '../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../__generated__/RoomTitleFragment.graphql'
+import { SingleChatDetailsFragment$key } from '../../../__generated__/SingleChatDetailsFragment.graphql'
 import { TitleFragment$data } from '../../../__generated__/TitleFragment.graphql'
 import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { GroupTitleFragment } from './graphql/fragments/GroupTitle'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
+import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
 export const useGroupNameAndAvatar = (
   headerRef: GroupTitleFragment$key | RoomTitleFragment$key | null | undefined,
@@ -55,6 +57,38 @@ export const useNameAndAvatar = (roomHeader: TitleFragment$data) => {
   const groupNameAndAvatar = useGroupNameAndAvatar(roomHeader)
   if (roomHeader.isGroup) return groupNameAndAvatar
   return roomNameAndAvatar
+}
+
+export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => {
+  const chatDetails = useFragment<SingleChatDetailsFragment$key>(SingleChatDetailsFragment, chatRef)
+
+  const { id, isGroup, isSoleAdmin, title, image, otherParticipant: participant } = chatDetails
+  if (!participant) {
+    return {
+      roomId: id,
+      isGroup,
+      title: 'Deleted User',
+      avatar: undefined,
+    }
+  }
+  if (isGroup) {
+    return {
+      roomId: id,
+      isGroup,
+      isSoleAdmin,
+      title,
+      avatar: image?.url,
+    }
+  }
+  return {
+    roomId: id,
+    isGroup,
+    title: participant?.profile?.name,
+    avatar: participant?.profile?.image?.url,
+    username: participant?.profile?.urlPath?.path,
+    biography: participant?.profile?.biography,
+    id: participant?.profile?.id,
+  }
 }
 
 export const getParticipantCountString = (participantCount: number | null | undefined) => {
