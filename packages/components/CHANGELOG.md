@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 1.4.18
+
+### Patch Changes
+
+- Add group details to RN
+- Add Leave group feature
+- Add Mark as unread
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.9
+
 ## 1.4.17
 
 ### Patch Changes
