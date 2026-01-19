@@ -58,7 +58,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         variables: {
           input: {
             content,
-            profileId: currentProfile?.id,
+            profileId: currentProfile.id,
             roomId: targetObjectId,
             clientMutationId,
           },
