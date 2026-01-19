@@ -3,6 +3,7 @@ import { FC } from 'react'
 import {
   SocialTextInputEditVariablesProps,
   SocialTextInputProps,
+  SocialTextInputReplyVariablesProps,
 } from '@baseapp-frontend/design-system/components/native/inputs'
 
 import { UseFormReturn } from 'react-hook-form'
@@ -23,4 +24,5 @@ export interface SocialInputProps {
   shouldUseBottomSheetSafeComponents?: boolean
   submit: VoidFunction
   editVariables?: SocialTextInputEditVariablesProps
+  replyVariables?: SocialTextInputReplyVariablesProps
 }
