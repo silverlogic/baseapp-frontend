@@ -7,6 +7,7 @@ export const CommentItemFragmentQuery = graphql`
     id
     body
     isPinned
+    isEdited
 
     profile {
       id
