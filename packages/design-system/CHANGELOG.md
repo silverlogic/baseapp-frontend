@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.1.9
+
+### Patch Changes
+
+- Add Circled Avatar for RN
+
 ## 1.1.8
 
 ### Minor Changes

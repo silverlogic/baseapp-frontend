@@ -1,6 +1,6 @@
 import { TitleFragment$data } from '../../../../../__generated__/TitleFragment.graphql'
 
-export interface ChatRoomHeaderProps {
+export interface GroupProfileProps {
   roomHeader: TitleFragment$data
-  onChatDetailsClicked: () => void
+  participantsCount?: number | null
 }
