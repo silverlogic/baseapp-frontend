@@ -30,7 +30,6 @@ const createNodeProfile = (
 export const simpleMembersListMockData = {
   data: {
     profile: {
-      pk: 1,
       canChangeRole: true,
       id: 'UHJvZmlsZTox',
       name: 'Owner Profile',
@@ -70,7 +69,6 @@ export const simpleMembersListMockData = {
 export const allRolesMembersListMockData = {
   data: {
     profile: {
-      pk: 1,
       canChangeRole: true,
       id: 'UHJvZmlsZTox',
       name: 'Owner Profile',
@@ -101,7 +99,6 @@ export const allRolesMembersListMockData = {
 export const fullMembersListMockData = {
   data: {
     profile: {
-      pk: 1,
       canChangeRole: true,
       id: 'owner-id',
       name: 'Owner Profile',

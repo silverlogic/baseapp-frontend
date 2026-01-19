@@ -115,7 +115,6 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
                 messageType: MESSAGE_TYPE.user,
                 inReplyTo: null,
                 isRead: true,
-                pk: 0, // This property is required, so we need to provide something to keep typescript happy
                 profile: {
                   id: currentProfile.id,
                 },

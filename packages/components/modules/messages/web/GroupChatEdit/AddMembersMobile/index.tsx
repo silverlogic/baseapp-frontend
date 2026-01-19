@@ -32,7 +32,6 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
   handleSubmitSuccess,
   profileId,
   roomId,
-  isPending,
   GroupChatMembersList = DefaultGroupChatMembersList,
   GroupChatMembersListProps = {},
   existingMembers = [],
@@ -140,8 +139,8 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
         </Typography>
         <IconButton
           aria-label="Add Member"
-          disabled={isEditButtonDisabled || isPending}
-          isLoading={isMutationInFlight || isPending}
+          disabled={isEditButtonDisabled}
+          isLoading={isMutationInFlight}
           onClick={() => {
             onSubmit()
           }}

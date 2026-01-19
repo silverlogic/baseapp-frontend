@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo, useState, useTransition } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
@@ -14,16 +14,19 @@ import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../../__generated__/MembersListFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileNode } from '../../../profiles/common'
 import {
   GroupDetailsQuery,
   MembersListFragment,
+  useCheckIsAdmin,
   useGroupNameAndAvatar,
   useRoomListSubscription,
   useUpdateChatRoomMutation,
 } from '../../common'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
+import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
 import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
 import { CreateOrEditGroup } from '../__shared__/types'
 import AddMembersDialog from './AddMembersDialog'
@@ -47,9 +50,11 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
 }) => {
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
+  const [memberToRemove, setMemberToRemove] = useState<ProfileItemFragment$key | null>(null)
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { avatar, title } = useGroupNameAndAvatar(group)
+
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
 
   const {
@@ -70,7 +75,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
       ) as ProfileNode[],
     [membersList],
   )
-
+  const { isSoleAdmin } = useCheckIsAdmin(membersList?.participants)
   const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: getDefaultFormValues(title || '', avatar),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
@@ -125,14 +130,14 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   })
 
   const isEditButtonDisabled = !isValid || !isDirty
-  const [isPending, startTransition] = useTransition()
-  const handleAddMemberSuccess = () => {
-    setOpen(false)
-    startTransition(() => {
-      refetch?.({})
-    })
+
+  const handleRemoveMember = (profile: ProfileItemFragment$key) => {
+    setMemberToRemove(profile)
   }
 
+  const handleAddMemberSuccess = () => {
+    setOpen(false)
+  }
   if (smDown && open)
     return (
       <AddMembersMobile
@@ -141,13 +146,22 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
         handleSubmitSuccess={handleAddMemberSuccess}
         profileId={profileId}
         roomId={roomId}
-        isPending={isPending}
         existingMembers={participants}
       />
     )
 
   return (
     <Box>
+      {roomId && memberToRemove && (
+        <LeaveGroupDialog
+          open={!!memberToRemove}
+          onClose={() => setMemberToRemove(null)}
+          profileId={profileId}
+          removingParticipantFragmentRef={memberToRemove}
+          roomId={roomId}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
       <AddMembersDialog
         open={open}
         allProfilesRef={allProfilesRef}
@@ -155,7 +169,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
         handleSubmitSuccess={handleAddMemberSuccess}
         profileId={profileId}
         roomId={roomId}
-        isPending={isPending}
         existingMembers={participants}
       />
       <Header
@@ -176,6 +189,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           setValue={setValue}
           watch={watch}
           currentParticipants={participants}
+          onRemoveMember={handleRemoveMember}
           refetch={refetch}
           membersLoadNext={loadNext}
           membersHasNext={hasNext}

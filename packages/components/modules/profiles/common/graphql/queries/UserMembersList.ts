@@ -9,7 +9,7 @@ export const UserMembersListPaginationQuery = graphql`
     $q: String
   ) {
     profile(id: $profileId) {
-      pk
+      id
       ...UserMembersListFragment
         @arguments(count: $count, cursor: $cursor, orderBy: $orderBy, q: $q)
     }

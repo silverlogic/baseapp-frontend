@@ -2,7 +2,6 @@ export const mockResolvers = {
   Node: () => ({
     id: 'Tm90aWZpY2F0aW9uOjIyNQ==',
     unread: true,
-    pk: 225,
     timestamp: '2024-10-25T19:46:09.288290+00:00',
     level: 'INFO',
     verb: 'COMMENTS.COMMENT_REPLY_CREATED',
