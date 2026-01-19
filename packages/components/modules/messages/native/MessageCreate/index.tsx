@@ -48,7 +48,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
     }
 
     const onSubmit = () => {
-      if (isMutationInFlight || !currentProfile) return
+      if (isMutationInFlight || !currentProfile || !body) return
 
       nextClientMutationId += 1
       const clientMutationId = nextClientMutationId.toString()
@@ -60,7 +60,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         variables: {
           input: {
             content,
-            profileId: currentProfile?.id,
+            profileId: currentProfile.id,
             roomId: targetObjectId,
             clientMutationId,
           },
