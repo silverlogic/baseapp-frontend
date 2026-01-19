@@ -18,7 +18,7 @@ const AdminOptionsMenu: FC<AdminOptionsProps> = ({
     </MenuItem>
     <MenuItem onClick={onRemoveClicked}>
       <Typography variant="body2" color="error">
-        Remove
+        Remove from chat
       </Typography>
     </MenuItem>
   </MenuList>

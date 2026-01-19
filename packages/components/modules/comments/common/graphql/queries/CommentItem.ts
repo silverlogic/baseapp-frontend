@@ -5,14 +5,12 @@ export const CommentItemFragmentQuery = graphql`
   @refetchable(queryName: "CommentItemRefetchQuery")
   @argumentDefinitions(isRepliesExpanded: { type: "Boolean", defaultValue: false }) {
     id
-    pk
     body
     isPinned
     isEdited
 
     profile {
       id
-      pk
       name
       image(width: 50, height: 50) {
         url
@@ -23,7 +21,6 @@ export const CommentItemFragmentQuery = graphql`
     }
     user {
       id
-      pk
       fullName
       avatar(width: 50, height: 50) {
         url

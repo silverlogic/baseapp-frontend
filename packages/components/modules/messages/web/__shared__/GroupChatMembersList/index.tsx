@@ -7,6 +7,7 @@ import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/c
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 
+import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileNode } from '../types'
 import DefaultProfileCard from './ProfileCard'
 import DefaultProfilesList from './ProfilesList'
@@ -28,6 +29,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   membersLoadNext,
   membersHasNext,
   membersIsLoadingNext,
+  onRemoveMember,
   ProfilesContainer = DefaultProfilesContainer,
   ProfileCard = DefaultProfileCard,
   ProfileCardProps = {},
@@ -68,16 +70,21 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
     })
   }
 
-  const handleRemoveMember = (profile: ProfileNode) => {
-    setValue(
-      FORM_VALUE.participants,
-      currentParticipants.filter((member: ProfileNode) => member?.id !== profile?.id),
-      {
-        shouldValidate: true,
-        shouldDirty: true,
-        shouldTouch: true,
-      },
-    )
+  const handleRemoveMember = (profile: ProfileNode | ProfileItemFragment$key) => {
+    if (onRemoveMember) {
+      onRemoveMember(profile as ProfileItemFragment$key)
+    } else {
+      const profileId = (profile as ProfileNode)?.id
+      setValue(
+        FORM_VALUE.participants,
+        currentParticipants.filter((member: ProfileNode) => member?.id !== profileId),
+        {
+          shouldValidate: true,
+          shouldDirty: true,
+          shouldTouch: true,
+        },
+      )
+    }
   }
 
   const renderItem = (profile: ProfileNode, isMember = false) => {
