@@ -105,14 +105,6 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     console.log('Not implemented yet.')
   }
 
-  const handleDeleteChat = () => {
-    if (data.isGroup) {
-      setOpenConfirmLeaveGroupDialog(true)
-      return
-    }
-    console.log('Not implemented yet.')
-  }
-
   const renderRightAction = (
     <>
       {currentProfile?.id && (

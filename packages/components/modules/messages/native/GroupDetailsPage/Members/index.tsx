@@ -61,7 +61,7 @@ const Members: FC<MembersProps> = ({
         ) : (
           hasNext && (
             <Button mode="text" size="medium" onPress={loadNext}>
-              Load 10 More
+              Load More
             </Button>
           )
         )}

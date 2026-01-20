@@ -57,8 +57,8 @@ const UseLeaveGroup = ({
           !response?.chatRoomUpdate?.errors
         ) {
           sendToast('Member was successfully removed')
-          onClose()
         }
+        onClose()
       },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
