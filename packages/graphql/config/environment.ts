@@ -1,5 +1,6 @@
-import { CURRENT_PROFILE_KEY_NAME, MinimalProfile } from '@baseapp-frontend/authentication'
+import { MinimalProfile } from '@baseapp-frontend/authentication'
 import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
+import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 

@@ -1,5 +1,17 @@
 # @baseapp-frontend/eslint-plugin
 
+## 0.0.6
+
+### Patch Changes
+
+- Remove `typescript` and `parcel` for simplicity. There were too many errors for installling this package due to the parcel setup.
+
+## 0.0.5
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+
 ## 0.0.4
 
 ### Patch Changes

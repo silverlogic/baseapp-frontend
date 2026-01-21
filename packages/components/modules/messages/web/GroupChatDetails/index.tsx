@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, Suspense, useRef, useState } from 'react'
+import { FC, Suspense, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
@@ -12,6 +12,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
 import { MembersListFragment$key } from '../../../../__generated__/MembersListFragment.graphql'
+import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
 import {
   GroupDetailsQuery,
   MembersListFragment,
@@ -71,17 +72,16 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
     )
   }
 
-  const [removingParticipantId, setRemovingParticipantId] = useState<string | undefined>(undefined)
-  const removingParticipantName = useRef<string | null | undefined>(undefined)
+  const [removingParticipantFragmentRef, setRemovingParticipantFragmentRef] = useState<
+    ProfileItemFragment$key | undefined
+  >(undefined)
 
-  const initiateRemoval = (id: string, name: string | null | undefined) => {
-    setRemovingParticipantId(id)
-    removingParticipantName.current = name
+  const initiateRemoval = (profileFragmentRef: ProfileItemFragment$key) => {
+    setRemovingParticipantFragmentRef(profileFragmentRef)
   }
 
   const handleRemoveDialogClose = () => {
-    setRemovingParticipantId(undefined)
-    removingParticipantName.current = undefined
+    setRemovingParticipantFragmentRef(undefined)
   }
 
   const renderItem = (item: GroupMembersEdge) => {
@@ -121,8 +121,8 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
       <LeaveGroupDialog
         profileId={profileId}
         roomId={group?.id}
-        open={!!removingParticipantId}
-        removingParticipantId={removingParticipantId ?? ''}
+        open={!!removingParticipantFragmentRef}
+        removingParticipantFragmentRef={removingParticipantFragmentRef}
         onClose={handleRemoveDialogClose}
         isSoleAdmin={isSoleAdmin}
       />

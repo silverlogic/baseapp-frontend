@@ -8,7 +8,7 @@ export interface CurrentProfileMenuProps {
   CurrentProfile?: FC
   MenuItems?: FC<MenuItemsProps>
   MenuItemsProps?: Partial<MenuItemsProps>
-  SwitchProfileMenu?: FC<SwitchProfileMenuProps>
+  SwitchProfileMenu?: FC<SwitchProfileMenuProps> | null
   SwitchProfileMenuProps?: Partial<SwitchProfileMenuProps>
   handlePopoverOnClose: () => void
   setOpenProfilesList: (open: boolean) => void

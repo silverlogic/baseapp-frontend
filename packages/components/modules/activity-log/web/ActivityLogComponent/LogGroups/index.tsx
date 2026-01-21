@@ -1,6 +1,9 @@
 import { FC } from 'react'
 
-import { Avatar, Box, CircularProgress, Typography } from '@mui/material'
+import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
+import { AvatarDeletedUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
+
+import { Box, CircularProgress, Typography } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Timestamp } from '../../../../__shared__/web'
@@ -9,8 +12,8 @@ import LogItem from '../LogItem'
 import { LogGroupsProps } from './types'
 
 const LogGroups: FC<LogGroupsProps> = ({
-  logGroups,
   LoadingState = CircularProgress,
+  logGroups,
   LoadingStateProps,
   VirtuosoProps,
   loadNext,
@@ -39,6 +42,18 @@ const LogGroups: FC<LogGroupsProps> = ({
     if (group.logs[0]?.user == null) return 'Deleted User'
     return group.logs[0]?.user?.fullName
   }
+  const renderAvatar = (group: LogGroup) => {
+    if (group.logs[0]?.user == null) return <AvatarDeletedUserIcon />
+    return (
+      <AvatarWithPlaceholder
+        width={40}
+        height={40}
+        className="self-start justify-self-center"
+        src={group.logs[0]?.user?.avatar?.url ?? ''}
+        sx={{ border: 'none', marginBottom: '4px' }}
+      />
+    )
+  }
 
   const renderItemContent = (group: LogGroup) => (
     <Box
@@ -51,12 +66,7 @@ const LogGroups: FC<LogGroupsProps> = ({
       maxWidth="568px"
     >
       <Box display="flex" alignItems="center" gap="12px">
-        <Avatar
-          style={{ marginBottom: '4px' }}
-          sizes="small"
-          src={group.logs[0]?.user?.avatar?.url ?? ''}
-          alt={group.logs[0]?.user?.fullName ?? 'User activity log avatar'}
-        />
+        {renderAvatar(group)}
         <Typography variant="subtitle2" mb="6px">
           {renderUserName(group)}
         </Typography>

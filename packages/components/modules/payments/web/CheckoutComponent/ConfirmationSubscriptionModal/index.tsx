@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import getUser from '@baseapp-frontend/authentication/dist/modules/user/getUser'
+import { getUserSSR } from '@baseapp-frontend/authentication/modules/user'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Button, Typography } from '@mui/material'
@@ -8,13 +8,13 @@ import { Box, Button, Typography } from '@mui/material'
 import { maskEmail } from '../utils'
 import { ConfirmationSubscriptionModalProps } from './types'
 
-const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
+const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = async ({
   open,
   onClose,
   orderNumber,
   planDetails,
 }) => {
-  const user = getUser()
+  const user = await getUserSSR()
   const maskedEmail = maskEmail(user?.email)
 
   const handleViewPlanDetails = () => {

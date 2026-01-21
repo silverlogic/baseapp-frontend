@@ -1,5 +1,76 @@
 # @baseapp-frontend/design-system
 
+## 1.1.9
+
+### Patch Changes
+
+- Add Circled Avatar for RN
+
+## 1.1.8
+
+### Minor Changes
+
+- Added roomslist components and illustrations
+
+## 1.1.7
+
+### Patch Changes
+
+- asd
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+  - @baseapp-frontend/utils@4.0.6
+
+## 1.1.6
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+
+## 1.1.5
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.1.4
+
+### Patch Changes
+
+- Added new icon ProfileNoCircleIcon
+
+## 1.1.3
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.4
+
+## 1.1.2
+
+### Patch Changes
+
+- Enhanced UI settings store to automatically load settings from client-side cookies when no initial settings are provided
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.3
+
+## 1.1.1
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.2
+
+## 1.1.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
 ## 1.0.22
 
 ### Patch Changes

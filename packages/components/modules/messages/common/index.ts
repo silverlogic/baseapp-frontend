@@ -32,6 +32,9 @@ export * from './graphql/subscriptions/useMessagesListSubscription'
 export * from './graphql/subscriptions/useMessageCountUpdateSubscription'
 export * from './graphql/subscriptions/useRoomListSubscription'
 
+export { default as useLeaveGroup } from './useLeaveGroup'
+export * from './useLeaveGroup/constants'
+
 export * from './constants'
 export type * from './types'
 export * from './utils'

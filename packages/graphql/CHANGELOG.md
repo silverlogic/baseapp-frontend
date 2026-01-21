@@ -1,5 +1,49 @@
 # @baseapp-frontend/graphql
 
+## 1.3.8
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.7
+  - @baseapp-frontend/utils@4.0.6
+
+## 1.3.7
+
+### Patch Changes
+
+- Update `react` and `react-dom` versions due to `CVE-2025-55182`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.6
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.3.6
+
+### Patch Changes
+
+- update 'CURRENT_PROFILE_KEY_NAME' import on environment.ts
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.5
+  - @baseapp-frontend/utils@4.0.4
+
+## 1.3.5
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.4
+  - @baseapp-frontend/utils@4.0.3
+
+## 1.3.4
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.3
+  - @baseapp-frontend/utils@4.0.2
+
 ## 1.3.3
 
 ### Patch Changes

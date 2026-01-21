@@ -3,19 +3,8 @@
   "ui": "tui",
   "tasks": {
     "dev": {
-      "env": ["BASEAPP_FRONTEND_TEMPLATE_PATH"],
       "cache": false,
       "persistent": true
-    },
-    "@baseapp-frontend/components#build": {
-      "dependsOn": ["@baseapp-frontend/design-system#build", "^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
-    },
-    "@baseapp-frontend/wagtail#build": {
-      "dependsOn": ["@baseapp-frontend/design-system#build", "^build"],
-      "inputs": ["$TURBO_DEFAULT$", ".env*"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
     },
     "build": {
       "dependsOn": ["^build"],

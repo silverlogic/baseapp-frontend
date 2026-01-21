@@ -1,30 +1,16 @@
 {
   "name": "@baseapp-frontend/eslint-plugin",
   "description": "Eslint custom rules for BaseApp.",
-  "version": "0.0.4",
-  "source": "index.ts",
-  "main": "dist/index.js",
-  "module": "dist/module.js",
-  "types": "dist/index.d.ts",
+  "version": "0.0.6",
+  "main": "index.js",
   "sideEffects": false,
   "scripts": {
-    "build": "parcel build",
-    "dev": "echo Skipping parcel watch",
-    "test": "ts-node ./rules/**/*.test.ts",
+    "test": "node ./rules/**/*.test.js",
     "storybook": "echo Eslint Plugin: No storybook found",
-    "clean": "rm -rf node_modules dist",
-    "prepare": "pnpm build"
+    "clean": "rm -rf node_modules"
   },
   "dependencies": {
     "eslint": "catalog:lint"
-  },
-  "devDependencies": {
-    "@baseapp-frontend/tsconfig": "workspace:*",
-    "@types/eslint": "catalog:lint",
-    "@types/jest": "catalog:test",
-    "parcel": "^2.12.0",
-    "ts-node": "catalog:test",
-    "typescript": "catalog:"
   },
   "license": "MIT",
   "repository": {

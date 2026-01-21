@@ -3,18 +3,12 @@
 import { FC } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
-import { ValueOf, useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
-import { ConnectionHandler } from 'react-relay'
+import { useFragment } from 'react-relay'
 
-import { useUpdateChatRoomMutation } from '../../../common'
-import {
-  LEAVE_GROUP_DIALOG_TEXT_COPY,
-  LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS,
-  LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS,
-  LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS,
-} from './constants'
+import { ProfileItemFragment } from '../../../../profiles/common'
+import { LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS, useLeaveGroup } from '../../../common'
 import { LeaveGroupDialogProps } from './types'
 
 const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
@@ -23,66 +17,45 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
   onClose,
   open,
   profileId,
-  removingParticipantId,
+  removingParticipantFragmentRef,
   roomId,
   isSoleAdmin = false,
 }) => {
-  const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
-  const { sendToast } = useNotification()
+  const removingParticipantData = useFragment(
+    ProfileItemFragment,
+    removingParticipantFragmentRef ?? null,
+  )
 
-  const getLeaveGroupDialogTextCopy = (
-    type: ValueOf<typeof LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS>,
-  ) => {
-    if (profileId === removingParticipantId) {
-      if (isSoleAdmin) {
-        return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
-          LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
-        ][type]
-      }
-      return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
-        LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.MEMBER
-      ][type]
+  const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
+    profileId,
+    removingParticipantId: removingParticipantData?.id ?? profileId,
+    roomId,
+    isSoleAdmin,
+    onClose,
+  })
+
+  const getTitle = () => {
+    if (customTitle) return customTitle
+
+    // If the member being removed is NOT the current user's profile,
+    // and we have access to that member's name data, display their actual name
+    if (profileId !== removingParticipantData?.id && removingParticipantData?.name) {
+      return `Remove ${removingParticipantData.name}?`
     }
-    return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_REMOVING][
-      LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
-    ][type]
+
+    return getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE)
   }
 
-  const onRemoveConfirmed = () => {
-    if (!roomId || !profileId) return
-    commit({
-      variables: {
-        input: {
-          roomId,
-          profileId,
-          removeParticipants: [removingParticipantId],
-        },
-        connections: [ConnectionHandler.getConnectionID(roomId, 'ChatRoom_participants')],
-      },
-      onCompleted: (response) => {
-        if (
-          removingParticipantId &&
-          removingParticipantId !== profileId &&
-          !response?.chatRoomUpdate?.errors
-        ) {
-          sendToast('Member was successfully removed')
-        }
-        onClose()
-      },
-      onError: (error) => {
-        sendToast(error.message, { type: 'error' })
-      },
-    })
+  const getContent = () => {
+    if (customContent) return customContent
+
+    return getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)
   }
 
   return (
     <ConfirmDialog
-      title={
-        customTitle ?? getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE)
-      }
-      content={
-        customContent ?? getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)
-      }
+      title={getTitle()}
+      content={getContent()}
       action={
         <LoadingButton
           color="error"
@@ -90,7 +63,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           disabled={isMutationInFlight}
           loading={isMutationInFlight}
         >
-          {removingParticipantId === profileId ? 'Leave group' : 'Remove'}
+          {removingParticipantData?.id === profileId ? 'Leave group' : 'Remove'}
         </LoadingButton>
       }
       onClose={onClose}
