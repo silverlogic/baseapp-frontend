@@ -13,8 +13,15 @@ import { NAV_WIDTH } from '../../constants'
 import NavSectionVertical from '../NavSectionVertical'
 import { VerticalDrawerProps } from './types'
 
-const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, onCloseNav }) => {
+const VerticalDrawer: FC<VerticalDrawerProps> = ({
+  navData,
+  LogoIcon,
+  openNav,
+  onCloseNav,
+  DrawerProps = {},
+}) => {
   const pathname = usePathname()
+  const { PaperProps, ...restDrawerProps } = DrawerProps
 
   useEffect(() => {
     if (openNav) {
@@ -27,11 +34,14 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({ navData, LogoIcon, openNav, o
       open={openNav}
       onClose={onCloseNav}
       PaperProps={{
+        ...PaperProps,
         sx: {
           width: NAV_WIDTH.VERTICAL,
           height: '100% !important',
+          ...PaperProps?.sx,
         },
       }}
+      {...restDrawerProps}
     >
       <Scrollbar
         sx={{

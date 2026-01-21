@@ -25,6 +25,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   children,
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
@@ -44,7 +47,12 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
         >
-          <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
+          <NavCentered
+            navData={navData}
+            openNav={nav.value}
+            onCloseNav={nav.onFalse}
+            VerticalDrawerProps={VerticalDrawerProps}
+          />
         </Header>
         <MainContainer isNavCentered {...MainContainerProps}>
           {children}
@@ -64,7 +72,13 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenuProps={AccountMenuProps}
           ToolbarProps={ToolbarProps}
         />
-        <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
+        <NavHorizontal
+          navData={navData}
+          openNav={nav.value}
+          onCloseNav={nav.onFalse}
+          slotProps={slotProps}
+          VerticalDrawerProps={VerticalDrawerProps}
+        />
         <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}
         </MainContainer>
@@ -97,6 +111,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             onCloseNav={nav.onFalse}
             LogoIcon={LogoIcon}
             LogoProps={LogoProps}
+            slotProps={slotProps}
+            VerticalDrawerProps={VerticalDrawerProps}
+            NavToggleButtonProps={NavToggleButtonProps}
           />
           <MainContainer isNavMini {...MainContainerProps}>
             {children}
@@ -129,6 +146,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           LogoProps={LogoProps}
           openNav={nav.value}
           onCloseNav={nav.onFalse}
+          slotProps={slotProps}
+          VerticalDrawerProps={VerticalDrawerProps}
+          NavToggleButtonProps={NavToggleButtonProps}
         />
         <MainContainer {...MainContainerProps}>{children}</MainContainer>
       </Box>
