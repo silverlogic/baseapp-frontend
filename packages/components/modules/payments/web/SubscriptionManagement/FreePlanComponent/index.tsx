@@ -1,10 +1,9 @@
 import { Check } from '@mui/icons-material'
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
 
-import { RowFlexContainer, SubscriptionPlanContainer } from './styled'
+import { RowFlexContainer, SubscriptionPlanContainer } from '../styled'
 
-const FreePlanComponent = ({ router }: { router: AppRouterInstance }) => {
+const FreePlanComponent = ({ onPlanChange }: { onPlanChange: () => void }) => {
   const freeFeatures = [
     'Access to core features',
     'Limited storage space',
@@ -44,7 +43,7 @@ const FreePlanComponent = ({ router }: { router: AppRouterInstance }) => {
       <Button
         variant="contained"
         color="inherit"
-        onClick={() => router.push('/subscriptions')}
+        onClick={onPlanChange}
         sx={{
           alignSelf: 'flex-end',
           width: 'fit-content',

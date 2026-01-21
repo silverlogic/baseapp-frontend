@@ -10,11 +10,11 @@ import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import AddCardModal from '../CheckoutComponent/AddCardModal'
+import AddCardModal from '../AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
-import { PRODUCT_API_KEY } from '../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
-import PaymentMethodsItem from './components/PaymentMethodsItem'
+import PaymentMethodsItem from './PaymentMethodsItem'
 import { PaymentMethodsManagementComponentProps } from './types'
 
 const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentProps> = ({
@@ -134,7 +134,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           variant="soft"
           color="inherit"
           onClick={() => {
-            createSetupIntent(entityId ?? '')
+            createSetupIntent()
           }}
           startIcon={<Add />}
           disabled={isCreatingSetupIntent}
@@ -179,7 +179,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
             setIsAddCardModalOpen(false)
-            queryClient.invalidateQueries({ queryKey: PRODUCT_API_KEY.get() })
+            queryClient.invalidateQueries({ queryKey: STRIPE_API_KEY.getProduct() })
           }}
         />
       )}

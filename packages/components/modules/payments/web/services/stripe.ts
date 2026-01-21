@@ -1,5 +1,7 @@
 import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 
+import { QueryKey } from '@tanstack/react-query'
+
 import {
   CreateSubscriptionOptions,
   Customer,
@@ -10,11 +12,41 @@ import {
   Subscription,
   SubscriptionRequestBody,
   UpdatePaymentMethodRequestBody,
+  UpdateSubscriptionOptions,
 } from '../types'
 
 const baseUrl = '/payments'
 
-class StripeApi {
+export const STRIPE_API_KEY = {
+  default: ['stripe'],
+  getCustomer: (entityId?: string) =>
+    [...STRIPE_API_KEY.default, 'getCustomer', entityId ?? 'me'] as QueryKey,
+  createSetupIntent: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'createSetupIntent', ...params] as QueryKey,
+  listPaymentMethods: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'listPaymentMethods', ...params] as QueryKey,
+  getPaymentMethod: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getPaymentMethod', ...params] as QueryKey,
+  getProduct: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getProduct', ...params] as QueryKey,
+  listProducts: () => [...STRIPE_API_KEY.default, 'listProducts'] as QueryKey,
+  confirmCardPayment: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'confirmCardPayment', ...params] as QueryKey,
+  getSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getSubscription', ...params] as QueryKey,
+  createSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'createSubscription', ...params] as QueryKey,
+  updateSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'updateSubscription', ...params] as QueryKey,
+  cancelSubscription: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'cancelSubscription', ...params] as QueryKey,
+  getInvoice: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getInvoice', ...params] as QueryKey,
+  listInvoices: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'listInvoices', ...params] as QueryKey,
+}
+
+export class StripeApi {
   static getCustomer = (entityId?: string): Promise<Customer> =>
     axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}`)
 
@@ -57,7 +89,7 @@ class StripeApi {
   static listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products`)
 
   static getProduct = (productId: string): Promise<Product> =>
-    axios.get(`${baseUrl}/stripe/products`, { params: { productId } })
+    axios.get(`${baseUrl}/stripe/products/${productId}`)
 
   static createSubscription = ({
     entityId,
@@ -85,9 +117,7 @@ class StripeApi {
 
   static updateSubscription = (
     subscriptionId: string,
-    updateData: Partial<Subscription>,
+    updateData: UpdateSubscriptionOptions,
   ): Promise<Subscription> =>
     axios.patch(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`, updateData)
 }
-
-export default StripeApi

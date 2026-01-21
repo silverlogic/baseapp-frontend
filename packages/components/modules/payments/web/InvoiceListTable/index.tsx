@@ -15,9 +15,9 @@ import {
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Invoice } from '../types'
-import InvoiceItemWrapper from './components/InvoiceItemWrapper'
-import InvoiceListTableFooter from './components/InvoiceListTableFooter'
-import InvoiceListTableHeader from './components/InvoiceListTableHeader'
+import InvoiceItemWrapper from './InvoiceItemWrapper'
+import InvoiceListTableFooter from './InvoiceListTableFooter'
+import InvoiceListTableHeader from './InvoiceListTableHeader'
 import { InvoiceListTableProps } from './types'
 
 const InvoiceListTable = ({

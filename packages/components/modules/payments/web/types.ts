@@ -75,6 +75,13 @@ export interface CreateSubscriptionOptions {
   billingDetails?: BillingDetails
 }
 
+export interface UpdateSubscriptionOptions {
+  priceId?: string
+  paymentMethodId?: string
+  billingDetails?: BillingDetails
+  defaultPaymentMethod?: string
+}
+
 export interface SubscriptionRequestBody {
   entityId: string
   priceId: string
