@@ -1,5 +1,163 @@
 # @baseapp-frontend/components
 
+## 1.4.18
+
+### Patch Changes
+
+- Add group details to RN
+- Add Leave group feature
+- Add Mark as unread
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.9
+
+## 1.4.17
+
+### Patch Changes
+
+- Updated group chat editing to improve UX for adding and removing members
+
+## 1.4.16
+
+### Patch Changes
+
+- Notifications shows actor's information correctly
+
+## 1.4.15
+
+### Minor Changes
+
+- Added roomslist components and illustrations
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.8
+
+## 1.4.14
+
+### Patch Changes
+
+- Consolidated hardcoded role values to use centralized constants for improved consistency and maintainability. Also updated component property naming for improved code clarity.
+
+## 1.4.13
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55183` and `CVE-2025-55184`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.7
+  - @baseapp-frontend/design-system@1.1.7
+  - @baseapp-frontend/graphql@1.3.8
+  - @baseapp-frontend/utils@4.0.6
+
+## 1.4.12
+
+### Patch Changes
+
+- Improved error handling for profile and organization creation workflows. Validation errors now display as field-specific alerts and a dismissible notification, providing clearer feedback during form submission failures
+
+## 1.4.11
+
+### Patch Changes
+
+- Added graphql queries for notifications, profile and pages
+
+## 1.4.10
+
+### Patch Changes
+
+- Improved handle formatting with consistent @ display, updated avatar visuals, and added shared utilities for broader use
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.6
+
+## 1.4.9
+
+### Patch Changes
+
+- Update `react`, `react-dom` and `next` versions due to `CVE-2025-55182` and `CVE-2025-66478`.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.6
+  - @baseapp-frontend/design-system@1.1.5
+  - @baseapp-frontend/graphql@1.3.7
+  - @baseapp-frontend/utils@4.0.5
+
+## 1.4.8
+
+### Patch Changes
+
+- Fix for posts images being deformed if too big
+
+## 1.4.7
+
+### Patch Changes
+
+- Updated messages to show additional detail regarding chat participant in non group chats
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.4
+
+## 1.4.6
+
+### Patch Changes
+
+- update to comments, posts, messages and reactions to show the current profile selected for these interactions
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.5
+  - @baseapp-frontend/graphql@1.3.6
+  - @baseapp-frontend/utils@4.0.4
+  - @baseapp-frontend/design-system@1.1.3
+
+## 1.4.5
+
+### Patch Changes
+
+- Hide block and report buttons for own profile, to prevent self-blocking and reporting
+
+## 1.4.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.4
+  - @baseapp-frontend/design-system@1.1.2
+  - @baseapp-frontend/utils@4.0.3
+  - @baseapp-frontend/graphql@1.3.5
+
+## 1.4.3
+
+### Patch Changes
+
+- moved dependencies from package.json to pnpm-workspace.yaml catalog
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.0.3
+  - @baseapp-frontend/design-system@1.1.1
+  - @baseapp-frontend/graphql@1.3.4
+  - @baseapp-frontend/utils@4.0.2
+
+## 1.4.2
+
+### Patch Changes
+
+- Fix UI incosistency for the `ProfileSettingsComponent` during page refreshes.
+- Remove incorrect border showing on the AccountPopover menu when the `SwitchProfileMenu`component is `null`.
+- Allow `SwitchProfileMenu`to be `null` (useful for opting-out of that feature).
+
+## 1.4.1
+
+### Patch Changes
+
+- User Deletion - Remove User Info from Messages
+
+## 1.4.0
+
+### Minor Changes
+
+- Switch to just-in-time compilation strategy using package exports.
+- Remove legacy build/watch scripts.
+- Update documentation.
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.0
+
 ## 1.3.0
 
 ### Minor Changes

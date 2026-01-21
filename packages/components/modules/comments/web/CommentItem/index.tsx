@@ -63,7 +63,7 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
-  const profileUrl = `${profilePath}/${comment?.user?.pk}`
+  const profileUrl = comment?.profile?.urlPath?.path ?? `${profilePath}/${comment?.profile?.id}`
   const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
@@ -93,18 +93,18 @@ const CommentItem: FC<CommentItemProps> = ({
       setCommentReply({
         commentItemRef,
         inReplyToId: comment.id,
-        name: comment.user?.fullName,
+        name: comment.profile?.name,
       })
     }
     showReplies()
   }
 
-  const renderUserName = () => {
+  const renderProfileName = () => {
     if (!hasUser) return <Typography variant="subtitle2">Deleted User</Typography>
 
     return (
       <Link href={profileUrl}>
-        <Typography variant="subtitle2">{comment.user?.fullName}</Typography>
+        <Typography variant="subtitle2">{comment.profile?.name}</Typography>
       </Link>
     )
   }
@@ -140,7 +140,7 @@ const CommentItem: FC<CommentItemProps> = ({
     deleteComment({ variables: { id: comment.id } })
     resetCommentReply()
   }
-
+  const totalCommentsCount = comment.commentsCount.total
   return (
     <div>
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
@@ -158,15 +158,15 @@ const CommentItem: FC<CommentItemProps> = ({
               deletedUser={!hasUser}
               width={40}
               height={40}
-              alt={comment.user?.fullName ?? `Comment's user avatar`}
-              src={comment.user?.avatar?.url}
+              alt={comment.profile?.name ?? `Comment's user avatar`}
+              src={comment.profile?.image?.url}
               onClick={() => router.push(profileUrl)}
             />
 
             <div className="grid gap-3">
               <div className="grid grid-cols-1 justify-start">
                 <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
-                  {renderUserName()}
+                  {renderProfileName()}
                   <CommentPinnedBadge isPinned={comment.isPinned} />
                 </div>
                 {renderCommentContent()}
@@ -178,7 +178,8 @@ const CommentItem: FC<CommentItemProps> = ({
                     onReply={replyToComment}
                     isLoadingReplies={isLoadingReplies}
                     commentId={comment.id}
-                    totalCommentsCount={comment.commentsCount.total}
+                    totalCommentsCount={totalCommentsCount}
+                    isDisabled={!hasUser && (totalCommentsCount ?? 0) === 0}
                   />
                 </div>
                 <Timestamp date={comment.created} />

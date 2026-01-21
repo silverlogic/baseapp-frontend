@@ -34,9 +34,11 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   participantsCount,
   roomTitleRef,
   onDisplayGroupDetailsClicked,
+  onDisplayProfileSummaryClicked,
   roomId,
 }) => {
   const roomHeader = useFragment(TitleFragment, roomTitleRef)
+
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
 
@@ -78,7 +80,6 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         onClose={() => setOpen(false)}
         profileId={currentProfile?.id ?? ''}
         roomId={roomId}
-        removingParticipantId={currentProfile?.id ?? ''}
         isSoleAdmin={isSoleAdmin}
       />
       <ChatHeaderContainer>
@@ -147,6 +148,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
                 onLeaveClicked={() => {
                   popover.onClose()
                   setOpen(true)
+                }}
+                onContactDetailsClicked={() => {
+                  popover.onClose()
+                  onDisplayProfileSummaryClicked()
                 }}
               />
             </Popover>

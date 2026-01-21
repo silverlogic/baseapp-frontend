@@ -1,3 +1,8 @@
+// Set a default API base URL for tests if not already set
+if (typeof process.env.NEXT_PUBLIC_API_BASE_URL === 'undefined') {
+  process.env.NEXT_PUBLIC_API_BASE_URL = ''
+}
+
 class MockResponse {
   ok: boolean
   status: number

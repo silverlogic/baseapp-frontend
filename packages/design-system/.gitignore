@@ -59,7 +59,3 @@ cypress/downloads
 
 # editorconfig
 .editorconfig
-
-# babel & tsc
-/tmp-babel
-/tmp-dts

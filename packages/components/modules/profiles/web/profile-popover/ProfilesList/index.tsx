@@ -56,6 +56,7 @@ const ProfilesList: FC<ProfilesListProps> = ({
       })
       sendToast(`Switched to ${profile.name}`)
       handleCloseSubmenu()
+      window.location.reload()
     }
   }
 

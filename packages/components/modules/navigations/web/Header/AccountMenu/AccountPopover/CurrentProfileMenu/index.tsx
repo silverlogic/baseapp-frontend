@@ -23,11 +23,9 @@ const CurrentProfileMenu: FC<CurrentProfileMenuProps> = ({
   setOpenProfilesList,
 }) => {
   const { currentProfile: profile } = useCurrentProfile()
-  const loadCurrentProfile = Boolean(CurrentProfile) && Boolean(profile)
-  const loadCurrentUser = !loadCurrentProfile && Boolean(CurrentUser)
-  const shouldShowDivider = Boolean(
-    loadCurrentProfile || loadCurrentUser || Boolean(SwitchProfileMenu),
-  )
+  const loadCurrentProfile = !!CurrentProfile && !!profile
+  const loadCurrentUser = !loadCurrentProfile && !!CurrentUser
+  const shouldShowDivider = (loadCurrentProfile || loadCurrentUser) && !!SwitchProfileMenu
 
   return (
     <>
@@ -35,14 +33,14 @@ const CurrentProfileMenu: FC<CurrentProfileMenuProps> = ({
 
       {loadCurrentUser && <CurrentUser />}
 
-      {loadCurrentProfile && Boolean(SwitchProfileMenu) && (
+      {loadCurrentProfile && !!SwitchProfileMenu && (
         <SwitchProfileMenu
           openProfilesList={() => setOpenProfilesList(true)}
           {...SwitchProfileMenuProps}
         />
       )}
 
-      {Boolean(MenuItemsProps?.menuItems?.length) && (
+      {!!MenuItemsProps?.menuItems?.length && (
         <>
           {shouldShowDivider && <Divider sx={{ borderStyle: 'solid' }} />}
 
