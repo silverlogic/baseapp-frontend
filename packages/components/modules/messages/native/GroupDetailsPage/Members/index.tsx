@@ -1,14 +1,23 @@
 import { FC } from 'react'
 
-import { FabButton } from '@baseapp-frontend/design-system/components/native/buttons'
+import { Button, FabButton } from '@baseapp-frontend/design-system/components/native/buttons'
+import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
+import MemberItem from './MemberItem'
 import { createStyles } from './styles'
 import { MembersProps } from './type'
 
-const Members: FC<MembersProps> = ({ participantsCount }) => {
+const Members: FC<MembersProps> = ({
+  participantsCount,
+  members,
+  isLoadingNext,
+  hasNext,
+  loadNext,
+}) => {
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -24,7 +33,8 @@ const Members: FC<MembersProps> = ({ participantsCount }) => {
       </View>
       <View style={styles.addMemberContainer}>
         <FabButton
-          onPress={() => console.log('not implemented yet')}
+          // TODO: implement add member functionality
+          onPress={() => {}}
           iconName="add"
           iconSize={28}
           iconColor={theme.colors.primary.contrast}
@@ -34,7 +44,28 @@ const Members: FC<MembersProps> = ({ participantsCount }) => {
           Add Member
         </Text>
       </View>
-      {/* TODO: Implement Members List here */}
+      <View>
+        {(members?.edges ?? []).map((edge, index) => {
+          if (!edge?.node) return null
+
+          return (
+            <MemberItem
+              key={edge.node.id ?? `member-edge-${index}`}
+              profileRef={edge.node.profile}
+              isAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
+            />
+          )
+        })}
+        {isLoadingNext ? (
+          <LoadingScreen size="small" />
+        ) : (
+          hasNext && (
+            <Button mode="text" size="medium" onPress={loadNext}>
+              Load More
+            </Button>
+          )
+        )}
+      </View>
     </View>
   )
 }

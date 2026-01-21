@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.19
+
+### Patch Changes
+
+- Add basic members list
+
 ## 1.4.18
 
 ### Patch Changes

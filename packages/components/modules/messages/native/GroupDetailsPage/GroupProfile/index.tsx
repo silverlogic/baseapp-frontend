@@ -8,8 +8,9 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { createStyles } from './styles'
 import { GroupProfileProps } from './types'
 
-const GroupProfile: FC<GroupProfileProps> = ({ roomHeader, participantsCount }) => {
-  const { title, avatar } = useGroupNameAndAvatar(roomHeader)
+const GroupProfile: FC<GroupProfileProps> = ({ group }) => {
+  const { title, avatar } = useGroupNameAndAvatar(group)
+  const participantsCount = group?.participantsCount ?? 0
   const styles = createStyles()
 
   return (
@@ -21,7 +22,7 @@ const GroupProfile: FC<GroupProfileProps> = ({ roomHeader, participantsCount }) 
             {title}
           </Text>
           <Text variant="body2" color="low">
-            {participantsCount ?? 0} {participantsCount === 1 ? 'member' : 'members'}
+            {participantsCount} {participantsCount === 1 ? 'member' : 'members'}
           </Text>
         </View>
       </View>

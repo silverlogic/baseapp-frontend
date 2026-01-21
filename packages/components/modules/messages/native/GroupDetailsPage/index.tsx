@@ -3,22 +3,20 @@ import { FC, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
 import { CloseIcon, EditIcon } from '@baseapp-frontend/design-system/components/native/icons'
-import { View } from '@baseapp-frontend/design-system/components/native/views'
+import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { useRouter } from 'expo-router'
-import { useFragment, useLazyLoadQuery } from 'react-relay'
+import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 
-import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
-import { MembersListFragment$data } from '../../../../__generated__/MembersListFragment.graphql'
-import { RoomTitleFragment$key } from '../../../../__generated__/RoomTitleFragment.graphql'
-import { TitleFragment$key } from '../../../../__generated__/TitleFragment.graphql'
+import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
+import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
+import { MembersListFragment$key } from '../../../../__generated__/MembersListFragment.graphql'
 import {
-  ChatRoomQuery,
-  TitleFragment,
+  GroupDetailsQuery,
+  MembersListFragment,
   useArchiveChatRoomMutation,
   useCheckIsAdmin,
 } from '../../common'
-import { RoomTitleFragment } from '../../common/graphql/fragments/RoomTitle'
 import { LeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
 import GroupProfile from './GroupProfile'
 import Members from './Members'
@@ -31,8 +29,8 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
   const { currentProfile } = useCurrentProfile()
   const [commitMarkAsRead, isMutationInFlight] = useArchiveChatRoomMutation()
 
-  const chatRoomRef = useLazyLoadQuery<ChatRoomQueryType>(
-    ChatRoomQuery,
+  const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
+    GroupDetailsQuery,
     { roomId },
     {
       fetchPolicy: 'store-and-network',
@@ -40,11 +38,18 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
     },
   )
 
-  const { chatRoom } = chatRoomRef
+  const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
+    ChatRoomParticipantsPaginationQuery,
+    MembersListFragment$key
+  >(MembersListFragment, group)
+  const members = data?.participants
+  const { isSoleAdmin } = useCheckIsAdmin(members)
 
-  const roomHeader = useFragment(TitleFragment, chatRoom as TitleFragment$key)
-  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
-  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
+  const handleLoadMoreMembers = () => {
+    if (hasNext && !isLoadingNext) {
+      loadNext(10)
+    }
+  }
 
   const handleArchiveChat = () => {
     if (currentProfile?.id && roomId) {
@@ -53,7 +58,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
           input: {
             roomId,
             profileId: currentProfile.id,
-            archive: !chatRoom?.isArchived,
+            archive: !group?.isArchived,
           },
         },
       })
@@ -81,14 +86,22 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
           isSoleAdmin={isSoleAdmin}
         />
       )}
-      <GroupProfile roomHeader={roomHeader} participantsCount={chatRoom?.participantsCount} />
-      <Members participantsCount={chatRoom?.participantsCount} />
-      <Options
-        isArchiveMutationInFlight={isMutationInFlight}
-        handleArchiveChat={handleArchiveChat}
-        handleLeaveGroup={() => setOpenConfirmLeaveGroupDialog(true)}
-        isArchived={!!chatRoom?.isArchived}
-      />
+      <ScrollView>
+        <GroupProfile group={group} />
+        <Members
+          participantsCount={group?.participantsCount}
+          members={members}
+          loadNext={handleLoadMoreMembers}
+          isLoadingNext={isLoadingNext}
+          hasNext={hasNext}
+        />
+        <Options
+          isArchiveMutationInFlight={isMutationInFlight}
+          handleArchiveChat={handleArchiveChat}
+          handleLeaveGroup={() => setOpenConfirmLeaveGroupDialog(true)}
+          isArchived={!!group?.isArchived}
+        />
+      </ScrollView>
     </View>
   )
 }
