@@ -52,6 +52,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             openNav={nav.value}
             onCloseNav={nav.onFalse}
             VerticalDrawerProps={VerticalDrawerProps}
+            slotProps={slotProps}
           />
         </Header>
         <MainContainer isNavCentered {...MainContainerProps}>
