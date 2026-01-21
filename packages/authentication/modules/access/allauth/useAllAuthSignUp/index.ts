@@ -14,6 +14,7 @@ import {
   SIGNUP_VALIDATION_SCHEMA_WITH_NAME,
 } from '../constants'
 import type { UseAllAuthSignUpOptions } from '../types'
+import { normalizeAllAuthError } from '../utils'
 
 const useAllAuthSignUp = <
   TRegisterRequest extends RegisterRequest = RegisterRequest,
@@ -38,9 +39,10 @@ const useAllAuthSignUp = <
     mutationFn: (values) => AllAuthApi.register<TRegisterResponse>(values),
     ...options,
     onError: (err, variables, context) => {
-      options?.onError?.(err, variables, context)
+      const normalizedError = normalizeAllAuthError(err)
+      options?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: (response, variables, context) => {

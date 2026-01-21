@@ -9,6 +9,7 @@ import { type SubmitHandler, useForm } from 'react-hook-form'
 import AllAuthApi from '../../../../services/allauth'
 import { RESET_PASSWORD_INITIAL_VALUES, RESET_PASSWORD_VALIDATION_SCHEMA } from '../constants'
 import type { ResetPasswordForm, UseAllAuthResetPasswordOptions } from '../types'
+import { normalizeAllAuthError } from '../utils'
 
 const useAllAuthResetPassword = ({
   token,
@@ -27,9 +28,10 @@ const useAllAuthResetPassword = ({
     mutationFn: ({ newPassword }) => AllAuthApi.resetPassword({ newPassword, token }),
     ...options,
     onError: (err, variables, context) => {
-      options?.onError?.(err, variables, context)
+      const normalizedError = normalizeAllAuthError(err)
+      options?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: (response, variables, context) => {

@@ -14,6 +14,7 @@ import { useAllAuthSession } from '../useAllAuthSession'
 import {
   extractTokensFromAllAuthResponse,
   isAllAuthPasswordChangeRedirect,
+  normalizeAllAuthError,
 } from '../utils'
 
 const useAllAuthLogin = ({
@@ -34,9 +35,10 @@ const useAllAuthLogin = ({
     mutationFn: (data: { email: string; password: string }) => AllAuthApi.login(data),
     ...loginOptions,
     onError: (err, variables, context) => {
-      loginOptions?.onError?.(err, variables, context)
+      const normalizedError = normalizeAllAuthError(err)
+      loginOptions?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: async (response: AllAuthLoginResponse, variables, context) => {

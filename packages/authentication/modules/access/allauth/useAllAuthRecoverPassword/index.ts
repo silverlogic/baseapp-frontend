@@ -10,6 +10,7 @@ import AllAuthApi from '../../../../services/allauth'
 import type { ForgotPasswordRequest } from '../../../../types/auth'
 import { RECOVER_PASSWORD_INITIAL_VALUES, RECOVER_PASSWORD_VALIDATION_SCHEMA } from '../constants'
 import type { UseAllAuthRecoverPasswordOptions } from '../types'
+import { normalizeAllAuthError } from '../utils'
 
 const useAllAuthRecoverPassword = ({
   validationSchema = RECOVER_PASSWORD_VALIDATION_SCHEMA,
@@ -27,9 +28,10 @@ const useAllAuthRecoverPassword = ({
     mutationFn: ({ email }) => AllAuthApi.recoverPassword({ email }),
     ...options,
     onError: (err, variables, context) => {
-      options?.onError?.(err, variables, context)
+      const normalizedError = normalizeAllAuthError(err)
+      options?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: (response, variables, context) => {
