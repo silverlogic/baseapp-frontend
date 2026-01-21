@@ -1,3 +1,5 @@
+import type { MinimalProfile } from './profile'
+
 export interface AllAuthUser {
   id: string | number
   email?: string
@@ -15,6 +17,10 @@ export interface AllAuthMeta {
   accessToken?: string
   refreshToken?: string
   expiresIn?: number
+  profile?: Partial<MinimalProfile>
+  id?: string | number
+  email?: string
+  [key: string]: unknown
 }
 
 export interface AllAuthError {
@@ -30,6 +36,13 @@ export interface AllAuthResponse<T = unknown> {
   errors?: AllAuthError[]
 }
 
+export interface AllAuthLoginMethod {
+  method: string
+  at?: number
+  email?: string
+  [key: string]: unknown
+}
+
 export interface AllAuthLoginData {
   user?: AllAuthUser
   flows?: Array<{
@@ -38,9 +51,10 @@ export interface AllAuthLoginData {
   }>
   accessToken?: string
   refreshToken?: string
+  methods?: AllAuthLoginMethod[]
 }
 
-export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {}
+export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> { }
 
 export interface AllAuthSignupData {
   user?: AllAuthUser
@@ -50,13 +64,13 @@ export interface AllAuthSignupData {
   }>
 }
 
-export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> {}
+export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> { }
 
 export interface AllAuthSessionData {
   user?: AllAuthUser
 }
 
-export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> {}
+export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> { }
 
 export interface AllAuthLoginJWTResponse {
   accessToken: string

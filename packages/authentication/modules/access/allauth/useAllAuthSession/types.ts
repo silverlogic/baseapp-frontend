@@ -1,18 +1,7 @@
-export interface UseAllAuthSessionOptions {
-  accessKeyName?: string
-  refreshKeyName?: string
-}
+import type { AllAuthLoginResponse } from '../../../../types/allauth'
 
 export interface AllAuthSessionData {
   accessToken: string
   refreshToken: string
-  rawData?: {
-    user?: {
-      id?: number | string
-      display?: string
-      email?: string
-      [key: string]: unknown
-    }
-    [key: string]: unknown
-  }
+  rawResponse?: AllAuthLoginResponse
 }

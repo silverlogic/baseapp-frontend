@@ -7,33 +7,46 @@ import {
   setTokenAsync,
 } from '@baseapp-frontend/utils'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
+import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
 import { useCurrentProfile } from '../../../profile'
 import { setProfileExpoStorage } from '../../../profile/utils'
-import type { AllAuthSessionData, UseAllAuthSessionOptions } from './types'
+import type { MinimalProfile } from '../../../../types/profile'
+import type { AllAuthSessionData } from './types'
 
-export function useAllAuthSession(options: UseAllAuthSessionOptions = {}) {
-  const { accessKeyName = ACCESS_KEY_NAME, refreshKeyName = REFRESH_KEY_NAME } = options
+export function useAllAuthSession() {
   const { setCurrentProfile } = useCurrentProfile()
 
   async function startSession(sessionData: AllAuthSessionData) {
-    const { accessToken, refreshToken } = sessionData
-    const { rawData } = sessionData
+    const { accessToken, refreshToken, rawResponse } = sessionData
 
-    await setTokenAsync(accessKeyName, accessToken, {
+    await setTokenAsync(ACCESS_KEY_NAME, accessToken, {
       secure: process.env.NODE_ENV === 'production',
     })
-    await setTokenAsync(refreshKeyName, refreshToken, {
+    await setTokenAsync(REFRESH_KEY_NAME, refreshToken, {
       secure: process.env.NODE_ENV === 'production',
     })
 
-    if (rawData?.user) {
-      const userData = rawData.user
-      const currentProfile = {
-        id: String(userData.id ?? ''),
-        name: userData.display ?? null,
-        image: null,
-        urlPath: null,
+
+    const profile = rawResponse?.meta?.profile
+    if (profile?.id) {
+      const isWebPlatform = !isMobilePlatform()
+      const API_BASE_URL = isWebPlatform
+        ? process.env.NEXT_PUBLIC_API_BASE_URL
+        : process.env.EXPO_PUBLIC_API_BASE_URL
+      const baseUrl = API_BASE_URL?.replace('/v1', '')
+      let absoluteImagePath = null
+      if (profile.image) {
+        absoluteImagePath = profile.image.startsWith('http') || !baseUrl
+          ? profile.image
+          : `${baseUrl}${profile.image}`
+      }
+
+      const currentProfile: MinimalProfile = {
+        id: profile.id,
+        name: profile.name ?? null,
+        image: absoluteImagePath,
+        urlPath: profile.urlPath ?? null,
       }
 
       setCurrentProfile(currentProfile)
@@ -42,8 +55,8 @@ export function useAllAuthSession(options: UseAllAuthSessionOptions = {}) {
   }
 
   async function clearSession() {
-    await removeTokenAsync(accessKeyName)
-    await removeTokenAsync(refreshKeyName)
+    await removeTokenAsync(ACCESS_KEY_NAME)
+    await removeTokenAsync(REFRESH_KEY_NAME)
     await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
     setCurrentProfile(null)
   }

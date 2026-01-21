@@ -1,7 +1,6 @@
 'use client'
 
 import { LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
-import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -12,13 +11,11 @@ import { useAllAuthSession } from '../useAllAuthSession'
 import type { UseAllAuthLogoutOptions } from './types'
 
 const useAllAuthLogout = ({
-  accessKeyName = ACCESS_KEY_NAME,
-  refreshKeyName = REFRESH_KEY_NAME,
   onLogout,
   emitLogoutEvent = true,
 }: UseAllAuthLogoutOptions = {}) => {
   const queryClient = useQueryClient()
-  const { clearSession } = useAllAuthSession({ accessKeyName, refreshKeyName })
+  const { clearSession } = useAllAuthSession()
 
   const logout = async () => {
     try {

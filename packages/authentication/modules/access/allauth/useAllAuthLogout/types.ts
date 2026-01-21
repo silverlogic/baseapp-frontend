@@ -1,6 +1,4 @@
-import type { CustomJWTKeyNames } from '../../../../types/auth'
-
-export interface UseAllAuthLogoutOptions extends CustomJWTKeyNames {
+export interface UseAllAuthLogoutOptions {
   onLogout?: () => void
   emitLogoutEvent?: boolean
 }
