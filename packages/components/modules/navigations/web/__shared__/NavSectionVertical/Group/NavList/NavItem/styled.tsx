@@ -25,7 +25,7 @@ export const StyledNavItem = styled(ListItemButton, {
     item: {
       marginBottom: 4,
       borderRadius: 8,
-      color: theme.palette.common.white,
+      color: theme.palette.text.secondary,
       padding: theme.spacing(0.5, 1, 0.5, 1.5),
     },
     icon: {
@@ -137,11 +137,11 @@ export const StyledNavItem = styled(ListItemButton, {
     }),
     '&:hover': {
       svg: {
-        color: active ? theme.palette.primary.main : theme.palette.common.white,
+        color: active ? theme.palette.primary.main : theme.palette.grey[600],
       },
     },
     svg: {
-      color: active ? theme.palette.primary.main : theme.palette.common.white,
+      color: active ? theme.palette.primary.main : theme.palette.grey[600],
     },
 
     // Deep sub item

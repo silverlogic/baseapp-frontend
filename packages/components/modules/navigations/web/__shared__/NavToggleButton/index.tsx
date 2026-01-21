@@ -30,8 +30,6 @@ export default function NavToggleButton({ sx, ...other }: NavToggleButtonProps) 
           bgcolor: 'background.default',
         },
         ...sx,
-        bgcolor: 'grey.900',
-        color: 'text.primary',
       }}
       {...other}
     >

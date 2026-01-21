@@ -23,6 +23,9 @@ const NavVertical: FC<NavVerticalProps> = ({
   openNav,
   onCloseNav,
   hideToggleButton = false,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
 }) => {
@@ -36,6 +39,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         onCloseNav={onCloseNav}
         LogoIcon={LogoIcon}
         LogoProps={LogoProps}
+        DrawerProps={VerticalDrawerProps}
       />
     )
   }
@@ -49,7 +53,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         backgroundColor: 'grey.900',
       }}
     >
-      {!hideToggleButton && <NavToggleButton />}
+      {!hideToggleButton && <NavToggleButton {...NavToggleButtonProps} />}
       <Stack
         sx={{
           height: 1,
@@ -73,7 +77,7 @@ const NavVertical: FC<NavVerticalProps> = ({
               <LogoIcon />
             </Logo>
           )}
-          <NavSectionVertical navData={navData} />
+          <NavSectionVertical navData={navData} slotProps={slotProps} />
           <Box sx={{ flexGrow: 1 }} />
           {AccountMenu && AccountMenuProps && (
             <Box

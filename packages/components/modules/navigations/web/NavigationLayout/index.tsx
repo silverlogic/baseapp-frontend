@@ -25,6 +25,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   children,
   MainContainerProps = {},
   MainContainer = DefaultMainContainer,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
   enableHeader = true,
 }) => {
   const { settings } = useUISettings()
@@ -47,7 +50,13 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             AccountMenuProps={AccountMenuProps}
             ToolbarProps={ToolbarProps}
           >
-            <NavCentered navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
+            <NavCentered
+              navData={navData}
+              openNav={nav.value}
+              onCloseNav={nav.onFalse}
+              slotProps={slotProps}
+              VerticalDrawerProps={VerticalDrawerProps}
+            />
           </Header>
         )}
         <MainContainer isNavCentered {...MainContainerProps}>
@@ -70,7 +79,13 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             ToolbarProps={ToolbarProps}
           />
         )}
-        <NavHorizontal navData={navData} openNav={nav.value} onCloseNav={nav.onFalse} />
+        <NavHorizontal
+          navData={navData}
+          openNav={nav.value}
+          onCloseNav={nav.onFalse}
+          slotProps={slotProps}
+          VerticalDrawerProps={VerticalDrawerProps}
+        />
         <MainContainer isNavHorizontal {...MainContainerProps}>
           {children}
         </MainContainer>
@@ -105,6 +120,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             onCloseNav={nav.onFalse}
             LogoIcon={LogoIcon}
             LogoProps={LogoProps}
+            slotProps={slotProps}
+            VerticalDrawerProps={VerticalDrawerProps}
+            NavToggleButtonProps={NavToggleButtonProps}
             AccountMenu={!enableHeader ? AccountMenu : undefined}
             AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
           />
@@ -141,6 +159,9 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           LogoProps={LogoProps}
           openNav={nav.value}
           onCloseNav={nav.onFalse}
+          slotProps={slotProps}
+          VerticalDrawerProps={VerticalDrawerProps}
+          NavToggleButtonProps={NavToggleButtonProps}
           AccountMenu={!enableHeader ? AccountMenu : undefined}
           AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
         />
