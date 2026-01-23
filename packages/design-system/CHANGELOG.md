@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.0
+
+### Patch Changes
+
+- Added Group Chat creation and Groups Tab
+
 ## 1.1.9
 
 ### Patch Changes
