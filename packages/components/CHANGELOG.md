@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.4.20
+
+### Patch Changes
+
+- Added Group Chat creation and Groups Tab
+
 ## 1.4.19
 
 ### Patch Changes
