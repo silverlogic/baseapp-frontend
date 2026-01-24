@@ -1,6 +1,8 @@
 import { ReactNode } from 'react'
 
+import { ProfileByIdQuery$data } from '../../../../__generated__/ProfileByIdQuery.graphql'
+
 export interface ProfilePermissionWrapperProps {
-  target: any
+  target: ProfileByIdQuery$data['profile'] | null | undefined
   children: ReactNode
 }
