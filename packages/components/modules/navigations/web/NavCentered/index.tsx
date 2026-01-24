@@ -9,13 +9,24 @@ import NavSectionHorizontal from '../__shared__/NavSectionHorizontal'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NavCenteredProps } from './types'
 
-const NavCentered: FC<NavCenteredProps> = ({ navData, openNav, onCloseNav }) => {
+const NavCentered: FC<NavCenteredProps> = ({
+  navData,
+  openNav,
+  onCloseNav,
+  slotProps,
+  VerticalDrawerProps,
+}) => {
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
     return (
       <>
-        <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+        <VerticalDrawer
+          navData={navData}
+          openNav={openNav}
+          onCloseNav={onCloseNav}
+          DrawerProps={VerticalDrawerProps}
+        />
         <div />
       </>
     )
@@ -29,7 +40,7 @@ const NavCentered: FC<NavCenteredProps> = ({ navData, openNav, onCloseNav }) => 
         },
       }}
     >
-      <NavSectionHorizontal navData={navData} hasTabLayout />
+      <NavSectionHorizontal navData={navData} hasTabLayout slotProps={slotProps} />
     </Scrollbar>
   )
 }
