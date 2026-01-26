@@ -21,6 +21,7 @@ export const RoomListSubscriptionQuery = graphql`
         node {
           id
           isArchived
+          isGroup
           participantsCount
           title
           ...LastMessageFragment
@@ -58,18 +59,20 @@ export const getRoomListSubscriptionConfig = (
     store: RecordSourceSelectorProxy<unknown>,
     data: useRoomListSubscription$data | null | undefined,
   ) => {
-    const roomId = data?.chatRoomOnRoomUpdate?.room?.node?.id
+    const roomNode = data?.chatRoomOnRoomUpdate?.room?.node
+    const roomId = roomNode?.id
     if (!roomId) return
     if (wasRemovedFromChatRoom(data, profileId)) {
       getChatRoomConnections(store, profileId).forEach((connectionRecord) =>
         ConnectionHandler.deleteNode(connectionRecord, roomId),
       )
     } else {
-      const isArchived = data?.chatRoomOnRoomUpdate?.room?.node?.isArchived
+      const isArchived = roomNode?.isArchived
       getChatRoomConnections(
         store,
         profileId,
-        ({ q, archived }) => q === '' && archived === isArchived,
+        ({ q, archived, isGroup }) =>
+          q === '' && archived === isArchived && isGroup === roomNode?.isGroup,
       ).forEach((connectionRecord) => {
         ConnectionHandler.deleteNode(connectionRecord, roomId)
         const serverEdge = store.getRootField('chatRoomOnRoomUpdate')?.getLinkedRecord('room')

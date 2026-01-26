@@ -5,6 +5,11 @@
 ### Minor Changes
 
 - Navigation components now support extended customization through new optional properties for drawer configuration, slot customization, and toggle button styling, enabling more flexible navigation component theming and behavior configuration.
+## 1.4.20
+
+### Patch Changes
+
+- Added Group Chat creation and Groups Tab
 
 ## 1.4.19
 

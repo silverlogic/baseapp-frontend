@@ -17,8 +17,16 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
       textAlign: 'center',
     },
-    buttonContainer: {
+    backButtonContainer: {
       alignItems: 'center',
       width: 24,
+    },
+    closeButtonContainer: {
+      alignItems: 'center',
+      minWidth: 24,
+    },
+    closeButtonContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
     },
   })
