@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.0
+
+### Minor Changes
+
+- Navigation components now support extended customization through new optional properties for drawer configuration, slot customization, and toggle button styling, enabling more flexible navigation component theming and behavior configuration.
+
 ## 1.4.19
 
 ### Patch Changes
