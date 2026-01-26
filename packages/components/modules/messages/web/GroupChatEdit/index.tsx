@@ -20,7 +20,7 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   useCheckIsAdmin,
-  useGroupNameAndAvatar,
+  useNameAndAvatar,
   useRoomListSubscription,
   useUpdateChatRoomMutation,
 } from '../../common'
@@ -53,7 +53,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   const [memberToRemove, setMemberToRemove] = useState<ProfileItemFragment$key | null>(null)
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
-  const { avatar, title } = useGroupNameAndAvatar(group)
+  const { avatar, title } = useNameAndAvatar(group)
 
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
 

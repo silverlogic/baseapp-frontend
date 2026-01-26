@@ -4,59 +4,22 @@ import { useFragment } from 'react-relay'
 import ConnectionHandler from 'relay-connection-handler-plus'
 import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime'
 
-import { GroupTitleFragment$key } from '../../../__generated__/GroupTitleFragment.graphql'
 import { MembersListFragment$data } from '../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../__generated__/RoomTitleFragment.graphql'
 import { SingleChatDetailsFragment$key } from '../../../__generated__/SingleChatDetailsFragment.graphql'
-import { TitleFragment$data } from '../../../__generated__/TitleFragment.graphql'
 import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
-import { GroupTitleFragment } from './graphql/fragments/GroupTitle'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
-export const useGroupNameAndAvatar = (
-  headerRef: GroupTitleFragment$key | RoomTitleFragment$key | null | undefined,
-) => {
-  const header = useFragment<GroupTitleFragment$key>(
-    GroupTitleFragment,
-    headerRef as GroupTitleFragment$key,
+export const useNameAndAvatar = (titleRef: RoomTitleFragment$key | null | undefined) => {
+  const data = useFragment<RoomTitleFragment$key>(
+    RoomTitleFragment,
+    titleRef as RoomTitleFragment$key,
   )
   return {
-    title: header?.title,
-    avatar: header?.image?.url,
+    title: data?.title,
+    avatar: data?.image?.url,
   }
-}
-
-export const useRoomNameAndAvatar = (headerRef: RoomTitleFragment$key | null | undefined) => {
-  const { currentProfile } = useCurrentProfile()
-  const header = useFragment<RoomTitleFragment$key>(RoomTitleFragment, headerRef)
-  if (!header?.participants) {
-    return {
-      title: 'Error: No participants',
-    }
-  }
-
-  const otherParticipant = header.participants.edges.find(
-    (edge) => edge?.node?.profile?.id && edge?.node?.profile?.id !== currentProfile?.id,
-  )
-  if (otherParticipant === undefined) {
-    return {
-      title: 'Deleted User',
-      avatar: undefined,
-    }
-  }
-
-  return {
-    title: otherParticipant?.node?.profile?.name,
-    avatar: otherParticipant?.node?.profile?.image?.url,
-  }
-}
-
-export const useNameAndAvatar = (roomHeader: TitleFragment$data) => {
-  const roomNameAndAvatar = useRoomNameAndAvatar(roomHeader)
-  const groupNameAndAvatar = useGroupNameAndAvatar(roomHeader)
-  if (roomHeader.isGroup) return groupNameAndAvatar
-  return roomNameAndAvatar
 }
 
 export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => {

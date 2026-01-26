@@ -17,7 +17,7 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   useCheckIsAdmin,
-  useGroupNameAndAvatar,
+  useNameAndAvatar,
   useRoomListSubscription,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
@@ -41,7 +41,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
 }) => {
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { currentProfile } = useCurrentProfile()
-  const { avatar, title } = useGroupNameAndAvatar(group)
+  const { avatar, title } = useNameAndAvatar(group)
   const profileId = currentProfile?.id ?? ''
 
   const connections = group?.id

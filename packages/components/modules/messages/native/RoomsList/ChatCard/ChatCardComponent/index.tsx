@@ -18,9 +18,11 @@ import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../../__generated__/LastMessageFragment.graphql'
+import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
+import { RoomTitleFragment } from '../../../../common/graphql/fragments/RoomTitle'
 import { TitleFragment } from '../../../../common/graphql/fragments/Title'
 import { UnreadMessagesCountFragment } from '../../../../common/graphql/fragments/UnreadMessagesCount'
 import ChatCardOptions from '../ChatCardOptions'
@@ -31,7 +33,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const theme = useTheme()
   const styles = createStyles(theme)
   const router = useRouter()
-  const roomId = useFragment(TitleFragment, roomRef)?.id
+  const roomId = useFragment(RoomTitleFragment, roomRef)?.id
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
@@ -40,16 +42,20 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     LastMessageFragment,
     roomRef as unknown as LastMessageFragment$key,
   )
-  const headerFragment = useFragment<TitleFragment$key>(
+  const headerFragment = useFragment<RoomTitleFragment$key>(
+    RoomTitleFragment,
+    roomRef as unknown as RoomTitleFragment$key,
+  )
+  const titleFragment = useFragment<TitleFragment$key>(
     TitleFragment,
-    roomRef as unknown as TitleFragment$key,
+    headerFragment as unknown as TitleFragment$key,
   )
   const unreadMessagesCountFragment = useFragment<UnreadMessagesCountFragment$key>(
     UnreadMessagesCountFragment,
     roomRef as unknown as UnreadMessagesCountFragment$key,
   )
 
-  const { title, avatar } = useNameAndAvatar(headerFragment)
+  const { title, avatar } = useNameAndAvatar(titleFragment)
   const { lastMessageTime } = lastMessageFragment
 
   const lastMessage = lastMessageFragment.lastMessage?.content
