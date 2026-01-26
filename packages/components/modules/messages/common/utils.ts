@@ -12,10 +12,7 @@ import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
 export const useNameAndAvatar = (titleRef: RoomTitleFragment$key | null | undefined) => {
-  const data = useFragment<RoomTitleFragment$key>(
-    RoomTitleFragment,
-    titleRef as RoomTitleFragment$key,
-  )
+  const data = useFragment(RoomTitleFragment, titleRef ?? null)
   return {
     title: data?.title,
     avatar: data?.image?.url,
