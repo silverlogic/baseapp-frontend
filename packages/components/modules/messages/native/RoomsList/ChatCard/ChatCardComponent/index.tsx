@@ -18,11 +18,9 @@ import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../../__generated__/LastMessageFragment.graphql'
-import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
-import { RoomTitleFragment } from '../../../../common/graphql/fragments/RoomTitle'
 import { TitleFragment } from '../../../../common/graphql/fragments/Title'
 import { UnreadMessagesCountFragment } from '../../../../common/graphql/fragments/UnreadMessagesCount'
 import ChatCardOptions from '../ChatCardOptions'
@@ -41,15 +39,12 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     LastMessageFragment,
     roomRef as unknown as LastMessageFragment$key,
   )
-  const headerFragment = useFragment<RoomTitleFragment$key>(
-    RoomTitleFragment,
-    roomRef as unknown as RoomTitleFragment$key,
-  )
-  const roomId = headerFragment?.id
+
   const titleFragment = useFragment<TitleFragment$key>(
     TitleFragment,
-    headerFragment as unknown as TitleFragment$key,
+    roomRef as unknown as TitleFragment$key,
   )
+  const roomId = titleFragment?.id
   const unreadMessagesCountFragment = useFragment<UnreadMessagesCountFragment$key>(
     UnreadMessagesCountFragment,
     roomRef as unknown as UnreadMessagesCountFragment$key,
