@@ -40,6 +40,17 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       avatar: undefined,
     }
   }
+  if (participant && !participant.profile) {
+    return {
+      roomId: id,
+      isGroup,
+      title: 'Deleted User',
+      avatar: undefined,
+      username: undefined,
+      biography: undefined,
+      id: undefined,
+    }
+  }
   return {
     roomId: id,
     isGroup,

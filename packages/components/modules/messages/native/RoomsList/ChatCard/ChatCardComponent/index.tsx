@@ -33,7 +33,6 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const theme = useTheme()
   const styles = createStyles(theme)
   const router = useRouter()
-  const roomId = useFragment(RoomTitleFragment, roomRef)?.id
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
@@ -46,6 +45,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     RoomTitleFragment,
     roomRef as unknown as RoomTitleFragment$key,
   )
+  const roomId = headerFragment?.id
   const titleFragment = useFragment<TitleFragment$key>(
     TitleFragment,
     headerFragment as unknown as TitleFragment$key,
