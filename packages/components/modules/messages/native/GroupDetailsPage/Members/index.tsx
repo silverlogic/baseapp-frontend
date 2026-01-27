@@ -17,6 +17,8 @@ const Members: FC<MembersProps> = ({
   isLoadingNext,
   hasNext,
   loadNext,
+  currentProfileIsAdmin = false,
+  groupId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -51,8 +53,10 @@ const Members: FC<MembersProps> = ({
           return (
             <MemberItem
               key={edge.node.id ?? `member-edge-${index}`}
-              profileRef={edge.node.profile}
-              isAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
+              groupMember={edge.node}
+              memberIsAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
+              currentProfileIsAdmin={currentProfileIsAdmin}
+              groupId={groupId}
             />
           )
         })}
