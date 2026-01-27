@@ -22,11 +22,22 @@ const NavVertical: FC<NavVerticalProps> = ({
   openNav,
   onCloseNav,
   hideToggleButton = false,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        LogoIcon={LogoIcon}
+        DrawerProps={VerticalDrawerProps}
+      />
+    )
   }
 
   return (
@@ -37,7 +48,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         display: { xs: 'none', lg: 'flex' },
       }}
     >
-      {!hideToggleButton && <NavToggleButton />}
+      {!hideToggleButton && <NavToggleButton {...NavToggleButtonProps} />}
       <Stack
         sx={{
           height: 1,
@@ -61,7 +72,7 @@ const NavVertical: FC<NavVerticalProps> = ({
               <LogoIcon />
             </Logo>
           )}
-          <NavSectionVertical navData={navData} />
+          <NavSectionVertical navData={navData} slotProps={slotProps} />
           <Box sx={{ flexGrow: 1 }} />
         </Scrollbar>
       </Stack>
