@@ -1,9 +1,9 @@
 import { graphql } from 'react-relay'
 
 export const ProfileByIdQuery = graphql`
-  query ProfileByIdQuery($id: ID!) {
+  query ProfileByIdQuery($id: ID!, $perm: String!) {
     profile(id: $id) {
-      canChange: hasPerm(perm: "change")
+      ...CheckMountPermissionWrapperFragment @arguments(perm: $perm)
       ...ProfileComponentFragment
       ...FollowToggleUpdatableFragment
     }
