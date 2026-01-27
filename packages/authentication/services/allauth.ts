@@ -48,13 +48,6 @@ export default class AllAuthApi {
       },
     }
 
-    console.log('[AllAuthApi.googleLogin] Sending payload:', {
-      provider: payload.provider,
-      process: payload.process,
-      tokenHasClientId: (!!'client_id') in payload.token,
-      tokenHasIdToken: !!payload.token.id_token,
-    })
-
     return baseAppFetch(`/_allauth/app/v1/auth/provider/token`, {
       method: 'POST',
       body: payload,

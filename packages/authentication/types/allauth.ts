@@ -82,3 +82,16 @@ export interface AllAuthLoginJWTResponse {
   accessToken: string
   refreshToken: string
 }
+
+export interface AllAuthSocialProvider {
+  id: string
+  name: string
+  flows: string[]
+}
+
+export interface AllAuthSocialProvidersData {
+  providers: AllAuthSocialProvider[]
+}
+
+export interface AllAuthSocialProvidersResponse
+  extends AllAuthResponse<AllAuthSocialProvidersData> {}

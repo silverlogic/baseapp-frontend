@@ -2,15 +2,15 @@ import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query'
 import type { UseFormProps } from 'react-hook-form'
 import { z } from 'zod'
 
-import type { AllAuthSocialProvidersResponse } from '../../../../types/allauth'
+import AllAuthApi from '../../../services/allauth'
+import type { AllAuthSocialProvidersResponse } from '../../../types/allauth'
 import type {
   ForgotPasswordRequest,
   LoginMfaRequest,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
-} from '../../../../types/auth'
-import AllAuthApi from '../../../services/allauth'
+} from '../../../types/auth'
 
 export type LoginParams = LoginRequest
 
