@@ -34,6 +34,7 @@ const Header: FC<HeaderProps> = ({
           px: { lg: 5 },
           justifyContent: 'center',
           gap: 2,
+          ...ToolbarProps?.sx,
         }}
         {...ToolbarProps}
       >
