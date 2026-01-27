@@ -11,7 +11,7 @@ const StyledMarkdown = styled('div')(({ theme }) => {
     h4: { margin: 0, ...theme.typography.h4 },
     h5: { margin: 0, ...theme.typography.h5 },
     h6: { margin: 0, ...theme.typography.h6 },
-    p: { margin: 0, ...theme.typography.body1 },
+    p: { margin: 0, ...theme.typography.body2 },
 
     br: {
       display: 'grid',
@@ -20,25 +20,39 @@ const StyledMarkdown = styled('div')(({ theme }) => {
     },
 
     // Divider
-    hr: {
+    /* hr: {
+      border:'none',
       margin: 0,
-      flexShrink: 0,
       borderWidth: 0,
       msFlexNegative: 0,
       WebkitFlexShrink: 0,
       borderStyle: 'solid',
-      borderBottomWidth: 'thin',
+      borderTopWidth: 1,
       borderColor: theme.palette.divider,
+      display: 'block',
     },
+    */
 
     // List
     '& ul, & ol': {
-      margin: 0,
+      fontSize: theme.typography.body2.fontSize,
+
       '& li': {
         lineHeight: 2,
       },
     },
-
+    '& ol': {
+      listStyle: 'decimal inside',
+    },
+    '& ul': {
+      listStyle: 'inside',
+    },
+    '& .contains-task-list': {
+      listStyle: 'none',
+      '& input[type="checkbox"]': {
+        marginRight: theme.spacing(1),
+      },
+    },
     // Blockquote
     '& blockquote': {
       lineHeight: 1.5,
@@ -70,14 +84,18 @@ const StyledMarkdown = styled('div')(({ theme }) => {
     },
 
     // Code Block
-    '& pre, & pre > code': {
-      fontSize: 16,
+    '& pre': {
       overflowX: 'auto',
       whiteSpace: 'pre',
       padding: theme.spacing(2),
-      color: theme.palette.common.white,
       borderRadius: theme.shape.borderRadius,
       backgroundColor: lightMode ? theme.palette.grey[900] : alpha(theme.palette.grey[500], 0.16),
+    },
+    '& pre > code': {
+      fontSize: 16,
+      color: theme.palette.common.white,
+      padding: theme.spacing(2),
+      backgroundColor: 'transparent',
     },
     '& code': {
       fontSize: 14,

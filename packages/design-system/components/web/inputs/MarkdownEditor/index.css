@@ -5,3 +5,26 @@
   width: 100%;
   max-width: 100%;
 }
+
+.mdxeditor-popup-container {
+  z-index: 1000;
+}
+
+.mdxeditor {
+  width: 100%;
+  display: grid;
+}
+
+.mdxeditor-toolbar {
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.mdxeditor-root-contenteditable ul li {
+  text-indent: 1.8rem;
+}
+
+.mdxeditor-root-contenteditable li::before {
+  transform: translate(var(--spacing-6), 4px)
+}

@@ -1,14 +1,13 @@
 'use client'
 
-import React, { FC } from 'react'
+import { FC, useRef } from 'react'
 
 import { withController } from '@baseapp-frontend/utils'
 
-import MDEditor from '@uiw/react-md-editor'
-import rehypeSanitize from 'rehype-sanitize'
+import { type MDXEditorMethods } from '@mdxeditor/editor'
 
+import { ForwardRefEditor } from './ForwardRefEditor'
 import './index.css'
-// TODO check custom css is not appling with the new build method
 import { MarkdownEditorProps } from './types'
 
 const MarkdownEditor: FC<MarkdownEditorProps> = ({
@@ -17,27 +16,30 @@ const MarkdownEditor: FC<MarkdownEditorProps> = ({
   onKeyDown,
   placeholder,
   ...props
-}) => (
-  <div className="container" style={{ maxWidth: '100%', width: '100%' }}>
-    <div data-color-mode="light">
-      <MDEditor
-        height={150}
-        preview="edit"
-        value={value}
-        onChange={onChange}
-        previewOptions={{
-          rehypePlugins: [[rehypeSanitize]],
-        }}
-        textareaProps={{
-          placeholder,
-          onKeyDown: (e) => {
-            onKeyDown?.(e)
-          },
-        }}
-        {...props}
-      />
-    </div>
-  </div>
-)
+}) => {
+  const editorRef = useRef<MDXEditorMethods>(null)
+
+  return (
+    <ForwardRefEditor
+      ref={editorRef}
+      markdown={value || ''}
+      placeholder={placeholder}
+      onKeyDown={(e) => {
+        onKeyDown?.(e)
+      }}
+      onChange={(content: string) => {
+        onChange?.(content)
+      }}
+      onPaste={(e) => {
+        if (e?.clipboardData?.getData('Text')) {
+          console.log(e?.clipboardData?.getData('Text').split('\\').join(''))
+          editorRef.current?.setMarkdown(e.clipboardData.getData('Text').split('\\').join(''))
+          // onChange?.(e.clipboardData.getData('Text').replace(/\\/g, ''))
+        }
+      }}
+      {...props}
+    />
+  )
+}
 
 export default withController(MarkdownEditor)

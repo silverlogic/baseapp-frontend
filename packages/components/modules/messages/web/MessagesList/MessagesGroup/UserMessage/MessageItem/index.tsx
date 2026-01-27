@@ -69,20 +69,33 @@ const MessageItem: FC<MessageItemProps> = ({
     }
 
     return (
-      <Typography
-        variant="body2"
-        color={messageColor}
-        sx={{
-          maxWidth: '100%',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'normal',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {deletedMessage && <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} />}
-        {deletedMessage && ' '}
-        <Markdown>{message?.content}</Markdown>
-      </Typography>
+      <div style={{ maxWidth: '100%' }}>
+        <Markdown
+          components={{
+            // eslint-disable-next-line react/no-unstable-nested-components
+            p: ({ children, ...props }) => (
+              <Typography
+                variant="body2"
+                color={messageColor}
+                sx={{
+                  maxWidth: '100%',
+                  whiteSpace: 'pre-wrap',
+                  wordBreak: 'normal',
+                  overflowWrap: 'anywhere',
+                }}
+                {...props}
+              >
+                {deletedMessage && (
+                  <BlockIcon sx={{ fontSize: '20px', color: 'grey.500', mr: 1 }} />
+                )}
+                {children}
+              </Typography>
+            ),
+          }}
+        >
+          {message?.content}
+        </Markdown>
+      </div>
     )
   }
 
