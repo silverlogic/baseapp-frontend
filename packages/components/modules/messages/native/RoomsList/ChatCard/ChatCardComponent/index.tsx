@@ -1,9 +1,11 @@
-import { FC, useRef } from 'react'
+import { FC, useCallback, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   useArchiveChatRoomMutation,
+  useCheckIsAdmin,
   useNameAndAvatar,
+  useUnreadChatMutation,
 } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Badge } from '@baseapp-frontend/design-system/components/native/badges'
@@ -18,11 +20,15 @@ import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../../__generated__/LastMessageFragment.graphql'
+import { MembersListFragment$data } from '../../../../../../__generated__/MembersListFragment.graphql'
+import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
+import { RoomTitleFragment } from '../../../../common/graphql/fragments/RoomTitle'
 import { TitleFragment } from '../../../../common/graphql/fragments/Title'
 import { UnreadMessagesCountFragment } from '../../../../common/graphql/fragments/UnreadMessagesCount'
+import { LeaveGroupDialog } from '../../../__shared__/LeaveGroupDialog'
 import ChatCardOptions from '../ChatCardOptions'
 import { createStyles } from './styles'
 import { ChatCardComponentProps } from './type'
@@ -31,9 +37,11 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const theme = useTheme()
   const styles = createStyles(theme)
   const router = useRouter()
+  const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
+  const [commitMarkAsRead] = useUnreadChatMutation()
 
   const lastMessageFragment = useFragment<LastMessageFragment$key>(
     LastMessageFragment,
@@ -50,8 +58,12 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     roomRef as unknown as UnreadMessagesCountFragment$key,
   )
 
+  const isGroup = !!titleFragment?.isGroup
   const { title, avatar } = useNameAndAvatar(titleFragment)
   const { lastMessageTime } = lastMessageFragment
+
+  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
+  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
 
   const lastMessage = lastMessageFragment.lastMessage?.content
   const hasUnreadMessages =
@@ -82,12 +94,25 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     bottomDrawerRef.current?.close()
   }
 
-  const handleMarkAsUnread = () => {
+  const handleMarkAsUnread = useCallback(() => {
     bottomDrawerRef.current?.close()
-    console.log('Not implemented yet.')
-  }
+    if (!roomId || !currentProfile?.id) return
+    commitMarkAsRead({
+      variables: {
+        input: {
+          roomId,
+          profileId: currentProfile?.id,
+        },
+      },
+    })
+  }, [roomId, currentProfile])
+
   const handleChatDetails = () => {
     bottomDrawerRef.current?.close()
+    if (isGroup && roomId) {
+      router.push(`/group-details/${roomId}`)
+      return
+    }
     console.log('Not implemented yet.')
   }
   const handleGoToProfile = () => {
@@ -96,6 +121,10 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   }
   const handleDeleteChat = () => {
     bottomDrawerRef.current?.close()
+    if (isGroup) {
+      setOpenConfirmLeaveGroupDialog(true)
+      return
+    }
     console.log('Not implemented yet.')
   }
 
@@ -138,7 +167,18 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
         handleDeleteChat={handleDeleteChat}
         isArchiveMutationInFlight={isMutationInFlight}
         isArchived={isArchived}
+        isGroup={isGroup}
       />
+      {currentProfile?.id && roomId && (
+        <LeaveGroupDialog
+          open={openConfirmLeaveGroupDialog}
+          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          profileId={currentProfile?.id}
+          roomId={roomId}
+          removingParticipantId={currentProfile?.id}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
     </Pressable>
   )
 }

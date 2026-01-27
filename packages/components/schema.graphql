@@ -290,6 +290,7 @@ interface ChatRoomsInterface {
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
+    isGroup: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -313,6 +314,7 @@ input ChatRoomUpdateInput {
   roomId: ID!
   profileId: ID!
   title: String
+  image: Upload
   deleteImage: Boolean = false
   addParticipants: [ID] = []
   removeParticipants: [ID] = []
@@ -347,11 +349,11 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -448,11 +450,11 @@ interface CommentsInterface {
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -1105,11 +1107,11 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
   hasPerm(perm: String!): Boolean
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -1276,6 +1278,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
+    isGroup: Boolean
   ): ChatRoomConnection!
   chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection!
   unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
@@ -1320,6 +1323,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
+    isGroup: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
@@ -1850,6 +1854,12 @@ type UnreadMessageCountEdge {
   """A cursor for use in pagination"""
   cursor: String!
 }
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
 
 type URLPath implements Node {
   """The ID of the object"""

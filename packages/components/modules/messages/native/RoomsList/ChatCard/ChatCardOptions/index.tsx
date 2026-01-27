@@ -20,10 +20,13 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
   handleDeleteChat,
   isArchived,
   isArchiveMutationInFlight,
+  isGroup = false,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   const snapPoints = useMemo(() => ['50%', '90%'], [])
+
+  const chatOrGroup = isGroup ? 'Group' : 'Chat'
 
   return (
     <BottomDrawer
@@ -38,7 +41,7 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
           disabled={isArchiveMutationInFlight}
         >
           <Text variant="body2" color="high">
-            {isArchived ? 'Unarchive Chat' : 'Archive Chat'}
+            {isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
           </Text>
         </Pressable>
         {/* TODO Not implemented yet */}
@@ -49,19 +52,21 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
         </Pressable>
         <Pressable onPress={handleChatDetails} style={styles.modalItem}>
           <Text variant="body2" color="high">
-            Chat Details
+            {chatOrGroup} Details
           </Text>
         </Pressable>
-        <Pressable onPress={handleGoToProfile} style={styles.modalItem}>
-          <Text variant="body2" color="high">
-            Go to Profile
-          </Text>
-        </Pressable>
+        {!isGroup && (
+          <Pressable onPress={handleGoToProfile} style={styles.modalItem}>
+            <Text variant="body2" color="high">
+              Go to Profile
+            </Text>
+          </Pressable>
+        )}
       </View>
       <View style={[styles.modalContent, { borderBottomWidth: 0 }]}>
         <Pressable onPress={handleDeleteChat} style={styles.modalItem}>
           <Text variant="body2" style={{ color: theme.colors.error.main }}>
-            Delete Chat
+            {isGroup ? 'Leave Group' : 'Delete Chat'}
           </Text>
         </Pressable>
       </View>

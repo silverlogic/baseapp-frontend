@@ -5,11 +5,14 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
 
-const NewChatButton = () => {
+import { NewChatButtonProps } from './types'
+
+const NewChatButton: React.FC<NewChatButtonProps> = ({ isGroup }) => {
   const theme = useTheme()
   const router = useRouter()
 
-  const navigateToCreateRoom = () => router.push('/create-room')
+  const navigateToCreateRoom = () =>
+    isGroup ? router.push('/create-group') : router.push('/create-room')
 
   return (
     <FabButton
