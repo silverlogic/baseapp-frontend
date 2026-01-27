@@ -12,15 +12,9 @@ import { useFragment, useLazyLoadQuery, useRefetchableFragment } from 'react-rel
 import { ChatRoomFragment$key } from '../../../../../__generated__/ChatRoomFragment.graphql'
 import { ChatRoomFragmentRefetchQuery } from '../../../../../__generated__/ChatRoomFragmentRefetchQuery.graphql'
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../../__generated__/ChatRoomQuery.graphql'
-import { MembersListFragment$data } from '../../../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
-import {
-  ChatRoomQuery,
-  TitleFragment,
-  useArchiveChatRoomMutation,
-  useCheckIsAdmin,
-} from '../../../common'
+import { ChatRoomQuery, TitleFragment, useArchiveChatRoomMutation } from '../../../common'
 import { ChatRoomFragment } from '../../../common/graphql/fragments/ChatRoom'
 import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
 import { LeaveGroupDialog } from '../../__shared__/LeaveGroupDialog'
@@ -64,8 +58,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     }
   }, [data, router, sendToast])
   const roomHeader = useFragment(TitleFragment, data as TitleFragment$key)
-  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
-  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
+  const { isSoleAdmin } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
 
   if (!data) {
     return null
@@ -114,7 +107,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
           profileId={currentProfile?.id}
           roomId={roomId}
           removingParticipantId={currentProfile?.id}
-          isSoleAdmin={isSoleAdmin}
+          isSoleAdmin={isSoleAdmin ?? false}
         />
       )}
       <ChatRoomOptions

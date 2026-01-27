@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { useGroupNameAndAvatar } from '@baseapp-frontend/components/messages/common'
+import { useNameAndAvatar } from '@baseapp-frontend/components/messages/common'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
@@ -9,7 +9,7 @@ import { createStyles } from './styles'
 import { GroupProfileProps } from './types'
 
 const GroupProfile: FC<GroupProfileProps> = ({ group }) => {
-  const { title, avatar } = useGroupNameAndAvatar(group)
+  const { title, avatar } = useNameAndAvatar(group)
   const participantsCount = group?.participantsCount ?? 0
   const styles = createStyles()
 
