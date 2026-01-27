@@ -2,10 +2,10 @@ import { FC, PropsWithChildren } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
-import { ToolbarProps as MuiToolbarProps } from '@mui/material'
+import { DrawerProps, IconButtonProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { AccountMenuProps } from '../Header/AccountMenu/types'
-import { NavigationData } from '../types'
+import { NavigationData, SlotProps } from '../types'
 import { MainContainerProps } from './MainContainer/types'
 
 export interface NavigationLayoutProps extends PropsWithChildren {
@@ -17,4 +17,7 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   ToolbarProps?: MuiToolbarProps
   MainContainerProps?: Partial<MainContainerProps>
   MainContainer?: FC<MainContainerProps>
+  slotProps?: SlotProps
+  VerticalDrawerProps?: Partial<DrawerProps>
+  NavToggleButtonProps?: Partial<IconButtonProps>
 }

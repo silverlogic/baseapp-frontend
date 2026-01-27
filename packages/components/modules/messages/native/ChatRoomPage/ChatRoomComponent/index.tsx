@@ -7,13 +7,23 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
 
 import { useRouter } from 'expo-router'
-import { useLazyLoadQuery, useRefetchableFragment } from 'react-relay'
+import { useFragment, useLazyLoadQuery, useRefetchableFragment } from 'react-relay'
 
 import { ChatRoomFragment$key } from '../../../../../__generated__/ChatRoomFragment.graphql'
 import { ChatRoomFragmentRefetchQuery } from '../../../../../__generated__/ChatRoomFragmentRefetchQuery.graphql'
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../../__generated__/ChatRoomQuery.graphql'
-import { ChatRoomQuery, useArchiveChatRoomMutation } from '../../../common'
+import { MembersListFragment$data } from '../../../../../__generated__/MembersListFragment.graphql'
+import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
+import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
+import {
+  ChatRoomQuery,
+  TitleFragment,
+  useArchiveChatRoomMutation,
+  useCheckIsAdmin,
+} from '../../../common'
 import { ChatRoomFragment } from '../../../common/graphql/fragments/ChatRoom'
+import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
+import { LeaveGroupDialog } from '../../__shared__/LeaveGroupDialog'
 import ChatRoomHeader from '../ChatRoomHeader'
 import ChatRoomOptions from '../ChatRoomOptions'
 import MessagesList from '../MessagesList'
@@ -22,6 +32,7 @@ import { ChatRoomPageComponentProps } from './type'
 const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
   const router = useRouter()
   const [visible, setVisible] = useState(false)
+  const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
@@ -52,12 +63,25 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
       })
     }
   }, [data, router, sendToast])
+  const roomHeader = useFragment(TitleFragment, data as TitleFragment$key)
+  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
+  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
 
   if (!data) {
     return null
   }
 
-  const renderTitleComponent = () => <ChatRoomHeader roomRef={data} />
+  const handleChatDetails = () => {
+    if (data.isGroup) {
+      router.push(`/group-details/${roomId}`)
+      return
+    }
+    console.log('Not implemented yet.')
+  }
+
+  const renderTitleComponent = () => (
+    <ChatRoomHeader roomHeader={roomHeader} onChatDetailsClicked={handleChatDetails} />
+  )
 
   const handleArchiveChat = () => {
     if (currentProfile?.id && roomId) {
@@ -73,17 +97,38 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     }
   }
 
+  const handleDeleteChat = () => {
+    if (data.isGroup) {
+      setOpenConfirmLeaveGroupDialog(true)
+      return
+    }
+    console.log('Not implemented yet.')
+  }
+
   const renderRightAction = (
-    <ChatRoomOptions
-      visible={visible}
-      setVisible={setVisible}
-      isArchived={!!data?.isArchived}
-      handleArchiveChat={handleArchiveChat}
-      isArchiveMutationInFlight={isMutationInFlight}
-      handleChatDetails={() => console.log('Not implemented.')}
-      handleGoToProfile={() => console.log('Not implemented.')}
-      handleDeleteChat={() => console.log('Not implemented.')}
-    />
+    <>
+      {currentProfile?.id && (
+        <LeaveGroupDialog
+          open={openConfirmLeaveGroupDialog}
+          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          profileId={currentProfile?.id}
+          roomId={roomId}
+          removingParticipantId={currentProfile?.id}
+          isSoleAdmin={isSoleAdmin}
+        />
+      )}
+      <ChatRoomOptions
+        visible={visible}
+        setVisible={setVisible}
+        isArchived={!!data?.isArchived}
+        isGroup={!!data?.isGroup}
+        handleArchiveChat={handleArchiveChat}
+        isArchiveMutationInFlight={isMutationInFlight}
+        handleChatDetails={handleChatDetails}
+        handleGoToProfile={() => console.log('Not implemented.')}
+        handleDeleteChat={handleDeleteChat}
+      />
+    </>
   )
 
   return (

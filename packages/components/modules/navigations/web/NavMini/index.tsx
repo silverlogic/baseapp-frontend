@@ -22,11 +22,22 @@ const NavMini: FC<NavMiniProps> = ({
   openNav,
   onCloseNav,
   hideToggleButton = false,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        LogoIcon={LogoIcon}
+        DrawerProps={VerticalDrawerProps}
+      />
+    )
   }
 
   return (
@@ -40,9 +51,11 @@ const NavMini: FC<NavMiniProps> = ({
     >
       {!hideToggleButton && (
         <NavToggleButton
+          {...NavToggleButtonProps}
           sx={{
             top: 22,
             left: NAV_WIDTH.MINI - 12,
+            ...NavToggleButtonProps?.sx,
           }}
         />
       )}
@@ -61,7 +74,7 @@ const NavMini: FC<NavMiniProps> = ({
             <LogoIcon />
           </Logo>
         )}
-        <NavSectionMini navData={navData} />
+        <NavSectionMini navData={navData} slotProps={slotProps} />
       </Stack>
     </Box>
   )
