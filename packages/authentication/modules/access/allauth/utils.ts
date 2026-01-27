@@ -68,3 +68,19 @@ export function normalizeAllAuthError(error: unknown) {
 
   return normalizedError
 }
+
+export function extractTokensFromAllAuthResponse(response: AllAuthResponse | null | undefined) {
+  if (!response?.meta) {
+    return {
+      accessToken: undefined,
+      refreshToken: undefined,
+      sessionToken: undefined,
+    }
+  }
+
+  return {
+    accessToken: response.meta.accessToken,
+    refreshToken: response.meta.refreshToken,
+    sessionToken: response.meta.sessionToken,
+  }
+}

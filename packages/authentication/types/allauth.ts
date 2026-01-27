@@ -60,6 +60,7 @@ export interface AllAuthLoginMeta extends AllAuthMeta {
 
 export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {
   meta: AllAuthLoginMeta
+  redirectUrl?: string
 }
 
 export interface AllAuthResetPasswordRequest {
@@ -84,3 +85,22 @@ export interface AllAuthSessionData {
 }
 
 export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> {}
+
+export interface AllAuthLoginJWTResponse {
+  accessToken: string
+  refreshToken: string
+  sessionToken: string
+}
+
+export interface AllAuthSocialProvider {
+  id: string
+  name: string
+  flows: string[]
+}
+
+export interface AllAuthSocialProvidersData {
+  providers: AllAuthSocialProvider[]
+}
+
+export interface AllAuthSocialProvidersResponse
+  extends AllAuthResponse<AllAuthSocialProvidersData> {}

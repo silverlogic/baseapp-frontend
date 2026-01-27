@@ -16,6 +16,7 @@ export { default as UserApi } from './services/user'
 export * from './services/user'
 
 export type * from './types/auth'
+export type * from './types/allauth'
 export type * from './types/mfa'
 export type * from './types/profile'
 export type * from './types/user'
