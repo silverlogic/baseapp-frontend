@@ -11,7 +11,7 @@ const MemberOptionsMenu: FC<MemberOptionsMenuProps> = ({
 }) => (
   <MenuList>
     <MenuItem onClick={onViewProfileClicked}>
-      <Typography variant="body2">View Profile</Typography>
+      <Typography variant="body2">See Profile</Typography>
     </MenuItem>
     {isMe && (
       <MenuItem onClick={onRemoveClicked}>

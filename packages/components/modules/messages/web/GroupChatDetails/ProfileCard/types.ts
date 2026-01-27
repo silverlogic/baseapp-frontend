@@ -9,4 +9,5 @@ export interface ProfileCardProps {
   groupMember: GroupMembersNode
   hasAdminPermissions: boolean
   initiateRemoval: (profileFragmentRef: ProfileItemFragment$key) => void
+  groupId?: string
 }
