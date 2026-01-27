@@ -43,7 +43,7 @@ export const NavCenteredContainer = styled(NavHorizontalContainer)(({ theme }) =
 
 export const NavVerticalContainer = styled(CommonContainer, {
   shouldForwardProp: (prop) => prop !== 'isNavMini',
-})<NavVerticalContainerProps>(({ theme, isNavMini = false }) => ({
+})<NavVerticalContainerProps>(({ theme, isNavMini = false, sx }) => ({
   display: 'flex',
   flexDirection: 'column',
   flexGrow: 1,
@@ -62,4 +62,5 @@ export const NavVerticalContainer = styled(CommonContainer, {
   [theme.breakpoints.down('sm')]: {
     paddingBottom: 0,
   },
+  ...((sx as object) || {}),
 }))
