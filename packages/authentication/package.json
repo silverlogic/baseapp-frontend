@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "catalog:",
+    "@react-oauth/google": "^0.13.4",
     "@tanstack/react-query": "catalog:",
     "js-cookie": "catalog:",
     "react-hook-form": "catalog:",

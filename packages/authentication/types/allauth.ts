@@ -13,13 +13,19 @@ export interface AllAuthUser {
 
 export interface AllAuthMeta {
   isAuthenticated?: boolean
+  is_authenticated?: boolean
   sessionToken?: string
+  session_token?: string
   accessToken?: string
+  access_token?: string
   refreshToken?: string
+  refresh_token?: string
   expiresIn?: number
   profile?: Partial<MinimalProfile>
   id?: string | number
   email?: string
+  is_email_verified?: boolean
+  email_verification_required?: boolean
   [key: string]: unknown
 }
 
@@ -54,7 +60,7 @@ export interface AllAuthLoginData {
   methods?: AllAuthLoginMethod[]
 }
 
-export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> { }
+export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {}
 
 export interface AllAuthSignupData {
   user?: AllAuthUser
@@ -64,13 +70,13 @@ export interface AllAuthSignupData {
   }>
 }
 
-export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> { }
+export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> {}
 
 export interface AllAuthSessionData {
   user?: AllAuthUser
 }
 
-export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> { }
+export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> {}
 
 export interface AllAuthLoginJWTResponse {
   accessToken: string

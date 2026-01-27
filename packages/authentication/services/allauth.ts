@@ -20,6 +20,47 @@ export default class AllAuthApi {
     })
   }
 
+  static async googleLogin(googleTokens: {
+    access_token: string
+    id_token?: string
+  }): Promise<AllAuthLoginResponse> {
+    const idToken = googleTokens.access_token
+    const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''
+
+    console.log('[AllAuthApi.googleLogin] Token info:', {
+      tokenLength: idToken?.length,
+      tokenPreview: `${idToken?.substring(0, 50)}...`,
+      hasMultipleParts: idToken?.split('.').length === 3, // JWT has 3 parts
+      clientId,
+    })
+
+    // AllAuth Headless provider/token endpoint expects:
+    // - provider: the provider name
+    // - process: 'login' or 'connect'
+    // - token: MUST BE AN OBJECT with client_id and id_token
+    // Reference: allauth/headless/socialaccount/inputs.py ProviderTokenInput
+    const payload = {
+      provider: 'google',
+      process: 'login',
+      token: {
+        client_id: clientId,
+        id_token: idToken,
+      },
+    }
+
+    console.log('[AllAuthApi.googleLogin] Sending payload:', {
+      provider: payload.provider,
+      process: payload.process,
+      tokenHasClientId: (!!'client_id') in payload.token,
+      tokenHasIdToken: !!payload.token.id_token,
+    })
+
+    return baseAppFetch(`/_allauth/app/v1/auth/provider/token`, {
+      method: 'POST',
+      body: payload,
+    })
+  }
+
   static logout(): Promise<void> {
     return baseAppFetch(`/_allauth/app/v1/auth/session`, {
       method: 'DELETE',
