@@ -91,6 +91,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
           groupMember={item.node}
           initiateRemoval={initiateRemoval}
           hasAdminPermissions={isAdmin}
+          groupId={group?.id}
           {...ProfileCardProps}
         />
       )
