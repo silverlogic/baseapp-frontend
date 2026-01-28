@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -19,6 +19,7 @@ import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import { useChatRoomToggleAdminMutation } from '../../../common/graphql/mutations/ChatRoomToggleAdmin'
 import AdminOptionsMenu from './AdminOptionsMenu'
 import MemberOptionsMenu from './MemberOptionsMenu'
+import RemoveAdminPermissionsDialog from './RemoveAdminPermissionsDialog'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
@@ -32,6 +33,10 @@ const ProfileCard: FC<ProfileCardProps> = ({
     ProfileItemFragment,
     groupMember.profile!,
   )
+  const [openRemoveAdminPermissionDialog, setOpenRemoveAdminDialog] = useState(false)
+  const handleCloseDialog = () => {
+    setOpenRemoveAdminDialog(false)
+  }
   const showUrlPath = !!urlPath?.path
   const isAdmin = groupMember.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
   const showMenu = hasAdminPermissions
@@ -47,7 +52,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
   const { sendToast } = useNotification()
   const [commitToggleAdmin, isMutationInFlight] = useChatRoomToggleAdminMutation()
 
-  const handleToggleAdminClicked = () => {
+  const handleCommitToggleAdmin = () => {
     if (isMutationInFlight || !groupId || !currentProfile?.id) return
     popover.onClose()
 
@@ -74,11 +79,20 @@ const ProfileCard: FC<ProfileCardProps> = ({
       },
       onCompleted: () => {
         popover.onClose()
+        handleCloseDialog()
       },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
       },
     })
+  }
+
+  const handleToggleAdminClicked = () => {
+    if (isAdmin) {
+      setOpenRemoveAdminDialog(true)
+    } else {
+      handleCommitToggleAdmin()
+    }
   }
 
   const renderMenuItems = () => {
@@ -94,12 +108,20 @@ const ProfileCard: FC<ProfileCardProps> = ({
 
     if (!isMe && hasAdminPermissions) {
       return (
-        <AdminOptionsMenu
-          onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
-          onToggleAdminClicked={handleToggleAdminClicked}
-          onRemoveClicked={handleRemoveClicked}
-          isAdmin={isAdmin}
-        />
+        <>
+          <RemoveAdminPermissionsDialog
+            open={openRemoveAdminPermissionDialog}
+            onClose={handleCloseDialog}
+            isMutationInFlight={isMutationInFlight}
+            onRemoveConfirmed={handleCommitToggleAdmin}
+          />
+          <AdminOptionsMenu
+            onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
+            onToggleAdminClicked={handleToggleAdminClicked}
+            onRemoveClicked={handleRemoveClicked}
+            isAdmin={isAdmin}
+          />
+        </>
       )
     }
 
