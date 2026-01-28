@@ -28,5 +28,8 @@ export type * from './Header/AccountMenu/AccountPopover/types'
 export { default as ViewportHeightContainer } from './ViewportHeightContainer'
 export type * from './ViewportHeightContainer/types'
 
+export { default as VerticalDrawer } from './__shared__/VerticalDrawer'
+export type * from './__shared__/VerticalDrawer/types'
+
 export * from './constants'
 export type * from './types'
