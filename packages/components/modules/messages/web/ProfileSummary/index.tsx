@@ -6,13 +6,13 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 
 import { usePreloadedQuery } from 'react-relay'
 
-import { GroupDetailsQuery } from '../../common'
+import { ChatRoomQuery } from '../../common'
 import Body from './Body'
 import Header from './Header'
 import { ProfileSummaryProps } from './types'
 
 const ProfileSummary: FC<ProfileSummaryProps> = ({ onBackButtonClicked, queryRef }) => {
-  const data = usePreloadedQuery(GroupDetailsQuery, queryRef)
+  const data = usePreloadedQuery(ChatRoomQuery, queryRef)
 
   if (!data.chatRoom) {
     return <LoadingState />

@@ -6,9 +6,8 @@ export const GroupDetailsQuery = graphql`
       id
       participantsCount
       isArchived
-      ...GroupTitleFragment
+      ...RoomTitleFragment
       ...MembersListFragment
-      ...ProfileSummaryFragment
     }
   }
 `

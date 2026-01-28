@@ -6,8 +6,9 @@ import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { useQueryLoader } from 'react-relay'
 
+import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
 import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__generated__/GroupDetailsQuery.graphql'
-import { GroupDetailsQuery, useChatRoom } from '../../common'
+import { ChatRoomQuery, GroupDetailsQuery, useChatRoom } from '../../common'
 import { LEFT_PANEL_CONTENT } from '../../common/context/useChatRoom/constants'
 import DefaultAllChatRoomsList from '../AllChatRoomsList'
 import ChatRoom from '../ChatRoom'
@@ -39,6 +40,8 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   const [groupDetailsQueryRef, loadGroupDetailsQuery] =
     useQueryLoader<GroupDetailsQueryType>(GroupDetailsQuery)
 
+  const [chatRoomQueryRef, loadChatRoomQuery] = useQueryLoader<ChatRoomQueryType>(ChatRoomQuery)
+
   const { id: selectedRoom, leftPanelContent, setLeftPanelContent } = useChatRoom()
 
   const displayGroupDetails = () => {
@@ -51,7 +54,7 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   const displayProfileSummary = () => {
     if (selectedRoom) {
       setLeftPanelContent(LEFT_PANEL_CONTENT.profileSummary)
-      loadGroupDetailsQuery({ roomId: selectedRoom }, { fetchPolicy: 'network-only' })
+      loadChatRoomQuery({ roomId: selectedRoom }, { fetchPolicy: 'network-only' })
     }
   }
 
@@ -107,10 +110,10 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
           />
         )
       case LEFT_PANEL_CONTENT.profileSummary:
-        if (!groupDetailsQueryRef) return null
+        if (!chatRoomQueryRef) return null
         return (
           <ProfileSummaryComponent
-            queryRef={groupDetailsQueryRef}
+            queryRef={chatRoomQueryRef}
             onBackButtonClicked={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
           />
         )
