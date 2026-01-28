@@ -43,7 +43,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const { isSoleAdmin } = useCheckIsAdmin(members)
+  const { isSoleAdmin, isAdmin: currentProfileIsAdmin } = useCheckIsAdmin(members)
 
   const handleLoadMoreMembers = () => {
     if (hasNext && !isLoadingNext) {
@@ -94,6 +94,8 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
           loadNext={handleLoadMoreMembers}
           isLoadingNext={isLoadingNext}
           hasNext={hasNext}
+          currentProfileIsAdmin={currentProfileIsAdmin}
+          groupId={roomId}
         />
         <Options
           isArchiveMutationInFlight={isMutationInFlight}
