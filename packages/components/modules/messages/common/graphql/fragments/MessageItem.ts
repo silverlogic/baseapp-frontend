@@ -11,6 +11,7 @@ export const MessageItemFragment = graphql`
       id
     }
     isRead
+    pk
     profile {
       id
     }
