@@ -2,7 +2,7 @@ export type ThemeMode = 'light' | 'dark'
 
 export type ThemeContrast = 'default' | 'bold'
 
-export type ThemeLayout = 'vertical' | 'horizontal' | 'mini' | 'centered'
+export type ThemeLayout = 'vertical' | 'horizontal' | 'mini' | 'centered' | 'sidebar'
 
 export type PresetType =
   | 'default'

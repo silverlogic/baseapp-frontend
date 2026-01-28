@@ -37,6 +37,8 @@
     "./navigations/common": "./modules/navigations/common/index.ts",
     "./navigations/web": "./modules/navigations/web/index.ts",
     "./navigations/native": "./modules/navigations/native/index.ts",
+    "./new-navigations/web": "./modules/new-navigations/web/index.ts",
+    "./new-navigations/native": "./modules/new-navigations/native/index.ts",
     "./notifications/common": "./modules/notifications/common/index.ts",
     "./notifications/web": "./modules/notifications/web/index.ts",
     "./notifications/native": "./modules/notifications/native/index.ts",
