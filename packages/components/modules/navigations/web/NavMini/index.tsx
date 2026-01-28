@@ -39,6 +39,7 @@ const NavMini: FC<NavMiniProps> = ({
         onCloseNav={onCloseNav}
         LogoIcon={LogoIcon}
         LogoProps={{ ...LogoProps, sx: { ...LogoProps?.sx, marginLeft: '0px', width: '100%' } }}
+        DrawerProps={VerticalDrawerProps}
       />
     )
   }
