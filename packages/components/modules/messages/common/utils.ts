@@ -11,11 +11,11 @@ import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
-export const useNameAndAvatar = (titleRef: RoomTitleFragment$key | null | undefined) => {
+export const useTitleAndImage = (titleRef: RoomTitleFragment$key | null | undefined) => {
   const data = useFragment(RoomTitleFragment, titleRef ?? null)
   return {
     title: data?.title,
-    avatar: data?.image?.url,
+    image: data?.image?.url,
   }
 }
 
@@ -29,7 +29,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       isGroup,
       isSoleAdmin,
       title,
-      avatar: image?.url,
+      image: image?.url,
     }
   }
   if (!participant) {
@@ -37,7 +37,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       roomId: id,
       isGroup,
       title: 'Deleted User',
-      avatar: undefined,
+      image: undefined,
     }
   }
   if (participant && !participant.profile) {
@@ -45,7 +45,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       roomId: id,
       isGroup,
       title: 'Deleted User',
-      avatar: undefined,
+      image: undefined,
       username: undefined,
       biography: undefined,
       id: undefined,
@@ -55,7 +55,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
     roomId: id,
     isGroup,
     title: participant?.profile?.name,
-    avatar: participant?.profile?.image?.url,
+    image: participant?.profile?.image?.url,
     username: participant?.profile?.urlPath?.path,
     biography: participant?.profile?.biography,
     id: participant?.profile?.id,

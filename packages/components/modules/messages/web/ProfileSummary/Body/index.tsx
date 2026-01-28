@@ -22,14 +22,14 @@ import {
 import { BodyProps } from './types'
 
 const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
-  const { title, avatar, username, biography, id } = useSingleChatDetails(chatRoomRef)
+  const { title, image, username, biography, id } = useSingleChatDetails(chatRoomRef)
 
   const profilePath = username ?? (id ? `/profile/${id}` : undefined)
 
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <HeaderContainer>
-        <CircledAvatar src={avatar} width={avatarSize} height={avatarSize} hasError={false} />
+        <CircledAvatar src={image} width={avatarSize} height={avatarSize} hasError={false} />
         <TitleContainer>
           <TypographyWithEllipsis variant="subtitle1" color="text.primary">
             {title}

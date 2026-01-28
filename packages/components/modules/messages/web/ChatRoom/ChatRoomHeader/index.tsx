@@ -37,7 +37,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
-  const { isGroup, isSoleAdmin, title, avatar } = useSingleChatDetails(roomTitleRef)
+  const { isGroup, isSoleAdmin, title, image } = useSingleChatDetails(roomTitleRef)
   const members = getParticipantCountString(participantsCount)
   const popover = usePopover()
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
@@ -93,7 +93,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             className="self-start justify-self-center"
             width={32}
             height={32}
-            src={avatar}
+            src={image}
             sx={{ border: 'none', alignSelf: 'center' }}
           />
           <Box>

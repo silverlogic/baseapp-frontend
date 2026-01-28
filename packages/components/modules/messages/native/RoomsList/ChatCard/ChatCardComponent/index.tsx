@@ -3,7 +3,7 @@ import { FC, useCallback, useRef, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   useArchiveChatRoomMutation,
-  useNameAndAvatar,
+  useTitleAndImage,
   useUnreadChatMutation,
 } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
@@ -57,7 +57,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   )
 
   const isGroup = !!titleFragment?.isGroup
-  const { title, avatar } = useNameAndAvatar(titleFragment)
+  const { title, image } = useTitleAndImage(titleFragment)
   const { lastMessageTime } = lastMessageFragment
 
   const { isSoleAdmin } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
@@ -132,7 +132,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
       onLongPress={onChatCardLongPress}
     >
       <View style={styles.profileCard}>
-        <AvatarWithPlaceholder imgSource={avatar} size={48} />
+        <AvatarWithPlaceholder imgSource={image} size={48} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1">{title}</Text>
           {lastMessage && lastMessageTime ? (

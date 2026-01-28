@@ -20,8 +20,8 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   useCheckIsAdmin,
-  useNameAndAvatar,
   useRoomListSubscription,
+  useTitleAndImage,
   useUpdateChatRoomMutation,
 } from '../../common'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
@@ -53,7 +53,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   const [memberToRemove, setMemberToRemove] = useState<ProfileItemFragment$key | null>(null)
   const smDown = useResponsive('down', 'sm')
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
-  const { avatar, title } = useNameAndAvatar(group)
+  const { image: chatImage, title } = useTitleAndImage(group)
 
   useRoomListSubscription({ profileId, connections: [], onRemoval: onRemovalFromGroup })
 
@@ -77,7 +77,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   )
   const { isSoleAdmin } = useCheckIsAdmin(membersList?.participants)
   const formReturn = useForm<CreateOrEditGroup>({
-    defaultValues: getDefaultFormValues(title || '', avatar),
+    defaultValues: getDefaultFormValues(title || '', chatImage),
     resolver: zodResolver(DEFAULT_FORM_VALIDATION),
     mode: 'onBlur',
   })
