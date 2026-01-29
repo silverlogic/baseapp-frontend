@@ -24,7 +24,7 @@ export const StyledNavItem = styled(ListItemButton, {
   const baseStyles = {
     item: {
       borderRadius: 6,
-      color: theme.palette.text.secondary,
+      color: theme.palette.common.white,
     },
     icon: {
       width: 22,
@@ -124,11 +124,11 @@ export const StyledNavItem = styled(ListItemButton, {
     }),
     '&:hover': {
       svg: {
-        color: active ? theme.palette.primary.main : theme.palette.grey[600],
+        color: active ? theme.palette.primary.main : theme.palette.common.white,
       },
     },
     svg: {
-      color: active ? theme.palette.primary.main : theme.palette.grey[600],
+      color: active ? theme.palette.primary.main : theme.palette.common.white,
     },
   }
 })

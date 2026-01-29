@@ -19,6 +19,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({
   openNav,
   onCloseNav,
   DrawerProps = {},
+  LogoProps,
 }) => {
   const pathname = usePathname()
   const { PaperProps, ...restDrawerProps } = DrawerProps
@@ -54,7 +55,7 @@ const VerticalDrawer: FC<VerticalDrawerProps> = ({
         }}
       >
         {LogoIcon && (
-          <Logo sx={{ mt: 3, ml: 4, mb: 1 }}>
+          <Logo {...LogoProps} sx={{ mt: 3, ml: 4, mb: 1, ...LogoProps?.sx }}>
             <LogoIcon />
           </Logo>
         )}

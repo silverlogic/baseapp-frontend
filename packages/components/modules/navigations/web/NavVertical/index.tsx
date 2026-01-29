@@ -39,6 +39,7 @@ const NavVertical: FC<NavVerticalProps> = ({
         onCloseNav={onCloseNav}
         LogoIcon={LogoIcon}
         DrawerProps={VerticalDrawerProps}
+        LogoProps={LogoProps}
       />
     )
   }
