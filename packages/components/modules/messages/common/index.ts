@@ -18,7 +18,6 @@ export * from './graphql/queries/ChatRoomQuery'
 export * from './graphql/queries/ChatRoomsQuery'
 export * from './graphql/queries/GroupDetailsQuery'
 
-export * from './graphql/fragments/GroupTitle'
 export * from './graphql/fragments/LastMessage'
 export * from './graphql/fragments/MembersList'
 export * from './graphql/fragments/MessageItem'

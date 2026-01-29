@@ -3,8 +3,7 @@ import { FC, useCallback, useRef, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
   useArchiveChatRoomMutation,
-  useCheckIsAdmin,
-  useNameAndAvatar,
+  useTitleAndImage,
   useUnreadChatMutation,
 } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
@@ -20,7 +19,6 @@ import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../../__generated__/LastMessageFragment.graphql'
-import { MembersListFragment$data } from '../../../../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
@@ -38,7 +36,6 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const styles = createStyles(theme)
   const router = useRouter()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
-  const roomId = useFragment(TitleFragment, roomRef)?.id
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
@@ -48,21 +45,22 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
     LastMessageFragment,
     roomRef as unknown as LastMessageFragment$key,
   )
-  const headerFragment = useFragment<TitleFragment$key>(
+
+  const titleFragment = useFragment<TitleFragment$key>(
     TitleFragment,
     roomRef as unknown as TitleFragment$key,
   )
+  const roomId = titleFragment?.id
   const unreadMessagesCountFragment = useFragment<UnreadMessagesCountFragment$key>(
     UnreadMessagesCountFragment,
     roomRef as unknown as UnreadMessagesCountFragment$key,
   )
 
-  const isGroup = !!headerFragment?.isGroup
-  const { title, avatar } = useNameAndAvatar(headerFragment)
+  const isGroup = !!titleFragment?.isGroup
+  const { title, image } = useTitleAndImage(titleFragment)
   const { lastMessageTime } = lastMessageFragment
 
-  const { participants } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, headerFragment)
-  const { isSoleAdmin } = useCheckIsAdmin(participants as MembersListFragment$data['participants'])
+  const { isSoleAdmin } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
 
   const lastMessage = lastMessageFragment.lastMessage?.content
   const hasUnreadMessages =
@@ -134,7 +132,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
       onLongPress={onChatCardLongPress}
     >
       <View style={styles.profileCard}>
-        <AvatarWithPlaceholder imgSource={avatar} size={48} />
+        <AvatarWithPlaceholder imgSource={image} size={48} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1">{title}</Text>
           {lastMessage && lastMessageTime ? (
@@ -175,7 +173,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
           profileId={currentProfile?.id}
           roomId={roomId}
           removingParticipantId={currentProfile?.id}
-          isSoleAdmin={isSoleAdmin}
+          isSoleAdmin={isSoleAdmin ?? false}
         />
       )}
     </Pressable>

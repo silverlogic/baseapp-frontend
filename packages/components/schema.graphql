@@ -109,6 +109,8 @@ type ChatRoom implements Node {
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
   isArchived(profileId: ID): Boolean
+  otherParticipant: ChatRoomParticipant
+  isSoleAdmin: Boolean
 }
 
 input ChatRoomArchiveInput {
@@ -347,11 +349,11 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -448,11 +450,11 @@ interface CommentsInterface {
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -1105,11 +1107,11 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
   hasPerm(perm: String!): Boolean
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""

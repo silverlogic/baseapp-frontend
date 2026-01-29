@@ -9,6 +9,7 @@ export const ChatRoomQuery = graphql`
       ...TitleFragment
       ...MessagesListFragment
       ...ChatRoomFragment
+      ...SingleChatDetailsFragment
     }
   }
 `

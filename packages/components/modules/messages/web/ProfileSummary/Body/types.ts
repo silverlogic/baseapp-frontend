@@ -1,8 +1,8 @@
 import { PropsWithChildren } from 'react'
 
-import { ProfileSummaryFragment$key } from '../../../../../__generated__/ProfileSummaryFragment.graphql'
+import { SingleChatDetailsFragment$key } from '../../../../../__generated__/SingleChatDetailsFragment.graphql'
 
 export interface BodyProps extends PropsWithChildren {
   avatarSize?: number
-  chatRoomRef: ProfileSummaryFragment$key
+  chatRoomRef: SingleChatDetailsFragment$key
 }
