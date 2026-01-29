@@ -20,4 +20,5 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   slotProps?: SlotProps
   VerticalDrawerProps?: Partial<DrawerProps>
   NavToggleButtonProps?: Partial<IconButtonProps>
+  enableHeader?: boolean
 }

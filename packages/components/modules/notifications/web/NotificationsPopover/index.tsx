@@ -30,6 +30,9 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   NotificationBellIconProps = {},
   NotificationsList = DefaultNotificationsList,
   NotificationsListProps = {},
+  showLabel = false,
+  labelComponent,
+  currentLayout,
 }) => {
   const [isDrawerOpened, setIsDrawerOpened] = useState<boolean>(false)
 
@@ -48,18 +51,30 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
 
   return (
     <>
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
+      <div
+        className={`flex w-full flex-wrap items-center gap-2 ${currentLayout === 'mini' ? 'justify-center gap-0' : ''}`}
+        role="button"
+        tabIndex={0}
         onClick={() => setIsDrawerOpened(true)}
-        aria-label="see notifications"
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') event.preventDefault()
+          setIsDrawerOpened(true)
+        }}
       >
-        <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
-          <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
-        </Badge>
-      </IconButton>
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          variants={varHover(1.05)}
+          onClick={() => setIsDrawerOpened(true)}
+          aria-label="see notifications"
+        >
+          <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
+            <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+          </Badge>
+        </IconButton>
+        {showLabel && labelComponent && labelComponent}
+      </div>
       <Drawer
         anchor={smDown ? 'bottom' : 'right'}
         open={isDrawerOpened}
