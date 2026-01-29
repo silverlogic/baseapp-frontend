@@ -54,8 +54,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
               navData={navData}
               openNav={nav.value}
               onCloseNav={nav.onFalse}
-              VerticalDrawerProps={VerticalDrawerProps}
               slotProps={slotProps}
+              VerticalDrawerProps={VerticalDrawerProps}
             />
           </Header>
         )}
