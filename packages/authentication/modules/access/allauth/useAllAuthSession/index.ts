@@ -3,6 +3,7 @@
 import {
   ACCESS_KEY_NAME,
   REFRESH_KEY_NAME,
+  SESSION_TOKEN_KEY_NAME,
   removeTokenAsync,
   setTokenAsync,
 } from '@baseapp-frontend/utils'
@@ -18,7 +19,7 @@ export function useAllAuthSession() {
   const { setCurrentProfile } = useCurrentProfile()
 
   async function startSession(sessionData: AllAuthSessionData) {
-    const { accessToken, refreshToken, rawResponse } = sessionData
+    const { accessToken, refreshToken, sessionToken, rawResponse } = sessionData
 
     await setTokenAsync(ACCESS_KEY_NAME, accessToken, {
       secure: process.env.NODE_ENV === 'production',
@@ -27,6 +28,11 @@ export function useAllAuthSession() {
       secure: process.env.NODE_ENV === 'production',
     })
 
+    if (sessionToken) {
+      await setTokenAsync(SESSION_TOKEN_KEY_NAME, sessionToken, {
+        secure: process.env.NODE_ENV === 'production',
+      })
+    }
 
     const profile = rawResponse?.meta?.profile
     if (profile?.id) {
@@ -57,6 +63,7 @@ export function useAllAuthSession() {
   async function clearSession() {
     await removeTokenAsync(ACCESS_KEY_NAME)
     await removeTokenAsync(REFRESH_KEY_NAME)
+    await removeTokenAsync(SESSION_TOKEN_KEY_NAME)
     await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
     setCurrentProfile(null)
   }

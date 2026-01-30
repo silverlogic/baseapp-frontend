@@ -48,6 +48,7 @@ const useAllAuthLogin = ({
           await startSession({
             accessToken: tokens.accessToken,
             refreshToken: tokens.refreshToken,
+            sessionToken: tokens.sessionToken,
             rawResponse: response,
           })
         }

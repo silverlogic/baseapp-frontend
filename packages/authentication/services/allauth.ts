@@ -20,9 +20,14 @@ export default class AllAuthApi {
     })
   }
 
-  static logout(): Promise<void> {
+  static logout(sessionToken?: string): Promise<void> {
     return baseAppFetch(`/_allauth/app/v1/auth/session`, {
       method: 'DELETE',
+      ...(sessionToken && {
+        headers: {
+          'X-Session-Token': sessionToken,
+        },
+      }),
     })
   }
 

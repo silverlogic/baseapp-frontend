@@ -13,14 +13,16 @@ export function extractTokensFromAllAuthResponse(
 ): AllAuthLoginJWTResponse | null {
   const accessToken = response.meta?.accessToken || response.data?.accessToken
   const refreshToken = response.meta?.refreshToken || response.data?.refreshToken
+  const sessionToken = response.meta?.sessionToken || response.data?.sessionToken
 
-  if (!accessToken || !refreshToken) {
+  if (!accessToken || !refreshToken || !sessionToken) {
     return null
   }
 
   return {
     accessToken,
     refreshToken,
+    sessionToken,
   }
 }
 

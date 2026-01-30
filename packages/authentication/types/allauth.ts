@@ -51,6 +51,7 @@ export interface AllAuthLoginData {
   }>
   accessToken?: string
   refreshToken?: string
+  sessionToken?: string
   methods?: AllAuthLoginMethod[]
 }
 
@@ -75,4 +76,5 @@ export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionDa
 export interface AllAuthLoginJWTResponse {
   accessToken: string
   refreshToken: string
+  sessionToken: string
 }

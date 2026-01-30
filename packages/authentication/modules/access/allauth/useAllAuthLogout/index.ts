@@ -1,6 +1,11 @@
 'use client'
 
-import { LOGOUT_EVENT, eventEmitter } from '@baseapp-frontend/utils'
+import {
+  LOGOUT_EVENT,
+  SESSION_TOKEN_KEY_NAME,
+  eventEmitter,
+  getToken,
+} from '@baseapp-frontend/utils'
 
 import { useQueryClient } from '@tanstack/react-query'
 
@@ -19,7 +24,8 @@ const useAllAuthLogout = ({
 
   const logout = async () => {
     try {
-      await AllAuthApi.logout()
+      const sessionToken = getToken(SESSION_TOKEN_KEY_NAME)
+      await AllAuthApi.logout(sessionToken || undefined)
     } catch (error) {
       // Logout API call failed, clearing local state anyway
     }
