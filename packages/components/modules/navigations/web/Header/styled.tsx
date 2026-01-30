@@ -6,7 +6,9 @@ import { styled } from '@mui/material/styles'
 import { HEADER_HEIGHT, NAV_WIDTH } from '../constants'
 import { CustomAppBarProps } from './types'
 
-export const CustomAppBar = styled(AppBar)<CustomAppBarProps>(({ theme, themeLayout }) => {
+export const CustomAppBar = styled(AppBar, {
+  shouldForwardProp: (prop) => prop !== 'themeLayout',
+})<CustomAppBarProps>(({ theme, themeLayout }) => {
   const isNavHorizontal = themeLayout === 'horizontal'
   const isNavVertical = themeLayout === 'vertical'
   const isNavCentered = themeLayout === 'centered'
