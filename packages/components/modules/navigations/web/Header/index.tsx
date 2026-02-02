@@ -29,13 +29,14 @@ const Header: FC<HeaderProps> = ({
   return (
     <CustomAppBar themeLayout={settings.themeLayout}>
       <Toolbar
+        {...ToolbarProps}
         sx={{
           height: 1,
           px: { lg: 5 },
           justifyContent: 'center',
           gap: 2,
+          ...ToolbarProps?.sx,
         }}
-        {...ToolbarProps}
       >
         {LogoIcon && (isNavHorizontal || isNavCentered) && (
           <Logo

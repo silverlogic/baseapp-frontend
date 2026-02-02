@@ -86,6 +86,8 @@
     "tsconfig.json"
   ],
   "dependencies": {
+    "clsx": "catalog:tailwind",
+    "tailwind-merge": "catalog:tailwind",
     "@emotion/cache": "catalog:material-ui",
     "@emotion/react": "catalog:material-ui",
     "@emotion/styled": "catalog:material-ui",

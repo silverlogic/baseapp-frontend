@@ -5,6 +5,7 @@ import { FC, Suspense, useState } from 'react'
 import { varHover } from '@baseapp-frontend/design-system/components/web/animate'
 import { NotificationBellIcon as DefaultNotificationBellIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
+import { tw } from '@baseapp-frontend/design-system/utils/web'
 
 import { Badge as DefaultBadge, Drawer as DefaultDrawer } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
@@ -30,6 +31,9 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   NotificationBellIconProps = {},
   NotificationsList = DefaultNotificationsList,
   NotificationsListProps = {},
+  showLabel = false,
+  currentLayout,
+  labelComponent,
 }) => {
   const [isDrawerOpened, setIsDrawerOpened] = useState<boolean>(false)
 
@@ -46,22 +50,47 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   const smDown = useResponsive('down', 'sm')
   const { onClose, ...restDrawerProps } = DrawerProps
 
+  const isVerticalLayout = currentLayout === 'vertical' || currentLayout === 'mini'
+  const navWidth = currentLayout === 'mini' ? 88 : 280
+
+  const getDrawerAnchor = () => {
+    if (smDown) return 'bottom'
+    if (isVerticalLayout) return 'left'
+    return 'right'
+  }
+
   return (
     <>
-      <IconButton
-        component={m.button}
-        whileTap="tap"
-        whileHover="hover"
-        variants={varHover(1.05)}
-        onClick={() => setIsDrawerOpened(true)}
-        aria-label="see notifications"
+      <div
+        className={tw(
+          'flex w-full flex-wrap items-center gap-2',
+          currentLayout === 'mini' && 'justify-center gap-0',
+        )}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault()
+            setIsDrawerOpened(true)
+          }
+        }}
       >
-        <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
-          <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
-        </Badge>
-      </IconButton>
+        <IconButton
+          component={m.button}
+          whileTap="tap"
+          whileHover="hover"
+          variants={varHover(1.05)}
+          onClick={() => setIsDrawerOpened(true)}
+          aria-label="see notifications"
+        >
+          <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
+            <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+          </Badge>
+        </IconButton>
+        {showLabel && labelComponent ? labelComponent : null}
+      </div>
       <Drawer
-        anchor={smDown ? 'bottom' : 'right'}
+        anchor={getDrawerAnchor()}
         open={isDrawerOpened}
         onClose={(event, reason) => {
           setIsDrawerOpened(false)
@@ -70,6 +99,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
         sx={{
           '& .MuiDrawer-paper': {
             height: '100vh',
+            ...(isVerticalLayout && !smDown && { marginLeft: `${navWidth}px` }),
           },
         }}
         PaperProps={{
@@ -86,15 +116,28 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
 }
 
 const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => {
-  const { NotificationBellIcon = DefaultNotificationBellIcon, NotificationBellIconProps = {} } =
-    props
+  const {
+    NotificationBellIcon = DefaultNotificationBellIcon,
+    NotificationBellIconProps = {},
+    showLabel = false,
+    labelComponent,
+    currentLayout,
+  } = props
 
   return (
     <Suspense
       fallback={
-        <IconButton disabled>
-          <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
-        </IconButton>
+        <div
+          className={tw(
+            'flex w-full flex-wrap items-center gap-2',
+            currentLayout === 'mini' && 'justify-center gap-0',
+          )}
+        >
+          <IconButton disabled>
+            <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
+          </IconButton>
+          {showLabel && labelComponent ? labelComponent : null}
+        </div>
       }
     >
       <NotificationsPopover {...props} />

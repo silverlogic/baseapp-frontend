@@ -13,4 +13,7 @@ export interface NotificationsPopoverProps {
   NotificationBellIconProps?: Partial<SvgIconProps>
   NotificationsList?: FC<NotificationsListProps>
   NotificationsListProps?: Partial<NotificationsListProps>
+  showLabel?: boolean
+  labelComponent?: React.ReactNode
+  currentLayout?: 'vertical' | 'mini' | 'horizontal' | 'centered'
 }
