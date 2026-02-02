@@ -9,7 +9,6 @@ import { useRefetchableFragment } from 'react-relay'
 
 import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
-import { CommentsList_comments$key } from '../../../../__generated__/CommentsList_comments.graphql'
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
 import DefaultCommentReactionButton from './CommentReactionButton'
@@ -97,7 +96,7 @@ const CommentItem: FC<CommentItemProps> = ({
   const renderCommentsReplies = () => {
     const CommentsListComponent = (
       <RepliesList
-        target={comment as CommentsList_comments$key}
+        target={comment}
         subscriptionsEnabled
         threadDepth={threadDepth + 1}
         onReply={onReply}
