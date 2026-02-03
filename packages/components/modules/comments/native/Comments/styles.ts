@@ -11,7 +11,8 @@ export const createStyles = (theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       gap: 16,
-      height: '100%',
+      flex: 1,
+      alignSelf: 'stretch',
     },
     contentContainer: {
       display: 'flex',
