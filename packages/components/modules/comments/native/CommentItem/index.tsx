@@ -11,25 +11,25 @@ import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRe
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
+import CommentShowRepliesButton from '../CommentShowRepliesButton'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
-import CommentShowRepliesButton from './CommentShowRepliesButton'
 import { createStyles } from './styles'
 import { CommentItemProps } from './types'
 
 const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
   onLongPress,
-  threadDepth = 0,
   onReply,
   commentIdToExpand,
+  threadDepth = 0,
+  maxThreadDepth = 5,
   RepliesList: RepliesListProp,
   RepliesListProps,
   Timestamp = DefaultTimestamp,
   CommentReplyButton = DefaultCommentReplyButton,
   CommentReactionButton = DefaultCommentReactionButton,
 }) => {
-  // Lazy load CommentsList as default, memoized to prevent recreation on each render
   const DefaultCommentsList = useMemo(() => lazy(() => import('../CommentsList')), [])
 
   const RepliesList = RepliesListProp ?? DefaultCommentsList
@@ -42,7 +42,9 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const styles = createStyles()
 
-  const hasReplies = (comment.commentsCount?.total ?? 0) > 0
+  const replyCount = comment.commentsCount?.total ?? 0
+  const hasReplies = replyCount > 0
+  const canReply = threadDepth < maxThreadDepth
 
   const showReplies = useCallback(() => {
     if (isRepliesExpanded) {
@@ -67,6 +69,10 @@ const CommentItem: FC<CommentItemProps> = ({
       },
     )
   }, [isRepliesExpanded, refetch])
+
+  const hideReplies = useCallback(() => {
+    setIsRepliesExpanded(false)
+  }, [])
 
   const replyToComment = () => {
     onReply?.(comment)
@@ -98,9 +104,12 @@ const CommentItem: FC<CommentItemProps> = ({
       <RepliesList
         target={comment}
         subscriptionsEnabled
-        threadDepth={threadDepth + 1}
         onReply={onReply}
         onLongPress={onLongPress}
+        threadDepth={threadDepth + 1}
+        maxThreadDepth={maxThreadDepth}
+        isReplyList
+        onHideReplies={hideReplies}
         {...RepliesListProps}
       />
     )
@@ -108,7 +117,6 @@ const CommentItem: FC<CommentItemProps> = ({
     if (!RepliesListProp) {
       return <Suspense fallback={null}>{CommentsListComponent}</Suspense>
     }
-
     return CommentsListComponent
   }
 
@@ -141,17 +149,19 @@ const CommentItem: FC<CommentItemProps> = ({
             <View style={styles.footerContainer}>
               <View style={styles.buttonContainer}>
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
-                <CommentReplyButton
-                  onReply={replyToComment}
-                  commentId={comment.id}
-                  shouldUseBottomSheetSafeComponents
-                />
+                {canReply && (
+                  <CommentReplyButton
+                    onReply={replyToComment}
+                    commentId={comment.id}
+                    shouldUseBottomSheetSafeComponents
+                  />
+                )}
               </View>
               <View style={styles.timestampContainer}>
                 <Timestamp date={comment.created} />
               </View>
             </View>
-            {hasReplies && (
+            {hasReplies && !isRepliesExpanded && (
               <CommentShowRepliesButton
                 onShowReplies={showReplies}
                 totalRepliesCount={comment.commentsCount?.total ?? 0}
@@ -160,7 +170,7 @@ const CommentItem: FC<CommentItemProps> = ({
           </View>
         </View>
       </Pressable>
-      {isRepliesExpanded && !isLoadingReplies && renderCommentsReplies()}
+      {isRepliesExpanded && !isLoadingReplies && canReply && renderCommentsReplies()}
     </>
   )
 }
