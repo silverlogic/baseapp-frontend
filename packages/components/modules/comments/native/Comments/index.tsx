@@ -48,6 +48,9 @@ const WithComments: FC<CommentsProps> = ({
   drawerStyle = {},
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isReplyMode, setIsReplyMode] = useState(false)
+  const [replyTargetName, setReplyTargetName] = useState('')
+  const [commentIdToExpand, setCommentIdToExpand] = useState<string | null>(null)
   const [selectedComment, setSelectedComment] = useState<CommentItem_comment$data | undefined>(
     undefined,
   )
@@ -72,6 +75,19 @@ const WithComments: FC<CommentsProps> = ({
     SocialInputDrawer.useTextInputProperties()
   const showHandle = isFocused || body !== ''
 
+  const handleReply = (comment: CommentItem_comment$data) => {
+    console.log('handleReply', comment)
+    setIsReplyMode(true)
+    form.reset()
+    form.setValue('id', comment.id ?? '')
+    setReplyTargetName(comment.profile?.name ?? '')
+  }
+
+  const handleReplyCancel = () => {
+    setIsReplyMode(false)
+    form.reset()
+  }
+
   const handleEditCancel = () => {
     setIsEditMode(false)
     form.reset()
@@ -83,13 +99,24 @@ const WithComments: FC<CommentsProps> = ({
     onEditCancel: handleEditCancel,
   }
 
+  const replyVariables = {
+    isReplyMode,
+    label: 'Replying to ',
+    onReplyCancel: handleReplyCancel,
+    targetName: replyTargetName,
+  }
+
   const onSubmit = () => {
     if (isCreateMutationInFlight || isUpdateMutationInFlight) return
 
     nextClientMutationId += 1
     const clientMutationId = nextClientMutationId.toString()
 
-    const connectionID = ConnectionHandler.getConnectionID(target.id, 'CommentsList_comments')
+    const connectionID =
+      replyVariables?.isReplyMode && id
+        ? ConnectionHandler.getConnectionID(id, 'CommentsList_comments')
+        : ConnectionHandler.getConnectionID(target.id, 'CommentsList_comments')
+
     if (editVariables.isEditMode) {
       commitUpdateMutation({
         variables: {
@@ -120,6 +147,7 @@ const WithComments: FC<CommentsProps> = ({
         input: {
           body,
           targetObjectId: target.id,
+          inReplyToId: replyVariables?.isReplyMode && id ? id : undefined,
           profileId: currentProfile?.id,
           clientMutationId,
         },
@@ -132,7 +160,13 @@ const WithComments: FC<CommentsProps> = ({
         }
         const mutationErrors = response?.commentCreate?.errors
         setFormRelayErrors(form, mutationErrors)
-
+        if (replyVariables?.isReplyMode) {
+          replyVariables?.onReplyCancel()
+          if (!mutationErrors?.length && id) {
+            setCommentIdToExpand(id)
+            setTimeout(() => setCommentIdToExpand(null), 100)
+          }
+        }
         if (!mutationErrors?.length) {
           form.reset()
           if (commentCreateRef && 'current' in commentCreateRef) commentCreateRef.current?.blur()
@@ -184,7 +218,9 @@ const WithComments: FC<CommentsProps> = ({
         <CommentsList
           target={target}
           subscriptionsEnabled={subscriptionsEnabled}
+          commentIdToExpand={commentIdToExpand}
           onLongPress={handleLongPress}
+          onReply={handleReply}
           {...CommentsListProps}
         />
         <SocialInputDrawer.Placeholder
@@ -205,6 +241,7 @@ const WithComments: FC<CommentsProps> = ({
         style={drawerStyle}
         submit={onSubmit}
         editVariables={editVariables}
+        replyVariables={replyVariables}
         {...SocialInputDrawerProps.DrawerProps}
       />
       {selectedComment && (
