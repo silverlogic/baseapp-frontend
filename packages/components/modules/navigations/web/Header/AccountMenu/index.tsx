@@ -104,7 +104,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
               justifyContent: 'flex-start',
               ...(isNavMini
                 ? {
-                    padding: (theme) => theme.spacing(0.5),
+                    padding: (theme) => theme.spacing(0),
                     margin: (theme) => theme.spacing(0, 0.5),
                   }
                 : {

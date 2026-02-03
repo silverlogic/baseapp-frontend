@@ -4,6 +4,7 @@ import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web
 
 import { DrawerProps, IconButtonProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 
+import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
 import { NavigationData, SlotProps } from '../types'
 import { MainContainerProps } from './MainContainer/types'
@@ -14,10 +15,13 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   LogoProps?: PartialLogoProps
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
+  NotificationsPopover?: FC<NotificationsPopoverProps>
+  NotificationsPopoverProps?: Partial<NotificationsPopoverProps>
   ToolbarProps?: MuiToolbarProps
   MainContainerProps?: Partial<MainContainerProps>
   MainContainer?: FC<MainContainerProps>
   slotProps?: SlotProps
   VerticalDrawerProps?: Partial<DrawerProps>
   NavToggleButtonProps?: Partial<IconButtonProps>
+  enableHeader?: boolean
 }

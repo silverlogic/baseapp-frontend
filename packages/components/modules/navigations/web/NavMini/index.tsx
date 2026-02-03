@@ -81,7 +81,7 @@ const NavMini: FC<NavMiniProps> = ({
         )}
         <NavSectionMini navData={navData} slotProps={slotProps} />
         <Box sx={{ flexGrow: 1 }} />
-        {(!!AccountMenu || !!NotificationsPopover) && (
+        {!!AccountMenu && !!AccountMenuProps && (
           <Box
             sx={{
               mt: 'auto',
@@ -89,19 +89,17 @@ const NavMini: FC<NavMiniProps> = ({
               flexDirection: 'column',
             }}
           >
-            {AccountMenu && (
-              <AccountMenu
-                {...AccountMenuProps}
-                vertical
-                additionalComponent={
-                  NotificationsPopover ? (
-                    <NotificationsPopover {...NotificationsPopoverProps} currentLayout="mini" />
-                  ) : (
-                    AccountMenuProps?.additionalComponent
-                  )
-                }
-              />
-            )}
+            <AccountMenu
+              {...AccountMenuProps}
+              vertical
+              additionalComponent={
+                NotificationsPopover ? (
+                  <NotificationsPopover {...NotificationsPopoverProps} currentLayout="mini" />
+                ) : (
+                  AccountMenuProps?.additionalComponent
+                )
+              }
+            />
           </Box>
         )}
       </Stack>
