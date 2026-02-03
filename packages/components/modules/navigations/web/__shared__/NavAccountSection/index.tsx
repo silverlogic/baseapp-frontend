@@ -15,7 +15,7 @@ const NavAccountSection: FC<NavAccountSectionProps> = ({
 
   return (
     <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column' }}>
-      {AccountMenu && (
+      {AccountMenu ? (
         <AccountMenu
           {...AccountMenuProps}
           vertical
@@ -31,6 +31,14 @@ const NavAccountSection: FC<NavAccountSectionProps> = ({
             )
           }
         />
+      ) : (
+        NotificationsPopover && (
+          <NotificationsPopover
+            {...NotificationsPopoverProps}
+            currentLayout={currentLayout}
+            showLabel
+          />
+        )
       )}
     </Box>
   )
