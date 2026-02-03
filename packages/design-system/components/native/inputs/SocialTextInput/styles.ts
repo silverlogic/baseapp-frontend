@@ -63,4 +63,31 @@ export const createStyles = (
       lineHeight: lineHeight ?? 22,
       color: theme.colors.object.low,
     },
+    replyModeContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      width: '100%',
+      padding: 8,
+      borderRadius: 8,
+      backgroundColor: theme.colors.surface.active,
+    },
+    replyModeLabelContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+      backgroundColor: 'transparent',
+    },
+    replyModeLabel: {
+      fontSize: 14,
+      lineHeight: lineHeight ?? 22,
+      color: theme.colors.object.low,
+    },
+    replyModeTargetName: {
+      fontSize: 14,
+      lineHeight: lineHeight ?? 22,
+      color: theme.colors.primary.main,
+    },
   })

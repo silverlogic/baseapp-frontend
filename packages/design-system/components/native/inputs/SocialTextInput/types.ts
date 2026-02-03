@@ -15,10 +15,18 @@ export type SocialTextInputProps = PaperTextInputProps &
     containerStyle?: StyleProp<ViewStyle>
     toolStyle?: StyleProp<ViewStyle>
     editVariables?: SocialTextInputEditVariablesProps
+    replyVariables?: SocialTextInputReplyVariablesProps
   }
 
 export interface SocialTextInputEditVariablesProps {
   isEditMode: boolean
   label: string
   onEditCancel: () => void
+}
+
+export interface SocialTextInputReplyVariablesProps {
+  isReplyMode: boolean
+  label: string
+  onReplyCancel: () => void
+  targetName: string
 }

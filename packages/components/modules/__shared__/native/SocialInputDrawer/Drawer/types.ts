@@ -1,6 +1,9 @@
 import { FC } from 'react'
 
-import type { SocialTextInputEditVariablesProps } from '@baseapp-frontend/design-system/components/native/inputs'
+import type {
+  SocialTextInputEditVariablesProps,
+  SocialTextInputReplyVariablesProps,
+} from '@baseapp-frontend/design-system/components/native/inputs'
 
 import { UseFormReturn } from 'react-hook-form'
 import { StyleProp, ViewStyle } from 'react-native'
@@ -21,4 +24,5 @@ export interface DrawerProps {
   style?: StyleProp<ViewStyle>
   submit: VoidFunction
   editVariables?: SocialTextInputEditVariablesProps
+  replyVariables?: SocialTextInputReplyVariablesProps
 }

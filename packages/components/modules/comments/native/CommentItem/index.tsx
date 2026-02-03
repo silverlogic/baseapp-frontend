@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -13,26 +13,103 @@ import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
 import { CommentItemFragmentQuery } from '../../common'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
+import CommentShowRepliesButton from './CommentShowRepliesButton'
 import { createStyles } from './styles'
 import { CommentItemProps } from './types'
 
 const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
   onLongPress,
+  threadDepth = 0,
+  onReply,
+  commentIdToExpand,
+  RepliesList: RepliesListProp,
+  RepliesListProps,
   Timestamp = DefaultTimestamp,
   CommentReplyButton = DefaultCommentReplyButton,
   CommentReactionButton = DefaultCommentReactionButton,
 }) => {
-  const [comment] = useRefetchableFragment<CommentItemRefetchQuery, CommentItem_comment$key>(
-    CommentItemFragmentQuery,
-    commentRef,
-  )
+  // Lazy load CommentsList as default, memoized to prevent recreation on each render
+  const DefaultCommentsList = useMemo(() => lazy(() => import('../CommentsList')), [])
+
+  const RepliesList = RepliesListProp ?? DefaultCommentsList
+  const [isRepliesExpanded, setIsRepliesExpanded] = useState(false)
+  const [isLoadingReplies, setIsLoadingReplies] = useState(false)
+  const [comment, refetch] = useRefetchableFragment<
+    CommentItemRefetchQuery,
+    CommentItem_comment$key
+  >(CommentItemFragmentQuery, commentRef)
 
   const styles = createStyles()
 
+  const hasReplies = (comment.commentsCount?.total ?? 0) > 0
+
+  const showReplies = useCallback(() => {
+    if (isRepliesExpanded) {
+      setIsRepliesExpanded(false)
+      return
+    }
+
+    setIsLoadingReplies(true)
+    refetch(
+      { isRepliesExpanded: true },
+      {
+        fetchPolicy: 'store-or-network',
+        onComplete: (error) => {
+          setIsLoadingReplies(false)
+          if (error) {
+            // eslint-disable-next-line no-console
+            console.error('Error loading replies:', error)
+          } else {
+            setIsRepliesExpanded(true)
+          }
+        },
+      },
+    )
+  }, [isRepliesExpanded, refetch])
+
   const replyToComment = () => {
-    // TODO (in another story)
-    console.log('Reply button clicked')
+    onReply?.(comment)
+  }
+
+  useEffect(() => {
+    if (commentIdToExpand === comment.id && !isRepliesExpanded && hasReplies) {
+      setIsLoadingReplies(true)
+      refetch(
+        { isRepliesExpanded: true },
+        {
+          fetchPolicy: 'network-only',
+          onComplete: (error) => {
+            setIsLoadingReplies(false)
+            if (error) {
+              // eslint-disable-next-line no-console
+              console.error('Error loading replies:', error)
+            } else {
+              setIsRepliesExpanded(true)
+            }
+          },
+        },
+      )
+    }
+  }, [commentIdToExpand, comment.id, isRepliesExpanded, hasReplies, refetch])
+
+  const renderCommentsReplies = () => {
+    const CommentsListComponent = (
+      <RepliesList
+        target={comment}
+        subscriptionsEnabled
+        threadDepth={threadDepth + 1}
+        onReply={onReply}
+        onLongPress={onLongPress}
+        {...RepliesListProps}
+      />
+    )
+
+    if (!RepliesListProp) {
+      return <Suspense fallback={null}>{CommentsListComponent}</Suspense>
+    }
+
+    return CommentsListComponent
   }
 
   if (!comment) {
@@ -40,42 +117,51 @@ const CommentItem: FC<CommentItemProps> = ({
   }
 
   return (
-    <Pressable onLongPress={() => onLongPress?.(comment)}>
-      <View style={styles.rootContainer}>
-        <View style={styles.avatarContainer}>
-          <AvatarWithPlaceholder imgSource={comment.user?.avatar?.url} />
-        </View>
-        <View style={styles.bodyContainer}>
-          <Text variant="subtitle2" color="high">
-            {comment.user?.fullName}
-          </Text>
-          <Text variant="body2" color="high">
-            {comment.body}
-            {comment.isEdited ? (
-              <Text variant="body2" color="disabled" style={{ fontSize: 12 }}>
-                {' '}
-                (edited)
-              </Text>
-            ) : (
-              ''
-            )}
-          </Text>
-          <View style={styles.footerContainer}>
-            <View style={styles.buttonContainer}>
-              <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
-              <CommentReplyButton
-                onReply={replyToComment}
-                commentId={comment.id}
-                shouldUseBottomSheetSafeComponents
+    <>
+      <Pressable onLongPress={() => onLongPress?.(comment)}>
+        <View style={styles.rootContainer}>
+          <View style={styles.avatarContainer}>
+            <AvatarWithPlaceholder imgSource={comment.user?.avatar?.url} />
+          </View>
+          <View style={styles.bodyContainer}>
+            <Text variant="subtitle2" color="high">
+              {comment.user?.fullName}
+            </Text>
+            <Text variant="body2" color="high">
+              {comment.body}
+              {comment.isEdited ? (
+                <Text variant="body2" color="disabled" style={{ fontSize: 12 }}>
+                  {' '}
+                  (edited)
+                </Text>
+              ) : (
+                ''
+              )}
+            </Text>
+            <View style={styles.footerContainer}>
+              <View style={styles.buttonContainer}>
+                <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
+                <CommentReplyButton
+                  onReply={replyToComment}
+                  commentId={comment.id}
+                  shouldUseBottomSheetSafeComponents
+                />
+              </View>
+              <View style={styles.timestampContainer}>
+                <Timestamp date={comment.created} />
+              </View>
+            </View>
+            {hasReplies && (
+              <CommentShowRepliesButton
+                onShowReplies={showReplies}
+                totalRepliesCount={comment.commentsCount?.total ?? 0}
               />
-            </View>
-            <View style={styles.timestampContainer}>
-              <Timestamp date={comment.created} />
-            </View>
+            )}
           </View>
         </View>
-      </View>
-    </Pressable>
+      </Pressable>
+      {isRepliesExpanded && !isLoadingReplies && renderCommentsReplies()}
+    </>
   )
 }
 
