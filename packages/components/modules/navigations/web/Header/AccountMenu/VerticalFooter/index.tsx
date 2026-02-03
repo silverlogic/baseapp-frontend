@@ -103,42 +103,44 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
             }}
           />
         </Box>
-        <Box
-          sx={{
-            flexGrow: 1,
-            minWidth: 0,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 0,
-          }}
-        >
-          {profileName && (
-            <Typography
-              component="p"
-              variant="subtitle2"
-              color="text.primary"
-              noWrap
-              sx={{
-                fontWeight: 590,
-                lineHeight: 1.571,
-              }}
-            >
-              {profileName}
-            </Typography>
-          )}
-          {userName && (
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              noWrap
-              sx={{
-                lineHeight: 1.571,
-              }}
-            >
-              {userName}
-            </Typography>
-          )}
-        </Box>
+        {!isNavMini && (
+          <Box
+            sx={{
+              flexGrow: 1,
+              minWidth: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 0,
+            }}
+          >
+            {profileName && (
+              <Typography
+                component="p"
+                variant="subtitle2"
+                color="text.primary"
+                noWrap
+                sx={{
+                  fontWeight: 590,
+                  lineHeight: 1.571,
+                }}
+              >
+                {profileName}
+              </Typography>
+            )}
+            {userName && (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                noWrap
+                sx={{
+                  lineHeight: 1.571,
+                }}
+              >
+                {userName}
+              </Typography>
+            )}
+          </Box>
+        )}
         {!isNavMini && (
           <Box
             sx={{
@@ -190,8 +192,8 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
 
         {Boolean(LogoutItem) && <Divider sx={{ borderStyle: 'solid' }} />}
         <Box margin={1.5} display="flex" flexDirection="column" gap={0.5}>
-          {openProfilesList && Boolean(AddProfileMenuItem) && (
-            <DefaultAddProfileMenuItem {...AddProfileMenuItemProps} />
+          {openProfilesList && AddProfileMenuItem != null && (
+            <AddProfileMenuItem {...AddProfileMenuItemProps} />
           )}
           <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps} />
         </Box>

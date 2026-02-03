@@ -20,12 +20,12 @@ import { useFragment, useLazyLoadQuery } from 'react-relay'
 
 import { NotificationUserMenuFragment$key } from '../../../../__generated__/NotificationUserMenuFragment.graphql'
 import { NotificationsPopoverQuery as NotificationsPopoverQueryType } from '../../../../__generated__/NotificationsPopoverQuery.graphql'
+import { NAV_WIDTH } from '../../../navigations/web/constants'
 import {
   NotificationUserMenuFragment,
   NotificationsPopoverQuery,
   useNotificationsSubscription,
 } from '../../common'
-import { NAV_WIDTH } from '../../../navigations/web/constants'
 import DefaultNotificationsList from '../NotificationsList'
 import { NotificationsPopoverProps } from './types'
 
@@ -182,7 +182,18 @@ const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => 
           <IconButton disabled>
             <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
           </IconButton>
-          {showLabel && labelComponent ? labelComponent : null}
+          {showLabel
+            ? (labelComponent ?? (
+                <Typography
+                  color="text.secondary"
+                  variant="body2"
+                  fontWeight={currentLayout === 'mini' ? 600 : 500}
+                  fontSize={currentLayout === 'mini' ? 10 : 14}
+                >
+                  Notifications
+                </Typography>
+              ))
+            : null}
         </div>
       }
     >

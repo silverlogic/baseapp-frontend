@@ -43,7 +43,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
     if (vertical) {
       return (
         <div className="flex w-full flex-col items-center justify-center gap-2">
-          {renderHeaderContent()}
+          {children}
           {onRegisterClick && onLoginClick && (
             <>
               <Button
@@ -96,8 +96,8 @@ const AccountMenu: FC<AccountMenuProps> = ({
           gap: 1,
         }}
       >
-        {renderHeaderContent()}
-        {renderAdditionalComponent() && (
+        {children}
+        {additionalComponent && (
           <Box
             sx={{
               display: 'flex',
@@ -113,7 +113,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
                   }),
             }}
           >
-            {renderAdditionalComponent()}
+            {additionalComponent}
           </Box>
         )}
         <Divider sx={{ borderStyle: 'solid' }} />
