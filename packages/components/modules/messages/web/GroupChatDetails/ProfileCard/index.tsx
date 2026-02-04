@@ -7,7 +7,6 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { ThreeDotsIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
-import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, IconButton, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
@@ -44,7 +43,6 @@ const ProfileCard: FC<ProfileCardProps> = ({
     initiateRemoval(groupMember.profile!)
   }
 
-  const { sendToast } = useNotification()
   const [commitToggleAdmin, isMutationInFlight] = useChatRoomToggleAdminMutation()
 
   const handleToggleAdminClicked = () => {
@@ -74,9 +72,6 @@ const ProfileCard: FC<ProfileCardProps> = ({
       },
       onCompleted: () => {
         popover.onClose()
-      },
-      onError: (error) => {
-        sendToast(error.message, { type: 'error' })
       },
     })
   }
