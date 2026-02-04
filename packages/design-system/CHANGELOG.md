@@ -4,7 +4,7 @@
 
 ### Minor Changes
 
-- Introduces a configurable navbar layout option for BaseApp. This layout removes the top navigation bar and moves the profile and notification components into the sidebar, supporting flexible UI configurations across different projects without requiring one-off customizations.
+- Introduces an opt-in alternative navbar layout for `BaseApp`, controlled by the `enableHeader` prop on `NavigationLayout` (defaults to `true`). When `enableHeader` is set to `false`, the top header is hidden on desktop viewports and the profile and notification components are moved into the sidebar. Mobile and tablet viewports continue to show the header regardless of this setting. This is not a breaking change—existing behavior is preserved by default.
 
 ## 1.2.0
 
