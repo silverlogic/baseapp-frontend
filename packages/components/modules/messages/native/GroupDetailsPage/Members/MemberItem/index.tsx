@@ -16,7 +16,7 @@ import { ProfileItemFragment } from '../../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../../common'
 import { useChatRoomToggleAdminMutation } from '../../../../common/graphql/mutations/ChatRoomToggleAdmin'
 import DefaultMemberOptions from '../MemberOptions'
-import { RemoveAdminPermissionsDialog } from './RemoveAdminPermissionsDialog'
+import { RemoveAdminPermissionsDialog as DefaultRemoveAdminPermissionsDialog } from './RemoveAdminPermissionsDialog'
 import { createStyles } from './styles'
 import { MemberItemProps } from './type'
 
@@ -27,6 +27,8 @@ const MemberItem: FC<MemberItemProps> = ({
   currentProfileIsAdmin = false,
   MemberOptions = DefaultMemberOptions,
   MemberOptionsProps = {},
+  RemoveAdminPermissionsDialog = DefaultRemoveAdminPermissionsDialog,
+  RemoveAdminPermissionsDialogProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -79,6 +81,7 @@ const MemberItem: FC<MemberItemProps> = ({
       },
       onCompleted: () => {
         bottomDrawerRef.current?.close()
+        handleCloseDialog()
       },
     })
   }
@@ -86,6 +89,7 @@ const MemberItem: FC<MemberItemProps> = ({
   const handleToggleAdminClicked = () => {
     if (memberIsAdmin) {
       setOpenRemoveAdminConfirmation(true)
+      bottomDrawerRef.current?.close()
     } else {
       handleCommitToggleAdmin()
     }
@@ -138,6 +142,7 @@ const MemberItem: FC<MemberItemProps> = ({
         onClose={handleCloseDialog}
         isMutationInFlight={isMutationInFlight}
         onRemoveConfirmed={handleCommitToggleAdmin}
+        {...RemoveAdminPermissionsDialogProps}
       />
     </Pressable>
   )
