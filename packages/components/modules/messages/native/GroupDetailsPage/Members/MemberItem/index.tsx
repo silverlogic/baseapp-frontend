@@ -5,7 +5,6 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
-import { useNotification } from '@baseapp-frontend/utils'
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { Pressable } from 'react-native'
@@ -16,7 +15,7 @@ import { formatHandle } from '../../../../../__shared__/common'
 import { ProfileItemFragment } from '../../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../../common'
 import { useChatRoomToggleAdminMutation } from '../../../../common/graphql/mutations/ChatRoomToggleAdmin'
-import MemberOptions from '../MemberOptions'
+import DefauleMemberOptions from '../MemberOptions'
 import { createStyles } from './styles'
 import { MemberItemProps } from './type'
 
@@ -25,6 +24,8 @@ const MemberItem: FC<MemberItemProps> = ({
   groupId,
   memberIsAdmin = false,
   currentProfileIsAdmin = false,
+  MemberOptions = DefauleMemberOptions,
+  MemberOptionsProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -43,7 +44,6 @@ const MemberItem: FC<MemberItemProps> = ({
     bottomDrawerRef.current?.present()
   }
 
-  const { sendToast } = useNotification()
   const [commitToggleAdmin, isMutationInFlight] = useChatRoomToggleAdminMutation()
 
   const handleToggleAdminClicked = () => {
@@ -73,9 +73,6 @@ const MemberItem: FC<MemberItemProps> = ({
       },
       onCompleted: () => {
         bottomDrawerRef.current?.close()
-      },
-      onError: (error) => {
-        sendToast(error.message, { type: 'error' })
       },
     })
   }
@@ -109,11 +106,18 @@ const MemberItem: FC<MemberItemProps> = ({
         bottomDrawerRef={bottomDrawerRef}
         memberIsAdmin={memberIsAdmin}
         currentProfileIsAdmin={currentProfileIsAdmin}
-        handleSheetChanges={() => {}}
+        handleSheetChanges={() => {
+          // TODO: handle sheet changes if needed
+        }}
         handleAdminToggle={handleToggleAdminClicked}
-        handleGoToProfile={() => {}}
-        handleRemoveMember={() => {}}
+        handleGoToProfile={() => {
+          // TODO: navigate to profile
+        }}
+        handleRemoveMember={() => {
+          // TODO: handle remove member
+        }}
         isMe={isMe}
+        {...MemberOptionsProps}
       />
     </Pressable>
   )

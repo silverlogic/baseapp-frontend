@@ -1,4 +1,7 @@
+import { FC } from 'react'
+
 import { MembersListFragment$data } from '../../../../../../__generated__/MembersListFragment.graphql'
+import { MemberOptionsProps } from '../MemberOptions/type'
 
 type GroupMembers = NonNullable<MembersListFragment$data['participants']>
 export type GroupMembersEdge = NonNullable<GroupMembers['edges'][number]>
@@ -9,4 +12,6 @@ export interface MemberItemProps {
   memberIsAdmin?: boolean
   currentProfileIsAdmin?: boolean
   groupId: string
+  MemberOptions?: FC<MemberOptionsProps>
+  MemberOptionsProps?: Partial<MemberOptionsProps>
 }

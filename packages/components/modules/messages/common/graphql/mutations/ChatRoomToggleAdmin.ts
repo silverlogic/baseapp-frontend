@@ -34,6 +34,12 @@ export const useChatRoomToggleAdminMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
+        response.chatRoomToggleAdmin?.errors?.forEach((error) => {
+          error?.messages.forEach((message) => {
+            sendToast(message, { type: 'error' })
+          })
+        })
+
         errors?.forEach((error) => {
           sendToast(error.message, { type: 'error' })
         })

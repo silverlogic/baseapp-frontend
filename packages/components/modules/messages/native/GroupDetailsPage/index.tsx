@@ -17,13 +17,23 @@ import {
   useArchiveChatRoomMutation,
   useCheckIsAdmin,
 } from '../../common'
-import { LeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
-import GroupProfile from './GroupProfile'
-import Members from './Members'
-import Options from './Options'
+import { LeaveGroupDialog as DefaultLeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
+import DefaultGroupProfile from './GroupProfile'
+import DefaultMembers from './Members'
+import DefaultOptions from './Options'
 import { GroupDetailsPageProps } from './type'
 
-const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
+const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
+  roomId,
+  LeaveGroupDialog = DefaultLeaveGroupDialog,
+  LeaveGroupDialogProps = {},
+  GroupProfile = DefaultGroupProfile,
+  GroupProfileProps = {},
+  Members = DefaultMembers,
+  MembersProps = {},
+  Options = DefaultOptions,
+  OptionsProps = {},
+}) => {
   const router = useRouter()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
@@ -84,10 +94,11 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
           roomId={roomId}
           removingParticipantId={currentProfile?.id}
           isSoleAdmin={isSoleAdmin}
+          {...LeaveGroupDialogProps}
         />
       )}
       <ScrollView>
-        <GroupProfile group={group} />
+        <GroupProfile group={group} {...GroupProfileProps} />
         <Members
           participantsCount={group?.participantsCount}
           members={members}
@@ -96,12 +107,14 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
           hasNext={hasNext}
           currentProfileIsAdmin={currentProfileIsAdmin}
           groupId={roomId}
+          {...MembersProps}
         />
         <Options
           isArchiveMutationInFlight={isMutationInFlight}
           handleArchiveChat={handleArchiveChat}
           handleLeaveGroup={() => setOpenConfirmLeaveGroupDialog(true)}
           isArchived={!!group?.isArchived}
+          {...OptionsProps}
         />
       </ScrollView>
     </View>

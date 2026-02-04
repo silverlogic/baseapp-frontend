@@ -1,13 +1,16 @@
 import { FC } from 'react'
 
-import { Button, FabButton } from '@baseapp-frontend/design-system/components/native/buttons'
-import { LoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
+import {
+  Button,
+  FabButton as DefaultFabButton,
+} from '@baseapp-frontend/design-system/components/native/buttons'
+import { LoadingScreen as DefaultLoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
-import MemberItem from './MemberItem'
+import DefaultMemberItem from './MemberItem'
 import { createStyles } from './styles'
 import { MembersProps } from './type'
 
@@ -19,6 +22,12 @@ const Members: FC<MembersProps> = ({
   loadNext,
   currentProfileIsAdmin = false,
   groupId,
+  MemberItem = DefaultMemberItem,
+  MemberItemProps = {},
+  FabButton = DefaultFabButton,
+  FabButtonProps = {},
+  LoadingScreen = DefaultLoadingScreen,
+  LoadingScreenProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -41,6 +50,7 @@ const Members: FC<MembersProps> = ({
           iconSize={28}
           iconColor={theme.colors.primary.contrast}
           style={styles.addMemberButton}
+          {...FabButtonProps}
         />
         <Text variant="subtitle2" color="high">
           Add Member
@@ -57,11 +67,12 @@ const Members: FC<MembersProps> = ({
               memberIsAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
               currentProfileIsAdmin={currentProfileIsAdmin}
               groupId={groupId}
+              {...MemberItemProps}
             />
           )
         })}
         {isLoadingNext ? (
-          <LoadingScreen size="small" />
+          <LoadingScreen size="small" {...LoadingScreenProps} />
         ) : (
           hasNext && (
             <Button mode="text" size="medium" onPress={loadNext}>

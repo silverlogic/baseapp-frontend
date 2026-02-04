@@ -4,7 +4,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 
 export type MemberOptionsProps = {
   bottomDrawerRef: RefObject<BottomSheetModal | undefined>
-  handleSheetChanges: () => void
+  handleSheetChanges: (index: number) => void
   handleAdminToggle: () => void
   handleGoToProfile: () => void
   handleRemoveMember: () => void
