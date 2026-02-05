@@ -18,6 +18,7 @@ import {
   useCheckIsAdmin,
 } from '../../common'
 import { LeaveGroupDialog as DefaultLeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
+import { useMessagesListSubscription } from '../graphql/subscriptions/useMessagesListSubscription'
 import DefaultGroupProfile from './GroupProfile'
 import DefaultMembers from './Members'
 import DefaultOptions from './Options'
@@ -74,6 +75,8 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
       })
     }
   }
+
+  useMessagesListSubscription(roomId, currentProfile?.id ?? '')
 
   return (
     <View style={{ flexGrow: 1, flex: 1 }}>
