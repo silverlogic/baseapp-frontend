@@ -50,7 +50,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
 
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
   const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
-  const isGroup = tab === CHAT_TAB_VALUES.groups
+  const isInGroupTab = tab === CHAT_TAB_VALUES.groups
   const searchValue = watch('search')
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -61,7 +61,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: value,
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isGroup,
+          isGroup: isInGroupTab,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -76,7 +76,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: '',
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isGroup,
+          isGroup: isInGroupTab,
         },
         { fetchPolicy: 'network-only' },
       )
