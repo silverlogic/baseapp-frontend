@@ -10,6 +10,5 @@ export const TitleFragment = graphql`
     id
     isGroup
     ...RoomTitleFragment
-    ...GroupTitleFragment
   }
 `

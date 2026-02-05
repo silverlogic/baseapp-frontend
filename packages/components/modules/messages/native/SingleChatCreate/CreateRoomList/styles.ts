@@ -9,11 +9,12 @@ export const createStyles = (theme: Theme) =>
     },
     contentContainer: {
       paddingBottom: 16,
+      paddingHorizontal: 16,
       width: '100%',
     },
     flatList: {
+      marginHorizontal: -16,
       flex: 1,
-      width: '100%',
       backgroundColor: theme.colors.surface.background,
     },
   })

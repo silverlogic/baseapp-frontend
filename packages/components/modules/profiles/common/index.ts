@@ -8,6 +8,7 @@ export * from './graphql/fragments/ProfileComponent'
 export * from './graphql/fragments/ProfileItem'
 export * from './graphql/fragments/ProfilesList'
 export * from './graphql/fragments/UserMembersList'
+export * from './graphql/fragments/CheckMountPermissionWrapperFragment'
 
 export * from './graphql/mutations/BlockToggle'
 export * from './graphql/mutations/ChangeUserRole'

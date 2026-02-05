@@ -1,3 +1,5 @@
+import { DrawerProps } from '@mui/material'
+
 import { NavigationData } from '../../types'
 
 export interface VerticalDrawerProps {
@@ -5,4 +7,5 @@ export interface VerticalDrawerProps {
   LogoIcon?: React.FC
   openNav: boolean
   onCloseNav: VoidFunction
+  DrawerProps?: Partial<DrawerProps>
 }
