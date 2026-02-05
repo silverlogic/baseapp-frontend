@@ -50,6 +50,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
 
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
   const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
+  const isGroup = tab === CHAT_TAB_VALUES.groups
   const searchValue = watch('search')
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -60,6 +61,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: value,
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
+          isGroup: isGroup,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -74,6 +76,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: '',
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
+          isGroup: isGroup,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -89,6 +92,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
+          isGroup: newTab === CHAT_TAB_VALUES.groups,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -217,6 +221,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
         >
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
+          <Tab label={renderTabLabel(CHAT_TAB_VALUES.groups)} value={CHAT_TAB_VALUES.groups} />
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
         </Tabs>
         {renderListContent()}
