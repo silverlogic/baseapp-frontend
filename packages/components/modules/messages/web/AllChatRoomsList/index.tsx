@@ -146,11 +146,14 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   }
 
   const renderTabLabel = (tabValue: ChatTabValues) => (
-    <Box display="grid" gap={1} gridTemplateColumns="1fr min-content" alignItems="center">
-      <Typography variant="subtitle2" color="text.primary">
-        {CHAT_TAB_LABEL[tabValue]}
-      </Typography>
-      {isRefetchPending && tab === tabValue && <CircularProgress size={15} />}
+    <Box display="grid" gridTemplateColumns="1fr min-content" alignItems="center">
+      {isRefetchPending && tab === tabValue ? (
+        <CircularProgress size={15} />
+      ) : (
+        <Typography variant="subtitle2" color="text.primary">
+          {CHAT_TAB_LABEL[tabValue]}
+        </Typography>
+      )}
     </Box>
   )
 
