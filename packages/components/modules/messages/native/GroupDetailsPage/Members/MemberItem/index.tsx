@@ -1,4 +1,4 @@
-import { FC, useRef } from 'react'
+import { FC, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
@@ -15,7 +15,8 @@ import { formatHandle } from '../../../../../__shared__/common'
 import { ProfileItemFragment } from '../../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../../common'
 import { useChatRoomToggleAdminMutation } from '../../../../common/graphql/mutations/ChatRoomToggleAdmin'
-import DefauleMemberOptions from '../MemberOptions'
+import DefaultMemberOptions from '../MemberOptions'
+import { RemoveAdminPermissionsDialog as DefaultRemoveAdminPermissionsDialog } from './RemoveAdminPermissionsDialog'
 import { createStyles } from './styles'
 import { MemberItemProps } from './type'
 
@@ -24,11 +25,14 @@ const MemberItem: FC<MemberItemProps> = ({
   groupId,
   memberIsAdmin = false,
   currentProfileIsAdmin = false,
-  MemberOptions = DefauleMemberOptions,
+  MemberOptions = DefaultMemberOptions,
   MemberOptionsProps = {},
+  RemoveAdminPermissionsDialog = DefaultRemoveAdminPermissionsDialog,
+  RemoveAdminPermissionsDialogProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
+  const [openRemoveAdminConfirmation, setOpenRemoveAdminConfirmation] = useState(false)
 
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
 
@@ -46,7 +50,11 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const [commitToggleAdmin, isMutationInFlight] = useChatRoomToggleAdminMutation()
 
-  const handleToggleAdminClicked = () => {
+  const handleCloseDialog = () => {
+    setOpenRemoveAdminConfirmation(false)
+  }
+
+  const handleCommitToggleAdmin = () => {
     if (isMutationInFlight || !groupId || !currentProfile?.id) return
     bottomDrawerRef.current?.close()
 
@@ -73,8 +81,18 @@ const MemberItem: FC<MemberItemProps> = ({
       },
       onCompleted: () => {
         bottomDrawerRef.current?.close()
+        handleCloseDialog()
       },
     })
+  }
+
+  const handleToggleAdminClicked = () => {
+    if (memberIsAdmin) {
+      setOpenRemoveAdminConfirmation(true)
+      bottomDrawerRef.current?.close()
+    } else {
+      handleCommitToggleAdmin()
+    }
   }
 
   return (
@@ -118,6 +136,13 @@ const MemberItem: FC<MemberItemProps> = ({
         }}
         isMe={isMe}
         {...MemberOptionsProps}
+      />
+      <RemoveAdminPermissionsDialog
+        open={openRemoveAdminConfirmation}
+        onClose={handleCloseDialog}
+        isMutationInFlight={isMutationInFlight}
+        onRemoveConfirmed={handleCommitToggleAdmin}
+        {...RemoveAdminPermissionsDialogProps}
       />
     </Pressable>
   )
