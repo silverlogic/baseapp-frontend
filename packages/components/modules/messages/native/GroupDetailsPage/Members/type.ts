@@ -6,4 +6,5 @@ export interface MembersProps {
   loadNext: () => void
   isLoadingNext: boolean
   hasNext?: boolean
+  roomId?: string
 }

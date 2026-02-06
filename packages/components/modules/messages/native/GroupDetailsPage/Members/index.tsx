@@ -6,6 +6,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useRouter } from 'expo-router'
+
 import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import MemberItem from './MemberItem'
 import { createStyles } from './styles'
@@ -17,10 +19,11 @@ const Members: FC<MembersProps> = ({
   isLoadingNext,
   hasNext,
   loadNext,
+  roomId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
-
+  const router = useRouter()
   return (
     <View style={styles.membersContainer}>
       <View style={styles.membersTextContainer}>
@@ -33,8 +36,9 @@ const Members: FC<MembersProps> = ({
       </View>
       <View style={styles.addMemberContainer}>
         <FabButton
-          // TODO: implement add member functionality
-          onPress={() => {}}
+          onPress={() => {
+            router.push(`/edit-group-details/${roomId}/add-members`)
+          }}
           iconName="add"
           iconSize={28}
           iconColor={theme.colors.primary.contrast}

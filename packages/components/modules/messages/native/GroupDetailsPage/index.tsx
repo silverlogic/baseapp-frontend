@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
@@ -17,6 +17,7 @@ import {
   useArchiveChatRoomMutation,
   useCheckIsAdmin,
 } from '../../common'
+import { useGroupChatCreate } from '../../common/context/GroupChatProvider'
 import { LeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
 import GroupProfile from './GroupProfile'
 import Members from './Members'
@@ -28,6 +29,12 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
   const [commitMarkAsRead, isMutationInFlight] = useArchiveChatRoomMutation()
+
+  const groups = useGroupChatCreate()
+
+  useEffect(() => {
+    groups.setRoomId(roomId)
+  }, [roomId])
 
   const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
     GroupDetailsQuery,
@@ -73,7 +80,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
         BackIcon={CloseIcon}
         CloseIcon={EditIcon}
         onClose={() => {
-          /* TODO: Implement edit action */
+          router.push(`/edit-group-details/${roomId}`)
         }}
       />
       {currentProfile?.id && (
