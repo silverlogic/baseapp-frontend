@@ -7,7 +7,6 @@ import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime
 import { MembersListFragment$data } from '../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../__generated__/RoomTitleFragment.graphql'
 import { SingleChatDetailsFragment$key } from '../../../__generated__/SingleChatDetailsFragment.graphql'
-// import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
