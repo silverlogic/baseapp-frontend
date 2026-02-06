@@ -145,17 +145,22 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     )
   }
 
-  const renderTabLabel = (tabValue: ChatTabValues) => (
-    <Box display="grid" gridTemplateColumns="1fr min-content" alignItems="center">
-      {isRefetchPending && tab === tabValue ? (
-        <CircularProgress size={15} />
-      ) : (
+  const renderTabLabel = (tabValue: ChatTabValues) => {
+    const isLoadingTab = isRefetchPending && tab === tabValue
+
+    return (
+      <Box display="grid" gridTemplateColumns="1fr max-content" alignItems="center">
         <Typography variant="subtitle2" color="text.primary">
           {CHAT_TAB_LABEL[tabValue]}
         </Typography>
-      )}
-    </Box>
-  )
+        <CircularProgress
+          size={15}
+          aria-hidden={!isLoadingTab}
+          sx={{ visibility: isLoadingTab ? 'visible' : 'hidden' }}
+        />
+      </Box>
+    )
+  }
 
   const renderListContent = () => {
     const hasEmptyStates = !isPending && chatRooms.length === 0
@@ -171,7 +176,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   return (
     <>
       <Header>
-        <Box display="grid" width="100%" gridTemplateColumns="auto min-content" gap={1}>
+        <Box display="grid" width="100%" gridTemplateColumns="auto max-content" gap={1}>
           <Typography variant="h4" component="span">
             Messages
           </Typography>
