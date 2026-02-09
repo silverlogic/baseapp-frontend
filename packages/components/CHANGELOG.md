@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.2
+
+### Patch Changes
+
+- Add RN single chat details
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.1
+
 ## 1.5.1
 
 ### Patch Changes
