@@ -8,7 +8,8 @@ import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import { LoadMoreFn, RefetchFnDynamic } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
-import { CreateOrEditGroup, ProfileNode } from '../types'
+import { CreateOrEditGroup } from '../../../common/types'
+import { ProfileNode } from '../types'
 import { ProfileCardProps } from './ProfileCard/types'
 import { ProfilesListProps } from './ProfilesList/types'
 

@@ -5,6 +5,7 @@ export type GroupChatCreateState = {
   participants?: ProfileItemFragment$data[]
   image?: string
   title?: string
+  roomId?: string
 }
 
 type ChatRoomFunctions = {
@@ -15,6 +16,7 @@ type ChatRoomFunctions = {
       | ((state: GroupChatCreateState) => Partial<GroupChatCreateState>),
     replace?: boolean | undefined,
   ) => void
+  setRoomId: (roomId: string) => void
   resetGroupChat: () => void
 }
 

@@ -1,19 +1,5 @@
-import { AllProfilesListFragment$data } from "../../../../__generated__/AllProfilesListFragment.graphql"
-import { MessagesListFragment$data } from "../../../../__generated__/MessagesListFragment.graphql"
-
-
-export interface TitleAndImage {
-  title: string
-  image?: string | File | Blob | null
-}
-
-export interface AddRemoveParticipants {
-  addParticipants?: any[]
-  participants?: any[]
-  removeParticipants?: any[]
-}
-
-export interface CreateOrEditGroup extends TitleAndImage, AddRemoveParticipants {}
+import { AllProfilesListFragment$data } from '../../../../__generated__/AllProfilesListFragment.graphql'
+import { MessagesListFragment$data } from '../../../../__generated__/MessagesListFragment.graphql'
 
 export type AllMessages = NonNullable<MessagesListFragment$data['allMessages']>
 export type MessageEdges = AllMessages['edges']
