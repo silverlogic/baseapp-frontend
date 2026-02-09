@@ -44,6 +44,7 @@ const useAllAuthResetPassword = ({
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
+      // NOSONAR
       // mutateAsync will raise an error if there's an API error
     }
   }

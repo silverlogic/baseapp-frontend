@@ -27,7 +27,7 @@ describe('useAllAuthSignUp', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
-      password: '#F12W7q0jwv525',
+      password: '#F12W7q0jwv525', // NOSONAR
     }
 
     mockFetch(signupUrl, {
@@ -85,7 +85,7 @@ describe('useAllAuthSignUp', () => {
       firstName: 'John',
       lastName: 'Doe',
       email: 'john.doe@example.com',
-      password: '#F12W7q0jwv525',
+      password: '#F12W7q0jwv525', // NOSONAR
     }
 
     let hasOnErrorRan = false
@@ -127,7 +127,7 @@ describe('useAllAuthSignUp', () => {
               firstName: 'John',
               lastName: 'Doe',
               email: 'test@example.com',
-              password: '#F12W7q0jwv525',
+              password: '#F12W7q0jwv525', // NOSONAR
             },
           },
           enableFormApiErrors: true,
@@ -157,7 +157,7 @@ describe('useAllAuthSignUp', () => {
               firstName: 'John',
               lastName: 'Doe',
               email: 'test@example.com',
-              password: '#F12W7q0jwv525',
+              password: '#F12W7q0jwv525', // NOSONAR
             },
           },
           enableFormApiErrors: false,
@@ -184,7 +184,7 @@ describe('useAllAuthSignUp', () => {
     const request = {
       name: 'John Doe',
       email: 'test@example.com',
-      password: '#F12W7q0jwv525',
+      password: '#F12W7q0jwv525', // NOSONAR
     }
 
     let hasOnSuccessRan = false

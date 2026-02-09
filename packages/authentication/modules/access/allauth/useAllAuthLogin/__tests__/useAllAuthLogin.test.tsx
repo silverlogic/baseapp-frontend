@@ -47,7 +47,7 @@ describe('useAllAuthLogin', () => {
     cookiesMock.set.mockImplementation((accessKeyName: string) => accessKeyName)
 
     const email = 'test@tsl.io'
-    const password = '123456789'
+    const password = '123456789' // NOSONAR
 
     let hasOnSuccessRan = false
 
@@ -92,7 +92,7 @@ describe('useAllAuthLogin', () => {
     })
 
     const email = 'test@tsl.io'
-    const password = '123456789'
+    const password = '123456789' // NOSONAR
 
     let hasOnErrorRan = false
 
@@ -134,7 +134,7 @@ describe('useAllAuthLogin', () => {
           loginFormOptions: {
             defaultValues: {
               email: 'test@tsl.io',
-              password: '123456789',
+              password: '123456789', // NOSONAR
             },
           },
           enableFormApiErrors: true,
@@ -162,7 +162,7 @@ describe('useAllAuthLogin', () => {
           loginFormOptions: {
             defaultValues: {
               email: 'test@tsl.io',
-              password: '123456789',
+              password: '123456789', // NOSONAR
             },
           },
           enableFormApiErrors: false,
@@ -193,7 +193,7 @@ describe('useAllAuthLogin', () => {
           loginFormOptions: {
             defaultValues: {
               email: 'test@tsl.io',
-              password: '123456789',
+              password: '123456789', // NOSONAR
             },
           },
         }),

@@ -58,20 +58,21 @@ function parseAllAuthErrorPayload(error: unknown): AllAuthResponse | null {
 }
 
 function mapAllAuthErrorsToFields(errors: AllAuthError[]): Record<string, string[]> {
-  return errors.reduce((accumulator, current) => {
-    const fieldKey = current.param || 'detail'
-    const message =
-      current.code === 'email_password_mismatch'
-        ? GENERIC_LOGIN_ERROR_MESSAGE
-        : current.message || DEFAULT_ERROR_MESSAGE
+  return errors.reduce(
+    (accumulator, current) => {
+      const fieldKey = current.param || 'detail'
+      const message =
+        current.code === 'email_password_mismatch'
+          ? GENERIC_LOGIN_ERROR_MESSAGE
+          : current.message || DEFAULT_ERROR_MESSAGE
 
-    if (!accumulator[fieldKey]) {
-      accumulator[fieldKey] = []
-    }
+      accumulator[fieldKey] ??= []
 
-    accumulator[fieldKey].push(message)
-    return accumulator
-  }, {} as Record<string, string[]>)
+      accumulator[fieldKey].push(message)
+      return accumulator
+    },
+    {} as Record<string, string[]>,
+  )
 }
 
 export function normalizeAllAuthError(error: unknown) {
@@ -85,7 +86,7 @@ export function normalizeAllAuthError(error: unknown) {
   const firstMessage = Object.values(data)[0]?.[0] ?? (error as any)?.message
   const normalizedError = error as any
 
-  normalizedError.response = { ...(normalizedError.response ?? {}), data }
+  normalizedError.response = { ...normalizedError.response, data }
   normalizedError.message = firstMessage
 
   return normalizedError

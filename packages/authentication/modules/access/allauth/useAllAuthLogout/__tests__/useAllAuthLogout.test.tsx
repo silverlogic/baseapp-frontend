@@ -4,7 +4,6 @@ import {
   LOGOUT_EVENT,
   REFRESH_KEY_NAME,
   eventEmitter,
-  getToken,
   removeTokenAsync,
 } from '@baseapp-frontend/utils'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'

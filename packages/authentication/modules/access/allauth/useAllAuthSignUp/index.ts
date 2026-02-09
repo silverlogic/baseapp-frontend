@@ -27,7 +27,7 @@ const useAllAuthSignUp = <
   useNameField = false,
 }: UseAllAuthSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm<Partial<TRegisterRequest>>({
-    defaultValues: (defaultValues || SIGNUP_INITIAL_VALUES) as any,
+    defaultValues: (defaultValues ?? SIGNUP_INITIAL_VALUES) as any,
     resolver: zodResolver(
       (useNameField ? SIGNUP_VALIDATION_SCHEMA_WITH_NAME : SIGNUP_VALIDATION_SCHEMA) as any,
     ) as any,
@@ -52,8 +52,9 @@ const useAllAuthSignUp = <
 
   const handleSubmit: SubmitHandler<TRegisterRequest> = async (values) => {
     try {
-      await mutation.mutateAsync(values as TRegisterRequest)
+      await mutation.mutateAsync(values)
     } catch (error) {
+      // NOSONAR
       // Error is already handled by mutation's onError callback
     }
   }

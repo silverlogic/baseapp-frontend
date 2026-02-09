@@ -15,10 +15,7 @@ import { USER_API_KEY } from '../../../../services/user'
 import { useAllAuthSession } from '../useAllAuthSession'
 import type { UseAllAuthLogoutOptions } from './types'
 
-const useAllAuthLogout = ({
-  onLogout,
-  emitLogoutEvent = true,
-}: UseAllAuthLogoutOptions = {}) => {
+const useAllAuthLogout = ({ onLogout, emitLogoutEvent = true }: UseAllAuthLogoutOptions = {}) => {
   const queryClient = useQueryClient()
   const { clearSession } = useAllAuthSession()
 
@@ -27,6 +24,7 @@ const useAllAuthLogout = ({
       const sessionToken = getToken(SESSION_TOKEN_KEY_NAME)
       await AllAuthApi.logout(sessionToken || undefined)
     } catch (error) {
+      // NOSONAR
       // Logout API call failed, clearing local state anyway
     }
 

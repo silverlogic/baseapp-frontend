@@ -15,7 +15,7 @@ jest.mock('@baseapp-frontend/utils', () => ({
 }))
 
 describe('useAllAuthResetPassword', () => {
-  const password = '12345#Abcde'
+  const password = '12345#Abcde' // NOSONAR
   const token = 'fake-token'
   const resetPasswordUrl = '/_allauth/app/v1/auth/password/reset'
 
