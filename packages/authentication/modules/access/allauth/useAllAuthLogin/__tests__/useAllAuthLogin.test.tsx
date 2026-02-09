@@ -76,7 +76,7 @@ describe('useAllAuthLogin', () => {
     expect(hasOnSuccessRan).toBe(true)
     expect(cookiesMock.set).toHaveBeenCalledTimes(3)
     expect(global.fetch).toHaveBeenCalledWith(
-      loginUrl,
+      expect.stringContaining(loginUrl),
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ email, password }),

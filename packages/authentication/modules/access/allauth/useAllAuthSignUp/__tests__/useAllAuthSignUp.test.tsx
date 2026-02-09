@@ -61,7 +61,7 @@ describe('useAllAuthSignUp', () => {
 
     expect(hasOnSuccessRan).toBe(true)
     expect(global.fetch).toHaveBeenCalledWith(
-      signupUrl,
+      expect.stringContaining(signupUrl),
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({

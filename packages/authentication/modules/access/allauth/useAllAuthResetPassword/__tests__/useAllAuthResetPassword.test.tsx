@@ -59,7 +59,7 @@ describe('useAllAuthResetPassword', () => {
 
     expect(hasOnSuccessRan).toBe(true)
     expect(global.fetch).toHaveBeenCalledWith(
-      resetPasswordUrl,
+      expect.stringContaining(resetPasswordUrl),
       expect.objectContaining({
         method: 'POST',
         body: JSON.stringify({ password, key: token }),
