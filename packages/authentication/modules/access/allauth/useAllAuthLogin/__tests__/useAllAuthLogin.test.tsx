@@ -32,6 +32,7 @@ describe('useAllAuthLogin', () => {
         meta: {
           accessToken: 'fake-access-token',
           refreshToken: 'fake-refresh-token',
+          sessionToken: 'fake-session-token',
         },
         data: {
           user: {
@@ -73,7 +74,7 @@ describe('useAllAuthLogin', () => {
     await result.current.form.handleSubmit()
 
     expect(hasOnSuccessRan).toBe(true)
-    expect(cookiesMock.set).toBeCalledTimes(2)
+    expect(cookiesMock.set).toHaveBeenCalledTimes(3)
     expect(global.fetch).toHaveBeenCalledWith(
       loginUrl,
       expect.objectContaining({

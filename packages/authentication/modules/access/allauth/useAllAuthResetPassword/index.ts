@@ -25,7 +25,8 @@ const useAllAuthResetPassword = ({
   })
 
   const mutation = useMutation({
-    mutationFn: ({ newPassword }) => AllAuthApi.resetPassword({ newPassword, token }),
+    mutationFn: ({ newPassword }) =>
+      AllAuthApi.resetPassword({ password: newPassword, key: token }),
     ...options,
     onError: (err, variables, context) => {
       const normalizedError = normalizeAllAuthError(err)

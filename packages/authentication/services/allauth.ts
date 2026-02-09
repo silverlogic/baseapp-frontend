@@ -1,12 +1,7 @@
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 
-import type { AllAuthLoginResponse } from '../types/allauth'
-import type {
-  ForgotPasswordRequest,
-  LoginRequest,
-  RegisterRequest,
-  ResetPasswordRequest,
-} from '../types/auth'
+import type { AllAuthLoginResponse, AllAuthResetPasswordRequest } from '../types/allauth'
+import type { ForgotPasswordRequest, LoginRequest, RegisterRequest } from '../types/auth'
 
 /**
  * AllAuth API service for headless authentication endpoints
@@ -38,10 +33,10 @@ export default class AllAuthApi {
     })
   }
 
-  static resetPassword({ newPassword, token }: ResetPasswordRequest): Promise<void> {
+  static resetPassword({ password, key }: AllAuthResetPasswordRequest): Promise<void> {
     return baseAppFetch(`/_allauth/app/v1/auth/password/reset`, {
       method: 'POST',
-      body: { newPassword, token },
+      body: { password, key },
     })
   }
 

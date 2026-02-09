@@ -43,7 +43,7 @@ describe('useAllAuthLogout', () => {
     })
 
     const { result } = renderHook(() => useAllAuthLogout(), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     await result.current.logout()
@@ -63,7 +63,7 @@ describe('useAllAuthLogout', () => {
     })
 
     const { result } = renderHook(() => useAllAuthLogout(), {
-      wrapper: ComponentWithProviders,
+      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
 
     await result.current.logout()

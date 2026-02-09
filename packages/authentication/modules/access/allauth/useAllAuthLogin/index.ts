@@ -1,5 +1,7 @@
 'use client'
 
+import type React from 'react'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -58,7 +60,13 @@ const useAllAuthLogin = ({
     },
   })
 
-  // TODO: Add MFA support
+  // TODO: implement MFA support in a separate story
+  const mfaForm = {
+    handleSubmit: (e?: React.BaseSyntheticEvent) => {
+      e?.preventDefault()
+    },
+    formState: { isSubmitting: false },
+  }
 
   return {
     form: {
@@ -72,6 +80,7 @@ const useAllAuthLogin = ({
       }),
     },
     mutation,
+    mfaForm,
   }
 }
 

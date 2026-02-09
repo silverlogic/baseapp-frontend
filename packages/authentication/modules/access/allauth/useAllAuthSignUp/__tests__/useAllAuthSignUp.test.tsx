@@ -64,7 +64,12 @@ describe('useAllAuthSignUp', () => {
       signupUrl,
       expect.objectContaining({
         method: 'POST',
-        body: JSON.stringify(request),
+        body: JSON.stringify({
+          first_name: request.firstName,
+          last_name: request.lastName,
+          password: request.password,
+          email: request.email,
+        }),
       }),
     )
   })
@@ -119,6 +124,8 @@ describe('useAllAuthSignUp', () => {
         useAllAuthSignUp({
           formOptions: {
             defaultValues: {
+              firstName: 'John',
+              lastName: 'Doe',
               email: 'test@example.com',
               password: '#F12W7q0jwv525',
             },
@@ -147,6 +154,8 @@ describe('useAllAuthSignUp', () => {
         useAllAuthSignUp({
           formOptions: {
             defaultValues: {
+              firstName: 'John',
+              lastName: 'Doe',
               email: 'test@example.com',
               password: '#F12W7q0jwv525',
             },

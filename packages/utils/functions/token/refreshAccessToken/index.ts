@@ -1,5 +1,5 @@
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
-import { getTokens } from '../getAccessToken'
+import { getTokens } from '../getTokens'
 import { removeTokenAsync } from '../removeTokenAsync'
 import { setTokenAsync } from '../setTokenAsync'
 import { RefreshAccessTokenParams } from './types'

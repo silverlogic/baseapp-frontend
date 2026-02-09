@@ -29,7 +29,7 @@ describe('useAllAuthResetPassword', () => {
       method: 'POST',
       status: 200,
       response: {
-        newPassword: password,
+        password,
         token,
       },
     })
@@ -62,7 +62,7 @@ describe('useAllAuthResetPassword', () => {
       resetPasswordUrl,
       expect.objectContaining({
         method: 'POST',
-        body: JSON.stringify({ newPassword: password, token }),
+        body: JSON.stringify({ password, key: token }),
       }),
     )
   })

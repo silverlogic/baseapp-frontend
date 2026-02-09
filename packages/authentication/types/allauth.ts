@@ -55,7 +55,14 @@ export interface AllAuthLoginData {
   methods?: AllAuthLoginMethod[]
 }
 
-export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> { }
+export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {}
+
+export interface AllAuthResetPasswordRequest {
+  password: string
+  key: string
+}
+
+export interface AllAuthResetPasswordResponse extends AllAuthResponse<void> {}
 
 export interface AllAuthSignupData {
   user?: AllAuthUser
@@ -65,13 +72,13 @@ export interface AllAuthSignupData {
   }>
 }
 
-export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> { }
+export interface AllAuthSignupResponse extends AllAuthResponse<AllAuthSignupData> {}
 
 export interface AllAuthSessionData {
   user?: AllAuthUser
 }
 
-export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> { }
+export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> {}
 
 export interface AllAuthLoginJWTResponse {
   accessToken: string
