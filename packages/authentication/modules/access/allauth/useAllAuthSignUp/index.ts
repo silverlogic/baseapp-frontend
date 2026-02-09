@@ -23,7 +23,7 @@ const useAllAuthSignUp = <
   formOptions = {},
   defaultValues,
   enableFormApiErrors = true,
-  options = {},
+  mutationOptions = {},
   useNameField = false,
 }: UseAllAuthSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
   const form = useForm<Partial<TRegisterRequest>>({
@@ -37,16 +37,16 @@ const useAllAuthSignUp = <
 
   const mutation = useMutation({
     mutationFn: (values) => AllAuthApi.register<TRegisterResponse>(values),
-    ...options,
+    ...mutationOptions,
     onError: (err, variables, context) => {
       const normalizedError = normalizeAllAuthError(err)
-      options?.onError?.(normalizedError, variables, context)
+      mutationOptions?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
         setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: (response, variables, context) => {
-      options?.onSuccess?.(response, variables, context)
+      mutationOptions?.onSuccess?.(response, variables, context)
     },
   })
 
@@ -54,7 +54,6 @@ const useAllAuthSignUp = <
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
-      // NOSONAR
       // Error is already handled by mutation's onError callback
     }
   }

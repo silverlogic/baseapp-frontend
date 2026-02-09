@@ -60,7 +60,7 @@ describe('useAllAuthLogin', () => {
               password,
             },
           },
-          loginOptions: {
+          mutationOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -105,7 +105,7 @@ describe('useAllAuthLogin', () => {
               password,
             },
           },
-          loginOptions: {
+          mutationOptions: {
             onError: () => {
               hasOnErrorRan = true
             },

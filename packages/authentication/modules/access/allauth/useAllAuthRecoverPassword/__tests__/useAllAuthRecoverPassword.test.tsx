@@ -38,7 +38,7 @@ describe('useAllAuthRecoverPassword', () => {
           defaultValues: {
             email,
           },
-          options: {
+          mutationOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -76,7 +76,7 @@ describe('useAllAuthRecoverPassword', () => {
           defaultValues: {
             email,
           },
-          options: {
+          mutationOptions: {
             onError: () => {
               hasOnErrorRan = true
             },

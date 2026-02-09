@@ -16,7 +16,7 @@ const useAllAuthResetPassword = ({
   validationSchema = RESET_PASSWORD_VALIDATION_SCHEMA,
   defaultValues = RESET_PASSWORD_INITIAL_VALUES,
   enableFormApiErrors = true,
-  options = {},
+  mutationOptions = {},
 }: UseAllAuthResetPasswordOptions) => {
   const form = useForm<ResetPasswordForm>({
     defaultValues,
@@ -27,16 +27,16 @@ const useAllAuthResetPassword = ({
   const mutation = useMutation({
     mutationFn: ({ newPassword }) =>
       AllAuthApi.resetPassword({ password: newPassword, key: token }),
-    ...options,
+    ...mutationOptions,
     onError: (err, variables, context) => {
       const normalizedError = normalizeAllAuthError(err)
-      options?.onError?.(normalizedError, variables, context)
+      mutationOptions?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
         setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: (response, variables, context) => {
-      options?.onSuccess?.(response, variables, context)
+      mutationOptions?.onSuccess?.(response, variables, context)
     },
   })
 
@@ -44,7 +44,6 @@ const useAllAuthResetPassword = ({
     try {
       await mutation.mutateAsync(values)
     } catch (error) {
-      // NOSONAR
       // mutateAsync will raise an error if there's an API error
     }
   }

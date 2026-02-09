@@ -13,15 +13,11 @@ import type { AllAuthLoginResponse } from '../../../../types/allauth'
 import { LOGIN_INITIAL_VALUES, LOGIN_VALIDATION_SCHEMA } from '../constants'
 import type { UseAllAuthLoginOptions } from '../types'
 import { useAllAuthSession } from '../useAllAuthSession'
-import {
-  extractTokensFromAllAuthResponse,
-  isAllAuthPasswordChangeRedirect,
-  normalizeAllAuthError,
-} from '../utils'
+import { isAllAuthPasswordChangeRedirect, normalizeAllAuthError } from '../utils'
 
 const useAllAuthLogin = ({
   loginFormOptions = {},
-  loginOptions = {},
+  mutationOptions = {},
   enableFormApiErrors = true,
 }: UseAllAuthLoginOptions = {}) => {
   const { startSession } = useAllAuthSession()
@@ -35,28 +31,25 @@ const useAllAuthLogin = ({
 
   const mutation = useMutation({
     mutationFn: (data: { email: string; password: string }) => AllAuthApi.login(data),
-    ...loginOptions,
+    ...mutationOptions,
     onError: (err, variables, context) => {
       const normalizedError = normalizeAllAuthError(err)
-      loginOptions?.onError?.(normalizedError, variables, context)
+      mutationOptions?.onError?.(normalizedError, variables, context)
       if (enableFormApiErrors) {
         setFormApiErrors(form, normalizedError)
       }
     },
     onSuccess: async (response: AllAuthLoginResponse, variables, context) => {
       if (!isAllAuthPasswordChangeRedirect(response)) {
-        const tokens = extractTokensFromAllAuthResponse(response)
-        if (tokens) {
-          await startSession({
-            accessToken: tokens.accessToken,
-            refreshToken: tokens.refreshToken,
-            sessionToken: tokens.sessionToken,
-            rawResponse: response,
-          })
-        }
+        await startSession({
+          accessToken: response.meta.accessToken,
+          refreshToken: response.meta.refreshToken,
+          sessionToken: response.meta.sessionToken,
+          rawResponse: response,
+        })
       }
 
-      loginOptions?.onSuccess?.(response, variables, context)
+      mutationOptions?.onSuccess?.(response, variables, context)
     },
   })
 

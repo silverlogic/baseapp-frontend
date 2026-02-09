@@ -24,7 +24,6 @@ const useAllAuthLogout = ({ onLogout, emitLogoutEvent = true }: UseAllAuthLogout
       const sessionToken = getToken(SESSION_TOKEN_KEY_NAME)
       await AllAuthApi.logout(sessionToken || undefined)
     } catch (error) {
-      // NOSONAR
       // Logout API call failed, clearing local state anyway
     }
 

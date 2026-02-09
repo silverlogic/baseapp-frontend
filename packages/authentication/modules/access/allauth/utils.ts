@@ -1,30 +1,7 @@
-import type {
-  AllAuthError,
-  AllAuthLoginJWTResponse,
-  AllAuthLoginResponse,
-  AllAuthResponse,
-} from '../../../types/allauth'
+import type { AllAuthError, AllAuthLoginResponse, AllAuthResponse } from '../../../types/allauth'
 
 const GENERIC_LOGIN_ERROR_MESSAGE = 'Invalid email or password.'
 const DEFAULT_ERROR_MESSAGE = 'Something went wrong.'
-
-export function extractTokensFromAllAuthResponse(
-  response: AllAuthLoginResponse,
-): AllAuthLoginJWTResponse | null {
-  const accessToken = response.meta?.accessToken || response.data?.accessToken
-  const refreshToken = response.meta?.refreshToken || response.data?.refreshToken
-  const sessionToken = response.meta?.sessionToken || response.data?.sessionToken
-
-  if (!accessToken || !refreshToken || !sessionToken) {
-    return null
-  }
-
-  return {
-    accessToken,
-    refreshToken,
-    sessionToken,
-  }
-}
 
 export function isAllAuthPasswordChangeRedirect(
   response: AllAuthLoginResponse | { redirectUrl?: string },

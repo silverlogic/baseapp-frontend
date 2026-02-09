@@ -49,13 +49,18 @@ export interface AllAuthLoginData {
     id: string
     isPending?: boolean
   }>
-  accessToken?: string
-  refreshToken?: string
-  sessionToken?: string
   methods?: AllAuthLoginMethod[]
 }
 
-export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {}
+export interface AllAuthLoginMeta extends AllAuthMeta {
+  accessToken: string
+  refreshToken: string
+  sessionToken: string
+}
+
+export interface AllAuthLoginResponse extends AllAuthResponse<AllAuthLoginData> {
+  meta: AllAuthLoginMeta
+}
 
 export interface AllAuthResetPasswordRequest {
   password: string
@@ -79,9 +84,3 @@ export interface AllAuthSessionData {
 }
 
 export interface AllAuthSessionResponse extends AllAuthResponse<AllAuthSessionData> {}
-
-export interface AllAuthLoginJWTResponse {
-  accessToken: string
-  refreshToken: string
-  sessionToken: string
-}

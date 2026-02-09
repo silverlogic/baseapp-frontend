@@ -46,7 +46,7 @@ describe('useAllAuthSignUp', () => {
           formOptions: {
             defaultValues: request,
           },
-          options: {
+          mutationOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -96,7 +96,7 @@ describe('useAllAuthSignUp', () => {
           formOptions: {
             defaultValues: request,
           },
-          options: {
+          mutationOptions: {
             onError: () => {
               hasOnErrorRan = true
             },
@@ -196,7 +196,7 @@ describe('useAllAuthSignUp', () => {
             defaultValues: request,
           },
           useNameField: true,
-          options: {
+          mutationOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },

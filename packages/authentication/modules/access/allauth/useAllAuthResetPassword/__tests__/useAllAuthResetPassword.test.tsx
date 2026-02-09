@@ -44,7 +44,7 @@ describe('useAllAuthResetPassword', () => {
             newPassword: password,
             confirmNewPassword: password,
           },
-          options: {
+          mutationOptions: {
             onSuccess: () => {
               hasOnSuccessRan = true
             },
@@ -84,7 +84,7 @@ describe('useAllAuthResetPassword', () => {
             newPassword: password,
             confirmNewPassword: password,
           },
-          options: {
+          mutationOptions: {
             onError: () => {
               hasOnErrorRan = true
             },
