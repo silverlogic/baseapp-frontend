@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.1
+
+### Patch Changes
+
+- Add RN NewGroupIcon
+
 ## 1.2.0
 
 ### Patch Changes
