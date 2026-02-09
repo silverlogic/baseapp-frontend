@@ -16,7 +16,7 @@ jest.mock('@baseapp-frontend/utils', () => ({
 
 describe('useAllAuthRecoverPassword', () => {
   const email = 'test@tsl.io'
-  const recoverPasswordUrl = '/_allauth/app/v1/auth/password/request'
+  const recoverPasswordUrl = '/_allauth/app/v1/auth/password/request' // NOSONAR
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear()

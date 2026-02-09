@@ -17,7 +17,7 @@ jest.mock('@baseapp-frontend/utils', () => ({
 describe('useAllAuthResetPassword', () => {
   const password = '12345#Abcde' // NOSONAR
   const token = 'fake-token'
-  const resetPasswordUrl = '/_allauth/app/v1/auth/password/reset'
+  const resetPasswordUrl = '/_allauth/app/v1/auth/password/reset' // NOSONAR
 
   afterEach(() => {
     ;(global.fetch as jest.Mock).mockClear()
