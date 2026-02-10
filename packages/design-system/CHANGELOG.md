@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 1.2.2
+
+### Patch Changes
+
+- Export LoadingScreen types
+- Export FabButton types
+
 ## 1.2.1
 
 ### Patch Changes

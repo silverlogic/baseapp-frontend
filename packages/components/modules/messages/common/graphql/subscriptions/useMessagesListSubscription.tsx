@@ -7,6 +7,7 @@ export const newMessageSubscription = graphql`
     chatRoomOnMessage(roomId: $roomId, profileId: $profileId) {
       message @prependEdge(connections: $connections) {
         node {
+          messageType
           ...MessageItemFragment
           actionObject {
             id
