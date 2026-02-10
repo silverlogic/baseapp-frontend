@@ -1,15 +1,20 @@
 # @baseapp-frontend/components
 
-## 2.0.0
-
-### Minor Changes
-
-- Introduces a configurable navbar layout option for BaseApp. This layout removes the top navigation bar and moves the profile and notification components into the sidebar, supporting flexible UI configurations across different projects without requiring one-off customizations.
+## 1.5.3
 
 ### Patch Changes
 
+- Add Toggle group admin feature
 - Updated dependencies
-  - @baseapp-frontend/design-system@1.3.0
+  - @baseapp-frontend/design-system@1.2.2
+
+## 1.5.2
+
+### Patch Changes
+
+- Add RN single chat details
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.1
 
 ## 1.5.1
 

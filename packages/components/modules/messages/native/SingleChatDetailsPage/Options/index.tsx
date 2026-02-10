@@ -2,8 +2,9 @@ import { FC } from 'react'
 
 import { Button } from '@baseapp-frontend/design-system/components/native/buttons'
 import {
-  ArchiveIcon as DefaultArchiveIcon,
-  LeaveIcon as DefaultLeaveIcon,
+  ArchiveIcon,
+  NewGroupIcon,
+  ProfileIcon,
 } from '@baseapp-frontend/design-system/components/native/icons'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
@@ -14,13 +15,8 @@ import { OptionsProps } from './type'
 
 const Options: FC<OptionsProps> = ({
   handleArchiveChat,
-  handleLeaveGroup,
   isArchiveMutationInFlight,
   isArchived,
-  ArchiveIcon = DefaultArchiveIcon,
-  ArchiveIconProps = {},
-  LeaveIcon = DefaultLeaveIcon,
-  LeaveIconProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -36,21 +32,41 @@ const Options: FC<OptionsProps> = ({
         <Button
           mode="text"
           size="medium"
+          onPress={() => {
+            // TODO: Implement see profile for single chat
+          }}
+        >
+          <View style={styles.buttons}>
+            <ProfileIcon width={20} height={20} />
+            <Text variant="buttonMedium" color="high">
+              See profile
+            </Text>
+          </View>
+        </Button>
+        <Button
+          mode="text"
+          size="medium"
+          onPress={() => {
+            // TODO: Implement add contact to group
+          }}
+        >
+          <View style={styles.buttons}>
+            <NewGroupIcon />
+            <Text variant="buttonMedium" color="high">
+              Add contact to a group
+            </Text>
+          </View>
+        </Button>
+        <Button
+          mode="text"
+          size="medium"
           onPress={handleArchiveChat}
           disabled={isArchiveMutationInFlight}
         >
           <View style={styles.buttons}>
-            <ArchiveIcon {...ArchiveIconProps} />
+            <ArchiveIcon />
             <Text variant="buttonMedium" color="high">
-              {isArchived ? 'Unarchive' : 'Archive'} Group
-            </Text>
-          </View>
-        </Button>
-        <Button mode="text" size="medium" onPress={handleLeaveGroup}>
-          <View style={styles.buttons}>
-            <LeaveIcon color={theme.colors.error.main} {...LeaveIconProps} />
-            <Text variant="buttonMedium" style={styles.leaveGroupButton}>
-              Leave Group
+              {isArchived ? 'Unarchive' : 'Archive'}
             </Text>
           </View>
         </Button>
