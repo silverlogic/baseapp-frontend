@@ -7,6 +7,8 @@ export * from './modules/tests/utils'
 export { default as AuthApi } from './services/auth'
 export * from './services/auth'
 
+export { default as AllAuthApi } from './services/allauth'
+
 export { default as MfaApi } from './services/mfa'
 export * from './services/mfa'
 

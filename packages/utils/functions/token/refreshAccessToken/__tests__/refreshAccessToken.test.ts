@@ -1,8 +1,8 @@
 import { refreshAccessToken } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../../constants/jwt'
 
-jest.mock('../../getAccessToken', () => ({
-  getAccessToken: jest.fn(),
+jest.mock('../../getTokens', () => ({
+  getTokens: jest.fn(),
 }))
 
 jest.mock('../../getToken', () => ({
@@ -23,7 +23,7 @@ jest.mock('js-cookie', () => ({
 }))
 
 describe('refreshAccessToken', () => {
-  const mockGetAccessToken = require('../../getAccessToken').getAccessToken
+  const mockGetTokens = require('../../getTokens').getTokens
   const mockGetToken = require('../../getToken').getToken
   const mockSetTokenAsync = require('../../setTokenAsync').setTokenAsync
   const mockRemoveTokenAsync = require('../../removeTokenAsync').removeTokenAsync
@@ -36,12 +36,32 @@ describe('refreshAccessToken', () => {
     const refreshToken = 'valid-refresh-token'
     const newAccessToken = 'new-access-token'
 
-    mockGetAccessToken.mockResolvedValue(newAccessToken)
+    mockGetTokens.mockResolvedValue({ access: newAccessToken })
 
     const result = await refreshAccessToken({ refreshToken })
 
-    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(mockGetTokens).toHaveBeenCalledWith(refreshToken)
     expect(mockSetTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME, newAccessToken, {
+      secure: false,
+    })
+    expect(mockRemoveTokenAsync).not.toHaveBeenCalled()
+    expect(result).toBe(newAccessToken)
+  })
+
+  it('should set refresh token cookie when a new refresh token is returned', async () => {
+    const refreshToken = 'valid-refresh-token'
+    const newAccessToken = 'new-access-token'
+    const newRefreshToken = 'new-refresh-token'
+
+    mockGetTokens.mockResolvedValue({ access: newAccessToken, refresh: newRefreshToken })
+
+    const result = await refreshAccessToken({ refreshToken })
+
+    expect(mockGetTokens).toHaveBeenCalledWith(refreshToken)
+    expect(mockSetTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME, newAccessToken, {
+      secure: false,
+    })
+    expect(mockSetTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME, newRefreshToken, {
       secure: false,
     })
     expect(mockRemoveTokenAsync).not.toHaveBeenCalled()
@@ -51,11 +71,11 @@ describe('refreshAccessToken', () => {
   it('should remove tokens if refreshing the access token fails', async () => {
     const refreshToken = 'valid-refresh-token'
 
-    mockGetAccessToken.mockRejectedValue(new Error('Failed to refresh token'))
+    mockGetTokens.mockRejectedValue(new Error('Failed to refresh token'))
 
     await expect(refreshAccessToken({ refreshToken })).rejects.toThrow('Failed to refresh token')
 
-    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(mockGetTokens).toHaveBeenCalledWith(refreshToken)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockSetTokenAsync).not.toHaveBeenCalled()
@@ -64,11 +84,11 @@ describe('refreshAccessToken', () => {
   it('should remove tokens if no refresh token is available', async () => {
     const refreshToken = null
 
-    mockGetAccessToken.mockRejectedValue(new Error('No refresh token'))
+    mockGetTokens.mockRejectedValue(new Error('No refresh token'))
 
     await expect(refreshAccessToken({ refreshToken })).rejects.toThrow('No refresh token')
 
-    expect(mockGetAccessToken).toHaveBeenCalledWith(refreshToken)
+    expect(mockGetTokens).toHaveBeenCalledWith(refreshToken)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(mockRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockSetTokenAsync).not.toHaveBeenCalled()
@@ -80,7 +100,7 @@ describe('refreshAccessToken', () => {
     const customAccessKey = 'customAccess'
     const customRefreshKey = 'customRefresh'
 
-    mockGetAccessToken.mockResolvedValue(newAccessToken)
+    mockGetTokens.mockResolvedValue({ access: newAccessToken })
 
     await refreshAccessToken({
       refreshToken,
