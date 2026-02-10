@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.3
+
+### Patch Changes
+
+- Add Toggle group admin feature
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.2
+
 ## 1.5.2
 
 ### Patch Changes
