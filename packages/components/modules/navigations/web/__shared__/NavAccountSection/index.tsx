@@ -13,32 +13,18 @@ const NavAccountSection: FC<NavAccountSectionProps> = ({
 }) => {
   if (!AccountMenu && !NotificationsPopover) return null
 
+  const notificationsPopover = NotificationsPopover ? (
+    <NotificationsPopover {...NotificationsPopoverProps} currentLayout={currentLayout} showLabel />
+  ) : null
+
+  const additionalComponent = notificationsPopover ?? AccountMenuProps?.additionalComponent
+
   return (
     <Box sx={{ mt: 'auto', display: 'flex', flexDirection: 'column' }}>
       {AccountMenu ? (
-        <AccountMenu
-          {...AccountMenuProps}
-          vertical
-          additionalComponent={
-            NotificationsPopover ? (
-              <NotificationsPopover
-                {...NotificationsPopoverProps}
-                currentLayout={currentLayout}
-                showLabel
-              />
-            ) : (
-              AccountMenuProps?.additionalComponent
-            )
-          }
-        />
+        <AccountMenu {...AccountMenuProps} vertical additionalComponent={additionalComponent} />
       ) : (
-        NotificationsPopover && (
-          <NotificationsPopover
-            {...NotificationsPopoverProps}
-            currentLayout={currentLayout}
-            showLabel
-          />
-        )
+        notificationsPopover
       )}
     </Box>
   )
