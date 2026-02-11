@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.4
+
+### Patch Changes
+
+- Introduces an opt-in alternative navbar layout for `BaseApp`, controlled by the `enableHeader` prop on `NavigationLayout` (defaults to `true`). When `enableHeader` is set to `false`, the top header is hidden on desktop viewports and the profile and notification components are moved into the sidebar. Mobile and tablet viewports continue to show the header regardless of this setting. This is not a breaking change—existing behavior is preserved by default.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.3
+
 ## 1.5.3
 
 ### Patch Changes
