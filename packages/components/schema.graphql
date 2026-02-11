@@ -111,6 +111,7 @@ type ChatRoom implements Node {
   isArchived(profileId: ID): Boolean
   otherParticipant: ChatRoomParticipant
   isSoleAdmin: Boolean
+  participantIds: [ID]
 }
 
 input ChatRoomArchiveInput {

@@ -44,7 +44,13 @@ const Members: FC<MembersProps> = ({
           iconColor={theme.colors.primary.contrast}
           style={styles.addMemberButton}
         />
-        <Text variant="subtitle2" color="high">
+        <Text
+          variant="subtitle2"
+          color="high"
+          onPress={() => {
+            router.push(`/edit-group-details/${roomId}/add-members`)
+          }}
+        >
           Add Member
         </Text>
       </View>

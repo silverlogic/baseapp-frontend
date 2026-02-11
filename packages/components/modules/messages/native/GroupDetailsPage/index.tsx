@@ -32,10 +32,6 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
 
   const groups = useGroupChatCreate()
 
-  useEffect(() => {
-    groups.setRoomId(roomId)
-  }, [roomId])
-
   const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
     GroupDetailsQuery,
     { roomId },
@@ -44,6 +40,13 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({ roomId }) => {
       fetchKey: roomId,
     },
   )
+
+  useEffect(() => {
+    if (group?.participantIds) {
+      groups.setExistingParticipants(group.participantIds.filter((id): id is string => id != null))
+    }
+    groups.setRoomId(roomId)
+  }, [roomId, group?.participantIds])
 
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     ChatRoomParticipantsPaginationQuery,

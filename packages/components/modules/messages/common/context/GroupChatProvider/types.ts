@@ -3,6 +3,7 @@ import { ProfileItemFragment$data } from '../../../../../__generated__/ProfileIt
 export type GroupChatCreateState = {
   id?: string
   participants?: ProfileItemFragment$data[]
+  existingParticipants?: String[]
   image?: string
   title?: string
   roomId?: string
@@ -10,6 +11,7 @@ export type GroupChatCreateState = {
 
 type ChatRoomFunctions = {
   setParticipants: (participants: ProfileItemFragment$data[]) => void
+  setExistingParticipants: (existingParticipants: String[]) => void
   setGroupChat: (
     partial:
       | Partial<GroupChatCreateState>
