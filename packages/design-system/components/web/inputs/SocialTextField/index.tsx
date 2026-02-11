@@ -27,6 +27,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
   isReply,
   replyTargetName,
   onCancelReply,
+  TextField = TextareaField,
   ...props
 }) => (
   <Container>
@@ -48,7 +49,8 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
         </div>
       </OutsideReplyContainer>
     )}
-    <TextareaField {...props} />
+    {/* @ts-ignore TODO: Type this properly */}
+    <TextField {...props} />
     <div className="flex justify-between px-3 pb-3">{children}</div>
   </Container>
 )
