@@ -20,4 +20,5 @@ export interface MembersProps {
   FabButtonProps?: Partial<FabButtonProps>
   LoadingScreen?: FC<LoadingScreenProps>
   LoadingScreenProps?: Partial<LoadingScreenProps>
+  setMemberToRemoveId: (id: string | null) => void
 }
