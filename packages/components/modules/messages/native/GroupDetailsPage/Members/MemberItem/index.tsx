@@ -134,6 +134,7 @@ const MemberItem: FC<MemberItemProps> = ({
         }}
         handleRemoveMember={() => {
           setMemberToRemoveId(profile.id)
+          bottomDrawerRef.current?.close()
         }}
         isMe={isMe}
         {...MemberOptionsProps}

@@ -29,7 +29,9 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
 
   const handleLeaveGroupSuccess = () => {
     onClose()
-    router.replace('/messages')
+    if (profileId === removingParticipantId) {
+      router.replace('/messages')
+    }
   }
 
   const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({

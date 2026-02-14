@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
@@ -41,11 +41,12 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
 
-  useEffect(() => {
-    if (memberToRemoveId && !openConfirmLeaveGroupDialog) {
+  const handleSetMemberToRemove = (id: string | null) => {
+    setMemberToRemoveId(id)
+    if (id) {
       setOpenConfirmLeaveGroupDialog(true)
     }
-  }, [memberToRemoveId])
+  }
 
   const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
     GroupDetailsQuery,
@@ -120,7 +121,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
           hasNext={hasNext}
           currentProfileIsAdmin={currentProfileIsAdmin}
           groupId={roomId}
-          setMemberToRemoveId={setMemberToRemoveId}
+          setMemberToRemoveId={handleSetMemberToRemove}
           {...MembersProps}
         />
         <Options
