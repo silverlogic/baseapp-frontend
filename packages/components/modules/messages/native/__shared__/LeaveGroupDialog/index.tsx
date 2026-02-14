@@ -73,7 +73,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
                 size="medium"
               >
                 <Text variant="buttonMedium" color="contrast">
-                  Leave Group
+                  {profileId === removingParticipantId ? 'Leave Group' : 'Remove Member'}
                 </Text>
               </Button>
             </View>

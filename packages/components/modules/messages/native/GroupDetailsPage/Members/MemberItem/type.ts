@@ -17,4 +17,5 @@ export interface MemberItemProps {
   MemberOptionsProps?: Partial<MemberOptionsProps>
   RemoveAdminPermissionsDialog?: FC<RemoveAdminPermissionsDialogProps>
   RemoveAdminPermissionsDialogProps?: Partial<RemoveAdminPermissionsDialogProps>
+  setMemberToRemoveId: (id: string | null) => void
 }

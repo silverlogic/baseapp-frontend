@@ -28,6 +28,7 @@ const Members: FC<MembersProps> = ({
   FabButtonProps = {},
   LoadingScreen = DefaultLoadingScreen,
   LoadingScreenProps = {},
+  setMemberToRemoveId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -67,6 +68,7 @@ const Members: FC<MembersProps> = ({
               memberIsAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
               currentProfileIsAdmin={currentProfileIsAdmin}
               groupId={groupId}
+              setMemberToRemoveId={setMemberToRemoveId}
               {...MemberItemProps}
             />
           )

@@ -29,6 +29,7 @@ const MemberItem: FC<MemberItemProps> = ({
   MemberOptionsProps = {},
   RemoveAdminPermissionsDialog = DefaultRemoveAdminPermissionsDialog,
   RemoveAdminPermissionsDialogProps = {},
+  setMemberToRemoveId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -132,7 +133,7 @@ const MemberItem: FC<MemberItemProps> = ({
           // TODO: navigate to profile
         }}
         handleRemoveMember={() => {
-          // TODO: handle remove member
+          setMemberToRemoveId(profile.id)
         }}
         isMe={isMe}
         {...MemberOptionsProps}
