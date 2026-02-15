@@ -8,6 +8,7 @@ export const DEFAULT_UI_SETTINGS: UISettings = {
   themeLayout: 'vertical',
   themeColorPresets: 'default',
   themeStretch: false,
+  collapsedSidebar: false,
 }
 
 export const MISSING_UI_SETTINGS_STORE_ERROR =

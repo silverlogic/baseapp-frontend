@@ -2,7 +2,14 @@ export type ThemeMode = 'light' | 'dark'
 
 export type ThemeContrast = 'default' | 'bold'
 
-export type ThemeLayout = 'vertical' | 'horizontal' | 'mini' | 'centered'
+/**
+ * Theme layout options for the application header/sidebar navigation.
+ *
+ * @deprecated The `'centered'` and `'mini'` layout options will be removed soon in favor of the new navigation module.
+ * Please migrate away from using `'centered'` or `'mini'` layout.
+ */
+export type ThemeLayout = 'vertical' | 'horizontal' | 'mini' | 'centered' | 'sidebar'
+export type ThemeLayoutV2 = Exclude<ThemeLayout, 'mini' | 'centered'>
 
 export type PresetType =
   | 'default'
@@ -20,6 +27,7 @@ export type UISettings = {
   themeContrast: ThemeContrast
   themeLayout: ThemeLayout
   themeColorPresets: PresetType
+  collapsedSidebar: boolean
 }
 
 export type ColorScheme = {

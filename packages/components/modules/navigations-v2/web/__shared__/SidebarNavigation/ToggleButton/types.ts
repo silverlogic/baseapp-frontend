@@ -1,5 +1,5 @@
 import { IconButtonProps } from '@mui/material/IconButton'
 
-export interface NavToggleButtonProps extends IconButtonProps {
+export interface ToggleButtonProps extends IconButtonProps {
   onClick?: VoidFunction
 }
