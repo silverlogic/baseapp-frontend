@@ -29,7 +29,9 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
 
   const handleLeaveGroupSuccess = () => {
     onClose()
-    router.replace('/messages')
+    if (profileId === removingParticipantId) {
+      router.replace('/messages')
+    }
   }
 
   const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
@@ -73,7 +75,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
                 size="medium"
               >
                 <Text variant="buttonMedium" color="contrast">
-                  Leave Group
+                  {profileId === removingParticipantId ? 'Leave Group' : 'Remove Member'}
                 </Text>
               </Button>
             </View>
