@@ -295,6 +295,21 @@ interface ChatRoomsInterface {
   unreadMessagesCount: Int
 }
 
+input ChatRoomToggleAdminInput {
+  targetParticipantId: ID!
+  profileId: ID!
+  roomId: ID!
+  clientMutationId: String
+}
+
+type ChatRoomToggleAdminPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  participant: ChatRoomParticipantEdge
+  clientMutationId: String
+}
+
 input ChatRoomUnreadInput {
   roomId: ID!
   profileId: ID!
@@ -812,6 +827,7 @@ type Mutation {
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
+  chatRoomToggleAdmin(input: ChatRoomToggleAdminInput!): ChatRoomToggleAdminPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload

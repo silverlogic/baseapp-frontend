@@ -18,4 +18,5 @@ export interface AccountMenuProps extends PropsWithChildren {
   loginButtonProps?: ButtonProps
   AccountPopoverProps?: Partial<AccountPopoverProps>
   additionalComponent?: React.ReactNode
+  vertical?: boolean
 }

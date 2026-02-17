@@ -9,6 +9,8 @@ import { hideScroll } from '@baseapp-frontend/design-system/styles/web'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
+import DefaultAccountMenu from '../Header/AccountMenu'
+import NavAccountSection from '../__shared__/NavAccountSection'
 import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NAV_WIDTH } from '../constants'
@@ -25,6 +27,10 @@ const NavMini: FC<NavMiniProps> = ({
   slotProps,
   VerticalDrawerProps,
   NavToggleButtonProps,
+  AccountMenu = DefaultAccountMenu,
+  AccountMenuProps,
+  NotificationsPopover,
+  NotificationsPopoverProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
@@ -75,6 +81,14 @@ const NavMini: FC<NavMiniProps> = ({
           </Logo>
         )}
         <NavSectionMini navData={navData} slotProps={slotProps} />
+        <Box sx={{ flexGrow: 1 }} />
+        <NavAccountSection
+          AccountMenu={AccountMenu}
+          AccountMenuProps={AccountMenuProps}
+          NotificationsPopover={NotificationsPopover}
+          NotificationsPopoverProps={NotificationsPopoverProps}
+          currentLayout="mini"
+        />
       </Stack>
     </Box>
   )

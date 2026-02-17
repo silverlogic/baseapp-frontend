@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
@@ -86,6 +86,8 @@
     "tsconfig.json"
   ],
   "dependencies": {
+    "clsx": "catalog:tailwind",
+    "tailwind-merge": "catalog:tailwind",
     "@emotion/cache": "catalog:material-ui",
     "@emotion/react": "catalog:material-ui",
     "@emotion/styled": "catalog:material-ui",
