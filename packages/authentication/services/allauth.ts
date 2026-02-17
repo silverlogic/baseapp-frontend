@@ -31,7 +31,7 @@ export default class AllAuthApi {
       },
     }
 
-    return baseAppFetch(`/_allauth/app/v1/auth/provider/token`, {
+    return baseAppFetch(`/_allauth/app/v1/auth/provider/token/`, {
       method: 'POST',
       body: payload,
     })
