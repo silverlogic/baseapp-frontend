@@ -35,7 +35,7 @@ import type { UseAllAuthGoogleLoginOptions } from './types'
 const useAllAuthGoogleLogin = ({ backendLoginOptions = {} }: UseAllAuthGoogleLoginOptions = {}) => {
   // MUTATION: Send Google id_token to backend
   const backendLoginMutation = useMutation({
-    mutationFn: (idToken: string) => AllAuthApi.googleLogin({ access_token: idToken }),
+    mutationFn: (idToken: string) => AllAuthApi.googleLogin({ id_token: idToken }),
     ...backendLoginOptions,
   })
 

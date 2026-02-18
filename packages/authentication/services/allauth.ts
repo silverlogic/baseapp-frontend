@@ -15,11 +15,8 @@ export default class AllAuthApi {
     })
   }
 
-  static async googleLogin(googleTokens: {
-    access_token: string
-    id_token?: string
-  }): Promise<AllAuthLoginResponse> {
-    const idToken = googleTokens.access_token
+  static async googleLogin(googleTokens: { id_token: string }): Promise<AllAuthLoginResponse> {
+    const idToken = googleTokens.id_token
     const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || ''
 
     const payload = {
