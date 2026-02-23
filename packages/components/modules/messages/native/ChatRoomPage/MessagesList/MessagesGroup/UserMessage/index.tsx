@@ -32,8 +32,7 @@ const UserMessage: FC<UserMessageProps> = ({
 
     return isPreviousMessageFromOtherParticipant || roomHasOnlyOneMessage
   }, [allMessages, allMessagesLastIndex, messageIndex])
-
-  const isOwnMessage = currentProfile?.id === message?.profile?.id
+  const isOwnMessage = message?.profile?.id === currentProfile?.id
   /* TODO: Extract into functions and reuse on web and mobile */
   const canShowAvatar = isFirstGroupedMessage && !isOwnMessage
 
@@ -59,6 +58,7 @@ const UserMessage: FC<UserMessageProps> = ({
           messageRef={message}
           isGroup={isGroup}
           isFirstGroupedMessage={isFirstGroupedMessage}
+          isOwnMessage={isOwnMessage}
           {...MessageItemProps}
         />
       </View>

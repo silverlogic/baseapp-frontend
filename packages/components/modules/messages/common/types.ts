@@ -10,3 +10,7 @@ export type MessageNode = NonNullable<MessageEdges[number]>['node']
 export type MessageTypeOptions = ValueOf<typeof MESSAGE_TYPE>
 
 export type ChatRoomParticipantRoles = ValueOf<typeof CHAT_ROOM_PARTICIPANT_ROLES>
+
+export interface UploadablesObj {
+  [key: string]: File | Blob
+}

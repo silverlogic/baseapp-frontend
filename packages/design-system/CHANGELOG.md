@@ -1,5 +1,36 @@
 # @baseapp-frontend/design-system
 
+## 1.2.3
+
+### Patch Changes
+
+- Introduces an opt-in alternative navbar layout for `BaseApp`, controlled by the `enableHeader` prop on `NavigationLayout` (defaults to `true`). When `enableHeader` is set to `false`, the top header is hidden on desktop viewports and the profile and notification components are moved into the sidebar. Mobile and tablet viewports continue to show the header regardless of this setting. This is not a breaking change—existing behavior is preserved by default.
+
+## 1.2.2
+
+### Patch Changes
+
+- Export LoadingScreen types
+- Export FabButton types
+
+## 1.2.1
+
+### Patch Changes
+
+- Add RN NewGroupIcon
+
+## 1.2.0
+
+### Patch Changes
+
+- Added Group Chat creation and Groups Tab
+
+## 1.1.9
+
+### Patch Changes
+
+- Add Circled Avatar for RN
+
 ## 1.1.8
 
 ### Minor Changes

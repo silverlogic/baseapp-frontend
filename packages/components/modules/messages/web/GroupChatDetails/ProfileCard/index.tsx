@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -15,8 +15,10 @@ import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileIte
 import { formatHandle } from '../../../../__shared__/common/utils'
 import { ProfileItemFragment } from '../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
+import { useChatRoomToggleAdminMutation } from '../../../common/graphql/mutations/ChatRoomToggleAdmin'
 import AdminOptionsMenu from './AdminOptionsMenu'
 import MemberOptionsMenu from './MemberOptionsMenu'
+import RemoveAdminPermissionsDialog from './RemoveAdminPermissionsDialog'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
@@ -24,13 +26,18 @@ const ProfileCard: FC<ProfileCardProps> = ({
   hasAdminPermissions,
   groupMember,
   initiateRemoval,
+  groupId,
 }) => {
   const { id, image, name, urlPath } = useFragment<ProfileItemFragment$key>(
     ProfileItemFragment,
     groupMember.profile!,
   )
+  const [openRemoveAdminPermissionDialog, setOpenRemoveAdminDialog] = useState(false)
+  const handleCloseDialog = () => {
+    setOpenRemoveAdminDialog(false)
+  }
   const showUrlPath = !!urlPath?.path
-  const showAdminLabel = groupMember?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
+  const isAdmin = groupMember.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
   const showMenu = hasAdminPermissions
   const { currentProfile } = useCurrentProfile()
   const popover = usePopover()
@@ -39,6 +46,48 @@ const ProfileCard: FC<ProfileCardProps> = ({
   const handleRemoveClicked = () => {
     popover.onClose()
     initiateRemoval(groupMember.profile!)
+  }
+
+  const [commitToggleAdmin, isMutationInFlight] = useChatRoomToggleAdminMutation()
+
+  const handleCommitToggleAdmin = () => {
+    if (isMutationInFlight || !groupId || !currentProfile?.id) return
+    popover.onClose()
+
+    commitToggleAdmin({
+      variables: {
+        input: {
+          roomId: groupId,
+          profileId: currentProfile.id,
+          targetParticipantId: groupMember.id,
+        },
+      },
+      optimisticResponse: {
+        chatRoomToggleAdmin: {
+          participant: {
+            node: {
+              id: groupMember.id,
+              role: isAdmin
+                ? CHAT_ROOM_PARTICIPANT_ROLES.member
+                : CHAT_ROOM_PARTICIPANT_ROLES.admin,
+            },
+          },
+          errors: null,
+        },
+      },
+      onCompleted: () => {
+        popover.onClose()
+        handleCloseDialog()
+      },
+    })
+  }
+
+  const handleToggleAdminClicked = () => {
+    if (isAdmin) {
+      setOpenRemoveAdminDialog(true)
+    } else {
+      handleCommitToggleAdmin()
+    }
   }
 
   const renderMenuItems = () => {
@@ -54,11 +103,20 @@ const ProfileCard: FC<ProfileCardProps> = ({
 
     if (!isMe && hasAdminPermissions) {
       return (
-        <AdminOptionsMenu
-          onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
-          onToggleAdminClicked={popover.onClose /* TODO: Add functionality */}
-          onRemoveClicked={handleRemoveClicked}
-        />
+        <>
+          <RemoveAdminPermissionsDialog
+            open={openRemoveAdminPermissionDialog}
+            onClose={handleCloseDialog}
+            isMutationInFlight={isMutationInFlight}
+            onRemoveConfirmed={handleCommitToggleAdmin}
+          />
+          <AdminOptionsMenu
+            onViewProfileClicked={popover.onClose /* TODO: Add functionality */}
+            onToggleAdminClicked={handleToggleAdminClicked}
+            onRemoveClicked={handleRemoveClicked}
+            isAdmin={isAdmin}
+          />
+        </>
       )
     }
 
@@ -91,7 +149,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
           <Typography variant="caption" color="text.secondary">
             {showUrlPath && formatHandle(urlPath.path)}
           </Typography>
-          {showAdminLabel && showUrlPath && (
+          {isAdmin && showUrlPath && (
             <Box
               sx={{
                 display: 'inline-block',
@@ -104,7 +162,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
             />
           )}
           <Typography variant="caption" color="primary.light">
-            {showAdminLabel && ADMIN_LABEL}
+            {isAdmin && ADMIN_LABEL}
           </Typography>
         </Box>
       </Box>

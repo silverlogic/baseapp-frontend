@@ -1,5 +1,63 @@
 # @baseapp-frontend/components
 
+## 1.5.4
+
+### Patch Changes
+
+- Introduces an opt-in alternative navbar layout for `BaseApp`, controlled by the `enableHeader` prop on `NavigationLayout` (defaults to `true`). When `enableHeader` is set to `false`, the top header is hidden on desktop viewports and the profile and notification components are moved into the sidebar. Mobile and tablet viewports continue to show the header regardless of this setting. This is not a breaking change—existing behavior is preserved by default.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.3
+
+## 1.5.3
+
+### Patch Changes
+
+- Add Toggle group admin feature
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.2
+
+## 1.5.2
+
+### Patch Changes
+
+- Add RN single chat details
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.1
+
+## 1.5.1
+
+### Patch Changes
+
+- Refactor to profile settings to have permission checking, static routes for each tab and utilize preloaded queries
+
+## 1.5.0
+
+### Minor Changes
+
+- Navigation components now support extended customization through new optional properties for drawer configuration, slot customization, and toggle button styling, enabling more flexible navigation component theming and behavior configuration.
+
+## 1.4.20
+
+### Patch Changes
+
+- Added Group Chat creation and Groups Tab
+
+## 1.4.19
+
+### Patch Changes
+
+- Add basic members list
+
+## 1.4.18
+
+### Patch Changes
+
+- Add group details to RN
+- Add Leave group feature
+- Add Mark as unread
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.1.9
+
 ## 1.4.17
 
 ### Patch Changes

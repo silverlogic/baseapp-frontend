@@ -1,8 +1,8 @@
 import { PreloadedQuery } from 'react-relay'
 
-import { GroupDetailsQuery } from '../../../../__generated__/GroupDetailsQuery.graphql'
+import { ChatRoomQuery } from '../../../../__generated__/ChatRoomQuery.graphql'
 
 export type ProfileSummaryProps = {
-  queryRef: PreloadedQuery<GroupDetailsQuery>
+  queryRef: PreloadedQuery<ChatRoomQuery>
   onBackButtonClicked: () => void
 }

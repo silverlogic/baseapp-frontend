@@ -18,7 +18,6 @@ export * from './graphql/queries/ChatRoomQuery'
 export * from './graphql/queries/ChatRoomsQuery'
 export * from './graphql/queries/GroupDetailsQuery'
 
-export * from './graphql/fragments/GroupTitle'
 export * from './graphql/fragments/LastMessage'
 export * from './graphql/fragments/MembersList'
 export * from './graphql/fragments/MessageItem'
@@ -31,6 +30,9 @@ export * from './graphql/fragments/UnreadMessagesCount'
 export * from './graphql/subscriptions/useMessagesListSubscription'
 export * from './graphql/subscriptions/useMessageCountUpdateSubscription'
 export * from './graphql/subscriptions/useRoomListSubscription'
+
+export { default as useLeaveGroup } from './useLeaveGroup'
+export * from './useLeaveGroup/constants'
 
 export * from './constants'
 export type * from './types'

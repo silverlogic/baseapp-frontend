@@ -9,6 +9,8 @@ import { hideScroll } from '@baseapp-frontend/design-system/styles/web'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
+import DefaultAccountMenu from '../Header/AccountMenu'
+import NavAccountSection from '../__shared__/NavAccountSection'
 import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NAV_WIDTH } from '../constants'
@@ -22,11 +24,26 @@ const NavMini: FC<NavMiniProps> = ({
   openNav,
   onCloseNav,
   hideToggleButton = false,
+  slotProps,
+  VerticalDrawerProps,
+  NavToggleButtonProps,
+  AccountMenu = DefaultAccountMenu,
+  AccountMenuProps,
+  NotificationsPopover,
+  NotificationsPopoverProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        LogoIcon={LogoIcon}
+        DrawerProps={VerticalDrawerProps}
+      />
+    )
   }
 
   return (
@@ -40,9 +57,11 @@ const NavMini: FC<NavMiniProps> = ({
     >
       {!hideToggleButton && (
         <NavToggleButton
+          {...NavToggleButtonProps}
           sx={{
             top: 22,
             left: NAV_WIDTH.MINI - 12,
+            ...NavToggleButtonProps?.sx,
           }}
         />
       )}
@@ -61,7 +80,15 @@ const NavMini: FC<NavMiniProps> = ({
             <LogoIcon />
           </Logo>
         )}
-        <NavSectionMini navData={navData} />
+        <NavSectionMini navData={navData} slotProps={slotProps} />
+        <Box sx={{ flexGrow: 1 }} />
+        <NavAccountSection
+          AccountMenu={AccountMenu}
+          AccountMenuProps={AccountMenuProps}
+          NotificationsPopover={NotificationsPopover}
+          NotificationsPopoverProps={NotificationsPopoverProps}
+          currentLayout="mini"
+        />
       </Stack>
     </Box>
   )

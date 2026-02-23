@@ -21,7 +21,7 @@ import {
   TitleFragment,
   UnreadMessagesCountFragment,
   useArchiveChatRoomMutation,
-  useNameAndAvatar,
+  useTitleAndImage,
   useUnreadChatMutation,
 } from '../../../common'
 import { StyledChatCard } from './styled'
@@ -52,7 +52,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const chatCardRef = useRef<HTMLDivElement>(null)
 
   const { currentProfile } = useCurrentProfile()
-  const { title, avatar } = useNameAndAvatar(headerFragment)
+  const { title, image } = useTitleAndImage(headerFragment)
 
   const { lastMessageTime } = lastMessageFragment
   const lastMessage = lastMessageFragment.lastMessage?.content
@@ -122,7 +122,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           sx={{ alignSelf: 'center', justifySelf: 'center' }}
           width={48}
           height={48}
-          src={avatar}
+          src={image}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
           <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>

@@ -1,5 +1,6 @@
-import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
+import { TitleFragment$data } from '../../../../../__generated__/TitleFragment.graphql'
 
 export interface ChatRoomHeaderProps {
-  roomRef: TitleFragment$key
+  roomHeader: TitleFragment$data
+  onChatDetailsClicked: () => void
 }
