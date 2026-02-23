@@ -17,8 +17,6 @@ export const createStyles = (theme: Theme) =>
       gap: 4,
     },
     hideRepliesButtonText: {
-      color: theme.colors.object.high,
-      fontFamily: 'PublicSans_700Bold',
-      fontSize: 13,
+      ...theme.typography.buttonSmall,
     },
   })

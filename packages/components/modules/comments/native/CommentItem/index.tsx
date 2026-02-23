@@ -24,7 +24,7 @@ const CommentItem: FC<CommentItemProps> = ({
   commentIdToExpand,
   threadDepth = 0,
   maxThreadDepth = 5,
-  RepliesList: RepliesListProp,
+  RepliesList,
   RepliesListProps,
   Timestamp = DefaultTimestamp,
   CommentReplyButton = DefaultCommentReplyButton,
@@ -32,7 +32,7 @@ const CommentItem: FC<CommentItemProps> = ({
 }) => {
   const DefaultCommentsList = useMemo(() => lazy(() => import('../CommentsList')), [])
 
-  const RepliesList = RepliesListProp ?? DefaultCommentsList
+  const SelectedRepliesList = RepliesList ?? DefaultCommentsList
   const [isRepliesExpanded, setIsRepliesExpanded] = useState(false)
   const [isLoadingReplies, setIsLoadingReplies] = useState(false)
   const [comment, refetch] = useRefetchableFragment<
@@ -100,8 +100,12 @@ const CommentItem: FC<CommentItemProps> = ({
   }, [commentIdToExpand, comment.id, isRepliesExpanded, hasReplies, refetch])
 
   const renderCommentsReplies = () => {
+    if (!isRepliesExpanded || isLoadingReplies || !canReply) {
+      return null
+    }
+
     const CommentsListComponent = (
-      <RepliesList
+      <SelectedRepliesList
         target={comment}
         subscriptionsEnabled
         onReply={onReply}
@@ -114,7 +118,7 @@ const CommentItem: FC<CommentItemProps> = ({
       />
     )
 
-    if (!RepliesListProp) {
+    if (!RepliesList) {
       return <Suspense fallback={null}>{CommentsListComponent}</Suspense>
     }
     return CommentsListComponent
@@ -170,7 +174,7 @@ const CommentItem: FC<CommentItemProps> = ({
           </View>
         </View>
       </Pressable>
-      {isRepliesExpanded && !isLoadingReplies && canReply && renderCommentsReplies()}
+      {renderCommentsReplies()}
     </>
   )
 }
