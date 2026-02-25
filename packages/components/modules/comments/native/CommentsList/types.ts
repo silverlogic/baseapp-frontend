@@ -14,4 +14,8 @@ export interface CommentsListProps {
   onReply?: (comment: CommentItem_comment$data) => void
   commentIdToExpand?: string | null
   onLongPress?: (comment: CommentItem_comment$data) => void
+  isReplyList?: boolean
+  onHideReplies?: () => void
+  currentReplyCount?: number
+  maxThreadDepth?: number
 }
