@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.4
+
+### Patch Changes
+
+- Add chevron icon customizations
+
 ## 1.2.3
 
 ### Patch Changes

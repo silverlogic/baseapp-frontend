@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.5
+
+### Patch Changes
+
+- Add chevron icon customizations
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.4
+
 ## 1.5.4
 
 ### Patch Changes

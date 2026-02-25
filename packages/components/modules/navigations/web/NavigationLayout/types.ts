@@ -2,12 +2,13 @@ import { FC, PropsWithChildren } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
-import { DrawerProps, IconButtonProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
+import { DrawerProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
 import { NavigationData, SlotProps } from '../types'
 import { MainContainerProps } from './MainContainer/types'
+import { NavToggleButtonProps } from '../__shared__/NavToggleButton/types'
 
 export interface NavigationLayoutProps extends PropsWithChildren {
   navData: NavigationData
@@ -22,6 +23,6 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   MainContainer?: FC<MainContainerProps>
   slotProps?: SlotProps
   VerticalDrawerProps?: Partial<DrawerProps>
-  NavToggleButtonProps?: Partial<IconButtonProps>
+  NavToggleButtonProps?: Partial<NavToggleButtonProps>
   enableHeader?: boolean
 }

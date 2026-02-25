@@ -1,4 +1,6 @@
-import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { FC } from 'react'
+
+import { ChevronIcon as DefaultChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { bgBlur } from '@baseapp-frontend/design-system/styles/web'
 
@@ -8,7 +10,12 @@ import { useTheme } from '@mui/material/styles'
 import { NAV_WIDTH } from '../../constants'
 import { NavToggleButtonProps } from './types'
 
-export default function NavToggleButton({ sx, ...other }: NavToggleButtonProps) {
+const NavToggleButton: FC<NavToggleButtonProps> = ({
+  sx,
+  ChevronIcon = DefaultChevronIcon,
+  ChevronIconProps = {},
+  ...other
+}) => {
   const { settings, setSettings } = useUISettings()
   const theme = useTheme()
 
@@ -33,7 +40,13 @@ export default function NavToggleButton({ sx, ...other }: NavToggleButtonProps) 
       }}
       {...other}
     >
-      <ChevronIcon isOpen={settings.themeLayout === 'vertical'} position="right" />
+      <ChevronIcon
+        isOpen={settings.themeLayout === 'vertical'}
+        position="right"
+        {...ChevronIconProps}
+      />
     </IconButton>
   )
 }
+
+export default NavToggleButton
