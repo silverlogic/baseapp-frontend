@@ -2,11 +2,12 @@ import { FC } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
-import { DrawerProps, IconButtonProps } from '@mui/material'
+import { DrawerProps } from '@mui/material'
 
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
 import { NavigationData, SlotProps } from '../types'
+import { NavToggleButtonProps } from '../__shared__/NavToggleButton/types'
 
 export interface NavMiniProps {
   navData: NavigationData
@@ -17,7 +18,7 @@ export interface NavMiniProps {
   hideToggleButton?: boolean
   slotProps?: SlotProps
   VerticalDrawerProps?: Partial<DrawerProps>
-  NavToggleButtonProps?: Partial<IconButtonProps>
+  NavToggleButtonProps?: Partial<NavToggleButtonProps>
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
   NotificationsPopover?: FC<NotificationsPopoverProps>
