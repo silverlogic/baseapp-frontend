@@ -15,6 +15,7 @@ export interface CommentItemProps {
   target: CommentItem_target$key
   onLongPress?: (comment: CommentItem_comment$data) => void
   threadDepth?: number
+  maxThreadDepth?: number
   RepliesList?: FC<CommentsListProps>
   RepliesListProps?: Partial<CommentsListProps>
   CommentReactionButton?: FC<CommentReactionButtonProps>
