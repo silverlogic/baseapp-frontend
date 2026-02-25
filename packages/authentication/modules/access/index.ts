@@ -27,7 +27,7 @@ export { default as useAllAuthGoogleLogin } from './allauth/useAllAuthGoogleLogi
 export type * from './allauth/useAllAuthGoogleLogin/types'
 export { useAllAuthGoogleLoginHandler } from './allauth/useAllAuthGoogleLoginHandler'
 export type { UseAllAuthGoogleLoginHandlerOptions } from './allauth/useAllAuthGoogleLoginHandler'
-export { extractTokensFromAllAuthResponse, isAllAuthPasswordChangeRedirect } from './allauth/utils'
+export { isAllAuthPasswordChangeRedirect } from './allauth/utils'
 
 export { default as useChangePassword } from './useChangePassword'
 export type * from './useChangePassword/types'
