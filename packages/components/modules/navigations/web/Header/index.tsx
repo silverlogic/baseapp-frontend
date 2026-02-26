@@ -21,13 +21,14 @@ const Header: FC<HeaderProps> = ({
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
   ToolbarProps,
+  CustomAppBarProps = {},
 }) => {
   const { settings } = useUISettings()
   const isNavHorizontal = settings.themeLayout === 'horizontal'
   const isNavCentered = settings.themeLayout === 'centered'
 
   return (
-    <CustomAppBar themeLayout={settings.themeLayout}>
+    <CustomAppBar themeLayout={settings.themeLayout} {...CustomAppBarProps}>
       <Toolbar
         {...ToolbarProps}
         sx={[
