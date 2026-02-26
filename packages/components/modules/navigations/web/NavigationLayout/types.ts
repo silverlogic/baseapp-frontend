@@ -6,9 +6,10 @@ import { DrawerProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
+import { CustomAppBarProps } from '../Header/types'
+import { NavToggleButtonProps } from '../__shared__/NavToggleButton/types'
 import { NavigationData, SlotProps } from '../types'
 import { MainContainerProps } from './MainContainer/types'
-import { NavToggleButtonProps } from '../__shared__/NavToggleButton/types'
 
 export interface NavigationLayoutProps extends PropsWithChildren {
   navData: NavigationData
@@ -25,4 +26,5 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   VerticalDrawerProps?: Partial<DrawerProps>
   NavToggleButtonProps?: Partial<NavToggleButtonProps>
   enableHeader?: boolean
+  CustomAppBarProps?: Partial<CustomAppBarProps>
 }

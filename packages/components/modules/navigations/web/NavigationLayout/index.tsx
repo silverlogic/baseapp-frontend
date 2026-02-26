@@ -31,6 +31,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   VerticalDrawerProps,
   NavToggleButtonProps,
   enableHeader = true,
+  CustomAppBarProps,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
@@ -55,10 +56,10 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             AccountMenu={AccountMenu}
             AccountMenuProps={{
               ...AccountMenuProps,
-              additionalComponent:
-                notificationsComponent ?? AccountMenuProps?.additionalComponent,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
             ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
           >
             <NavCentered
               navData={navData}
@@ -87,10 +88,10 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             AccountMenu={AccountMenu}
             AccountMenuProps={{
               ...AccountMenuProps,
-              additionalComponent:
-                notificationsComponent ?? AccountMenuProps?.additionalComponent,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
             ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
           />
         )}
         <NavHorizontal
@@ -118,10 +119,10 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             AccountMenu={AccountMenu}
             AccountMenuProps={{
               ...AccountMenuProps,
-              additionalComponent:
-                notificationsComponent ?? AccountMenuProps?.additionalComponent,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
             ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
           />
         )}
 
@@ -164,10 +165,10 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           AccountMenu={AccountMenu}
           AccountMenuProps={{
             ...AccountMenuProps,
-            additionalComponent:
-              notificationsComponent ?? AccountMenuProps?.additionalComponent,
+            additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
           }}
           ToolbarProps={ToolbarProps}
+          CustomAppBarProps={CustomAppBarProps}
         />
       )}
       <Box

@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.6
+
+### Patch Changes
+
+- Improve CustomAppBarProps
+
 ## 1.5.5
 
 ### Patch Changes
