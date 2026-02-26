@@ -36,6 +36,15 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
     }
   }, [data.children])
 
+  const handleToggleMenu = useCallback(() => {
+    if (data.children) {
+      setOpenMenu((prev) => !prev)
+    }
+    if (data.onClick) {
+      data.onClick()
+    }
+  }, [data])
+
   return (
     <>
       <NavItem
@@ -46,11 +55,11 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
         itemData={data}
         depth={depth}
         hasChild={!!data.children}
+        onClick={handleToggleMenu}
         active={active}
         className={active ? 'active' : ''}
         sx={depth === 1 ? slotProps?.rootItem : slotProps?.subItem}
       />
-
       {!!data.children && (
         <Popover
           disableScrollLock
