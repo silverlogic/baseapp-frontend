@@ -28,7 +28,7 @@ const Header: FC<HeaderProps> = ({
   const isNavCentered = settings.themeLayout === 'centered'
 
   return (
-    <CustomAppBar themeLayout={settings.themeLayout} {...CustomAppBarProps}>
+    <CustomAppBar {...CustomAppBarProps} themeLayout={settings.themeLayout}>
       <Toolbar
         {...ToolbarProps}
         sx={[
