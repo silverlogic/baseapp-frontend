@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.7
+
+### Patch Changes
+
+- Allow disabling the sidebar footer (`NavAccountSection`).
+
 ## 1.5.6
 
 ### Patch Changes
