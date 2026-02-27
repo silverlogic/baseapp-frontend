@@ -21,6 +21,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   LogoProps,
   AccountMenu,
   AccountMenuProps,
+  NavAccountSection,
+  NavAccountSectionProps,
   NotificationsPopover,
   NotificationsPopoverProps,
   ToolbarProps,
@@ -144,6 +146,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             NavToggleButtonProps={NavToggleButtonProps}
             AccountMenu={AccountMenu}
             AccountMenuProps={AccountMenuProps}
+            NavAccountSection={NavAccountSection}
+            NavAccountSectionProps={NavAccountSectionProps}
             NotificationsPopover={!enableHeader ? NotificationsPopover : undefined}
             NotificationsPopoverProps={!enableHeader ? NotificationsPopoverProps : undefined}
           />
@@ -189,6 +193,8 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           NavToggleButtonProps={NavToggleButtonProps}
           AccountMenu={!enableHeader ? AccountMenu : undefined}
           AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
+          NavAccountSection={NavAccountSection}
+          NavAccountSectionProps={NavAccountSectionProps}
           NotificationsPopover={!enableHeader ? NotificationsPopover : undefined}
           NotificationsPopoverProps={!enableHeader ? NotificationsPopoverProps : undefined}
         />

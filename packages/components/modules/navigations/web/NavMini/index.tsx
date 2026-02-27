@@ -10,7 +10,7 @@ import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
 import DefaultAccountMenu from '../Header/AccountMenu'
-import NavAccountSection from '../__shared__/NavAccountSection'
+import DefaultNavAccountSection from '../__shared__/NavAccountSection'
 import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NAV_WIDTH } from '../constants'
@@ -29,6 +29,8 @@ const NavMini: FC<NavMiniProps> = ({
   NavToggleButtonProps,
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
+  NavAccountSection = DefaultNavAccountSection,
+  NavAccountSectionProps,
   NotificationsPopover,
   NotificationsPopoverProps,
 }) => {
@@ -82,13 +84,16 @@ const NavMini: FC<NavMiniProps> = ({
         )}
         <NavSectionMini navData={navData} slotProps={slotProps} />
         <Box sx={{ flexGrow: 1 }} />
-        <NavAccountSection
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          NotificationsPopover={NotificationsPopover}
-          NotificationsPopoverProps={NotificationsPopoverProps}
-          currentLayout="mini"
-        />
+        {NavAccountSection && (
+          <NavAccountSection
+            AccountMenu={AccountMenu}
+            AccountMenuProps={AccountMenuProps}
+            NotificationsPopover={NotificationsPopover}
+            NotificationsPopoverProps={NotificationsPopoverProps}
+            currentLayout="mini"
+            {...NavAccountSectionProps}
+          />
+        )}
       </Stack>
     </Box>
   )

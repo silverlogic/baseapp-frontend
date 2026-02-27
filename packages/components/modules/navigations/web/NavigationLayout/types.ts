@@ -7,6 +7,7 @@ import { DrawerProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
 import { CustomAppBarProps } from '../Header/types'
+import { NavAccountSectionProps } from '../__shared__/NavAccountSection/types'
 import { NavToggleButtonProps } from '../__shared__/NavToggleButton/types'
 import { NavigationData, SlotProps } from '../types'
 import { MainContainerProps } from './MainContainer/types'
@@ -17,6 +18,8 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   LogoProps?: PartialLogoProps
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
+  NavAccountSection?: FC<NavAccountSectionProps> | null
+  NavAccountSectionProps?: Partial<NavAccountSectionProps>
   NotificationsPopover?: FC<NotificationsPopoverProps>
   NotificationsPopoverProps?: Partial<NotificationsPopoverProps>
   ToolbarProps?: MuiToolbarProps
