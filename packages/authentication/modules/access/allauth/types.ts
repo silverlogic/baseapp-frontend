@@ -1,8 +1,9 @@
-import type { UseMutationOptions } from '@tanstack/react-query'
+import type { UseMutationOptions, UseQueryOptions } from '@tanstack/react-query'
 import type { UseFormProps } from 'react-hook-form'
 import { z } from 'zod'
 
 import AllAuthApi from '../../../services/allauth'
+import type { AllAuthSocialProvidersResponse } from '../../../types/allauth'
 import type { ForgotPasswordRequest, LoginRequest, RegisterRequest } from '../../../types/auth'
 
 export type LoginParams = LoginRequest
@@ -44,4 +45,12 @@ export interface UseAllAuthResetPasswordOptions {
   defaultValues?: ResetPasswordForm
   mutationOptions?: UseMutationOptions<void, unknown, ResetPasswordForm, any>
   enableFormApiErrors?: boolean
+}
+
+export interface UseAllAuthSocialLoginOptions {
+  callbackUrl?: string
+  providersOptions?: Omit<
+    UseQueryOptions<AllAuthSocialProvidersResponse, unknown>,
+    'queryKey' | 'queryFn'
+  >
 }

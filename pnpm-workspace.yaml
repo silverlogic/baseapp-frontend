@@ -156,6 +156,9 @@ catalogs:
     prettier-plugin-tailwindcss: ^0.6.3
     prettier: ^3.3.3
 
+  auth:
+    "@react-oauth/google": ^0.13.4
+
   components:
     framer-motion: ^11.5.4
     numbro: ^2.5.0

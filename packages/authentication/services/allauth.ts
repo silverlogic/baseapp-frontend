@@ -15,6 +15,24 @@ export default class AllAuthApi {
     })
   }
 
+  static async googleLogin(googleTokens: { id_token: string }): Promise<AllAuthLoginResponse> {
+    const idToken = googleTokens.id_token
+
+    const payload = {
+      provider: 'google',
+      process: 'login',
+      token: {
+        client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+        id_token: idToken,
+      },
+    }
+
+    return baseAppFetch(`/_allauth/app/v1/auth/provider/token`, {
+      method: 'POST',
+      body: payload,
+    })
+  }
+
   static logout(sessionToken?: string): Promise<void> {
     return baseAppFetch(`/_allauth/app/v1/auth/session`, {
       method: 'DELETE',

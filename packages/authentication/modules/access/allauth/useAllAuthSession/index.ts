@@ -10,9 +10,9 @@ import {
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
+import type { MinimalProfile } from '../../../../types/profile'
 import { useCurrentProfile } from '../../../profile'
 import { setProfileExpoStorage } from '../../../profile/utils'
-import type { MinimalProfile } from '../../../../types/profile'
 import type { AllAuthSessionData } from './types'
 
 export function useAllAuthSession() {
@@ -43,9 +43,10 @@ export function useAllAuthSession() {
       const baseUrl = API_BASE_URL?.replace('/v1', '')
       let absoluteImagePath = null
       if (profile.image) {
-        absoluteImagePath = profile.image.startsWith('http') || !baseUrl
-          ? profile.image
-          : `${baseUrl}${profile.image}`
+        absoluteImagePath =
+          profile.image.startsWith('http') || !baseUrl
+            ? profile.image
+            : `${baseUrl}${profile.image}`
       }
 
       const currentProfile: MinimalProfile = {
@@ -70,3 +71,5 @@ export function useAllAuthSession() {
 
   return { startSession, clearSession }
 }
+
+export default useAllAuthSession
