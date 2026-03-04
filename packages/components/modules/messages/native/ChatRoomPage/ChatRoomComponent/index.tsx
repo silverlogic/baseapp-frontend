@@ -69,7 +69,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
       router.push(`/group-details/${roomId}`)
       return
     }
-    console.log('Not implemented yet.')
+    router.push(`/single-chat-details/${roomId}`)
   }
 
   const renderTitleComponent = () => (

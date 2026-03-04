@@ -1,7 +1,10 @@
 import { FC } from 'react'
 
 import { Button } from '@baseapp-frontend/design-system/components/native/buttons'
-import { ArchiveIcon, LeaveIcon } from '@baseapp-frontend/design-system/components/native/icons'
+import {
+  ArchiveIcon as DefaultArchiveIcon,
+  LeaveIcon as DefaultLeaveIcon,
+} from '@baseapp-frontend/design-system/components/native/icons'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
@@ -14,6 +17,10 @@ const Options: FC<OptionsProps> = ({
   handleLeaveGroup,
   isArchiveMutationInFlight,
   isArchived,
+  ArchiveIcon = DefaultArchiveIcon,
+  ArchiveIconProps = {},
+  LeaveIcon = DefaultLeaveIcon,
+  LeaveIconProps = {},
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -33,7 +40,7 @@ const Options: FC<OptionsProps> = ({
           disabled={isArchiveMutationInFlight}
         >
           <View style={styles.buttons}>
-            <ArchiveIcon />
+            <ArchiveIcon {...ArchiveIconProps} />
             <Text variant="buttonMedium" color="high">
               {isArchived ? 'Unarchive' : 'Archive'} Group
             </Text>
@@ -41,7 +48,7 @@ const Options: FC<OptionsProps> = ({
         </Button>
         <Button mode="text" size="medium" onPress={handleLeaveGroup}>
           <View style={styles.buttons}>
-            <LeaveIcon color={theme.colors.error.main} />
+            <LeaveIcon color={theme.colors.error.main} {...LeaveIconProps} />
             <Text variant="buttonMedium" style={styles.leaveGroupButton}>
               Leave Group
             </Text>

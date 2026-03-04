@@ -9,6 +9,8 @@ import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 
+import DefaultAccountMenu from '../Header/AccountMenu'
+import DefaultNavAccountSection from '../__shared__/NavAccountSection'
 import NavSectionVertical from '../__shared__/NavSectionVertical'
 import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
@@ -25,6 +27,12 @@ const NavVertical: FC<NavVerticalProps> = ({
   slotProps,
   VerticalDrawerProps,
   NavToggleButtonProps,
+  AccountMenu = DefaultAccountMenu,
+  AccountMenuProps,
+  NavAccountSection = DefaultNavAccountSection,
+  NavAccountSectionProps,
+  NotificationsPopover,
+  NotificationsPopoverProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
@@ -74,6 +82,16 @@ const NavVertical: FC<NavVerticalProps> = ({
           )}
           <NavSectionVertical navData={navData} slotProps={slotProps} />
           <Box sx={{ flexGrow: 1 }} />
+          {NavAccountSection && (
+            <NavAccountSection
+              AccountMenu={AccountMenu}
+              AccountMenuProps={AccountMenuProps}
+              NotificationsPopover={NotificationsPopover}
+              NotificationsPopoverProps={NotificationsPopoverProps}
+              currentLayout="vertical"
+              {...NavAccountSectionProps}
+            />
+          )}
         </Scrollbar>
       </Stack>
     </Box>

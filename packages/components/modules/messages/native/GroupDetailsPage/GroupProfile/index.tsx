@@ -1,14 +1,18 @@
 import { FC } from 'react'
 
 import { useTitleAndImage } from '@baseapp-frontend/components/messages/common'
-import { CircledAvatar } from '@baseapp-frontend/design-system/components/native/avatars'
+import { CircledAvatar as DefaultCircledAvatar } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { createStyles } from './styles'
 import { GroupProfileProps } from './types'
 
-const GroupProfile: FC<GroupProfileProps> = ({ group }) => {
+const GroupProfile: FC<GroupProfileProps> = ({
+  group,
+  CircledAvatar = DefaultCircledAvatar,
+  CircledAvatarProps = {},
+}) => {
   const { title, image } = useTitleAndImage(group)
   const participantsCount = group?.participantsCount ?? 0
   const styles = createStyles()
@@ -16,7 +20,7 @@ const GroupProfile: FC<GroupProfileProps> = ({ group }) => {
   return (
     <View style={styles.container}>
       <View style={styles.profileCard}>
-        <CircledAvatar imgSource={image} size={128} />
+        <CircledAvatar imgSource={image} size={128} {...CircledAvatarProps} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1" color="high">
             {title}

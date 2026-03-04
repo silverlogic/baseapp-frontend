@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
+import { useResponsive, useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { useBoolean } from '@baseapp-frontend/utils'
 
 import Box from '@mui/material/Box'
@@ -21,6 +21,10 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   LogoProps,
   AccountMenu,
   AccountMenuProps,
+  NavAccountSection,
+  NavAccountSectionProps,
+  NotificationsPopover,
+  NotificationsPopoverProps,
   ToolbarProps,
   children,
   MainContainerProps = {},
@@ -28,33 +32,46 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   slotProps,
   VerticalDrawerProps,
   NavToggleButtonProps,
+  enableHeader = true,
+  CustomAppBarProps,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
+  const isMobileOrTablet = useResponsive('down', 'lg')
 
   const isNavCentered = settings?.themeLayout === 'centered'
   const isNavHorizontal = settings?.themeLayout === 'horizontal'
   const isNavMini = settings?.themeLayout === 'mini'
 
+  const notificationsComponent = NotificationsPopover ? (
+    <NotificationsPopover {...NotificationsPopoverProps} currentLayout={settings?.themeLayout} />
+  ) : undefined
+
   if (isNavCentered) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        >
-          <NavCentered
-            navData={navData}
-            openNav={nav.value}
-            onCloseNav={nav.onFalse}
-            VerticalDrawerProps={VerticalDrawerProps}
-            slotProps={slotProps}
-          />
-        </Header>
+        {(enableHeader || isMobileOrTablet) && (
+          <Header
+            LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
+            onOpenNav={nav.onTrue}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={{
+              ...AccountMenuProps,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
+            }}
+            ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
+          >
+            <NavCentered
+              navData={navData}
+              openNav={nav.value}
+              onCloseNav={nav.onFalse}
+              VerticalDrawerProps={VerticalDrawerProps}
+              slotProps={slotProps}
+            />
+          </Header>
+        )}
         <MainContainer isNavCentered {...MainContainerProps}>
           {children}
         </MainContainer>
@@ -65,14 +82,20 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavHorizontal) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        />
+        {(enableHeader || isMobileOrTablet) && (
+          <Header
+            LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
+            onOpenNav={nav.onTrue}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={{
+              ...AccountMenuProps,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
+            }}
+            ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
+          />
+        )}
         <NavHorizontal
           navData={navData}
           openNav={nav.value}
@@ -90,14 +113,20 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   if (isNavMini) {
     return (
       <>
-        <Header
-          LogoIcon={LogoIcon}
-          LogoProps={LogoProps}
-          onOpenNav={nav.onTrue}
-          AccountMenu={AccountMenu}
-          AccountMenuProps={AccountMenuProps}
-          ToolbarProps={ToolbarProps}
-        />
+        {(enableHeader || isMobileOrTablet) && (
+          <Header
+            LogoIcon={LogoIcon}
+            LogoProps={LogoProps}
+            onOpenNav={nav.onTrue}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={{
+              ...AccountMenuProps,
+              additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
+            }}
+            ToolbarProps={ToolbarProps}
+            CustomAppBarProps={CustomAppBarProps}
+          />
+        )}
 
         <Box
           sx={{
@@ -115,6 +144,12 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             slotProps={slotProps}
             VerticalDrawerProps={VerticalDrawerProps}
             NavToggleButtonProps={NavToggleButtonProps}
+            AccountMenu={AccountMenu}
+            AccountMenuProps={AccountMenuProps}
+            NavAccountSection={NavAccountSection}
+            NavAccountSectionProps={NavAccountSectionProps}
+            NotificationsPopover={!enableHeader ? NotificationsPopover : undefined}
+            NotificationsPopoverProps={!enableHeader ? NotificationsPopoverProps : undefined}
           />
           <MainContainer isNavMini {...MainContainerProps}>
             {children}
@@ -126,14 +161,20 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
 
   return (
     <>
-      <Header
-        LogoIcon={LogoIcon}
-        LogoProps={LogoProps}
-        onOpenNav={nav.onTrue}
-        AccountMenu={AccountMenu}
-        AccountMenuProps={AccountMenuProps}
-        ToolbarProps={ToolbarProps}
-      />
+      {(enableHeader || isMobileOrTablet) && (
+        <Header
+          LogoIcon={LogoIcon}
+          LogoProps={LogoProps}
+          onOpenNav={nav.onTrue}
+          AccountMenu={AccountMenu}
+          AccountMenuProps={{
+            ...AccountMenuProps,
+            additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
+          }}
+          ToolbarProps={ToolbarProps}
+          CustomAppBarProps={CustomAppBarProps}
+        />
+      )}
       <Box
         sx={{
           minHeight: 1,
@@ -150,6 +191,12 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
           slotProps={slotProps}
           VerticalDrawerProps={VerticalDrawerProps}
           NavToggleButtonProps={NavToggleButtonProps}
+          AccountMenu={!enableHeader ? AccountMenu : undefined}
+          AccountMenuProps={!enableHeader ? AccountMenuProps : undefined}
+          NavAccountSection={NavAccountSection}
+          NavAccountSectionProps={NavAccountSectionProps}
+          NotificationsPopover={!enableHeader ? NotificationsPopover : undefined}
+          NotificationsPopoverProps={!enableHeader ? NotificationsPopoverProps : undefined}
         />
         <MainContainer {...MainContainerProps}>{children}</MainContainer>
       </Box>

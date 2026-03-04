@@ -21,21 +21,25 @@ const Header: FC<HeaderProps> = ({
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
   ToolbarProps,
+  CustomAppBarProps = {},
 }) => {
   const { settings } = useUISettings()
   const isNavHorizontal = settings.themeLayout === 'horizontal'
   const isNavCentered = settings.themeLayout === 'centered'
 
   return (
-    <CustomAppBar themeLayout={settings.themeLayout}>
+    <CustomAppBar {...CustomAppBarProps} themeLayout={settings.themeLayout}>
       <Toolbar
-        sx={{
-          height: 1,
-          px: { lg: 5 },
-          justifyContent: 'center',
-          gap: 2,
-        }}
         {...ToolbarProps}
+        sx={[
+          {
+            height: 1,
+            px: { lg: 5 },
+            justifyContent: 'center',
+            gap: 2,
+          },
+          ...(Array.isArray(ToolbarProps?.sx) ? ToolbarProps.sx : [ToolbarProps?.sx]),
+        ]}
       >
         {LogoIcon && (isNavHorizontal || isNavCentered) && (
           <Logo
