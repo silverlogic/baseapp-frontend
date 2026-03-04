@@ -103,37 +103,36 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
     )
   }
 
-  const menuOptions = (
-    <>
-      <MenuItem onClick={handleShareClick} disableRipple>
-        <ShareIcon />
-        Share profile
-      </MenuItem>
-      {smDown && <Divider />}
-      {profile && currentProfileId !== profile?.id && (
-        <>
-          <BlockButtonWithDialog
-            target={profile}
-            handleCloseMenu={handleClose}
-            currentProfileId={currentProfileId}
-            isMenu
-          />
-          <ReportButtonWithDialog handleClose={handleClose} targetId={profile?.id} />
-        </>
-      )}
-    </>
-  )
+  const menuOptions = [
+    <MenuItem key="share" onClick={handleShareClick} disableRipple>
+      <ShareIcon />
+      Share profile
+    </MenuItem>,
+    smDown && <Divider key="divider" />,
+    profile && currentProfileId !== profile?.id && (
+      <BlockButtonWithDialog
+        key="block"
+        target={profile}
+        handleCloseMenu={handleClose}
+        currentProfileId={currentProfileId}
+        isMenu
+      />
+    ),
+    profile && currentProfileId !== profile?.id && (
+      <ReportButtonWithDialog key="report" handleClose={handleClose} targetId={profile?.id} />
+    ),
+  ].filter(Boolean)
 
   return (
     <div className="flex h-full w-full justify-center">
       <ProfileContainer>
         <ImageWithFallback
-          src={profile?.bannerImage?.url ?? ''}
+          src={profile?.bannerImage?.url || '/png/profile-banner-fallback.png'}
           fallbackSrc="/png/profile-banner-fallback.png"
           alt="Home Banner"
           width={868}
           height={
-            290 /* Some css height: auto takes precedence, 
+            290 /* Some css height: auto takes precedence,
             so also set as style below */
           }
           className="overflow-hidden rounded-lg"
