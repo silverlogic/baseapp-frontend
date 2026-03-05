@@ -35,7 +35,7 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
 
   const groups = useGroupChatCreate()
-
+  const { id, participants, title, roomId: groupRoomId, existingParticipants } = groups
   useEffect(() => () => groups.resetGroupChat(), [])
 
   const handlePresentModalPress = useCallback(() => {
@@ -63,10 +63,24 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
 
   const handleRemoveImage = () => {
     if (existingImage && groups.image === undefined) {
-      groups.setGroupChat({ ...groups, image: '' })
+      groups.setGroupChat({
+        id,
+        participants,
+        existingParticipants,
+        title,
+        roomId: groupRoomId,
+        image: '',
+      })
       return
     }
-    groups.setGroupChat({ ...groups, image: undefined })
+    groups.setGroupChat({
+      id,
+      participants,
+      existingParticipants,
+      title,
+      roomId: groupRoomId,
+      image: undefined,
+    })
   }
 
   return (
@@ -92,7 +106,7 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
       </View>
       <View style={styles.inputContainer}>
         <TextInput
-          maxLength={30}
+          maxLength={20}
           mode="outlined"
           contentStyle={styles.input}
           label="Group Name"

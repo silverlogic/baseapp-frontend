@@ -30,7 +30,6 @@ const Members: FC<MembersProps> = ({
   FabButtonProps = {},
   LoadingScreen = DefaultLoadingScreen,
   LoadingScreenProps = {},
-  roomId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
@@ -48,7 +47,7 @@ const Members: FC<MembersProps> = ({
       <View style={styles.addMemberContainer}>
         <FabButton
           onPress={() => {
-            router.push(`/edit-group-details/${roomId}/add-members`)
+            router.push(`/edit-group-details/${groupId}/add-members`)
           }}
           iconName="add"
           iconSize={28}
@@ -60,7 +59,7 @@ const Members: FC<MembersProps> = ({
           variant="subtitle2"
           color="high"
           onPress={() => {
-            router.push(`/edit-group-details/${roomId}/add-members`)
+            router.push(`/edit-group-details/${groupId}/add-members`)
           }}
         >
           Add Member
