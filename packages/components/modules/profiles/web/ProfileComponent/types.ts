@@ -3,4 +3,5 @@ import { ProfileComponentFragment$key } from '../../../../__generated__/ProfileC
 export interface ProfileComponentProps {
   profile: ProfileComponentFragment$key
   currentProfileId?: string
+  bannerFallback?: string
 }

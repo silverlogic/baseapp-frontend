@@ -8,12 +8,21 @@ import { AvatarWithPlaceholderProps } from './types'
 const AvatarWithPlaceholder: FC<AvatarWithPlaceholderProps> = ({
   width = 40,
   height = 40,
+  borderStyle = 'solid',
+  borderWidth = '2px',
   children,
   alt,
   showDeletedUser = false,
   ...props
 }) => (
-  <AvatarStyled width={width} height={height} alt={alt} {...props}>
+  <AvatarStyled
+    width={width}
+    height={height}
+    alt={alt}
+    borderStyle={borderStyle}
+    borderWidth={borderWidth}
+    {...props}
+  >
     {children ||
       (showDeletedUser ? (
         <AvatarDeletedUserIcon sx={{ fontSize: width }} titleAccess="Deleted User Avatar" />

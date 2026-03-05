@@ -31,7 +31,11 @@ import {
 } from './styled'
 import { ProfileComponentProps } from './types'
 
-const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, currentProfileId }) => {
+const ProfileComponent: FC<ProfileComponentProps> = ({
+  profile: profileRef,
+  currentProfileId,
+  bannerFallback = '/png/profile-banner-fallback.png',
+}) => {
   const profile = useFragment(ProfileComponentFragment, profileRef)
   const smDown = useResponsive('down', 'sm')
   const router = useRouter()
@@ -123,12 +127,14 @@ const ProfileComponent: FC<ProfileComponentProps> = ({ profile: profileRef, curr
     ),
   ].filter(Boolean)
 
+  const bannerSrc = profile?.bannerImage?.url || bannerFallback
+
   return (
     <div className="flex h-full w-full justify-center">
       <ProfileContainer>
         <ImageWithFallback
-          src={profile?.bannerImage?.url || '/png/profile-banner-fallback.png'}
-          fallbackSrc="/png/profile-banner-fallback.png"
+          src={bannerSrc}
+          fallbackSrc={bannerFallback}
           alt="Home Banner"
           width={868}
           height={

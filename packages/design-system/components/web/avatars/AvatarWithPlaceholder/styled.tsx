@@ -10,9 +10,9 @@ import { AvatarWithPlaceholderProps } from './types'
 
 export const AvatarStyled: ComponentType<AvatarWithPlaceholderProps> = styled(
   Avatar,
-)<AvatarWithPlaceholderProps>(({ theme, width, height }) => ({
+)<AvatarWithPlaceholderProps>(({ theme, width, height, borderStyle, borderWidth }) => ({
   width,
   height,
-  border: `solid 2px ${theme.palette.background.default}`,
+  border: `${borderStyle} ${borderWidth} ${theme.palette.background.default}`,
   backgroundColor: theme.palette.grey[300],
 })) as OverridableComponent<AvatarTypeMap<AvatarWithPlaceholderProps, 'div'>>
