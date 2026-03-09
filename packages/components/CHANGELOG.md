@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.9
+
+### Patch Changes
+
+- Remove member from group on mobile
+
 ## 1.5.8
 
 ### Patch Changes
