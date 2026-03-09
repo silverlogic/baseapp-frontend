@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.8
+
+### Patch Changes
+
+- Group chat updates on mobile
+
 ## 1.5.7
 
 ### Patch Changes

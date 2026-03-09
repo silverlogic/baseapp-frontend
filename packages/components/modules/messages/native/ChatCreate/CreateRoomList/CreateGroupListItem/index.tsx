@@ -29,6 +29,13 @@ const CreateGroupListItem = ({ profile: profileRef }: { profile: ProfileItemFrag
     }
   }
 
+  const isSelected = () => {
+    const { existingParticipants } = groups
+    const currentParticipants = groups.participants?.map((participant) => participant.id) || []
+    const allParticipants = [...(existingParticipants || []), ...currentParticipants]
+    return allParticipants.some((participant) => participant === node.id)
+  }
+
   return (
     <Pressable>
       <View style={styles.cardContainer}>
@@ -43,11 +50,8 @@ const CreateGroupListItem = ({ profile: profileRef }: { profile: ProfileItemFrag
         </View>
         <View style={styles.spacer} />
         <Checkbox.Android
-          status={
-            groups.participants?.some((participant) => participant.id === node.id)
-              ? 'checked'
-              : 'unchecked'
-          }
+          disabled={groups.existingParticipants?.some((participant) => participant === node.id)}
+          status={isSelected() ? 'checked' : 'unchecked'}
           onPress={onMemberPress}
           color={theme.colors.primary.main}
         />

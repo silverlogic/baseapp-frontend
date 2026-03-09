@@ -10,6 +10,7 @@ export const UpdateChatRoomMutationQuery = graphql`
       room {
         node {
           id
+          participantsCount
           ...LastMessageFragment
           ...TitleFragment
           ...UnreadMessagesCountFragment

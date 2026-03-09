@@ -12,14 +12,14 @@ import { ConnectionHandler } from 'relay-runtime'
 
 import { ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import { useChatRoom, useCreateChatRoomMutation } from '../../common'
-import DefaultEditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
-import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
-} from '../__shared__/constants'
-import { CreateOrEditGroup } from '../__shared__/types'
+} from '../../common/constants'
+import { CreateOrEditGroup } from '../../common/types'
+import DefaultEditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
+import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import DefaultHeader from './Header'
 import { ProfilesContainer } from './styled'
 import { GroupChatCreateProps } from './types'

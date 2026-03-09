@@ -16,9 +16,9 @@ import EmptyProfilesListState from '../__shared__/EmptyProfilesListState'
 import DefaultBody from './Body'
 import DefaultChatRoomListItem from './ChatRoomListItem'
 import DefaultHeader from './Header'
-import { SingleChatCreateProps } from './types'
+import { ChatCreateProps } from './types'
 
-const SingleChatCreate: FC<SingleChatCreateProps> = ({
+const ChatCreate: FC<ChatCreateProps> = ({
   allProfilesRef,
   Body = DefaultBody,
   BodyProps = {},
@@ -137,4 +137,4 @@ const SingleChatCreate: FC<SingleChatCreateProps> = ({
   )
 }
 
-export default SingleChatCreate
+export default ChatCreate
