@@ -42,7 +42,7 @@ const InvoiceListTable = ({
 
   return (
     <Box display="flex" flexDirection="column" gap={2}>
-      <Typography variant="h4" sx={{ p: 2 }} {...titleProps}>
+      <Typography variant="h4" {...titleProps}>
         {title ?? 'Subscription Receipts'}
       </Typography>
       {isLoading ? (

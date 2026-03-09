@@ -93,6 +93,7 @@
     "./profiles/common": "./modules/profiles/common/index.ts",
     "./profiles/web": "./modules/profiles/web/index.ts",
     "./profiles/native": "./modules/profiles/native/index.ts",
+    "./payments/web": "./modules/payments/web/index.ts",
     "./tests/common": "./modules/tests/common/index.ts",
     "./tests/web": "./modules/tests/web/index.ts",
     "./tests/native": "./modules/tests/native/index.ts",
