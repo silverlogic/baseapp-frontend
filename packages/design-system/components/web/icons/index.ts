@@ -44,3 +44,5 @@ export { default as UsernameIcon } from './UsernameIcon'
 export { default as PillIcon } from './PillIcon'
 export { default as ReplyIcon } from './ReplyIcon'
 export { default as SharePostIcon } from './SharePostIcon'
+
+export type * from './ChevronIcon/types'

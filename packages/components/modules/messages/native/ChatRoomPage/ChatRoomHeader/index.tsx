@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { useNameAndAvatar } from '@baseapp-frontend/components/messages/common'
+import { useTitleAndImage } from '@baseapp-frontend/components/messages/common'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
@@ -11,12 +11,12 @@ import { createStyles } from './styles'
 import { ChatRoomHeaderProps } from './types'
 
 const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({ roomHeader, onChatDetailsClicked }) => {
-  const { title, avatar } = useNameAndAvatar(roomHeader)
+  const { title, image } = useTitleAndImage(roomHeader)
   const styles = createStyles()
 
   return (
     <Pressable style={styles.profileCard} onPress={onChatDetailsClicked}>
-      <AvatarWithPlaceholder imgSource={avatar} size={32} />
+      <AvatarWithPlaceholder imgSource={image} size={32} />
       <View style={styles.profileInfo}>
         <Text variant="subtitle1">{title}</Text>
       </View>

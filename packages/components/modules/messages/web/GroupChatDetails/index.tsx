@@ -17,8 +17,8 @@ import {
   GroupDetailsQuery,
   MembersListFragment,
   useCheckIsAdmin,
-  useGroupNameAndAvatar,
   useRoomListSubscription,
+  useTitleAndImage,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
 import DefaultBody from './Body'
@@ -41,7 +41,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
 }) => {
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { currentProfile } = useCurrentProfile()
-  const { avatar, title } = useGroupNameAndAvatar(group)
+  const { image, title } = useTitleAndImage(group)
   const profileId = currentProfile?.id ?? ''
 
   const connections = group?.id
@@ -91,6 +91,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
           groupMember={item.node}
           initiateRemoval={initiateRemoval}
           hasAdminPermissions={isAdmin}
+          groupId={group?.id}
           {...ProfileCardProps}
         />
       )
@@ -134,7 +135,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
       />
       <Body
         title={title}
-        avatar={avatar}
+        avatar={image}
         participantsCount={group?.participantsCount}
         {...BodyProps}
       >

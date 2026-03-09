@@ -1,17 +1,39 @@
 import { FC } from 'react'
 
-import { FabButton } from '@baseapp-frontend/design-system/components/native/buttons'
+import {
+  Button,
+  FabButton as DefaultFabButton,
+} from '@baseapp-frontend/design-system/components/native/buttons'
+import { LoadingScreen as DefaultLoadingScreen } from '@baseapp-frontend/design-system/components/native/displays'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useRouter } from 'expo-router'
+
+import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
+import DefaultMemberItem from './MemberItem'
 import { createStyles } from './styles'
 import { MembersProps } from './type'
 
-const Members: FC<MembersProps> = ({ participantsCount }) => {
+const Members: FC<MembersProps> = ({
+  participantsCount,
+  members,
+  isLoadingNext,
+  hasNext,
+  loadNext,
+  currentProfileIsAdmin = false,
+  groupId,
+  MemberItem = DefaultMemberItem,
+  MemberItemProps = {},
+  FabButton = DefaultFabButton,
+  FabButtonProps = {},
+  LoadingScreen = DefaultLoadingScreen,
+  LoadingScreenProps = {},
+}) => {
   const theme = useTheme()
   const styles = createStyles(theme)
-
+  const router = useRouter()
   return (
     <View style={styles.membersContainer}>
       <View style={styles.membersTextContainer}>
@@ -24,17 +46,50 @@ const Members: FC<MembersProps> = ({ participantsCount }) => {
       </View>
       <View style={styles.addMemberContainer}>
         <FabButton
-          onPress={() => console.log('not implemented yet')}
+          onPress={() => {
+            router.push(`/edit-group-details/${groupId}/add-members`)
+          }}
           iconName="add"
           iconSize={28}
           iconColor={theme.colors.primary.contrast}
           style={styles.addMemberButton}
+          {...FabButtonProps}
         />
-        <Text variant="subtitle2" color="high">
+        <Text
+          variant="subtitle2"
+          color="high"
+          onPress={() => {
+            router.push(`/edit-group-details/${groupId}/add-members`)
+          }}
+        >
           Add Member
         </Text>
       </View>
-      {/* TODO: Implement Members List here */}
+      <View>
+        {(members?.edges ?? []).map((edge, index) => {
+          if (!edge?.node) return null
+
+          return (
+            <MemberItem
+              key={edge.node.id ?? `member-edge-${index}`}
+              groupMember={edge.node}
+              memberIsAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
+              currentProfileIsAdmin={currentProfileIsAdmin}
+              groupId={groupId}
+              {...MemberItemProps}
+            />
+          )
+        })}
+        {isLoadingNext ? (
+          <LoadingScreen size="small" {...LoadingScreenProps} />
+        ) : (
+          hasNext && (
+            <Button mode="text" size="medium" onPress={loadNext}>
+              Load More
+            </Button>
+          )
+        )}
+      </View>
     </View>
   )
 }

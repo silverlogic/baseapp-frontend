@@ -50,6 +50,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
 
   const isInArchivedTab = tab === CHAT_TAB_VALUES.archived
   const isInUnreadTab = tab === CHAT_TAB_VALUES.unread
+  const isInGroupTab = tab === CHAT_TAB_VALUES.groups
   const searchValue = watch('search')
 
   const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -60,6 +61,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: value,
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
+          isGroup: isInGroupTab,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -74,6 +76,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: '',
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
+          isGroup: isInGroupTab,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -89,6 +92,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
+          isGroup: newTab === CHAT_TAB_VALUES.groups,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -141,14 +145,22 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     )
   }
 
-  const renderTabLabel = (tabValue: ChatTabValues) => (
-    <Box display="grid" gap={1} gridTemplateColumns="1fr min-content" alignItems="center">
-      <Typography variant="subtitle2" color="text.primary">
-        {CHAT_TAB_LABEL[tabValue]}
-      </Typography>
-      {isRefetchPending && tab === tabValue && <CircularProgress size={15} />}
-    </Box>
-  )
+  const renderTabLabel = (tabValue: ChatTabValues) => {
+    const isLoadingTab = isRefetchPending && tab === tabValue
+
+    return (
+      <Box display="grid" gridTemplateColumns="1fr max-content" alignItems="center">
+        <Typography variant="subtitle2" color="text.primary">
+          {CHAT_TAB_LABEL[tabValue]}
+        </Typography>
+        <CircularProgress
+          size={15}
+          aria-hidden={!isLoadingTab}
+          sx={{ visibility: isLoadingTab ? 'visible' : 'hidden' }}
+        />
+      </Box>
+    )
+  }
 
   const renderListContent = () => {
     const hasEmptyStates = !isPending && chatRooms.length === 0
@@ -164,7 +176,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   return (
     <>
       <Header>
-        <Box display="grid" width="100%" gridTemplateColumns="auto min-content" gap={1}>
+        <Box display="grid" width="100%" gridTemplateColumns="auto max-content" gap={1}>
           <Typography variant="h4" component="span">
             Messages
           </Typography>
@@ -217,6 +229,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
         >
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
+          <Tab label={renderTabLabel(CHAT_TAB_VALUES.groups)} value={CHAT_TAB_VALUES.groups} />
           <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
         </Tabs>
         {renderListContent()}

@@ -1,6 +1,11 @@
-import { TitleFragment$data } from '../../../../../__generated__/TitleFragment.graphql'
+import { FC } from 'react'
+
+import { CircledAvatarProps } from '@baseapp-frontend/design-system/components/native/avatars'
+
+import { GroupDetailsQuery$data } from '../../../../../__generated__/GroupDetailsQuery.graphql'
 
 export interface GroupProfileProps {
-  roomHeader: TitleFragment$data
-  participantsCount?: number | null
+  group: GroupDetailsQuery$data['chatRoom']
+  CircledAvatar?: FC<CircledAvatarProps>
+  CircledAvatarProps?: Partial<CircledAvatarProps>
 }

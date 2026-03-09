@@ -27,5 +27,5 @@ export type * from './MessageUpdate/types'
 export { default as SendMessage } from './SendMessage'
 export type * from './SendMessage/types'
 
-export { default as SingleChatCreate } from './SingleChatCreate'
-export type * from './SingleChatCreate/types'
+export { default as ChatCreate } from './ChatCreate'
+export type * from './ChatCreate/types'

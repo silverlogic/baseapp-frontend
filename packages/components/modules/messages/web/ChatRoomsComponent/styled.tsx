@@ -15,7 +15,7 @@ export const ChatRoomContainer = styled(Box)<HidableContainerProps>(({ theme, hi
 export const ChatRoomsContainer = styled(ViewportHeightContainer)<ViewportHeightContainerProps>(
   ({ theme }) => ({
     display: 'grid',
-    gridTemplateColumns: '390px auto',
+    gridTemplateColumns: 'minmax(400px, max-content) minmax(0, 1fr)',
     alignItems: 'flex-start',
     justifyItems: 'center',
     borderRadius: theme.shape.borderRadius * 2,

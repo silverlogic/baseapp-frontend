@@ -7,9 +7,6 @@ import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 
-import { Box } from '@mui/material'
-import Divider from '@mui/material/Divider'
-
 // TODO: review importing components directly from another module
 import {
   AddProfileMenuItem as DefaultAddProfileMenuItem,
@@ -17,9 +14,8 @@ import {
   ProfilesList as DefaultProfilesList,
   SwitchProfileMenu as DefaultSwitchProfileMenu,
 } from '../../../../../profiles/web'
-import CurrentProfileMenu from './CurrentProfileMenu'
+import PopoverContent from '../__shared__/PopoverContent'
 import DefaultCurrentUser from './CurrentUser'
-import LogoutItem from './LogoutItem'
 import DefaultMenuItems from './MenuItems'
 import { PopoverStyles as DefaultPopoverStyles } from './styled'
 import { AccountPopoverProps } from './types'
@@ -80,32 +76,22 @@ const AccountPopover: FC<AccountPopoverProps> = ({
         onClose={handlePopoverOnClose}
         sx={{ ...DefaultPopoverStyles, ...PopoverStyles }}
       >
-        {!!ProfilesList && openProfilesList ? (
-          <ProfilesList
-            openSubmenu={openProfilesList}
-            handleCloseSubmenu={() => setOpenProfilesList(false)}
-            {...ProfilesListProps}
-          />
-        ) : (
-          <CurrentProfileMenu
-            CurrentUser={CurrentUser}
-            CurrentProfile={CurrentProfile}
-            SwitchProfileMenu={SwitchProfileMenu}
-            SwitchProfileMenuProps={SwitchProfileMenuProps}
-            MenuItems={MenuItems}
-            MenuItemsProps={MenuItemsProps}
-            handlePopoverOnClose={handlePopoverOnClose}
-            setOpenProfilesList={setOpenProfilesList}
-          />
-        )}
-
-        {Boolean(LogoutItem) && <Divider sx={{ borderStyle: 'solid' }} />}
-        <Box margin={1.5} display="flex" flexDirection="column" gap={0.5}>
-          {openProfilesList && Boolean(AddProfileMenuItem) && (
-            <DefaultAddProfileMenuItem {...AddProfileMenuItemProps} />
-          )}
-          <LogoutItem handlePopoverOnClose={handlePopoverOnClose} {...LogoutItemProps} />
-        </Box>
+        <PopoverContent
+          ProfilesList={ProfilesList}
+          ProfilesListProps={ProfilesListProps}
+          openProfilesList={openProfilesList}
+          setOpenProfilesList={setOpenProfilesList}
+          CurrentUser={CurrentUser}
+          CurrentProfile={CurrentProfile}
+          SwitchProfileMenu={SwitchProfileMenu}
+          SwitchProfileMenuProps={SwitchProfileMenuProps}
+          MenuItems={MenuItems}
+          MenuItemsProps={MenuItemsProps}
+          handlePopoverOnClose={handlePopoverOnClose}
+          AddProfileMenuItem={AddProfileMenuItem}
+          AddProfileMenuItemProps={AddProfileMenuItemProps}
+          LogoutItemProps={LogoutItemProps}
+        />
       </Popover>
     </>
   )

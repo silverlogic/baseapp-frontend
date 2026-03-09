@@ -13,12 +13,13 @@ import { useForm } from 'react-hook-form'
 
 import { useAllProfilesList } from '../../../../profiles/common'
 import { useUpdateChatRoomMutation } from '../../../common'
-import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
 import {
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
-} from '../../__shared__/constants'
-import { CreateOrEditGroup, ProfileNode } from '../../__shared__/types'
+} from '../../../common/constants'
+import { CreateOrEditGroup } from '../../../common/types'
+import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
+import { ProfileNode } from '../../__shared__/types'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
 import { Container as HeaderContainer } from '../Header/styled'

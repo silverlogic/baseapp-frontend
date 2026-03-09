@@ -18,4 +18,5 @@ export interface HeaderProps extends PropsWithChildren {
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
   ToolbarProps?: MuiToolbarProps
+  CustomAppBarProps?: Partial<CustomAppBarProps>
 }

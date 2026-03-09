@@ -3,8 +3,8 @@ import z from 'zod'
 import {
   CREATE_OR_EDIT_GROUP_FORM_VALUE,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION,
-} from '../__shared__/constants'
-import { CreateOrEditGroup } from '../__shared__/types'
+} from '../../common/constants'
+import { CreateOrEditGroup } from '../../common/types'
 
 export const getDefaultFormValues = (
   title: string,

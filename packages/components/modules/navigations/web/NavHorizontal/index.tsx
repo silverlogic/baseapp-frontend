@@ -16,12 +16,25 @@ import { HEADER_HEIGHT } from '../constants'
 import HeaderShadow from './HeaderShadow'
 import { NavHorizontalProps } from './types'
 
-const NavHorizontal: FC<NavHorizontalProps> = ({ navData, openNav, onCloseNav }) => {
+const NavHorizontal: FC<NavHorizontalProps> = ({
+  navData,
+  openNav,
+  onCloseNav,
+  slotProps,
+  VerticalDrawerProps,
+}) => {
   const theme = useTheme()
   const lgDown = useResponsive('down', 'lg')
 
   if (lgDown) {
-    return <VerticalDrawer navData={navData} openNav={openNav} onCloseNav={onCloseNav} />
+    return (
+      <VerticalDrawer
+        navData={navData}
+        openNav={openNav}
+        onCloseNav={onCloseNav}
+        DrawerProps={VerticalDrawerProps}
+      />
+    )
   }
 
   return (
@@ -47,7 +60,7 @@ const NavHorizontal: FC<NavHorizontalProps> = ({ navData, openNav, onCloseNav })
             },
           }}
         >
-          <NavSectionHorizontal navData={navData} />
+          <NavSectionHorizontal navData={navData} slotProps={slotProps} />
         </Scrollbar>
       </Toolbar>
       <HeaderShadow />

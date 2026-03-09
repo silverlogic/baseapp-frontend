@@ -19,3 +19,6 @@ export type * from './ProfileComponent/types'
 
 export { default as ProfileSettingsComponent } from './ProfileSettingsComponent'
 export type * from './ProfileSettingsComponent/types'
+
+export { default as CheckPermissionWrapper } from './CheckPermissionWrapper'
+export type * from './CheckPermissionWrapper/types'

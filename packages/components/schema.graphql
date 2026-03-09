@@ -105,10 +105,13 @@ type ChatRoom implements Node {
   lastMessageTime: DateTime
   participantsCount: Int!
   isGroup: Boolean!
-  participants(offset: Int, before: String, after: String, first: Int, last: Int): ChatRoomParticipantConnection
+  participants(offset: Int, before: String, after: String, first: Int, last: Int, q: String): ChatRoomParticipantConnection
   allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
   isArchived(profileId: ID): Boolean
+  otherParticipant: ChatRoomParticipant
+  isSoleAdmin: Boolean
+  participantIds: [ID]
 }
 
 input ChatRoomArchiveInput {
@@ -288,8 +291,24 @@ interface ChatRoomsInterface {
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
+    isGroup: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
+}
+
+input ChatRoomToggleAdminInput {
+  targetParticipantId: ID!
+  profileId: ID!
+  roomId: ID!
+  clientMutationId: String
+}
+
+type ChatRoomToggleAdminPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  participant: ChatRoomParticipantEdge
+  clientMutationId: String
 }
 
 input ChatRoomUnreadInput {
@@ -311,6 +330,7 @@ input ChatRoomUpdateInput {
   roomId: ID!
   profileId: ID!
   title: String
+  image: Upload
   deleteImage: Boolean = false
   addParticipants: [ID] = []
   removeParticipants: [ID] = []
@@ -345,11 +365,11 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -446,11 +466,11 @@ interface CommentsInterface {
   id: ID!
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -808,6 +828,7 @@ type Mutation {
   chatRoomReadMessages(input: ChatRoomReadMessagesInput!): ChatRoomReadMessagesPayload
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
+  chatRoomToggleAdmin(input: ChatRoomToggleAdminInput!): ChatRoomToggleAdminPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -1103,11 +1124,11 @@ type Page implements Node & PageInterface & PermissionsInterface & CommentsInter
   hasPerm(perm: String!): Boolean
   commentsCount: CommentsCount!
   comments(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -1261,7 +1282,22 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
-  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, profile_TargetContentType: ID): ChatRoomParticipantConnection!
+  profileCreatedRooms(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+    profileId: String
+    unreadMessages: Boolean
+    archived: Boolean
+    isGroup: Boolean
+  ): ChatRoomConnection!
+  chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection!
   unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
@@ -1304,6 +1340,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     profileId: String
     unreadMessages: Boolean
     archived: Boolean
+    isGroup: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
@@ -1834,6 +1871,12 @@ type UnreadMessageCountEdge {
   """A cursor for use in pagination"""
   cursor: String!
 }
+
+"""
+Create scalar that ignores normal serialization/deserialization, since
+that will be handled by the multipart request spec
+"""
+scalar Upload
 
 type URLPath implements Node {
   """The ID of the object"""
