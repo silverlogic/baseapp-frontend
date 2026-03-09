@@ -17,6 +17,8 @@ const GroupChatProvider: FC<PropsWithChildren> = ({ children }) => {
       ...INITIAL_GROUP_CHAT_STATE,
       setGroupChat: (state: GroupChatCreateState) => set(state),
       setParticipants: (participants: ProfileItemFragment$data[]) => set({ participants }),
+      setExistingParticipants: (existingParticipants: string[]) => set({ existingParticipants }),
+      setRoomId: (roomId: string) => set({ roomId }),
       resetGroupChat: () => set({ ...INITIAL_GROUP_CHAT_STATE }),
     }))
   }

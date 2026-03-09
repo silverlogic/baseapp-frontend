@@ -7,7 +7,6 @@ import { RecordProxy, RecordSourceSelectorProxy, Variables } from 'relay-runtime
 import { MembersListFragment$data } from '../../../__generated__/MembersListFragment.graphql'
 import { RoomTitleFragment$key } from '../../../__generated__/RoomTitleFragment.graphql'
 import { SingleChatDetailsFragment$key } from '../../../__generated__/SingleChatDetailsFragment.graphql'
-import { CHAT_ROOM_PARTICIPANT_ROLES } from './constants'
 import { RoomTitleFragment } from './graphql/fragments/RoomTitle'
 import { SingleChatDetailsFragment } from './graphql/fragments/SingleChatDetailsFragment'
 
@@ -80,6 +79,16 @@ export const getChatRoomConnections: (
   }
   return []
 }
+// Not ideal but added here to avoid circular dependency
+export const CHAT_ROOM_PARTICIPANT_ROLES = {
+  admin: 'ADMIN',
+  member: 'MEMBER',
+} as const
+// Not ideal but added here to avoid circular dependency
+export const MESSAGE_TYPE = {
+  user: 'USER_MESSAGE',
+  system: 'SYSTEM_GENERATED',
+} as const
 
 export const useCheckIsAdmin = (participants: MembersListFragment$data['participants']) => {
   const { currentProfile } = useCurrentProfile()

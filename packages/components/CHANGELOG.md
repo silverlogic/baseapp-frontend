@@ -1,5 +1,31 @@
 # @baseapp-frontend/components
 
+## 1.5.8
+
+### Patch Changes
+
+- Group chat updates on mobile
+
+## 1.5.7
+
+### Patch Changes
+
+- Allow disabling the sidebar footer (`NavAccountSection`).
+
+## 1.5.6
+
+### Patch Changes
+
+- Improve CustomAppBarProps
+
+## 1.5.5
+
+### Patch Changes
+
+- Add chevron icon customizations
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.4
+
 ## 1.5.4
 
 ### Patch Changes

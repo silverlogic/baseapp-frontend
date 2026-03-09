@@ -4,10 +4,8 @@ import { AddProfileMenuItemProps, ProfilesListProps } from '../../../../../../pr
 import { CurrentProfileMenuProps } from '../../AccountPopover/CurrentProfileMenu/types'
 import { LogoutItemProps } from '../../AccountPopover/LogoutItem/types'
 
-export interface PopoverContentProps extends Omit<
-  CurrentProfileMenuProps,
-  'handlePopoverOnClose' | 'setOpenProfilesList'
-> {
+export interface PopoverContentProps
+  extends Omit<CurrentProfileMenuProps, 'handlePopoverOnClose' | 'setOpenProfilesList'> {
   ProfilesList?: FC<ProfilesListProps>
   ProfilesListProps?: Partial<ProfilesListProps>
   openProfilesList: boolean
