@@ -21,10 +21,11 @@ import {
 } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRouter, useSearchParams } from 'next/navigation'
 
-import PaymentDropdown from '../CheckoutComponent/PaymentDropDown'
+import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
-import { CUSTOMER_API_KEY } from '../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
 import CancelSubscriptionModal from './CancelSubscriptionModal'
 import FreePlanComponent from './FreePlanComponent'
@@ -37,16 +38,16 @@ import {
 import { SubscriptionManagementProps } from './types'
 import { getChipLabelAndColorByStatus } from './utils'
 
-const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, router }) => {
+const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) => {
   const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
     useState<string | null>(null)
-
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [isCancelSubscriptionModalOpen, setIsCancelSubscriptionModalOpen] = useState(false)
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null)
 
   const queryClient = useQueryClient()
   const invalidateCustomer = () => {
-    queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
+    queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer(entityId)] })
   }
 
   const {
@@ -56,11 +57,12 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
     useUpdateSubscription,
     useGetCustomer,
   } = useStripeHook()
-  const { data: customer } = useGetCustomer(entityId)
-  const subscriptionId = customer?.subscriptions?.[0]?.id
-  const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscription(
-    subscriptionId ?? '',
-  )
+  const { data: customer, refetch: refetchCustomer } = useGetCustomer(entityId)
+  const {
+    data: subscription,
+    isLoading: isLoadingSubscription,
+    refetch: refetchSubscription,
+  } = useGetSubscription(subscriptionId ?? '')
   const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(
     subscription?.id ?? '',
@@ -69,29 +71,37 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   const { sendToast } = useNotification()
   const elements = useElements()
   const stripe = useStripe()
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const tabRedirect = searchParams.get('tab')
   const isLoading = isLoadingMethods || isLoadingSubscription
-  const { mutateAsync: updateSubscription } = useUpdateSubscription(
-    subscription?.id ?? '',
-    invalidateCustomer,
-    {
-      onSuccess: () => {
-        sendToast('Subscription updated successfully.', { type: 'success' })
-      },
-      onError: () => {
-        sendToast(`Failed to update payment method`, { type: 'error' })
-      },
+  const { mutateAsync: updateSubscription } = useUpdateSubscription(subscription?.id ?? '', {
+    onSuccess: () => {
+      invalidateCustomer()
+      queryClient.invalidateQueries({
+        queryKey: [
+          STRIPE_API_KEY.listPaymentMethods(),
+          STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
+        ],
+      })
+      sendToast('Subscription updated successfully.', { type: 'success' })
     },
-  )
+    onError: (error) => {
+      console.error('Error updating subscription:', error)
+      sendToast(`Failed to update payment method`, { type: 'error' })
+    },
+  })
 
   const amountDue = (subscription?.upcomingInvoice?.amountDue ?? 0) / 100
   const nextPaymentAttempt = formatDateFromApi(subscription?.upcomingInvoice?.nextPaymentAttempt)
-  const isSubscriptionActive = subscription?.status === 'active'
-  const hasActiveSubscription =
-    customer?.subscriptions?.length &&
-    customer.subscriptions.length > 0 &&
-    customer.subscriptions.some((sub) => sub.status === 'active')
+  const hasNextBill = subscription?.status === 'active'
+  const hasSubscription = customer?.subscriptions?.length && customer.subscriptions.length > 0
+  const marketingFeatures = subscription?.product?.marketingFeatures ?? []
   const selectedPaymentMethodId = useMemo(() => {
     if (!paymentMethods || paymentMethods.length === 0) return ''
+    if (lastAddedPaymentMethodIdDuringSession) {
+      return lastAddedPaymentMethodIdDuringSession
+    }
     if (subscription?.defaultPaymentMethod) {
       const defaultPM = paymentMethods.find((pm) => pm.id === subscription.defaultPaymentMethod)
       if (defaultPM) return defaultPM.id
@@ -112,6 +122,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
       await updateSubscription({
         defaultPaymentMethod: paymentMethodId,
       })
+      setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
     } catch (error) {
       console.error('Error updating subscription:', error)
     }
@@ -123,8 +134,20 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
     }
   }, [lastAddedPaymentMethodIdDuringSession])
 
-  if (!hasActiveSubscription && !isLoading) {
-    return <FreePlanComponent router={router} />
+  useEffect(() => {
+    if (customer?.subscriptions?.[0]?.id) {
+      setSubscriptionId(customer.subscriptions[0].id)
+      refetchSubscription()
+    }
+  }, [customer])
+
+  useEffect(() => {
+    if (!tabRedirect || tabRedirect !== 'subscription') return
+    refetchCustomer()
+  }, [tabRedirect])
+
+  if (!hasSubscription && !isLoading) {
+    return <FreePlanComponent onPlanChange={() => router.push('/subscriptions')} />
   }
 
   return (
@@ -147,60 +170,58 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
                 <Typography variant="body1" component="p">
                   {subscription?.product?.description ?? ''}
                 </Typography>
-                <RowFlexContainer>
-                  <List>
-                    {subscription?.product?.marketingFeatures?.map((feature) => (
-                      <ListItem sx={{ paddingLeft: 0 }} key={feature?.name}>
-                        <ListItemIcon>
-                          <Check />
-                        </ListItemIcon>
-                        <ListItemText primary={feature?.name ?? ''} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </RowFlexContainer>
+                {marketingFeatures.length > 0 && (
+                  <RowFlexContainer>
+                    <List>
+                      {marketingFeatures.map((feature) => (
+                        <ListItem sx={{ paddingLeft: 0 }} key={feature?.name}>
+                          <ListItemIcon>
+                            <Check />
+                          </ListItemIcon>
+                          <ListItemText primary={feature?.name ?? ''} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </RowFlexContainer>
+                )}
                 <Divider
                   sx={{
                     width: 'calc(100% + 48px)',
-                    marginLeft: '-24px',
+                    marginLeft: -3,
+                    marginY: 2,
                   }}
                 />
               </SubscriptionPlanContainer>
               <PaymentMethodContainer>
                 <ColumnFlexContainer>
                   <Typography variant="h6">Payment</Typography>
-                  {amountDue && nextPaymentAttempt && isSubscriptionActive && (
+                  {nextPaymentAttempt && hasNextBill && (
                     <Typography variant="body2">
-                      Your next bill is for <strong>${amountDue.toFixed(2)}</strong> on{' '}
-                      <strong>{nextPaymentAttempt}</strong>
+                      Your next bill is{' '}
+                      {amountDue !== 0 ? (
+                        <>
+                          for <strong>${amountDue.toFixed(2)}</strong>
+                        </>
+                      ) : (
+                        'free'
+                      )}{' '}
+                      on <strong>{nextPaymentAttempt}</strong>
                     </Typography>
                   )}
                 </ColumnFlexContainer>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '32px',
-                    width: '100%',
-                    flex: 1,
-                  }}
-                >
-                  <Box display="flex" sx={{ py: '8px' }}>
-                    {elements && stripe && (
-                      <PaymentDropdown
-                        handleSetupSuccess={handleSetupSuccess}
-                        entityId={entityId}
-                        paymentMethods={paymentMethods ?? []}
-                        selectedPaymentMethodId={selectedPaymentMethodId ?? ''}
-                        setSelectedPaymentMethodId={handleUpdateSubscription}
-                        elements={elements}
-                        stripe={stripe}
-                        isAddCardModalOpen={isAddCardModalOpen}
-                        setIsAddCardModalOpen={setIsAddCardModalOpen}
-                      />
-                    )}
-                  </Box>
-                </Box>
+                {elements && stripe && (
+                  <PaymentDropdown
+                    handleSetupSuccess={handleSetupSuccess}
+                    entityId={entityId}
+                    paymentMethods={paymentMethods ?? []}
+                    selectedPaymentMethodId={selectedPaymentMethodId ?? ''}
+                    setSelectedPaymentMethodId={handleUpdateSubscription}
+                    elements={elements}
+                    stripe={stripe}
+                    isAddCardModalOpen={isAddCardModalOpen}
+                    setIsAddCardModalOpen={setIsAddCardModalOpen}
+                  />
+                )}
               </PaymentMethodContainer>
             </CardContent>
           </Card>
@@ -240,7 +261,12 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
             onClose={() => setIsCancelSubscriptionModalOpen(false)}
             onConfirm={() => {
               cancelSubscription()
-              queryClient.invalidateQueries({ queryKey: [CUSTOMER_API_KEY.get(entityId)] })
+              queryClient.invalidateQueries({
+                queryKey: [
+                  STRIPE_API_KEY.getCustomer(entityId),
+                  STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
+                ],
+              })
               setIsCancelSubscriptionModalOpen(false)
             }}
           />
@@ -250,12 +276,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId, rou
   )
 }
 
-const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({
-  entityId,
-  router,
-}) => (
+const SubscriptionManagementWithElements: FC<SubscriptionManagementProps> = ({ entityId }) => (
   <Elements stripe={getStripePromise(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '')}>
-    <SubscriptionManagement entityId={entityId} router={router} />
+    <SubscriptionManagement entityId={entityId} />
   </Elements>
 )
 

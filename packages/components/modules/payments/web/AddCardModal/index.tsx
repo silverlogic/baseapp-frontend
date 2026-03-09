@@ -7,7 +7,7 @@ import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import { AddressElement, PaymentElement } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 
-import { PAYMENT_METHOD_API_KEY } from '../../services/keys'
+import { STRIPE_API_KEY } from '../services/stripe'
 import { AddCardModalProps } from './types'
 
 const AddCardModal: FC<AddCardModalProps> = ({
@@ -23,25 +23,19 @@ const AddCardModal: FC<AddCardModalProps> = ({
   const [isAddingCardPaymentProcessing, setIsAddingCardPaymentProcessing] = useState(false)
 
   const handleConfirmSetup = async () => {
-    if (!stripe || !elements) {
-      return
-    }
-
+    if (!stripe || !elements) return
     const addressElement = elements.getElement(AddressElement)
     if (!addressElement) {
       sendToast('Address element is missing. Please try again.', { type: 'error' })
       return
     }
-
     const addressValue = await addressElement.getValue()
     if (!addressValue.complete) {
       sendToast('Error confirming card: Incomplete address', { type: 'error' })
       return
     }
-
     try {
       setIsAddingCardPaymentProcessing(true)
-
       const { setupIntent, error } = await stripe.confirmSetup({
         elements,
         confirmParams: {
@@ -49,7 +43,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
         },
         redirect: 'if_required',
       })
-
       if (error) {
         sendToast(`Error confirming card: ${error.message || 'Unknown error'}`, {
           type: 'error',
@@ -57,7 +50,7 @@ const AddCardModal: FC<AddCardModalProps> = ({
         setIsAddingCardPaymentProcessing(false)
       } else {
         await queryClient.invalidateQueries({
-          queryKey: [PAYMENT_METHOD_API_KEY.get()],
+          queryKey: [STRIPE_API_KEY.listPaymentMethods()],
         })
         // renew the session is required to get the new payment method
         if (handleSetupSuccess) {
@@ -93,7 +86,6 @@ const AddCardModal: FC<AddCardModalProps> = ({
             <>
               <PaymentElement />
               <Typography variant="subtitle2">Billing Address</Typography>
-
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
               <AddressElement options={{ mode: 'billing' }} />
               <Box

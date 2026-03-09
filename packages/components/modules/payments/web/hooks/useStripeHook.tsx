@@ -3,20 +3,8 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
-import {
-  CANCEL_SUBSCRIPTION_API_KEY,
-  CONFIRM_CARD_PAYMENT_API_KEY,
-  CREATION_SUBSCRIPTION_API_KEY,
-  CUSTOMER_API_KEY,
-  INVOICE_API_KEY,
-  PAYMENT_METHOD_API_KEY,
-  PRODUCT_API_KEY,
-  SETUP_INTENT_API_KEY,
-  SUBSCRIPTION_API_KEY,
-  UPDATE_SUBSCRIPTION_API_KEY,
-} from '../services/keys'
-import StripeApi from '../services/stripe'
-import { CreateSubscriptionOptions, Subscription } from '../types'
+import { STRIPE_API_KEY, StripeApi } from '../services/stripe'
+import { CreateSubscriptionOptions, SetupIntent, UpdateSubscriptionOptions } from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -24,7 +12,7 @@ const useStripeHook = () => {
 
   const useGetCustomer = (entityId?: string) =>
     useQuery({
-      queryKey: [CUSTOMER_API_KEY.get(entityId?.toString() ?? 'me')],
+      queryKey: [STRIPE_API_KEY.getCustomer(entityId?.toString() ?? 'me')],
       queryFn: () => StripeApi.getCustomer(entityId),
     })
 
@@ -33,18 +21,28 @@ const useStripeHook = () => {
       mutationFn: (entityId?: string) => StripeApi.createCustomer(entityId),
     })
 
-  const useSetupIntent = (entityId: string) =>
+  const useSetupIntent = (
+    entityId: string,
+    options: {
+      onSuccess?: (setupIntent: SetupIntent) => void
+      onError?: (error: any) => void
+    } = {},
+  ) =>
     useMutation({
-      mutationFn: (id: string) => StripeApi.createSetupIntent(id),
+      mutationFn: () => StripeApi.createSetupIntent(entityId),
+      onSuccess: (setupIntent: SetupIntent) => {
+        options.onSuccess?.(setupIntent)
+      },
       onError: (error) => {
         sendToast(error.message, { type: 'error' })
+        options.onError?.(error)
       },
-      mutationKey: [SETUP_INTENT_API_KEY.get(entityId)],
+      mutationKey: [STRIPE_API_KEY.createSetupIntent(entityId)],
     })
 
   const useListPaymentMethods = (entityId: string) =>
     useQuery({
-      queryKey: [PAYMENT_METHOD_API_KEY.get(entityId.toString())],
+      queryKey: [STRIPE_API_KEY.listPaymentMethods(entityId.toString())],
       queryFn: () => StripeApi.listPaymentMethods(entityId),
       enabled: !!entityId,
     })
@@ -67,7 +65,7 @@ const useStripeHook = () => {
           defaultPaymentMethodId,
         }),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listPaymentMethods()] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -90,7 +88,7 @@ const useStripeHook = () => {
         isDefault: boolean
       }) => StripeApi.deletePaymentMethod(entityId, paymentMethodId, isDefault),
       onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: PAYMENT_METHOD_API_KEY.get() })
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listPaymentMethods()] })
         options.onSuccess?.()
       },
       onError: (error) => {
@@ -121,39 +119,60 @@ const useStripeHook = () => {
       onError: (error) => {
         sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
       },
-      mutationKey: [CONFIRM_CARD_PAYMENT_API_KEY.get()],
+      mutationKey: [STRIPE_API_KEY.confirmCardPayment()],
     })
 
   const useListProducts = () =>
     useQuery({
-      queryKey: ['useListProducts'],
+      queryKey: [STRIPE_API_KEY.listProducts()],
       queryFn: () => StripeApi.listProducts(),
     })
 
   const useGetProduct = (productId: string) =>
     useQuery({
-      queryKey: [PRODUCT_API_KEY.get(productId)],
+      queryKey: [STRIPE_API_KEY.getProduct(productId)],
       queryFn: () => StripeApi.getProduct(productId),
       enabled: !!productId,
     })
 
-  const useCreationSubscription = () =>
+  const useCreateSubscription = () =>
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
       onSuccess: () => {
-        console.log('Subscription created successfully:')
+        queryClient.invalidateQueries({
+          queryKey: [STRIPE_API_KEY.getCustomer(), STRIPE_API_KEY.getSubscription()],
+        })
       },
-      onError: (error) => {
-        sendToast(`Failed to create subscription: ${error.message}`, { type: 'error' })
-      },
-      mutationKey: [CREATION_SUBSCRIPTION_API_KEY.get()],
+      mutationKey: [STRIPE_API_KEY.createSubscription()],
     })
 
   const useGetSubscription = (subscriptionId: string) =>
     useQuery({
-      queryKey: [SUBSCRIPTION_API_KEY.get(subscriptionId)],
+      queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId)],
       queryFn: () => StripeApi.getSubscription(subscriptionId),
       enabled: !!subscriptionId,
+    })
+
+  const useUpdateSubscription = (
+    subscriptionId: string,
+    options: {
+      onSuccess?: () => void
+      onError?: (error: any) => void
+    } = {},
+  ) =>
+    useMutation({
+      mutationFn: (updateData: UpdateSubscriptionOptions) =>
+        StripeApi.updateSubscription(subscriptionId, updateData),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [STRIPE_API_KEY.getCustomer(), STRIPE_API_KEY.getSubscription()],
+        })
+        options?.onSuccess?.()
+      },
+      onError: (error) => {
+        options?.onError?.(error)
+      },
+      mutationKey: [STRIPE_API_KEY.updateSubscription(subscriptionId)],
     })
 
   const useCancelSubscription = (subscriptionId: string, refetch: () => void) =>
@@ -166,37 +185,12 @@ const useStripeHook = () => {
       onError: () => {
         sendToast(`Failed to cancel subscription`, { type: 'error' })
       },
-      mutationKey: [CANCEL_SUBSCRIPTION_API_KEY.get(subscriptionId)],
-    })
-
-  const useUpdateSubscription = (
-    subscriptionId: string,
-    refetch: () => void,
-    options: {
-      onSuccess?: (response: any, variables: Partial<Subscription>, context: any) => void
-      onError?: (error: any, variables: Partial<Subscription>, context: any) => void
-    } = {},
-  ) =>
-    useMutation({
-      mutationFn: (updateData: Partial<Subscription>) =>
-        StripeApi.updateSubscription(subscriptionId, updateData),
-      onSuccess: (response, variables, context) => {
-        queryClient.invalidateQueries({ queryKey: [PAYMENT_METHOD_API_KEY.get()] })
-
-        sendToast('Subscription updated successfully.', { type: 'success' })
-        refetch()
-        options?.onSuccess?.(response, variables, context)
-      },
-      onError: (error, variables, context) => {
-        sendToast(`Failed to update subscription: ${error.message}`, { type: 'error' })
-        options?.onError?.(error, variables, context)
-      },
-      mutationKey: [UPDATE_SUBSCRIPTION_API_KEY.get(subscriptionId)],
+      mutationKey: [STRIPE_API_KEY.cancelSubscription(subscriptionId)],
     })
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
     useQuery({
-      queryKey: [INVOICE_API_KEY.get(page.toString())],
+      queryKey: [STRIPE_API_KEY.listInvoices(page.toString())],
       queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 
@@ -210,7 +204,7 @@ const useStripeHook = () => {
     useConfirmCardPayment,
     useListProducts,
     useGetProduct,
-    useCreationSubscription,
+    useCreateSubscription,
     useGetSubscription,
     useCancelSubscription,
     useUpdateSubscription,
