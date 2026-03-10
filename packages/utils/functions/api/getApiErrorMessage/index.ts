@@ -9,7 +9,23 @@ export const getApiErrorMessage = (
   if (error?.message) {
     try {
       const parsedMessage = JSON.parse(error.message)
-      message = parsedMessage.detail || error.message
+      if (parsedMessage && typeof parsedMessage === 'object') {
+        if (parsedMessage.detail != null) {
+          message = parsedMessage.detail
+        } else {
+          const firstKey = Object.keys(parsedMessage)[0]
+          const potentialMessage = firstKey ? parsedMessage[firstKey] : undefined
+          if (potentialMessage !== undefined) {
+            message = isArray(potentialMessage)
+              ? potentialMessage.join(' ')
+              : String(potentialMessage)
+          } else {
+            message = error.message
+          }
+        }
+      } else {
+        message = error.message
+      }
     } catch {
       message = error.message
     }
