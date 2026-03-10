@@ -9,6 +9,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useRouter } from 'expo-router'
+
 import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import DefaultMemberItem from './MemberItem'
 import { createStyles } from './styles'
@@ -28,10 +30,11 @@ const Members: FC<MembersProps> = ({
   FabButtonProps = {},
   LoadingScreen = DefaultLoadingScreen,
   LoadingScreenProps = {},
+  setMemberToRemoveId,
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
-
+  const router = useRouter()
   return (
     <View style={styles.membersContainer}>
       <View style={styles.membersTextContainer}>
@@ -44,15 +47,22 @@ const Members: FC<MembersProps> = ({
       </View>
       <View style={styles.addMemberContainer}>
         <FabButton
-          // TODO: implement add member functionality
-          onPress={() => {}}
+          onPress={() => {
+            router.push(`/edit-group-details/${groupId}/add-members`)
+          }}
           iconName="add"
           iconSize={28}
           iconColor={theme.colors.primary.contrast}
           style={styles.addMemberButton}
           {...FabButtonProps}
         />
-        <Text variant="subtitle2" color="high">
+        <Text
+          variant="subtitle2"
+          color="high"
+          onPress={() => {
+            router.push(`/edit-group-details/${groupId}/add-members`)
+          }}
+        >
           Add Member
         </Text>
       </View>
@@ -67,6 +77,7 @@ const Members: FC<MembersProps> = ({
               memberIsAdmin={edge.node.role === CHAT_ROOM_PARTICIPANT_ROLES.admin}
               currentProfileIsAdmin={currentProfileIsAdmin}
               groupId={groupId}
+              setMemberToRemoveId={setMemberToRemoveId}
               {...MemberItemProps}
             />
           )

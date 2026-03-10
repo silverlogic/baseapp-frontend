@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
@@ -17,6 +17,7 @@ import {
   useArchiveChatRoomMutation,
   useCheckIsAdmin,
 } from '../../common'
+import { useGroupChatCreate } from '../../common/context/GroupChatProvider'
 import { LeaveGroupDialog as DefaultLeaveGroupDialog } from '../__shared__/LeaveGroupDialog'
 import { useMessagesListSubscription } from '../graphql/subscriptions/useMessagesListSubscription'
 import DefaultGroupProfile from './GroupProfile'
@@ -38,7 +39,16 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   const router = useRouter()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
+  const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
+  const groups = useGroupChatCreate()
+
+  const handleSetMemberToRemove = (id: string | null) => {
+    setMemberToRemoveId(id)
+    if (id) {
+      setOpenConfirmLeaveGroupDialog(true)
+    }
+  }
 
   const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
     GroupDetailsQuery,
@@ -48,6 +58,13 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
       fetchKey: roomId,
     },
   )
+
+  useEffect(() => {
+    if (group?.participantIds) {
+      groups.setExistingParticipants(group.participantIds.filter((id): id is string => id != null))
+    }
+    groups.setRoomId(roomId)
+  }, [roomId, group?.participantIds])
 
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     ChatRoomParticipantsPaginationQuery,
@@ -86,16 +103,19 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
         BackIcon={CloseIcon}
         CloseIcon={EditIcon}
         onClose={() => {
-          /* TODO: Implement edit action */
+          router.push(`/edit-group-details/${roomId}`)
         }}
       />
       {currentProfile?.id && (
         <LeaveGroupDialog
           open={openConfirmLeaveGroupDialog}
-          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          onClose={() => {
+            setMemberToRemoveId(null)
+            setOpenConfirmLeaveGroupDialog(false)
+          }}
           profileId={currentProfile?.id}
           roomId={roomId}
-          removingParticipantId={currentProfile?.id}
+          removingParticipantId={memberToRemoveId ?? currentProfile?.id}
           isSoleAdmin={isSoleAdmin}
           {...LeaveGroupDialogProps}
         />
@@ -110,6 +130,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
           hasNext={hasNext}
           currentProfileIsAdmin={currentProfileIsAdmin}
           groupId={roomId}
+          setMemberToRemoveId={handleSetMemberToRemove}
           {...MembersProps}
         />
         <Options

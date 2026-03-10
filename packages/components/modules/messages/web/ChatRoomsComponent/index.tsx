@@ -11,12 +11,12 @@ import { GroupDetailsQuery as GroupDetailsQueryType } from '../../../../__genera
 import { ChatRoomQuery, GroupDetailsQuery, useChatRoom } from '../../common'
 import { LEFT_PANEL_CONTENT } from '../../common/context/useChatRoom/constants'
 import DefaultAllChatRoomsList from '../AllChatRoomsList'
+import DefaultChatCreate from '../ChatCreate'
 import ChatRoom from '../ChatRoom'
 import DefaultGroupChatCreate from '../GroupChatCreate'
 import DefaultGroupChatDetails from '../GroupChatDetails'
 import DefaultGroupChatEdit from '../GroupChatEdit'
 import DefaultProfileSummary from '../ProfileSummary'
-import DefaultSingleChatCreate from '../SingleChatCreate'
 import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
 import { ChatRoomsComponentProps } from './types'
 
@@ -31,8 +31,8 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   GroupChatDetailsComponentProps = {},
   GroupChatEditComponent = DefaultGroupChatEdit,
   GroupChatEditComponentProps = {},
-  SingleChatCreateComponent = DefaultSingleChatCreate,
-  SingleChatCreateComponentProps = {},
+  ChatCreateComponent = DefaultChatCreate,
+  ChatCreateComponentProps = {},
   ProfileSummaryComponent = DefaultProfileSummary,
 }) => {
   const isUpToMd = useResponsive('up', 'md')
@@ -99,14 +99,14 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
         )
       case LEFT_PANEL_CONTENT.createChat:
         return (
-          <SingleChatCreateComponent
+          <ChatCreateComponent
             allProfilesRef={chatRoomsQueryData}
             onHeaderClick={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onChatCreation={() => setLeftPanelContent(LEFT_PANEL_CONTENT.chatRoomList)}
             onGroupChatCreationButtonClicked={() =>
               setLeftPanelContent(LEFT_PANEL_CONTENT.createGroupChat)
             }
-            {...SingleChatCreateComponentProps}
+            {...ChatCreateComponentProps}
           />
         )
       case LEFT_PANEL_CONTENT.profileSummary:

@@ -24,11 +24,11 @@ import {
   useTitleAndImage,
   useUpdateChatRoomMutation,
 } from '../../common'
+import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../../common/constants'
+import { CreateOrEditGroup } from '../../common/types'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
-import { CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE } from '../__shared__/constants'
-import { CreateOrEditGroup } from '../__shared__/types'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import DefaultHeader from './Header'

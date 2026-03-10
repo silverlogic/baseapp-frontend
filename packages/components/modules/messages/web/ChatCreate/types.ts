@@ -9,7 +9,7 @@ import { BodyProps } from './Body/types'
 import { ChatRoomListItemProps } from './ChatRoomListItem/types'
 import { HeaderProps } from './Header/types'
 
-export interface SingleChatCreateProps extends PropsWithChildren {
+export interface ChatCreateProps extends PropsWithChildren {
   allProfilesRef: ChatRoomsQuery$data
   Body?: FC<BodyProps>
   BodyProps?: Partial<BodyProps>

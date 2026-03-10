@@ -28,7 +28,7 @@ export const LEAVE_GROUP_DIALOG_TEXT_COPY = {
   },
   [LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_REMOVING]: {
     [LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN]: {
-      [LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE]: 'Remove from chat?',
+      [LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE]: 'Remove group member?',
       [LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT]:
         'Are you sure you want to remove this person from the conversation? They will no longer be able to send or receive new messages.',
     },
