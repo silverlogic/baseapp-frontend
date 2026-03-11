@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.5
+
+### Patch Changes
+
+- `TextareaField` can now be resizable. It also got style tweaks.
+
 ## 1.2.4
 
 ### Patch Changes
