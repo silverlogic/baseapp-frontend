@@ -3,7 +3,6 @@
 import { FC } from 'react'
 
 import { useResponsive, useUISettings } from '@baseapp-frontend/design-system/hooks/web'
-import { AttachmentIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useBoolean } from '@baseapp-frontend/utils'
 
 import Box from '@mui/material/Box'

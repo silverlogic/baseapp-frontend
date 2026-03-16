@@ -24,6 +24,7 @@ const createTheme = (mode: ThemeMode = 'light') =>
       themeLayout: 'vertical' as ThemeLayout,
       themeColorPresets: 'default' as PresetType,
       themeStretch: false,
+      collapsedSidebar: false,
     },
     shadows: createShadows(mode),
     customShadows: createCustomShadows(mode),

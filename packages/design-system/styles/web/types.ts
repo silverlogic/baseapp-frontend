@@ -27,7 +27,7 @@ export type UISettings = {
   themeContrast: ThemeContrast
   themeLayout: ThemeLayout
   themeColorPresets: PresetType
-  collapsedSidebar: boolean
+  collapsedSidebar?: boolean
 }
 
 export type ColorScheme = {

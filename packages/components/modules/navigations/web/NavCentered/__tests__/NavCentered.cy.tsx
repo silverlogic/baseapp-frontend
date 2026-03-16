@@ -19,6 +19,7 @@ const defaultTheme = {
     themeLayout: 'centered',
     themeColorPresets: 'default',
     themeStretch: false,
+    collapsedSidebar: false,
   },
   shadows: createShadows('light'),
   customShadows: createCustomShadows('light'),

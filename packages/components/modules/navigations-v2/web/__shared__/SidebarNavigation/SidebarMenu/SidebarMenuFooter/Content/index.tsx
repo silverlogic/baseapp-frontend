@@ -7,22 +7,6 @@ const Content: FC = () => (
   <div>
     <Typography variant="caption">Footer Content</Typography>
     <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
-    <Typography variant="caption">Footer Content</Typography>
   </div>
 )
 
