@@ -1,3 +1,5 @@
+import React from 'react'
+
 import { BoxProps } from '@mui/material'
 
 export interface LogoContainerProps extends BoxProps {

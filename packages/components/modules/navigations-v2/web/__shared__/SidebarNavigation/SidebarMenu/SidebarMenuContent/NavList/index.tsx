@@ -38,14 +38,12 @@ const NavList: FC<NavListProps> = ({ navList, slots, slotProps }) => {
             sx={{ paddingX: (theme) => theme.spacing(2) }}
             {...slotProps?.ListRoot}
           >
-            {navList.children
-              ?.filter((child) => !child.hide)
-              .map((child) => (
-                <ListItem.Root key={child.title} {...child} {...slotProps?.ListItem}>
-                  <ListItem.Icon Icon={child.icon} />
-                  <ListItem.Title title={child.title} caption={child.caption} />
-                </ListItem.Root>
-              ))}
+            {filteredChildren?.map((child) => (
+              <ListItem.Root key={child.title} {...child} {...slotProps?.ListItem}>
+                <ListItem.Icon Icon={child.icon} />
+                <ListItem.Title title={child.title} caption={child.caption} />
+              </ListItem.Root>
+            ))}
           </ListRoot>
         </>
       )}

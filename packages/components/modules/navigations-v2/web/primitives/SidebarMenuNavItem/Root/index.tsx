@@ -18,6 +18,7 @@ const Root: FC<RootProps> = ({
   const component = componentType === 'button' || !path ? 'button' : Link
   const target = componentType === 'externalLink' ? '_blank' : undefined
   const rel = componentType === 'externalLink' ? 'noopener' : undefined
+  const { sx: sxProps, ...otherProps } = props
 
   if (hide) return null
 
@@ -42,8 +43,9 @@ const Root: FC<RootProps> = ({
             color: (theme) => theme.palette.primary.main,
           },
         }),
+        ...sxProps,
       }}
-      {...props}
+      {...otherProps}
     >
       {children}
     </ListItemButton>

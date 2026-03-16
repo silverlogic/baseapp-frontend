@@ -11,21 +11,24 @@ const SidebarMenuContent: FC<SidebarMenuContentProps> = ({
   navData,
   sx,
   ...props
-}) => (
-  <Scrollbar
-    sx={{
-      height: 1,
-      '& .simplebar-content': {
+}) => {
+  const renderNav = createNavRenderer(slots ?? {}, slotProps ?? {})
+  return (
+    <Scrollbar
+      sx={{
         height: 1,
-        display: 'flex',
-        flexDirection: 'column',
-      },
-      ...sx,
-    }}
-    {...props}
-  >
-    {navData?.map((nav, idx) => createNavRenderer(slots ?? {}, slotProps ?? {})(nav, idx))}
-  </Scrollbar>
-)
+        '& .simplebar-content': {
+          height: 1,
+          display: 'flex',
+          flexDirection: 'column',
+        },
+        ...sx,
+      }}
+      {...props}
+    >
+      {navData?.map((nav, idx) => renderNav(nav, idx))}
+    </Scrollbar>
+  )
+}
 
 export default SidebarMenuContent
