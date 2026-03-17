@@ -131,7 +131,8 @@
     "react-native-reanimated": "catalog:react-native",
     "react-native-svg": "catalog:react-native",
     "simplebar-react": "catalog:",
-    "zustand": "catalog:"
+    "zustand": "catalog:",
+    "@mdxeditor/editor": "catalog:"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",
