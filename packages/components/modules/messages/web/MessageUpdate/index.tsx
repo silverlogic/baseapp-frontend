@@ -2,6 +2,7 @@
 
 import { FC, useEffect, useRef } from 'react'
 
+import { MarkdownEditor } from '@baseapp-frontend/design-system/components/web/inputs'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -143,6 +144,9 @@ const MessageUpdate: FC<MessageUpdateProps> = ({
         disabled: isMutationInFlight,
         ariaLabel: 'save message edit',
         cancelAriaLabel: 'cancel message edit',
+      }}
+      SocialTextFieldProps={{
+        TextField: MarkdownEditor,
       }}
       {...SocialInputProps}
     />
