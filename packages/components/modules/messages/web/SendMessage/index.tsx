@@ -3,6 +3,7 @@
 import { forwardRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { MarkdownEditor } from '@baseapp-frontend/design-system/components/web/inputs'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -149,6 +150,9 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         form={form}
         submit={onSubmit}
         isLoading={isMutationInFlight}
+        SocialTextFieldProps={{
+          TextField: MarkdownEditor,
+        }}
         {...SocialInputProps}
       />
     )

@@ -25,6 +25,7 @@ catalog:
   zod: 3.25.7
   zustand: 5.0.4
   react-multi-carousel: 2.8.6
+  "@mdxeditor/editor": 3.52.4
 
 catalogs:
   react19:

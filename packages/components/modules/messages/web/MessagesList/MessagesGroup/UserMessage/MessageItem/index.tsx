@@ -2,20 +2,19 @@ import { FC, useRef, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import {
-  BlockIcon,
   CopyIcon,
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 import { useNotification } from '@baseapp-frontend/utils'
 
-import { Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { ActionsOverlay, HOVER_OVERLAY_MODES } from '../../../../../../__shared__/web'
 import { MessageItemFragment } from '../../../../../common'
 import { useMessageDeleteMutation } from '../../../../../common/graphql/mutations/MessageDelete'
 import MessageUpdate from '../../../../MessageUpdate'
+import MessageContent from './MessageContent'
 import { MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 
@@ -61,28 +60,7 @@ const MessageItem: FC<MessageItemProps> = ({
       return <MessageUpdate message={message} onCancel={() => setIsEditMode(false)} />
     }
 
-    let messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
-
-    if (deletedMessage) {
-      messageColor = 'text.disabled'
-    }
-
-    return (
-      <Typography
-        variant="body2"
-        color={messageColor}
-        sx={{
-          maxWidth: '100%',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'normal',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {deletedMessage && <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} />}
-        {deletedMessage && ' '}
-        {message?.content}
-      </Typography>
-    )
+    return <MessageContent message={message} />
   }
 
   return (
