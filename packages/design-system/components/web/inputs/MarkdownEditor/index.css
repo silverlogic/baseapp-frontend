@@ -5,3 +5,41 @@
   width: 100%;
   max-width: 100%;
 }
+
+.mdxeditor-popup-container {
+  z-index: 1000;
+}
+
+.mdxeditor {
+  width: 100%;
+  display: grid;
+}
+
+.mdxeditor-toolbar {
+  max-width: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.mdxeditor-root-contenteditable ul li[role="checkbox"] {
+  text-indent: 1.8rem;
+  margin-inline-start:0;
+  padding:0;
+}
+
+.mdxeditor-root-contenteditable li[role="checkbox"]::before {
+  transform: translate(0px, 4px)
+}
+
+.mdxeditor ol{
+  list-style: decimal inside;
+}
+
+.mdxeditor ul{
+  list-style: inside;
+}
+
+.mdxeditor h2{
+  font-size: 1.5em;
+  font-weight: 700;
+}

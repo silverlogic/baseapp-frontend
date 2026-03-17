@@ -1,3 +1,4 @@
+import { Divider } from '@mui/material'
 import Link from '@mui/material/Link'
 import ReactMarkdown from 'react-markdown'
 import rehypeHighlight from 'rehype-highlight'
@@ -28,6 +29,7 @@ const components = {
       </Link>
     )
   },
+  hr: ({ ...props }) => <Divider {...props} />,
 }
 
 export default function Markdown({ sx, ...other }: MarkdownProps) {
