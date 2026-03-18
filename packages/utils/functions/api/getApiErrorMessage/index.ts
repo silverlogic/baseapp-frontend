@@ -11,7 +11,9 @@ export const getApiErrorMessage = (
       const parsedMessage = JSON.parse(error.message)
       if (parsedMessage && typeof parsedMessage === 'object') {
         if (parsedMessage.detail != null) {
-          message = parsedMessage.detail
+          message = isArray(parsedMessage.detail)
+            ? parsedMessage.detail.join(' ')
+            : parsedMessage.detail
         } else {
           const firstKey = Object.keys(parsedMessage)[0]
           const potentialMessage = firstKey ? parsedMessage[firstKey] : undefined
