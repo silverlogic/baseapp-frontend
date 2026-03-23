@@ -688,10 +688,9 @@ type Follow implements Node {
   created: DateTime!
   modified: DateTime!
   user: User
-  actor: Profile!
   targetIsFollowingBack: Boolean!
-  target: Profile!
-  pk: Int
+  actorObject: Node
+  targetObject: Node
 }
 
 type FollowConnection {
@@ -1243,8 +1242,6 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   modified: DateTime!
   blockersCount: Int
   blockingCount: Int
-  followersCount: Int
-  followingCount: Int
   reportsCount: GenericScalar
   commentsCount: JSONString!
   isCommentsEnabled: Boolean!
@@ -1312,8 +1309,6 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     """Ordering"""
     orderBy: String
   ): ContentPostConnection!
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   organization: Organization
@@ -1325,6 +1320,10 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   urlPath: URLPath
   urlPaths: [URLPath]
   metadata: Metadata
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followersCount: Int
+  followingCount: Int
   isFollowedByMe(profileId: ID): Boolean
   isBlockedByMe(profileId: ID): Boolean
   chatRooms(
@@ -1368,8 +1367,8 @@ input ProfileCreateInput {
   biography: String
   urlPath: String
   target: String
-  targetContentType: String!
-  targetObjectId: Int!
+  targetContentType: String
+  targetObjectId: Int
   clientMutationId: String
 }
 
