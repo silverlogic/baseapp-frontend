@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 1.6.0
+
+### Minor Changes
+
+- Added the useRequestEmailChange hook and some icons and ilustrations
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.0
+  - @baseapp-frontend/graphql@2.0.0
+
 ## 1.5.11
 
 ### Patch Changes
