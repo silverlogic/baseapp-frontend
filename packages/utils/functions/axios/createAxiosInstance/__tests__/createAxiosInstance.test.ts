@@ -1,6 +1,9 @@
 import humps from 'humps'
 
 import { createAxiosInstance } from '..'
+import { awaitSessionRecovery } from '../../../auth/awaitSessionRecovery'
+
+var mockRequest = jest.fn()
 
 jest.mock('humps', () => ({
   decamelize: jest.fn().mockImplementation((key) => key.replace(/([A-Z])/g, '_$1').toLowerCase()),
@@ -11,6 +14,7 @@ jest.mock('axios', () => ({
   ...jest.requireActual('axios'),
   create: () => ({
     defaults: jest.requireActual('axios').create().defaults,
+    request: mockRequest,
     interceptors: {
       ...jest.requireActual('axios').create().interceptors,
       request: { eject: jest.fn(), use: jest.fn() },
@@ -22,29 +26,16 @@ jest.mock('js-cookie', () => ({
   ...jest.requireActual('js-cookie'),
   get: () => 'someLanguage',
 }))
-jest.mock('../../../token/decodeJWT', () => ({
-  decodeJWT: jest.fn(() => ({ exp: 1234567890 })),
-}))
-jest.mock('../../../token/isUserTokenValid', () => ({
-  isUserTokenValid: jest.fn(() => true),
-}))
-jest.mock('../../../token/refreshAccessToken', () => ({
-  refreshAccessToken: jest.fn().mockResolvedValue('refreshedAuthToken'),
-}))
 jest.mock('../../../token/getToken', () => ({
   getToken: jest.fn().mockReturnValue('someAuthToken'),
 }))
 jest.mock('../../../token/getTokenSSR', () => ({
   getTokenSSR: jest.fn().mockResolvedValue('someAuthToken'),
 }))
-jest.mock('../../../events', () => ({
-  eventEmitter: {
-    emit: jest.fn(),
-    listenerCount: jest.fn().mockReturnValue(1),
-  },
+jest.mock('../../../auth/awaitSessionRecovery', () => ({
+  awaitSessionRecovery: jest.fn().mockResolvedValue('cleared'),
 }))
 
-// Mock the global window object
 Object.defineProperty(global, 'window', {
   value: {},
   writable: true,
@@ -280,6 +271,91 @@ describe('createAxiosInstance', () => {
     expect(request.params).toEqual(params)
   })
 
+  describe('stateless transport', () => {
+    it('should not decode tokens or call refresh in the request interceptor', async () => {
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+
+      const request = {
+        headers: { Authorization: undefined },
+        url: 'someUrl',
+      }
+
+      const result = await interceptorFn(request)
+
+      expect(result.headers.Authorization).toBe('Bearer someAuthToken')
+    })
+
+    it('should call awaitSessionRecovery on 401 response in response interceptor', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('cleared')
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: {} },
+      }
+
+      await expect(errorHandler(error)).rejects.toBeDefined()
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          source: 'axios',
+          path: '/api/test',
+          status: 401,
+        }),
+      )
+    })
+
+    it('should not call awaitSessionRecovery on non-401 errors', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 403,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Forbidden' },
+        },
+        config: { url: '/api/test', headers: {} },
+      }
+
+      await expect(errorHandler(error)).rejects.toBeDefined()
+
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
+    })
+  })
+
   describe('SSR functionality', () => {
     let originalWindow: any
 
@@ -315,51 +391,7 @@ describe('createAxiosInstance', () => {
       await interceptorFn(request)
 
       expect(getTokenSSRMock).toHaveBeenCalledWith('Authorization')
-      expect(getTokenSSRMock).toHaveBeenCalledWith('Refresh')
       expect(request.headers.Authorization).toBe('Bearer ssr-access-token')
-    })
-
-    it('should handle SSR token refresh when token is invalid', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-
-      const getTokenSSRMock = getTokenSSR as jest.Mock
-      getTokenSSRMock
-        .mockResolvedValueOnce('invalid-access-token') // access token
-        .mockResolvedValueOnce('ssr-refresh-token') // refresh token
-
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
-      isUserTokenValidMock.mockReturnValue(false)
-
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-      refreshAccessTokenMock.mockResolvedValue('new-ssr-access-token')
-
-      const {
-        axios: {
-          interceptors: {
-            request: { use },
-          },
-        },
-      } = createAxiosInstance()
-
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
-
-      const request = {
-        headers: { Authorization: undefined },
-        url: 'someUrl',
-      }
-
-      await interceptorFn(request)
-
-      expect(getTokenSSRMock).toHaveBeenCalledWith('Authorization')
-      expect(getTokenSSRMock).toHaveBeenCalledWith('Refresh')
-      expect(refreshAccessToken).toHaveBeenCalledWith({
-        refreshToken: 'ssr-refresh-token',
-        accessKeyName: 'Authorization',
-        refreshKeyName: 'Refresh',
-      })
-      expect(request.headers.Authorization).toBe('Bearer new-ssr-access-token')
     })
 
     it('should not use getTokenSSR when no auth is required in SSR', async () => {
@@ -389,76 +421,137 @@ describe('createAxiosInstance', () => {
       expect(getTokenSSRMock).toHaveBeenCalled()
       expect(request.headers.Authorization).toBeUndefined()
     })
+  })
 
-    it('should handle SSR token refresh failure by emitting logout event', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-      const { eventEmitter } = require('../../../events')
+  describe('401 retry-once flow', () => {
+    it('should retry once and return data when refresh resolves as refreshed', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('refreshed')
 
-      const getTokenSSRMock = getTokenSSR as jest.Mock
-      getTokenSSRMock
-        .mockResolvedValueOnce('invalid-access-token') // access token
-        .mockResolvedValueOnce('ssr-refresh-token') // refresh token
+      const { getToken } = require('../../../token/getToken')
+      ;(getToken as jest.Mock).mockReturnValue('new-refreshed-token')
 
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
-      isUserTokenValidMock.mockReturnValue(false)
-
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-      refreshAccessTokenMock.mockRejectedValue(new Error('Refresh failed'))
+      mockRequest.mockResolvedValue({ data: 'retried-success' })
 
       const {
         axios: {
           interceptors: {
-            request: { use },
+            response: { use },
           },
         },
       } = createAxiosInstance()
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
 
-      const request = {
-        headers: { Authorization: undefined },
-        url: 'someUrl',
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: {} },
       }
 
-      await expect(interceptorFn(request)).rejects.toThrow('Refresh failed')
+      const result = await errorHandler(error)
 
-      expect(eventEmitter.emit).toHaveBeenCalledWith('logout')
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(mockRequest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          authRecoveryRetried: true,
+          headers: expect.objectContaining({
+            Authorization: 'Bearer new-refreshed-token',
+          }),
+        }),
+      )
+      expect(result).toEqual({ data: 'retried-success' })
     })
 
-    it('should not attempt to refresh token if refreshToken is false in SSR', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-
-      const getTokenSSRMock = getTokenSSR as jest.Mock
-      getTokenSSRMock.mockResolvedValue('invalid-access-token')
-
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
-      isUserTokenValidMock.mockReturnValue(false)
-
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    it('should reject when refresh resolves as cleared', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('cleared')
 
       const {
         axios: {
           interceptors: {
-            request: { use },
+            response: { use },
           },
         },
-      } = createAxiosInstance({ refreshToken: false })
+      } = createAxiosInstance()
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
 
-      const request = {
-        headers: { Authorization: undefined },
-        url: 'someUrl',
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: {} },
       }
 
-      await interceptorFn(request)
+      await expect(errorHandler(error)).rejects.toBeDefined()
 
-      expect(refreshAccessTokenMock).not.toHaveBeenCalled()
-      expect(request.headers.Authorization).toBe('Bearer invalid-access-token')
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(mockRequest).not.toHaveBeenCalled()
+    })
+
+    it('should not retry a second time if authRecoveryRetried is already true', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: {}, authRecoveryRetried: true },
+      }
+
+      await expect(errorHandler(error)).rejects.toBeDefined()
+
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
+      expect(mockRequest).not.toHaveBeenCalled()
+    })
+
+    it('should not call awaitSessionRecovery for non-auth-required paths on 401', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance({
+        servicesWithoutToken: [/\/public/],
+      })
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/public/endpoint', headers: {} },
+      }
+
+      await expect(errorHandler(error)).rejects.toBeDefined()
+
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
     })
   })
 

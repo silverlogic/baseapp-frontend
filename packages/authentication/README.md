@@ -4,6 +4,8 @@
 
 This package includes authentication modules such as login, signup, reset password, multifactor authentication and more.
 
+It also includes strategy-based authentication configuration and shared session utilities for client, SSR, and middleware authentication flows.
+
 ## **Installation**
 
 You can install the package via npm, yarn or pnpm:
@@ -16,6 +18,51 @@ yarn add @baseapp-frontend/authentication
 pnpm install @baseapp-frontend/authentication
 ```
 
+## **Strategy Configuration**
+
+The active authentication strategy is selected through:
+
+```bash
+NEXT_PUBLIC_AUTH_STRATEGY=allauth
+```
+
+Unsupported values fail fast.
+
+Only one authentication strategy can be active at a time.
+
+## **Session and Middleware**
+
+### **useSession**
+
+Use `useSession` for client-side session state:
+
+```tsx
+import { useSession } from '@baseapp-frontend/authentication'
+
+const { user, isAuthenticated, isLoading } = useSession()
+```
+
+### **SSR session checks**
+
+Use the SSR session contract helper for server-side authentication checks:
+
+- `session/getServerSessionContract`
+
+The session contract exposes:
+
+- `isAuthenticated()`
+- `resolveUser()`
+
+### **Middleware**
+
+Middleware should delegate authentication evaluation to the session evaluator:
+
+```ts
+const state = await evaluateRequestSession(request)
+```
+
+Middleware should use the evaluated session state to decide redirects and cookie mutations. Middleware should not implement refresh logic inline.
+
 ## **What is in here?**
 
 ### **useLogin**
@@ -24,15 +71,10 @@ Handles login/mfa form and execute the login. Extends all ReactQuery's useMutati
 
 #### **Parameters**
 
-- `validationSchema` (optional)
+- `loginFormOptions` (optional)
 
-  - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
-    The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
-    This schema is used to validate the form values before submission.
-
-- `defaultValues` (optional)
-
-  - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
+  - This object is used to provide additional configuration to the `react-hook-form` instance used by the login form.
+    Validation and default values for the login form should be configured through this object.
 
 - `loginOptions` (optional)
 
@@ -144,6 +186,10 @@ Handles password reset form and sends a request for password reset. Extends all 
 
 #### **Parameters**
 
+- `token`
+
+  - This is the password reset token required by the reset password flow.
+
 - `validationSchema` (optional)
 
   - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
@@ -195,18 +241,19 @@ Handles sign-up form and sends a request for registration. Extends all ReactQuer
 
 #### **Parameters**
 
-- `validationSchema` (optional)
+- `formOptions` (optional)
 
-  - This is a validation schema used with Yup, a JavaScript object schema validator and builder.
-    The default value for validationSchema is `DEFAULT_VALIDATION_SCHEMA`.
-    This schema is used to validate the form values before submission.
+  - This object is used to provide additional configuration to the `react-hook-form` instance used by the sign-up form.
 
 - `defaultValues` (optional)
 
-  - This is an object representing the initial values for the form fields. The default value for defaultValues is DEFAULT_INITIAL_VALUES.
+  - This is an object representing the initial values for the form fields.
 
 - `options` (optional)
   - This object is used to provide additional configuration to the useMutation hook from react-query that handles the registration request. By default, it's an empty object {}.
+
+- `useNameField` (optional)
+  - Enables the schema variant that includes a name field.
 
 #### **Returns**
 
@@ -242,7 +289,7 @@ return <form onSubmit={form.handleSubmit}>
 
 ### **useLogout**
 
-Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) data in cache, and removes the user's token cookie.
+Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) data in cache, clears local session state, and executes the active strategy logout operation.
 
 #### **Returns**
 
@@ -445,3 +492,56 @@ const { mutate: deactivateMfa } = useMfaDeactivate()
 // to deactivate a method
 deactivateMfa.mutate({ method: 'your-method', code: 'your-code' })
 ```
+
+## **Consumer Rules**
+
+Consumer code should:
+
+- use unified hooks for authentication operations
+- use `useSession` or the session contract for auth state
+- let middleware delegate to the session evaluator
+
+Consumer code should not:
+
+- decode tokens directly
+- check token expiry directly
+- branch on strategy names
+- call provider-specific auth services from UI code
+
+## **Adding a New Strategy**
+
+To add a new authentication strategy:
+
+1. Add the strategy id to the canonical strategy id type
+2. Add a provider-specific folder under `modules/auth-strategy/`
+3. Implement the strategy contract
+4. Map provider responses and errors to canonical auth types
+5. Select the appropriate session lifecycle
+6. Wire the strategy into active strategy resolution
+7. Add or update tests
+
+Suggested structure:
+
+```text
+modules/auth-strategy/
+  allauth/
+    constants.ts
+    index.ts
+    strategy.ts
+    utils.ts
+  base/
+    base-auth-strategy.ts
+  constants.ts
+  factory.ts
+  types.ts
+  utils.ts
+```
+
+## **Architecture Boundaries**
+
+Keep these boundaries intact when expanding the package:
+
+- strategies own authentication operations
+- session utilities own session lifecycle
+- transport stays stateless
+- middleware and HOCs depend on session abstractions, not token parsing

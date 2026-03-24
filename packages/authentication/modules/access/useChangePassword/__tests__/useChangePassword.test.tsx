@@ -1,34 +1,30 @@
-import {
-  ComponentWithProviders,
-  mockFetch,
-  mockFetchError,
-  renderHook,
-} from '@baseapp-frontend/test'
+import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
 
 import { z } from 'zod'
 
 import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useChangePassword from '../index'
 
+const mockChangePassword = jest.fn()
+
+jest.mock('../../../auth-strategy/factory', () => ({
+  getActiveAuthModule: () => ({
+    strategy: {
+      changePassword: mockChangePassword,
+    },
+  }),
+}))
+
 describe('useChangePassword', () => {
   const currentPassword = '1234'
   const password = 'abcABC@123456'
-  const changePasswordUrl = '/users/change-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
+    mockChangePassword.mockReset()
   })
 
-  test('should run onSuccess', async () => {
-    // Mock the fetch call with a success response for POST method
-    mockFetch(changePasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {
-        currentPassword,
-        newPassword: password,
-      },
-    })
+  test('should call strategy.changePassword and run onSuccess', async () => {
+    mockChangePassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -53,12 +49,19 @@ describe('useChangePassword', () => {
 
     await result.current.form.handleSubmit()
 
+    expect(mockChangePassword).toHaveBeenCalledWith({
+      currentPassword,
+      newPassword: password,
+      token: undefined,
+    })
     expect(hasOnSuccessRan).toBe(true)
   })
 
-  test('should run onError', async () => {
-    // Mock the fetch call with an error response
-    mockFetchError(changePasswordUrl, { error: 'error', status: 500, method: 'POST' })
+  test('should run onError when strategy rejects', async () => {
+    mockChangePassword.mockRejectedValueOnce({
+      code: 'validation_error',
+      message: 'Wrong password',
+    })
 
     let hasOnErrorRan = false
 
@@ -86,13 +89,8 @@ describe('useChangePassword', () => {
     expect(hasOnErrorRan).toBe(true)
   })
 
-  test('should run onError when newPassword and confirmNewPassword are different', async () => {
-    // Mock the fetch call with a success response
-    mockFetch(changePasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+  test('should not submit when newPassword and confirmNewPassword are different', async () => {
+    mockChangePassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -121,17 +119,12 @@ describe('useChangePassword', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    // Mock the fetch call with a success response
-    mockFetch(changePasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+    mockChangePassword.mockResolvedValueOnce(undefined)
 
     const customDefaultValues = {
       currentPassword: '1234',
       newPassword: '12345',
-      confirmNewPassword: '123456', // custom validation allows different passwords
+      confirmNewPassword: '123456',
     }
 
     const customValidationSchema = z.object({
@@ -168,24 +161,13 @@ describe('useChangePassword with token for expired passwords', () => {
   const currentPassword = '1234'
   const password = 'abcABC@123456'
   const token = 'fake-token'
-  const changePasswordUrl = '/change-expired-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
+    mockChangePassword.mockReset()
   })
 
-  // This is just to ensure that running with token has the same behavior as running without token
-  test('should run onSuccess', async () => {
-    // Mock the fetch call with a success response for POST method
-    mockFetch(changePasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {
-        currentPassword,
-        newPassword: password,
-        token,
-      },
-    })
+  test('should pass token to strategy.changePassword', async () => {
+    mockChangePassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -211,6 +193,11 @@ describe('useChangePassword with token for expired passwords', () => {
 
     await result.current.form.handleSubmit()
 
+    expect(mockChangePassword).toHaveBeenCalledWith({
+      currentPassword,
+      newPassword: password,
+      token,
+    })
     expect(hasOnSuccessRan).toBe(true)
   })
 })

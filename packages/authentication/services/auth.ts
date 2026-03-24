@@ -1,4 +1,5 @@
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
+import type { JWTResponse } from '@baseapp-frontend/utils/types/jwt'
 
 import type {
   ChangeExpiredPasswordRequest,
@@ -25,6 +26,23 @@ export default class AuthApi {
 
   static register<TResponse = void>(request: RegisterRequest): Promise<TResponse> {
     return baseAppFetch(`/register`, { method: 'POST', body: request })
+  }
+
+  static async preAuthenticateJWT(token: string): Promise<JWTResponse> {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`, {
+      method: 'POST',
+      body: JSON.stringify({ token }),
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    if (response instanceof Response && !response.ok) {
+      throw new Error('Failed to pre-authenticate.')
+    }
+
+    return response.json() as Promise<JWTResponse>
   }
 
   static changePassword({ currentPassword, newPassword }: ChangePasswordRequest) {

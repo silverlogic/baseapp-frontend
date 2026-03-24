@@ -1,22 +1,22 @@
 import { useState } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
+import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
+import { getSessionService } from '../../../../session/client'
 import type { AllAuthLoginResponse } from '../../../../types/allauth'
-import { useAllAuthSession } from '../useAllAuthSession'
+import type { MinimalProfile } from '../../../../types/profile'
+import { useCurrentProfile } from '../../../profile'
+import { setProfileExpoStorage } from '../../../profile/utils'
 
 export interface UseAllAuthGoogleLoginHandlerOptions {
   onSuccess?: () => void
 }
 
-/**
- * Shared hook for handling Google OAuth login success across login/signup flows.
- * Extracts tokens, starts session, calls success callback, and manages loading state.
- */
 export const useAllAuthGoogleLoginHandler = (options?: UseAllAuthGoogleLoginHandlerOptions) => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const { sendApiErrorToast } = useNotification()
-  const { startSession } = useAllAuthSession()
+  const { setCurrentProfile } = useCurrentProfile()
 
   const startGoogleLogin = () => setIsGoogleLoading(true)
 
@@ -28,11 +28,36 @@ export const useAllAuthGoogleLoginHandler = (options?: UseAllAuthGoogleLoginHand
       const refreshToken = response.meta?.refreshToken
 
       if (typeof accessToken === 'string' && typeof refreshToken === 'string') {
-        await startSession({
+        const sessionService = getSessionService()
+        await sessionService.write({
           accessToken,
           refreshToken,
-          rawResponse: response,
+          sessionToken: response.meta?.sessionToken ?? null,
         })
+
+        const profile = response.meta?.profile
+        if (profile?.id) {
+          const isWebPlatform = !isMobilePlatform()
+          const API_BASE_URL = isWebPlatform
+            ? process.env.NEXT_PUBLIC_API_BASE_URL
+            : process.env.EXPO_PUBLIC_API_BASE_URL
+          const baseUrl = API_BASE_URL?.replace('/v1', '')
+          let absoluteImagePath = null
+          if (profile.image) {
+            absoluteImagePath =
+              profile.image.startsWith('http') || !baseUrl
+                ? profile.image
+                : `${baseUrl}${profile.image}`
+          }
+          const currentProfile: MinimalProfile = {
+            id: profile.id,
+            name: profile.name ?? null,
+            image: absoluteImagePath,
+            urlPath: profile.urlPath ?? null,
+          }
+          setCurrentProfile(currentProfile)
+          await setProfileExpoStorage(currentProfile)
+        }
 
         options?.onSuccess?.()
       } else {

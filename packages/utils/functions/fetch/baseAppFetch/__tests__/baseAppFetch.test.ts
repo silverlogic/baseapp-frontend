@@ -1,9 +1,8 @@
 import humps from 'humps'
 
 import { baseAppFetch } from '..'
-import { LOGOUT_EVENT } from '../../../../constants/events'
-import { eventEmitter } from '../../../events'
-import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
+import { awaitSessionRecovery } from '../../../auth/awaitSessionRecovery'
+import { getToken } from '../../../token'
 import { getTokenSSR } from '../../../token/getTokenSSR'
 
 global.fetch = jest.fn()
@@ -17,26 +16,11 @@ jest.mock('humps', () => ({
   decamelizeKeys: jest.fn().mockImplementation((keys) => keys),
   camelizeKeys: jest.fn().mockImplementation((keys) => keys),
 }))
-jest.mock('../../../events', () => ({
-  eventEmitter: {
-    emit: jest.fn(),
-    listenerCount: jest.fn().mockReturnValue(1),
-  },
+jest.mock('../../../auth/awaitSessionRecovery', () => ({
+  awaitSessionRecovery: jest.fn().mockResolvedValue('cleared'),
 }))
 jest.mock('../../../token', () => ({
   getToken: jest.fn(),
-  isUserTokenValid: jest.fn(),
-  refreshAccessToken: jest.fn(),
-  decodeJWT: jest.fn().mockImplementation(() => ({ exp: Date.now() / 1000 + 5000 })),
-}))
-jest.mock('../../../token/refreshAccessToken', () => ({
-  refreshAccessToken: jest.fn(),
-}))
-jest.mock('../../../token/isUserTokenValid', () => ({
-  isUserTokenValid: jest.fn(),
-}))
-jest.mock('../../../token/decodeJWT', () => ({
-  decodeJWT: jest.fn(),
 }))
 jest.mock('../../../token/getToken', () => ({
   getToken: jest.fn(),
@@ -58,9 +42,9 @@ const DEFAULT_FETCH_RESPONSE = {
     get: jest.fn().mockReturnValue('application/json'),
   },
   json: jest.fn().mockResolvedValue({}),
-} as Partial<Omit<Response, 'headers'>>
+} as any
 
-const mockFetch = (response = DEFAULT_FETCH_RESPONSE) => {
+const mockFetch = (response: any = DEFAULT_FETCH_RESPONSE) => {
   const fetchMock = global.fetch as jest.Mock
   fetchMock.mockResolvedValue(response)
 
@@ -78,33 +62,15 @@ describe('baseAppFetch', () => {
 
     const { getToken: dynamicGetToken } = require('../../../token/getToken')
     const { getLanguage: dynamicGetLanguage } = require('../../../language/getLanguage')
-    const {
-      refreshAccessToken: specificRefreshAccessToken,
-    } = require('../../../token/refreshAccessToken')
-    const {
-      isUserTokenValid: specificIsUserTokenValid,
-    } = require('../../../token/isUserTokenValid')
-    const { decodeJWT: specificDecodeJWT } = require('../../../token/decodeJWT')
 
     const staticGetTokenMock = getToken as jest.Mock
-    const staticRefreshAccessTokenMock = refreshAccessToken as jest.Mock
-    const staticIsUserTokenValidMock = isUserTokenValid as jest.Mock
 
     dynamicGetToken.mockImplementation((...args: any[]) => staticGetTokenMock(...args))
-    specificRefreshAccessToken.mockImplementation((...args: any[]) =>
-      staticRefreshAccessTokenMock(...args),
-    )
-    specificIsUserTokenValid.mockImplementation((...args: any[]) =>
-      staticIsUserTokenValidMock(...args),
-    )
-    specificDecodeJWT.mockReturnValue({ exp: Date.now() / 1000 + 5000 })
     dynamicGetLanguage.mockReturnValue(undefined)
 
     mockFetch()
 
     staticGetTokenMock.mockReturnValue(null)
-    staticRefreshAccessTokenMock.mockResolvedValue('new-token')
-    staticIsUserTokenValidMock.mockReturnValue(true)
   })
 
   afterEach(() => {
@@ -155,51 +121,6 @@ describe('baseAppFetch', () => {
     expect(stringifySpy).toHaveBeenCalledWith(requestBody)
   })
 
-  it('should refresh token if it is invalid and auth is required', async () => {
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(false)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-    refreshAccessTokenMock.mockResolvedValue('new-token')
-
-    await baseAppFetch('/test', {})
-
-    expect(refreshAccessToken).toHaveBeenCalled()
-    expect(fetch).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({
-        headers: expect.objectContaining({
-          Authorization: 'Bearer new-token',
-        }),
-      }),
-    )
-  })
-
-  it('should not attempt to refresh token if it is valid', async () => {
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('valid-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(true)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-    refreshAccessTokenMock.mockClear()
-
-    await baseAppFetch('/test', {})
-
-    expect(refreshAccessToken).not.toHaveBeenCalled()
-  })
-
-  it('should not attempt to refresh token if refreshToken is false', async () => {
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(false)
-
-    await baseAppFetch('/test', { refreshToken: false })
-
-    expect(refreshAccessToken).not.toHaveBeenCalled()
-  })
-
   it('should not require auth for paths marked as not requiring a token', async () => {
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue('any-token')
@@ -207,7 +128,6 @@ describe('baseAppFetch', () => {
 
     await baseAppFetch(path, { servicesWithoutToken: [/no-auth-required/] })
 
-    expect(refreshAccessToken).not.toHaveBeenCalled()
     expect(fetch).toHaveBeenCalledWith(
       expect.any(String),
       expect.not.objectContaining({
@@ -218,34 +138,16 @@ describe('baseAppFetch', () => {
     )
   })
 
-  it('should handle refreshAccessToken failure by emitting logout event', async () => {
-    const getTokenMock = getToken as jest.Mock
-    getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(false)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-    refreshAccessTokenMock.mockRejectedValue(new Error('Failed to refresh'))
-
-    await expect(baseAppFetch('/test', {})).rejects.toThrow('Failed to refresh')
-    expect(eventEmitter.emit).toHaveBeenCalledWith(LOGOUT_EVENT)
-  })
-
   it('should set Authorization header correctly when using jwt token', async () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue(token)
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(true)
 
     const { getToken: dynamicGetToken } = require('../../../token/getToken')
     dynamicGetToken.mockReturnValue(token)
 
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-    refreshAccessTokenMock.mockClear()
-
     await baseAppFetch('/test', {})
 
-    expect(refreshAccessToken).not.toHaveBeenCalled()
     expect(fetch).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
@@ -260,18 +162,12 @@ describe('baseAppFetch', () => {
     const token = 'test-token'
     const getTokenMock = getToken as jest.Mock
     getTokenMock.mockReturnValue(token)
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
-    isUserTokenValidMock.mockReturnValue(true)
 
     const { getToken: dynamicGetToken } = require('../../../token/getToken')
     dynamicGetToken.mockReturnValue(token)
 
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-    refreshAccessTokenMock.mockClear()
-
     await baseAppFetch('/test', { tokenType: 'Token' })
 
-    expect(refreshAccessToken).not.toHaveBeenCalled()
     expect(fetch).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({
@@ -384,6 +280,109 @@ describe('baseAppFetch', () => {
     expect(response).toEqual(dataResponse)
   })
 
+  describe('stateless transport', () => {
+    it('should not decode tokens or validate expiry', async () => {
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockReturnValue('some-token')
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockReturnValue('some-token')
+
+      await baseAppFetch('/test', {})
+
+      expect(fetch).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            Authorization: 'Bearer some-token',
+          }),
+        }),
+      )
+    })
+
+    it('should call awaitSessionRecovery on 401 response for auth-required paths', async () => {
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockImplementation((key: string) => {
+        if (key === 'Authorization') return 'some-token'
+        return null
+      })
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockImplementation((key: string) => {
+        if (key === 'Authorization') return 'some-token'
+        return null
+      })
+
+      mockFetch({
+        ok: false,
+        status: 401,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json'),
+        },
+        json: jest.fn().mockResolvedValue({ detail: 'Unauthorized' }),
+      })
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecovery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          source: 'fetch',
+          path: '/test',
+          status: 401,
+          hasRefreshToken: false,
+        }),
+      )
+    })
+
+    it('should call awaitSessionRecovery with hasRefreshToken true when refresh token exists', async () => {
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockImplementation((key: string) => {
+        if (key === 'Authorization') return 'some-access-token'
+        if (key === 'Refresh') return 'some-refresh-token'
+        return null
+      })
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockImplementation((key: string) => {
+        if (key === 'Authorization') return 'some-access-token'
+        if (key === 'Refresh') return 'some-refresh-token'
+        return null
+      })
+
+      mockFetch({
+        ok: false,
+        status: 401,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json'),
+        },
+        json: jest.fn().mockResolvedValue({ detail: 'Unauthorized' }),
+      })
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecovery).toHaveBeenCalledWith(
+        expect.objectContaining({
+          hasRefreshToken: true,
+        }),
+      )
+    })
+
+    it('should not call awaitSessionRecovery on non-401 error responses', async () => {
+      mockFetch({
+        ok: false,
+        status: 403,
+        headers: {
+          get: jest.fn().mockReturnValue('application/json'),
+        },
+        json: jest.fn().mockResolvedValue({ detail: 'Forbidden' }),
+      })
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecovery).not.toHaveBeenCalled()
+    })
+  })
+
   describe('SSR functionality', () => {
     let originalWindow: any
 
@@ -400,7 +399,6 @@ describe('baseAppFetch', () => {
       const getTokenSSRMock = getTokenSSR as jest.Mock
       getTokenSSRMock.mockResolvedValue('ssr-access-token')
 
-      // Mock next/headers cookies
       const mockCookies = {
         get: jest.fn().mockReturnValue({ value: 'en' }),
       }
@@ -422,18 +420,12 @@ describe('baseAppFetch', () => {
       )
     })
 
-    it('should handle SSR token refresh when token is invalid', async () => {
+    it('should attach SSR token without decoding or refreshing', async () => {
       const getTokenSSRMock = getTokenSSR as jest.Mock
       getTokenSSRMock
         .mockResolvedValueOnce('Current-Profile')
-        .mockResolvedValueOnce('invalid-access-token') // access token
-        .mockResolvedValueOnce('ssr-refresh-token') // refresh token
-
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
-      isUserTokenValidMock.mockReturnValue(false)
-
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
-      refreshAccessTokenMock.mockResolvedValue('new-ssr-access-token')
+        .mockResolvedValueOnce('ssr-access-token')
+        .mockResolvedValueOnce('ssr-refresh-token')
 
       const mockCookies = {
         get: jest.fn().mockReturnValue({ value: 'fr' }),
@@ -444,18 +436,11 @@ describe('baseAppFetch', () => {
       await baseAppFetch('/test', {})
 
       expect(getTokenSSRMock).toHaveBeenCalledWith('Authorization')
-      expect(getTokenSSRMock).toHaveBeenCalledWith('Refresh')
-      expect(refreshAccessToken).toHaveBeenCalledWith({
-        refreshToken: 'ssr-refresh-token',
-        accessKeyName: 'Authorization',
-        refreshKeyName: 'Refresh',
-      })
       expect(fetch).toHaveBeenCalledWith(
         expect.any(String),
         expect.objectContaining({
           headers: expect.objectContaining({
-            Authorization: 'Bearer new-ssr-access-token',
-            'Accept-Language': 'fr',
+            Authorization: 'Bearer ssr-access-token',
           }),
         }),
       )
@@ -481,7 +466,7 @@ describe('baseAppFetch', () => {
 
     it('should handle SSR language header from cookies', async () => {
       const getTokenSSRMock = getTokenSSR as jest.Mock
-      getTokenSSRMock.mockResolvedValue(null) // No token
+      getTokenSSRMock.mockResolvedValue(null)
 
       const mockCookies = {
         get: jest.fn().mockReturnValue({ value: 'es' }),
@@ -522,6 +507,121 @@ describe('baseAppFetch', () => {
           }),
         }),
       )
+    })
+  })
+
+  describe('401 retry-once flow', () => {
+    const UNAUTHORIZED_RESPONSE = {
+      ok: false,
+      status: 401,
+      headers: {
+        get: jest.fn().mockReturnValue('application/json'),
+      },
+      json: jest.fn().mockResolvedValue({ detail: 'Unauthorized' }),
+    }
+
+    const SUCCESS_RESPONSE = {
+      ok: true,
+      status: 200,
+      headers: {
+        get: jest.fn().mockReturnValue('application/json'),
+      },
+      json: jest.fn().mockResolvedValue({ data: 'success' }),
+    }
+
+    it('should retry once and succeed when refresh resolves as refreshed', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('refreshed')
+
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockReturnValue('old-token')
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockReturnValue('old-token')
+
+      const fetchMock = global.fetch as jest.Mock
+      fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce(SUCCESS_RESPONSE)
+
+      dynamicGetToken
+        .mockReturnValueOnce('old-token')
+        .mockReturnValueOnce('old-token')
+        .mockReturnValueOnce('old-token')
+        .mockReturnValue('new-refreshed-token')
+
+      const result = await baseAppFetch('/test', {})
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+      expect(result).toEqual({ data: 'success' })
+    })
+
+    it('should reject when refresh resolves as cleared', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('cleared')
+
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockReturnValue('old-token')
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockReturnValue('old-token')
+
+      mockFetch(UNAUTHORIZED_RESPONSE as any)
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(global.fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should reject when refresh resolves as timeout', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('timeout')
+
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockReturnValue('old-token')
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockReturnValue('old-token')
+
+      mockFetch(UNAUTHORIZED_RESPONSE as any)
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(global.fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should not retry a second time if the retried request also returns 401', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('refreshed')
+
+      const getTokenMock = getToken as jest.Mock
+      getTokenMock.mockReturnValue('old-token')
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockReturnValue('old-token')
+
+      const fetchMock = global.fetch as jest.Mock
+      fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce({
+        ...UNAUTHORIZED_RESPONSE,
+        json: jest.fn().mockResolvedValue({ detail: 'Still Unauthorized' }),
+      })
+
+      await expect(baseAppFetch('/test', {})).rejects.toThrow()
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+    })
+
+    it('should not call awaitSessionRecovery for non-auth-required paths on 401', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      mockFetch(UNAUTHORIZED_RESPONSE as any)
+
+      await expect(baseAppFetch('/public', { servicesWithoutToken: [/public/] })).rejects.toThrow()
+
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
     })
   })
 })
