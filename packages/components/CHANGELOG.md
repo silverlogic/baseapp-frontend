@@ -1,5 +1,20 @@
 # @baseapp-frontend/components
 
+## 1.5.11
+
+### Patch Changes
+
+- Fixed infinite loop issue in `ProfileComponent`, added border prop to `AvatarWithPlaceholder` component
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.6
+
+## 1.5.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.5
+
 ## 1.5.9
 
 ### Patch Changes

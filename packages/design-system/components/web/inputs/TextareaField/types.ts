@@ -1,7 +1,8 @@
 import { TextFieldProps } from '../TextField/types'
 
-type HideBorder = {
+type TextareaOptions = {
   hideBorder?: boolean
+  resizable?: boolean
 }
 
-export type TextareaFieldProps = TextFieldProps & HideBorder
+export type TextareaFieldProps = TextFieldProps & TextareaOptions
