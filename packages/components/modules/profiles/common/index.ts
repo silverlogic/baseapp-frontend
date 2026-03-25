@@ -2,7 +2,6 @@
 
 export * from './graphql/fragments/AllProfilesList'
 export * from './graphql/fragments/BlockToggle'
-export * from './graphql/fragments/FollowToggleUpdatableFragment'
 export * from './graphql/fragments/MemberItem'
 export * from './graphql/fragments/ProfileComponent'
 export * from './graphql/fragments/ProfileItem'

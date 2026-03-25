@@ -15,10 +15,9 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
-import numbro from 'numbro'
 import { useFragment } from 'react-relay'
 
-import { ProfileComponentFragment } from '../../common'
+import { ProfileComponentFragment, formatFollowCount } from '../../common'
 import BlockButtonWithDialog from './BlockButtonWithDialog'
 import FollowToggleButton from './FollowToggleButton'
 import ReportButtonWithDialog from './ReportButtonWithDialog'
@@ -58,19 +57,6 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
     handleClose()
   }
 
-  const formatFollowCount = (count?: number | null) => {
-    if (!count || count === 0) {
-      return 0
-    }
-    if (count <= 1000) {
-      return count
-    }
-    if (count < 1050000) {
-      return numbro(count).format({ average: true })
-    }
-    return numbro(count).format({ average: true, mantissa: 1 })
-  }
-
   const renderProfileUpdatesButtons = () => {
     if (currentProfileId === profile?.id) {
       return (
@@ -89,12 +75,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
     return (
       <div className="flex flex-row gap-2">
         {!profile?.isBlockedByMe && (
-          <FollowToggleButton
-            targetId={profile?.id}
-            isFollowedByMe={profile?.isFollowedByMe}
-            currentProfileId={currentProfileId}
-            profileRef={profile}
-          />
+          <FollowToggleButton targetId={profile?.id} isFollowedByMe={profile?.isFollowedByMe} />
         )}
         {profile?.isBlockedByMe && (
           <BlockButtonWithDialog

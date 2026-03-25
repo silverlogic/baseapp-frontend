@@ -1,16 +1,19 @@
 # @baseapp-frontend/components
 
-## 1.6.0
-
-### Minor Changes
-
-- Added the useRequestEmailChange hook and some icons and ilustrations
+## 1.5.13
 
 ### Patch Changes
 
+- Creates a resuable hook `useFollowToggle` and simplify `FollowToggleButton`. Create `formatFollowCount` and removes numbro dependency.
+
+## 1.5.13
+
+### Patch Changes
+
+- Added the `useRequestEmailChange` hook and some icons and illustrations.
 - Updated dependencies
   - @baseapp-frontend/authentication@5.1.0
-  - @baseapp-frontend/graphql@2.0.0
+  - @baseapp-frontend/graphql@1.3.9
 
 ## 1.5.11
 
