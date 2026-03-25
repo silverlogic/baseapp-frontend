@@ -1,6 +1,6 @@
 # @baseapp-frontend/graphql
 
-## 1.4.0
+## 1.3.9
 
 ### Patch Changes
 
