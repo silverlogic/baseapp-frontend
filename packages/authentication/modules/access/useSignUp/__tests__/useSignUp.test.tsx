@@ -21,6 +21,7 @@ jest.mock('../../../auth-strategy/factory', () => ({
 
 const successResult: AuthResult = {
   kind: 'success',
+  rawResponse: { email: request.email },
   metadata: { rawResponse: { email: request.email } },
 }
 
@@ -94,6 +95,7 @@ describe('useSignUp', () => {
     const customRequest = { ...request, customField: 123 }
     const customResult: AuthResult = {
       kind: 'success',
+      rawResponse: customRequest,
       metadata: { rawResponse: customRequest },
     }
     mockSignUp.mockResolvedValueOnce(customResult)
@@ -118,9 +120,7 @@ describe('useSignUp', () => {
     await waitFor(() => expect(result.current.mutation.isSuccess).toBeTruthy())
 
     expect(result.current.mutation.data).toMatchObject({ kind: 'success' })
-    expect((result.current.mutation.data as any)?.metadata?.rawResponse).toStrictEqual(
-      customRequest,
-    )
+    expect((result.current.mutation.data as any)?.rawResponse).toStrictEqual(customRequest)
   })
 
   test('should run onError when strategy rejects', async () => {

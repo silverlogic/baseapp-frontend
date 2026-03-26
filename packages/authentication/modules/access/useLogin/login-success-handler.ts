@@ -2,51 +2,72 @@ import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
 import { getSessionService } from '../../../session/client'
 import type { MinimalProfile } from '../../../types/profile'
-import type { AuthResult } from '../../auth-strategy/types'
+import type { AuthResult, AuthSuccessResult } from '../../auth-strategy/types'
 
-interface LoginSuccessMetadata {
+interface LegacyLoginSuccessMetadata {
   accessToken?: string
   refreshToken?: string
   sessionToken?: string
   rawResponse?: { meta?: { profile?: Partial<MinimalProfile> } }
 }
 
-export async function writeSessionFromAuthResult(result: AuthResult): Promise<void> {
-  if (result.kind !== 'success' || !result.metadata) return
-
-  const metadata = result.metadata as LoginSuccessMetadata
-  if (metadata.accessToken || metadata.refreshToken) {
-    const sessionService = getSessionService()
-    await sessionService.write({
-      accessToken: metadata.accessToken ?? null,
-      refreshToken: metadata.refreshToken ?? null,
-      sessionToken: metadata.sessionToken ?? null,
-    })
-  }
+function getLegacyMetadata(result: AuthSuccessResult): LegacyLoginSuccessMetadata | null {
+  return (result.metadata as LegacyLoginSuccessMetadata | undefined) ?? null
 }
 
-export function resolveProfileFromAuthResult(result: AuthResult): MinimalProfile | null {
-  if (result.kind !== 'success' || !result.metadata) return null
-
-  const metadata = result.metadata as LoginSuccessMetadata
-  const profile = metadata.rawResponse?.meta?.profile
-  if (!profile?.id) return null
+function resolveProfileImage(profileImage?: string | null): string | null {
+  if (!profileImage) return null
 
   const isWebPlatform = !isMobilePlatform()
   const API_BASE_URL = isWebPlatform
     ? process.env.NEXT_PUBLIC_API_BASE_URL
     : process.env.EXPO_PUBLIC_API_BASE_URL
   const baseUrl = API_BASE_URL?.replace('/v1', '')
-  let absoluteImagePath = null
-  if (profile.image) {
-    absoluteImagePath =
-      profile.image.startsWith('http') || !baseUrl ? profile.image : `${baseUrl}${profile.image}`
+
+  return profileImage.startsWith('http') || !baseUrl ? profileImage : `${baseUrl}${profileImage}`
+}
+
+export async function writeSessionFromAuthResult(result: AuthResult): Promise<void> {
+  if (result.kind !== 'success') return
+
+  const { session } = result
+  const legacyMetadata = getLegacyMetadata(result)
+
+  if (session?.accessToken || session?.refreshToken) {
+    const sessionService = getSessionService()
+    await sessionService.write(session)
+    return
   }
+
+  if (legacyMetadata?.accessToken || legacyMetadata?.refreshToken) {
+    const sessionService = getSessionService()
+    await sessionService.write({
+      accessToken: legacyMetadata.accessToken ?? null,
+      refreshToken: legacyMetadata.refreshToken ?? null,
+      sessionToken: legacyMetadata.sessionToken ?? null,
+    })
+  }
+}
+
+export function resolveProfileFromAuthResult(result: AuthResult): MinimalProfile | null {
+  if (result.kind !== 'success') return null
+
+  if (result.profile?.id) {
+    return {
+      id: result.profile.id,
+      name: result.profile.name ?? null,
+      image: resolveProfileImage(result.profile.image),
+      urlPath: result.profile.urlPath ?? null,
+    }
+  }
+
+  const profile = getLegacyMetadata(result)?.rawResponse?.meta?.profile
+  if (!profile?.id) return null
 
   return {
     id: profile.id,
     name: profile.name ?? null,
-    image: absoluteImagePath,
+    image: resolveProfileImage(profile.image),
     urlPath: profile.urlPath ?? null,
   }
 }

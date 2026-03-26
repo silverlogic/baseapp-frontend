@@ -28,7 +28,7 @@ export default class AuthApi {
     return baseAppFetch(`/register`, { method: 'POST', body: request })
   }
 
-  static async preAuthenticateJWT(token: string): Promise<JWTResponse> {
+  static async preAuthenticate(token: string): Promise<JWTResponse> {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/pre-auth/jwt`, {
       method: 'POST',
       body: JSON.stringify({ token }),
@@ -43,6 +43,10 @@ export default class AuthApi {
     }
 
     return response.json() as Promise<JWTResponse>
+  }
+
+  static async preAuthenticateJWT(token: string): Promise<JWTResponse> {
+    return this.preAuthenticate(token)
   }
 
   static changePassword({ currentPassword, newPassword }: ChangePasswordRequest) {

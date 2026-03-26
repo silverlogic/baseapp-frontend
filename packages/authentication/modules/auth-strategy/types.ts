@@ -7,10 +7,12 @@ import type {
   RegisterRequest,
   ResetPasswordRequest,
 } from '../../types/auth'
+import type { MinimalProfile } from '../../types/profile'
 import type { User } from '../../types/user'
+import { ALLAUTH_STRATEGY_ID } from './allauth/constants'
 import type { SESSION_STATUS } from './constants'
 
-export type AuthStrategyId = 'allauth' | 'simplejwt'
+export type AuthStrategyId = typeof ALLAUTH_STRATEGY_ID
 
 export interface AuthError {
   code: string
@@ -20,24 +22,35 @@ export interface AuthError {
   cause?: unknown
 }
 
+export interface AuthSuccessResult<TUser = User> {
+  kind: 'success'
+  user?: TUser | null
+  session?: SessionMaterial
+  profile?: MinimalProfile | null
+  redirectUrl?: null
+  rawResponse?: unknown
+  metadata?: Record<string, unknown>
+}
+
+export interface AuthMfaRequiredResult {
+  kind: 'mfa_required'
+  ephemeralToken: string
+  method: string
+  rawResponse?: unknown
+  metadata?: Record<string, unknown>
+}
+
+export interface AuthRedirectRequiredResult {
+  kind: 'redirect_required'
+  redirectUrl: string
+  rawResponse?: unknown
+  metadata?: Record<string, unknown>
+}
+
 export type AuthResult<TUser = User> =
-  | {
-      kind: 'success'
-      user?: TUser | null
-      redirectUrl?: null
-      metadata?: Record<string, unknown>
-    }
-  | {
-      kind: 'mfa_required'
-      ephemeralToken: string
-      method: string
-      metadata?: Record<string, unknown>
-    }
-  | {
-      kind: 'redirect_required'
-      redirectUrl: string
-      metadata?: Record<string, unknown>
-    }
+  | AuthSuccessResult<TUser>
+  | AuthMfaRequiredResult
+  | AuthRedirectRequiredResult
 
 export interface AuthStrategy {
   readonly id: AuthStrategyId

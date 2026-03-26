@@ -37,27 +37,24 @@ Only one authentication strategy can be active at a time.
 Use `useSession` for client-side session state:
 
 ```tsx
-import { useSession } from '@baseapp-frontend/authentication'
+import { useSession } from '@baseapp-frontend/authentication/client'
 
 const { user, isAuthenticated, isLoading } = useSession()
 ```
 
 ### **SSR session checks**
 
-Use the SSR session contract helper for server-side authentication checks:
+Use the direct server session helper for server-side authentication checks:
 
-- `session/getServerSessionContract`
-
-The session contract exposes:
-
-- `isAuthenticated()`
-- `resolveUser()`
+- `getServerSession`
 
 ### **Middleware**
 
 Middleware should delegate authentication evaluation to the session evaluator:
 
 ```ts
+import { evaluateRequestSession } from '@baseapp-frontend/authentication/middleware'
+
 const state = await evaluateRequestSession(request)
 ```
 

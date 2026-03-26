@@ -62,6 +62,12 @@ describe('AllauthStrategy — contract', () => {
       expect(result.kind).toBe('success')
       expect(result).toMatchObject({
         kind: 'success',
+        session: {
+          accessToken: 'access-tok',
+          refreshToken: 'refresh-tok',
+          sessionToken: 'session-tok',
+        },
+        rawResponse: loginResponse,
         metadata: expect.objectContaining({
           accessToken: 'access-tok',
           refreshToken: 'refresh-tok',

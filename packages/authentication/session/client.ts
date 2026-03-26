@@ -1,5 +1,5 @@
 import { getActiveAuthModule } from '../modules/auth-strategy/factory'
-import type { SessionService } from '../modules/auth-strategy/types'
+import type { SessionService, SessionState } from '../modules/auth-strategy/types'
 import type { User } from '../types/user'
 import { createSessionService } from './service'
 import { createBrowserSessionStorage } from './storage'
@@ -15,4 +15,16 @@ export function getSessionService<TUser = User>(): SessionService<TUser> {
   }
 
   return cachedSessionService as SessionService<TUser>
+}
+
+export async function getClientSession<TUser = User>(): Promise<SessionState<TUser>> {
+  return getSessionService<TUser>().getState()
+}
+
+export async function refreshClientSession<TUser = User>(): Promise<SessionState<TUser>> {
+  return getSessionService<TUser>().refresh()
+}
+
+export async function handleClientUnauthorized<TUser = User>(): Promise<SessionState<TUser>> {
+  return getSessionService<TUser>().handleUnauthorized()
 }

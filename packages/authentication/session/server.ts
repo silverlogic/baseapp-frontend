@@ -46,8 +46,12 @@ async function resolveRequestState<TUser = User>(
   return state
 }
 
-export async function getServerSessionState<TUser = User>(): Promise<SessionState<TUser>> {
+export async function getServerSession<TUser = User>(): Promise<SessionState<TUser>> {
   return evaluateState<TUser>(await readServerSession())
+}
+
+export async function getServerSessionState<TUser = User>(): Promise<SessionState<TUser>> {
+  return getServerSession<TUser>()
 }
 
 export async function getServerSessionContract<TUser = User>(): Promise<SessionContract<TUser>> {

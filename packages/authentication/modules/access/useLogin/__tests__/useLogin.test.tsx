@@ -26,6 +26,11 @@ jest.mock('../../../../session/client', () => ({
 
 const successResult: AuthResult = {
   kind: 'success',
+  session: {
+    accessToken: 'access',
+    refreshToken: 'refresh',
+    sessionToken: 'session',
+  },
   metadata: {
     accessToken: 'access',
     refreshToken: 'refresh',

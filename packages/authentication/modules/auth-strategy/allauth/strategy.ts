@@ -37,7 +37,7 @@ export class AllauthStrategy extends BaseAuthStrategy {
 
   override async preAuthenticate(token: string) {
     try {
-      return await AuthApi.preAuthenticateJWT(token)
+      return await AuthApi.preAuthenticate(token)
     } catch (error) {
       return this.throwAuthError(error)
     }
