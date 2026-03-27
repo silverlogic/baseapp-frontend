@@ -1,17 +1,13 @@
 import humps from 'humps'
 
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
-import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { MinimalProfile } from '../../../types/profile'
-import { eventEmitter } from '../../events'
+import { awaitSessionRecovery } from '../../auth/awaitSessionRecovery'
 import { getExpoConstant } from '../../expo'
 import { buildQueryString, parseString } from '../../string'
-import { decodeJWT } from '../../token/decodeJWT'
-import { isUserTokenValid } from '../../token/isUserTokenValid'
-import { refreshAccessToken } from '../../token/refreshAccessToken'
 import { BaseAppFetch, RequestOptions } from './types'
 
 /**
@@ -72,6 +68,7 @@ export const baseAppFetch: BaseAppFetch = async (
   path,
   {
     accessKeyName = ACCESS_KEY_NAME,
+    accessTokenOverride,
     refreshKeyName = REFRESH_KEY_NAME,
     languageCookieName = LANGUAGE_COOKIE_NAME,
     baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
@@ -83,102 +80,14 @@ export const baseAppFetch: BaseAppFetch = async (
     stringifyBody = true,
     setContentType = true,
     throwError = true,
-    refreshToken = true,
     tokenType = 'Bearer',
     ...options
   } = {},
 ) => {
   const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
-
+  const isServer = typeof window === typeof undefined
   const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
-
-  let currentProfile
-  if (typeof window === typeof undefined) {
-    const { getTokenSSR } = await import('../../token/getTokenSSR')
-    currentProfile = await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
-  } else {
-    const { getToken } = await import('../../token/getToken')
-    currentProfile = getToken(CURRENT_PROFILE_KEY_NAME)
-  }
-
-  const parsedCurrentProfile = parseString<MinimalProfile>(currentProfile ?? undefined)
-
-  const fetchOptions: RequestOptions = {
-    ...options,
-    headers: {
-      Accept: 'application/json, text/plain, */*',
-      'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
-      ...options.headers,
-    },
-  }
-
-  // stringify and decamelize request body
-  if (options.body && stringifyBody) {
-    const bodyStringify = decamelizeRequestBodyKeys
-      ? JSON.stringify(humps.decamelizeKeys(options.body))
-      : JSON.stringify(options.body)
-
-    fetchOptions.body = bodyStringify
-  }
-
-  // token refresh logic
-  let accessAuthToken
-  let refreshAuthToken
-  // TODO: maybe find a better way to deal with RSC
-  if (typeof window === typeof undefined) {
-    const { getTokenSSR } = await import('../../token/getTokenSSR')
-    accessAuthToken = await getTokenSSR(accessKeyName)
-    refreshAuthToken = await getTokenSSR(refreshKeyName)
-  } else {
-    const { getToken } = await import('../../token/getToken')
-    accessAuthToken = getToken(accessKeyName)
-    refreshAuthToken = getToken(refreshKeyName)
-  }
-
-  if (accessAuthToken && isAuthTokenRequired && refreshToken) {
-    const isTokenValid = isUserTokenValid(decodeJWT(accessAuthToken))
-    if (!isTokenValid) {
-      try {
-        accessAuthToken = await refreshAccessToken({
-          refreshToken: refreshAuthToken,
-          accessKeyName,
-          refreshKeyName,
-        })
-      } catch (error) {
-        if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
-          eventEmitter.emit(LOGOUT_EVENT)
-        }
-        return Promise.reject(error)
-      }
-    }
-  }
-
-  // set Authorization header
-  if (accessAuthToken && isAuthTokenRequired) {
-    fetchOptions.headers!.Authorization = `${tokenType} ${accessAuthToken}`
-  }
-
-  // set language header
-  // TODO: maybe find a better way to deal with RSC
-  let language
-  if (typeof window === typeof undefined) {
-    const { cookies } = await import('next/headers')
-    const cookieStore = await cookies()
-    language = cookieStore.get(languageCookieName)?.value
-  } else {
-    const { getLanguage } = await import('../../language/getLanguage')
-    language = getLanguage(languageCookieName)
-  }
-  if (language) {
-    fetchOptions.headers!['Accept-Language'] = language
-  }
-
-  // set content-type header
-  const methodsToSetContentType = ['POST', 'PUT', 'PATCH']
-  if (setContentType && methodsToSetContentType.includes(fetchOptions.method || '')) {
-    fetchOptions.headers!['Content-Type'] = 'application/json; charset=utf-8'
-  }
 
   let fetchUrl = url
 
@@ -190,9 +99,93 @@ export const baseAppFetch: BaseAppFetch = async (
     fetchUrl = `${url}?${queryString}`
   }
 
-  try {
+  async function executeRequest(hasRetried = false): Promise<any> {
+    let currentProfile
+    if (isServer) {
+      const { getTokenSSR } = await import('../../token/getTokenSSR')
+      currentProfile = await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
+    } else {
+      const { getToken } = await import('../../token/getToken')
+      currentProfile = getToken(CURRENT_PROFILE_KEY_NAME)
+    }
+
+    const parsedCurrentProfile = parseString<MinimalProfile>(currentProfile ?? undefined)
+
+    const fetchOptions: RequestOptions = {
+      ...options,
+      headers: {
+        Accept: 'application/json, text/plain, */*',
+        'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
+        ...options.headers,
+      },
+    }
+
+    if (options.body && stringifyBody) {
+      const bodyStringify = decamelizeRequestBodyKeys
+        ? JSON.stringify(humps.decamelizeKeys(options.body))
+        : JSON.stringify(options.body)
+
+      fetchOptions.body = bodyStringify
+    }
+
+    let accessAuthToken
+    let refreshAuthToken
+    if (isServer) {
+      const { getTokenSSR } = await import('../../token/getTokenSSR')
+      accessAuthToken = await getTokenSSR(accessKeyName)
+      refreshAuthToken = await getTokenSSR(refreshKeyName)
+    } else {
+      const { getToken } = await import('../../token/getToken')
+      accessAuthToken = getToken(accessKeyName)
+      refreshAuthToken = getToken(refreshKeyName)
+    }
+
+    const resolvedAccessToken = accessTokenOverride ?? accessAuthToken
+
+    if (!fetchOptions.headers?.Authorization && resolvedAccessToken && isAuthTokenRequired) {
+      fetchOptions.headers!.Authorization = `${tokenType} ${resolvedAccessToken}`
+    }
+
+    let language
+    if (isServer) {
+      const { cookies } = await import('next/headers')
+      const cookieStore = await cookies()
+      language = cookieStore.get(languageCookieName)?.value
+    } else {
+      const { getLanguage } = await import('../../language/getLanguage')
+      language = getLanguage(languageCookieName)
+    }
+    if (language) {
+      fetchOptions.headers!['Accept-Language'] = language
+    }
+
+    const methodsToSetContentType = ['POST', 'PUT', 'PATCH']
+    if (setContentType && methodsToSetContentType.includes(fetchOptions.method || '')) {
+      fetchOptions.headers!['Content-Type'] = 'application/json; charset=utf-8'
+    }
+
     // had to override the fetchOptions type because of the GraphQLBody type
     const response = await fetch(fetchUrl, fetchOptions as RequestInit)
+
+    if (response.status === 401 && !hasRetried && isAuthTokenRequired && !isServer) {
+      const { getToken } = await import('../../token/getToken')
+      const latestAccessToken = getToken(accessKeyName)
+
+      if (latestAccessToken && latestAccessToken !== resolvedAccessToken) {
+        return executeRequest(true)
+      }
+
+      const outcome = await awaitSessionRecovery({
+        source: 'fetch',
+        path,
+        status: 401,
+        hasRefreshToken: !!refreshAuthToken,
+      })
+
+      if (outcome === 'refreshed') {
+        return executeRequest(true)
+      }
+    }
 
     const isJsonResponse = response.headers.get('content-type')?.includes('application/json')
 
@@ -203,12 +196,14 @@ export const baseAppFetch: BaseAppFetch = async (
 
     if (isJsonResponse) {
       const data = await response.json()
-
-      // camelize response data
       return camelizeResponseDataKeys ? humps.camelizeKeys(data) : data
     }
 
     return response
+  }
+
+  try {
+    return await executeRequest()
   } catch (error) {
     return Promise.reject(error)
   }

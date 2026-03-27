@@ -1,39 +1,39 @@
 'use client'
 
-import { ACCESS_KEY_NAME, REFRESH_KEY_NAME, refreshAccessToken } from '@baseapp-frontend/utils'
-import { getToken } from '@baseapp-frontend/utils/functions/token'
-
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 
 import UserApi, { USER_API_KEY } from '../../../services/user'
+import { getSessionService } from '../../../session/client'
 import type { User, UserUpdateParams } from '../../../types/user'
-import { useCurrentProfile } from '../../profile'
+import { SESSION_QUERY_KEY } from '../useSession'
 import type { UseUpdateUserOptions } from './types'
 
 const useUpdateUser = <TUser extends Pick<User, 'id'>>({
   options,
-  accessKeyName = ACCESS_KEY_NAME,
-  refreshKeyName = REFRESH_KEY_NAME,
   ApiClass = UserApi,
 }: UseUpdateUserOptions<TUser> = {}) => {
   const queryClient = useQueryClient()
-  const { setCurrentProfile } = useCurrentProfile()
-  const refreshToken = getToken(refreshKeyName)
+  const sessionService = getSessionService()
+  const { onSuccess, onSettled, ...mutationOptions } = options ?? {}
 
   const mutation = useMutation({
     mutationFn: (params: UserUpdateParams<TUser>) => ApiClass.updateUser<TUser>(params),
-    onSettled: async (data, error, variables, context) => {
+    onSuccess: async (data, variables, context) => {
       queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
-      try {
-        await refreshAccessToken({ refreshToken, accessKeyName, refreshKeyName })
-      } catch (e) {
-        // silently fail
-        // eslint-disable-next-line no-console
-        setCurrentProfile(null)
+      queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEY })
+
+      const session = await Promise.resolve(sessionService.read())
+
+      if (session.refreshToken) {
+        await sessionService.refresh()
       }
-      options?.onSettled?.(data, error, variables, context)
+
+      await onSuccess?.(data, variables, context)
     },
-    ...options,
+    onSettled: async (data, error, variables, context) => {
+      await onSettled?.(data, error, variables, context)
+    },
+    ...mutationOptions,
   })
 
   return mutation

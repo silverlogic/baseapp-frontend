@@ -3,15 +3,34 @@ import humps from 'humps'
 import Cookies from 'js-cookie'
 
 import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
-import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
-import { eventEmitter } from '../../events'
+import { awaitSessionRecovery } from '../../auth/awaitSessionRecovery'
 import { getExpoConstant } from '../../expo'
 import { buildQueryString } from '../../string'
-import { decodeJWT } from '../../token/decodeJWT'
-import { isUserTokenValid } from '../../token/isUserTokenValid'
-import { refreshAccessToken } from '../../token/refreshAccessToken'
+
+const AUTH_RECOVERY_RETRY_FLAG = 'authRecoveryRetried'
+
+interface AuthRecoveryRetryRequest {
+  authRecoveryRetried?: boolean
+}
+
+function readTokenFromAuthorizationHeader(
+  authorizationHeader: unknown,
+  tokenType: string,
+): string | null {
+  if (typeof authorizationHeader !== 'string' || !authorizationHeader) {
+    return null
+  }
+
+  const prefix = `${tokenType} `
+
+  if (authorizationHeader.startsWith(prefix)) {
+    return authorizationHeader.slice(prefix.length)
+  }
+
+  return authorizationHeader
+}
 
 export const createAxiosInstance = ({
   returnData = true,
@@ -21,7 +40,6 @@ export const createAxiosInstance = ({
   languageCookieName = LANGUAGE_COOKIE_NAME,
   servicesWithoutToken = SERVICES_WITHOUT_TOKEN,
   useFormData = true,
-  refreshToken = true,
   tokenType = 'Bearer',
   decamelizeRequestBodyKeys = true,
   decamelizeRequestParamsKeys = true,
@@ -47,37 +65,18 @@ export const createAxiosInstance = ({
   }
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
+    const requestWithRetryState = request as typeof request & AuthRecoveryRetryRequest
+    const isRetriedRequest = Boolean(requestWithRetryState.authRecoveryRetried)
     const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
-    // token refresh logic
+
     let accessAuthToken
-    let refreshAuthToken
     // TODO: maybe find a better way to deal with RSC
     if (typeof window === typeof undefined) {
       const { getTokenSSR } = await import('../../token/getTokenSSR')
       accessAuthToken = await getTokenSSR(accessKeyName)
-      refreshAuthToken = await getTokenSSR(refreshKeyName)
     } else {
       const { getToken } = await import('../../token/getToken')
       accessAuthToken = getToken(accessKeyName)
-      refreshAuthToken = getToken(refreshKeyName)
-    }
-
-    if (accessAuthToken && isAuthTokenRequired && refreshToken) {
-      const isTokenValid = isUserTokenValid(decodeJWT(accessAuthToken))
-      if (!isTokenValid) {
-        try {
-          accessAuthToken = await refreshAccessToken({
-            refreshToken: refreshAuthToken,
-            accessKeyName,
-            refreshKeyName,
-          })
-        } catch (error) {
-          if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
-            eventEmitter.emit(LOGOUT_EVENT)
-          }
-          return Promise.reject(error)
-        }
-      }
     }
 
     if (
@@ -94,7 +93,7 @@ export const createAxiosInstance = ({
       request.headers['Accept-Language'] = language
     }
 
-    if (request.data) {
+    if (request.data && !isRetriedRequest) {
       if (!file || !useFormData) {
         if (stringifyBody) {
           if (decamelizeRequestBodyKeys) {
@@ -122,7 +121,7 @@ export const createAxiosInstance = ({
       }
     }
 
-    if (request.params && decamelizeRequestParamsKeys) {
+    if (request.params && decamelizeRequestParamsKeys && !isRetriedRequest) {
       request.params = humps.decamelizeKeys(request.params)
     }
 
@@ -139,7 +138,65 @@ export const createAxiosInstance = ({
       }
       return returnData && response.data ? response.data : response
     },
-    (error) => {
+    async (error) => {
+      const isUnauthorized = error.response?.status === 401
+      const isServer = typeof window === typeof undefined
+      const errorConfig = error.config as
+        | (typeof error.config & AuthRecoveryRetryRequest)
+        | undefined
+      const hasRetried = Boolean(errorConfig?.authRecoveryRetried)
+      const isAuthTokenRequired = !servicesWithoutToken.some((regex) =>
+        regex.test(error.config?.url || ''),
+      )
+
+      if (isUnauthorized && !isServer && !hasRetried && isAuthTokenRequired) {
+        const { getToken } = await import('../../token/getToken')
+        const latestAccessToken = getToken(accessKeyName)
+        const failedAccessToken = readTokenFromAuthorizationHeader(
+          error.config?.headers?.Authorization,
+          tokenType,
+        )
+
+        if (latestAccessToken && latestAccessToken !== failedAccessToken) {
+          const retryConfig = {
+            ...error.config,
+            [AUTH_RECOVERY_RETRY_FLAG]: true,
+            headers: {
+              ...(error.config?.headers ?? {}),
+              Authorization: `${tokenType} ${latestAccessToken}`,
+            },
+          } as typeof error.config & AuthRecoveryRetryRequest
+
+          return instance.request(retryConfig)
+        }
+
+        const outcome = await awaitSessionRecovery({
+          source: 'axios',
+          path: error.config?.url,
+          status: 401,
+          hasRefreshToken: !!Cookies.get(refreshKeyName),
+        })
+
+        if (outcome === 'refreshed') {
+          const refreshedToken = getToken(accessKeyName)
+          const retryConfig = {
+            ...error.config,
+            [AUTH_RECOVERY_RETRY_FLAG]: true,
+            headers: {
+              ...(error.config?.headers ?? {}),
+            },
+          } as typeof error.config & AuthRecoveryRetryRequest
+
+          if (refreshedToken) {
+            retryConfig.headers.Authorization = `${tokenType} ${refreshedToken}`
+          } else {
+            delete retryConfig.headers.Authorization
+          }
+
+          return instance.request(retryConfig)
+        }
+      }
+
       const contentTypeHeader = error.response?.headers?.['content-type'] || ''
       const isJsonError = contentTypeHeader.includes('application/json')
 

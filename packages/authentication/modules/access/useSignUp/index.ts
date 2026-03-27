@@ -1,13 +1,16 @@
 'use client'
 
+import { useMemo } from 'react'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 
-import AuthApi from '../../../services/auth'
 import type { RegisterRequest } from '../../../types/auth'
+import { getActiveAuthModule } from '../../auth-strategy/factory'
+import type { AuthError, AuthResult } from '../../auth-strategy/types'
 import {
   DEFAULT_INITIAL_VALUES,
   DEFAULT_VALIDATION_SCHEMA,
@@ -15,13 +18,14 @@ import {
 } from './constants'
 import type { UseSignUpOptions } from './types'
 
-const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse = void>({
+const useSignUp = <TRegisterRequest extends RegisterRequest>({
   formOptions = {},
-  ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
   useNameField = false,
-}: UseSignUpOptions<TRegisterRequest, TRegisterResponse> = {}) => {
+}: UseSignUpOptions<TRegisterRequest> = {}) => {
+  const strategy = useMemo(() => getActiveAuthModule().strategy, [])
+
   const form = useForm({
     // @ts-ignore TODO: DeepPartial type error will be fixed on v8
     defaultValues: DEFAULT_INITIAL_VALUES,
@@ -34,17 +38,22 @@ const useSignUp = <TRegisterRequest extends RegisterRequest, TRegisterResponse =
     ...formOptions,
   })
 
-  const mutation = useMutation({
-    mutationFn: (values) => ApiClass.register<TRegisterResponse>(values),
-    ...options, // needs to be placed below all overridable options
-    onError: (err, variables, context) => {
+  const mutation = useMutation<AuthResult, AuthError | Error, TRegisterRequest>({
+    mutationFn: (values) => strategy.signUp(values),
+    ...options,
+    onError: (error: unknown, variables, context) => {
+      const err = error as AuthError | Error
       options?.onError?.(err, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        const errorWithFieldErrors =
+          err && typeof err === 'object' && 'fieldErrors' in err
+            ? { response: { data: (err as AuthError).fieldErrors } }
+            : err
+        setFormApiErrors(form, errorWithFieldErrors)
       }
     },
-    onSuccess: (response, variables, context) => {
-      options?.onSuccess?.(response, variables, context)
+    onSuccess: (result, variables, context) => {
+      options?.onSuccess?.(result, variables, context)
     },
   })
 
