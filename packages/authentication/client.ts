@@ -16,7 +16,7 @@ export {
   CurrentProfileProvider,
 } from './modules/profile/useCurrentProfile'
 
-export { getClientSession, handleClientUnauthorized, refreshClientSession } from './session/client'
+export { handleClientUnauthorized, refreshClientSession } from './session/client'
 
 export { SESSION_STATUS } from './modules/auth-strategy/constants'
 
@@ -29,3 +29,4 @@ export type * from './modules/access/useChangePassword/types'
 export type * from './modules/access/allauth/useAllAuthGoogleLogin/types'
 export type { UseAllAuthGoogleLoginHandlerOptions } from './modules/access/allauth/useAllAuthGoogleLoginHandler'
 export type { SessionState, SessionStatus } from './modules/auth-strategy/types'
+export { isAuthError } from './modules/auth-strategy/types'

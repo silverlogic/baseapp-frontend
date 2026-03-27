@@ -9,6 +9,8 @@ import type { SessionMaterial, SessionState, StrategySession } from '../types'
 
 type AccessTokenPayload = JWTContent & Partial<User>
 
+const inflightRefreshByToken = new Map<string, Promise<SessionState>>()
+
 function toAnonymousState(): SessionState {
   return {
     status: SESSION_STATUS.anonymous,
@@ -38,8 +40,6 @@ function toAuthenticatedState(
 }
 
 export function createAllauthSession(): StrategySession {
-  let inflightRefresh: Promise<SessionState> | null = null
-
   async function evaluate(session: SessionMaterial): Promise<SessionState> {
     if (!session.accessToken) {
       if (session.refreshToken) {
@@ -84,15 +84,25 @@ export function createAllauthSession(): StrategySession {
   }
 
   async function refresh(session: SessionMaterial): Promise<SessionState> {
+    const { refreshToken } = session
+
+    if (!refreshToken) {
+      return doRefresh(session)
+    }
+
+    const inflightRefresh = inflightRefreshByToken.get(refreshToken)
+
     if (inflightRefresh) {
       return inflightRefresh
     }
 
-    inflightRefresh = doRefresh(session).finally(() => {
-      inflightRefresh = null
+    const nextRefresh = doRefresh(session).finally(() => {
+      inflightRefreshByToken.delete(refreshToken)
     })
 
-    return inflightRefresh
+    inflightRefreshByToken.set(refreshToken, nextRefresh)
+
+    return nextRefresh
   }
 
   return {

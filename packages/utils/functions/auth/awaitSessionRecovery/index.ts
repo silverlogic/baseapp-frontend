@@ -18,11 +18,17 @@ interface AwaitSessionRecoveryInput {
   timeoutMs?: number
 }
 
+let inflightRecovery: Promise<UnauthorizedResolution> | null = null
+
 export function awaitSessionRecovery({
   timeoutMs = 5000,
   ...event
 }: AwaitSessionRecoveryInput): Promise<UnauthorizedResolution> {
-  return new Promise((resolve) => {
+  if (inflightRecovery) {
+    return inflightRecovery
+  }
+
+  inflightRecovery = new Promise<UnauthorizedResolution>((resolve) => {
     let timeoutId: ReturnType<typeof setTimeout>
     let onRefreshed = () => {}
     let onCleared = () => {}
@@ -54,5 +60,9 @@ export function awaitSessionRecovery({
       type: AUTH_UNAUTHORIZED_EVENT,
       ...event,
     })
+  }).finally(() => {
+    inflightRecovery = null
   })
+
+  return inflightRecovery
 }

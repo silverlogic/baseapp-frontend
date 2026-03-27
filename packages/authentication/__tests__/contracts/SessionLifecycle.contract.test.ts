@@ -40,6 +40,7 @@ describe('StrategySession — allauth — contract', () => {
     const session: SessionMaterial = {
       accessToken: 'valid-access-token',
       refreshToken: 'valid-refresh-token',
+      sessionToken: null,
     }
 
     const state: SessionState = await strategySession.evaluate(session)
@@ -52,6 +53,7 @@ describe('StrategySession — allauth — contract', () => {
     const session: SessionMaterial = {
       accessToken: null,
       refreshToken: 'valid-refresh-token',
+      sessionToken: null,
     }
 
     const state: SessionState = await strategySession.evaluate(session)
@@ -61,7 +63,11 @@ describe('StrategySession — allauth — contract', () => {
   })
 
   it('evaluate returns anonymous when no tokens exist', async () => {
-    const state = await strategySession.evaluate({})
+    const state = await strategySession.evaluate({
+      accessToken: null,
+      refreshToken: null,
+      sessionToken: null,
+    })
 
     expect(state.status).toBe('anonymous')
   })
@@ -88,6 +94,7 @@ describe('StrategySession — allauth — contract', () => {
     const state = await strategySession.refresh({
       accessToken: 'expired-access-token',
       refreshToken: 'bad-refresh-token',
+      sessionToken: null,
     })
 
     expect(state.status).toBe('anonymous')
@@ -107,6 +114,7 @@ describe('StrategySession — allauth — contract', () => {
     const session: SessionMaterial = {
       accessToken: 'expired-access-token',
       refreshToken: 'valid-refresh-token',
+      sessionToken: null,
     }
 
     const results = await Promise.all([
@@ -124,6 +132,7 @@ describe('StrategySession — allauth — contract', () => {
     const state = await strategySession.refresh({
       accessToken: 'expired-access-token',
       refreshToken: null,
+      sessionToken: null,
     })
 
     expect(state.status).toBe('anonymous')

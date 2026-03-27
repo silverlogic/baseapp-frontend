@@ -1,9 +1,4 @@
-export {
-  getClientSession,
-  getSessionService,
-  handleClientUnauthorized,
-  refreshClientSession,
-} from './client'
+export { getSessionService, handleClientUnauthorized, refreshClientSession } from './client'
 export { createSessionService } from './service'
 export { createBrowserSessionStorage } from './storage'
 export {

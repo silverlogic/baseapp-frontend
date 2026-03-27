@@ -17,10 +17,6 @@ export function getSessionService<TUser = User>(): SessionService<TUser> {
   return cachedSessionService as SessionService<TUser>
 }
 
-export async function getClientSession<TUser = User>(): Promise<SessionState<TUser>> {
-  return getSessionService<TUser>().getState()
-}
-
 export async function refreshClientSession<TUser = User>(): Promise<SessionState<TUser>> {
   return getSessionService<TUser>().refresh()
 }

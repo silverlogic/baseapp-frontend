@@ -126,6 +126,7 @@ export async function httpFetch(
     const fetchOptions = getFetchOptions({ request, variables, uploadables })
     const EXPO_PUBLIC_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_RELAY_ENDPOINT')
     const isServer = typeof window === typeof undefined
+    const accessTokenAtRequestStart = !isServer ? (getToken(ACCESS_KEY_NAME) ?? null) : null
 
     const response = await baseAppFetch('', {
       baseUrl: (process.env.NEXT_PUBLIC_RELAY_ENDPOINT ?? EXPO_PUBLIC_RELAY_ENDPOINT) as string,
@@ -138,6 +139,12 @@ export async function httpFetch(
     })
 
     if (!hasRetried && !isServer && hasUnauthorizedGraphQLErrors(response)) {
+      const latestAccessToken = getToken(ACCESS_KEY_NAME)
+
+      if (latestAccessToken && latestAccessToken !== accessTokenAtRequestStart) {
+        return attemptFetch(true)
+      }
+
       const outcome = await awaitSessionRecovery({
         source: 'fetch',
         path: '/graphql',

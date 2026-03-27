@@ -168,6 +168,13 @@ export const baseAppFetch: BaseAppFetch = async (
     const response = await fetch(fetchUrl, fetchOptions as RequestInit)
 
     if (response.status === 401 && !hasRetried && isAuthTokenRequired && !isServer) {
+      const { getToken } = await import('../../token/getToken')
+      const latestAccessToken = getToken(accessKeyName)
+
+      if (latestAccessToken && latestAccessToken !== resolvedAccessToken) {
+        return executeRequest(true)
+      }
+
       const outcome = await awaitSessionRecovery({
         source: 'fetch',
         path,

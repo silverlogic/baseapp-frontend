@@ -33,7 +33,7 @@ const useChangePassword = ({
       strategy.changePassword({ currentPassword, newPassword, token }),
     ...options,
     onError: (err: AuthError | Error, variables, context) => {
-      options?.onError?.(err as any, variables, context)
+      options?.onError?.(err, variables, context)
       if (enableFormApiErrors) {
         const errorWithFieldErrors =
           err && typeof err === 'object' && 'fieldErrors' in err

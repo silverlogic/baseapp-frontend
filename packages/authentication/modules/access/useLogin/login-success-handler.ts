@@ -2,18 +2,7 @@ import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
 
 import { getSessionService } from '../../../session/client'
 import type { MinimalProfile } from '../../../types/profile'
-import type { AuthResult, AuthSuccessResult } from '../../auth-strategy/types'
-
-interface LegacyLoginSuccessMetadata {
-  accessToken?: string
-  refreshToken?: string
-  sessionToken?: string
-  rawResponse?: { meta?: { profile?: Partial<MinimalProfile> } }
-}
-
-function getLegacyMetadata(result: AuthSuccessResult): LegacyLoginSuccessMetadata | null {
-  return (result.metadata as LegacyLoginSuccessMetadata | undefined) ?? null
-}
+import type { AuthResult } from '../../auth-strategy/types'
 
 function resolveProfileImage(profileImage?: string | null): string | null {
   if (!profileImage) return null
@@ -27,48 +16,29 @@ function resolveProfileImage(profileImage?: string | null): string | null {
   return profileImage.startsWith('http') || !baseUrl ? profileImage : `${baseUrl}${profileImage}`
 }
 
+// Writes the session tokens from a successful auth result.
+// Strategies must populate result.session on AuthSuccessResult.
 export async function writeSessionFromAuthResult(result: AuthResult): Promise<void> {
   if (result.kind !== 'success') return
 
   const { session } = result
-  const legacyMetadata = getLegacyMetadata(result)
 
   if (session?.accessToken || session?.refreshToken) {
     const sessionService = getSessionService()
     await sessionService.write(session)
-    return
-  }
-
-  if (legacyMetadata?.accessToken || legacyMetadata?.refreshToken) {
-    const sessionService = getSessionService()
-    await sessionService.write({
-      accessToken: legacyMetadata.accessToken ?? null,
-      refreshToken: legacyMetadata.refreshToken ?? null,
-      sessionToken: legacyMetadata.sessionToken ?? null,
-    })
   }
 }
 
 export function resolveProfileFromAuthResult(result: AuthResult): MinimalProfile | null {
   if (result.kind !== 'success') return null
 
-  if (result.profile?.id) {
-    return {
-      id: result.profile.id,
-      name: result.profile.name ?? null,
-      image: resolveProfileImage(result.profile.image),
-      urlPath: result.profile.urlPath ?? null,
-    }
-  }
-
-  const profile = getLegacyMetadata(result)?.rawResponse?.meta?.profile
-  if (!profile?.id) return null
+  if (!result.profile?.id) return null
 
   return {
-    id: profile.id,
-    name: profile.name ?? null,
-    image: resolveProfileImage(profile.image),
-    urlPath: profile.urlPath ?? null,
+    id: result.profile.id,
+    name: result.profile.name ?? null,
+    image: resolveProfileImage(result.profile.image),
+    urlPath: result.profile.urlPath ?? null,
   }
 }
 

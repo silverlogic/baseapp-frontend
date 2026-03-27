@@ -23,6 +23,7 @@ describe('createAllauthSession', () => {
     const state = await session.evaluate({
       accessToken: null,
       refreshToken: 'refresh-token',
+      sessionToken: null,
     })
 
     expect(state.status).toBe('expired')
@@ -34,6 +35,7 @@ describe('createAllauthSession', () => {
     mockedDecodeJWT.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 } as never)
 
     const state = await session.refresh({
+      accessToken: null,
       refreshToken: 'refresh-token',
       sessionToken: 'session-token',
     })
@@ -48,10 +50,38 @@ describe('createAllauthSession', () => {
     mockedGetTokens.mockRejectedValue(new Error('refresh failed'))
 
     const state = await session.refresh({
+      accessToken: null,
       refreshToken: 'refresh-token',
+      sessionToken: null,
     })
 
     expect(state.status).toBe('anonymous')
+  })
+
+  it('dedupes refresh calls across separate session instances for the same refresh token', async () => {
+    const firstSession = createAllauthSession()
+    const secondSession = createAllauthSession()
+    mockedGetTokens.mockResolvedValue({ access: 'new-access', refresh: 'new-refresh' })
+    mockedDecodeJWT.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 } as never)
+
+    const [firstState, secondState] = await Promise.all([
+      firstSession.refresh({
+        accessToken: null,
+        refreshToken: 'shared-refresh-token',
+        sessionToken: 'session-token',
+      }),
+      secondSession.refresh({
+        accessToken: null,
+        refreshToken: 'shared-refresh-token',
+        sessionToken: 'session-token',
+      }),
+    ])
+
+    expect(mockedGetTokens).toHaveBeenCalledTimes(1)
+    expect(firstState.status).toBe('authenticated')
+    expect(secondState.status).toBe('authenticated')
+    expect(firstState.session.accessToken).toBe('new-access')
+    expect(secondState.session.accessToken).toBe('new-access')
   })
 
   it('marks access token as authenticated when valid', async () => {
@@ -61,6 +91,8 @@ describe('createAllauthSession', () => {
 
     const state = await session.evaluate({
       accessToken: 'valid-access',
+      refreshToken: null,
+      sessionToken: null,
     })
 
     expect(state.status).toBe('authenticated')
@@ -78,6 +110,7 @@ describe('createAllauthSession', () => {
     const state = await session.evaluate({
       accessToken: 'expired-access',
       refreshToken: 'refresh-token',
+      sessionToken: null,
     })
 
     expect(state.status).toBe('expired')

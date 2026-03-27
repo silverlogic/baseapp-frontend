@@ -44,6 +44,7 @@ Object.defineProperty(global, 'window', {
 describe('createAxiosInstance', () => {
   afterEach(() => {
     jest.clearAllMocks()
+    mockRequest.mockReset()
   })
 
   it('should set default headers for post, patch, and put methods', () => {
@@ -296,6 +297,8 @@ describe('createAxiosInstance', () => {
     it('should call awaitSessionRecovery on 401 response in response interceptor', async () => {
       const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
       awaitSessionRecoveryMock.mockResolvedValue('cleared')
+      const { getToken } = require('../../../token/getToken')
+      ;(getToken as jest.Mock).mockReturnValue(null)
 
       const {
         axios: {
@@ -429,6 +432,83 @@ describe('createAxiosInstance', () => {
       awaitSessionRecoveryMock.mockResolvedValue('refreshed')
 
       const { getToken } = require('../../../token/getToken')
+      let accessTokenReads = 0
+      ;(getToken as jest.Mock).mockImplementation(() => {
+        accessTokenReads += 1
+        return accessTokenReads === 1 ? 'old-token' : 'new-refreshed-token'
+      })
+
+      mockRequest.mockResolvedValue({ data: 'retried-success' })
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: { Authorization: 'Bearer old-token' } },
+      }
+
+      const result = await errorHandler(error)
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(mockRequest).toHaveBeenCalledWith(
+        expect.objectContaining({
+          authRecoveryRetried: true,
+          headers: expect.objectContaining({
+            Authorization: 'Bearer new-refreshed-token',
+          }),
+        }),
+      )
+      expect(result).toEqual({ data: 'retried-success' })
+    })
+
+    it('should reject when refresh resolves as cleared', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockResolvedValue('cleared')
+      const { getToken } = require('../../../token/getToken')
+      ;(getToken as jest.Mock).mockReturnValue('old-token')
+
+      const {
+        axios: {
+          interceptors: {
+            response: { use },
+          },
+        },
+      } = createAxiosInstance()
+
+      const [[, errorHandler]] = (use as jest.Mock).mock.calls
+
+      const error = {
+        response: {
+          status: 401,
+          headers: { 'content-type': 'application/json' },
+          data: { detail: 'Unauthorized' },
+        },
+        config: { url: '/api/test', headers: { Authorization: 'Bearer old-token' } },
+      }
+
+      await expect(errorHandler(error)).rejects.toBeDefined()
+
+      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(mockRequest).not.toHaveBeenCalled()
+    })
+
+    it('should retry with the latest cookie token without triggering session recovery when the token changed mid-flight', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      const { getToken } = require('../../../token/getToken')
       ;(getToken as jest.Mock).mockReturnValue('new-refreshed-token')
 
       mockRequest.mockResolvedValue({ data: 'retried-success' })
@@ -449,12 +529,15 @@ describe('createAxiosInstance', () => {
           headers: { 'content-type': 'application/json' },
           data: { detail: 'Unauthorized' },
         },
-        config: { url: '/api/test', headers: {} },
+        config: {
+          url: '/api/test',
+          headers: { Authorization: 'Bearer old-token' },
+        },
       }
 
       const result = await errorHandler(error)
 
-      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
       expect(mockRequest).toHaveBeenCalledWith(
         expect.objectContaining({
           authRecoveryRetried: true,
@@ -464,35 +547,6 @@ describe('createAxiosInstance', () => {
         }),
       )
       expect(result).toEqual({ data: 'retried-success' })
-    })
-
-    it('should reject when refresh resolves as cleared', async () => {
-      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
-      awaitSessionRecoveryMock.mockResolvedValue('cleared')
-
-      const {
-        axios: {
-          interceptors: {
-            response: { use },
-          },
-        },
-      } = createAxiosInstance()
-
-      const [[, errorHandler]] = (use as jest.Mock).mock.calls
-
-      const error = {
-        response: {
-          status: 401,
-          headers: { 'content-type': 'application/json' },
-          data: { detail: 'Unauthorized' },
-        },
-        config: { url: '/api/test', headers: {} },
-      }
-
-      await expect(errorHandler(error)).rejects.toBeDefined()
-
-      expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
-      expect(mockRequest).not.toHaveBeenCalled()
     })
 
     it('should not retry a second time if authRecoveryRetried is already true', async () => {

@@ -15,6 +15,23 @@ interface AuthRecoveryRetryRequest {
   authRecoveryRetried?: boolean
 }
 
+function readTokenFromAuthorizationHeader(
+  authorizationHeader: unknown,
+  tokenType: string,
+): string | null {
+  if (typeof authorizationHeader !== 'string' || !authorizationHeader) {
+    return null
+  }
+
+  const prefix = `${tokenType} `
+
+  if (authorizationHeader.startsWith(prefix)) {
+    return authorizationHeader.slice(prefix.length)
+  }
+
+  return authorizationHeader
+}
+
 export const createAxiosInstance = ({
   returnData = true,
   file = false,
@@ -133,6 +150,26 @@ export const createAxiosInstance = ({
       )
 
       if (isUnauthorized && !isServer && !hasRetried && isAuthTokenRequired) {
+        const { getToken } = await import('../../token/getToken')
+        const latestAccessToken = getToken(accessKeyName)
+        const failedAccessToken = readTokenFromAuthorizationHeader(
+          error.config?.headers?.Authorization,
+          tokenType,
+        )
+
+        if (latestAccessToken && latestAccessToken !== failedAccessToken) {
+          const retryConfig = {
+            ...error.config,
+            [AUTH_RECOVERY_RETRY_FLAG]: true,
+            headers: {
+              ...(error.config?.headers ?? {}),
+              Authorization: `${tokenType} ${latestAccessToken}`,
+            },
+          } as typeof error.config & AuthRecoveryRetryRequest
+
+          return instance.request(retryConfig)
+        }
+
         const outcome = await awaitSessionRecovery({
           source: 'axios',
           path: error.config?.url,
@@ -141,7 +178,6 @@ export const createAxiosInstance = ({
         })
 
         if (outcome === 'refreshed') {
-          const { getToken } = await import('../../token/getToken')
           const refreshedToken = getToken(accessKeyName)
           const retryConfig = {
             ...error.config,

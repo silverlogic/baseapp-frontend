@@ -22,6 +22,17 @@ export interface AuthError {
   cause?: unknown
 }
 
+export function isAuthError(error: unknown): error is AuthError {
+  return (
+    typeof error === 'object' &&
+    error !== null &&
+    'code' in error &&
+    'message' in error &&
+    typeof (error as AuthError).code === 'string' &&
+    typeof (error as AuthError).message === 'string'
+  )
+}
+
 export interface AuthSuccessResult<TUser = User> {
   kind: 'success'
   user?: TUser | null
@@ -65,10 +76,9 @@ export interface AuthStrategy {
 }
 
 export interface SessionMaterial {
-  accessToken?: string | null
-  refreshToken?: string | null
-  sessionToken?: string | null
-  strategyData?: Record<string, unknown>
+  accessToken: string | null
+  refreshToken: string | null
+  sessionToken: string | null
 }
 
 export type SessionStatus = (typeof SESSION_STATUS)[keyof typeof SESSION_STATUS]

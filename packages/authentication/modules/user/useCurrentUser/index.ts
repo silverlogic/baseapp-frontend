@@ -30,7 +30,8 @@ const useCurrentUser = <TUser extends Partial<User>>({
   })
 
   useEffect(() => {
-    if ((query.error as any)?.response?.status === 401) {
+    const apiError = query.error as { response?: { status?: number } } | null
+    if (apiError?.response?.status === 401) {
       queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     }
   }, [query.error, queryClient])

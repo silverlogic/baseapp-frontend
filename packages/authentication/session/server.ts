@@ -10,6 +10,83 @@ import { getActiveAuthModule } from '../modules/auth-strategy/factory'
 import type { SessionContract, SessionMaterial, SessionState } from '../modules/auth-strategy/types'
 import type { User } from '../types/user'
 
+const SESSION_COOKIE_NAMES = [ACCESS_KEY_NAME, REFRESH_KEY_NAME, SESSION_TOKEN_KEY_NAME] as const
+const SESSION_COOKIE_CONFIG = { secure: process.env.NODE_ENV === 'production' }
+
+type MiddlewareResponse = {
+  cookies: {
+    set(name: string, value: string, options?: object): void
+    delete(name: string): void
+  }
+}
+
+function readCookieHeader(headers: Headers): Map<string, string> {
+  const cookieHeader = headers.get('cookie')
+  const cookies = new Map<string, string>()
+  if (!cookieHeader) return cookies
+  cookieHeader.split(';').forEach((entry) => {
+    const [rawName, ...rawValueParts] = entry.trim().split('=')
+    if (!rawName) return
+    cookies.set(rawName, rawValueParts.join('='))
+  })
+  return cookies
+}
+
+function writeCookieHeader(headers: Headers, cookies: Map<string, string>) {
+  const nextCookieHeader = Array.from(cookies.entries())
+    .map(([name, value]) => `${name}=${value}`)
+    .join('; ')
+  if (nextCookieHeader) {
+    headers.set('cookie', nextCookieHeader)
+    return
+  }
+  headers.delete('cookie')
+}
+
+export function setRequestCookie(headers: Headers, name: string, value: string) {
+  const cookies = readCookieHeader(headers)
+  cookies.set(name, value)
+  writeCookieHeader(headers, cookies)
+}
+
+function deleteRequestCookie(headers: Headers, name: string) {
+  const cookies = readCookieHeader(headers)
+  cookies.delete(name)
+  writeCookieHeader(headers, cookies)
+}
+
+export function applySessionCookies(
+  response: MiddlewareResponse,
+  headers: Headers,
+  session: SessionMaterial,
+): void {
+  const tokens: [string, string | null][] = [
+    [ACCESS_KEY_NAME, session.accessToken],
+    [REFRESH_KEY_NAME, session.refreshToken],
+    [SESSION_TOKEN_KEY_NAME, session.sessionToken],
+  ]
+  tokens
+    .filter(([, value]) => Boolean(value))
+    .forEach(([name, value]) => {
+      response.cookies.set(name, value as string, SESSION_COOKIE_CONFIG)
+      setRequestCookie(headers, name, value as string)
+    })
+}
+
+export function clearSessionCookies(response: MiddlewareResponse, headers: Headers): void {
+  SESSION_COOKIE_NAMES.forEach((name) => {
+    response.cookies.delete(name)
+    deleteRequestCookie(headers, name)
+  })
+}
+
+// Expired session: only remove the access token — refresh token is preserved
+// so the next request can attempt a token refresh.
+export function clearExpiredSessionCookies(response: MiddlewareResponse, headers: Headers): void {
+  response.cookies.delete(ACCESS_KEY_NAME)
+  deleteRequestCookie(headers, ACCESS_KEY_NAME)
+}
+
 function readRequestSession(request: {
   cookies: { get(name: string): { value: string } | undefined }
 }): SessionMaterial {

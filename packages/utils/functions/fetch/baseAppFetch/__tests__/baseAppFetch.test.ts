@@ -534,19 +534,22 @@ describe('baseAppFetch', () => {
       awaitSessionRecoveryMock.mockResolvedValue('refreshed')
 
       const getTokenMock = getToken as jest.Mock
-      getTokenMock.mockReturnValue('old-token')
+      let accessTokenReads = 0
+      getTokenMock.mockImplementation((key: string) => {
+        if (key === 'Authorization') {
+          accessTokenReads += 1
+          return accessTokenReads <= 2 ? 'old-token' : 'new-refreshed-token'
+        }
+
+        if (key === 'Refresh') return 'old-refresh-token'
+        return null
+      })
 
       const { getToken: dynamicGetToken } = require('../../../token/getToken')
-      dynamicGetToken.mockReturnValue('old-token')
+      dynamicGetToken.mockImplementation((key: string) => getTokenMock(key))
 
       const fetchMock = global.fetch as jest.Mock
       fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce(SUCCESS_RESPONSE)
-
-      dynamicGetToken
-        .mockReturnValueOnce('old-token')
-        .mockReturnValueOnce('old-token')
-        .mockReturnValueOnce('old-token')
-        .mockReturnValue('new-refreshed-token')
 
       const result = await baseAppFetch('/test', {})
 
@@ -589,6 +592,36 @@ describe('baseAppFetch', () => {
 
       expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
       expect(global.fetch).toHaveBeenCalledTimes(1)
+    })
+
+    it('should retry with the latest cookie token without triggering session recovery when the token changed mid-flight', async () => {
+      const awaitSessionRecoveryMock = awaitSessionRecovery as jest.Mock
+      awaitSessionRecoveryMock.mockClear()
+
+      const getTokenMock = getToken as jest.Mock
+      let accessTokenReads = 0
+      getTokenMock.mockImplementation((key: string) => {
+        if (key === 'Authorization') {
+          accessTokenReads += 1
+          return accessTokenReads === 1 ? 'old-token' : 'new-token'
+        }
+
+        if (key === 'Refresh') return 'refresh-token'
+        return null
+      })
+
+      const { getToken: dynamicGetToken } = require('../../../token/getToken')
+      dynamicGetToken.mockImplementation((key: string) => getTokenMock(key))
+
+      const fetchMock = global.fetch as jest.Mock
+      fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce(SUCCESS_RESPONSE)
+
+      const result = await baseAppFetch('/test', {})
+
+      expect(awaitSessionRecoveryMock).not.toHaveBeenCalled()
+      expect(fetchMock).toHaveBeenCalledTimes(2)
+      expect(fetchMock.mock.calls[1]?.[1]?.headers?.Authorization).toBe('Bearer new-token')
+      expect(result).toEqual({ data: 'success' })
     })
 
     it('should not retry a second time if the retried request also returns 401', async () => {
