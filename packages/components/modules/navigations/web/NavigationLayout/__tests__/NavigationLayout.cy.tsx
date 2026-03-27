@@ -48,6 +48,7 @@ const defaultTheme = {
     themeLayout: 'vertical',
     themeColorPresets: 'default',
     themeStretch: false,
+    collapsedSidebar: false,
   },
   shadows: createShadows('light'),
   customShadows: createCustomShadows('light'),

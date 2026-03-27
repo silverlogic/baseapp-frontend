@@ -22,6 +22,7 @@ const customTheme = (mode: ThemeMode = 'light'): ThemeProviderProps => ({
     themeLayout: 'mini' as ThemeLayout,
     themeColorPresets: 'default' as PresetType,
     themeStretch: false,
+    collapsedSidebar: false,
   },
   shadows: createShadows(mode),
   customShadows: createCustomShadows(mode),
