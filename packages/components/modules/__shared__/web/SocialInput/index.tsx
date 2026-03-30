@@ -7,7 +7,7 @@ import { SocialTextField as DefaultSocialTextField } from '@baseapp-frontend/des
 import { SOCIAL_UPSERT_FORM } from '../../common'
 import DefaultSocialUpsertActions from '../SocialUpsertActions'
 import DefaultSubmitActions from './SubmitActions'
-import { Form } from './styled'
+import { Form as DefaultForm } from './styled'
 import { SocialInputProps } from './types'
 
 /**
@@ -68,6 +68,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       SocialUpsertActions = DefaultSocialUpsertActions,
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
+      Form = DefaultForm,
       onKeyDown,
       formId = 'text-field-form',
       submit,

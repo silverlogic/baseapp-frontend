@@ -30,6 +30,8 @@ import { Meta } from '@storybook/addon-docs'
 
 ## Notes
 
+- **Provider Note**: `Comments` includes the `CommentReplyProvider` internally. If you already wrap a page/section with the provider (so you can call `useCommentReply` higher up), use `BaseComments` instead to avoid double providers.
+
 - **Related Components**:
   - CommentInput: Used for creating new comments
   - CommentCard: Individual comment display

@@ -19,13 +19,9 @@ export type CommentOption = {
   hasPermission?: boolean | null
 }
 
-export interface CommentItemProps {
-  comment: CommentItem_comment$key
-  target: CommentItem_target$key
-  currentThreadDepth: number
-  subscriptionsEnabled: boolean
-  onReplyClick?: () => void
+export type CustomizableCommentItemProps = {
   enableDelete?: boolean
+  enableShare?: boolean
   ActionOverlayProps?: Partial<ActionOverlayProps>
   CommentUpdate?: FC<CommentUpdateProps>
   CommentUpdateProps?: Partial<CommentUpdateProps>
@@ -33,8 +29,18 @@ export interface CommentItemProps {
   CommentReactionButton?: FC<CommentReactionButtonProps>
   CommentReplyButton?: FC<CommentReplyButtonProps>
   CommentPinnedBadge?: FC<CommentPinnedBadgeProps>
+  CommentContainer?: FC<BoxProps>
   Timestamp?: FC<TimestampProps>
+  useProfileId?: boolean
   profilePath?: string
+}
+
+export interface CommentItemProps extends CustomizableCommentItemProps {
+  comment: CommentItem_comment$key
+  target: CommentItem_target$key
+  currentThreadDepth: number
+  subscriptionsEnabled: boolean
+  onReplyClick?: () => void
 }
 
 export interface CommentContainerWrapperProps extends BoxProps {

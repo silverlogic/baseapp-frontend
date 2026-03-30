@@ -11,5 +11,6 @@ export interface CommentsRepliesProps {
   subscriptionsEnabled: boolean
   onReplyClick?: () => void
   CommentItem: FC<CommentItemProps>
+  CommentItemProps?: Partial<CommentItemProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
 }

@@ -18,8 +18,8 @@ import DefaultCommentPinnedBadge from './CommentPinnedBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
 import CommentsReplies from './CommentsReplies'
-import { CommentContainer, CommentContainerWrapper } from './styled'
-import { CommentItemProps } from './types'
+import { CommentContainerWrapper, CommentContainer as DefaultCommentContainer } from './styled'
+import { CommentItemProps, CustomizableCommentItemProps } from './types'
 import useCommentOptions from './useCommentOptions'
 
 const CommentItem: FC<CommentItemProps> = ({
@@ -27,17 +27,24 @@ const CommentItem: FC<CommentItemProps> = ({
   currentThreadDepth,
   subscriptionsEnabled,
   onReplyClick,
-  CommentUpdateProps,
-  CommentsRepliesProps,
-  ActionOverlayProps,
-  enableDelete = false,
-  Timestamp = DefaultTimestamp,
-  CommentUpdate = DefaultCommentUpdate,
-  CommentReplyButton = DefaultCommentReplyButton,
-  CommentPinnedBadge = DefaultCommentPinnedBadge,
-  CommentReactionButton = DefaultCommentReactionButton,
-  profilePath = '/profile',
+  ...customizableProps
 }) => {
+  const {
+    CommentUpdateProps,
+    CommentsRepliesProps,
+    ActionOverlayProps,
+    enableDelete = false,
+    enableShare,
+    Timestamp = DefaultTimestamp,
+    CommentUpdate = DefaultCommentUpdate,
+    CommentReplyButton = DefaultCommentReplyButton,
+    CommentPinnedBadge = DefaultCommentPinnedBadge,
+    CommentReactionButton = DefaultCommentReactionButton,
+    CommentContainer = DefaultCommentContainer,
+    useProfileId = false,
+    profilePath = '/profile',
+  }: CustomizableCommentItemProps = customizableProps
+
   const [comment, refetchCommentItem] = useRefetchableFragment<
     CommentItemRefetchQuery,
     CommentItem_comment$key
@@ -53,6 +60,7 @@ const CommentItem: FC<CommentItemProps> = ({
   const defaultCommentOptions = useCommentOptions({
     comment,
     onEdit: () => setIsEditMode(true),
+    enableShare,
   })
 
   const { actions = defaultCommentOptions, ...restOfActionOverlayProps } = ActionOverlayProps ?? {}
@@ -63,7 +71,9 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
-  const profileUrl = comment?.profile?.urlPath?.path ?? `${profilePath}/${comment?.profile?.id}`
+  const profileUrlPath = comment?.profile?.urlPath?.path
+  const profileUrl =
+    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
   const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
@@ -196,6 +206,8 @@ const CommentItem: FC<CommentItemProps> = ({
           subscriptionsEnabled={subscriptionsEnabled}
           onReplyClick={onReplyClick}
           CommentItem={CommentItem}
+          // Make sure the replies are also customizable with the same props as the parent comment item
+          CommentItemProps={customizableProps}
           {...CommentsRepliesProps}
         />
       )}
