@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.7
+
+### Patch Changes
+
+- Make comments more flexibe
+
 ## 1.2.6
 
 ### Patch Changes

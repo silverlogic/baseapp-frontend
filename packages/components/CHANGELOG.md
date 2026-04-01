@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.14
+
+### Patch Changes
+
+- Make comments more flexibe
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.7
+
 ## 1.5.13
 
 ### Patch Changes
