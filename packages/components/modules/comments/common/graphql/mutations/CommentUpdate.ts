@@ -10,7 +10,7 @@ export const CommentUpdateMutationQuery = graphql`
       comment {
         id
         body
-        ...CommentsList_comments
+        ...CommentItem_comment
       }
       errors {
         field

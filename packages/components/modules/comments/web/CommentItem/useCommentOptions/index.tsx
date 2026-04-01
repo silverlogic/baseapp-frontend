@@ -8,7 +8,11 @@ import { OverlayAction } from '../../../../__shared__/web'
 import { useCommentPinMutation } from '../../../common'
 import { UseCommentOptionsParams } from './types'
 
-const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): OverlayAction[] => {
+const useCommentOptions = ({
+  comment,
+  onEdit,
+  enableShare = true,
+}: UseCommentOptionsParams): OverlayAction[] => {
   const [pinComment, isPinningComment] = useCommentPinMutation()
   const handlePinComment = () => {
     pinComment({ variables: { id: comment!.id } })
@@ -24,7 +28,7 @@ const useCommentOptions = ({ comment, onEdit }: UseCommentOptionsParams): Overla
       icon: <LinkIcon />,
       label: 'Share Comment',
       onClick: () => {},
-      hasPermission: true,
+      hasPermission: enableShare,
       closeOnClick: true,
     },
     {

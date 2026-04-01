@@ -3,4 +3,5 @@ import { CommentItem_comment$data } from '../../../../../__generated__/CommentIt
 export interface UseCommentOptionsParams {
   comment?: CommentItem_comment$data
   onEdit: () => void
+  enableShare?: boolean
 }

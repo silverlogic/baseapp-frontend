@@ -9,7 +9,11 @@ import CloseIcon from '../../icons/CloseIcon'
 import CommentReplyIcon from '../../icons/CommentReplyIcon'
 import TypographyWithEllipsis from '../../typographies/TypographyWithEllipsis'
 import TextareaField from '../TextareaField'
-import { Container, OutsideReplyContainer, ReplyContainer } from './styled'
+import {
+  Container as DefaultContainer,
+  OutsideReplyContainer as DefaultOutsideReplyContainer,
+  ReplyContainer as DefaultReplyContainer,
+} from './styled'
 import { SocialTextFieldProps } from './types'
 
 /**
@@ -27,6 +31,9 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
   isReply,
   replyTargetName,
   onCancelReply,
+  Container = DefaultContainer,
+  OutsideReplyContainer = DefaultOutsideReplyContainer,
+  ReplyContainer = DefaultReplyContainer,
   ...props
 }) => (
   <Container>

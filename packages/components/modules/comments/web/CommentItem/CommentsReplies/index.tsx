@@ -17,6 +17,7 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   subscriptionsEnabled,
   onReplyClick,
   CommentItem,
+  CommentItemProps = {},
   VirtuosoProps,
 }) => {
   const { data: target, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
@@ -32,6 +33,7 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
 
     return (
       <CommentItem
+        {...CommentItemProps}
         target={target}
         key={`comment-reply-${comment.id}`}
         comment={comment}
