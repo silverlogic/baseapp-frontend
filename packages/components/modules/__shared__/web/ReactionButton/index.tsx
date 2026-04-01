@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, MouseEvent } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
@@ -44,11 +44,14 @@ const ReactionButton: FC<ReactionButtonProps> = ({
   children,
   handleSuccess,
   handleError,
+  onClick,
 }) => {
   const target = useFragment(fragmentQuery, targetRef)
   const [commitMutation, isMutationInFlight] = useMutation<ReactionButtonMutation>(mutationQuery)
   const { currentProfile } = useCurrentProfile()
-  const handleReaction = () => {
+  const handleReaction = (e: MouseEvent) => {
+    onClick?.(e)
+
     if (isMutationInFlight) {
       return
     }

@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 
 import { ReactionTypes } from '../../../../__generated__/ReactionButtonMutation.graphql'
 import {
@@ -7,7 +7,7 @@ import {
 } from '../../../../__generated__/ReactionButton_target.graphql'
 
 type ReactionButtonChildren = (props: {
-  handleReaction: () => void
+  handleReaction: (e: MouseEvent) => void
   isLoading: boolean
   target: ReactionButton_target$data
 }) => ReactElement | null
@@ -18,4 +18,5 @@ export interface ReactionButtonProps {
   children: ReactionButtonChildren
   handleError?: () => void
   handleSuccess?: () => void
+  onClick?: (e: MouseEvent) => void
 }

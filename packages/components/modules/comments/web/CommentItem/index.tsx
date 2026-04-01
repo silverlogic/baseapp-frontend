@@ -30,11 +30,11 @@ const CommentItem: FC<CommentItemProps> = ({
   ...customizableProps
 }) => {
   const {
-    CommentUpdateProps,
-    CommentsRepliesProps,
-    ActionOverlayProps,
-    enableDelete = false,
     enableShare,
+    ActionOverlayProps = {},
+    CommentUpdateProps = {},
+    CommentsRepliesProps = {},
+    enableDelete = false,
     Timestamp = DefaultTimestamp,
     CommentUpdate = DefaultCommentUpdate,
     CommentReplyButton = DefaultCommentReplyButton,

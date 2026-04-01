@@ -3,7 +3,7 @@ import type { FC } from 'react'
 import type { VirtuosoProps } from 'react-virtuoso'
 
 import { CommentsList_comments$key } from '../../../../../__generated__/CommentsList_comments.graphql'
-import type { CommentItemProps } from '../types'
+import type { CommentItemProps, CustomizableCommentItemProps } from '../types'
 
 export interface CommentsRepliesProps {
   target: CommentsList_comments$key
@@ -11,6 +11,6 @@ export interface CommentsRepliesProps {
   subscriptionsEnabled: boolean
   onReplyClick?: () => void
   CommentItem: FC<CommentItemProps>
-  CommentItemProps?: Partial<CommentItemProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
+  CommentItemProps?: CustomizableCommentItemProps
 }
