@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.15
+
+### Patch Changes
+
+- ReactionButton know accepts an optional `onClick` prop.
+
 ## 1.5.14
 
 ### Patch Changes
