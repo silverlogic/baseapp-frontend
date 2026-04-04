@@ -9,5 +9,9 @@ export const HeaderContainer = styled(Box)(({ theme }) => ({
   position: 'sticky',
   top: 0,
   zIndex: 1,
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.paper,
 }))
+
+export const ListContainer = styled(Box)({
+  backgroundColor: 'background.paper',
+})

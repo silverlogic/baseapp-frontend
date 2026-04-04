@@ -7,7 +7,7 @@ import { NotificationBodyProps } from './types'
 
 const NotificationBody: FC<NotificationBodyProps> = ({ content }) => (
   <BodyTypographyContainer>
-    <TypographyWithEllipsis variant="body2" maxHeight={64} lineClamp={2}>
+    <TypographyWithEllipsis variant="body2" color="text.secondary" maxHeight={64} lineClamp={2}>
       {content ?? ''}
     </TypographyWithEllipsis>
   </BodyTypographyContainer>

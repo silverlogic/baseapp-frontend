@@ -11,24 +11,19 @@ const NotificationHeader: FC<NotificationHeaderProps> = ({
   unread,
   timestamp,
 }) => (
-  <Box display="grid">
-    <Box display="flex" alignItems="center" justifyContent="space-between" gap={1}>
-      <Box
-        display="grid"
-        gap={0.5}
-        alignItems="center"
-        gridTemplateColumns="repeat(2, max-content)"
-      >
-        <Typography variant="body2" sx={{ fontWeight: 700 }}>
+  <Box display="grid" minWidth={0}>
+    <Box display="flex" alignItems="flex-start" justifyContent="space-between" gap={1} minWidth={0}>
+      <Box minWidth={0}>
+        <Typography variant="body2" component="span" sx={{ fontWeight: 700 }}>
           {actorName ?? ''}
-        </Typography>
-        <Typography variant="body2" display="flex" alignItems="center">
+        </Typography>{' '}
+        <Typography variant="body2" component="span">
           {message}
         </Typography>
       </Box>
-      {unread && <TimelineDot color="error" />}
+      {unread && <TimelineDot color="error" sx={{ flexShrink: 0 }} />}
     </Box>
-    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+    <Typography variant="caption" sx={{ color: 'text.disabled' }}>
       {timestamp}
     </Typography>
   </Box>
