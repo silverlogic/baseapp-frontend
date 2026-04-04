@@ -21,7 +21,7 @@ export const NavHorizontalContainer = styled(CommonContainer)(({ theme }) => ({
   paddingBottom: NAV_PADDING_DOWN_TO_LG.horizontal.bottom,
   paddingTop: NAV_PADDING_DOWN_TO_LG.horizontal.top,
   [theme.breakpoints.up('lg')]: {
-    paddingTop: NAV_PADDING_DOWN_TO_LG.horizontal.top,
+    paddingTop: NAV_PADDING_UP_TO_LG.horizontal.top,
     paddingBottom: NAV_PADDING_UP_TO_LG.horizontal.bottom,
   },
   [theme.breakpoints.down('sm')]: {
