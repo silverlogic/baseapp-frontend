@@ -12,6 +12,6 @@ export const HeaderContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }))
 
-export const ListContainer = styled(Box)({
-  backgroundColor: 'background.paper',
-})
+export const ListContainer = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+}))

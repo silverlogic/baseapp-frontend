@@ -10,6 +10,7 @@ import { NotificationItemProps } from './types'
 const NotificationItem: FC<NotificationItemProps> = ({
   notification: notificationRef,
   NotificationItemRenderer = DefaultNotificationItemRenderer,
+  NotificationItemRendererProps = {},
 }) => {
   const notification = useFragment(NotificationItemFragment, notificationRef)
 
@@ -35,7 +36,7 @@ const NotificationItem: FC<NotificationItemProps> = ({
         cursor: 'pointer',
       }}
     >
-      <NotificationItemRenderer notification={notification} />
+      <NotificationItemRenderer notification={notification} {...NotificationItemRendererProps} />
     </Box>
   )
 }

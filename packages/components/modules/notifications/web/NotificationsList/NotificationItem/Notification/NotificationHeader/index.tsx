@@ -23,7 +23,7 @@ const NotificationHeader: FC<NotificationHeaderProps> = ({
       </Box>
       {unread && <TimelineDot color="error" sx={{ flexShrink: 0 }} />}
     </Box>
-    <Typography variant="caption" sx={{ color: 'text.disabled' }}>
+    <Typography variant="caption" color="text.disabled">
       {timestamp}
     </Typography>
   </Box>
