@@ -38,13 +38,9 @@ function toAuthenticatedState(
   payload: AccessTokenPayload | null,
   session: SessionMaterial,
 ): SessionState {
-  if (!isValidUser(payload)) {
-    return toAnonymousState()
-  }
-
   return {
     status: SESSION_STATUS.authenticated,
-    user: payload,
+    user: isValidUser(payload) ? payload : null,
     session,
   }
 }
@@ -88,8 +84,7 @@ export function createAllauthSession(): StrategySession {
       const payload = decodeAccessToken(tokens.access)
 
       return toAuthenticatedState(payload, nextSession)
-    } catch (error) {
-      console.warn('[auth] Token refresh failed', { error })
+    } catch {
       return toAnonymousState()
     }
   }

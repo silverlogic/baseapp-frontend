@@ -62,8 +62,7 @@ export function createSessionService<TUser = User>(
 
       await clear('refresh_failed')
       return state
-    } catch (error) {
-      console.warn('[auth] Unexpected error during session refresh', { error })
+    } catch {
       await clear('refresh_failed')
       return strategySession.evaluate(currentSession)
     }
