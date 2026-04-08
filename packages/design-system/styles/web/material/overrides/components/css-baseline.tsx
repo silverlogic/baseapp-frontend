@@ -1,6 +1,6 @@
-import { Theme, alpha } from '@mui/material/styles'
+import { Components, Theme, alpha } from '@mui/material/styles'
 
-export function cssBaseline(theme: Theme) {
+export function cssBaseline(theme: Theme): Pick<Components<Theme>, 'MuiCssBaseline'> {
   return {
     MuiCssBaseline: {
       styleOverrides: {
