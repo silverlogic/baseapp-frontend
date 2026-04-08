@@ -47,21 +47,26 @@ export function createSessionService<TUser = User>(
     const currentSession = storage.read()
 
     if (!currentSession.refreshToken) {
-      const anonymousState = await strategySession.refresh(currentSession)
       await clear('missing_refresh_token')
-      return anonymousState
+      return strategySession.evaluate(currentSession)
     }
 
-    const state = await strategySession.refresh(currentSession)
+    try {
+      const state = await strategySession.refresh(currentSession)
 
-    if (state.status === SESSION_STATUS.authenticated) {
-      await storage.write(state.session)
-      emitRefreshed()
+      if (state.status === SESSION_STATUS.authenticated) {
+        await storage.write(state.session)
+        emitRefreshed()
+        return state
+      }
+
+      await clear('refresh_failed')
       return state
+    } catch (error) {
+      console.warn('[auth] Unexpected error during session refresh', { error })
+      await clear('refresh_failed')
+      return strategySession.evaluate(currentSession)
     }
-
-    await clear('refresh_failed')
-    return state
   }
 
   async function handleUnauthorized(): Promise<SessionState<TUser>> {

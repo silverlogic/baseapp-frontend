@@ -19,10 +19,12 @@ const useUpdateUser = <TUser extends Pick<User, 'id'>>({
   const mutation = useMutation({
     mutationFn: (params: UserUpdateParams<TUser>) => ApiClass.updateUser<TUser>(params),
     onSuccess: async (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() })
-      queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEY })
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: USER_API_KEY.getUser() }),
+        queryClient.invalidateQueries({ queryKey: SESSION_QUERY_KEY }),
+      ])
 
-      const session = await Promise.resolve(sessionService.read())
+      const session = await sessionService.read()
 
       if (session.refreshToken) {
         await sessionService.refresh()

@@ -3,25 +3,29 @@ import humps from 'humps'
 import { createAxiosInstance } from '..'
 import { awaitSessionRecovery } from '../../../auth/awaitSessionRecovery'
 
-var mockRequest = jest.fn()
-
 jest.mock('humps', () => ({
   decamelize: jest.fn().mockImplementation((key) => key.replace(/([A-Z])/g, '_$1').toLowerCase()),
   decamelizeKeys: jest.fn().mockImplementation((keys) => keys),
   camelizeKeys: jest.fn().mockImplementation((keys) => keys),
 }))
-jest.mock('axios', () => ({
-  ...jest.requireActual('axios'),
-  create: () => ({
-    defaults: jest.requireActual('axios').create().defaults,
-    request: mockRequest,
-    interceptors: {
-      ...jest.requireActual('axios').create().interceptors,
-      request: { eject: jest.fn(), use: jest.fn() },
-      response: { eject: jest.fn(), use: jest.fn() },
-    },
-  }),
-}))
+
+jest.mock('axios', () => {
+  const mockRequest = jest.fn()
+
+  return {
+    ...jest.requireActual('axios'),
+    create: () => ({
+      defaults: jest.requireActual('axios').create().defaults,
+      request: mockRequest,
+      interceptors: {
+        ...jest.requireActual('axios').create().interceptors,
+        request: { eject: jest.fn(), use: jest.fn() },
+        response: { eject: jest.fn(), use: jest.fn() },
+      },
+    }),
+    __mockRequest: mockRequest,
+  }
+})
 jest.mock('js-cookie', () => ({
   ...jest.requireActual('js-cookie'),
   get: () => 'someLanguage',
@@ -35,6 +39,8 @@ jest.mock('../../../token/getTokenSSR', () => ({
 jest.mock('../../../auth/awaitSessionRecovery', () => ({
   awaitSessionRecovery: jest.fn().mockResolvedValue('cleared'),
 }))
+
+const { __mockRequest: mockRequest } = require('axios')
 
 Object.defineProperty(global, 'window', {
   value: {},

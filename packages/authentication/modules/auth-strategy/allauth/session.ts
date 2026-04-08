@@ -9,6 +9,12 @@ import type { SessionMaterial, SessionState, StrategySession } from '../types'
 
 type AccessTokenPayload = JWTContent & Partial<User>
 
+type AuthenticatedPayload = JWTContent & User
+
+function isValidUser(payload: AccessTokenPayload | null): payload is AuthenticatedPayload {
+  return payload !== null && typeof payload.id === 'number' && typeof payload.email === 'string'
+}
+
 const inflightRefreshByToken = new Map<string, Promise<SessionState>>()
 
 function toAnonymousState(): SessionState {
@@ -32,9 +38,13 @@ function toAuthenticatedState(
   payload: AccessTokenPayload | null,
   session: SessionMaterial,
 ): SessionState {
+  if (!isValidUser(payload)) {
+    return toAnonymousState()
+  }
+
   return {
     status: SESSION_STATUS.authenticated,
-    user: (payload as User) ?? null,
+    user: payload,
     session,
   }
 }
@@ -58,7 +68,7 @@ export function createAllauthSession(): StrategySession {
 
     return {
       status: valid ? SESSION_STATUS.authenticated : SESSION_STATUS.expired,
-      user: (payload as User) ?? null,
+      user: isValidUser(payload) ? payload : null,
       session,
     }
   }
@@ -78,7 +88,8 @@ export function createAllauthSession(): StrategySession {
       const payload = decodeAccessToken(tokens.access)
 
       return toAuthenticatedState(payload, nextSession)
-    } catch {
+    } catch (error) {
+      console.warn('[auth] Token refresh failed', { error })
       return toAnonymousState()
     }
   }
@@ -87,7 +98,7 @@ export function createAllauthSession(): StrategySession {
     const { refreshToken } = session
 
     if (!refreshToken) {
-      return doRefresh(session)
+      return toAnonymousState()
     }
 
     const inflightRefresh = inflightRefreshByToken.get(refreshToken)

@@ -51,7 +51,7 @@ export async function writeMfaSession(response: {
   await sessionService.write({
     accessToken: response.access,
     refreshToken: response.refresh,
-    sessionToken: null,
+    sessionToken: null, // MFA completion doesn't issue a session token; the JWT pair is sufficient here
   })
   // TODO(auth-strategy): If MFA completion needs profile hydration in the
   // unified flow, move that responsibility into the strategy/session layer

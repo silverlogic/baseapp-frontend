@@ -10,6 +10,170 @@ import { getExpoConstant } from '../../expo'
 import { buildQueryString, parseString } from '../../string'
 import { BaseAppFetch, RequestOptions } from './types'
 
+async function resolveCurrentProfile(isServer: boolean): Promise<string | null | undefined> {
+  if (isServer) {
+    const { getTokenSSR } = await import('../../token/getTokenSSR')
+    return getTokenSSR(CURRENT_PROFILE_KEY_NAME)
+  }
+  const { getToken } = await import('../../token/getToken')
+  return getToken(CURRENT_PROFILE_KEY_NAME)
+}
+
+async function resolveAuthTokens(
+  isServer: boolean,
+  accessKeyName: string,
+  refreshKeyName: string,
+): Promise<{ accessToken: string | null | undefined; refreshToken: string | null | undefined }> {
+  if (isServer) {
+    const { getTokenSSR } = await import('../../token/getTokenSSR')
+    return {
+      accessToken: await getTokenSSR(accessKeyName),
+      refreshToken: await getTokenSSR(refreshKeyName),
+    }
+  }
+  const { getToken } = await import('../../token/getToken')
+  return {
+    accessToken: getToken(accessKeyName),
+    refreshToken: getToken(refreshKeyName),
+  }
+}
+
+async function resolveLanguage(
+  isServer: boolean,
+  languageCookieName: string,
+): Promise<string | null | undefined> {
+  if (isServer) {
+    const { cookies } = await import('next/headers')
+    const cookieStore = await cookies()
+    return cookieStore.get(languageCookieName)?.value
+  }
+  const { getLanguage } = await import('../../language/getLanguage')
+  return getLanguage(languageCookieName)
+}
+
+async function getLatestAccessToken(accessKeyName: string): Promise<string | null | undefined> {
+  const { getToken } = await import('../../token/getToken')
+  return getToken(accessKeyName)
+}
+
+const METHODS_TO_SET_CONTENT_TYPE = ['POST', 'PUT', 'PATCH']
+
+function prepareFetchOptions({
+  options,
+  currentProfileId,
+  resolvedAccessToken,
+  isAuthTokenRequired,
+  tokenType,
+  language,
+  setContentType,
+  stringifyBody,
+  decamelizeRequestBodyKeys,
+}: {
+  options: RequestOptions
+  currentProfileId: string
+  resolvedAccessToken: string | null | undefined
+  isAuthTokenRequired: boolean
+  tokenType: string
+  language: string | null | undefined
+  setContentType: boolean
+  stringifyBody: boolean
+  decamelizeRequestBodyKeys: boolean
+}): RequestOptions {
+  const fetchOptions: RequestOptions = {
+    ...options,
+    headers: {
+      Accept: 'application/json, text/plain, */*',
+      'Current-Profile': currentProfileId,
+      ...options.headers,
+    },
+  }
+
+  if (options.body && stringifyBody) {
+    fetchOptions.body = decamelizeRequestBodyKeys
+      ? JSON.stringify(humps.decamelizeKeys(options.body))
+      : JSON.stringify(options.body)
+  }
+
+  const headers = fetchOptions.headers as NonNullable<RequestOptions['headers']>
+
+  if (!headers.Authorization && resolvedAccessToken && isAuthTokenRequired) {
+    headers.Authorization = `${tokenType} ${resolvedAccessToken}`
+  }
+
+  if (language) {
+    headers['Accept-Language'] = language
+  }
+
+  if (setContentType && METHODS_TO_SET_CONTENT_TYPE.includes(fetchOptions.method || '')) {
+    headers['Content-Type'] = 'application/json; charset=utf-8'
+  }
+
+  return fetchOptions
+}
+
+async function shouldRetryRequest({
+  response,
+  hasRetried,
+  isAuthTokenRequired,
+  isServer,
+  accessKeyName,
+  resolvedAccessToken,
+  path,
+  refreshAuthToken,
+}: {
+  response: Response
+  hasRetried: boolean
+  isAuthTokenRequired: boolean
+  isServer: boolean
+  accessKeyName: string
+  resolvedAccessToken: string | null | undefined
+  path: string
+  refreshAuthToken: string | null | undefined
+}): Promise<boolean> {
+  if (response.status !== 401 || hasRetried || !isAuthTokenRequired || isServer) {
+    return false
+  }
+
+  const latestAccessToken = await getLatestAccessToken(accessKeyName)
+
+  if (latestAccessToken && latestAccessToken !== resolvedAccessToken) {
+    return true
+  }
+
+  const outcome = await awaitSessionRecovery({
+    source: 'fetch',
+    path,
+    status: 401,
+    hasRefreshToken: !!refreshAuthToken,
+  })
+
+  return outcome === 'refreshed'
+}
+
+async function parseResponseData({
+  response,
+  camelizeResponseDataKeys,
+  throwError,
+}: {
+  response: Response
+  camelizeResponseDataKeys: boolean
+  throwError: boolean
+}) {
+  const isJsonResponse = response.headers.get('content-type')?.includes('application/json')
+
+  if (!response.ok && throwError) {
+    const errorMessage = isJsonResponse ? await response.json() : response.statusText
+    throw new Error(JSON.stringify(errorMessage))
+  }
+
+  if (!isJsonResponse) {
+    return response
+  }
+
+  const data = await response.json()
+  return camelizeResponseDataKeys ? humps.camelizeKeys(data) : data
+}
+
 /**
  *
  * Fetch function that handles token refresh and other common use cases.
@@ -100,106 +264,46 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   async function executeRequest(hasRetried = false): Promise<any> {
-    let currentProfile
-    if (isServer) {
-      const { getTokenSSR } = await import('../../token/getTokenSSR')
-      currentProfile = await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
-    } else {
-      const { getToken } = await import('../../token/getToken')
-      currentProfile = getToken(CURRENT_PROFILE_KEY_NAME)
-    }
-
+    const currentProfile = await resolveCurrentProfile(isServer)
     const parsedCurrentProfile = parseString<MinimalProfile>(currentProfile ?? undefined)
-
-    const fetchOptions: RequestOptions = {
-      ...options,
-      headers: {
-        Accept: 'application/json, text/plain, */*',
-        'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
-        ...options.headers,
-      },
-    }
-
-    if (options.body && stringifyBody) {
-      const bodyStringify = decamelizeRequestBodyKeys
-        ? JSON.stringify(humps.decamelizeKeys(options.body))
-        : JSON.stringify(options.body)
-
-      fetchOptions.body = bodyStringify
-    }
-
-    let accessAuthToken
-    let refreshAuthToken
-    if (isServer) {
-      const { getTokenSSR } = await import('../../token/getTokenSSR')
-      accessAuthToken = await getTokenSSR(accessKeyName)
-      refreshAuthToken = await getTokenSSR(refreshKeyName)
-    } else {
-      const { getToken } = await import('../../token/getToken')
-      accessAuthToken = getToken(accessKeyName)
-      refreshAuthToken = getToken(refreshKeyName)
-    }
+    const { accessToken: accessAuthToken, refreshToken: refreshAuthToken } =
+      await resolveAuthTokens(isServer, accessKeyName, refreshKeyName)
 
     const resolvedAccessToken = accessTokenOverride ?? accessAuthToken
-
-    if (!fetchOptions.headers?.Authorization && resolvedAccessToken && isAuthTokenRequired) {
-      fetchOptions.headers!.Authorization = `${tokenType} ${resolvedAccessToken}`
-    }
-
-    let language
-    if (isServer) {
-      const { cookies } = await import('next/headers')
-      const cookieStore = await cookies()
-      language = cookieStore.get(languageCookieName)?.value
-    } else {
-      const { getLanguage } = await import('../../language/getLanguage')
-      language = getLanguage(languageCookieName)
-    }
-    if (language) {
-      fetchOptions.headers!['Accept-Language'] = language
-    }
-
-    const methodsToSetContentType = ['POST', 'PUT', 'PATCH']
-    if (setContentType && methodsToSetContentType.includes(fetchOptions.method || '')) {
-      fetchOptions.headers!['Content-Type'] = 'application/json; charset=utf-8'
-    }
+    const language = await resolveLanguage(isServer, languageCookieName)
+    const fetchOptions = prepareFetchOptions({
+      options,
+      currentProfileId: parsedCurrentProfile?.id ?? '',
+      resolvedAccessToken,
+      isAuthTokenRequired,
+      tokenType,
+      language,
+      setContentType,
+      stringifyBody,
+      decamelizeRequestBodyKeys,
+    })
 
     // had to override the fetchOptions type because of the GraphQLBody type
     const response = await fetch(fetchUrl, fetchOptions as RequestInit)
 
-    if (response.status === 401 && !hasRetried && isAuthTokenRequired && !isServer) {
-      const { getToken } = await import('../../token/getToken')
-      const latestAccessToken = getToken(accessKeyName)
+    const retry = await shouldRetryRequest({
+      response,
+      hasRetried,
+      isAuthTokenRequired,
+      isServer,
+      accessKeyName,
+      resolvedAccessToken,
+      path,
+      refreshAuthToken,
+    })
 
-      if (latestAccessToken && latestAccessToken !== resolvedAccessToken) {
-        return executeRequest(true)
-      }
+    if (retry) return executeRequest(true)
 
-      const outcome = await awaitSessionRecovery({
-        source: 'fetch',
-        path,
-        status: 401,
-        hasRefreshToken: !!refreshAuthToken,
-      })
-
-      if (outcome === 'refreshed') {
-        return executeRequest(true)
-      }
-    }
-
-    const isJsonResponse = response.headers.get('content-type')?.includes('application/json')
-
-    if (!response.ok && throwError) {
-      const errorMessage = isJsonResponse ? await response.json() : response.statusText
-      throw new Error(JSON.stringify(errorMessage))
-    }
-
-    if (isJsonResponse) {
-      const data = await response.json()
-      return camelizeResponseDataKeys ? humps.camelizeKeys(data) : data
-    }
-
-    return response
+    return parseResponseData({
+      response,
+      camelizeResponseDataKeys,
+      throwError,
+    })
   }
 
   try {
