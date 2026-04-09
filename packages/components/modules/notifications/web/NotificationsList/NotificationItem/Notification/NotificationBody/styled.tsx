@@ -2,7 +2,7 @@ import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const BodyTypographyContainer = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.grey[200],
+  backgroundColor: theme.palette.background.neutral,
   borderRadius: 6,
   height: '100%',
   maxHeight: 64,

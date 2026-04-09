@@ -20,16 +20,22 @@ import {
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
-import { HeaderContainer } from './styled'
+import {
+  HeaderContainer as DefaultHeaderContainer,
+  ListContainer as DefaultListContainer,
+} from './styled'
 import { NotificationsListProps } from './types'
 
 const NotificationsList: FC<NotificationsListProps> = ({
   setIsDrawerOpened,
   EmptyState = DefaultEmptyState,
+  EmptyStateProps = {},
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
   NotificationItem = DefaultNotificationItem,
   NotificationItemProps = {},
+  HeaderContainer = DefaultHeaderContainer,
+  ListContainer = DefaultListContainer,
 }) => {
   const smDown = useResponsive('down', 'sm')
 
@@ -90,10 +96,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
   }
 
   const renderContent = () => {
-    if (notifications.length === 0) return <EmptyState />
+    if (notifications.length === 0) return <EmptyState {...EmptyStateProps} />
 
     return (
-      <Box sx={{ backgroundColor: 'common.white' }}>
+      <ListContainer>
         <Virtuoso
           data={notifications}
           // TODO: using overscan can cause Maximum call stack size exceeded error
@@ -110,7 +116,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
             }
           }}
         />
-      </Box>
+      </ListContainer>
     )
   }
 

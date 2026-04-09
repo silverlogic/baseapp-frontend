@@ -2,29 +2,47 @@ import { FC } from 'react'
 
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
-import Notification from '../Notification'
-import { GenericItemProps } from '../types'
+import DefaultNotificationAvatar from '../Notification/NotificationAvatar'
+import DefaultNotificationBody from '../Notification/NotificationBody'
+import DefaultNotificationHeader from '../Notification/NotificationHeader'
+import {
+  NotificationContent as DefaultNotificationContent,
+  NotificationRoot as DefaultNotificationRoot,
+} from '../styled'
+import { CommentReplyProps } from './types'
 
-const CommentReply: FC<GenericItemProps> = ({ notification }) => {
+const CommentReply: FC<CommentReplyProps> = ({
+  notification,
+  NotificationRoot = DefaultNotificationRoot,
+  NotificationContent = DefaultNotificationContent,
+  NotificationAvatar = DefaultNotificationAvatar,
+  NotificationAvatarProps = {},
+  NotificationHeader = DefaultNotificationHeader,
+  NotificationHeaderProps = {},
+  NotificationBody = DefaultNotificationBody,
+  NotificationBodyProps = {},
+}) => {
   // eslint-disable-next-line no-underscore-dangle
-  const message = `added a comment to your ${notification.target?.__typename.toLowerCase()}`
+  const message = `replied to your comment`
 
   return (
-    <Notification.Root>
-      <Notification.Avatar
+    <NotificationRoot>
+      <NotificationAvatar
         actorAvatar={notification.actor?.image?.url}
         actorName={notification.actor?.name}
+        {...NotificationAvatarProps}
       />
-      <Notification.Content>
-        <Notification.Content.Header
+      <NotificationContent>
+        <NotificationHeader
           message={message}
           timestamp={formatRelativeTime(notification.timestamp)}
           actorName={notification.actor?.name}
           unread={notification.unread}
+          {...NotificationHeaderProps}
         />
-        <Notification.Content.Body content={notification.actionObject?.body} />
-      </Notification.Content>
-    </Notification.Root>
+        <NotificationBody content={notification.actionObject?.body} {...NotificationBodyProps} />
+      </NotificationContent>
+    </NotificationRoot>
   )
 }
 
