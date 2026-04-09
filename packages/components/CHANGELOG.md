@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.16
+
+### Patch Changes
+
+- Improve Notifications Customization"
+
 ## 1.5.15
 
 ### Patch Changes
