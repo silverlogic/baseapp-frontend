@@ -42,6 +42,11 @@ export function cssBaseline(theme: Theme): Pick<Components<Theme>, 'MuiCssBaseli
           display: 'inline-block',
           verticalAlign: 'bottom',
         },
+        // MDXEditor appends its popup container to document.body with z-index: 2.
+        // Override so it renders above MUI Dialogs (z-index 1300).
+        '.mdxeditor-popup-container': {
+          zIndex: `${theme.zIndex.modal + 1} !important`,
+        },
         // MDXEditor Radix link dialog — styled to match MUI ConfirmDialog
         '[data-radix-popper-content-wrapper] div[role="dialog"]': {
           backgroundColor: theme.palette.background.paper,

@@ -25,9 +25,6 @@ export const EditorContainer = styled(Box, {
     color: theme.palette.text.disabled,
     // ...theme.typography.body2,
   },
-  '& .mdxeditor-popup-container': {
-    zIndex: 1000,
-  },
   '& .mdxeditor': {
     width: '100%',
     display: 'grid',
