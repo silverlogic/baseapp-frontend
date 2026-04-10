@@ -60,7 +60,7 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
         autoLoadLanguageSupport: true,
       }),
       linkPlugin(),
-      linkDialogPlugin(),
+      linkDialogPlugin({ showLinkTitleField: false }),
       headingsPlugin(),
       imagePlugin(),
       listsPlugin(),
