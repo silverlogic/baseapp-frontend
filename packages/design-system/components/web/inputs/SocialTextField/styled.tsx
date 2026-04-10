@@ -1,12 +1,12 @@
 import { ComponentType } from 'react'
 
-import { Box, BoxProps } from '@mui/material'
+import { Box, BoxProps, alpha } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const Container: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   display: 'grid',
   borderRadius: 8,
-  border: `1px solid ${theme.palette.grey[200]}`,
+  border: `1px solid ${alpha(theme.palette.grey[500], 0.2)}`,
   width: '100%',
   '&:hover, &:focus-within': {
     transition: 'border-color 0.25s ease',
@@ -20,6 +20,12 @@ export const OutsideReplyContainer: ComponentType<BoxProps> = styled(Box)(({ the
   display: 'flex',
   justifyContent: 'center',
   padding: theme.spacing(1.5, 1.5, 0, 1.5),
+}))
+
+export const ActionsContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: theme.spacing(0, 1.5, 1.5),
 }))
 
 export const ReplyContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({

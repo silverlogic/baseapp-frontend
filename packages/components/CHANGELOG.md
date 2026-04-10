@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 1.5.17
+
+### Patch Changes
+
+- `ActionsOverlay` wont open if there is no option available (e.g. unlogged users)
+- `CommentsList` returns `EmptyState` when no comments exist.
+- `SocialInput` have the `mode` set to `plain-text`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.8
+
 ## 1.5.16
 
 ### Patch Changes
