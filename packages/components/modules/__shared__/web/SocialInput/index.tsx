@@ -63,6 +63,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
     {
       placeholder = 'Message...',
       autoFocusInput,
+      mode,
       SocialTextField = DefaultSocialTextField,
       SocialTextFieldProps = {},
       SocialUpsertActions = DefaultSocialUpsertActions,
@@ -106,6 +107,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
           onKeyDown={handleKeyDown}
           placeholder={placeholder}
           autoFocus={autoFocusInput}
+          mode={mode}
           isReply={isReply}
           replyTargetName={replyTargetName}
           onCancelReply={onCancelReply}
