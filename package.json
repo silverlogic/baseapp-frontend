@@ -27,7 +27,7 @@
     "prettier": "catalog:lint",
     "turbo": "^2.5.3",
     "typescript": "catalog:",
-    "yaml": "^2.5.1"
+    "yaml": "^2.8.3"
   },
   "lint-staged": {
     "apps/**/*.{js,ts,jsx,tsx}": [
