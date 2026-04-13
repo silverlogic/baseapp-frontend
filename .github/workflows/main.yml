@@ -66,7 +66,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Login to Harbor Registry
-        run: echo "${{ secrets.HARBOR_TRIVY_ROBOT_TOKEN }}" | docker login registry.tsl.io -u "${{ secrets.HARBOR_TRIVY_ROBOT_USER }}" --password-stdin
+        env:
+          HARBOR_USER: ${{ secrets.HARBOR_TRIVY_ROBOT_USER }}
+          HARBOR_TOKEN: ${{ secrets.HARBOR_TRIVY_ROBOT_TOKEN }}
+        run: echo "${HARBOR_TOKEN}" | docker login registry.tsl.io -u "${HARBOR_USER}" --password-stdin
 
       - name: Run Trivy vulnerability scanner
         run: |
