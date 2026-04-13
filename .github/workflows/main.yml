@@ -58,6 +58,25 @@ jobs:
       - name: Unit Test
         run: pnpm test:unit
 
+  dependency-scan:
+    name: Dependency Vulnerability Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Login to Harbor Registry
+        run: echo "${{ secrets.HARBOR_TRIVY_ROBOT_TOKEN }}" | docker login registry.tsl.io -u "${{ secrets.HARBOR_TRIVY_ROBOT_USER }}" --password-stdin
+
+      - name: Run Trivy vulnerability scanner
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/workspace" \
+            registry.tsl.io/baseapp-github/trivy:baseapp \
+            fs --scanners vuln --pkg-types library \
+            --severity CRITICAL,HIGH --exit-code 1 \
+            --format table /workspace
+
   test-component:
     name: Component Test Packages
     runs-on: ubuntu-latest
