@@ -45,16 +45,9 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
 }) => {
   const renderField = () => {
     if (mode === 'rich-text') {
-      const { name, control, helperText, placeholder, onKeyDown } = props
       return (
         <MarkdownEditorField
-          {...({
-            name,
-            control,
-            helperText,
-            placeholder,
-            onKeyDown,
-          } as SocialTextFieldProps['MarkdownEditorFieldProps'])}
+          {...(props as SocialTextFieldProps['MarkdownEditorFieldProps'])}
           hasBorder={false}
           {...MarkdownEditorFieldProps}
         />
