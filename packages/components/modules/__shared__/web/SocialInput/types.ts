@@ -1,6 +1,9 @@
 import { ComponentPropsWithoutRef, ComponentType, FC, KeyboardEvent } from 'react'
 
-import { SocialTextFieldProps } from '@baseapp-frontend/design-system/components/web/inputs'
+import {
+  SocialTextFieldMode,
+  SocialTextFieldProps,
+} from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { UseFormReturn } from 'react-hook-form'
 
@@ -10,6 +13,7 @@ import { SubmitActionsProps } from './SubmitActions/types'
 export interface SocialInputProps {
   placeholder?: string
   autoFocusInput?: boolean
+  mode?: SocialTextFieldMode
   SocialTextField?: FC<SocialTextFieldProps>
   SocialTextFieldProps?: Partial<SocialTextFieldProps>
   SocialUpsertActions?: FC
