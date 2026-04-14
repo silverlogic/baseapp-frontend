@@ -1,10 +1,17 @@
 # @baseapp-frontend/design-system
 
+## 1.2.8
+
+### Patch Changes
+
+- `SocialTextField` conditionally renders `MarkdownEditorField`or `TextareaField` depending on `mode` prop.
+- Create `MarkdownEditorField` as a rich text field option.
+
 ## 1.2.7
 
 ### Patch Changes
 
-- Make comments more flexibe
+- Make comments more flexible/customizable.
 
 ## 1.2.6
 

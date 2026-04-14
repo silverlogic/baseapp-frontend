@@ -8,8 +8,10 @@ import IconButton from '../../buttons/IconButton'
 import CloseIcon from '../../icons/CloseIcon'
 import CommentReplyIcon from '../../icons/CommentReplyIcon'
 import TypographyWithEllipsis from '../../typographies/TypographyWithEllipsis'
-import TextareaField from '../TextareaField'
+import DefaultMarkdownEditorField from '../MarkdownEditorField'
+import DefaultTextareaField from '../TextareaField'
 import {
+  ActionsContainer as DefaultActionsContainer,
   Container as DefaultContainer,
   OutsideReplyContainer as DefaultOutsideReplyContainer,
   ReplyContainer as DefaultReplyContainer,
@@ -28,36 +30,63 @@ import { SocialTextFieldProps } from './types'
  */
 const SocialTextField: FC<SocialTextFieldProps> = ({
   children,
+  mode = 'plain-text',
   isReply,
   replyTargetName,
   onCancelReply,
+  ActionsContainer = DefaultActionsContainer,
   Container = DefaultContainer,
   OutsideReplyContainer = DefaultOutsideReplyContainer,
   ReplyContainer = DefaultReplyContainer,
+  MarkdownEditorField = DefaultMarkdownEditorField,
+  MarkdownEditorFieldProps,
+  TextareaField = DefaultTextareaField,
   ...props
-}) => (
-  <Container>
-    {isReply && (
-      <OutsideReplyContainer>
-        <div className="flex w-full justify-between rounded-md bg-background-neutral px-2 py-1">
-          <ReplyContainer>
-            <CommentReplyIcon />
-            <Typography variant="body2" color="text.secondary">
-              Replying to
-            </Typography>
-            <TypographyWithEllipsis maxWidth={170} variant="body2" color="primary.light">
-              {replyTargetName}
-            </TypographyWithEllipsis>
-          </ReplyContainer>
-          <IconButton onClick={onCancelReply} aria-label="cancel reply">
-            <CloseIcon />
-          </IconButton>
-        </div>
-      </OutsideReplyContainer>
-    )}
-    <TextareaField {...props} />
-    <div className="flex justify-between px-3 pb-3">{children}</div>
-  </Container>
-)
+}) => {
+  const renderField = () => {
+    if (mode === 'rich-text') {
+      const { name, control, helperText, placeholder, onKeyDown } = props
+      return (
+        <MarkdownEditorField
+          {...({
+            name,
+            control,
+            helperText,
+            placeholder,
+            onKeyDown,
+          } as SocialTextFieldProps['MarkdownEditorFieldProps'])}
+          hasBorder={false}
+          {...MarkdownEditorFieldProps}
+        />
+      )
+    }
+    return <TextareaField {...props} />
+  }
+
+  return (
+    <Container>
+      {isReply && (
+        <OutsideReplyContainer>
+          <div className="flex w-full justify-between rounded-md bg-background-neutral px-2 py-1">
+            <ReplyContainer>
+              <CommentReplyIcon />
+              <Typography variant="body2" color="text.secondary">
+                Replying to
+              </Typography>
+              <TypographyWithEllipsis maxWidth={170} variant="body2" color="primary.light">
+                {replyTargetName}
+              </TypographyWithEllipsis>
+            </ReplyContainer>
+            <IconButton onClick={onCancelReply} aria-label="cancel reply">
+              <CloseIcon />
+            </IconButton>
+          </div>
+        </OutsideReplyContainer>
+      )}
+      {renderField()}
+      {children && <ActionsContainer>{children}</ActionsContainer>}
+    </Container>
+  )
+}
 
 export default SocialTextField
