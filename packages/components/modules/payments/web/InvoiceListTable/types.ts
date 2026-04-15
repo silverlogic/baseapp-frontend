@@ -19,6 +19,7 @@ export interface InvoiceListTableProps {
   cellProps?: TableCellProps
   headerProps?: TableHeadProps
   footerProps?: TableFooterProps
+  onChange?: (event: ChangeEvent<unknown>, page: number) => void
   entityId?: string
 }
 

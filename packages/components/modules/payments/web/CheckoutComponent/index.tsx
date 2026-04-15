@@ -30,6 +30,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
   const [isRetry, setIsRetry] = useState<boolean>(false)
+  const [pendingClientSecret, setPendingClientSecret] = useState<string | null>(null)
   const [confirmationModalOpen, setConfirmationModalOpen] = useState<boolean>(false)
   const [addressElementHasErrors, setAddressElementHasErrors] = useState<boolean>(false)
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
@@ -163,10 +164,12 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               } catch (error) {
                 const message = extractErrorMessage(error)
                 sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
+                setPendingClientSecret(clientSecret)
                 setIsRetry(true)
                 return
               }
               setOrderNumber(paymentIntent?.id ?? null)
+              setPendingClientSecret(null)
               if (paymentMethods?.length && paymentMethods.length > 0) {
                 setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
               }
@@ -196,10 +199,26 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     }
   }
 
-  const handleRetry = () => {
-    setIsRetry(false)
-    sendToast('Retrying subscription creation...', { type: 'info' })
-    handlePlaceOrder()
+  const handleRetry = async () => {
+    if (!pendingClientSecret) {
+      setIsRetry(false)
+      handlePlaceOrder()
+      return
+    }
+    try {
+      const paymentIntent = await confirmCardPayment({
+        clientSecret: pendingClientSecret,
+        paymentMethodId: selectedPaymentMethodId,
+      })
+      setOrderNumber(paymentIntent?.id ?? null)
+      setPendingClientSecret(null)
+      setIsRetry(false)
+      setConfirmationModalOpen(true)
+      onSuccess?.()
+    } catch (error) {
+      const message = extractErrorMessage(error)
+      sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
+    }
   }
 
   const handleSetupSuccess = (paymentMethodId: string) => {

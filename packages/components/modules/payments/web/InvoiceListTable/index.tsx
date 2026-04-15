@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
@@ -28,6 +28,7 @@ const InvoiceListTable = ({
   rowProps,
   cellProps,
   footerProps,
+  onChange,
   entityId,
 }: InvoiceListTableProps) => {
   const [page, setPage] = useState(1)
@@ -36,10 +37,12 @@ const InvoiceListTable = ({
   const { useListInvoices } = useStripeHook()
   const { data, isLoading, isFetching } = useListInvoices({ page, entityId })
 
+  useEffect(() => {
+    setPage(1)
+  }, [entityId])
+
   const receipts = data?.results ?? []
   const isResultsEmpty = receipts.length === 0
-  const { onChange, ...restFooterProps } = footerProps ?? {}
-
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h4" {...titleProps}>
@@ -52,10 +55,16 @@ const InvoiceListTable = ({
           <Table {...tableProps}>
             <InvoiceListTableHeader smDown={smDown} {...headerProps} />
             <TableBody>
-              {isFetching && <CircularProgress sx={{ margin: 'auto' }} />}
+              {isFetching && (
+                <TableRow>
+                  <TableCell colSpan={smDown ? 3 : 5} sx={{ textAlign: 'center' }}>
+                    <CircularProgress sx={{ margin: 'auto' }} />
+                  </TableCell>
+                </TableRow>
+              )}
               {isResultsEmpty ? (
                 <TableRow {...rowProps}>
-                  <TableCell colSpan={5} sx={{ p: 4 }}>
+                  <TableCell colSpan={smDown ? 3 : 5} sx={{ p: 4 }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                       No receipts found
                     </Typography>
@@ -78,9 +87,9 @@ const InvoiceListTable = ({
               page={page}
               onChange={(event: ChangeEvent<unknown>, pageNumber: number) => {
                 setPage(pageNumber)
-                onChange?.(event as ChangeEvent<HTMLTableSectionElement>)
+                onChange?.(event, pageNumber)
               }}
-              {...restFooterProps}
+              footerProps={footerProps}
             />
           </Table>
         </TableContainer>
