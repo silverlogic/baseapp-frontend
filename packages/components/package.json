@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.5.8",
+  "version": "1.5.18",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -133,7 +133,6 @@
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
-    "numbro": "catalog:components",
     "react-hook-form": "catalog:",
     "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",

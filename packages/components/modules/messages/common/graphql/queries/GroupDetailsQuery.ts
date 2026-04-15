@@ -6,6 +6,7 @@ export const GroupDetailsQuery = graphql`
       id
       participantsCount
       isArchived
+      participantIds
       ...RoomTitleFragment
       ...MembersListFragment
     }

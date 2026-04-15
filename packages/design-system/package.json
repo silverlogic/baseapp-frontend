@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "1.2.4",
+  "version": "1.2.8",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
@@ -94,6 +94,7 @@
     "@expo/vector-icons": "catalog:react-native",
     "@gorhom/bottom-sheet": "catalog:react-native",
     "@iconify/react": "catalog:design-system",
+    "@mdxeditor/editor": "catalog:",
     "@mui/icons-material": "catalog:material-ui",
     "@mui/lab": "catalog:material-ui",
     "@mui/material": "catalog:material-ui",

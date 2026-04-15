@@ -1,5 +1,11 @@
 # @baseapp-frontend/authentication
 
+## 5.1.0
+
+### Minor Changes
+
+- Added the useRequestEmailChange hook and some icons and ilustrations
+
 ## 5.0.7
 
 ### Patch Changes

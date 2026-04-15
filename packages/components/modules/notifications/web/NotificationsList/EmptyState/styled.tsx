@@ -9,5 +9,5 @@ export const Container = styled(Box)(({ theme }) => ({
   justifyItems: 'center',
   alignContent: 'center',
   gridAutoRows: 'min-content',
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.paper,
 }))

@@ -5,7 +5,6 @@ export const ProfileByIdQuery = graphql`
     profile(id: $id) {
       ...CheckMountPermissionWrapperFragment @arguments(perm: $perm)
       ...ProfileComponentFragment
-      ...FollowToggleUpdatableFragment
     }
   }
 `

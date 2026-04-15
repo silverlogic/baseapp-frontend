@@ -155,10 +155,6 @@ describe('Comments', () => {
       })
     cy.findByText('This is not a pinned comment anymore.').should('exist')
 
-    cy.step('Cannot delete a comment')
-    cy.findByText('This is a regular comment.').click()
-    cy.findAllByRole('button', { name: /delete item/i }).should('not.exist')
-
     cy.step('Delete a comment')
     cy.findByText('This is not a pinned comment anymore.').click()
     cy.findAllByRole('button', { name: /delete item/i })

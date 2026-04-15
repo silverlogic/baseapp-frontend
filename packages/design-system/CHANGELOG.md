@@ -1,5 +1,30 @@
 # @baseapp-frontend/design-system
 
+## 1.2.8
+
+### Patch Changes
+
+- `SocialTextField` conditionally renders `MarkdownEditorField`or `TextareaField` depending on `mode` prop.
+- Create `MarkdownEditorField` as a rich text field option.
+
+## 1.2.7
+
+### Patch Changes
+
+- Make comments more flexible/customizable.
+
+## 1.2.6
+
+### Patch Changes
+
+- Fixed infinite loop issue in `ProfileComponent`, added border prop to `AvatarWithPlaceholder` component
+
+## 1.2.5
+
+### Patch Changes
+
+- `TextareaField` can now be resizable. It also got style tweaks.
+
 ## 1.2.4
 
 ### Patch Changes

@@ -7,13 +7,13 @@ import { TextareaFieldProps } from './types'
 
 export const Textarea: ComponentType<TextareaFieldProps> = styled(
   PureTextField,
-)<TextareaFieldProps>(({ theme, hideBorder }) => ({
+)<TextareaFieldProps>(({ theme, hideBorder, resizable }) => ({
   '& .MuiInputBase-root': {
-    padding: 0,
+    padding: '12px 0 4px 0',
   },
   '& .MuiInputBase-input': {
     ...theme.typography.body1,
-    padding: theme.spacing(1.5),
+    padding: theme.spacing(1),
   },
   ...(hideBorder && {
     '& fieldset': {
@@ -31,5 +31,12 @@ export const Textarea: ComponentType<TextareaFieldProps> = styled(
       border: `4px solid ${theme.palette.common.white}`,
       borderRadius: 12,
     },
+    ...(resizable && {
+      resize: 'vertical',
+      '&::-webkit-scrollbar-corner': {
+        backgroundColor: 'transparent',
+        border: 'none',
+      },
+    }),
   },
 }))

@@ -20,7 +20,7 @@ export const CommentContainerWrapper = styled(Box)<CommentContainerWrapperProps>
 
 export const CommentContainer = styled(Box)(({ theme }) => ({
   alignItems: 'self-start',
-  backgroundColor: theme.palette.common.white,
+  backgroundColor: theme.palette.background.default,
   borderRadius: theme.spacing(1),
   display: 'grid',
   gap: theme.spacing(1.5),

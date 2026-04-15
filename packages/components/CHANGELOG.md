@@ -1,5 +1,77 @@
 # @baseapp-frontend/components
 
+## 1.5.18
+
+### Patch Changes
+
+- Export MarkAllAsReadButton and EmptyState
+
+## 1.5.17
+
+### Patch Changes
+
+- `ActionsOverlay` wont open if there is no option available (e.g. unlogged users)
+- `CommentsList` returns `EmptyState` when no comments exist.
+- `SocialInput` have the `mode` set to `plain-text`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.8
+
+## 1.5.16
+
+### Patch Changes
+
+- Improve Notifications Customization"
+
+## 1.5.15
+
+### Patch Changes
+
+- ReactionButton know accepts an optional `onClick` prop.
+
+## 1.5.14
+
+### Patch Changes
+
+- Make comments more flexibe
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.7
+
+## 1.5.13
+
+### Patch Changes
+
+- Creates a resuable hook `useFollowToggle` and simplify `FollowToggleButton`. Create `formatFollowCount` and removes numbro dependency.
+
+## 1.5.13
+
+### Patch Changes
+
+- Added the `useRequestEmailChange` hook and some icons and illustrations.
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.0
+  - @baseapp-frontend/graphql@1.3.9
+
+## 1.5.11
+
+### Patch Changes
+
+- Fixed infinite loop issue in `ProfileComponent`, added border prop to `AvatarWithPlaceholder` component
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.6
+
+## 1.5.10
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.5
+
+## 1.5.9
+
+### Patch Changes
+
+- Remove member from group on mobile
+
 ## 1.5.8
 
 ### Patch Changes

@@ -39,8 +39,16 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   const router = useRouter()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
+  const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
   const groups = useGroupChatCreate()
+
+  const handleSetMemberToRemove = (id: string | null) => {
+    setMemberToRemoveId(id)
+    if (id) {
+      setOpenConfirmLeaveGroupDialog(true)
+    }
+  }
 
   const { chatRoom: group } = useLazyLoadQuery<GroupDetailsQueryType>(
     GroupDetailsQuery,
@@ -101,10 +109,13 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
       {currentProfile?.id && (
         <LeaveGroupDialog
           open={openConfirmLeaveGroupDialog}
-          onClose={() => setOpenConfirmLeaveGroupDialog(false)}
+          onClose={() => {
+            setMemberToRemoveId(null)
+            setOpenConfirmLeaveGroupDialog(false)
+          }}
           profileId={currentProfile?.id}
           roomId={roomId}
-          removingParticipantId={currentProfile?.id}
+          removingParticipantId={memberToRemoveId ?? currentProfile?.id}
           isSoleAdmin={isSoleAdmin}
           {...LeaveGroupDialogProps}
         />
@@ -119,6 +130,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
           hasNext={hasNext}
           currentProfileIsAdmin={currentProfileIsAdmin}
           groupId={roomId}
+          setMemberToRemoveId={handleSetMemberToRemove}
           {...MembersProps}
         />
         <Options

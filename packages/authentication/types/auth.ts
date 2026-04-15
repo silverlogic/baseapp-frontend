@@ -59,3 +59,12 @@ export interface ChangePasswordRequest {
 export interface ChangeExpiredPasswordRequest extends ChangePasswordRequest {
   token: string
 }
+
+export interface RequestEmailChangeRequest {
+  newEmail: string
+}
+
+export interface ConfirmEmailParams {
+  id: string
+  token: string
+}

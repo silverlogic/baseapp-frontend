@@ -3,10 +3,12 @@ import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFet
 import type {
   ChangeExpiredPasswordRequest,
   ChangePasswordRequest,
+  ConfirmEmailParams,
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
   RegisterRequest,
+  RequestEmailChangeRequest,
   ResetPasswordRequest,
 } from '../types/auth'
 
@@ -43,6 +45,30 @@ export default class AuthApi {
       method: 'POST',
       body: { currentPassword, newPassword, token },
     })
+  }
+
+  static requestEmailChange({ newEmail }: RequestEmailChangeRequest): Promise<void> {
+    return baseAppFetch(`/change-email`, { method: 'POST', body: { newEmail } })
+  }
+
+  static resendRequestEmailChange(): Promise<void> {
+    return baseAppFetch(`/change-email/resend-confirm`, { method: 'POST' })
+  }
+
+  static confirmEmailChange({ id, token }: ConfirmEmailParams): Promise<void> {
+    return baseAppFetch(`/change-email/${id}/confirm`, { method: 'POST', body: { token } })
+  }
+
+  static verifyEmailChange({ id, token }: ConfirmEmailParams): Promise<void> {
+    return baseAppFetch(`/change-email/${id}/verify`, { method: 'POST', body: { token } })
+  }
+
+  static resendVerifyEmailChange(): Promise<void> {
+    return baseAppFetch(`/change-email/resend-verify`, { method: 'POST' })
+  }
+
+  static cancelEmailChange(): Promise<void> {
+    return baseAppFetch(`/change-email/cancel`, { method: 'POST' })
   }
 }
 

@@ -45,11 +45,6 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
 
     const popover = usePopover()
 
-    const handleClosePopover = () => {
-      setIsHoveringItem(false)
-      popover.onClose()
-    }
-
     const longPressHandlers = useLongPress<HTMLDivElement>(
       (e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>) => {
         e.stopPropagation()
@@ -71,6 +66,22 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
         threshold: 400,
       },
     )
+
+    const hasVisibleActions = actions.some((action) => action.hasPermission)
+    const hasOptions = hasVisibleActions || !!showDeleteButton
+
+    if (!hasOptions) {
+      return (
+        <Box ref={ref} position="relative" {...ContainerProps}>
+          {children}
+        </Box>
+      )
+    }
+
+    const handleClosePopover = () => {
+      setIsHoveringItem(false)
+      popover.onClose()
+    }
     const handleLongPressItemOptionsClose = () => {
       setLongPressHandler({ isLongPressingItem: false, shouldOpenItemOptions: false })
     }
