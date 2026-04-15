@@ -10,6 +10,7 @@ export interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'content
   cancelText?: string
   action: ReactNode
   onClose: VoidFunction
+  hideCancelButton?: boolean
   DialogTitleProps?: Partial<DialogTitleProps>
   DialogContentProps?: Partial<DialogContentProps>
   DialogActionsProps?: Partial<DialogActionsProps>

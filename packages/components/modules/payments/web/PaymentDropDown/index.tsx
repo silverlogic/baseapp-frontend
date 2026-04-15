@@ -1,0 +1,120 @@
+import { FC } from 'react'
+
+import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
+
+import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
+
+import AddCardModal from '../AddCardModal'
+import useStripeHook from '../hooks/useStripeHook'
+import { SetupIntent } from '../types'
+import { getCardIcon } from '../utils'
+import AddPaymentMethodItem from './AddPaymentMethodItem'
+import PaymentMethodDisplay from './PaymentMethodDisplay'
+import { StyledButton } from './styled'
+import { PaymentDropdownProps } from './types'
+
+const ADD_NEW_PAYMENT_METHOD = 'add-new'
+
+const PaymentDropdown: FC<PaymentDropdownProps> = ({
+  paymentMethods,
+  selectedPaymentMethodId,
+  setSelectedPaymentMethodId,
+  stripe,
+  elements,
+  setIsAddCardModalOpen,
+  isAddCardModalOpen,
+  entityId,
+  handleSetupSuccess,
+}) => {
+  const { useSetupIntent } = useStripeHook()
+  const { mutate: createSetupIntent } = useSetupIntent(entityId, {
+    onSuccess: (setupIntent: SetupIntent) => {
+      // @ts-ignore
+      elements?.update({ clientSecret: setupIntent.clientSecret })
+      setIsAddCardModalOpen(true)
+    },
+    onError: (error) => {
+      console.error('Error creating setup intent:', error)
+    },
+  })
+
+  const isEmpty = !paymentMethods || paymentMethods.length === 0
+
+  const handleOpenModal = () => {
+    createSetupIntent()
+  }
+
+  const handleCloseModal = () => {
+    setIsAddCardModalOpen(false)
+  }
+
+  const handleSelectPaymentMethod = (e: SelectChangeEvent<string>) => {
+    const selectedId = e.target.value as string
+    if (selectedId === ADD_NEW_PAYMENT_METHOD) {
+      handleOpenModal()
+    } else {
+      setSelectedPaymentMethodId(selectedId)
+    }
+  }
+
+  if (isEmpty)
+    return (
+      <>
+        <StyledButton fullWidth variant="outlined" color="primary" onClick={handleOpenModal}>
+          <AddPaymentMethodItem />
+        </StyledButton>
+        <AddCardModal
+          entityId={entityId}
+          stripe={stripe}
+          elements={elements}
+          open={isAddCardModalOpen}
+          onClose={handleCloseModal}
+          handleSetupSuccess={handleSetupSuccess}
+        />
+      </>
+    )
+
+  return (
+    <>
+      <FormControl fullWidth>
+        <Select
+          labelId="payment-method-select-label"
+          value={selectedPaymentMethodId}
+          onChange={(e) => {
+            handleSelectPaymentMethod(e)
+          }}
+          renderValue={(selectedId) => {
+            const pm = paymentMethods.find((pam) => pam.id === selectedId)
+            if (!pm) return <AddPaymentMethodItem isSelected />
+            return <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} isSelected />
+          }}
+          sx={{
+            '& .MuiSelect-select': { py: 0, px: 1 },
+          }}
+        >
+          {paymentMethods.map((pm) => (
+            <MenuItem key={pm.id} value={pm.id} dense sx={{ py: 0.5 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" width="100%">
+                <PaymentMethodDisplay pm={pm} getCardIcon={getCardIcon} />
+                {pm.id === selectedPaymentMethodId && <CheckMarkIcon color="action" />}
+              </Box>
+            </MenuItem>
+          ))}
+          <MenuItem value={ADD_NEW_PAYMENT_METHOD}>
+            <AddPaymentMethodItem />
+          </MenuItem>
+        </Select>
+      </FormControl>
+      <AddCardModal
+        entityId={entityId}
+        stripe={stripe}
+        elements={elements}
+        open={isAddCardModalOpen}
+        onClose={handleCloseModal}
+        handleSetupSuccess={handleSetupSuccess}
+      />
+    </>
+  )
+}
+
+export default PaymentDropdown
