@@ -30,7 +30,7 @@ import { SocialTextFieldProps } from './types'
  */
 const SocialTextField: FC<SocialTextFieldProps> = ({
   children,
-  mode = 'plain-text',
+  mode = 'rich-text',
   isReply,
   replyTargetName,
   onCancelReply,

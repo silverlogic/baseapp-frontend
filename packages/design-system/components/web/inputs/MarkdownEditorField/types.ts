@@ -31,6 +31,7 @@ export interface ToolbarConfig {
 
 export type EditorContainerProps = BoxProps & {
   minHeight?: number | string
+  maxHeight?: number | string
   hasBorder?: boolean
   hasLabel?: boolean
   error?: boolean
@@ -55,8 +56,10 @@ export type MarkdownEditorFieldCoreProps = Omit<MDXEditorProps, 'markdown'> & {
   showDiffSourceToggle?: boolean
   showUndoRedo?: boolean
   minHeight?: number | string
+  maxHeight?: number | string
   hasBorder?: boolean
   label?: ReactNode
+  labelBackgroundColor?: string
   helperText?: ReactNode
   error?: boolean
   Toolbar?: FC<ToolbarProps>

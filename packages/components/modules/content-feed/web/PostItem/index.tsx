@@ -2,7 +2,9 @@
 
 import { FC } from 'react'
 
-import { Stack, Typography } from '@mui/material'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
+
+import { Stack } from '@mui/material'
 import { useRefetchableFragment } from 'react-relay'
 
 import { ContentPostRefetchQuery } from '../../../../__generated__/ContentPostRefetchQuery.graphql'
@@ -25,7 +27,7 @@ const PostItem: FC<PostItemProps> = ({ postRef }) => {
       <PostHeader post={post} />
       <PostItemImages post={post} />
       <Stack px={1.5} gap={1}>
-        <Typography variant="body2">{post.content}</Typography>
+        <Markdown>{post.content}</Markdown>
       </Stack>
       <PostFooter post={post} />
     </Stack>

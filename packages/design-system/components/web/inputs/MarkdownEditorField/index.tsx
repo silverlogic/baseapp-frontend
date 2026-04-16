@@ -20,8 +20,10 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   showDiffSourceToggle,
   showUndoRedo,
   minHeight,
+  maxHeight = 300,
   hasBorder = true,
   label,
+  labelBackgroundColor,
   helperText,
   error,
   Toolbar,
@@ -55,6 +57,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
       onFocus={handleFocus}
       onBlur={handleBlur}
       minHeight={minHeight}
+      maxHeight={maxHeight}
       hasBorder={hasBorder}
       hasLabel={!!label}
       error={error}
@@ -83,7 +86,9 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   if (label) {
     return (
       <FormControl focused={focused} error={error} fullWidth>
-        <StyledInputLabel shrink={focused || filled}>{label}</StyledInputLabel>
+        <StyledInputLabel shrink={focused || filled} labelBackgroundColor={labelBackgroundColor}>
+          {label}
+        </StyledInputLabel>
         {editorContent}
         {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
       </FormControl>
