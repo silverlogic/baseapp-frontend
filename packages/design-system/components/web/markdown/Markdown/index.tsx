@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useMemo } from 'react'
+import { ComponentProps, FC, useMemo } from 'react'
 
 import type { LinkProps } from '@mui/material/Link'
 import ReactMarkdown from 'react-markdown'
@@ -12,16 +12,12 @@ import DefaultLink from './DefaultLink'
 import { StyledMarkdown } from './styled'
 import { MarkdownProps } from './types'
 
-function createDefaultComponents(linkProps?: Partial<LinkProps>) {
-  return {
-    a: function MarkdownLink(props: React.ComponentProps<'a'>) {
-      return <DefaultLink {...props} extraLinkProps={linkProps} />
-    },
-    img: function MarkdownImage(props: React.ComponentProps<'img'>) {
-      return <LazyLoadImage alt={props.alt} src={props.src} />
-    },
-  }
-}
+const createDefaultComponents = (linkProps?: Partial<LinkProps>) => ({
+  a: (props: ComponentProps<'a'>) => <DefaultLink {...props} extraLinkProps={linkProps} />,
+  img: (props: ComponentProps<'img'>) => (
+    <LazyLoadImage alt={props.alt} src={props.src as string | undefined} />
+  ),
+})
 
 const Markdown: FC<MarkdownProps> = ({
   children,
