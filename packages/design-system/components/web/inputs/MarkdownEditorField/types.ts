@@ -61,6 +61,7 @@ export type MarkdownEditorFieldCoreProps = Omit<MDXEditorProps, 'markdown'> & {
   label?: ReactNode
   labelBackgroundColor?: string
   helperText?: ReactNode
+  showHelperText?: boolean
   error?: boolean
   Toolbar?: FC<ToolbarProps>
   ToolbarProps?: Partial<ToolbarProps>

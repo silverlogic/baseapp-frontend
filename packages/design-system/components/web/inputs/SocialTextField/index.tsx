@@ -49,6 +49,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
         <MarkdownEditorField
           {...(props as SocialTextFieldProps['MarkdownEditorFieldProps'])}
           hasBorder={false}
+          showHelperText={false}
           {...MarkdownEditorFieldProps}
         />
       )

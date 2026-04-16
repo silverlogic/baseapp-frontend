@@ -25,6 +25,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   label,
   labelBackgroundColor,
   helperText,
+  showHelperText = true,
   error,
   Toolbar,
   ToolbarProps,
@@ -90,7 +91,9 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
           {label}
         </StyledInputLabel>
         {editorContent}
-        {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
+        {showHelperText && helperText && (
+          <FormHelperText error={error}>{helperText}</FormHelperText>
+        )}
       </FormControl>
     )
   }
@@ -98,7 +101,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   return (
     <div>
       {editorContent}
-      {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
+      {showHelperText && helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
     </div>
   )
 }
