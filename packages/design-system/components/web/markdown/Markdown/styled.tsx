@@ -68,6 +68,11 @@ export const StyledMarkdown = styled(Box, {
       '& li': {
         lineHeight: 2,
       },
+      // react-markdown wraps list item content in <p> tags;
+      // remove their spacing to match the editor's inline rendering.
+      '& li > p': {
+        margin: 0,
+      },
     },
     '& ol': { listStyle: 'decimal inside' },
     '& ul': { listStyle: 'inside' },
