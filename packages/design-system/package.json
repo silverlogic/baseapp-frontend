@@ -163,6 +163,7 @@
     "@types/lodash": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@types/react-lazy-load-image-component": "catalog:lint",
     "autoprefixer": "catalog:tailwind",
     "babel-jest": "catalog:test",
     "css-loader": "catalog:storybook",
