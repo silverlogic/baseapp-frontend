@@ -34,6 +34,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   NavToggleButtonProps,
   enableHeader = true,
   CustomAppBarProps,
+  NavProps,
 }) => {
   const { settings } = useUISettings()
   const nav = useBoolean()
@@ -183,6 +184,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
         }}
       >
         <NavVertical
+          NavProps={NavProps}
           navData={navData}
           LogoIcon={LogoIcon}
           LogoProps={LogoProps}

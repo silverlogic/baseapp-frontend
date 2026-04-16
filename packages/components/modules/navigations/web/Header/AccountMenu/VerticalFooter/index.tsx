@@ -67,6 +67,7 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
     AddProfileMenuItem = DefaultAddProfileMenuItem,
     AddProfileMenuItemProps = {},
     LogoutItemProps = {},
+    AccountProfileNameProps = {},
   } = AccountPopoverProps
 
   const profileName = useMemo(() => profile?.name || '', [profile?.name])
@@ -118,9 +119,11 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
                 variant="subtitle2"
                 color="text.primary"
                 noWrap
+                {...AccountProfileNameProps}
                 sx={{
                   fontWeight: 590,
                   lineHeight: 1.571,
+                  ...AccountProfileNameProps?.sx,
                 }}
               >
                 {profileName}

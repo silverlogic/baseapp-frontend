@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
-import { DrawerProps } from '@mui/material'
+import { BoxProps, DrawerProps } from '@mui/material'
 
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
@@ -26,4 +26,5 @@ export interface NavVerticalProps {
   NavAccountSectionProps?: Partial<NavAccountSectionProps>
   NotificationsPopover?: FC<NotificationsPopoverProps>
   NotificationsPopoverProps?: Partial<NotificationsPopoverProps>
+  NavProps?: BoxProps
 }

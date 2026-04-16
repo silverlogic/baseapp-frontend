@@ -2,7 +2,7 @@ import { FC, PropsWithChildren } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
-import { DrawerProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
+import { BoxProps, DrawerProps, ToolbarProps as MuiToolbarProps } from '@mui/material'
 
 import { NotificationsPopoverProps } from '../../../notifications/web/NotificationsPopover/types'
 import { AccountMenuProps } from '../Header/AccountMenu/types'
@@ -30,4 +30,5 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   NavToggleButtonProps?: Partial<NavToggleButtonProps>
   enableHeader?: boolean
   CustomAppBarProps?: Partial<CustomAppBarProps>
+  NavProps?: BoxProps
 }

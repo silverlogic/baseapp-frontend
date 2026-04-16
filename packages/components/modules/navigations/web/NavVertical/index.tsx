@@ -33,6 +33,7 @@ const NavVertical: FC<NavVerticalProps> = ({
   NavAccountSectionProps,
   NotificationsPopover,
   NotificationsPopoverProps,
+  NavProps,
 }) => {
   const lgDown = useResponsive('down', 'lg')
 
@@ -50,10 +51,12 @@ const NavVertical: FC<NavVerticalProps> = ({
 
   return (
     <Box
+      {...NavProps}
       sx={{
         flexShrink: { lg: 0 },
         width: { lg: NAV_WIDTH.VERTICAL },
         display: { xs: 'none', lg: 'flex' },
+        ...NavProps?.sx,
       }}
     >
       {!hideToggleButton && <NavToggleButton {...NavToggleButtonProps} />}
