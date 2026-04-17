@@ -36,7 +36,7 @@ const useRecoverPassword = ({
       if (enableFormApiErrors) {
         const errorWithFieldErrors =
           err && typeof err === 'object' && 'fieldErrors' in err
-            ? { response: { data: (err as AuthError).fieldErrors } }
+            ? { response: { data: err.fieldErrors } }
             : err
         setFormApiErrors(form, errorWithFieldErrors)
       }

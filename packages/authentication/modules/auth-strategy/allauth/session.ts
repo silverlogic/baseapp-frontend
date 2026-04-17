@@ -45,72 +45,72 @@ function toAuthenticatedState(
   }
 }
 
+async function evaluate(session: SessionMaterial): Promise<SessionState> {
+  if (!session.accessToken) {
+    if (session.refreshToken) {
+      return {
+        status: SESSION_STATUS.expired,
+        user: null,
+        session,
+      }
+    }
+
+    return toAnonymousState()
+  }
+
+  const payload = decodeAccessToken(session.accessToken)
+  const valid = isUserTokenValid(payload)
+
+  return {
+    status: valid ? SESSION_STATUS.authenticated : SESSION_STATUS.expired,
+    user: isValidUser(payload) ? payload : null,
+    session,
+  }
+}
+
+async function doRefresh(session: SessionMaterial): Promise<SessionState> {
+  if (!session.refreshToken) {
+    return toAnonymousState()
+  }
+
+  try {
+    const tokens = await getTokens(session.refreshToken)
+    const nextSession: SessionMaterial = {
+      accessToken: tokens.access,
+      refreshToken: tokens.refresh ?? session.refreshToken,
+      sessionToken: session.sessionToken ?? null,
+    }
+    const payload = decodeAccessToken(tokens.access)
+
+    return toAuthenticatedState(payload, nextSession)
+  } catch {
+    return toAnonymousState()
+  }
+}
+
+async function refresh(session: SessionMaterial): Promise<SessionState> {
+  const { refreshToken } = session
+
+  if (!refreshToken) {
+    return toAnonymousState()
+  }
+
+  const inflightRefresh = inflightRefreshByToken.get(refreshToken)
+
+  if (inflightRefresh) {
+    return inflightRefresh
+  }
+
+  const nextRefresh = doRefresh(session).finally(() => {
+    inflightRefreshByToken.delete(refreshToken)
+  })
+
+  inflightRefreshByToken.set(refreshToken, nextRefresh)
+
+  return nextRefresh
+}
+
 export function createAllauthSession(): StrategySession {
-  async function evaluate(session: SessionMaterial): Promise<SessionState> {
-    if (!session.accessToken) {
-      if (session.refreshToken) {
-        return {
-          status: SESSION_STATUS.expired,
-          user: null,
-          session,
-        }
-      }
-
-      return toAnonymousState()
-    }
-
-    const payload = decodeAccessToken(session.accessToken)
-    const valid = isUserTokenValid(payload)
-
-    return {
-      status: valid ? SESSION_STATUS.authenticated : SESSION_STATUS.expired,
-      user: isValidUser(payload) ? payload : null,
-      session,
-    }
-  }
-
-  async function doRefresh(session: SessionMaterial): Promise<SessionState> {
-    if (!session.refreshToken) {
-      return toAnonymousState()
-    }
-
-    try {
-      const tokens = await getTokens(session.refreshToken)
-      const nextSession: SessionMaterial = {
-        accessToken: tokens.access,
-        refreshToken: tokens.refresh ?? session.refreshToken,
-        sessionToken: session.sessionToken ?? null,
-      }
-      const payload = decodeAccessToken(tokens.access)
-
-      return toAuthenticatedState(payload, nextSession)
-    } catch {
-      return toAnonymousState()
-    }
-  }
-
-  async function refresh(session: SessionMaterial): Promise<SessionState> {
-    const { refreshToken } = session
-
-    if (!refreshToken) {
-      return toAnonymousState()
-    }
-
-    const inflightRefresh = inflightRefreshByToken.get(refreshToken)
-
-    if (inflightRefresh) {
-      return inflightRefresh
-    }
-
-    const nextRefresh = doRefresh(session).finally(() => {
-      inflightRefreshByToken.delete(refreshToken)
-    })
-
-    inflightRefreshByToken.set(refreshToken, nextRefresh)
-
-    return nextRefresh
-  }
-
   return {
     evaluate,
     refresh,

@@ -40,7 +40,7 @@ describe('useCurrentUser', () => {
   })
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(globalThis.fetch as jest.Mock).mockClear()
     jest.clearAllMocks()
   })
 

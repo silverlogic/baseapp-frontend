@@ -136,9 +136,7 @@ export async function getServerSessionContract<TUser = User>(): Promise<SessionC
   let statePromise: Promise<SessionState<TUser>> | null = null
 
   const getResolvedState = () => {
-    if (!statePromise) {
-      statePromise = evaluateState<TUser>(session)
-    }
+    statePromise ??= evaluateState<TUser>(session)
 
     return statePromise
   }

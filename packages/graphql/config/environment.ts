@@ -125,8 +125,8 @@ export async function httpFetch(
   const attemptFetch = async (hasRetried = false): Promise<GraphQLResponse> => {
     const fetchOptions = getFetchOptions({ request, variables, uploadables })
     const EXPO_PUBLIC_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_RELAY_ENDPOINT')
-    const isServer = typeof window === typeof undefined
-    const accessTokenAtRequestStart = !isServer ? (getToken(ACCESS_KEY_NAME) ?? null) : null
+    const isServer = typeof globalThis.window === typeof undefined
+    const accessTokenAtRequestStart = isServer ? null : (getToken(ACCESS_KEY_NAME) ?? null)
 
     const response = await baseAppFetch('', {
       baseUrl: (process.env.NEXT_PUBLIC_RELAY_ENDPOINT ?? EXPO_PUBLIC_RELAY_ENDPOINT) as string,
@@ -255,7 +255,7 @@ export function createEnvironment() {
     handlerProvider,
     network,
     store,
-    isServer: typeof window === typeof undefined,
+    isServer: typeof globalThis.window === typeof undefined,
   })
 
   responseCacheByEnvironment.set(environment, cache)

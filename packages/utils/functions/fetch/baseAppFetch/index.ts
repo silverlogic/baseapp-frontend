@@ -56,7 +56,7 @@ async function getLatestAccessToken(accessKeyName: string): Promise<string | nul
   return getToken(accessKeyName)
 }
 
-const METHODS_TO_SET_CONTENT_TYPE = ['POST', 'PUT', 'PATCH']
+const METHODS_TO_SET_CONTENT_TYPE = new Set(['POST', 'PUT', 'PATCH'])
 
 function prepareFetchOptions({
   options,
@@ -104,7 +104,7 @@ function prepareFetchOptions({
     headers['Accept-Language'] = language
   }
 
-  if (setContentType && METHODS_TO_SET_CONTENT_TYPE.includes(fetchOptions.method || '')) {
+  if (setContentType && METHODS_TO_SET_CONTENT_TYPE.has(fetchOptions.method || '')) {
     headers['Content-Type'] = 'application/json; charset=utf-8'
   }
 
@@ -249,7 +249,7 @@ export const baseAppFetch: BaseAppFetch = async (
   } = {},
 ) => {
   const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
-  const isServer = typeof window === typeof undefined
+  const isServer = typeof globalThis.window === typeof undefined
   const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 

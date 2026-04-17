@@ -27,11 +27,11 @@ const useSignUp = <TRegisterRequest extends RegisterRequest>({
   const strategy = useMemo(() => getActiveAuthModule().strategy, [])
 
   const form = useForm({
-    // @ts-expect-error TODO: DeepPartial type error will be fixed on v8
+    // @ts-expect-error DeepPartial type error will be fixed on v8
     defaultValues: DEFAULT_INITIAL_VALUES,
-    // @ts-expect-error TODO: Fix typing for zodResolver
+    // @ts-expect-error Fix typing for zodResolver
     resolver: zodResolver(
-      // @ts-expect-error TODO: Fix typing for zodResolver
+      // @ts-expect-error Fix typing for zodResolver
       useNameField ? DEFAULT_VALIDATION_SCHEMA_WITH_NAME : DEFAULT_VALIDATION_SCHEMA,
     ),
     mode: 'onChange',
@@ -47,7 +47,7 @@ const useSignUp = <TRegisterRequest extends RegisterRequest>({
       if (enableFormApiErrors) {
         const errorWithFieldErrors =
           err && typeof err === 'object' && 'fieldErrors' in err
-            ? { response: { data: (err as AuthError).fieldErrors } }
+            ? { response: { data: err.fieldErrors } }
             : err
         setFormApiErrors(form, errorWithFieldErrors)
       }

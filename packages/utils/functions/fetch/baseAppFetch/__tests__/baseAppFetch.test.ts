@@ -387,12 +387,12 @@ describe('baseAppFetch', () => {
     let originalWindow: any
 
     beforeEach(() => {
-      originalWindow = global.window
-      delete (global as any).window
+      originalWindow = globalThis.window
+      delete (globalThis as any).window
     })
 
     afterEach(() => {
-      global.window = originalWindow
+      globalThis.window = originalWindow
     })
 
     it('should use getTokenSSR in SSR environment', async () => {
@@ -548,7 +548,7 @@ describe('baseAppFetch', () => {
       const { getToken: dynamicGetToken } = require('../../../token/getToken')
       dynamicGetToken.mockImplementation((key: string) => getTokenMock(key))
 
-      const fetchMock = global.fetch as jest.Mock
+      const fetchMock = globalThis.fetch as jest.Mock
       fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce(SUCCESS_RESPONSE)
 
       const result = await baseAppFetch('/test', {})
@@ -573,7 +573,7 @@ describe('baseAppFetch', () => {
       await expect(baseAppFetch('/test', {})).rejects.toThrow()
 
       expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
-      expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
     })
 
     it('should reject when refresh resolves as timeout', async () => {
@@ -591,7 +591,7 @@ describe('baseAppFetch', () => {
       await expect(baseAppFetch('/test', {})).rejects.toThrow()
 
       expect(awaitSessionRecoveryMock).toHaveBeenCalledTimes(1)
-      expect(global.fetch).toHaveBeenCalledTimes(1)
+      expect(globalThis.fetch).toHaveBeenCalledTimes(1)
     })
 
     it('should retry with the latest cookie token without triggering session recovery when the token changed mid-flight', async () => {
@@ -613,7 +613,7 @@ describe('baseAppFetch', () => {
       const { getToken: dynamicGetToken } = require('../../../token/getToken')
       dynamicGetToken.mockImplementation((key: string) => getTokenMock(key))
 
-      const fetchMock = global.fetch as jest.Mock
+      const fetchMock = globalThis.fetch as jest.Mock
       fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce(SUCCESS_RESPONSE)
 
       const result = await baseAppFetch('/test', {})
@@ -634,7 +634,7 @@ describe('baseAppFetch', () => {
       const { getToken: dynamicGetToken } = require('../../../token/getToken')
       dynamicGetToken.mockReturnValue('old-token')
 
-      const fetchMock = global.fetch as jest.Mock
+      const fetchMock = globalThis.fetch as jest.Mock
       fetchMock.mockResolvedValueOnce(UNAUTHORIZED_RESPONSE).mockResolvedValueOnce({
         ...UNAUTHORIZED_RESPONSE,
         json: jest.fn().mockResolvedValue({ detail: 'Still Unauthorized' }),

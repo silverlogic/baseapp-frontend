@@ -71,7 +71,7 @@ export const createAxiosInstance = ({
 
     let accessAuthToken
     // TODO: maybe find a better way to deal with RSC
-    if (typeof window === typeof undefined) {
+    if (typeof globalThis.window === typeof undefined) {
       const { getTokenSSR } = await import('../../token/getTokenSSR')
       accessAuthToken = await getTokenSSR(accessKeyName)
     } else {
@@ -140,10 +140,8 @@ export const createAxiosInstance = ({
     },
     async (error) => {
       const isUnauthorized = error.response?.status === 401
-      const isServer = typeof window === typeof undefined
-      const errorConfig = error.config as
-        | (typeof error.config & AuthRecoveryRetryRequest)
-        | undefined
+      const isServer = typeof globalThis.window === typeof undefined
+      const errorConfig = error.config
       const hasRetried = Boolean(errorConfig?.authRecoveryRetried)
       const isAuthTokenRequired = !servicesWithoutToken.some((regex) =>
         regex.test(error.config?.url || ''),
@@ -162,10 +160,10 @@ export const createAxiosInstance = ({
             ...error.config,
             [AUTH_RECOVERY_RETRY_FLAG]: true,
             headers: {
-              ...(error.config?.headers ?? {}),
+              ...error.config?.headers,
               Authorization: `${tokenType} ${latestAccessToken}`,
             },
-          } as typeof error.config & AuthRecoveryRetryRequest
+          }
 
           return instance.request(retryConfig)
         }
@@ -183,9 +181,9 @@ export const createAxiosInstance = ({
             ...error.config,
             [AUTH_RECOVERY_RETRY_FLAG]: true,
             headers: {
-              ...(error.config?.headers ?? {}),
+              ...error.config?.headers,
             },
-          } as typeof error.config & AuthRecoveryRetryRequest
+          }
 
           if (refreshedToken) {
             retryConfig.headers.Authorization = `${tokenType} ${refreshedToken}`

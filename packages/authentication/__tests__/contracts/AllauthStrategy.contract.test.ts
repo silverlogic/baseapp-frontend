@@ -124,8 +124,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.login({ email: '', password: '' })
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.code).toBe('validation_error')
         expect(authError.fieldErrors).toEqual({
           email: ['Email is required.'],
@@ -145,8 +145,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.login({ email: 'test@example.com', password: 'wrong' }) // NOSONAR
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.code).toBe('invalid_credentials')
         expect(authError.fieldErrors?.email).toEqual(['Invalid email or password.'])
       }
@@ -158,8 +158,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.login({ email: 'a@b.com', password: 'x' })
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.code).toBe('unknown_error')
         expect(authError.message).toBe('Network failure')
       }
@@ -191,8 +191,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.signUp({ email: 'dup@example.com', password: 'pass' }) // NOSONAR
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.fieldErrors).toEqual({
           email: ['Email already exists.'],
         })
@@ -215,8 +215,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.logout()
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.code).toBe('unknown_error')
       }
     })
@@ -240,8 +240,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.recoverPassword({ email: 'nope@example.com' })
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.fieldErrors).toEqual({
           email: ['User not found.'],
         })
@@ -268,8 +268,8 @@ describe('AllauthStrategy — contract', () => {
       try {
         await strategy.resetPassword({ newPassword: 'x', token: 'bad' })
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.fieldErrors).toEqual({
           key: ['Invalid token.'],
         })
@@ -317,8 +317,8 @@ describe('AllauthStrategy — contract', () => {
           newPassword: 'new', // NOSONAR
         })
         fail('Expected an error to be thrown')
-      } catch (thrown) {
-        const authError = thrown as AuthError
+      } catch (error_) {
+        const authError = error_ as AuthError
         expect(authError.code).toBe('unknown_error')
       }
     })
