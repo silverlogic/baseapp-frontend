@@ -1,10 +1,15 @@
+'use client'
+
+import { useMemo } from 'react'
+
 import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { type SubmitHandler, useForm } from 'react-hook-form'
 
-import AuthApi from '../../../services/auth'
+import { getActiveAuthModule } from '../../auth-strategy/factory'
+import type { AuthError } from '../../auth-strategy/types'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
 import type { ChangePasswordForm, UseChangePassword } from './types'
 
@@ -12,10 +17,11 @@ const useChangePassword = ({
   token,
   validationSchema = DEFAULT_VALIDATION_SCHEMA,
   defaultValues = DEFAULT_INITIAL_VALUES,
-  ApiClass = AuthApi,
   enableFormApiErrors = true,
   options = {},
 }: UseChangePassword) => {
+  const strategy = useMemo(() => getActiveAuthModule().strategy, [])
+
   const form = useForm<ChangePasswordForm>({
     defaultValues,
     resolver: zodResolver(validationSchema),
@@ -23,15 +29,17 @@ const useChangePassword = ({
   })
 
   const mutation = useMutation({
-    mutationFn: ({ currentPassword, newPassword }) =>
-      token
-        ? ApiClass.changeExpiredPassword({ currentPassword, newPassword, token })
-        : ApiClass.changePassword({ currentPassword, newPassword }),
-    ...options, // needs to be placed below all overridable options
-    onError: (err, variables, context) => {
+    mutationFn: ({ currentPassword, newPassword }: ChangePasswordForm) =>
+      strategy.changePassword({ currentPassword, newPassword, token }),
+    ...options,
+    onError: (err: AuthError | Error, variables, context) => {
       options?.onError?.(err, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        const errorWithFieldErrors =
+          err && typeof err === 'object' && 'fieldErrors' in err
+            ? { response: { data: err.fieldErrors } }
+            : err
+        setFormApiErrors(form, errorWithFieldErrors)
       }
     },
     onSuccess: (response, variables, context) => {

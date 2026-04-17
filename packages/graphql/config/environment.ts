@@ -1,6 +1,12 @@
 import { MinimalProfile } from '@baseapp-frontend/authentication'
-import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
+import {
+  ACCESS_KEY_NAME,
+  REFRESH_KEY_NAME,
+  getExpoConstant,
+  parseString,
+} from '@baseapp-frontend/utils'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
+import { awaitSessionRecovery } from '@baseapp-frontend/utils/functions/auth/awaitSessionRecovery'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
 
@@ -64,37 +70,106 @@ const getFetchOptions = ({ request, variables, uploadables }: GetFetchOptions) =
   }
 }
 
+type GraphQLErrorLike = {
+  message?: string
+  extensions?: {
+    code?: unknown
+  }
+}
+
+function getGraphQLErrors(response: GraphQLResponse): GraphQLErrorLike[] {
+  if (
+    !response ||
+    typeof response !== 'object' ||
+    !('errors' in response) ||
+    !Array.isArray(response.errors)
+  ) {
+    return []
+  }
+
+  return response.errors as GraphQLErrorLike[]
+}
+
+function hasUnauthorizedGraphQLErrors(response: GraphQLResponse): boolean {
+  const errors = getGraphQLErrors(response)
+  if (errors.length === 0) return false
+
+  return errors.some((error) => {
+    const message = typeof error?.message === 'string' ? error.message : ''
+    const code =
+      error &&
+      typeof error === 'object' &&
+      'extensions' in error &&
+      error.extensions &&
+      typeof error.extensions === 'object' &&
+      'code' in error.extensions
+        ? String(error.extensions.code)
+        : ''
+
+    return (
+      /invalid token/i.test(message) ||
+      /authentication credentials/i.test(message) ||
+      /not authenticated/i.test(message) ||
+      /signature has expired/i.test(message) ||
+      code === 'UNAUTHENTICATED'
+    )
+  })
+}
+
 export async function httpFetch(
   request: RequestParameters,
   variables: Variables,
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
-  const fetchOptions = getFetchOptions({ request, variables, uploadables })
-  const EXPO_PUBLIC_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_RELAY_ENDPOINT')
+  const attemptFetch = async (hasRetried = false): Promise<GraphQLResponse> => {
+    const fetchOptions = getFetchOptions({ request, variables, uploadables })
+    const EXPO_PUBLIC_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_RELAY_ENDPOINT')
+    const isServer = typeof globalThis.window === typeof undefined
+    const accessTokenAtRequestStart = isServer ? null : (getToken(ACCESS_KEY_NAME) ?? null)
 
-  const response = await baseAppFetch('', {
-    baseUrl: (process.env.NEXT_PUBLIC_RELAY_ENDPOINT ?? EXPO_PUBLIC_RELAY_ENDPOINT) as string,
-    decamelizeRequestBodyKeys: false,
-    decamelizeRequestParamsKeys: false,
-    camelizeResponseDataKeys: false,
-    stringifyBody: !uploadables,
-    setContentType: !uploadables,
-    ...fetchOptions,
-  })
+    const response = await baseAppFetch('', {
+      baseUrl: (process.env.NEXT_PUBLIC_RELAY_ENDPOINT ?? EXPO_PUBLIC_RELAY_ENDPOINT) as string,
+      decamelizeRequestBodyKeys: false,
+      decamelizeRequestParamsKeys: false,
+      camelizeResponseDataKeys: false,
+      stringifyBody: !uploadables,
+      setContentType: !uploadables,
+      ...fetchOptions,
+    })
 
-  // GraphQL returns exceptions (for example, a missing required variable) in the "errors"
-  // property of the response. If any exceptions occurred when processing the request,
-  // throw an error to indicate to the developer what went wrong.
-  if (Array.isArray(response.errors)) {
-    throw new Error(
-      `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
-        variables,
-      )}': ${JSON.stringify(response.errors)}`,
-    )
+    if (!hasRetried && !isServer && hasUnauthorizedGraphQLErrors(response)) {
+      const latestAccessToken = getToken(ACCESS_KEY_NAME)
+
+      if (latestAccessToken && latestAccessToken !== accessTokenAtRequestStart) {
+        return attemptFetch(true)
+      }
+
+      const outcome = await awaitSessionRecovery({
+        source: 'fetch',
+        path: '/graphql',
+        status: 200,
+        hasRefreshToken: !!getToken(REFRESH_KEY_NAME),
+      })
+
+      if (outcome === 'refreshed') {
+        return attemptFetch(true)
+      }
+    }
+
+    const errors = getGraphQLErrors(response)
+    if (errors.length > 0) {
+      throw new Error(
+        `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
+          variables,
+        )}': ${JSON.stringify(errors)}`,
+      )
+    }
+
+    return response
   }
 
-  return response
+  return attemptFetch()
 }
 
 const EXPO_PUBLIC_WS_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDPOINT')
@@ -180,7 +255,7 @@ export function createEnvironment() {
     handlerProvider,
     network,
     store,
-    isServer: typeof window === typeof undefined,
+    isServer: typeof globalThis.window === typeof undefined,
   })
 
   responseCacheByEnvironment.set(environment, cache)
