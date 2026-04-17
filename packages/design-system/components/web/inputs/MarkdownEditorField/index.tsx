@@ -49,7 +49,11 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   }, [])
 
   useEffect(() => {
-    editorRef?.current?.setMarkdown(value || '')
+    const currentMarkdown = editorRef?.current?.getMarkdown()?.trim()
+    const incomingValue = (value || '').trim()
+    if (currentMarkdown !== incomingValue) {
+      editorRef?.current?.setMarkdown(value || '')
+    }
   }, [value])
 
   const editorContent = (

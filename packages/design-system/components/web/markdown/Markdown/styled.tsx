@@ -78,6 +78,14 @@ export const StyledMarkdown = styled(Box, {
       '& li > p:first-of-type': {
         display: 'inline',
       },
+      // Hide bullet markers on checklist items (they have a checkbox instead)
+      '& li:has(> input[type="checkbox"])': {
+        listStyle: 'none',
+      },
+      '& li:has(> input[type="checkbox"]:checked)': {
+        textDecoration: 'line-through',
+        color: theme.palette.text.disabled,
+      },
     },
     '& ol': { listStyle: 'decimal inside' },
     '& ul': { listStyle: 'inside' },
@@ -152,6 +160,7 @@ export const StyledMarkdown = styled(Box, {
       '&[type=checkbox]': {
         position: 'relative',
         cursor: 'pointer',
+        marginRight: theme.spacing(1),
         '&:before': {
           content: '""',
           top: -2,
