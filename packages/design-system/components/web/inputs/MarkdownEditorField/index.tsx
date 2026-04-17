@@ -20,9 +20,12 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   showDiffSourceToggle,
   showUndoRedo,
   minHeight,
+  maxHeight = 300,
   hasBorder = true,
   label,
+  labelBackgroundColor,
   helperText,
+  showHelperText = true,
   error,
   Toolbar,
   ToolbarProps,
@@ -46,7 +49,11 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   }, [])
 
   useEffect(() => {
-    editorRef?.current?.setMarkdown(value || '')
+    const currentMarkdown = editorRef?.current?.getMarkdown()?.trim()
+    const incomingValue = (value || '').trim()
+    if (currentMarkdown !== incomingValue) {
+      editorRef?.current?.setMarkdown(value || '')
+    }
   }, [value])
 
   const editorContent = (
@@ -55,6 +62,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
       onFocus={handleFocus}
       onBlur={handleBlur}
       minHeight={minHeight}
+      maxHeight={maxHeight}
       hasBorder={hasBorder}
       hasLabel={!!label}
       error={error}
@@ -83,9 +91,13 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   if (label) {
     return (
       <FormControl focused={focused} error={error} fullWidth>
-        <StyledInputLabel shrink={focused || filled}>{label}</StyledInputLabel>
+        <StyledInputLabel shrink={focused || filled} labelBackgroundColor={labelBackgroundColor}>
+          {label}
+        </StyledInputLabel>
         {editorContent}
-        {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
+        {showHelperText && helperText && (
+          <FormHelperText error={error}>{helperText}</FormHelperText>
+        )}
       </FormControl>
     )
   }
@@ -93,7 +105,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   return (
     <div>
       {editorContent}
-      {helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
+      {showHelperText && helperText && <FormHelperText error={error}>{helperText}</FormHelperText>}
     </div>
   )
 }

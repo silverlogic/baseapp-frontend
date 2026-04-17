@@ -30,7 +30,7 @@ import { SocialTextFieldProps } from './types'
  */
 const SocialTextField: FC<SocialTextFieldProps> = ({
   children,
-  mode = 'plain-text',
+  mode = 'rich-text',
   isReply,
   replyTargetName,
   onCancelReply,
@@ -49,6 +49,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
         <MarkdownEditorField
           {...(props as SocialTextFieldProps['MarkdownEditorFieldProps'])}
           hasBorder={false}
+          showHelperText={false}
           {...MarkdownEditorFieldProps}
         />
       )

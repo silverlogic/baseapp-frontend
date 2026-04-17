@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.5.19
+
+### Patch Changes
+
+- Use `Mardown` componentes on `comments`, `messages` and `content-feed` modules.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.9
+
 ## 1.5.18
 
 ### Patch Changes

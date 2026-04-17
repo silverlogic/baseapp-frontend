@@ -7,6 +7,7 @@ import {
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
@@ -61,27 +62,27 @@ const MessageItem: FC<MessageItemProps> = ({
       return <MessageUpdate message={message} onCancel={() => setIsEditMode(false)} />
     }
 
-    let messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
-
     if (deletedMessage) {
-      messageColor = 'text.disabled'
+      return (
+        <Typography variant="body2" color="text.disabled" sx={{ maxWidth: '100%' }}>
+          <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} /> {message?.content}
+        </Typography>
+      )
     }
 
+    const messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
+
     return (
-      <Typography
-        variant="body2"
-        color={messageColor}
+      <Markdown
         sx={{
           maxWidth: '100%',
-          whiteSpace: 'pre-wrap',
           wordBreak: 'normal',
           overflowWrap: 'anywhere',
+          color: messageColor,
         }}
       >
-        {deletedMessage && <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} />}
-        {deletedMessage && ' '}
         {message?.content}
-      </Typography>
+      </Markdown>
     )
   }
 
