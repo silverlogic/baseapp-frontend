@@ -68,10 +68,15 @@ export const StyledMarkdown = styled(Box, {
       '& li': {
         lineHeight: 2,
       },
-      // react-markdown wraps list item content in <p> tags;
-      // remove their spacing to match the editor's inline rendering.
+      // react-markdown wraps list item content in <p> tags (block elements).
+      // With listStyle 'inside', the bullet and a block <p> can't share a line.
+      // Making the first <p> inline keeps the bullet and text together;
+      // subsequent <p> tags remain block for multi-paragraph list items.
       '& li > p': {
         margin: 0,
+      },
+      '& li > p:first-of-type': {
+        display: 'inline',
       },
     },
     '& ol': { listStyle: 'decimal inside' },
