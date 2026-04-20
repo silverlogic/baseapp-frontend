@@ -49,17 +49,25 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
 
   // Expose a minimal HTMLInputElement-compatible proxy so consumers that hold
   // an HTMLInputElement ref (e.g. SocialInput → SocialTextField → here) can
-  // still call .focus() and have it delegate to MDXEditorMethods.focus().
+  // still call .focus(), read .value, and invoke .setSelectionRange() — the
+  // textarea idiom used by MessageUpdate/CommentUpdate to "focus with caret
+  // at end". Reads delegate to MDXEditorMethods; caret positioning is
+  // absorbed into focus() via defaultSelection: 'rootEnd'.
   useImperativeHandle(
     inputRef,
     () =>
       ({
+        get value() {
+          return editorRef.current?.getMarkdown() ?? ''
+        },
+        setSelectionRange: () => {},
         focus: (options?: FocusOptions) => {
           editorRef.current?.focus(undefined, {
             preventScroll: options?.preventScroll,
+            defaultSelection: 'rootEnd',
           })
         },
-      }) as HTMLInputElement,
+      }) as unknown as HTMLInputElement,
     [],
   )
 
