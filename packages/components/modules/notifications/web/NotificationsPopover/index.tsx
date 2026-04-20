@@ -22,9 +22,9 @@ import { NotificationUserMenuFragment$key } from '../../../../__generated__/Noti
 import { NotificationsPopoverQuery as NotificationsPopoverQueryType } from '../../../../__generated__/NotificationsPopoverQuery.graphql'
 import { NAV_WIDTH } from '../../../navigations/web/constants'
 import {
+  useNotificationsSubscription as DefaultUseNotificationsSubscription,
   NotificationUserMenuFragment,
   NotificationsPopoverQuery,
-  useNotificationsSubscription,
 } from '../../common'
 import DefaultNotificationsList from '../NotificationsList'
 import { NotificationsPopoverProps } from './types'
@@ -38,6 +38,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   NotificationBellIconProps = {},
   NotificationsList = DefaultNotificationsList,
   NotificationsListProps = {},
+  useNotificationsSubscription = DefaultUseNotificationsSubscription,
   showLabel = false,
   currentLayout,
   labelComponent,
@@ -52,7 +53,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
 
   const user = useFragment<NotificationUserMenuFragment$key>(NotificationUserMenuFragment, me)
 
-  useNotificationsSubscription(user?.id)
+  useNotificationsSubscription(user?.id || '')
 
   const smDown = useResponsive('down', 'sm')
   const { onClose, anchor: anchorOverride, sx: sxOverride, ...restDrawerProps } = DrawerProps
@@ -155,7 +156,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
         }}
         {...restDrawerProps}
       >
-        <NotificationsList setIsDrawerOpened={setIsDrawerOpened} {...NotificationsListProps} />
+        <NotificationsList {...NotificationsListProps} setIsDrawerOpened={setIsDrawerOpened} />
       </Drawer>
     </>
   )

@@ -15,7 +15,6 @@ import {
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
-  useNotificationsSubscription,
 } from '../../common'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
@@ -48,8 +47,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
     NotificationsListQueryType,
     NotificationsListFragment$key
   >(NotificationsListFragment, me)
-
-  useNotificationsSubscription(me?.id)
 
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
