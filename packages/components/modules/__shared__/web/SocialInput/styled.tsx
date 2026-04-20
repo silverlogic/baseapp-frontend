@@ -5,7 +5,7 @@ export const Form = styled('form')(({ theme }) => ({
   borderRadius: 8,
   bottom: 0,
   width: '100%',
-  paddingBottom: theme.spacing(2),
+  marginBottom: theme.spacing(2),
   position: 'sticky',
   zIndex: 10,
 }))

@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system
 
+## 1.2.9
+
+### Patch Changes
+
+- Creates the `Markdown` component to translate markdown content created by the `MarkdownEditorField`.
+- `MarkdownEditorField` has now `maxHeight` and `labelBackgroundColor` props.
+- `SocialTextField` now defaults `mode` to `rich-text`.
+- Create `LazyLoadImage` component to be used on the `Markdown` component.
+
 ## 1.2.8
 
 ### Patch Changes

@@ -20,6 +20,16 @@ const CommentsForTesting = (props?: Partial<CommentsProps>) => {
 
   return (
     <Comments
+      CommentCreateProps={{
+        SocialInputProps: { mode: 'plain-text' },
+      }}
+      CommentsListProps={{
+        CommentItemProps: {
+          CommentUpdateProps: {
+            SocialInputProps: { mode: 'plain-text' },
+          },
+        },
+      }}
       {...props}
       target={data.target as CommentsFragment$key}
       subscriptionsEnabled={false}
