@@ -6,6 +6,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'react-relay'
 
@@ -144,13 +145,15 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
     }
 
     return (
-      <SocialInput
-        ref={ref}
-        form={form}
-        submit={onSubmit}
-        isLoading={isMutationInFlight}
-        {...SocialInputProps}
-      />
+      <Box paddingRight={2}>
+        <SocialInput
+          ref={ref}
+          form={form}
+          submit={onSubmit}
+          isLoading={isMutationInFlight}
+          {...SocialInputProps}
+        />
+      </Box>
     )
   },
 )
