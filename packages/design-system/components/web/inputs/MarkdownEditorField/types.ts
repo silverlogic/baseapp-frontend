@@ -4,6 +4,7 @@ import type {
   FC,
   KeyboardEventHandler,
   ReactNode,
+  Ref,
 } from 'react'
 
 import type { FormControl } from '@baseapp-frontend/utils'
@@ -52,6 +53,7 @@ export type MarkdownEditorFieldCoreProps = Omit<MDXEditorProps, 'markdown'> & {
   onKeyDown?: KeyboardEventHandler<HTMLTextAreaElement>
   placeholder?: string
   onChange?: (value: string) => void
+  inputRef?: Ref<HTMLInputElement>
   toolbarConfig?: Partial<ToolbarConfig>
   showDiffSourceToggle?: boolean
   showUndoRedo?: boolean

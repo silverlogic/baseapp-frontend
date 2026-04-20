@@ -1,6 +1,14 @@
 'use client'
 
-import { FC, FocusEvent, useCallback, useEffect, useRef, useState } from 'react'
+import {
+  FC,
+  FocusEvent,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react'
 
 import { withController } from '@baseapp-frontend/utils'
 
@@ -31,12 +39,29 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   ToolbarProps,
   EditorContainer = DefaultEditorContainer,
   EditorContainerProps,
+  inputRef,
   ...props
 }) => {
   const editorRef = useRef<MDXEditorMethods>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [focused, setFocused] = useState(false)
   const filled = Boolean(value && value.trim())
+
+  // Expose a minimal HTMLInputElement-compatible proxy so consumers that hold
+  // an HTMLInputElement ref (e.g. SocialInput → SocialTextField → here) can
+  // still call .focus() and have it delegate to MDXEditorMethods.focus().
+  useImperativeHandle(
+    inputRef,
+    () =>
+      ({
+        focus: (options?: FocusOptions) => {
+          editorRef.current?.focus(undefined, {
+            preventScroll: options?.preventScroll,
+          })
+        },
+      }) as HTMLInputElement,
+    [],
+  )
 
   const handleFocus = useCallback(() => {
     setFocused(true)
