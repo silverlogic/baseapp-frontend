@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 1.5.20
+
+### Patch Changes
+
+- Make notifications subscription customizable
+- Fix duplicate Older divider when mark as read
+
 ## 1.5.19
 
 ### Patch Changes
