@@ -53,6 +53,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
     [data?.notifications?.edges],
   )
 
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
+
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
     if (!notification.unread && notifications[index - 1]?.unread) {
@@ -64,6 +68,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
           <NotificationItem
             key={`notification-${notification.id}`}
             notification={notification}
+            refetchNotifications={refetchNotifications}
             {...NotificationItemProps}
           />
         </>
@@ -73,6 +78,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <NotificationItem
         key={`notification-${notification.id}`}
         notification={notification}
+        refetchNotifications={refetchNotifications}
         {...NotificationItemProps}
       />
     )
@@ -115,10 +121,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
         />
       </ListContainer>
     )
-  }
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
   }
 
   return (
