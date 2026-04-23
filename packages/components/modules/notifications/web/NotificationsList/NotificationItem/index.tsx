@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, startTransition } from 'react'
 
 import { Box } from '@mui/material'
 import { useFragment } from 'react-relay'
@@ -9,6 +9,7 @@ import { NotificationItemProps } from './types'
 
 const NotificationItem: FC<NotificationItemProps> = ({
   notification: notificationRef,
+  refetchNotifications,
   NotificationItemRenderer = DefaultNotificationItemRenderer,
   NotificationItemRendererProps = {},
 }) => {
@@ -24,6 +25,11 @@ const NotificationItem: FC<NotificationItemProps> = ({
             read: true,
             notificationIds: [notification.id],
           },
+        },
+        onCompleted: () => {
+          startTransition(() => {
+            refetchNotifications?.()
+          })
         },
       })
     }
