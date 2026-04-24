@@ -483,7 +483,7 @@ overrides:
 patchedDependencies:
   '@cypress/request@3.0.10':
     hash: 548d6c1c08dd9111ef30f06cb222d27824c10620c3c244dd9fb41eedd0b23505
-    path: patches/@cypress+request@3.0.10.patch
+    path: .patches/@cypress+request@3.0.10.patch
 
 importers:
 
