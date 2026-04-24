@@ -49,5 +49,14 @@
   "resolutions": {
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@xmldom/xmldom": ">=0.9.10",
+      "uuid": ">=14.0.0"
+    },
+    "patchedDependencies": {
+      "@cypress/request@3.0.10": "patches/@cypress+request@3.0.10.patch"
+    }
   }
 }
