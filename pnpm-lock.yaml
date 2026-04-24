@@ -482,7 +482,7 @@ overrides:
 
 patchedDependencies:
   '@cypress/request@3.0.10':
-    hash: 60799c99f25edb81c1da8385884ccdbf7d28615b9484034e0147f8011712ddc5
+    hash: 548d6c1c08dd9111ef30f06cb222d27824c10620c3c244dd9fb41eedd0b23505
     path: patches/@cypress+request@3.0.10.patch
 
 importers:
@@ -13507,7 +13507,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@cypress/request@3.0.10(patch_hash=60799c99f25edb81c1da8385884ccdbf7d28615b9484034e0147f8011712ddc5)':
+  '@cypress/request@3.0.10(patch_hash=548d6c1c08dd9111ef30f06cb222d27824c10620c3c244dd9fb41eedd0b23505)':
     dependencies:
       aws-sign2: 0.7.0
       aws4: 1.13.2
@@ -18349,7 +18349,7 @@ snapshots:
 
   cypress@13.16.1:
     dependencies:
-      '@cypress/request': 3.0.10(patch_hash=60799c99f25edb81c1da8385884ccdbf7d28615b9484034e0147f8011712ddc5)
+      '@cypress/request': 3.0.10(patch_hash=548d6c1c08dd9111ef30f06cb222d27824c10620c3c244dd9fb41eedd0b23505)
       '@cypress/xvfb': 1.2.4(supports-color@8.1.1)
       '@types/sinonjs__fake-timers': 8.1.1
       '@types/sizzle': 2.3.10
