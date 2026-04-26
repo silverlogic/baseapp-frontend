@@ -19,7 +19,7 @@ jobs:
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 10.14.0
+          version: 10.28.2
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -32,7 +32,7 @@ jobs:
 
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
-        with: 
+        with:
           path: packages/components/storybook-static
 
       - name: Deploy to GitHub Pages
