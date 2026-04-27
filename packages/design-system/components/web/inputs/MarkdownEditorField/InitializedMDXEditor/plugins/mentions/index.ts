@@ -185,17 +185,22 @@ export const mentionsPlugin = realmPlugin<MentionsActiveConfig>({
         (event: KeyboardEvent) => {
           const state = realm.getValue(mentionMenuState$)
           if (!state.open) return false
+          const config = realm.getValue(mentionsConfig$)
+          const hasItems = (config?.controller?.items.length ?? 0) > 0
           switch (event.key) {
             case 'ArrowDown':
+              if (!hasItems) return false
               event.preventDefault()
               realm.pub(moveSelectionDown$)
               return true
             case 'ArrowUp':
+              if (!hasItems) return false
               event.preventDefault()
               realm.pub(moveSelectionUp$)
               return true
             case 'Enter':
             case 'Tab':
+              if (!hasItems) return false
               event.preventDefault()
               // -1 means "use whatever activeIndex is current". The portal
               // resolves this into a suggestion and publishes applyMention$.

@@ -7,11 +7,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import {
-  SOCIAL_UPSERT_FORM,
-  SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
-  SocialUpsertForm,
-} from '../../../__shared__/common'
+import { SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA, SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
   UpdateSubmitActions,
@@ -86,14 +82,19 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const form = useForm<SocialUpsertForm>({
-    defaultValues: {
+  const initialValues = useMemo<SocialUpsertForm>(
+    () => ({
       body: comment.body ?? '',
       mentionedProfileIds:
         comment.mentionedProfiles?.edges?.flatMap((edge) =>
           edge?.node?.id ? [edge.node.id] : [],
         ) ?? [],
-    },
+    }),
+    [comment.body, comment.mentionedProfiles?.edges],
+  )
+
+  const form = useForm<SocialUpsertForm>({
+    defaultValues: initialValues,
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
   const { setValue } = form
@@ -143,7 +144,7 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
 
   const handleEditCancel = () => {
     onCancel()
-    form.setValue(SOCIAL_UPSERT_FORM.body, comment.body ?? '')
+    form.reset(initialValues)
   }
 
   useEffect(() => {

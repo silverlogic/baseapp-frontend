@@ -28,7 +28,6 @@ const MentionListItem: FC<MentionListItemProps> = ({ suggestion, selected, onSel
         width={AVATAR_SIZE}
         height={AVATAR_SIZE}
         src={suggestion.imageUrl ?? undefined}
-        alt={displayName}
         borderWidth="0px"
       />
       <ListItemText primary={displayName} primaryTypographyProps={{ variant: 'body2' }} />
