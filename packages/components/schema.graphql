@@ -181,6 +181,7 @@ type ChatRoomEdge {
 input ChatRoomEditMessageInput {
   id: ID!
   content: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -264,6 +265,7 @@ input ChatRoomSendMessageInput {
   profileId: ID!
   content: String!
   inReplyToId: ID
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -350,6 +352,17 @@ type ChatRoomUpdatePayload {
 type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
   created: DateTime!
   modified: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   user: User
   profile: Profile
   body: String
@@ -405,6 +418,7 @@ input CommentCreateInput {
   inReplyToId: ID
   profileId: ID
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -488,6 +502,7 @@ enum CommentStatus {
 input CommentUpdateInput {
   id: ID!
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -502,6 +517,17 @@ type CommentUpdatePayload {
 type ContentPost implements Node & ReactionsInterface {
   created: DateTime!
   modified: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
@@ -529,6 +555,7 @@ type ContentPostConnection {
 input ContentPostCreateInput {
   content: String!
   isReactionsEnabled: Boolean!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -765,6 +792,17 @@ type Message implements Node {
   """The ID of the object"""
   id: ID!
   created: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   content(profileId: ID): String
   user: User
   profile: Profile
@@ -1264,6 +1302,17 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
   ): CommentConnection!
   reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
+  commentsCommentMentions(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection!
   ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
   activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
@@ -1299,7 +1348,18 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  chatsMessageMentions(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
+  contentFeedContentpostMentions(
     first: Int
     last: Int
     offset: Int
@@ -1343,7 +1403,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
   pk: Int
@@ -1786,11 +1846,9 @@ type ReportEdge {
 }
 
 interface ReportsInterface {
-  """The ID of the object"""
-  id: ID!
   reportsCount: GenericScalar
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
 }
 
 type ReportType implements Node {

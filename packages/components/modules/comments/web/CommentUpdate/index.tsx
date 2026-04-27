@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
@@ -12,7 +12,12 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../__shared__/common'
-import { SocialInput as DefaultSocialInput, UpdateSubmitActions } from '../../../__shared__/web'
+import {
+  SocialInput as DefaultSocialInput,
+  UpdateSubmitActions,
+  useFormMentions,
+  withMentionsInSocialInputProps,
+} from '../../../__shared__/web'
 import { useCommentUpdateMutation } from '../../common'
 import { CommentUpdateProps } from './types'
 
@@ -76,15 +81,35 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   onCancel,
   SocialInput = DefaultSocialInput,
   SocialInputProps = {},
+  mentionsController,
+  disableMentions = true,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<SocialUpsertForm>({
-    defaultValues: { body: comment.body ?? '' },
+    defaultValues: {
+      body: comment.body ?? '',
+      mentionedProfileIds:
+        comment.mentionedProfiles?.edges?.flatMap((edge) =>
+          edge?.node?.id ? [edge.node.id] : [],
+        ) ?? [],
+    },
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
+  const { setValue } = form
 
   const [commitUpdate, isMutationInFlight] = useCommentUpdateMutation()
+
+  const { mentions, isMentionsActive } = useFormMentions<SocialUpsertForm>({
+    setValue,
+    controller: mentionsController,
+    disabled: disableMentions,
+  })
+
+  const mergedSocialInputProps = useMemo(
+    () => withMentionsInSocialInputProps(SocialInputProps, mentions),
+    [SocialInputProps, mentions],
+  )
 
   const onSubmit = async (data: SocialUpsertForm) => {
     if (isMutationInFlight) return
@@ -94,6 +119,7 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         input: {
           id: comment.id,
           body: data?.body,
+          ...(isMentionsActive && { mentionedProfileIds: data.mentionedProfileIds }),
         },
       },
       onCompleted: (response, errors) => {
@@ -142,7 +168,7 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         formId: 'comment-update',
         disabled: isMutationInFlight,
       }}
-      {...SocialInputProps}
+      {...mergedSocialInputProps}
     />
   )
 }

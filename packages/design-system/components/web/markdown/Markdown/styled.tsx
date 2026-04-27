@@ -46,6 +46,7 @@ export const StyledMarkdown = styled(Box, {
       color: theme.palette.info.main,
       wordBreak: 'break-all',
       overflowWrap: 'anywhere',
+      pointerEvents: 'auto',
     },
 
     // Divider
