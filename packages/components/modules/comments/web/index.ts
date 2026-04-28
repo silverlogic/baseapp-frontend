@@ -20,3 +20,8 @@ export type * from './CommentsList/types'
 
 export { default as CommentsReplies } from './CommentItem/CommentsReplies'
 export type * from './CommentItem/CommentsReplies/types'
+
+export { default as CommentPinnedBadge } from './CommentItem/CommentPinnedBadge'
+export type * from './CommentItem/CommentPinnedBadge/types'
+
+export { default as useCommentOptions } from './CommentItem/useCommentOptions'
