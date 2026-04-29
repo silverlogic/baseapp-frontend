@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 1.5.21
+
+### Patch Changes
+
+- Add Extra Centered Header component
+
 ## 1.5.20
 
 ### Patch Changes
