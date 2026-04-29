@@ -87,8 +87,8 @@ export const StyledMarkdown = styled(Box, {
         color: theme.palette.text.disabled,
       },
     },
-    '& ol': { listStyle: 'decimal inside' },
-    '& ul': { listStyle: 'inside' },
+    '& ol': { listStyle: 'decimal inside', paddingInlineStart: theme.spacing(2) },
+    '& ul': { listStyle: 'inside', paddingInlineStart: theme.spacing(2) },
 
     // Blockquote
     '& blockquote': {

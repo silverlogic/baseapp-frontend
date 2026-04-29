@@ -122,9 +122,11 @@ export const EditorContainer = styled(Box, {
   },
   '& .mdxeditor ol': {
     listStyle: 'decimal inside',
+    paddingInlineStart: theme.spacing(2),
   },
   '& .mdxeditor ul': {
     listStyle: 'inside',
+    paddingInlineStart: theme.spacing(2),
   },
   '& .mdxeditor h2': {
     ...theme.typography.h2,
