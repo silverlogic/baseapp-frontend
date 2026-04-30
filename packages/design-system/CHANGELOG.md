@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 1.2.10
+
+### Patch Changes
+
+- fix identation for bullet and numbered lists under MarkdownEditorField
+
 ## 1.2.9
 
 ### Patch Changes
