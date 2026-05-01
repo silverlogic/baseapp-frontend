@@ -136,6 +136,9 @@ export const EditorContainer = styled(Box, {
     textDecoration: 'underline',
     color: theme.palette.info.main,
   },
+  '& .mdx-mention': {
+    color: theme.palette.info.main,
+  },
   '& .mdxeditor code': {
     ...theme.typography.body2,
     fontFamily: 'monospace',

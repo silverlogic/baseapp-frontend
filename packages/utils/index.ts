@@ -22,6 +22,7 @@ export * from './functions/string'
 export * from './functions/token'
 
 export { default as useDebounce } from './hooks/useDebounce'
+export { default as useDebouncedValue } from './hooks/useDebouncedValue'
 export { default as useDjangoOrderBy } from './hooks/useDjangoOrderBy'
 export { default as useEventSubscription } from './hooks/useEventSubscription'
 export { default as useNotification } from './hooks/useNotification'

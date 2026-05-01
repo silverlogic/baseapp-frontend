@@ -8,4 +8,5 @@ export interface MessageUpdateProps {
   onCancel: () => void
   SocialInput?: FC<SocialInputProps>
   SocialInputProps?: Partial<SocialInputProps>
+  disableMentions?: boolean
 }

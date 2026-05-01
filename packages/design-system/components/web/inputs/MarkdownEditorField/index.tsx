@@ -1,11 +1,13 @@
 'use client'
 
 import {
+  ClipboardEventHandler,
   FC,
   FocusEvent,
   useCallback,
   useEffect,
   useImperativeHandle,
+  useMemo,
   useRef,
   useState,
 } from 'react'
@@ -16,6 +18,8 @@ import { type MDXEditorMethods } from '@mdxeditor/editor'
 import { FormControl, FormHelperText } from '@mui/material'
 
 import { ForwardRefEditor } from './ForwardRefEditor'
+import { MENTION_MARKDOWN_PROTOCOL } from './InitializedMDXEditor/plugins/mentions/constants'
+import { stripMentionLinksFromMarkdown } from './InitializedMDXEditor/plugins/mentions/utils'
 import { EditorContainer as DefaultEditorContainer, StyledInputLabel } from './styled'
 import { MarkdownEditorFieldProps } from './types'
 
@@ -23,6 +27,7 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   value,
   onChange,
   onKeyDown,
+  onPaste,
   placeholder,
   toolbarConfig,
   showDiffSourceToggle,
@@ -40,12 +45,35 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
   EditorContainer = DefaultEditorContainer,
   EditorContainerProps,
   inputRef,
+  mentions,
   ...props
 }) => {
   const editorRef = useRef<MDXEditorMethods>(null)
   const containerRef = useRef<HTMLDivElement>(null)
   const [focused, setFocused] = useState(false)
   const filled = Boolean(value && value.trim())
+
+  const isMentionsDisabled = mentions?.disabled === true
+  const effectiveMentions = isMentionsDisabled ? undefined : mentions
+  const sanitizedValue = useMemo(
+    () => (isMentionsDisabled ? stripMentionLinksFromMarkdown(value ?? '') : (value ?? '')),
+    [value, isMentionsDisabled],
+  )
+
+  const handlePaste = useCallback<ClipboardEventHandler<HTMLTextAreaElement>>(
+    (event) => {
+      if (isMentionsDisabled) {
+        const text = event.clipboardData?.getData('text/plain') ?? ''
+        if (text.includes(MENTION_MARKDOWN_PROTOCOL)) {
+          event.preventDefault()
+          editorRef.current?.insertMarkdown(stripMentionLinksFromMarkdown(text))
+          return
+        }
+      }
+      onPaste?.(event)
+    },
+    [isMentionsDisabled, onPaste],
+  )
 
   // Expose a minimal HTMLInputElement-compatible proxy so consumers that hold
   // an HTMLInputElement ref (e.g. SocialInput → SocialTextField → here) can
@@ -83,11 +111,11 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
 
   useEffect(() => {
     const currentMarkdown = editorRef?.current?.getMarkdown()?.trim()
-    const incomingValue = (value || '').trim()
+    const incomingValue = sanitizedValue.trim()
     if (currentMarkdown !== incomingValue) {
-      editorRef?.current?.setMarkdown(value || '')
+      editorRef?.current?.setMarkdown(sanitizedValue)
     }
-  }, [value])
+  }, [sanitizedValue])
 
   const editorContent = (
     <EditorContainer
@@ -103,16 +131,18 @@ const MarkdownEditorField: FC<MarkdownEditorFieldProps> = ({
     >
       <ForwardRefEditor
         {...props}
-        markdown={value || ''}
+        markdown={sanitizedValue}
         placeholder={label ? undefined : placeholder}
         toolbarConfig={toolbarConfig}
         showDiffSourceToggle={showDiffSourceToggle}
         showUndoRedo={showUndoRedo}
         Toolbar={Toolbar}
         ToolbarProps={ToolbarProps}
+        mentions={effectiveMentions}
         onKeyDown={(e) => {
           onKeyDown?.(e)
         }}
+        onPaste={handlePaste}
         onChange={(content: string) => {
           onChange?.(content)
         }}

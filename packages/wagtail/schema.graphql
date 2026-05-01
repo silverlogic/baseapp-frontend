@@ -96,6 +96,59 @@ type BlockTogglePayload {
   clientMutationId: String
 }
 
+type Bookmark implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  user: User!
+  profile: Profile
+  target: Node
+}
+
+type BookmarkConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [BookmarkEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Bookmark` and its cursor."""
+type BookmarkEdge {
+  """The item at the end of the edge"""
+  node: Bookmark
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+interface BookmarksInterface {
+  """The ID of the object"""
+  id: ID!
+  bookmarksCount: Int
+  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
+  isBookmarksEnabled: Boolean!
+  isBookmarked(profileId: ID): Boolean
+}
+
+input BookmarkToggleInput {
+  targetObjectId: ID!
+  profileObjectId: ID
+  clientMutationId: String
+}
+
+type BookmarkTogglePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  bookmark: BookmarkEdge
+  target: BookmarksInterface
+  bookmarkDeletedId: ID
+  clientMutationId: String
+}
+
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
@@ -181,6 +234,7 @@ type ChatRoomEdge {
 input ChatRoomEditMessageInput {
   id: ID!
   content: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -264,6 +318,7 @@ input ChatRoomSendMessageInput {
   profileId: ID!
   content: String!
   inReplyToId: ID
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -347,9 +402,47 @@ type ChatRoomUpdatePayload {
   clientMutationId: String
 }
 
+type City implements Node {
+  """The ID of the object"""
+  id: ID!
+  name: String!
+  region: Region
+  country: Country!
+}
+
+type CityConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CityEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `City` and its cursor."""
+type CityEdge {
+  """The item at the end of the edge"""
+  node: City
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
   created: DateTime!
   modified: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   user: User
   profile: Profile
   body: String
@@ -405,6 +498,7 @@ input CommentCreateInput {
   inReplyToId: ID
   profileId: ID
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -488,6 +582,7 @@ enum CommentStatus {
 input CommentUpdateInput {
   id: ID!
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -499,20 +594,60 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & ReactionsInterface {
+type ContentPost implements Node & ReactionsInterface & CommentsInterface & PermissionsInterface & HoneycombInterface & BookmarksInterface & ReportsInterface & HiddensInterface {
   created: DateTime!
   modified: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
   content: String!
   images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
+  isCommentsEnabled: Boolean!
+  title: String!
+  hive: Hive
 
   """The ID of the object"""
   id: ID!
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   myReaction(profileId: ID): Reaction
+  commentsCount: CommentsCount!
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  honeycombs: [Honeycomb]
+  bookmarksCount: Int
+  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
+  isBookmarksEnabled: Boolean!
+  isBookmarked(profileId: ID): Boolean
+  reportsCount: GenericScalar
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReport: Report
+  isHiddenByMe: Boolean
   pk: Int
 }
 
@@ -527,8 +662,13 @@ type ContentPostConnection {
 }
 
 input ContentPostCreateInput {
+  title: String!
   content: String!
   isReactionsEnabled: Boolean!
+  isCommentsEnabled: Boolean!
+  hiveId: ID
+  honeycombNames: [String]
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -540,6 +680,19 @@ type ContentPostCreatePayload {
   clientMutationId: String
 }
 
+input ContentPostDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type ContentPostDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
 """A Relay edge containing a `ContentPost` and its cursor."""
 type ContentPostEdge {
   """The item at the end of the edge"""
@@ -547,6 +700,26 @@ type ContentPostEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+input ContentPostEditInput {
+  id: ID!
+  title: String
+  content: String
+  isReactionsEnabled: Boolean
+  isCommentsEnabled: Boolean
+  honeycombNames: [String]
+  removedImageIds: [ID]
+  mentionedProfileIds: [ID]
+  clientMutationId: String
+}
+
+type ContentPostEditPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  contentPost: ContentPostEdge
+  clientMutationId: String
 }
 
 type ContentPostImage implements Node {
@@ -572,6 +745,33 @@ type ContentPostImageConnection {
 type ContentPostImageEdge {
   """The item at the end of the edge"""
   node: ContentPostImage
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+type Country implements Node {
+  """The ID of the object"""
+  id: ID!
+  name: String!
+  code2: String
+  phone: String
+}
+
+type CountryConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [CountryEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Country` and its cursor."""
+type CountryEdge {
+  """The item at the end of the edge"""
+  node: Country
 
   """A cursor for use in pagination"""
   cursor: String!
@@ -673,6 +873,18 @@ type DjangoDebugSQL {
   encoding: String
 }
 
+"""An enumeration."""
+enum employment_type {
+  """Full Time"""
+  FULL_TIME
+
+  """Part Time"""
+  PART_TIME
+
+  """Fractional"""
+  FRACTIONAL
+}
+
 type ErrorType {
   field: String!
   messages: [String!]!
@@ -701,6 +913,11 @@ type FollowConnection {
   edges: [FollowEdge]!
   totalCount: Int
   edgeCount: Int
+}
+
+enum FollowCountContentType {
+  PROFILE
+  HIVE
 }
 
 """A Relay edge containing a `Follow` and its cursor."""
@@ -746,6 +963,183 @@ String, Boolean, Int, Float, List or Object.
 """
 scalar GenericScalar
 
+type Hidden implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  user: User
+  actorObject: Node
+  targetObject: Node
+}
+
+interface HiddensInterface {
+  """The ID of the object"""
+  id: ID!
+  isHiddenByMe: Boolean
+}
+
+input HideTargetInput {
+  """Relay ID of the object to hide."""
+  targetId: ID!
+  clientMutationId: String
+}
+
+"""
+Hide any target identified by its Relay ID for the current user's profile.
+"""
+type HideTargetPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  hidden: Hidden
+  target: HiddensInterface
+  clientMutationId: String
+}
+
+type Hive implements Node & FollowsInterface & PermissionsInterface & HoneycombInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  honeycombs: [Honeycomb]
+  name: String!
+  image(width: Int!, height: Int!): File
+  bannerImage(width: Int!, height: Int!): File
+  description: String!
+  resources: String!
+  additionalRules: String!
+  owner: User!
+  contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
+  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followersCount: Int
+  followingCount: Int
+  isFollowedByMe(profileId: ID): Boolean
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  followerProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  isOwner: Boolean
+  pk: Int
+}
+
+type HiveCheckName {
+  isAvailable: Boolean
+  message: String
+}
+
+type HiveConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [HiveEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input HiveCreateInput {
+  name: String!
+  image: String
+  bannerImage: String
+  description: String!
+  resources: String
+  additionalRules: String
+  owner: String
+  honeycombNames: [String]
+  clientMutationId: String
+}
+
+type HiveCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  hive: Hive
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `Hive` and its cursor."""
+type HiveEdge {
+  """The item at the end of the edge"""
+  node: Hive
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input HiveUpdateInput {
+  id: ID!
+  name: String!
+  image: String
+  bannerImage: String
+  description: String!
+  resources: String
+  additionalRules: String
+  honeycombNames: [String]
+  clientMutationId: String
+}
+
+type HiveUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  hive: Hive
+  clientMutationId: String
+}
+
+type Honeycomb implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  name: String!
+}
+
+type HoneycombConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [HoneycombEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Honeycomb` and its cursor."""
+type HoneycombEdge {
+  """The item at the end of the edge"""
+  node: Honeycomb
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+interface HoneycombInterface {
+  honeycombs: [Honeycomb]
+}
+
 """
 Allows use of a JSON String for input / output from the GraphQL schema.
 
@@ -765,6 +1159,17 @@ type Message implements Node {
   """The ID of the object"""
   id: ID!
   created: DateTime!
+  mentionedProfiles(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection!
   content(profileId: ID): String
   user: User
   profile: Profile
@@ -817,6 +1222,14 @@ type Metadata {
 }
 
 type Mutation {
+  """
+  Hide any target identified by its Relay ID for the current user's profile.
+  """
+  hideTarget(input: HideTargetInput!): HideTargetPayload
+  bookmarkToggle(input: BookmarkToggleInput!): BookmarkTogglePayload
+  hiveCreate(input: HiveCreateInput!): HiveCreatePayload
+  hiveUpdate(input: HiveUpdateInput!): HiveUpdatePayload
+  hiveCheckName(id: ID, name: String!): HiveCheckName
   rateCreate(input: RateCreateInput!): RateCreatePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
@@ -828,6 +1241,12 @@ type Mutation {
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   chatRoomToggleAdmin(input: ChatRoomToggleAdminInput!): ChatRoomToggleAdminPayload
+
+  """
+  Hive-level override that adds generic self-report detection
+  and ``report_subject`` max-length validation on top of the core
+  report-creation logic.
+  """
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
@@ -836,6 +1255,8 @@ type Mutation {
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
   contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
+  contentPostEdit(input: ContentPostEditInput!): ContentPostEditPayload
+  contentPostDelete(input: ContentPostDeleteInput!): ContentPostDeletePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
   commentPin(input: CommentPinInput!): CommentPinPayload
@@ -848,6 +1269,26 @@ type Mutation {
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
   profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
+  profileExperienceCreate(input: ProfileExperienceCreateInput!): ProfileExperienceCreatePayload
+  profileExperienceUpdate(input: ProfileExperienceUpdateInput!): ProfileExperienceUpdatePayload
+
+  """Delete a profile experience by its relay ID."""
+  profileExperienceDelete(input: ProfileExperienceDeleteInput!): ProfileExperienceDeletePayload
+  profileEducationCreate(input: ProfileEducationCreateInput!): ProfileEducationCreatePayload
+  profileEducationUpdate(input: ProfileEducationUpdateInput!): ProfileEducationUpdatePayload
+
+  """Delete a profile education entry by its relay ID."""
+  profileEducationDelete(input: ProfileEducationDeleteInput!): ProfileEducationDeletePayload
+  profileCertificationCreate(input: ProfileCertificationCreateInput!): ProfileCertificationCreatePayload
+  profileCertificationUpdate(input: ProfileCertificationUpdateInput!): ProfileCertificationUpdatePayload
+
+  """Delete a profile certification entry by its relay ID."""
+  profileCertificationDelete(input: ProfileCertificationDeleteInput!): ProfileCertificationDeletePayload
+  profileRecommendationCreate(input: ProfileRecommendationCreateInput!): ProfileRecommendationCreatePayload
+  profileRecommendationUpdate(input: ProfileRecommendationUpdateInput!): ProfileRecommendationUpdatePayload
+
+  """Delete a profile education entry by its relay ID."""
+  profileRecommendationDelete(input: ProfileRecommendationDeleteInput!): ProfileRecommendationDeletePayload
 }
 
 interface Node {
@@ -1235,7 +1676,12 @@ interface PermissionsInterface {
   hasPerm(perm: String!): Boolean
 }
 
-type Profile implements Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
+enum PostTypeEnum {
+  HIVE
+  EXPERT
+}
+
+type Profile implements BookmarksInterface & Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
@@ -1252,6 +1698,21 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   targetObjectId: Int
   status: ProfilesProfileStatusChoices!
   owner: User!
+  firstName: String!
+  middleName: String!
+  lastName: String!
+  country: Country
+  region: Region
+  city: City
+  title: String
+  headline: String
+  industry: String
+  phoneNumber: String
+  isFoundingMember: Boolean!
+  hourlyRate: Decimal
+  isAvailableForWork: Boolean!
+  resume: File
+  rating: Int
   comments(
     first: Int
     last: Int
@@ -1264,6 +1725,17 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
   ): CommentConnection!
   reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
+  commentsCommentMentions(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection!
   ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
   activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
@@ -1279,6 +1751,12 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
+  skills: [ProfileSkills!]
+  experiences: [ProfileExperience!]
+  education: [ProfileEducation!]
+  certifications: [ProfileCertification!]
+  recommendationsGiven(first: Int, last: Int, offset: Int, after: String, before: String, id: ID, isVisible: Boolean): ProfileRecommendationConnection!
+  recommendationsReceived(first: Int, last: Int, offset: Int, after: String, before: String, id: ID, isVisible: Boolean): ProfileRecommendationConnection!
   profileCreatedRooms(
     first: Int
     last: Int
@@ -1299,7 +1777,19 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  chatsMessageMentions(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
+  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
   contentPosts(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+
+    """Ordering"""
+    orderBy: String
+  ): ContentPostConnection!
+  contentFeedContentpostMentions(
     first: Int
     last: Int
     offset: Int
@@ -1312,6 +1802,9 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
   organization: Organization
+  bookmarksCount: Int
+  isBookmarksEnabled: Boolean!
+  isBookmarked(profileId: ID): Boolean
 
   """
   Determine if the logged in user has a specific permission for this object.
@@ -1323,7 +1816,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
   followersCount: Int
-  followingCount: Int
+  followingCount(contentType: FollowCountContentType): Int
   isFollowedByMe(profileId: ID): Boolean
   isBlockedByMe(profileId: ID): Boolean
   chatRooms(
@@ -1343,10 +1836,67 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
+  networkPreviewProfiles(first: Int = 5): [Profile]
+  isRecommendedByMe: Boolean
+  profileCompletion: StringIntMap
   pk: Int
+}
+
+type ProfileCertification implements Node {
+  """The ID of the object"""
+  id: ID!
+  title: String!
+  dateReceived: Date!
+  description: String
+}
+
+input ProfileCertificationCreateInput {
+  profileId: ID!
+  title: String
+  dateReceived: Date
+  description: String
+  clientMutationId: String
+}
+
+type ProfileCertificationCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileCertification: ProfileCertification
+  clientMutationId: String
+}
+
+input ProfileCertificationDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+"""Delete a profile certification entry by its relay ID."""
+type ProfileCertificationDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+input ProfileCertificationUpdateInput {
+  id: ID!
+  title: String
+  dateReceived: Date
+  description: String
+  clientMutationId: String
+}
+
+type ProfileCertificationUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileCertification: ProfileCertification
+  clientMutationId: String
 }
 
 type ProfileConnection {
@@ -1367,8 +1917,8 @@ input ProfileCreateInput {
   biography: String
   urlPath: String
   target: String
-  targetContentType: String
-  targetObjectId: Int
+  targetContentType: String!
+  targetObjectId: Int!
   clientMutationId: String
 }
 
@@ -1402,10 +1952,222 @@ type ProfileEdge {
   cursor: String!
 }
 
+type ProfileEducation implements Node {
+  """The ID of the object"""
+  id: ID!
+  schoolName: String!
+  degree: String!
+  fieldOfStudy: String!
+  startDate: Date
+  endDate: Date
+  description: String
+}
+
+input ProfileEducationCreateInput {
+  profileId: ID!
+  schoolName: String!
+  degree: String!
+  fieldOfStudy: String!
+  startDate: Date
+  endDate: Date
+  description: String
+  clientMutationId: String
+}
+
+type ProfileEducationCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileEducation: ProfileEducation
+  clientMutationId: String
+}
+
+input ProfileEducationDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+"""Delete a profile education entry by its relay ID."""
+type ProfileEducationDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+input ProfileEducationUpdateInput {
+  id: ID!
+  schoolName: String
+  degree: String
+  fieldOfStudy: String
+  startDate: Date
+  endDate: Date
+  description: String
+  clientMutationId: String
+}
+
+type ProfileEducationUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileEducation: ProfileEducation
+  clientMutationId: String
+}
+
+type ProfileExperience implements Node {
+  """The ID of the object"""
+  id: ID!
+  companyName: String!
+  jobTitle: String!
+  startDate: Date!
+  endDate: Date
+  description: String
+  isCurrent: Boolean!
+
+  """e.g. full-time, part-time, contract, freelance, etc."""
+  employmentType: ProfilesProfileExperienceEmploymentTypeChoices!
+  country: Country
+  region: Region
+}
+
+input ProfileExperienceCreateInput {
+  profileId: ID!
+  companyName: String!
+  jobTitle: String!
+  startDate: Date!
+  endDate: Date
+  countryId: String
+  regionId: String
+  description: String
+  isCurrent: Boolean
+
+  """e.g. full-time, part-time, contract, freelance, etc."""
+  employmentType: employment_type!
+  clientMutationId: String
+}
+
+type ProfileExperienceCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileExperience: ProfileExperience
+  clientMutationId: String
+}
+
+input ProfileExperienceDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+"""Delete a profile experience by its relay ID."""
+type ProfileExperienceDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+input ProfileExperienceUpdateInput {
+  id: ID!
+  companyName: String
+  jobTitle: String
+  startDate: Date!
+  endDate: Date
+  countryId: String
+  regionId: String
+  description: String
+  isCurrent: Boolean
+  employmentType: String
+  clientMutationId: String
+}
+
+type ProfileExperienceUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileExperience: ProfileExperience
+  clientMutationId: String
+}
+
 interface ProfileInterface {
   """The ID of the object"""
   id: ID!
   profile: Profile
+}
+
+type ProfileRecommendation implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  author: Profile!
+  target: Profile!
+  isVisible: Boolean!
+  description: String!
+}
+
+type ProfileRecommendationConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [ProfileRecommendationEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input ProfileRecommendationCreateInput {
+  targetId: ID!
+  authorId: String
+  description: String!
+  clientMutationId: String
+}
+
+type ProfileRecommendationCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileRecommendation: ProfileRecommendation
+  clientMutationId: String
+}
+
+input ProfileRecommendationDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+"""Delete a profile education entry by its relay ID."""
+type ProfileRecommendationDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `ProfileRecommendation` and its cursor."""
+type ProfileRecommendationEdge {
+  """The item at the end of the edge"""
+  node: ProfileRecommendation
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+input ProfileRecommendationUpdateInput {
+  id: ID!
+  description: String
+  isVisible: Boolean
+  clientMutationId: String
+}
+
+type ProfileRecommendationUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileRecommendation: ProfileRecommendation
+  clientMutationId: String
 }
 
 input ProfileRemoveMemberInput {
@@ -1459,6 +2221,24 @@ interface ProfilesInterface {
   ): ProfileConnection
 }
 
+type ProfileSkills implements Node {
+  """The ID of the object"""
+  id: ID!
+  name: String!
+}
+
+"""An enumeration."""
+enum ProfilesProfileExperienceEmploymentTypeChoices {
+  """Full Time"""
+  FULL_TIME
+
+  """Part Time"""
+  PART_TIME
+
+  """Fractional"""
+  FRACTIONAL
+}
+
 """An enumeration."""
 enum ProfilesProfileStatusChoices {
   """public"""
@@ -1470,6 +2250,9 @@ enum ProfilesProfileStatusChoices {
 
 input ProfileUpdateInput {
   id: ID!
+  experiences: [GenericScalar]
+  education: [GenericScalar]
+  certifications: [GenericScalar]
   owner: String
   name: String
   image: String
@@ -1477,6 +2260,17 @@ input ProfileUpdateInput {
   biography: String
   urlPath: String
   phoneNumber: String
+  firstName: String
+  middleName: String
+  lastName: String
+  countryId: String
+  regionId: String
+  cityId: String
+  title: String
+  headline: String
+  industry: String
+  skills: [String]
+  resume: String
   clientMutationId: String
 }
 
@@ -1517,6 +2311,31 @@ type ProfileUserRoleEdge {
 }
 
 type Query {
+  bookmark(
+    """The ID of the object"""
+    id: ID!
+  ): Bookmark
+  honeycombSuggestions(offset: Int, before: String, after: String, first: Int, last: Int, q: String): HoneycombConnection
+  allHives(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    name: String
+    isFollowedBy: String
+
+    """Ordering"""
+    orderBy: String
+  ): HiveConnection
+  hive(
+    """The ID of the object"""
+    id: ID!
+  ): Hive
+  hiveByName(name: String!): Hive
+  allCountries(offset: Int, before: String, after: String, first: Int, last: Int, q: String): CountryConnection
+  allRegions(offset: Int, before: String, after: String, first: Int, last: Int, country: String, q: String): RegionConnection
+  allCities(offset: Int, before: String, after: String, first: Int, last: Int, region: String, q: String): CityConnection
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   organization(
     """The ID of the object"""
@@ -1739,6 +2558,33 @@ enum ReactionTypes {
   DISLIKE
 }
 
+type Region implements Node {
+  """The ID of the object"""
+  id: ID!
+  name: String!
+  geonameCode: String
+  country: Country!
+}
+
+type RegionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [RegionEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Region` and its cursor."""
+type RegionEdge {
+  """The item at the end of the edge"""
+  node: Region
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 type Report implements Node {
   """The ID of the object"""
   id: ID!
@@ -1767,6 +2613,11 @@ input ReportCreateInput {
   clientMutationId: String
 }
 
+"""
+Hive-level override that adds generic self-report detection
+and ``report_subject`` max-length validation on top of the core
+report-creation logic.
+"""
 type ReportCreatePayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
@@ -1786,11 +2637,9 @@ type ReportEdge {
 }
 
 interface ReportsInterface {
-  """The ID of the object"""
-  id: ID!
   reportsCount: GenericScalar
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
 }
 
 type ReportType implements Node {
@@ -1835,6 +2684,9 @@ type RoleUpdatePayload {
   profileUserRole: ProfileUserRole
   clientMutationId: String
 }
+
+"""A scalar that represents a dict with string keys and int values."""
+scalar StringIntMap
 
 type Subscription {
   chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage

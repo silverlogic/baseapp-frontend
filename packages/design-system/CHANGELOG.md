@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system
 
+## 1.2.11
+
+### Patch Changes
+
+- Add `@`-mention support to `MarkdownEditorField` via the new `mentions` prop (`MentionsConfig` — active arm with a `MentionsSearchController`, or `{ disabled: true }`).
+- `Markdown` component now renders persisted `[@name](mention://id)` links as a `MentionChip`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
 ## 1.2.10
 
 ### Patch Changes

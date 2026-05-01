@@ -36,6 +36,14 @@ export const CommentItemFragmentQuery = graphql`
     canReport: hasPerm(perm: "report")
     canPin: hasPerm(perm: "pin")
 
+    mentionedProfiles(first: 50) {
+      edges {
+        node {
+          id
+        }
+      }
+    }
+
     ...CommentsList_comments @include(if: $isRepliesExpanded)
 
     ...ReactionButton_target

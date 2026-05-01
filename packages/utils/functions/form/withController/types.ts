@@ -11,4 +11,13 @@ type OptionalActions = {
 
 export type DebouncedFunction = NonUndefined<OptionalActions['onChange']>
 
-export type WithControllerProps<T> = FormControl & T & OptionalActions
+export type WithControllerProps<T> = FormControl &
+  T &
+  OptionalActions & {
+    /**
+     * Per-instance override for the factory-time `shouldDebounce` flag.
+     * `true` debounces the consumer-side onChange (RHF state still updates synchronously).
+     * Leave undefined to fall back to the factory default.
+     */
+    shouldDebounce?: boolean
+  }

@@ -1,23 +1,14 @@
 'use client'
 
-import { ComponentProps, FC, useMemo } from 'react'
+import { FC, useMemo } from 'react'
 
-import type { LinkProps } from '@mui/material/Link'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import remarkGfm from 'remark-gfm'
 
-import { LazyLoadImage } from '../../images'
-import DefaultLink from './DefaultLink'
 import { StyledMarkdown } from './styled'
 import { MarkdownProps } from './types'
-
-const createDefaultComponents = (linkProps?: Partial<LinkProps>) => ({
-  a: (props: ComponentProps<'a'>) => <DefaultLink {...props} extraLinkProps={linkProps} />,
-  img: (props: ComponentProps<'img'>) => (
-    <LazyLoadImage alt={props.alt} src={props.src as string | undefined} />
-  ),
-})
+import { allowMentionUrls, createDefaultComponents } from './utils'
 
 const Markdown: FC<MarkdownProps> = ({
   children,
@@ -41,6 +32,7 @@ const Markdown: FC<MarkdownProps> = ({
       <ReactMarkdown
         remarkPlugins={[remarkGfm, ...(remarkPlugins ?? [])]}
         rehypePlugins={[rehypeRaw, ...(rehypePlugins ?? [])]}
+        urlTransform={allowMentionUrls}
         components={{ ...defaultComponents, ...componentOverrides }}
         {...rest}
       >

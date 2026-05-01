@@ -1,5 +1,12 @@
 # @baseapp-frontend/provider
 
+## 2.0.21
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
 ## 2.0.20
 
 ### Patch Changes
