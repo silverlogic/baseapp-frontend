@@ -23,9 +23,14 @@ import {
   moveSelectionDown$,
   moveSelectionUp$,
 } from './cells'
-import { INITIAL_MENU_STATE, MENTION_MIN_CHARS, MENTION_TRIGGER } from './constants'
+import {
+  INITIAL_MENU_STATE,
+  MENTION_MIN_CHARS,
+  MENTION_TRIGGER,
+  MENTION_TRIGGER_WORD_REGEX,
+} from './constants'
 import type { MentionsActiveConfig } from './types'
-import { buildTriggerWordRegex, parseMentionsFromMarkdown } from './utils'
+import { parseMentionsFromMarkdown } from './utils'
 import { LexicalMentionVisitor, MdastMentionLinkVisitor } from './visitors'
 
 const {
@@ -42,16 +47,12 @@ const {
 } = lexical
 
 /**
- * Returns the screen-space rect of the trigger character (e.g. `@`) so the
- * menu can anchor to it instead of following the caret as the user types
- * the query. Re-derived on every selection change so the rect tracks line
+ * Returns the screen-space rect of the `@` trigger character so the menu
+ * can anchor to it instead of following the caret as the user types the
+ * query. Re-derived on every selection change so the rect tracks line
  * wraps and scroll correctly.
  */
-const getTriggerRect = (
-  editor: LexicalEditor,
-  triggerLength: number,
-  triggerStartOffset: number,
-): DOMRect | null => {
+const getTriggerRect = (editor: LexicalEditor, triggerStartOffset: number): DOMRect | null => {
   if (typeof document === 'undefined') return null
   let rect: DOMRect | null = null
   editor.getEditorState().read(() => {
@@ -71,7 +72,7 @@ const getTriggerRect = (
     try {
       const range = document.createRange()
       range.setStart(textChild, triggerStartOffset)
-      range.setEnd(textChild, Math.min(triggerStartOffset + triggerLength, textLength))
+      range.setEnd(textChild, Math.min(triggerStartOffset + MENTION_TRIGGER.length, textLength))
       rect = range.getBoundingClientRect()
     } catch {
       // offset shifted out from under us — let the caller fall back
@@ -82,7 +83,6 @@ const getTriggerRect = (
 
 const detectTrigger = (
   editor: LexicalEditor,
-  trigger: string,
   minChars: number,
 ): { open: boolean; query: string; triggerStartOffset: number } | null => {
   let result: { open: boolean; query: string; triggerStartOffset: number } | null = null
@@ -94,12 +94,11 @@ const detectTrigger = (
     const node = anchor.getNode()
     if (!$isTextNode(node)) return
     const textUpToCaret = node.getTextContent().slice(0, anchor.offset)
-    const regex = buildTriggerWordRegex(trigger)
-    const match = regex.exec(textUpToCaret)
+    const match = MENTION_TRIGGER_WORD_REGEX.exec(textUpToCaret)
     if (!match) return
     const query = match[1] ?? ''
     const open = query.length >= minChars
-    const triggerStartOffset = anchor.offset - query.length - trigger.length
+    const triggerStartOffset = anchor.offset - query.length - MENTION_TRIGGER.length
     result = { open, query, triggerStartOffset }
   })
   return result
@@ -159,15 +158,14 @@ export const mentionsPlugin = realmPlugin<MentionsActiveConfig>({
         SELECTION_CHANGE_COMMAND,
         () => {
           const config = realm.getValue(mentionsConfig$)
-          const trigger = config?.trigger ?? MENTION_TRIGGER
           const minChars = config?.minChars ?? MENTION_MIN_CHARS
-          const detected = detectTrigger(editor, trigger, minChars)
+          const detected = detectTrigger(editor, minChars)
           const current = realm.getValue(mentionMenuState$)
           if (!detected || !detected.open) {
             if (current.open) realm.pub(mentionMenuState$, { ...current, open: false })
             return false
           }
-          const anchorRect = getTriggerRect(editor, trigger.length, detected.triggerStartOffset)
+          const anchorRect = getTriggerRect(editor, detected.triggerStartOffset)
           realm.pub(mentionMenuState$, {
             open: true,
             query: detected.query,

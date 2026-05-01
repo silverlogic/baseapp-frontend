@@ -37,19 +37,17 @@ export interface MentionsActiveConfig {
   disabled?: false
   controller: MentionsSearchController
   onMentionsChange?: (mentions: MentionCommitted[]) => void
-  trigger?: string
   minChars?: number
 }
 
 /**
  * Public prop shape on `MarkdownEditorField`. Two arms:
- * - active: pass a controller (and optional callback / trigger / minChars).
+ * - active: pass a controller (and optional callback / `minChars`).
  * - disabled: `{ disabled: true }` keeps the plugin out and triggers the wrapper-level
  *   sanitization path (`mention://` links stripped from initial value and from text/plain
- *   paste). `trigger` is still accepted on the disabled arm only as a placeholder for
- *   future symmetry — the plugin never sees this shape.
+ *   paste).
  */
-export type MentionsConfig = MentionsActiveConfig | { disabled: true; trigger?: string }
+export type MentionsConfig = MentionsActiveConfig | { disabled: true }
 
 export interface MentionMenuState {
   open: boolean

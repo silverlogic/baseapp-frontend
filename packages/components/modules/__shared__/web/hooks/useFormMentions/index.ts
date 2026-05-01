@@ -10,15 +10,14 @@ import type {
 import type { FieldValues, Path, PathValue } from 'react-hook-form'
 
 import type { SocialInputProps } from '../../SocialInput/types'
+import { DEFAULT_MENTIONS_FIELD_NAME } from './constants'
 import type { UseFormMentionsOptions, UseFormMentionsResult } from './types'
-
-const DEFAULT_FIELD_NAME = 'mentionedProfileIds'
 
 const useFormMentions = <TForm extends FieldValues>({
   setValue,
   controller,
   disabled = false,
-  fieldName = DEFAULT_FIELD_NAME as Path<TForm>,
+  fieldName = DEFAULT_MENTIONS_FIELD_NAME as Path<TForm>,
 }: UseFormMentionsOptions<TForm>): UseFormMentionsResult => {
   const handleMentionsChange = useCallback(
     (mentions: MentionCommitted[]) => {

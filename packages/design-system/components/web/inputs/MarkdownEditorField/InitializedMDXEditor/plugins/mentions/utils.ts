@@ -1,20 +1,10 @@
-import { MENTION_MARKDOWN_PROTOCOL } from './constants'
+import { MENTION_MARKDOWN_LINK_REGEX, MENTION_MARKDOWN_PROTOCOL } from './constants'
 import type { MentionCommitted } from './types'
-
-export const escapeRegex = (value: string): string => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
-
-export const buildTriggerWordRegex = (trigger: string): RegExp =>
-  new RegExp(`(?:^|\\s)${escapeRegex(trigger)}([A-Za-z0-9_-]*)$`)
-
-// Matches `[@name](mention://profile-id "urlPath")` — the canonical on-disk form.
-// The link title (between quotes) carries the urlPath so it survives round-trip
-// without us needing to parse the display name back into a handle.
-const MENTIONS_IN_MARKDOWN = /\[@([^\]]+)\]\(mention:\/\/([^)\s"]+)(?:\s+"([^"]*)")?\)/g
 
 export const parseMentionsFromMarkdown = (markdown: string): MentionCommitted[] => {
   if (!markdown) return []
   const seen = new Set<string>()
-  return Array.from(markdown.matchAll(MENTIONS_IN_MARKDOWN)).reduce<MentionCommitted[]>(
+  return Array.from(markdown.matchAll(MENTION_MARKDOWN_LINK_REGEX)).reduce<MentionCommitted[]>(
     (acc, match) => {
       const profileId = match[2]
       if (profileId && !seen.has(profileId)) {
@@ -33,7 +23,7 @@ export const parseMentionsFromMarkdown = (markdown: string): MentionCommitted[] 
 export const stripMentionLinksFromMarkdown = (markdown: string): string => {
   if (!markdown) return ''
   if (!markdown.includes(MENTION_MARKDOWN_PROTOCOL)) return markdown
-  return markdown.replace(MENTIONS_IN_MARKDOWN, (_match, name: string) => `@${name}`)
+  return markdown.replace(MENTION_MARKDOWN_LINK_REGEX, (_match, name: string) => `@${name}`)
 }
 
 /**

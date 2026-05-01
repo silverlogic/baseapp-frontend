@@ -3,7 +3,11 @@ import type { ElementNode } from 'lexical'
 import type * as Mdast from 'mdast'
 
 import { $createMentionNode, $isMentionNode } from './MentionNode'
-import { MENTION_MARKDOWN_PROTOCOL } from './constants'
+import {
+  MENTION_MARKDOWN_PROTOCOL,
+  MENTION_NAME_SANITIZE_REGEX,
+  MENTION_URL_PATH_SANITIZE_REGEX,
+} from './constants'
 import { stripMentionProtocol } from './utils'
 
 export const MdastMentionLinkVisitor: MdastImportVisitor<Mdast.Nodes> = {
@@ -27,13 +31,11 @@ export const MdastMentionLinkVisitor: MdastImportVisitor<Mdast.Nodes> = {
   },
 }
 
-// Defensive sanitization on export so the parse regex
-// (`/\[@([^\]]+)\]\(mention:\/\/([^)\s"]+)(?:\s+"([^"]*)")?\)/g`) cannot be
-// fooled by hostile or unusual inputs. Profile.name and URLPath.path are
-// product-controlled today, but this keeps the round-trip resilient if either
-// ever loosens.
-const sanitizeName = (name: string): string => name.replace(/[\]\\]/g, '')
-const sanitizeUrlPath = (urlPath: string): string => urlPath.replace(/["\\]/g, '')
+// Defensive sanitization on export so a hostile or unusual name/urlPath
+// can't break out of the `[@…](… "…")` form `MENTION_MARKDOWN_LINK_REGEX` parses.
+const sanitizeName = (name: string): string => name.replace(MENTION_NAME_SANITIZE_REGEX, '')
+const sanitizeUrlPath = (urlPath: string): string =>
+  urlPath.replace(MENTION_URL_PATH_SANITIZE_REGEX, '')
 
 export const LexicalMentionVisitor: LexicalVisitor = {
   testLexicalNode: $isMentionNode,
