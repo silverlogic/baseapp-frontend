@@ -1,5 +1,17 @@
 # @baseapp-frontend/components
 
+## 1.5.23
+
+### Patch Changes
+
+- Add `useFormMentions` hook and `withMentionsInSocialInputProps` helper for wiring `MarkdownEditorField` mentions into `SocialInput`-based forms.
+- Comments, messages, and content-feed mutations now thread `mentionedProfileIds` through their submit payloads.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.11
+  - @baseapp-frontend/utils@4.0.7
+  - @baseapp-frontend/authentication@5.1.1
+  - @baseapp-frontend/graphql@1.3.10
+
 ## 1.5.22
 
 ### Patch Changes

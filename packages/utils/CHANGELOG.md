@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 4.0.7
+
+### Patch Changes
+
+- Add `useDebouncedValue` hook for reactive value debouncing (used by mention search).
+- Add `removeLeadingSlash` string utility.
+
 ## 4.0.6
 
 ### Patch Changes
