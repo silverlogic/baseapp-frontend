@@ -1,5 +1,11 @@
 # @baseapp-frontend/graphql
 
+## 1.4.0
+
+### Minor Changes
+
+- Change the default `fetchPolicy` from `'store-or-network'` to `'store-and-network'` in `withRelay` and `useSerializablePreloadedQuery`. Pages now render instantly from the cached store and refetch in parallel, so data mutated by another client (e.g. a new comment posted from another browser) becomes visible the next time the user navigates to the page instead of staying stale until a hard reload. Per-page overrides via `withRelay({ fetchPolicy })` continue to work.
+
 ## 1.3.10
 
 ### Patch Changes
