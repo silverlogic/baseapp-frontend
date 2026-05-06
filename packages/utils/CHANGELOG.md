@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 4.0.8
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the cookie store — the store is now created fresh per `CookieProvider` mount. Cross-tree sync between imperative `setCookie`/`removeCookie` callers and `useCookie()` consumers now happens via a new `baseapp:cookie-change` `CustomEvent` instead of a shared module-level reference.
+- Add `COOKIE_CHANGE_EVENT` constant and `CookieChangeEventDetail` type (exported from `@baseapp-frontend/utils/hooks/useCookie/constants`) for consumers that want to dispatch or listen to cookie changes directly.
+- Remove the internal `getCookieFromStore`, `setCookieInStore`, `removeCookieFromStore`, and `getCookieStore` exports (the public `getCookie`/`setCookie`/`removeCookie` API is unchanged).
+
 ## 4.0.7
 
 ### Patch Changes

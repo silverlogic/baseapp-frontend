@@ -1,13 +1,14 @@
+// Do not introduce module-level mutable state here. This file runs during SSR of client
+// components; in Next.js App Router, module-level `let` persists across HTTP requests in
+// a long-running Node process and leaks user data between sessions. Per-request
+// isolation comes from the Provider's `useRef`.
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
 import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 
 import { MinimalProfile } from '../../../types/profile'
-import { MISSING_PROFILE_STORE_ERROR } from './constants'
 import type { CurrentProfileState } from './types'
-
-let profileStore: StoreApi<CurrentProfileState> | null = null
 
 const getClientSideCurrentProfile = (): MinimalProfile | null => {
   const storedProfile = Cookies.get(CURRENT_PROFILE_KEY_NAME)
@@ -47,41 +48,4 @@ const createProfileStore = (
 
 export const initializeProfileStore = (
   initialProfile: MinimalProfile | null = null,
-): StoreApi<CurrentProfileState> => {
-  if (
-    // Create a new store in dev mode to prevent HMR from preserving stale data
-    process.env.NODE_ENV === 'development' ||
-    !profileStore ||
-    (initialProfile && Object.keys(initialProfile).length > 0)
-  ) {
-    profileStore = createProfileStore(initialProfile)
-  }
-
-  return profileStore
-}
-
-export const getProfileStore = (): StoreApi<CurrentProfileState> => {
-  if (!profileStore) {
-    throw new Error(MISSING_PROFILE_STORE_ERROR)
-  }
-  return profileStore
-}
-export const getCurrentProfileFromStore = (): MinimalProfile | null => {
-  const store = getProfileStore()
-  return store.getState().currentProfile
-}
-
-export const setCurrentProfileInStore = (profile: MinimalProfile | null): void => {
-  const store = getProfileStore()
-  store.getState().setCurrentProfile(profile)
-}
-
-export const updateProfileIfActiveInStore = (profile: MinimalProfile): void => {
-  const store = getProfileStore()
-  store.getState().updateProfileIfActive(profile)
-}
-
-export const resetProfileStore = (): void => {
-  Cookies.remove(CURRENT_PROFILE_KEY_NAME)
-  profileStore = null
-}
+): StoreApi<CurrentProfileState> => createProfileStore(initialProfile)

@@ -6,6 +6,7 @@ import {
   renderHook,
   waitFor,
 } from '@baseapp-frontend/test'
+import { ACCESS_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 
 import type { UseQueryResult } from '@tanstack/react-query'
 import Cookies from 'js-cookie'
@@ -45,6 +46,16 @@ describe('useJWTUser', () => {
   const token =
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzA5NjcxNjgzLCJpYXQiOjE3MDk2NjA3MTIsImp0aSI6IjhmMjg3ZGNhODVjODRjOTVhOThkZThmN2NiZTllNTE5IiwidXNlcl9pZCI6MSwiaWQiOjEsImVtYWlsIjoiYWFAdHNsLmlvIiwiaXNfZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuZXdfZW1haWwiOiIiLCJpc19uZXdfZW1haWxfY29uZmlybWVkIjpmYWxzZSwicmVmZXJyYWxfY29kZSI6IiIsImF2YXRhciI6eyJmdWxsX3NpemUiOiIvbWVkaWEvdXNlci1hdmF0YXJzLzUvNi8xL3Jlc2l6ZWQvMTAyNC8xMDI0LzU0NGNhNDA2YWUxMWJhYzVjNDk3NTlhMjQwN2ZkY2JlLnBuZyIsInNtYWxsIjoiL21lZGlhL3VzZXItYXZhdGFycy81LzYvMS9yZXNpemVkLzY0LzY0LzU0NGNhNDA2YWUxMWJhYzVjNDk3NTlhMjQwN2ZkY2JlLnBuZyJ9LCJmaXJzdF9uYW1lIjoiYWEiLCJsYXN0X25hbWUiOiJUZXN0In0.zmTBh3Iz6iRGTiV84o7r4JMA3AU4Q4bVbN76ZUwm5Jg'
 
+  // useJWTUser reads the access token from the CookieProvider context, so the test wrapper
+  // must seed `initialCookies` with the access token. We construct a small wrapper that
+  // forwards `initialCookies` into the shared `withAuthenticationTestProviders`.
+  const wrapperWithToken = (Component: typeof ComponentWithProviders) => {
+    const Wrapped = withAuthenticationTestProviders(Component)
+    return ({ children }: { children: React.ReactNode }) => (
+      <Wrapped initialCookies={{ [ACCESS_KEY_NAME]: token }}>{children}</Wrapped>
+    )
+  }
+
   it(`should call the user's endpoint if there is no initial data`, async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)
@@ -56,7 +67,7 @@ describe('useJWTUser', () => {
     })
 
     const { result } = renderHook(() => useJWTUser({ options: { placeholderData: undefined } }), {
-      wrapper: withAuthenticationTestProviders(ComponentWithProviders),
+      wrapper: wrapperWithToken(ComponentWithProviders),
     })
 
     expect(result.current.isLoading).toBe(true)
@@ -86,7 +97,7 @@ describe('useJWTUser', () => {
           },
         }),
       {
-        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
+        wrapper: wrapperWithToken(ComponentWithProviders),
       },
     )
 

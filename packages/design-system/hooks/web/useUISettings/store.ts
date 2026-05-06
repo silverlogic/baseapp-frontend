@@ -1,12 +1,12 @@
+// Do not introduce module-level mutable state here. This file runs during SSR of client
+// components; in Next.js App Router, module-level `let` persists across HTTP requests in
+// a long-running Node process and leaks user data between sessions. Per-request
+// isolation comes from the Provider's `useRef`.
 import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 
 import { UISettings } from '../../../styles/web'
-import {
-  DEFAULT_UI_SETTINGS,
-  MISSING_UI_SETTINGS_STORE_ERROR,
-  UI_SETTINGS_KEY_NAME,
-} from './constants'
+import { DEFAULT_UI_SETTINGS, UI_SETTINGS_KEY_NAME } from './constants'
 import type { UISettingsState } from './types'
 
 const handleTailwindThemeMode = (themeMode: string) => {
@@ -14,8 +14,6 @@ const handleTailwindThemeMode = (themeMode: string) => {
     document.documentElement.classList.toggle('dark', themeMode === 'dark')
   }
 }
-
-let settingsStore: StoreApi<UISettingsState> | null = null
 
 const getClientSideUISettings = (initialSettings?: UISettings): UISettings => {
   const storedSettings = Cookies.get(UI_SETTINGS_KEY_NAME)
@@ -48,36 +46,5 @@ const createSettingsStore = (initialSettings?: UISettings): StoreApi<UISettingsS
   }))
 }
 
-export const initializeSettingsStore = (
-  initialSettings?: UISettings,
-): StoreApi<UISettingsState> => {
-  if (
-    // Create a new store in dev mode to prevent HMR from preserving stale data
-    process.env.NODE_ENV === 'development' ||
-    !settingsStore
-  ) {
-    settingsStore = createSettingsStore(initialSettings)
-  }
-
-  return settingsStore
-}
-export const getSettingsStore = (): StoreApi<UISettingsState> => {
-  if (!settingsStore) {
-    throw new Error(MISSING_UI_SETTINGS_STORE_ERROR)
-  }
-  return settingsStore
-}
-
-export const getUISettingsFromStore = (): UISettings => {
-  const store = getSettingsStore()
-  return store.getState().settings
-}
-
-export const setUISettingsInStore = (newSettings: Partial<UISettings>): void => {
-  const store = getSettingsStore()
-  store.getState().setSettings(newSettings)
-}
-
-export const resetSettingsStore = (): void => {
-  settingsStore = null
-}
+export const initializeSettingsStore = (initialSettings?: UISettings): StoreApi<UISettingsState> =>
+  createSettingsStore(initialSettings)
