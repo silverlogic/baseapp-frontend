@@ -10,12 +10,12 @@
 import React from 'react'
 
 import { act, render, renderHook, waitFor } from '@baseapp-frontend/test'
-import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
 import ClientCookies from 'js-cookie'
 
 import useCookie, { CookieProvider } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { removeCookie, setCookie } from '../../../functions/cookie'
 import { COOKIE_CHANGE_EVENT } from '../constants'
 
