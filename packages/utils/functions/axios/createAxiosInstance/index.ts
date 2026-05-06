@@ -131,7 +131,7 @@ export const createAxiosInstance = ({
 
   const responseInterceptorId = instance.interceptors.response.use(
     (response) => {
-      const contentTypeHeader = response.headers?.['content-type'] || ''
+      const contentTypeHeader = String(response.headers?.['content-type'] ?? '')
       const isJsonResponse = contentTypeHeader.includes('application/json')
 
       if (isJsonResponse && response.data && camelizeResponseDataKeys) {
@@ -140,7 +140,7 @@ export const createAxiosInstance = ({
       return returnData && response.data ? response.data : response
     },
     (error) => {
-      const contentTypeHeader = error.response?.headers?.['content-type'] || ''
+      const contentTypeHeader = String(error.response?.headers?.['content-type'] ?? '')
       const isJsonError = contentTypeHeader.includes('application/json')
 
       if (isJsonError && error.response?.data) {
