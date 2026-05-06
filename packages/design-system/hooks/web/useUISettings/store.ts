@@ -1,7 +1,5 @@
-// Do not introduce module-level mutable state here. This file runs during SSR of client
-// components; in Next.js App Router, module-level `let` persists across HTTP requests in
-// a long-running Node process and leaks user data between sessions. Per-request
-// isolation comes from the Provider's `useRef`.
+// No module-level mutable state: this file runs during SSR of client components, where
+// `let` persists across HTTP requests in the Node process. Use the Provider's `useRef`.
 import Cookies from 'js-cookie'
 import { type StoreApi, createStore } from 'zustand'
 

@@ -29,10 +29,7 @@ export const CookieProvider = <T extends Record<string, any> = {}>({
   useEffect(() => {
     if (typeof window === 'undefined') return undefined
 
-    const handler = (event: Event) => {
-      const { detail } = event as CustomEvent<CookieChangeEventDetail>
-      if (!detail) return
-
+    const apply = (detail: CookieChangeEventDetail) => {
       const state = store.getState()
       if (detail.type === 'set') {
         state.setCookie(detail.key, detail.value)
@@ -41,8 +38,26 @@ export const CookieProvider = <T extends Record<string, any> = {}>({
       }
     }
 
-    window.addEventListener(COOKIE_CHANGE_EVENT, handler)
-    return () => window.removeEventListener(COOKIE_CHANGE_EVENT, handler)
+    // window for the dispatching tab; BroadcastChannel for other tabs.
+    const sameTabHandler = (event: Event) => {
+      const { detail } = event as CustomEvent<CookieChangeEventDetail>
+      if (detail) apply(detail)
+    }
+    window.addEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+
+    let channel: BroadcastChannel | undefined
+    if (typeof BroadcastChannel !== 'undefined') {
+      channel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
+      channel.onmessage = (event) => {
+        const detail = event.data as CookieChangeEventDetail | undefined
+        if (detail) apply(detail)
+      }
+    }
+
+    return () => {
+      window.removeEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+      channel?.close()
+    }
   }, [store])
 
   return <CookieContext.Provider value={store}>{children}</CookieContext.Provider>

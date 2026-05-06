@@ -1,15 +1,8 @@
 /**
  * @jest-environment node
  *
- * Cross-request isolation regression test for the cookie store.
- *
- * The bug: a module-level `let cookieStore: ... | null = null` cache caused two
- * Provider mounts in the same Node process to share state. In production SSR,
- * one user's cookies leaked into the next user's render.
- *
- * The post-fix invariant: every call to `initializeCookieStore` produces a fresh,
- * isolated StoreApi. This test runs with `@jest-environment node` so it mirrors the
- * production SSR runtime where `typeof window === 'undefined'`.
+ * Cross-request isolation regression: two `initializeCookieStore` calls must produce
+ * separate `StoreApi` instances. Runs under `node` to mirror the SSR runtime.
  */
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { initializeCookieStore } from '../store'

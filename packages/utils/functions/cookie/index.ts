@@ -9,7 +9,15 @@ import type { GetCookieOptions, SetCookieOptions } from './types'
 
 const dispatchCookieChange = (detail: CookieChangeEventDetail) => {
   if (typeof window === 'undefined') return
+
+  // window covers the dispatching tab; BroadcastChannel covers other tabs (it does not
+  // deliver to the posting context). Per-call open/close to avoid module-level state.
   window.dispatchEvent(new CustomEvent<CookieChangeEventDetail>(COOKIE_CHANGE_EVENT, { detail }))
+  if (typeof BroadcastChannel !== 'undefined') {
+    const channel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
+    channel.postMessage(detail)
+    channel.close()
+  }
 }
 
 export const getCookie = <T = string>(

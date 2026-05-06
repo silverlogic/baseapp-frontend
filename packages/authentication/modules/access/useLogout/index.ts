@@ -2,7 +2,7 @@ import {
   ACCESS_KEY_NAME,
   LOGOUT_EVENT,
   REFRESH_KEY_NAME,
-  eventEmitter,
+  broadcastEvent,
   removeTokenAsync,
 } from '@baseapp-frontend/utils'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
@@ -29,7 +29,7 @@ const useLogout = ({
     queryClient.resetQueries({ queryKey: MFA_API_KEY.default })
     onLogout?.()
     if (emitLogoutEvent) {
-      eventEmitter.emit(LOGOUT_EVENT)
+      broadcastEvent(LOGOUT_EVENT)
     }
   }
 

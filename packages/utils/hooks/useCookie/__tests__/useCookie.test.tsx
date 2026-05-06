@@ -1,11 +1,6 @@
 /**
- * Event-bridge integration tests for the cookie store.
- *
- * The post-fix design replaces the module-level singleton with a `CustomEvent`-on-window
- * bridge: `setCookie`/`removeCookie` from `functions/cookie/index.ts` write to
- * `document.cookie` and dispatch `baseapp:cookie-change`; `<CookieProvider>` listens for
- * that event and forwards updates into its in-tree Zustand store. These tests verify the
- * end-to-end plumbing on the client (`@jest-environment jsdom`, default).
+ * Event-bridge tests for the cookie store: same-tab `window` CustomEvent and cross-tab
+ * BroadcastChannel. Runs in jsdom (default).
  */
 import React from 'react'
 
@@ -26,6 +21,43 @@ jest.mock('js-cookie', () => ({
 }))
 
 const mockedCookies = ClientCookies as jest.Mocked<typeof ClientCookies>
+
+// jsdom doesn't expose BroadcastChannel here. Stub matching real semantics: same-name
+// channels receive each other's posts; a channel never receives its own.
+class MockBroadcastChannel {
+  static subscribers = new Map<string, Set<MockBroadcastChannel>>()
+  name: string
+  onmessage: ((event: { data: unknown }) => void) | null = null
+
+  constructor(name: string) {
+    this.name = name
+    if (!MockBroadcastChannel.subscribers.has(name)) {
+      MockBroadcastChannel.subscribers.set(name, new Set())
+    }
+    MockBroadcastChannel.subscribers.get(name)!.add(this)
+  }
+
+  postMessage(data: unknown) {
+    const subs = MockBroadcastChannel.subscribers.get(this.name)
+    if (!subs) return
+    subs.forEach((sub) => {
+      if (sub !== this && sub.onmessage) sub.onmessage({ data })
+    })
+  }
+
+  close() {
+    MockBroadcastChannel.subscribers.get(this.name)?.delete(this)
+  }
+}
+
+beforeAll(() => {
+  ;(globalThis as { BroadcastChannel?: typeof MockBroadcastChannel }).BroadcastChannel =
+    MockBroadcastChannel
+})
+
+afterAll(() => {
+  delete (globalThis as { BroadcastChannel?: unknown }).BroadcastChannel
+})
 
 describe('useCookie event-bridge sync', () => {
   beforeEach(() => {
@@ -141,9 +173,6 @@ describe('useCookie event-bridge sync', () => {
   })
 
   it('updates two CookieProviders mounted in parallel from a single setCookie', async () => {
-    // Two independent Provider mounts (separate React trees) both receive the same window
-    // event and update their own in-tree store. Edge case — not used in this app today —
-    // but cheap to verify so a future regression doesn't surprise us.
     const { result: r1 } = renderHook(() => useCookie(), {
       wrapper: ({ children }) => (
         <CookieProvider initialCookies={{ [ACCESS_KEY_NAME]: 'a1' }}>{children}</CookieProvider>
@@ -181,5 +210,43 @@ describe('useCookie event-bridge sync', () => {
     expect(cookieListenerCalls).toHaveLength(1)
 
     addListenerSpy.mockRestore()
+  })
+
+  it('synchronises across tabs via BroadcastChannel', async () => {
+    const { result } = renderHook(() => useCookie(), {
+      wrapper: wrapWith({ [ACCESS_KEY_NAME]: 'initial-token' }),
+    })
+
+    expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('initial-token')
+
+    const externalChannel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
+    externalChannel.postMessage({ type: 'set', key: ACCESS_KEY_NAME, value: 'from-other-tab' })
+
+    await waitFor(() => expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('from-other-tab'))
+
+    externalChannel.postMessage({ type: 'remove', key: ACCESS_KEY_NAME })
+    await waitFor(() => expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBeUndefined())
+
+    externalChannel.close()
+  })
+
+  it('closes its BroadcastChannel on Provider unmount', async () => {
+    const { result, unmount } = renderHook(() => useCookie(), {
+      wrapper: wrapWith({ [ACCESS_KEY_NAME]: 'initial' }),
+    })
+
+    expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('initial')
+
+    unmount()
+
+    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    const externalChannel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
+    externalChannel.postMessage({ type: 'set', key: ACCESS_KEY_NAME, value: 'after-unmount' })
+    externalChannel.close()
+
+    await new Promise((resolve) => setTimeout(resolve, 10))
+
+    expect(consoleErrorSpy).not.toHaveBeenCalled()
+    consoleErrorSpy.mockRestore()
   })
 })
