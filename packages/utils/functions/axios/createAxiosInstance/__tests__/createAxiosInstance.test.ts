@@ -38,10 +38,7 @@ jest.mock('../../../token/getTokenSSR', () => ({
   getTokenSSR: jest.fn().mockResolvedValue('someAuthToken'),
 }))
 jest.mock('../../../events', () => ({
-  eventEmitter: {
-    emit: jest.fn(),
-    listenerCount: jest.fn().mockReturnValue(1),
-  },
+  broadcastEvent: jest.fn(),
 }))
 
 // Mock the global window object
@@ -394,7 +391,7 @@ describe('createAxiosInstance', () => {
       const { getTokenSSR } = require('../../../token/getTokenSSR')
       const { isUserTokenValid } = require('../../../token/isUserTokenValid')
       const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-      const { eventEmitter } = require('../../../events')
+      const { broadcastEvent } = require('../../../events')
 
       const getTokenSSRMock = getTokenSSR as jest.Mock
       getTokenSSRMock
@@ -424,7 +421,7 @@ describe('createAxiosInstance', () => {
 
       await expect(interceptorFn(request)).rejects.toThrow('Refresh failed')
 
-      expect(eventEmitter.emit).toHaveBeenCalledWith('logout')
+      expect(broadcastEvent).toHaveBeenCalledWith('logout')
     })
 
     it('should not attempt to refresh token if refreshToken is false in SSR', async () => {

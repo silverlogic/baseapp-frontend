@@ -1,5 +1,15 @@
 # @baseapp-frontend/components
 
+## 1.5.25
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.2
+  - @baseapp-frontend/design-system@1.2.12
+  - @baseapp-frontend/utils@4.0.8
+  - @baseapp-frontend/graphql@1.4.1
+
 ## 1.5.24
 
 ### Patch Changes

@@ -9,12 +9,6 @@ import Cookies from 'js-cookie'
 import { CurrentProfileProvider } from '..'
 import useCurrentProfile from '..'
 import { MISSING_PROFILE_STORE_ERROR } from '../constants'
-import {
-  getCurrentProfileFromStore,
-  resetProfileStore,
-  setCurrentProfileInStore,
-  updateProfileIfActiveInStore,
-} from '../store'
 import { mockUserProfileFactory } from './__mock__/profiles'
 
 jest.mock('js-cookie', () => ({
@@ -37,12 +31,10 @@ describe('useCurrentProfile', () => {
 
   beforeEach(() => {
     jest.clearAllMocks()
-    resetProfileStore()
   })
 
   afterEach(() => {
     jest.clearAllMocks()
-    resetProfileStore()
   })
 
   describe('initialization', () => {
@@ -141,64 +133,7 @@ describe('useCurrentProfile', () => {
     })
   })
 
-  describe('store helper functions', () => {
-    it('getCurrentProfileFromStore returns current profile', () => {
-      const profile = mockUserProfileFactory('helper-test-1')
-      const { result } = renderWithProviders()
-
-      expect(getCurrentProfileFromStore()).toBeNull()
-
-      act(() => result.current.setCurrentProfile(profile))
-      expect(getCurrentProfileFromStore()).toEqual(profile)
-    })
-
-    it('setCurrentProfileInStore updates profile state', () => {
-      const profile = mockUserProfileFactory('helper-test-2')
-      const { result } = renderWithProviders()
-
-      act(() => setCurrentProfileInStore(profile))
-      expect(result.current.currentProfile).toEqual(profile)
-      expect(getCurrentProfileFromStore()).toEqual(profile)
-      expect(mockedCookies.set).toHaveBeenCalledWith(
-        CURRENT_PROFILE_KEY_NAME,
-        JSON.stringify(profile),
-      )
-    })
-
-    it('updateProfileIfActiveInStore updates when profile matches', () => {
-      const originalProfile = mockUserProfileFactory('helper-test-3')
-      const updatedProfile = { ...originalProfile, name: 'Updated via helper' }
-      const { result } = renderWithProviders()
-
-      act(() => result.current.setCurrentProfile(originalProfile))
-
-      act(() => updateProfileIfActiveInStore(updatedProfile))
-      expect(result.current.currentProfile).toEqual(updatedProfile)
-      expect(getCurrentProfileFromStore()).toEqual(updatedProfile)
-    })
-
-    it('updateProfileIfActiveInStore does not update when profile does not match', () => {
-      const profile1 = mockUserProfileFactory('helper-test-4')
-      const profile2 = mockUserProfileFactory('helper-test-5')
-      const { result } = renderWithProviders()
-
-      act(() => result.current.setCurrentProfile(profile1))
-
-      act(() => updateProfileIfActiveInStore(profile2))
-      expect(result.current.currentProfile).toEqual(profile1) // Should remain unchanged
-      expect(getCurrentProfileFromStore()).toEqual(profile1)
-    })
-
-    it('helper functions throw error when used without CurrentProfileProvider context', () => {
-      const profile = mockUserProfileFactory('no-context-test')
-
-      expect(() => getCurrentProfileFromStore()).toThrow(MISSING_PROFILE_STORE_ERROR)
-
-      expect(() => setCurrentProfileInStore(profile)).toThrow(MISSING_PROFILE_STORE_ERROR)
-
-      expect(() => updateProfileIfActiveInStore(profile)).toThrow(MISSING_PROFILE_STORE_ERROR)
-    })
-
+  describe('provider error handling', () => {
     it('hook throws error when used without CurrentProfileProvider context', () => {
       expect(() => {
         renderHook(() => useCurrentProfile())

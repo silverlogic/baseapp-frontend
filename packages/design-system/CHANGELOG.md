@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system
 
+## 1.2.12
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the UI settings store — the store is now created fresh per `UISettingsProvider` mount.
+- Remove the unused `getUISettingsFromStore`, `setUISettingsInStore`, `resetSettingsStore`, and `getSettingsStore` exports — `useUISettings()` and the hook setter are unchanged.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.8
+
 ## 1.2.11
 
 ### Patch Changes

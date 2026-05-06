@@ -1,5 +1,15 @@
 # @baseapp-frontend/utils
 
+## 4.0.8
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the cookie store — the store is now created fresh per `CookieProvider` mount. Cross-tree sync between imperative `setCookie`/`removeCookie` callers and `useCookie()` consumers now happens via a new `baseapp:cookie-change` `CustomEvent` instead of a shared module-level reference.
+- Cross-tab sync: `setCookie`/`removeCookie` also post to a same-named `BroadcastChannel`, and `CookieProvider` listens on it. Login / logout / token refresh in one tab now propagate to other open tabs of the same origin without requiring a navigation.
+- Add `broadcastEvent(name, payload?)` and `subscribeToBroadcastEvent(name, callback)` in `@baseapp-frontend/utils/functions/events/broadcastEvent`. `broadcastEvent` emits locally (via `eventEmitter`) and posts on a per-event `BroadcastChannel` so subscribers in other same-origin tabs receive it too. `useEventSubscription` now listens on both, so existing consumers automatically pick up cross-tab events. The interceptor logout paths in `baseAppFetch` and `createAxiosInstance`, and `useLogout` from `@baseapp-frontend/authentication`, now use `broadcastEvent` — logout in one tab triggers the `LOGOUT_EVENT` listeners (e.g., `EventHandler` redirect to `/login`) in every open tab of the same origin.
+- Add `COOKIE_CHANGE_EVENT` constant and `CookieChangeEventDetail` type (exported from `@baseapp-frontend/utils/hooks/useCookie/constants`) for consumers that want to dispatch or listen to cookie changes directly.
+- Remove the internal `getCookieFromStore`, `setCookieInStore`, `removeCookieFromStore`, and `getCookieStore` exports (the public `getCookie`/`setCookie`/`removeCookie` API is unchanged).
+
 ## 4.0.7
 
 ### Patch Changes

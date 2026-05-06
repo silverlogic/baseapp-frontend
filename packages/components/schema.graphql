@@ -349,20 +349,9 @@ type ChatRoomUpdatePayload {
   clientMutationId: String
 }
 
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
+type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface & MentionsInterface {
   created: DateTime!
   modified: DateTime!
-  mentionedProfiles(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection!
   user: User
   profile: Profile
   body: String
@@ -399,6 +388,19 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   """
   hasPerm(perm: String!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   target: CommentsInterface
   pk: Int
 }
@@ -514,20 +516,9 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & ReactionsInterface {
+type ContentPost implements Node & ReactionsInterface & MentionsInterface {
   created: DateTime!
   modified: DateTime!
-  mentionedProfiles(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection!
   isReactionsEnabled: Boolean!
   user: User!
   profile: Profile
@@ -539,6 +530,19 @@ type ContentPost implements Node & ReactionsInterface {
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   myReaction(profileId: ID): Reaction
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   pk: Int
 }
 
@@ -788,21 +792,41 @@ enum Languages {
   pt
 }
 
-type Message implements Node {
+"""
+GraphQL fields exposed on any object type that has mentioned profiles.
+
+Consuming object types (Comment, ContentPost, Message, ...) append this
+interface conditionally:
+
+    if apps.is_installed("baseapp_mentions"):
+        from baseapp_mentions.graphql.interfaces import MentionsInterface
+        interfaces.append(MentionsInterface)
+
+No fields are added to the consuming model — the resolvers query the
+Mention through-table keyed off the consuming object's DocumentId.
+"""
+interface MentionsInterface {
   """The ID of the object"""
   id: ID!
-  created: DateTime!
   mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
     first: Int
     last: Int
-    offset: Int
-    after: String
-    before: String
     q: String
 
     """Ordering"""
     orderBy: String
-  ): ProfileConnection!
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
+}
+
+type Message implements Node & MentionsInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
   content(profileId: ID): String
   user: User
   profile: Profile
@@ -812,6 +836,19 @@ type Message implements Node {
   inReplyTo: Message
   deleted: Boolean!
   extraData: JSONString
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   actionObject: Node
   isRead(profileId: ID): Boolean
 }
@@ -1302,17 +1339,6 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
     orderBy: String
   ): CommentConnection!
   reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
-  commentsCommentMentions(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection!
   ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
   user: User
   activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
@@ -1348,18 +1374,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  chatsMessageMentions(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   contentPosts(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-
-    """Ordering"""
-    orderBy: String
-  ): ContentPostConnection!
-  contentFeedContentpostMentions(
     first: Int
     last: Int
     offset: Int
