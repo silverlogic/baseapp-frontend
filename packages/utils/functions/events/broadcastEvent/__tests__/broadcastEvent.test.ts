@@ -28,7 +28,7 @@ class MockBroadcastChannel {
 }
 
 beforeAll(() => {
-  ;(globalThis as { BroadcastChannel?: typeof MockBroadcastChannel }).BroadcastChannel =
+  ;(globalThis as unknown as { BroadcastChannel?: typeof MockBroadcastChannel }).BroadcastChannel =
     MockBroadcastChannel
 })
 
