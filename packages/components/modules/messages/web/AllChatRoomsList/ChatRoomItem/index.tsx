@@ -7,6 +7,7 @@ import {
   UnarchiveIcon,
   UnreadIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
@@ -145,14 +146,17 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
                   marginX: '8px',
                 }}
               />
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                noWrap
-                sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}
+              <Markdown
+                sx={{
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  color: 'text.secondary',
+                  '& *': { display: 'inline', margin: 0, fontSize: 'inherit' },
+                }}
               >
                 {lastMessage}
-              </Typography>
+              </Markdown>
             </Box>
           ) : (
             <div />

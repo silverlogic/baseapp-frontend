@@ -23,14 +23,18 @@ settings:
   trustPolicy: no-downgrade
 
 catalog:
+  "@mdxeditor/editor": 3.54.0
+  "@mdxeditor/gurx": 1.2.4
+  "@types/mdast": 4.0.4
   "@hookform/resolvers": 5.0.1
+  lexical: 0.35.0
   "@tanstack/react-query": 5.76.1
   "@tanstack/react-query-devtools": 5.76.1
   "@types/js-cookie": 3.0.6
   "@types/lodash": 4.17.7
   "@types/luxon": 3.6.2
   "@types/node": 22.7.2
-  axios: 1.15.0
+  axios: 1.15.2
   jotai: 2.12.4
   js-cookie: 3.0.5
   lodash: 4.18.0
@@ -95,7 +99,7 @@ catalogs:
     "@tailwindcss/typography": 0.5.13
     autoprefixer: 10.4.19
     clsx: ^2.1.1
-    postcss: 8.4.38
+    postcss: 8.5.10
     tailwind-merge: ^3.4.0
     tailwindcss: 3.4.4
 
@@ -163,6 +167,7 @@ catalogs:
     "@types/eslint": ^9.6.1
     "@typescript-eslint/eslint-plugin": ^5.59.11
     "@typescript-eslint/parser": ^5.29.0
+    "@types/react-lazy-load-image-component": "^1.6.3"
     eslint-config-airbnb-typescript: ^17.0.0
     eslint-config-airbnb: ^19.0.4
     eslint-config-next: ^13.4.6
@@ -192,6 +197,9 @@ catalogs:
     color: ^4.2.3
     react-dropzone: ^14.2.3
     react-lazy-load-image-component: ^1.6.2
+    react-markdown: ^9.0.1
+    rehype-raw: ^7.0.0
+    remark-gfm: ^4.0.1
     "@types/color": "^4.2.0"
 
   utils:

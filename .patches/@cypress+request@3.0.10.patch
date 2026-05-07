@@ -1,0 +1,25 @@
+diff --git a/lib/auth.js b/lib/auth.js
+index 0000000..0000001 100644
+--- a/lib/auth.js
++++ b/lib/auth.js
+@@ -1,7 +1,7 @@
+ 'use strict'
+
+ var caseless = require('caseless')
+-var { v4: uuid } = require('uuid')
++var uuid = require('crypto').randomUUID
+ var helpers = require('./helpers')
+
+ var md5 = helpers.md5
+diff --git a/lib/multipart.js b/lib/multipart.js
+index 0000000..0000001 100644
+--- a/lib/multipart.js
++++ b/lib/multipart.js
+@@ -1,6 +1,6 @@
+ 'use strict'
+
+-var { v4: uuid } = require('uuid')
++var uuid = require('crypto').randomUUID
+ var CombinedStream = require('combined-stream')
+ var isstream = require('isstream')
+ var Buffer = require('safe-buffer').Buffer

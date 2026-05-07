@@ -15,7 +15,6 @@ import {
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
-  useNotificationsSubscription,
 } from '../../common'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
@@ -49,12 +48,14 @@ const NotificationsList: FC<NotificationsListProps> = ({
     NotificationsListFragment$key
   >(NotificationsListFragment, me)
 
-  useNotificationsSubscription(me?.id)
-
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
 
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
@@ -67,6 +68,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
           <NotificationItem
             key={`notification-${notification.id}`}
             notification={notification}
+            refetchNotifications={refetchNotifications}
             {...NotificationItemProps}
           />
         </>
@@ -76,6 +78,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <NotificationItem
         key={`notification-${notification.id}`}
         notification={notification}
+        refetchNotifications={refetchNotifications}
         {...NotificationItemProps}
       />
     )
@@ -118,10 +121,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
         />
       </ListContainer>
     )
-  }
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
   }
 
   return (

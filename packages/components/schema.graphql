@@ -181,6 +181,7 @@ type ChatRoomEdge {
 input ChatRoomEditMessageInput {
   id: ID!
   content: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -264,6 +265,7 @@ input ChatRoomSendMessageInput {
   profileId: ID!
   content: String!
   inReplyToId: ID
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -347,7 +349,7 @@ type ChatRoomUpdatePayload {
   clientMutationId: String
 }
 
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
+type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface & MentionsInterface {
   created: DateTime!
   modified: DateTime!
   user: User
@@ -386,6 +388,19 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   """
   hasPerm(perm: String!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   target: CommentsInterface
   pk: Int
 }
@@ -405,6 +420,7 @@ input CommentCreateInput {
   inReplyToId: ID
   profileId: ID
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -488,6 +504,7 @@ enum CommentStatus {
 input CommentUpdateInput {
   id: ID!
   body: String!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -499,7 +516,7 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & ReactionsInterface {
+type ContentPost implements Node & ReactionsInterface & MentionsInterface {
   created: DateTime!
   modified: DateTime!
   isReactionsEnabled: Boolean!
@@ -513,6 +530,19 @@ type ContentPost implements Node & ReactionsInterface {
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   myReaction(profileId: ID): Reaction
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   pk: Int
 }
 
@@ -529,6 +559,7 @@ type ContentPostConnection {
 input ContentPostCreateInput {
   content: String!
   isReactionsEnabled: Boolean!
+  mentionedProfileIds: [ID]
   clientMutationId: String
 }
 
@@ -761,7 +792,38 @@ enum Languages {
   pt
 }
 
-type Message implements Node {
+"""
+GraphQL fields exposed on any object type that has mentioned profiles.
+
+Consuming object types (Comment, ContentPost, Message, ...) append this
+interface conditionally:
+
+    if apps.is_installed("baseapp_mentions"):
+        from baseapp_mentions.graphql.interfaces import MentionsInterface
+        interfaces.append(MentionsInterface)
+
+No fields are added to the consuming model — the resolvers query the
+Mention through-table keyed off the consuming object's DocumentId.
+"""
+interface MentionsInterface {
+  """The ID of the object"""
+  id: ID!
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
+}
+
+type Message implements Node & MentionsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
@@ -774,6 +836,19 @@ type Message implements Node {
   inReplyTo: Message
   deleted: Boolean!
   extraData: JSONString
+  mentionedProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   actionObject: Node
   isRead(profileId: ID): Boolean
 }
@@ -1343,7 +1418,7 @@ type Profile implements Node & PermissionsInterface & PageInterface & FollowsInt
   ): ChatRoomConnection
   unreadMessagesCount: Int
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
   pk: Int
@@ -1786,11 +1861,9 @@ type ReportEdge {
 }
 
 interface ReportsInterface {
-  """The ID of the object"""
-  id: ID!
   reportsCount: GenericScalar
   reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReports: Report
+  myReport: Report
 }
 
 type ReportType implements Node {

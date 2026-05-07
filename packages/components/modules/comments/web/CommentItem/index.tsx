@@ -3,6 +3,7 @@
 import { FC, useRef, useState, useTransition } from 'react'
 
 import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 
 import { Typography } from '@mui/material'
 import Link from 'next/link'
@@ -129,16 +130,7 @@ const CommentItem: FC<CommentItemProps> = ({
       )
 
     return (
-      <Typography
-        variant="body2"
-        sx={{
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'normal',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {comment.body}
-      </Typography>
+      <Markdown sx={{ wordBreak: 'normal', overflowWrap: 'anywhere' }}>{comment.body}</Markdown>
     )
   }
 

@@ -5,6 +5,7 @@ import { NotificationItemRendererProps } from './NotificationItemRenderer/types'
 
 export interface NotificationItemProps {
   notification: NotificationItemFragment$key
+  refetchNotifications?: () => void
   NotificationItemRenderer?: FC<NotificationItemRendererProps>
   NotificationItemRendererProps?: Partial<NotificationItemRendererProps>
 }

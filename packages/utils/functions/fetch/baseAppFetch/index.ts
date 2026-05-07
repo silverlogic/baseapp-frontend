@@ -6,7 +6,7 @@ import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { MinimalProfile } from '../../../types/profile'
-import { eventEmitter } from '../../events'
+import { broadcastEvent } from '../../events'
 import { getExpoConstant } from '../../expo'
 import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
@@ -146,9 +146,7 @@ export const baseAppFetch: BaseAppFetch = async (
           refreshKeyName,
         })
       } catch (error) {
-        if (eventEmitter.listenerCount(LOGOUT_EVENT)) {
-          eventEmitter.emit(LOGOUT_EVENT)
-        }
+        broadcastEvent(LOGOUT_EVENT)
         return Promise.reject(error)
       }
     }

@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef } from 'react'
+import { forwardRef, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
@@ -14,7 +14,11 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../__shared__/common'
-import { SocialInput as DefaultSocialInput } from '../../../__shared__/web'
+import {
+  SocialInput as DefaultSocialInput,
+  useFormMentions,
+  withMentionsInSocialInputProps,
+} from '../../../__shared__/web'
 import { useCommentCreateMutation, useCommentReply } from '../../common'
 import { CommentCreateProps } from './types'
 
@@ -28,10 +32,14 @@ let nextClientMutationId = 0
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  *
- * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and `form` setup for creating comments.
+ * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and
+ * `form` setup for creating comments.
  *
  * It integrates the `useCommentCreateMutation` mutation for submitting new comments and leverages `react-hook-form` and Zod for form validation.
  * Additionally, it supports replying to existing comments by utilizing the `useCommentReply` context to track the comment being replied to.
+ *
+ * To enable @-mention tagging, pass `mentionsController` from a consumer-side hook (e.g.
+ * `useProfileMentionSearch()`). The controller owns search state, debouncing, and pagination.
  *
  * ### Extending the Component
  * If you need to customize the form validation schema or the GraphQL query, this component serves as a base.
@@ -75,7 +83,14 @@ let nextClientMutationId = 0
  */
 const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
   (
-    { targetObjectId, autoFocusInput, SocialInput = DefaultSocialInput, SocialInputProps = {} },
+    {
+      targetObjectId,
+      autoFocusInput,
+      SocialInput = DefaultSocialInput,
+      SocialInputProps = {},
+      mentionsController,
+      disableMentions = true,
+    },
     ref,
   ) => {
     const { currentProfile } = useCurrentProfile()
@@ -86,7 +101,19 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
     })
+    const { setValue } = form
     const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
+
+    const { mentions, isMentionsActive } = useFormMentions<SocialUpsertForm>({
+      setValue,
+      controller: mentionsController,
+      disabled: disableMentions,
+    })
+
+    const mergedSocialInputProps = useMemo(
+      () => withMentionsInSocialInputProps(SocialInputProps, mentions),
+      [SocialInputProps, mentions],
+    )
 
     const onSubmit = (data: SocialUpsertForm) => {
       if (isMutationInFlight) return
@@ -106,6 +133,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
             targetObjectId,
             inReplyToId: commentReply.inReplyToId,
             profileId: currentProfile?.id,
+            ...(isMentionsActive && { mentionedProfileIds: data.mentionedProfileIds }),
             clientMutationId,
           },
           connections: [connectionID],
@@ -153,7 +181,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         SubmitActionsProps={{
           ariaLabel: 'create comment',
         }}
-        {...SocialInputProps}
+        {...mergedSocialInputProps}
       />
     )
   },

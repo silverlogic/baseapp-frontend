@@ -43,11 +43,21 @@
     ]
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=22.11.0"
   },
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.28.2",
   "resolutions": {
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@xmldom/xmldom": ">=0.9.10",
+      "postcss": ">=8.5.10",
+      "uuid": ">=14.0.0"
+    },
+    "patchedDependencies": {
+      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
+    }
   }
 }

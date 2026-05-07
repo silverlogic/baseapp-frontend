@@ -1,3 +1,1 @@
-- `__package_name__` package update - `v __package_version__`
-  - **changelog_info**
-  - **changelog_info**
+

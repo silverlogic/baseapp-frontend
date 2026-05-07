@@ -7,8 +7,17 @@ import { Controller } from 'react-hook-form'
 import useDebounce from '../../../hooks/useDebounce'
 import type { DebouncedFunction, WithControllerProps } from './types'
 
-function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceTime = 500 } = {}) {
-  return ({ name, control, helperText, ...props }: WithControllerProps<T>) => {
+function withController<T>(
+  Component: FC<T>,
+  { shouldDebounce: factoryShouldDebounce = false, debounceTime = 500 } = {},
+) {
+  return ({
+    name,
+    control,
+    helperText,
+    shouldDebounce: runtimeShouldDebounce,
+    ...props
+  }: WithControllerProps<T>) => {
     if (control) {
       const { onChange, onBlur, ...restOfTheProps } = props
       const onChangeWithFallback = onChange ?? (() => {})
@@ -18,6 +27,7 @@ function withController<T>(Component: FC<T>, { shouldDebounce = false, debounceT
           debounceTime,
         },
       )
+      const shouldDebounce = runtimeShouldDebounce ?? factoryShouldDebounce
 
       return (
         <Controller

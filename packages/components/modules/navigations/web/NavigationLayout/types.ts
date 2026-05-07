@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, ReactNode } from 'react'
 
 import { PartialLogoProps } from '@baseapp-frontend/design-system/components/web/logos'
 
@@ -18,6 +18,7 @@ export interface NavigationLayoutProps extends PropsWithChildren {
   LogoProps?: PartialLogoProps
   AccountMenu?: FC<AccountMenuProps>
   AccountMenuProps?: Partial<AccountMenuProps>
+  HeaderCenterComponent?: ReactNode
   NavAccountSection?: FC<NavAccountSectionProps> | null
   NavAccountSectionProps?: Partial<NavAccountSectionProps>
   NotificationsPopover?: FC<NotificationsPopoverProps>

@@ -4,7 +4,6 @@ import { FC, Suspense } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
-import { Box } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
@@ -53,9 +52,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
       />
       <ChatBodyContainer>
         <MessagesList roomRef={chatRoom} {...MessagesListProps} />
-        <Box paddingRight={2}>
-          <SendMessage roomId={roomId} {...SendMessageProps} />
-        </Box>
+        <SendMessage roomId={roomId} {...SendMessageProps} />
       </ChatBodyContainer>
     </ChatRoomContainer>
   )

@@ -65,7 +65,7 @@ const BaseComments: FC<BaseCommentsProps> = ({
   }
 
   return (
-    <div className="grid">
+    <div className="grid pb-4">
       <CommentsList
         target={target}
         subscriptionsEnabled={subscriptionsEnabledBoolean}

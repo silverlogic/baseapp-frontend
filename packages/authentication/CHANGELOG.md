@@ -1,5 +1,22 @@
 # @baseapp-frontend/authentication
 
+## 5.1.2
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the current-profile store — the store is now created fresh per `CurrentProfileProvider` mount.
+- `useJWTUser` now reads the access token from `useCookie()` context instead of `getToken()`, so first-paint user data on logged-in renders flows through the seed cookie passed by the dynamic-layout. A `<CookieProvider>` ancestor is required (already provided by the template's `RootLayout`).
+- Remove the unused `getCurrentProfileFromStore`, `setCurrentProfileInStore`, `updateProfileIfActiveInStore`, `resetProfileStore`, and `getProfileStore` exports — `useCurrentProfile()` and the hook setters are unchanged.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.8
+
+## 5.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
 ## 5.1.0
 
 ### Minor Changes

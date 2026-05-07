@@ -1,5 +1,78 @@
 # @baseapp-frontend/components
 
+## 1.5.25
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.2
+  - @baseapp-frontend/design-system@1.2.12
+  - @baseapp-frontend/utils@4.0.8
+  - @baseapp-frontend/graphql@1.4.1
+
+## 1.5.24
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.0
+
+## 1.5.23
+
+### Patch Changes
+
+- Add `useFormMentions` hook and `withMentionsInSocialInputProps` helper for wiring `MarkdownEditorField` mentions into `SocialInput`-based forms.
+- Comments, messages, and content-feed mutations now thread `mentionedProfileIds` through their submit payloads.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.11
+  - @baseapp-frontend/utils@4.0.7
+  - @baseapp-frontend/authentication@5.1.1
+  - @baseapp-frontend/graphql@1.3.10
+
+## 1.5.22
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.10
+
+## 1.5.21
+
+### Patch Changes
+
+- Add Extra Centered Header component
+
+## 1.5.20
+
+### Patch Changes
+
+- Make notifications subscription customizable
+- Fix duplicate Older divider when mark as read
+
+## 1.5.19
+
+### Patch Changes
+
+- Use `Mardown` componentes on `comments`, `messages` and `content-feed` modules.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.9
+
+## 1.5.18
+
+### Patch Changes
+
+- Export MarkAllAsReadButton and EmptyState
+
+## 1.5.17
+
+### Patch Changes
+
+- `ActionsOverlay` wont open if there is no option available (e.g. unlogged users)
+- `CommentsList` returns `EmptyState` when no comments exist.
+- `SocialInput` have the `mode` set to `plain-text`.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.8
+
 ## 1.5.16
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 import { bgBlur } from '@baseapp-frontend/design-system/styles/web'
 
-import { AppBar } from '@mui/material'
+import { AppBar, Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import { HEADER_HEIGHT, NAV_WIDTH } from '../constants'
@@ -39,3 +39,11 @@ export const CustomAppBar = styled(AppBar)<CustomAppBarProps>(({ theme, themeLay
     },
   }
 })
+
+export const HeaderCenterContainer = styled(Box)(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: 1,
+  minWidth: 0,
+}))

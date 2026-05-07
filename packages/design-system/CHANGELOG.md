@@ -1,10 +1,50 @@
 # @baseapp-frontend/design-system
 
+## 1.2.12
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the UI settings store — the store is now created fresh per `UISettingsProvider` mount.
+- Remove the unused `getUISettingsFromStore`, `setUISettingsInStore`, `resetSettingsStore`, and `getSettingsStore` exports — `useUISettings()` and the hook setter are unchanged.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.8
+
+## 1.2.11
+
+### Patch Changes
+
+- Add `@`-mention support to `MarkdownEditorField` via the new `mentions` prop (`MentionsConfig` — active arm with a `MentionsSearchController`, or `{ disabled: true }`).
+- `Markdown` component now renders persisted `[@name](mention://id)` links as a `MentionChip`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
+## 1.2.10
+
+### Patch Changes
+
+- fix identation for bullet and numbered lists under MarkdownEditorField
+
+## 1.2.9
+
+### Patch Changes
+
+- Creates the `Markdown` component to translate markdown content created by the `MarkdownEditorField`.
+- `MarkdownEditorField` has now `maxHeight` and `labelBackgroundColor` props.
+- `SocialTextField` now defaults `mode` to `rich-text`.
+- Create `LazyLoadImage` component to be used on the `Markdown` component.
+
+## 1.2.8
+
+### Patch Changes
+
+- `SocialTextField` conditionally renders `MarkdownEditorField`or `TextareaField` depending on `mode` prop.
+- Create `MarkdownEditorField` as a rich text field option.
+
 ## 1.2.7
 
 ### Patch Changes
 
-- Make comments more flexibe
+- Make comments more flexible/customizable.
 
 ## 1.2.6
 

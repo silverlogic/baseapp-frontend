@@ -7,12 +7,14 @@ import { Virtuoso } from 'react-virtuoso'
 
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
 import DefaultCommentItem from '../CommentItem'
+import DefaultEmptyState from './EmptyState'
 import type { CommentsListProps } from './types'
 
 const CommentsList: FC<CommentsListProps> = ({
   target: targetRef,
   subscriptionsEnabled,
   onReplyClick,
+  EmptyState = DefaultEmptyState,
   CommentItem = DefaultCommentItem,
   CommentItemProps,
   VirtuosoProps,
@@ -23,6 +25,10 @@ const CommentsList: FC<CommentsListProps> = ({
     () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [target?.comments?.edges],
   )
+
+  if (comments.length === 0) {
+    return <EmptyState />
+  }
 
   const renderCommentItem = (comment: any) => {
     if (!comment) return null

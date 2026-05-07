@@ -12,4 +12,5 @@ export interface CommentsListProps {
   CommentItem?: FC<CommentItemProps>
   CommentItemProps?: Partial<CommentItemProps>
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
+  EmptyState?: FC
 }
