@@ -42,9 +42,13 @@ export const setCookie = (
   }
 }
 
-export const removeCookie = (key: string) => {
+export const removeCookie = (key: string, options?: SetCookieOptions) => {
   try {
-    ClientCookies.remove(key)
+    if (options) {
+      ClientCookies.remove(key, options)
+    } else {
+      ClientCookies.remove(key)
+    }
     dispatchCookieChange({ type: 'remove', key })
   } catch (error) {
     console.error(error)
