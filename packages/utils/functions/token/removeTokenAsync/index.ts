@@ -11,7 +11,11 @@ export const removeTokenAsync = async (key: string) => {
       await deleteItemAsync(key)
     } else {
       const cookieDomain = process.env.NEXT_PUBLIC_AUTH_COOKIE_DOMAIN
-      removeCookie(key, cookieDomain ? { domain: cookieDomain } : undefined)
+      if (cookieDomain) {
+        removeCookie(key, { domain: cookieDomain })
+      } else {
+        removeCookie(key)
+      }
     }
   } catch (error) {
     console.error(`Failed to set token for ${key}:`, error)
