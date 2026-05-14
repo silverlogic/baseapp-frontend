@@ -50,7 +50,10 @@ export const setTokenAsync = async (key: string, value: string, config?: CookieA
     if (isMobilePlatform()) {
       await setItemAsync(key, value)
     } else {
-      setCookie(key, value, config)
+      const cookieDomain = process.env.NEXT_PUBLIC_AUTH_COOKIE_DOMAIN
+      const mergedConfig =
+        cookieDomain && !config?.domain ? { ...config, domain: cookieDomain } : config
+      setCookie(key, value, mergedConfig)
     }
   } catch (error) {
     console.error(`Failed to set token for ${key}:`, error)

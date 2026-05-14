@@ -10,7 +10,12 @@ export const removeTokenAsync = async (key: string) => {
     if (isMobilePlatform()) {
       await deleteItemAsync(key)
     } else {
-      removeCookie(key)
+      const cookieDomain = process.env.NEXT_PUBLIC_AUTH_COOKIE_DOMAIN
+      if (cookieDomain) {
+        removeCookie(key, { domain: cookieDomain })
+      } else {
+        removeCookie(key)
+      }
     }
   } catch (error) {
     console.error(`Failed to set token for ${key}:`, error)
