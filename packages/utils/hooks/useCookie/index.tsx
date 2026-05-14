@@ -9,6 +9,7 @@ import {
   type CookieChangeEventDetail,
   MISSING_COOKIE_STORE_ERROR,
 } from './constants'
+import { subscribeToCookieChanges } from './emitter'
 import { initializeCookieStore } from './store'
 import type { CookieProviderProps, CookieState } from './types'
 
@@ -27,8 +28,6 @@ export const CookieProvider = <T extends Record<string, any> = {}>({
   const store = storeRef.current
 
   useEffect(() => {
-    if (typeof window === 'undefined') return undefined
-
     const apply = (detail: CookieChangeEventDetail) => {
       const state = store.getState()
       if (detail.type === 'set') {
@@ -38,24 +37,40 @@ export const CookieProvider = <T extends Record<string, any> = {}>({
       }
     }
 
-    // window for the dispatching tab; BroadcastChannel for other tabs.
-    const sameTabHandler = (event: Event) => {
-      const { detail } = event as CustomEvent<CookieChangeEventDetail>
-      if (detail) apply(detail)
-    }
-    window.addEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+    // Always subscribe to the DOM-free emitter: this is the only sync path on
+    // React Native (no `window.dispatchEvent`/`BroadcastChannel`) and a no-op
+    // on web when nothing emits through it.
+    const unsubscribe = subscribeToCookieChanges(apply)
 
+    // React Native exposes a global `window` but no DOM event APIs, so we check
+    // the method itself rather than the object's existence.
+    const hasWindowEvents =
+      typeof window !== 'undefined' && typeof window.addEventListener === 'function'
+
+    let removeWindowListener: (() => void) | undefined
     let channel: BroadcastChannel | undefined
-    if (typeof BroadcastChannel !== 'undefined') {
-      channel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
-      channel.onmessage = (event) => {
-        const detail = event.data as CookieChangeEventDetail | undefined
+
+    if (hasWindowEvents) {
+      // window for the dispatching tab; BroadcastChannel for other tabs.
+      const sameTabHandler = (event: Event) => {
+        const { detail } = event as CustomEvent<CookieChangeEventDetail>
         if (detail) apply(detail)
+      }
+      window.addEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+      removeWindowListener = () => window.removeEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+
+      if (typeof BroadcastChannel !== 'undefined') {
+        channel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
+        channel.onmessage = (event) => {
+          const detail = event.data as CookieChangeEventDetail | undefined
+          if (detail) apply(detail)
+        }
       }
     }
 
     return () => {
-      window.removeEventListener(COOKIE_CHANGE_EVENT, sameTabHandler)
+      unsubscribe()
+      removeWindowListener?.()
       channel?.close()
     }
   }, [store])
