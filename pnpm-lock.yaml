@@ -484,8 +484,10 @@ overrides:
   wrap-ansi: 7.0.0
   string-width: 4.1.0
   '@xmldom/xmldom': '>=0.9.10'
+  brace-expansion@^5.0.0: '>=5.0.6'
   postcss: '>=8.5.10'
   uuid: '>=14.0.0'
+  ws@^8.0.0: '>=8.20.1'
 
 patchedDependencies:
   '@cypress/request@3.0.10':
@@ -1287,10 +1289,10 @@ importers:
         version: 16.11.0
       graphql-ws:
         specifier: catalog:graphql
-        version: 6.0.5(graphql@16.11.0)(ws@8.20.0)
+        version: 6.0.5(graphql@16.11.0)(ws@8.20.1)
       isomorphic-ws:
         specifier: catalog:graphql
-        version: 5.0.0(ws@8.20.0)
+        version: 5.0.0(ws@8.20.1)
       js-cookie:
         specifier: 'catalog:'
         version: 3.0.5
@@ -6257,8 +6259,8 @@ packages:
   brace-expansion@2.1.0:
     resolution: {integrity: sha512-TN1kCZAgdgweJhWWpgKYrQaMNHcDULHkWwQIspdtjV4Y5aurRdZpjAqn6yX3FPqTA9ngHCc4hJxMAMgGfve85w==}
 
-  brace-expansion@5.0.5:
-    resolution: {integrity: sha512-VZznLgtwhn+Mact9tfiwx64fA9erHH/MCXEUfB/0bX/6Fz6ny5EGTXYltMocqg4xFAQZtnO3DHWWXi8RiuN7cQ==}
+  brace-expansion@5.0.6:
+    resolution: {integrity: sha512-kLpxurY4Z4r9sgMsyG0Z9uzsBlgiU/EFKhj/h91/8yHu0edo7XuixOIH3VcJ8kkxs6/jPzoI6U9Vj3WqbMQ94g==}
     engines: {node: 18 || 20 || >=22}
 
   braces@3.0.3:
@@ -7973,7 +7975,7 @@ packages:
       crossws: ~0.3
       graphql: ^15.10.1 || ^16
       uWebSockets.js: ^20
-      ws: ^8
+      ws: '>=8.20.1'
     peerDependenciesMeta:
       '@fastify/websocket':
         optional: true
@@ -8554,7 +8556,7 @@ packages:
   isomorphic-ws@5.0.0:
     resolution: {integrity: sha512-muId7Zzn9ywDsyXgTIafTry2sV3nySZeUDe6YedVd1Hvuuep5AsIlqK+XefWpYTyJG5e503F2xIuT2lcU6rCSw==}
     peerDependencies:
-      ws: '*'
+      ws: '>=8.20.1'
 
   isomorphic.js@0.2.5:
     resolution: {integrity: sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw==}
@@ -12021,8 +12023,8 @@ packages:
       utf-8-validate:
         optional: true
 
-  ws@8.20.0:
-    resolution: {integrity: sha512-sAt8BhgNbzCtgGbt2OxmpuryO63ZoDk/sqaB/znQm94T4fCEsy/yV+7CdC1kJhOU9lboAEU7R3kquuycDoibVA==}
+  ws@8.20.1:
+    resolution: {integrity: sha512-It4dO0K5v//JtTXuPkfEOaI3uUN87iYPnqo/ZzqCoG3g8uhA66QUMs/SrM0YK7/NAu+r4LMh/9dq2A7k+rHs+w==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -13962,7 +13964,7 @@ snapshots:
       terminal-link: 2.1.1
       toqr: 0.1.1
       wrap-ansi: 7.0.0
-      ws: 8.20.0
+      ws: 8.20.1
       zod: 3.25.76
     optionalDependencies:
       expo-router: 5.0.7(065b7292062ad3db5704cd3977b4ddf9)
@@ -16412,7 +16414,7 @@ snapshots:
       recast: 0.23.11
       semver: 7.7.4
       util: 0.12.5
-      ws: 8.20.0
+      ws: 8.20.1
     optionalDependencies:
       prettier: 3.8.3
     transitivePeerDependencies:
@@ -17853,7 +17855,7 @@ snapshots:
     dependencies:
       balanced-match: 1.0.2
 
-  brace-expansion@5.0.5:
+  brace-expansion@5.0.6:
     dependencies:
       balanced-match: 4.0.4
 
@@ -19904,11 +19906,11 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-ws@6.0.5(graphql@16.11.0)(ws@8.20.0):
+  graphql-ws@6.0.5(graphql@16.11.0)(ws@8.20.1):
     dependencies:
       graphql: 16.11.0
     optionalDependencies:
-      ws: 8.20.0
+      ws: 8.20.1
 
   graphql@14.7.0:
     dependencies:
@@ -20491,9 +20493,9 @@ snapshots:
 
   isobject@3.0.1: {}
 
-  isomorphic-ws@5.0.0(ws@8.20.0):
+  isomorphic-ws@5.0.0(ws@8.20.1):
     dependencies:
-      ws: 8.20.0
+      ws: 8.20.1
 
   isomorphic.js@0.2.5: {}
 
@@ -21038,7 +21040,7 @@ snapshots:
       whatwg-encoding: 2.0.0
       whatwg-mimetype: 3.0.0
       whatwg-url: 11.0.0
-      ws: 8.20.0
+      ws: 8.20.1
       xml-name-validator: 4.0.0
     transitivePeerDependencies:
       - bufferutil
@@ -22274,7 +22276,7 @@ snapshots:
 
   minimatch@10.2.5:
     dependencies:
-      brace-expansion: 5.0.5
+      brace-expansion: 5.0.6
 
   minimatch@3.1.5:
     dependencies:
@@ -24811,7 +24813,7 @@ snapshots:
       sockjs: 0.3.24
       spdy: 4.0.2
       webpack-dev-middleware: 5.3.4(webpack@5.93.0)
-      ws: 8.20.0
+      ws: 8.20.1
     optionalDependencies:
       webpack: 5.93.0(esbuild@0.24.2)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
@@ -24852,7 +24854,7 @@ snapshots:
       sockjs: 0.3.24
       spdy: 4.0.2
       webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.93.0)
-      ws: 8.20.0
+      ws: 8.20.1
     optionalDependencies:
       webpack: 5.93.0(esbuild@0.24.2)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.93.0)
@@ -25047,7 +25049,7 @@ snapshots:
 
   ws@7.5.10: {}
 
-  ws@8.20.0: {}
+  ws@8.20.1: {}
 
   wsl-utils@0.1.0:
     dependencies:
