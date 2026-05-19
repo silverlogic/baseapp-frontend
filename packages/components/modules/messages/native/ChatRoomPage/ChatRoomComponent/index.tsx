@@ -23,7 +23,7 @@ import ChatRoomOptions from '../ChatRoomOptions'
 import MessagesList from '../MessagesList'
 import { ChatRoomPageComponentProps } from './type'
 
-const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
+const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId, hiddenOptions }) => {
   const router = useRouter()
   const [visible, setVisible] = useState(false)
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
@@ -120,6 +120,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
         handleChatDetails={handleChatDetails}
         handleGoToProfile={() => console.log('Not implemented.')}
         handleDeleteChat={handleDeleteChat}
+        hiddenOptions={hiddenOptions}
       />
     </>
   )

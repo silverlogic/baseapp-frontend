@@ -5,8 +5,11 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { View } from 'react-native'
 import { IconButton, Menu } from 'react-native-paper'
 
+import { CHAT_ROOM_OPTION_VALUES } from './constants'
+import type { ChatRoomOptionValue } from './constants'
 import { createStyles } from './styles'
 import { ChatRoomOptionsProps } from './type'
+import { getVisibleOptions } from './utils'
 
 const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   visible,
@@ -18,6 +21,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   handleDeleteChat,
   isArchiveMutationInFlight,
   isGroup = false,
+  hiddenOptions = [],
 }) => {
   const openMenu = () => setVisible(true)
   const closeMenu = () => setVisible(false)
@@ -25,6 +29,59 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   const styles = createStyles(theme)
 
   const chatOrGroup = isGroup ? 'Group' : 'Chat'
+
+  const renderOption = (value: ChatRoomOptionValue) => {
+    switch (value) {
+      case CHAT_ROOM_OPTION_VALUES.archive:
+        return (
+          <Menu.Item
+            key={value}
+            onPress={() => {
+              closeMenu()
+              handleArchiveChat()
+            }}
+            disabled={isArchiveMutationInFlight}
+            title={isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
+          />
+        )
+      case CHAT_ROOM_OPTION_VALUES.chatDetails:
+        return (
+          <Menu.Item
+            key={value}
+            onPress={() => {
+              closeMenu()
+              handleChatDetails()
+            }}
+            title={`${chatOrGroup} Details`}
+          />
+        )
+      case CHAT_ROOM_OPTION_VALUES.goToProfile:
+        return (
+          <Menu.Item
+            key={value}
+            onPress={() => {
+              closeMenu()
+              handleGoToProfile()
+            }}
+            title="Go to Profile"
+          />
+        )
+      case CHAT_ROOM_OPTION_VALUES.delete:
+        return (
+          <Menu.Item
+            key={value}
+            onPress={() => {
+              closeMenu()
+              handleDeleteChat()
+            }}
+            title={isGroup ? 'Leave Group' : 'Delete Chat'}
+            titleStyle={styles.deleteTitleStyle}
+          />
+        )
+      default:
+        return null
+    }
+  }
 
   return (
     <View>
@@ -40,39 +97,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
         contentStyle={styles.menuContentStyle}
         style={styles.menuStyle}
       >
-        <Menu.Item
-          onPress={() => {
-            closeMenu()
-            handleArchiveChat()
-          }}
-          disabled={isArchiveMutationInFlight}
-          title={isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
-        />
-        {/* TODO: Not implemented yet */}
-        <Menu.Item
-          onPress={() => {
-            closeMenu()
-            handleChatDetails()
-          }}
-          title={`${chatOrGroup} Details`}
-        />
-        {!isGroup && (
-          <Menu.Item
-            onPress={() => {
-              closeMenu()
-              handleGoToProfile()
-            }}
-            title="Go to Profile"
-          />
-        )}
-        <Menu.Item
-          onPress={() => {
-            closeMenu()
-            handleDeleteChat()
-          }}
-          title={isGroup ? 'Leave Group' : 'Delete Chat'}
-          titleStyle={styles.deleteTitleStyle}
-        />
+        {getVisibleOptions({ hiddenOptions, isGroup }).map(renderOption)}
       </Menu>
     </View>
   )

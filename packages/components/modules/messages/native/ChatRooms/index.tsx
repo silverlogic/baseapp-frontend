@@ -27,8 +27,17 @@ import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from '../RoomsList/RoomsListComponent
 import { ChatTabValues } from '../RoomsList/RoomsListComponent/types'
 import { useRoomListSubscription } from '../graphql/subscriptions/useRoomListSubscription'
 import { createStyles } from './styles'
+import { ChatRoomsProps } from './types'
+import { getVisibleTabs } from './utils'
 
-const ChatRooms: FC = () => {
+const TAB_ARIA_LABEL: Record<ChatTabValues, string> = {
+  [CHAT_TAB_VALUES.active]: 'Active messages tab',
+  [CHAT_TAB_VALUES.unread]: 'Unread messages tab',
+  [CHAT_TAB_VALUES.groups]: 'Groups messages tab',
+  [CHAT_TAB_VALUES.archived]: 'Archived messages tab',
+}
+
+const ChatRooms: FC<ChatRoomsProps> = ({ hiddenTabs = [], showNewChatButton = true }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   const { control, watch, setValue, reset } = useForm<SearchInputFormValues>({
@@ -91,39 +100,27 @@ const ChatRooms: FC = () => {
         />
 
         <Tabs value={selectedTab} onChange={handleChange} style={styles.tabs}>
-          <Tab
-            label={CHAT_TAB_LABEL.active}
-            value={CHAT_TAB_VALUES.active}
-            aria-label="Active messages tab"
-          />
-          <Tab
-            label={CHAT_TAB_LABEL.unread}
-            value={CHAT_TAB_VALUES.unread}
-            aria-label="Unread messages tab"
-          />
-          <Tab
-            label={CHAT_TAB_LABEL.groups}
-            value={CHAT_TAB_VALUES.groups}
-            aria-label="Groups messages tab"
-          />
-          <Tab
-            label={CHAT_TAB_LABEL.archived}
-            value={CHAT_TAB_VALUES.archived}
-            aria-label="Archived messages tab"
-          />
+          {getVisibleTabs(hiddenTabs).map((value) => (
+            <Tab
+              key={value}
+              label={CHAT_TAB_LABEL[value]}
+              value={value}
+              aria-label={TAB_ARIA_LABEL[value]}
+            />
+          ))}
         </Tabs>
         <RoomsList
           targetRef={chatRoomQueryData}
           searchParam={searchParam}
           selectedTab={selectedTab}
         />
-        <NewChatButton isGroup={selectedTab === CHAT_TAB_VALUES.groups} />
+        {showNewChatButton && <NewChatButton isGroup={selectedTab === CHAT_TAB_VALUES.groups} />}
       </View>
     </PageViewWithHeader>
   )
 }
 
-const SuspendedChatRooms = () => (
+const SuspendedChatRooms: FC<ChatRoomsProps> = (props) => (
   <Suspense
     fallback={
       <View style={{ flex: 1 }}>
@@ -131,7 +128,7 @@ const SuspendedChatRooms = () => (
       </View>
     }
   >
-    <ChatRooms />
+    <ChatRooms {...props} />
   </Suspense>
 )
 

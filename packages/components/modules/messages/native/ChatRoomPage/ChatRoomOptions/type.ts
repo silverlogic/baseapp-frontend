@@ -1,3 +1,5 @@
+import type { ChatRoomOptionValue } from './constants'
+
 export type ChatRoomOptionsProps = {
   handleArchiveChat: () => void
   handleChatDetails: () => void
@@ -8,4 +10,5 @@ export type ChatRoomOptionsProps = {
   isArchiveMutationInFlight: boolean
   visible: boolean
   setVisible: (visible: boolean) => void
+  hiddenOptions?: ChatRoomOptionValue[]
 }
