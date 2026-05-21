@@ -26,6 +26,7 @@ import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
 import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from './constants'
 import { Header, MainContainer } from './styled'
 import { AllChatRoomsListProps, ChatRoomNode, ChatTabValues } from './types'
+import { getVisibleTabs } from './utils'
 
 const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   targetRef,
@@ -36,7 +37,10 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   ChatRoomItemProps = {},
   EmptyChatRoomsState = DefaultEmptyChatRoomsState,
   VirtuosoProps = {},
+  hiddenTabs = [],
+  showNewChatButton = true,
 }) => {
+  const visibleTabs = useMemo(() => getVisibleTabs({ hiddenTabs }), [hiddenTabs])
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
   const [renderList, setRenderList] = useState<boolean>(true)
 
@@ -180,14 +184,16 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           <Typography variant="h4" component="span">
             Messages
           </Typography>
-          <Button
-            variant="contained"
-            color="inherit"
-            startIcon={<Iconify icon="mingcute:add-line" />}
-            onClick={onHeaderClick}
-          >
-            New
-          </Button>
+          {showNewChatButton && (
+            <Button
+              variant="contained"
+              color="inherit"
+              startIcon={<Iconify icon="mingcute:add-line" />}
+              onClick={onHeaderClick}
+            >
+              New
+            </Button>
+          )}
         </Box>
       </Header>
       <MainContainer>
@@ -227,10 +233,9 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
             paddingTop: 2,
           }}
         >
-          <Tab label={renderTabLabel(CHAT_TAB_VALUES.active)} value={CHAT_TAB_VALUES.active} />
-          <Tab label={renderTabLabel(CHAT_TAB_VALUES.unread)} value={CHAT_TAB_VALUES.unread} />
-          <Tab label={renderTabLabel(CHAT_TAB_VALUES.groups)} value={CHAT_TAB_VALUES.groups} />
-          <Tab label={renderTabLabel(CHAT_TAB_VALUES.archived)} value={CHAT_TAB_VALUES.archived} />
+          {visibleTabs.map((value) => (
+            <Tab key={value} label={renderTabLabel(value)} value={value} />
+          ))}
         </Tabs>
         {renderListContent()}
         {renderList && (

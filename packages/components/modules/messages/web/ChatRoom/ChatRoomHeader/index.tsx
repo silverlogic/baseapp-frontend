@@ -30,6 +30,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   onDisplayGroupDetailsClicked,
   onDisplayProfileSummaryClicked,
   roomId,
+  hiddenOptions,
 }) => {
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
@@ -142,6 +143,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
                   popover.onClose()
                   onDisplayProfileSummaryClicked()
                 }}
+                hiddenOptions={hiddenOptions}
               />
             </Popover>
           </Box>

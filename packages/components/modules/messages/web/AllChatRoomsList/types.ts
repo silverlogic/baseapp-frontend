@@ -14,6 +14,8 @@ type ChatRooms = NonNullable<RoomsListFragment$data['chatRooms']>
 type ChatRoomsEdges = ChatRooms['edges']
 export type ChatRoomNode = NonNullable<ChatRoomsEdges[number]>['node']
 
+export type ChatTabValues = ValueOf<typeof CHAT_TAB_VALUES>
+
 export interface AllChatRoomsListProps {
   targetRef: ChatRoomsQuery$data
   onHeaderClick: () => void
@@ -23,6 +25,6 @@ export interface AllChatRoomsListProps {
   ChatRoomItemProps?: Partial<ChatRoomItemProps>
   EmptyChatRoomsState?: FC
   VirtuosoProps?: Partial<VirtuosoProps<any, any>>
+  hiddenTabs?: ChatTabValues[]
+  showNewChatButton?: boolean
 }
-
-export type ChatTabValues = ValueOf<typeof CHAT_TAB_VALUES>

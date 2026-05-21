@@ -23,6 +23,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
   SendMessageProps = {},
   onDisplayGroupDetailsClicked,
   onDisplayProfileSummaryClicked,
+  ChatRoomHeaderProps = {},
 }) => {
   // TODO: pre load this query and instead of lazyload
   const { chatRoom } = useLazyLoadQuery<ChatRoomQueryType>(
@@ -50,6 +51,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
         onDisplayGroupDetailsClicked={onDisplayGroupDetailsClicked}
         onDisplayProfileSummaryClicked={onDisplayProfileSummaryClicked}
         roomId={roomId}
+        {...ChatRoomHeaderProps}
       />
       <ChatBodyContainer>
         <MessagesList roomRef={chatRoom} {...MessagesListProps} />

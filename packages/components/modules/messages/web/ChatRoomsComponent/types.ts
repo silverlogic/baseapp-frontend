@@ -9,6 +9,7 @@ import { ChatRoomsQuery$data } from '../../../../__generated__/ChatRoomsQuery.gr
 import { LEFT_PANEL_CONTENT } from '../../common/context/useChatRoom/constants'
 import { AllChatRoomsListProps } from '../AllChatRoomsList/types'
 import { ChatCreateProps } from '../ChatCreate/types'
+import { ChatRoomProps } from '../ChatRoom/types'
 import { GroupChatCreateProps } from '../GroupChatCreate/types'
 import { GroupChatDetailsProps } from '../GroupChatDetails/types'
 import { GroupChatEditProps } from '../GroupChatEdit/types'
@@ -35,4 +36,5 @@ export interface ChatRoomsComponentProps {
   ChatCreateComponentProps?: Partial<ChatCreateProps>
   ProfileSummaryComponent?: FC<ProfileSummaryProps>
   ProfileSummaryComponentProps?: Partial<ProfileSummaryProps>
+  ChatRoomProps?: Partial<ChatRoomProps>
 }

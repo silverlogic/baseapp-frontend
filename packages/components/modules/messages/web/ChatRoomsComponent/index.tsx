@@ -34,6 +34,7 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   ChatCreateComponent = DefaultChatCreate,
   ChatCreateComponentProps = {},
   ProfileSummaryComponent = DefaultProfileSummary,
+  ChatRoomProps = {},
 }) => {
   const isUpToMd = useResponsive('up', 'md')
 
@@ -136,6 +137,7 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
         roomId={selectedRoom}
         onDisplayGroupDetailsClicked={displayGroupDetails}
         onDisplayProfileSummaryClicked={displayProfileSummary}
+        {...ChatRoomProps}
       />
     )
   }

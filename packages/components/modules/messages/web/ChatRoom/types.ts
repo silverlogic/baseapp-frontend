@@ -2,6 +2,7 @@ import { FC } from 'react'
 
 import { MessagesListProps } from '../MessagesList/types'
 import { SendMessageProps } from '../SendMessage/types'
+import { ChatRoomHeaderProps } from './ChatRoomHeader/types'
 
 export interface ChatRoomProps {
   roomId: string
@@ -11,4 +12,5 @@ export interface ChatRoomProps {
   SendMessageProps?: Partial<SendMessageProps>
   onDisplayGroupDetailsClicked: () => void
   onDisplayProfileSummaryClicked: () => void
+  ChatRoomHeaderProps?: Partial<ChatRoomHeaderProps>
 }

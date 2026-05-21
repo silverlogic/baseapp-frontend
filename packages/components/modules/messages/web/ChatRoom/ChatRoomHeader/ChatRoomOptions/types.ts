@@ -1,3 +1,5 @@
+import type { ChatRoomOptionValue } from './constants'
+
 export interface ChatRoomOptionsProps {
   isArchived: boolean
   isArchiveMutationInFlight: boolean
@@ -6,4 +8,5 @@ export interface ChatRoomOptionsProps {
   onDetailsClicked: () => void
   onLeaveClicked: () => void
   onContactDetailsClicked: () => void
+  hiddenOptions?: ChatRoomOptionValue[]
 }
