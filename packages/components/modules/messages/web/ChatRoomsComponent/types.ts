@@ -37,4 +37,5 @@ export interface ChatRoomsComponentProps {
   ProfileSummaryComponent?: FC<ProfileSummaryProps>
   ProfileSummaryComponentProps?: Partial<ProfileSummaryProps>
   ChatRoomProps?: Partial<ChatRoomProps>
+  ChatRoomsContainer?: FC<BoxProps>
 }

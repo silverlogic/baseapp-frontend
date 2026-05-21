@@ -17,7 +17,11 @@ import DefaultGroupChatCreate from '../GroupChatCreate'
 import DefaultGroupChatDetails from '../GroupChatDetails'
 import DefaultGroupChatEdit from '../GroupChatEdit'
 import DefaultProfileSummary from '../ProfileSummary'
-import { ChatRoomContainer, ChatRoomsContainer, ChatRoomsListContainer } from './styled'
+import {
+  ChatRoomContainer,
+  ChatRoomsListContainer,
+  ChatRoomsContainer as DefaultChatRoomsContainer,
+} from './styled'
 import { ChatRoomsComponentProps } from './types'
 
 const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
@@ -35,6 +39,7 @@ const ChatRoomsComponent: FC<ChatRoomsComponentProps> = ({
   ChatCreateComponentProps = {},
   ProfileSummaryComponent = DefaultProfileSummary,
   ChatRoomProps = {},
+  ChatRoomsContainer = DefaultChatRoomsContainer,
 }) => {
   const isUpToMd = useResponsive('up', 'md')
 
