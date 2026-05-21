@@ -261,6 +261,7 @@ describe('useCookie event-bridge sync', () => {
       })
 
       expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('from-provider')
+      expect(ClientCookies.get).not.toHaveBeenCalled()
     })
   })
 
