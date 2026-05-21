@@ -30,7 +30,7 @@ export { NotificationProvider } from './hooks/useNotification'
 export type * from './hooks/useNotification/types'
 export { default as useSSR } from './hooks/useSSR'
 export { default as useBoolean } from './hooks/useBoolean'
-export { CookieProvider, default as useCookie } from './hooks/useCookie'
+export { CookieProvider, default as useCookie, useOptionalCookie } from './hooks/useCookie'
 export type * from './hooks/useCookie/types'
 
 export type * from './types/date'
