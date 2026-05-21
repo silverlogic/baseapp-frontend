@@ -76,6 +76,29 @@ describe('useJWTUser', () => {
     expect(result.current.user?.email).toBe(request.email)
   })
 
+  it('falls back to getToken when no CookieProvider is mounted (mobile / providerless web)', async () => {
+    // No CookieProvider in this wrapper — useOptionalCookie returns `cookies: undefined`
+    // and useJWTUser must fall back to `getToken()`, which reads via js-cookie on web
+    // and expo-secure-store on mobile. We mock js-cookie here to stand in for either.
+    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
+    decodeJWTMock.mockImplementation(() => undefined)
+
+    mockFetch('/users/me', {
+      method: 'GET',
+      status: 200,
+      response: { ...request },
+    })
+
+    const { result } = renderHook(() => useJWTUser({ options: { placeholderData: undefined } }), {
+      wrapper: ComponentWithProviders,
+    })
+
+    expect(result.current.isLoading).toBe(true)
+    await waitFor(() => expect(result.current.isSuccess).toBeTruthy())
+
+    expect(result.current.user?.email).toBe(request.email)
+  })
+
   it('should run custom onError and resetQueries on 401', async () => {
     ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)

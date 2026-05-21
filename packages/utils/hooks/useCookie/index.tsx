@@ -4,13 +4,16 @@ import { createContext, useContext, useEffect, useRef } from 'react'
 
 import { type StoreApi, useStore } from 'zustand'
 
+import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../constants/jwt'
+import { getToken } from '../../functions/token/getToken'
 import {
   COOKIE_CHANGE_EVENT,
   type CookieChangeEventDetail,
   MISSING_COOKIE_STORE_ERROR,
+  NOOP_COOKIE_STORE,
 } from './constants'
 import { initializeCookieStore } from './store'
-import type { CookieProviderProps, CookieState } from './types'
+import type { BaseCookies, CookieProviderProps, CookieState } from './types'
 
 export const CookieContext = createContext<StoreApi<CookieState> | null>(null)
 
@@ -71,6 +74,27 @@ const useCookie = <T extends Record<string, any> = {}>(): CookieState<T> => {
   }
 
   return useStore(store) as CookieState<T>
+}
+
+/**
+ * Cross-platform variant of `useCookie`. Inside a `<CookieProvider>`, returns the
+ * provider state. Outside one (mobile, providerless web), synthesizes `cookies` from
+ * `getToken()` so callers read `cookies?.[ACCESS_KEY_NAME]` uniformly. `setCookie` /
+ * `removeCookie` are no-ops outside a provider — use the imperative helpers instead.
+ */
+export const useOptionalCookie = <T extends Record<string, any> = {}>(): CookieState<T> => {
+  const store = useContext(CookieContext)
+  const state = useStore(store ?? NOOP_COOKIE_STORE) as CookieState<T>
+
+  if (store) return state
+
+  return {
+    ...state,
+    cookies: {
+      [ACCESS_KEY_NAME]: getToken(ACCESS_KEY_NAME) ?? undefined,
+      [REFRESH_KEY_NAME]: getToken(REFRESH_KEY_NAME) ?? undefined,
+    } as BaseCookies & T,
+  }
 }
 
 export default useCookie

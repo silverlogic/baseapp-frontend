@@ -1,5 +1,13 @@
 # @baseapp-frontend/authentication
 
+## 5.1.3
+
+### Patch Changes
+
+- Fix `useJWTUser` throwing `MISSING_COOKIE_STORE_ERROR` on mobile (and any web build that does not mount a `<CookieProvider>`). The hook now reads the access token via the new `useOptionalCookie()` from `@baseapp-frontend/utils`, which falls back to the platform-aware `getToken()` (mobile → `expo-secure-store`) outside a provider. Web behavior is unchanged — the SSR-seeded cookie still drives first-paint user data when `<CookieProvider>` is mounted.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.9
+
 ## 5.1.2
 
 ### Patch Changes
