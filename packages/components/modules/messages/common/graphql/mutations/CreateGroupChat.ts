@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ACCESS_KEY_NAME, getToken, useNotification } from '@baseapp-frontend/utils'
 
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system/legacy'
 import { ConnectionHandler, UseMutationConfig, graphql, useMutation } from 'react-relay'
 import { PayloadError } from 'relay-runtime'
 
