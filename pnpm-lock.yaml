@@ -59,8 +59,8 @@ catalogs:
       specifier: 2.12.4
       version: 2.12.4
     js-cookie:
-      specifier: 3.0.5
-      version: 3.0.5
+      specifier: 3.0.7
+      version: 3.0.7
     lexical:
       specifier: 0.35.0
       version: 0.35.0
@@ -477,8 +477,8 @@ catalogs:
       specifier: ^4.0.0
       version: 4.0.0
     qs:
-      specifier: ^6.14.1
-      version: 6.15.1
+      specifier: ^6.15.2
+      version: 6.15.2
     server-only:
       specifier: ^0.0.1
       version: 0.0.1
@@ -545,7 +545,7 @@ importers:
         version: 5.76.1(react@19.2.0)
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       react:
         specifier: catalog:react19
         version: 19.2.0
@@ -684,7 +684,7 @@ importers:
         version: 16.11.0
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       luxon:
         specifier: 'catalog:'
         version: 3.7.2
@@ -1072,7 +1072,7 @@ importers:
         version: 2.12.4(@types/react@19.2.14)(react@19.2.0)
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       lexical:
         specifier: 'catalog:'
         version: 0.35.0
@@ -1298,7 +1298,7 @@ importers:
         version: 5.0.0(ws@8.20.1)
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       react:
         specifier: catalog:react19
         version: 19.2.0
@@ -1405,7 +1405,7 @@ importers:
         version: 1.22.0(axios@1.15.2)
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       react:
         specifier: catalog:react19
         version: 19.2.0
@@ -1483,7 +1483,7 @@ importers:
         version: 2.0.1
       js-cookie:
         specifier: 'catalog:'
-        version: 3.0.5
+        version: 3.0.7
       jwt-decode:
         specifier: catalog:utils
         version: 4.0.0
@@ -1498,7 +1498,7 @@ importers:
         version: 15.5.18(@babel/core@7.29.0)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       qs:
         specifier: catalog:utils
-        version: 6.15.1
+        version: 6.15.2
       react:
         specifier: catalog:react19
         version: 19.2.0
@@ -8809,9 +8809,9 @@ packages:
     resolution: {integrity: sha512-34wB/Y7MW7bzjKRjUKTa46I2Z7eV62Rkhva+KkopW7Qvv/OSWBqvkSY7vusOPrNuZcUG3tApvdVgNB8POj3SPw==}
     engines: {node: '>=10'}
 
-  js-cookie@3.0.5:
-    resolution: {integrity: sha512-cEiJEAEoIbWfCZYKWhVwFuvPX1gETRYPw6LlaTKoxD3s2AkXzkCjnp6h0V77ozyqj0jakteJ4YqDJT830+lVGw==}
-    engines: {node: '>=14'}
+  js-cookie@3.0.7:
+    resolution: {integrity: sha512-z/wZZgDrkNV1eA0ULjM/F9/50Ya8fbzgKneSpoPsXSGd0KnpdtHfOZWK+GcwLk+EZbS4F9RBhU+K2RgzuDaItw==}
+    engines: {node: '>=20'}
 
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
@@ -10479,6 +10479,10 @@ packages:
 
   qs@6.15.1:
     resolution: {integrity: sha512-6YHEFRL9mfgcAvql/XhwTvf5jKcOiiupt2FiJxHkiX1z4j7WL8J/jRHYLluORvc1XxB5rV20KoeK00gVJamspg==}
+    engines: {node: '>=0.6'}
+
+  qs@6.15.2:
+    resolution: {integrity: sha512-Rzq0KEyX/w/tEybncDgdkZrJgVUsUMk3xjh3t5bv3S1HTAtg+uOYt72+ZfwiQwKdysThkTBdL/rTi6HDmX9Ddw==}
     engines: {node: '>=0.6'}
 
   quansync@0.2.11:
@@ -21143,7 +21147,7 @@ snapshots:
 
   joycon@3.1.1: {}
 
-  js-cookie@3.0.5: {}
+  js-cookie@3.0.7: {}
 
   js-tokens@4.0.0: {}
 
@@ -23270,6 +23274,10 @@ snapshots:
       side-channel: 1.1.0
 
   qs@6.15.1:
+    dependencies:
+      side-channel: 1.1.0
+
+  qs@6.15.2:
     dependencies:
       side-channel: 1.1.0
 
