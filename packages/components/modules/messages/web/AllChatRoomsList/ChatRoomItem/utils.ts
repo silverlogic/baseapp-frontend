@@ -8,14 +8,27 @@ import {
 
 import { DateTime } from 'luxon'
 
+const stripHtmlTagsSafely = (input: string) => {
+  let previous: string
+  let current = input
+
+  do {
+    previous = current
+    current = current.replace(/<[^>]*>/g, '')
+  } while (current !== previous)
+
+  return current
+}
+
 export const getLastMessagePreview = (content?: string | null) => {
   if (!content) return ''
 
   const firstLine =
-    content
-      .replace(/<br\s*\/?>/gi, '\n')
-      .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n')
-      .replace(/<[^>]*>/g, '')
+    stripHtmlTagsSafely(
+      content
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n'),
+    )
       .split(/\r?\n/)
       .map((line) => line.trim())
       .find((line) => line.length > 0) ?? ''
