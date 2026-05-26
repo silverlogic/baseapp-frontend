@@ -26,22 +26,8 @@ const stripHtmlTagsSafely = (input: string) => {
   return current.replace(/[<>]/g, '')
 }
 
-export const getLastMessagePreview = (content?: string | null) => {
-  if (!content) return ''
-
-  const safeContent = content.slice(0, MAX_PREVIEW_INPUT_LENGTH)
-
-  const firstLine =
-    stripHtmlTagsSafely(
-      safeContent
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n'),
-    )
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .find((line) => line.length > 0) ?? ''
-
-  return firstLine
+const stripMarkdownSafely = (line: string) =>
+  line
     .replace(/!\[([^\]]{0,200})\]\([^)]{0,200}\)/g, '$1')
     .replace(/\[([^\]]{1,200})\]\([^)]{0,200}\)/g, '$1')
     .replace(/`{1,3}([^`]{1,200})`{1,3}/g, '$1')
@@ -53,6 +39,22 @@ export const getLastMessagePreview = (content?: string | null) => {
     .replace(/^\s*[-*+]\s+/, '')
     .replace(/^\s*\d+\.\s+/, '')
     .trim()
+
+export const getLastMessagePreview = (content?: string | null) => {
+  if (!content) return ''
+
+  const safeContent = content.slice(0, MAX_PREVIEW_INPUT_LENGTH)
+
+  return (
+    stripHtmlTagsSafely(
+      safeContent
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n'),
+    )
+      .split(/\r?\n/)
+      .map(stripMarkdownSafely)
+      .find((line) => line.length > 0) ?? ''
+  )
 }
 
 export const formatDate = (date?: string | null) => {
