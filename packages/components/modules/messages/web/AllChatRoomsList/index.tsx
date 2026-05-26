@@ -150,17 +150,13 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
 
     return (
       <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-        <Typography
-          variant="subtitle2"
-          color="text.primary"
-          sx={{ visibility: isLoadingTab ? 'hidden' : 'visible' }}
-        >
+        <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
           {CHAT_TAB_LABEL[tabValue]}
         </Typography>
         {isLoadingTab && (
           <CircularProgress
             size={15}
-            aria-label="loading tab"
+            aria-hidden="true"
             sx={{
               position: 'absolute',
               top: '50%',
