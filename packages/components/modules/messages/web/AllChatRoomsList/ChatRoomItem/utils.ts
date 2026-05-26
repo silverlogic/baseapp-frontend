@@ -8,6 +8,32 @@ import {
 
 import { DateTime } from 'luxon'
 
+export const getLastMessagePreview = (content?: string | null) => {
+  if (!content) return ''
+
+  const firstLine =
+    content
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n')
+      .replace(/<[^>]*>/g, '')
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .find((line) => line.length > 0) ?? ''
+
+  return firstLine
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/`{1,3}([^`]+)`{1,3}/g, '$1')
+    .replace(/(\*\*|__)(.+?)\1/g, '$2')
+    .replace(/(\*|_)(.+?)\1/g, '$2')
+    .replace(/~~(.+?)~~/g, '$1')
+    .replace(/^\s*#{1,6}\s*/g, '')
+    .replace(/^\s*>\s*/g, '')
+    .replace(/^\s*[-*+]\s+/g, '')
+    .replace(/^\s*\d+\.\s+/g, '')
+    .trim()
+}
+
 export const formatDate = (date?: string | null) => {
   if (!date) return ''
   const dateTime = DateTime.fromISO(date)
