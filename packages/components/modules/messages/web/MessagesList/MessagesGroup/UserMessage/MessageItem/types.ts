@@ -6,6 +6,10 @@ export interface MessageItemProps {
   messageRef: MessageItemFragment$key
   isFirstGroupedMessage?: boolean
   isGroup?: boolean
+  overrideColors?: {
+    overrideOwnMessageColor?: string
+    overrideSystemMessageColor?: string
+  }
 }
 
 export interface MessageItemContainerProps extends BoxProps {

@@ -23,7 +23,9 @@ const MessageItem: FC<MessageItemProps> = ({
   messageRef,
   isFirstGroupedMessage,
   isGroup = false,
+  overrideColors = {},
 }) => {
+  const { overrideOwnMessageColor, overrideSystemMessageColor } = overrideColors
   const { currentProfile } = useCurrentProfile()
   const message = useFragment(MessageItemFragment, messageRef)
   const isOwnMessage = currentProfile?.id === message?.profile?.id
@@ -60,8 +62,12 @@ const MessageItem: FC<MessageItemProps> = ({
     if (isEditMode) {
       return <MessageUpdate message={message} onCancel={() => setIsEditMode(false)} />
     }
-
-    let messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
+    let messageColor
+    if (isOwnMessage) {
+      messageColor = overrideOwnMessageColor || 'text.primary'
+    } else {
+      messageColor = overrideSystemMessageColor || 'primary.contrastText'
+    }
 
     if (deletedMessage) {
       messageColor = 'text.disabled'
