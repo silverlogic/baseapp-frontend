@@ -8,24 +8,32 @@ import {
 
 import { DateTime } from 'luxon'
 
+// Bound every regex pass so adversarial input cannot cause super-linear runtime:
+// the input length is capped, the HTML strip loop has a hard iteration ceiling,
+// and every lazy-quantifier match is constrained to a fixed character class and length.
+const MAX_PREVIEW_INPUT_LENGTH = 1000
+const MAX_HTML_STRIP_ITERATIONS = 5
+
 const stripHtmlTagsSafely = (input: string) => {
-  let previous: string
+  let previous = ''
   let current = input
 
-  do {
+  for (let i = 0; i < MAX_HTML_STRIP_ITERATIONS && current !== previous; i += 1) {
     previous = current
     current = current.replace(/<[^>]*>/g, '')
-  } while (current !== previous)
+  }
 
-  return current
+  return current.replace(/[<>]/g, '')
 }
 
 export const getLastMessagePreview = (content?: string | null) => {
   if (!content) return ''
 
+  const safeContent = content.slice(0, MAX_PREVIEW_INPUT_LENGTH)
+
   const firstLine =
     stripHtmlTagsSafely(
-      content
+      safeContent
         .replace(/<br\s*\/?>/gi, '\n')
         .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n'),
     )
@@ -34,16 +42,16 @@ export const getLastMessagePreview = (content?: string | null) => {
       .find((line) => line.length > 0) ?? ''
 
   return firstLine
-    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/`{1,3}([^`]+)`{1,3}/g, '$1')
-    .replace(/(\*\*|__)(.+?)\1/g, '$2')
-    .replace(/(\*|_)(.+?)\1/g, '$2')
-    .replace(/~~(.+?)~~/g, '$1')
-    .replace(/^\s*#{1,6}\s*/g, '')
-    .replace(/^\s*>\s*/g, '')
-    .replace(/^\s*[-*+]\s+/g, '')
-    .replace(/^\s*\d+\.\s+/g, '')
+    .replace(/!\[([^\]]{0,200})\]\([^)]{0,200}\)/g, '$1')
+    .replace(/\[([^\]]{1,200})\]\([^)]{0,200}\)/g, '$1')
+    .replace(/`{1,3}([^`]{1,200})`{1,3}/g, '$1')
+    .replace(/(\*\*|__)([^*_\n]{1,200})\1/g, '$2')
+    .replace(/(\*|_)([^*_\n]{1,200})\1/g, '$2')
+    .replace(/~~([^~\n]{1,200})~~/g, '$1')
+    .replace(/^\s*#{1,6}\s*/, '')
+    .replace(/^\s*>\s*/, '')
+    .replace(/^\s*[-*+]\s+/, '')
+    .replace(/^\s*\d+\.\s+/, '')
     .trim()
 }
 
