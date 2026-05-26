@@ -20,7 +20,7 @@ const stripHtmlTagsSafely = (input: string) => {
 
   for (let i = 0; i < MAX_HTML_STRIP_ITERATIONS && current !== previous; i += 1) {
     previous = current
-    current = current.replace(/<[^>]*>/g, '')
+    current = current.replace(/<[^>]{0,500}>/g, '')
   }
 
   return current.replace(/[<>]/g, '')
