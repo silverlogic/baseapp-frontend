@@ -9,22 +9,9 @@ import {
 import { DateTime } from 'luxon'
 
 // Bound every regex pass so adversarial input cannot cause super-linear runtime:
-// the input length is capped, the HTML strip loop has a hard iteration ceiling,
-// and every lazy-quantifier match is constrained to a fixed character class and length.
+// the input length is capped and every lazy-quantifier match is constrained to a
+// fixed character class and length.
 const MAX_PREVIEW_INPUT_LENGTH = 1000
-const MAX_HTML_STRIP_ITERATIONS = 5
-
-const stripHtmlTagsSafely = (input: string) => {
-  let previous = ''
-  let current = input
-
-  for (let i = 0; i < MAX_HTML_STRIP_ITERATIONS && current !== previous; i += 1) {
-    previous = current
-    current = current.replace(/<[^>]{0,500}>/g, '')
-  }
-
-  return current.replace(/[<>]/g, '')
-}
 
 const stripMarkdownSafely = (line: string) =>
   line
@@ -43,14 +30,9 @@ const stripMarkdownSafely = (line: string) =>
 export const getLastMessagePreview = (content?: string | null) => {
   if (!content) return ''
 
-  const safeContent = content.slice(0, MAX_PREVIEW_INPUT_LENGTH)
-
   return (
-    stripHtmlTagsSafely(
-      safeContent
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<\/(p|div|li|h[1-6]|blockquote|tr)\s*>/gi, '\n'),
-    )
+    content
+      .slice(0, MAX_PREVIEW_INPUT_LENGTH)
       .split(/\r?\n/)
       .map(stripMarkdownSafely)
       .find((line) => line.length > 0) ?? ''
