@@ -72,7 +72,9 @@ export const getRoomListSubscriptionConfig = (
         store,
         profileId,
         ({ q, archived, isGroup }) =>
-          q === '' && archived === isArchived && isGroup === roomNode?.isGroup,
+          q === '' &&
+          archived === isArchived &&
+          (isGroup === null || isGroup === undefined || isGroup === roomNode?.isGroup),
       ).forEach((connectionRecord) => {
         ConnectionHandler.deleteNode(connectionRecord, roomId)
         const serverEdge = store.getRootField('chatRoomOnRoomUpdate')?.getLinkedRecord('room')

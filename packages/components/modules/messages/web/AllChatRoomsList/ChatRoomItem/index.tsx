@@ -7,7 +7,6 @@ import {
   UnarchiveIcon,
   UnreadIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
-import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
@@ -27,7 +26,7 @@ import {
 } from '../../../common'
 import { StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
-import { formatDate } from './utils'
+import { formatDate, getLastMessagePreview } from './utils'
 
 const ChatRoomItem: FC<ChatRoomItemProps> = ({
   roomRef,
@@ -56,7 +55,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   const { title, image } = useTitleAndImage(headerFragment)
 
   const { lastMessageTime } = lastMessageFragment
-  const lastMessage = lastMessageFragment.lastMessage?.content
+  const lastMessage = getLastMessagePreview(lastMessageFragment.lastMessage?.content)
 
   const hasUnreadMessages =
     unreadMessagesCountFragment.unreadMessages?.markedUnread ||
@@ -146,17 +145,9 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
                   marginX: '8px',
                 }}
               />
-              <Markdown
-                sx={{
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  color: 'text.secondary',
-                  '& *': { display: 'inline', margin: 0, fontSize: 'inherit' },
-                }}
-              >
+              <TypographyWithEllipsis variant="caption" color="text.secondary">
                 {lastMessage}
-              </Markdown>
+              </TypographyWithEllipsis>
             </Box>
           ) : (
             <div />
