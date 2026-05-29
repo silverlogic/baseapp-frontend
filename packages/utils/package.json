@@ -16,7 +16,6 @@
     "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast"
   },
   "dependencies": {
-    "@baseapp-frontend/i18n": "workspace:*",
     "@formatjs/intl": "catalog:",
     "axios": "catalog:",
     "events": "catalog:utils",

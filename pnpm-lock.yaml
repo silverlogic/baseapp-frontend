@@ -1536,9 +1536,6 @@ importers:
 
   packages/utils:
     dependencies:
-      '@baseapp-frontend/i18n':
-        specifier: workspace:*
-        version: link:../i18n
       '@formatjs/intl':
         specifier: 'catalog:'
         version: 2.10.10(typescript@5.9.2)

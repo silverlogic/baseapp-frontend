@@ -23,6 +23,8 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 }
 
 /**
- * Cookie name for storing the user's language preference
+ * Cookie name for storing the user's language preference.
+ * Re-exported from @baseapp-frontend/utils (its canonical home) to keep the
+ * i18n -> utils dependency one-directional.
  */
-export const LANGUAGE_COOKIE_NAME = 'Language'
+export { LANGUAGE_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
