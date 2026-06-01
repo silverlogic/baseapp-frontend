@@ -12,5 +12,22 @@
   "common.error": "Erro",
   "common.success": "Sucesso",
   "common.warning": "Aviso",
-  "common.info": "Informação"
+  "common.info": "Informação",
+  "settings.title": "Configurações",
+  "settings.tabs.profile": "Perfil",
+  "settings.tabs.credentials": "Credenciais",
+  "settings.tabs.preferences": "Preferências",
+  "settings.tabs.theme": "Tema",
+  "settings.tabs.notifications": "Notificações",
+  "settings.tabs.members": "Membros",
+  "settings.tabs.deleteAccount": "Excluir conta",
+  "settings.preferences.title": "Preferências",
+  "settings.preferences.description": "Personalize suas preferências de idioma e fuso horário.",
+  "settings.preferences.languageLabel": "Idioma",
+  "settings.preferences.languageHelper": "Selecione o idioma de sua preferência para o aplicativo",
+  "settings.preferences.timezoneLabel": "Fuso horário",
+  "settings.preferences.timezoneHelper": "Selecione seu fuso horário para exibir datas e horas",
+  "settings.preferences.saveButton": "Salvar alterações",
+  "settings.preferences.saveSuccess": "Preferências salvas com sucesso",
+  "settings.preferences.saveError": "Não foi possível salvar as preferências"
 }
