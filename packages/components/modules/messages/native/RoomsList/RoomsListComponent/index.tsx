@@ -39,6 +39,16 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
     return undefined
   }
 
+  const shouldFilterByGroup = () => {
+    if (selectedTab === CHAT_TAB_VALUES.groups) {
+      return true
+    }
+    if (selectedTab === CHAT_TAB_VALUES.active) {
+      return false
+    }
+    return null
+  }
+
   useFocusEffect(
     useCallback(() => {
       layoutTriggeredRef.current = false
@@ -48,9 +58,9 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
             q: searchParam,
             unreadMessages: selectedTab === CHAT_TAB_VALUES.unread,
             archived: selectedTab === CHAT_TAB_VALUES.archived,
-            isGroup: selectedTab === CHAT_TAB_VALUES.groups,
+            isGroup: shouldFilterByGroup(selectedTab),
           },
-          { fetchPolicy: 'store-and-network' },
+          { fetchPolicy: 'network-only' },
         )
       })
     }, [refetch, searchParam, selectedTab, startTransition]),
@@ -58,6 +68,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
 
   return (
     <InfiniteScrollerView
+      key={selectedTab}
       data={(data?.chatRooms?.edges ?? []).filter((e) => e?.node)}
       renderItem={({ item }) => {
         const node = item!.node!
