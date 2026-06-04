@@ -58,7 +58,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
             q: searchParam,
             unreadMessages: selectedTab === CHAT_TAB_VALUES.unread,
             archived: selectedTab === CHAT_TAB_VALUES.archived,
-            isGroup: shouldFilterByGroup(selectedTab),
+            isGroup: shouldFilterByGroup(),
           },
           { fetchPolicy: 'network-only' },
         )
