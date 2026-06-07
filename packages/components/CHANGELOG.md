@@ -1,5 +1,12 @@
 # @baseapp-frontend/components
 
+## 1.6.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.3
+
 ## 1.6.0
 
 ### Minor Changes
