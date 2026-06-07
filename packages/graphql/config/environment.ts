@@ -121,7 +121,8 @@ const wsClient = createClient({
   retryAttempts: MAX_WS_RETRY_ATTEMPTS,
   retryWait: async (retries) => {
     const backoff = Math.min(BASE_WS_RETRY_DELAY_IN_MS * 2 ** retries, MAX_WS_RETRY_DELAY_IN_MS)
-    const jitter = Math.random() * BASE_WS_RETRY_DELAY_IN_MS
+    // NOSONAR: Math.random() is acceptable for non-cryptographic jitter
+    const jitter = Math.random() * backoff
     await new Promise((resolve) => {
       setTimeout(resolve, backoff + jitter)
     })
