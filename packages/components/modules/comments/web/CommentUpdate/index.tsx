@@ -86,11 +86,11 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
     () => ({
       body: comment.body ?? '',
       mentionedProfileIds:
-        comment.mentionedProfiles?.edges?.flatMap((edge) =>
-          edge?.node?.id ? [edge.node.id] : [],
+        comment.mentions?.edges?.flatMap((edge) =>
+          edge?.node?.profile?.id ? [edge.node.profile.id] : [],
         ) ?? [],
     }),
-    [comment.body, comment.mentionedProfiles?.edges],
+    [comment.body, comment.mentions?.edges],
   )
 
   const form = useForm<SocialUpsertForm>({
