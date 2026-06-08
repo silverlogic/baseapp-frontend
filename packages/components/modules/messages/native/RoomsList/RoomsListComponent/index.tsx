@@ -1,6 +1,9 @@
 import { FC, useCallback, useRef, useTransition } from 'react'
 
-import { InfiniteScrollerView } from '@baseapp-frontend/design-system/components/native/views'
+import {
+  InfiniteScrollerView,
+  type InfiniteScrollerViewRef,
+} from '@baseapp-frontend/design-system/components/native/views'
 
 import { useFocusEffect } from 'expo-router'
 import { Dimensions } from 'react-native'
@@ -20,6 +23,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
   )
   const layoutTriggeredRef = useRef(false)
   const screenHeight = Dimensions.get('window').height
+  const flashListRef = useRef<InfiniteScrollerViewRef>(null)
 
   const loadNextBasedOnHeight = (height: number) => {
     if (!layoutTriggeredRef.current && hasNext && height < screenHeight) {
@@ -39,16 +43,6 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
     return undefined
   }
 
-  const shouldFilterByGroup = () => {
-    if (selectedTab === CHAT_TAB_VALUES.groups) {
-      return true
-    }
-    if (selectedTab === CHAT_TAB_VALUES.active) {
-      return false
-    }
-    return null
-  }
-
   useFocusEffect(
     useCallback(() => {
       layoutTriggeredRef.current = false
@@ -58,9 +52,21 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
             q: searchParam,
             unreadMessages: selectedTab === CHAT_TAB_VALUES.unread,
             archived: selectedTab === CHAT_TAB_VALUES.archived,
-            isGroup: shouldFilterByGroup(),
+            isGroup: selectedTab === CHAT_TAB_VALUES.groups ? true : null,
           },
-          { fetchPolicy: 'network-only' },
+          {
+            fetchPolicy: 'store-and-network',
+            // Scroll again after the network response is committed to the store.
+            // With store-and-network the transition can settle on cached data before the
+            // network payload arrives, so isPending (startTransaction) alone misses items prepended by the
+            // network update (e.g. a just-unarchived chat appearing at position 0).
+            // requestAnimationFrame defers until after React has re-rendered the new layout.
+            onComplete: () => {
+              requestAnimationFrame(() => {
+                flashListRef.current?.scrollToOffset({ offset: 0, animated: false })
+              })
+            },
+          },
         )
       })
     }, [refetch, searchParam, selectedTab, startTransition]),
@@ -68,7 +74,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
 
   return (
     <InfiniteScrollerView
-      key={selectedTab}
+      ref={flashListRef}
       data={(data?.chatRooms?.edges ?? []).filter((e) => e?.node)}
       renderItem={({ item }) => {
         const node = item!.node!
