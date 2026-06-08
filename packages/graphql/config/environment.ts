@@ -1,5 +1,6 @@
 import { MinimalProfile } from '@baseapp-frontend/authentication'
 import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
+import { REFRESH_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
@@ -25,6 +26,10 @@ import RelayDefaultHandlerProvider, {
 } from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
 const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
+
+const MAX_WS_RETRY_ATTEMPTS = 10
+const BASE_WS_RETRY_DELAY_IN_MS = 1000
+const MAX_WS_RETRY_DELAY_IN_MS = 30 * 1000
 
 type GetFetchOptions = {
   request: RequestParameters
@@ -102,15 +107,25 @@ const wsClient = createClient({
   url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
   connectionParams: () => {
     const Authorization = getToken(ACCESS_KEY_NAME)
+    if (!Authorization) return {}
+
+    const Refresh = getToken(REFRESH_KEY_NAME) || undefined
     const CurrentProfileStr = getToken(CURRENT_PROFILE_KEY_NAME) || undefined
     const CurrentProfile = parseString<MinimalProfile>(CurrentProfileStr)
-    if (!Authorization) return {}
     return {
       Authorization,
+      Refresh,
       'Current-Profile': CurrentProfile ? CurrentProfile.id : undefined,
     }
   },
-  retryAttempts: Infinity,
+  retryAttempts: MAX_WS_RETRY_ATTEMPTS,
+  retryWait: async (retries) => {
+    const backoff = Math.min(BASE_WS_RETRY_DELAY_IN_MS * 2 ** retries, MAX_WS_RETRY_DELAY_IN_MS)
+    const jitter = Math.random() * backoff // NOSONAR: Math.random() is acceptable for non-cryptographic jitter
+    await new Promise((resolve) => {
+      setTimeout(resolve, backoff + jitter)
+    })
+  },
   webSocketImpl: WebSocket,
 })
 
