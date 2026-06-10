@@ -6,14 +6,14 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { QueryClientProvider } from '@tanstack/react-query'
 
-import { QueryCacheOnError, ReactQueryProviderProps } from './types'
+import { QueryCacheOnError, QueryMetaToastOptions, ReactQueryProviderProps } from './types'
 import { getQueryClient } from './utils'
 
 const ReactQueryProvider: FC<ReactQueryProviderProps> = ({ children, config }) => {
   const { sendApiErrorToast, sendToast } = useNotification()
 
   const onError: QueryCacheOnError = (error, query) => {
-    const { sendErrorToast, toastMessage, toastType } = query?.meta ?? {}
+    const { sendErrorToast, toastMessage, toastType } = (query?.meta ?? {}) as QueryMetaToastOptions
     if (sendErrorToast) {
       sendApiErrorToast(error)
     } else if (toastMessage) {
