@@ -16,7 +16,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { TextInput as NativeTextInput, Pressable, ScrollView } from 'react-native'
+import { TextInput as NativeTextInput, Pressable } from 'react-native'
 import { ConnectionHandler, useFragment } from 'react-relay'
 
 import { CommentItem_comment$data } from '../../../../__generated__/CommentItem_comment.graphql'
@@ -229,7 +229,7 @@ const WithComments: FC<CommentsProps> = ({
   return (
     <>
       <View style={[styles.rootContainer, styles.transparent]}>
-        <ScrollView style={styles.contentContainer}>
+        <View style={styles.contentContainer}>
           <View style={styles.transparent}>{children}</View>
           <CommentsList
             target={target}
@@ -246,7 +246,7 @@ const WithComments: FC<CommentsProps> = ({
             textHeight={textHeight}
             {...SocialInputDrawerProps.PlaceholderProps}
           />
-        </ScrollView>
+        </View>
         <SocialInputDrawer.Drawer
           form={form}
           isLoading={isCreateMutationInFlight || isUpdateMutationInFlight}

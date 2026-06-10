@@ -3,6 +3,9 @@ import { FC, useCallback, useMemo } from 'react'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FlatList } from 'react-native'
+import { ActivityIndicator } from 'react-native-paper'
+
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
 import CommentHideRepliesButton from './CommentHideRepliesButton'
@@ -29,7 +32,7 @@ const CommentsList: FC<CommentsListProps> = ({
   const CommentItemComponent = CommentItem ?? getDefaultCommentItem()
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { data: target, loadNext, hasNext } = useCommentList(targetRef)
+  const { data: target, loadNext, hasNext, isLoadingNext } = useCommentList(targetRef)
   const comments = useMemo(
     () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [target?.comments?.edges],
@@ -73,12 +76,23 @@ const CommentsList: FC<CommentsListProps> = ({
       {isReplyList && <View style={styles.threadDepthDivider} />}
       <View style={styles.listContainer}>
         {subscriptionsEnabled && <CommentsSubscription targetObjectId={target.id} />}
-        <View style={styles.listContainer} {...CommentsListProps}>
-          {
-            // TODO (another story): paginate properly
-            comments.map((comment) => renderCommentItem(comment))
-          }
-        </View>
+        {isReplyList ? (
+          <View style={styles.listContainer} {...CommentsListProps}>
+            {
+              // TODO (another story): paginate properly
+              comments.map((comment) => renderCommentItem(comment))
+            }
+          </View>
+        ) : (
+          <FlatList
+            contentContainerStyle={{ paddingHorizontal: 16 }}
+            data={comments}
+            renderItem={({ item }) => renderCommentItem(item)}
+            onEndReached={hasNext ? showMoreReplies : undefined}
+            onEndReachedThreshold={0.9}
+            ListFooterComponent={isLoadingNext ? <ActivityIndicator /> : null}
+          />
+        )}
         {shouldShowShowMoreRepliesButton && (
           <CommentShowRepliesButton
             onShowReplies={showMoreReplies}
