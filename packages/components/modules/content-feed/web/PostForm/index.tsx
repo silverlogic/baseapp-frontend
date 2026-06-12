@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { TextField } from '@baseapp-frontend/design-system/components/web/inputs'
+import { MarkdownEditorField } from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, FormControlLabel, Switch, Typography } from '@mui/material'
@@ -42,12 +42,9 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
         </HeaderContainer>
         <PostImageDropzone form={form} />
         <Box>
-          <TextField
+          <MarkdownEditorField
             name="content"
-            type="text"
             placeholder="What is on your mind?"
-            multiline
-            rows={4}
             control={form.control}
           />
         </Box>
