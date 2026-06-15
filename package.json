@@ -57,7 +57,8 @@
       "postcss": ">=8.5.10",
       "shell-quote": ">=1.8.4",
       "uuid": ">=14.0.0",
-      "ws@^8.0.0": ">=8.20.1"
+      "ws@^8.0.0": ">=8.20.1",
+      "esbuild": ">=0.28.1"
     },
     "patchedDependencies": {
       "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
