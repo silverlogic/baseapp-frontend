@@ -8,7 +8,7 @@ import { act, render, renderHook, waitFor } from '@baseapp-frontend/test'
 
 import ClientCookies from 'js-cookie'
 
-import useCookie, { CookieProvider } from '..'
+import useCookie, { CookieProvider, useOptionalCookie } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { removeCookie, setCookie } from '../../../functions/cookie'
@@ -228,6 +228,41 @@ describe('useCookie event-bridge sync', () => {
     await waitFor(() => expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBeUndefined())
 
     externalChannel.close()
+  })
+
+  describe('useOptionalCookie', () => {
+    type GetByName = (name: string) => string | undefined
+
+    it('does not throw outside a Provider; synthesizes cookies from getToken', () => {
+      ;(ClientCookies.get as GetByName) = jest.fn((key: string) =>
+        key === ACCESS_KEY_NAME ? 'token-from-getToken' : undefined,
+      )
+
+      const { result } = renderHook(() => useOptionalCookie())
+
+      expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('token-from-getToken')
+      expect(typeof result.current.setCookie).toBe('function')
+      expect(typeof result.current.removeCookie).toBe('function')
+    })
+
+    it('returns undefined for keys with no stored token outside a Provider', () => {
+      ;(ClientCookies.get as GetByName) = jest.fn(() => undefined)
+
+      const { result } = renderHook(() => useOptionalCookie())
+
+      expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBeUndefined()
+    })
+
+    it('reads from the Provider when one is mounted (does not call getToken)', () => {
+      ;(ClientCookies.get as GetByName) = jest.fn(() => 'should-not-be-used')
+
+      const { result } = renderHook(() => useOptionalCookie(), {
+        wrapper: wrapWith({ [ACCESS_KEY_NAME]: 'from-provider' }),
+      })
+
+      expect(result.current.cookies?.[ACCESS_KEY_NAME]).toBe('from-provider')
+      expect(ClientCookies.get).not.toHaveBeenCalled()
+    })
   })
 
   it('closes its BroadcastChannel on Provider unmount', async () => {

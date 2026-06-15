@@ -1,5 +1,12 @@
 # @baseapp-frontend/utils
 
+## 4.0.9
+
+### Patch Changes
+
+- Add `useOptionalCookie` — a cross-platform variant of `useCookie` that does not throw when called outside a `<CookieProvider>`. Inside a provider it returns the provider state; outside one it synthesizes `cookies` from the platform-aware `getToken()` (mobile → `expo-secure-store`, web → `js-cookie`), so callers can read `cookies?.[ACCESS_KEY_NAME]` uniformly without per-call fallbacks. `setCookie` / `removeCookie` are no-ops outside a provider — use the imperative `setCookie`/`removeCookie` from `functions/cookie` instead.
+- Add `NOOP_COOKIE_STORE` export to `@baseapp-frontend/utils/hooks/useCookie/constants` (used internally by `useOptionalCookie` as a stable subscription target when no provider is mounted).
+
 ## 4.0.8
 
 ### Patch Changes

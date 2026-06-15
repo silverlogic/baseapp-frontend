@@ -1,5 +1,19 @@
 # @baseapp-frontend/graphql
 
+## 1.4.3
+
+### Patch Changes
+
+- Fix an unbounded WebSocket subscription reconnect loop. `retryAttempts` was `Infinity` with no backoff, so once the access token expired the Relay client reconnected to `/graphql` indefinitely with the dead token — flooding the backend with auth failures and exhausting connections. Reconnects are now capped with exponential backoff and jitter, and the `Refresh` token is sent in `connectionParams` so the server can refresh an expired access token at connect time instead of rejecting the connection.
+
+## 1.4.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.3
+  - @baseapp-frontend/utils@4.0.9
+
 ## 1.4.1
 
 ### Patch Changes

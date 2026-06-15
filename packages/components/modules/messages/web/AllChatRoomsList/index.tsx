@@ -61,7 +61,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: value,
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isInGroupTab,
+          isGroup: isInGroupTab ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -76,7 +76,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: '',
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isInGroupTab,
+          isGroup: isInGroupTab ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -92,7 +92,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
-          isGroup: newTab === CHAT_TAB_VALUES.groups,
+          isGroup: newTab === CHAT_TAB_VALUES.groups ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -149,15 +149,23 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     const isLoadingTab = isRefetchPending && tab === tabValue
 
     return (
-      <Box display="grid" gridTemplateColumns="1fr max-content" alignItems="center">
-        <Typography variant="subtitle2" color="text.primary">
+      <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
           {CHAT_TAB_LABEL[tabValue]}
         </Typography>
-        <CircularProgress
-          size={15}
-          aria-hidden={!isLoadingTab}
-          sx={{ visibility: isLoadingTab ? 'visible' : 'hidden' }}
-        />
+        {isLoadingTab && (
+          <CircularProgress
+            size={15}
+            aria-hidden="true"
+            sx={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              marginTop: '-7.5px',
+              marginLeft: '-7.5px',
+            }}
+          />
+        )}
       </Box>
     )
   }

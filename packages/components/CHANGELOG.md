@@ -1,5 +1,32 @@
 # @baseapp-frontend/components
 
+## 1.6.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.3
+
+## 1.6.0
+
+### Minor Changes
+
+- fix: include groups in active/unread chat tabs and overlay tab loading spinner
+  - Drop `defaultValue: false` on `isGroup` in `RoomsListFragment` so unset means "no filter" (returns both group and non-group rooms).
+  - In `AllChatRoomsList`, send `isGroup: true` only on the Groups tab and `null` on Active / Unread / Archived, so groups also appear in those tabs.
+  - Update `useRoomListSubscription` connection matcher to treat a `null`, `isGroup` on a stored connection as "match any room", so newly arrived group rooms slot into Active / Unread / Archived connections.
+  - Render the tab loading `CircularProgress` overlaid on top of the tab label (LoadingButton-style) instead of pushing it to the side, keeping the tab width stable while refetching.
+
+## 1.5.26
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.3
+  - @baseapp-frontend/utils@4.0.9
+  - @baseapp-frontend/graphql@1.4.2
+  - @baseapp-frontend/design-system@1.2.13
+
 ## 1.5.25
 
 ### Patch Changes
