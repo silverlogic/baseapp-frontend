@@ -3,10 +3,9 @@ import { styled } from '@mui/material/styles'
 
 import { CommentContainerWrapperProps } from './types'
 
-export const CommentContainerWrapper = styled(Box)<CommentContainerWrapperProps>(({
-  theme,
-  currentThreadDepth,
-}) => {
+export const CommentContainerWrapper = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'currentThreadDepth',
+})<CommentContainerWrapperProps>(({ theme, currentThreadDepth }) => {
   const currentThreadDepthHigherThanOne = currentThreadDepth > 1
   const marginLeft = currentThreadDepthHigherThanOne ? 3 * (currentThreadDepth - 1) - 3 : 0
 

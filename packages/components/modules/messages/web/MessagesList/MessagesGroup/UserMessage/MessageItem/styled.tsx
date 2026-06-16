@@ -2,11 +2,9 @@ import { Box, styled } from '@mui/material'
 
 import { MessageItemContainerProps } from './types'
 
-export const MessageItemContainer = styled(Box)<MessageItemContainerProps>(({
-  theme,
-  isOwnMessage,
-  isFirstGroupedMessage = false,
-}) => {
+export const MessageItemContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isOwnMessage' && prop !== 'isFirstGroupedMessage',
+})<MessageItemContainerProps>(({ theme, isOwnMessage, isFirstGroupedMessage = false }) => {
   const ownMessageRadius = isFirstGroupedMessage ? '12px 4px 12px 12px' : '12px'
   const otherMessageRadius = isFirstGroupedMessage ? '4px 12px 12px 12px' : '12px'
 
