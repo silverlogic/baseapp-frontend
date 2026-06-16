@@ -38,7 +38,7 @@ jest.mock('../../../token/decodeJWT', () => ({
 jest.mock('../../../token/getToken', () => ({
   getToken: jest.fn(),
 }))
-jest.mock('../../../language/getLanguage', () => ({
+jest.mock('@baseapp-frontend/i18n', () => ({
   getLanguage: jest.fn(),
 }))
 jest.mock('../../../token/getTokenSSR', () => ({
@@ -74,7 +74,7 @@ describe('baseAppFetch', () => {
     stringifySpy = jest.spyOn(JSON, 'stringify')
 
     const { getToken: dynamicGetToken } = require('../../../token/getToken')
-    const { getLanguage: dynamicGetLanguage } = require('../../../language/getLanguage')
+    const { getLanguage: dynamicGetLanguage } = require('@baseapp-frontend/i18n')
     const {
       refreshAccessToken: specificRefreshAccessToken,
     } = require('../../../token/refreshAccessToken')

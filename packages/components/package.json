@@ -18,10 +18,13 @@
     "cypress:open": "cypress open --browser chrome",
     "test:component": "pnpm relay && cypress run --component --browser chrome --headed",
     "test:unit": "jest --config ./jest.config.ts",
+    "i18n:extract": "formatjs extract 'modules/**/*.ts*' --out-file locales/en.json --format simple",
+    "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
     "./package.json": "./package.json",
+    "./locales": "./locales/index.ts",
     "./shared/common": "./modules/__shared__/common/index.ts",
     "./shared/web": "./modules/__shared__/web/index.ts",
     "./shared/native": "./modules/__shared__/native/index.ts",
@@ -52,6 +55,7 @@
     "./pages/common": "./modules/pages/common/index.ts"
   },
   "files": [
+    "locales",
     "modules",
     "tsconfig.json",
     "relay.config.js",
@@ -80,6 +84,7 @@
     "luxon": "catalog:",
     "next": "catalog:",
     "react-hook-form": "catalog:",
+    "react-intl": "catalog:",
     "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
@@ -114,6 +119,7 @@
     "@chromatic-com/storybook": "catalog:storybook",
     "@cypress/webpack-dev-server": "catalog:test",
     "@faker-js/faker": "catalog:test",
+    "@formatjs/cli": "^6.7.4",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",

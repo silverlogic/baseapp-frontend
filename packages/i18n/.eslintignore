@@ -1,0 +1,8 @@
+scripts/**/*
+docs/**/*
+dist/**/*
+node_modules/**/*
+*.js
+**/*.test.ts
+**/*.test.tsx
+**/__tests__/**

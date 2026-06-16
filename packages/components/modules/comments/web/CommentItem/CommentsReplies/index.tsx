@@ -1,6 +1,7 @@
 import { FC, useMemo, useTransition } from 'react'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import {
@@ -20,6 +21,7 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   CommentItemProps = {},
   VirtuosoProps,
 }) => {
+  const intl = useIntl()
   const { data: target, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
   const [isPending, startTransition] = useTransition()
 
@@ -69,7 +71,13 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
             })
           }}
         >
-          Show more replies ({commentsLeft})
+          {intl.formatMessage(
+            {
+              id: 'comments.replies.showMore',
+              defaultMessage: 'Show more replies ({count})',
+            },
+            { count: commentsLeft },
+          )}
         </LoadMoreRepliesButton>
       </Box>
     )
