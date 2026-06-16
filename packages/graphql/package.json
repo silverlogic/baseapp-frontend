@@ -21,6 +21,7 @@
     "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
     "relay-test-utils": "catalog:graphql",
+    "ws": "catalog:graphql",
     "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
