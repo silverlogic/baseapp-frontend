@@ -36,10 +36,13 @@ export const CommentItemFragmentQuery = graphql`
     canReport: hasPerm(perm: "report")
     canPin: hasPerm(perm: "pin")
 
-    mentionedProfiles(first: 50) {
+    mentions(first: 50) {
       edges {
         node {
           id
+          profile {
+            id
+          }
         }
       }
     }
