@@ -96,6 +96,7 @@ catalogs:
     relay-connection-handler-plus: 0.1.2
     relay-runtime: 19.0.0
     relay-test-utils: 19.0.0
+    ws: 8.21.0
 
   tailwind:
     "@tailwindcss/typography": 0.5.13
