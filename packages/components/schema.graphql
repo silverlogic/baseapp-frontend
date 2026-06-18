@@ -388,17 +388,7 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
   """
   hasPerm(perm: String!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-  mentionedProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
   mentionsCount: Int
   isMentioningProfile(profileId: ID!): Boolean
   target: CommentsInterface
@@ -530,17 +520,7 @@ type ContentPost implements Node & ReactionsInterface & MentionsInterface {
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   myReaction(profileId: ID): Reaction
-  mentionedProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
   mentionsCount: Int
   isMentioningProfile(profileId: ID!): Boolean
   pk: Int
@@ -792,6 +772,33 @@ enum Languages {
   pt
 }
 
+type Mention implements Node {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  profile: Profile!
+}
+
+type MentionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MentionEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Mention` and its cursor."""
+type MentionEdge {
+  """The item at the end of the edge"""
+  node: Mention
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
 """
 GraphQL fields exposed on any object type that has mentioned profiles.
 
@@ -808,17 +815,7 @@ Mention through-table keyed off the consuming object's DocumentId.
 interface MentionsInterface {
   """The ID of the object"""
   id: ID!
-  mentionedProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
   mentionsCount: Int
   isMentioningProfile(profileId: ID!): Boolean
 }
@@ -836,17 +833,7 @@ type Message implements Node & MentionsInterface {
   inReplyTo: Message
   deleted: Boolean!
   extraData: JSONString
-  mentionedProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
   mentionsCount: Int
   isMentioningProfile(profileId: ID!): Boolean
   actionObject: Node
