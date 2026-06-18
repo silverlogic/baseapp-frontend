@@ -218,7 +218,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
             <CardContent sx={{ padding: '16px' }}>
               <div className="grid grid-rows-[1fr_min-content] justify-center gap-4">
                 <ImageWithFallback
-                  src={bannerImageUrl}
+                  src={bannerImageUrl || '/png/profile-banner-edit-page-fallback.png'}
                   fallbackSrc="/png/profile-banner-edit-page-fallback.png"
                   alt="Home Banner"
                   width={868}
