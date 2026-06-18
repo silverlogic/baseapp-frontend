@@ -18,7 +18,6 @@ export const createStyles = (theme: Theme) =>
       display: 'flex',
       flexDirection: 'column',
       flex: 1,
-      paddingHorizontal: 16,
     },
     bottomDrawerActionContainer: {
       paddingHorizontal: 16,
