@@ -1,10 +1,7 @@
 import { FC, useCallback, useMemo } from 'react'
 
-import { View } from '@baseapp-frontend/design-system/components/native/views'
+import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
-
-import { FlatList } from 'react-native'
-import { ActivityIndicator } from 'react-native-paper'
 
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
@@ -84,13 +81,17 @@ const CommentsList: FC<CommentsListProps> = ({
             }
           </View>
         ) : (
-          <FlatList
+          <InfiniteScrollerView
             contentContainerStyle={{ paddingHorizontal: 16 }}
             data={comments}
             renderItem={({ item }) => renderCommentItem(item)}
-            onEndReached={hasNext ? showMoreReplies : undefined}
+            onEndReached={() => {
+              if (hasNext) {
+                showMoreReplies()
+              }
+            }}
             onEndReachedThreshold={0.9}
-            ListFooterComponent={isLoadingNext ? <ActivityIndicator /> : null}
+            isLoading={isLoadingNext}
           />
         )}
         {shouldShowShowMoreRepliesButton && (
