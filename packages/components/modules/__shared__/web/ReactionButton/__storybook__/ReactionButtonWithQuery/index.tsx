@@ -17,9 +17,9 @@ import { ReactionButtonWithQuery as Query } from '../../../../../../__generated_
 // TODO: review this import
 import { CommentItemFragmentQuery } from '../../../../../comments/common'
 import ReactionButton from '../../../../common/ReactionButton'
-import { ReactionButtonProps } from '../../../../common/ReactionButton/types'
+import { WebReactionButtonProps } from '../../../../common/ReactionButton/types'
 
-const ReactionButtonWithQuery = (props: ReactionButtonProps) => {
+const ReactionButtonWithQuery = (props: WebReactionButtonProps) => {
   const data = useLazyLoadQuery<Query>(
     graphql`
       query ReactionButtonWithQuery @relay_test_operation {
