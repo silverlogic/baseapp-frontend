@@ -26,14 +26,14 @@ const CommentReactionButton: FC<CommentReactionButtonProps> = ({
         <View style={styles.reactionContainer}>
           {shouldUseBottomSheetSafeComponents ? (
             <TouchableOpacity
-              onPress={handleReaction}
+              onPress={handleReaction as () => void}
               style={{ paddingHorizontal: 0, paddingVertical: 5 }}
             >
               {target?.myReaction?.id ? <FavoriteSelectedIcon /> : <FavoriteIcon />}
             </TouchableOpacity>
           ) : (
             <IconButton
-              onPress={handleReaction}
+              onPress={handleReaction as () => void}
               style={{ paddingHorizontal: 0, paddingVertical: 5 }}
             >
               {target?.myReaction?.id ? <FavoriteSelectedIcon /> : <FavoriteIcon />}
