@@ -31,6 +31,7 @@ import {
   useCommentCreateMutation,
   useCommentUpdateMutation,
 } from '../../common'
+import CommentDeleteDialog from '../CommentDeleteDialog'
 import DefaultCommentsList from '../CommentsList'
 import { createStyles } from './styles'
 import { CommentsProps } from './types'
@@ -49,6 +50,7 @@ const WithComments: FC<CommentsProps> = ({
   maxThreadDepth = 5,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
+  const [isDeleting, setIsDeleting] = useState(false)
   const [isReplyMode, setIsReplyMode] = useState(false)
   const [replyTargetName, setReplyTargetName] = useState('')
   const [commentIdToExpand, setCommentIdToExpand] = useState<string | null>(null)
@@ -185,6 +187,15 @@ const WithComments: FC<CommentsProps> = ({
     [form],
   )
 
+  const openDeleteDialog = useCallback(() => {
+    setIsDeleting(true)
+  }, [])
+
+  const closeDeleteDialog = useCallback(() => {
+    setIsDeleting(false)
+    setSelectedComment(undefined)
+  }, [])
+
   const handleLongPress = useCallback((comment: CommentItem_comment$data) => {
     bottomDrawerRef.current?.present()
     setSelectedComment(comment)
@@ -201,8 +212,12 @@ const WithComments: FC<CommentsProps> = ({
       bottomDrawerRef.current?.close()
       if (_action === 'edit') {
         handleEdit(selectedComment as CommentItem_comment$data)
+        setSelectedComment(undefined)
       }
-      setSelectedComment(undefined)
+
+      if (_action === 'delete') {
+        openDeleteDialog()
+      }
     },
     [selectedComment, handleEdit],
   )
@@ -212,94 +227,103 @@ const WithComments: FC<CommentsProps> = ({
   }
 
   return (
-    <View style={[styles.rootContainer, styles.transparent]}>
-      <ScrollView style={styles.contentContainer}>
-        <View style={styles.transparent}>{children}</View>
-        <CommentsList
-          target={target}
-          subscriptionsEnabled={subscriptionsEnabled}
-          commentIdToExpand={commentIdToExpand}
-          onLongPress={handleLongPress}
-          onReply={handleReply}
-          maxThreadDepth={maxThreadDepth}
-          {...CommentsListProps}
-        />
-        <SocialInputDrawer.Placeholder
+    <>
+      <View style={[styles.rootContainer, styles.transparent]}>
+        <ScrollView style={styles.contentContainer}>
+          <View style={styles.transparent}>{children}</View>
+          <CommentsList
+            target={target}
+            subscriptionsEnabled={subscriptionsEnabled}
+            commentIdToExpand={commentIdToExpand}
+            onLongPress={handleLongPress}
+            onReply={handleReply}
+            maxThreadDepth={maxThreadDepth}
+            {...CommentsListProps}
+          />
+          <SocialInputDrawer.Placeholder
+            keyboardHeight={keyboardHeight}
+            showHandle={showHandle}
+            textHeight={textHeight}
+            {...SocialInputDrawerProps.PlaceholderProps}
+          />
+        </ScrollView>
+        <SocialInputDrawer.Drawer
+          form={form}
+          isLoading={isCreateMutationInFlight || isUpdateMutationInFlight}
           keyboardHeight={keyboardHeight}
+          onFocusChange={onFocusChange}
+          onTextHeightChange={onTextHeightChange}
           showHandle={showHandle}
-          textHeight={textHeight}
-          {...SocialInputDrawerProps.PlaceholderProps}
+          ref={commentCreateRef}
+          style={drawerStyle}
+          submit={onSubmit}
+          editVariables={editVariables}
+          replyVariables={replyVariables}
+          {...SocialInputDrawerProps.DrawerProps}
         />
-      </ScrollView>
-      <SocialInputDrawer.Drawer
-        form={form}
-        isLoading={isCreateMutationInFlight || isUpdateMutationInFlight}
-        keyboardHeight={keyboardHeight}
-        onFocusChange={onFocusChange}
-        onTextHeightChange={onTextHeightChange}
-        showHandle={showHandle}
-        ref={commentCreateRef}
-        style={drawerStyle}
-        submit={onSubmit}
-        editVariables={editVariables}
-        replyVariables={replyVariables}
-        {...SocialInputDrawerProps.DrawerProps}
-      />
-      {selectedComment && (
-        <BottomDrawer
-          bottomDrawerRef={bottomDrawerRef}
-          handleSheetChanges={handleSheetChanges}
-          snapPoints={['30%']}
-        >
-          <View style={styles.bottomDrawerActionContainer}>
-            <Pressable
-              onPress={() => handleMenuAction('share')}
-              style={styles.bottomDrawerPressable}
-            >
-              <ShareIcon width={20} height={20} color={theme.colors.object.high} />
-              <Text variant="body2" color="high">
-                Share Comment
-              </Text>
-            </Pressable>
-            {selectedComment.canPin && (
+        {selectedComment && (
+          <BottomDrawer
+            bottomDrawerRef={bottomDrawerRef}
+            handleSheetChanges={handleSheetChanges}
+            snapPoints={['30%']}
+          >
+            <View style={styles.bottomDrawerActionContainer}>
               <Pressable
-                onPress={() => handleMenuAction('pin')}
+                onPress={() => handleMenuAction('share')}
                 style={styles.bottomDrawerPressable}
               >
-                <PinIcon width={20} height={20} color={theme.colors.object.high} />
+                <ShareIcon width={20} height={20} color={theme.colors.object.high} />
                 <Text variant="body2" color="high">
-                  Pin Comment
+                  Share Comment
                 </Text>
               </Pressable>
-            )}
-            {selectedComment.canChange && (
-              <Pressable
-                onPress={() => handleMenuAction('edit')}
-                style={styles.bottomDrawerPressable}
-              >
-                <EditIcon width={20} height={20} color={theme.colors.object.high} />
-                <Text variant="body2" color="high">
-                  Edit Comment
-                </Text>
-              </Pressable>
-            )}
-          </View>
-          {selectedComment.canDelete && (
-            <View style={styles.bottomDrawerDivider}>
-              <Pressable
-                onPress={() => handleMenuAction('delete')}
-                style={styles.bottomDrawerPressable}
-              >
-                <TrashIcon width={20} height={20} color={theme.colors.error.main} />
-                <Text variant="body2" style={{ color: theme.colors.error.main }}>
-                  Delete Comment
-                </Text>
-              </Pressable>
+              {selectedComment.canPin && (
+                <Pressable
+                  onPress={() => handleMenuAction('pin')}
+                  style={styles.bottomDrawerPressable}
+                >
+                  <PinIcon width={20} height={20} color={theme.colors.object.high} />
+                  <Text variant="body2" color="high">
+                    Pin Comment
+                  </Text>
+                </Pressable>
+              )}
+              {selectedComment.canChange && (
+                <Pressable
+                  onPress={() => handleMenuAction('edit')}
+                  style={styles.bottomDrawerPressable}
+                >
+                  <EditIcon width={20} height={20} color={theme.colors.object.high} />
+                  <Text variant="body2" color="high">
+                    Edit Comment
+                  </Text>
+                </Pressable>
+              )}
             </View>
-          )}
-        </BottomDrawer>
+            {selectedComment.canDelete && (
+              <View style={styles.bottomDrawerDivider}>
+                <Pressable
+                  onPress={() => handleMenuAction('delete')}
+                  style={styles.bottomDrawerPressable}
+                >
+                  <TrashIcon width={20} height={20} color={theme.colors.error.main} />
+                  <Text variant="body2" style={{ color: theme.colors.error.main }}>
+                    Delete Comment
+                  </Text>
+                </Pressable>
+              </View>
+            )}
+          </BottomDrawer>
+        )}
+      </View>
+      {selectedComment?.id && (
+        <CommentDeleteDialog
+          visible={isDeleting}
+          onClose={closeDeleteDialog}
+          commentId={selectedComment.id}
+        />
       )}
-    </View>
+    </>
   )
 }
 
