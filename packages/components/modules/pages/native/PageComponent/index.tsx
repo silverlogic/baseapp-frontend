@@ -6,12 +6,13 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import RenderHtml from '@native-html/render'
 import { type Href, useRouter } from 'expo-router'
-import { Linking, ScrollView, useWindowDimensions } from 'react-native'
+import { ScrollView, useWindowDimensions } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { CONTENT_HORIZONTAL_PADDING, HTML_TAGS_STYLES } from './constants'
 import { createStyles } from './styles'
 import { PageComponentProps } from './types'
+import { openExternalUrl } from './utils'
 
 const PageComponent: FC<PageComponentProps> = ({ page: pageRef }) => {
   const page = useFragment(PageComponentFragment, pageRef)
@@ -20,14 +21,14 @@ const PageComponent: FC<PageComponentProps> = ({ page: pageRef }) => {
   const router = useRouter()
   const styles = createStyles(theme)
 
-  // Internal links (href starting with "/") route through expo-router; everything else
-  // (http(s), mailto, tel, …) opens in the device's default handler / browser.
+  // Internal links (href starting with "/") route through expo-router; everything else is
+  // handed to openExternalUrl, which only opens allow-listed schemes (http(s), mailto, tel, …).
   const handleLinkPress = (href?: string) => {
     if (!href) return
     if (href.startsWith('/')) {
       router.push(href as Href)
     } else {
-      Linking.openURL(href)
+      openExternalUrl(href)
     }
   }
 

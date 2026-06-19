@@ -3,6 +3,10 @@ import type { MixedStyleRecord } from '@native-html/render'
 // Horizontal inset applied to the page content so it isn't flush against the screen edges.
 export const CONTENT_HORIZONTAL_PADDING = 16
 
+// URL schemes a page link is allowed to open externally. Anything else (e.g. `file:` or custom
+// app schemes embedded in page content) is rejected so untrusted page body can't trigger them.
+export const ALLOWED_LINK_SCHEMES = ['http:', 'https:', 'mailto:', 'tel:'] as const
+
 // The render engine applies browser-default (em-based) block margins, which are far larger than
 // the web markdown styling — there blocks render flush (margin: 0) and rely on line height. These
 // tighter, collapsing margins restore a web-like vertical rhythm between headings and paragraphs.

@@ -33,7 +33,7 @@ export const PageComponent = ({ page: pageRef }: PageComponentProps) => {
           )}
           {page.canDelete && (
             <Link
-              href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/../admin/pages/page/${page.id}/change/`}
+              href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/../admin/pages/page/${page.id}/delete/`}
               sx={{ ml: 2 }}
               target="_blank"
               rel="noopener"
