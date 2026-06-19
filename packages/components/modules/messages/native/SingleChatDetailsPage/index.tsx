@@ -5,11 +5,12 @@ import { AppBar } from '@baseapp-frontend/design-system/components/native/appbar
 import { CloseIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 
-import { useRouter } from 'expo-router'
+import { type Href, useRouter } from 'expo-router'
 import { useFragment, useLazyLoadQuery } from 'react-relay'
 
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
 import { SingleChatDetailsFragment$key } from '../../../../__generated__/SingleChatDetailsFragment.graphql'
+import { getProfilePath } from '../../../__shared__/common'
 import { ChatRoomQuery, useArchiveChatRoomMutation } from '../../common'
 import { SingleChatDetailsFragment } from '../../common/graphql/fragments/SingleChatDetailsFragment'
 import About from './About'
@@ -55,6 +56,11 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
 
   const profile = otherParticipant?.profile
 
+  const handleGoToProfile = () => {
+    const profilePath = getProfilePath(profile?.urlPath?.path, profile?.id)
+    if (profilePath) router.push(profilePath as Href)
+  }
+
   return (
     <View style={{ flexGrow: 1, flex: 1 }}>
       <AppBar title="Chat Details" onBack={() => router.back()} BackIcon={CloseIcon} />
@@ -67,6 +73,7 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
         <Options
           isArchiveMutationInFlight={isMutationInFlight}
           handleArchiveChat={handleArchiveChat}
+          handleGoToProfile={handleGoToProfile}
           isArchived={!!chatRoom?.isArchived}
         />
         <About biography={profile?.biography} />
