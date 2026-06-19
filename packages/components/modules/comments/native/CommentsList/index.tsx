@@ -25,6 +25,7 @@ const CommentsList: FC<CommentsListProps> = ({
   CommentItem,
   CommentItemProps,
   CommentsListProps = {},
+  ListHeaderComponent,
 }) => {
   const CommentItemComponent = CommentItem ?? getDefaultCommentItem()
   const theme = useTheme()
@@ -83,6 +84,7 @@ const CommentsList: FC<CommentsListProps> = ({
         ) : (
           <InfiniteScrollerView
             contentContainerStyle={{ paddingHorizontal: 16 }}
+            ListHeaderComponent={ListHeaderComponent}
             data={comments}
             renderItem={({ item }) => renderCommentItem(item)}
             onEndReached={() => {
