@@ -26,7 +26,7 @@ export const PageComponent = ({ page: pageRef }: PageComponentProps) => {
             <Link
               href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/../admin/pages/page/${page.id}/change/`}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               Edit
             </Link>
@@ -36,7 +36,7 @@ export const PageComponent = ({ page: pageRef }: PageComponentProps) => {
               href={`${process.env.NEXT_PUBLIC_API_BASE_URL}/../admin/pages/page/${page.id}/delete/`}
               sx={{ ml: 2 }}
               target="_blank"
-              rel="noopener"
+              rel="noopener noreferrer"
             >
               Delete
             </Link>

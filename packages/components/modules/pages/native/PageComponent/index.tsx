@@ -21,11 +21,12 @@ const PageComponent: FC<PageComponentProps> = ({ page: pageRef }) => {
   const router = useRouter()
   const styles = createStyles(theme)
 
-  // Internal links (href starting with "/") route through expo-router; everything else is
-  // handed to openExternalUrl, which only opens allow-listed schemes (http(s), mailto, tel, …).
+  // Internal links (a single-leading-slash absolute path like "/page") route through expo-router.
+  // Everything else — including protocol-relative URLs ("//example.com") — is handed to
+  // openExternalUrl, which only opens allow-listed schemes (http(s), mailto, tel, …).
   const handleLinkPress = (href?: string) => {
     if (!href) return
-    if (href.startsWith('/')) {
+    if (href.startsWith('/') && !href.startsWith('//')) {
       router.push(href as Href)
     } else {
       openExternalUrl(href)
