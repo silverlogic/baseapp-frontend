@@ -4,6 +4,7 @@ import { FC, useRef, useState, useTransition } from 'react'
 
 import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
+import { removeLeadingSlash } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
 import Link from 'next/link'
@@ -74,7 +75,9 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const profileUrlPath = comment?.profile?.urlPath?.path
   const profileUrl =
-    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
+    !profileUrlPath || useProfileId
+      ? `${profilePath}/${comment?.profile?.id}`
+      : `${profilePath}/${removeLeadingSlash(profileUrlPath)}`
   const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
