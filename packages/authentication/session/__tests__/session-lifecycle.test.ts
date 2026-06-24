@@ -98,22 +98,50 @@ describe('createAllauthSession', () => {
     expect(state.status).toBe('authenticated')
   })
 
-  it('keeps the decoded user when access token is expired', async () => {
+  it('returns the persisted user when the access token is valid', async () => {
     const session = createAllauthSession()
-    mockedDecodeJWT.mockReturnValue({
-      id: 1,
-      email: 'user@company.com',
-      exp: Math.floor(Date.now() / 1000) - 60,
-    } as never)
+    mockedDecodeJWT.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 } as never)
+    mockedIsUserTokenValid.mockReturnValue(true)
+
+    const state = await session.evaluate({
+      accessToken: 'valid-access',
+      refreshToken: null,
+      sessionToken: null,
+      user: { id: 1, email: 'user@company.com' } as never,
+    })
+
+    expect(state.status).toBe('authenticated')
+    expect(state.user?.email).toBe('user@company.com')
+  })
+
+  it('keeps the persisted user when the access token is expired', async () => {
+    const session = createAllauthSession()
     mockedIsUserTokenValid.mockReturnValue(false)
 
     const state = await session.evaluate({
       accessToken: 'expired-access',
       refreshToken: 'refresh-token',
       sessionToken: null,
+      user: { id: 1, email: 'user@company.com' } as never,
     })
 
     expect(state.status).toBe('expired')
     expect(state.user?.email).toBe('user@company.com')
+  })
+
+  it('preserves the persisted user across a successful refresh', async () => {
+    const session = createAllauthSession()
+    mockedGetTokens.mockResolvedValue({ access: 'new-access', refresh: 'new-refresh' })
+
+    const state = await session.refresh({
+      accessToken: null,
+      refreshToken: 'refresh-token',
+      sessionToken: null,
+      user: { id: 1, email: 'user@company.com' } as never,
+    })
+
+    expect(state.status).toBe('authenticated')
+    expect(state.user?.email).toBe('user@company.com')
+    expect(state.session.accessToken).toBe('new-access')
   })
 })

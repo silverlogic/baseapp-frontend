@@ -79,10 +79,18 @@ export interface SessionMaterial {
   accessToken: string | null
   refreshToken: string | null
   sessionToken: string | null
+  // Persisted alongside the tokens so `evaluate`/`refresh` stay pure functions
+  // of the stored session. With allauth the user is captured from the response,
+  // not decoded from the access token.
+  user?: User | null
 }
 
 export type SessionStatus = (typeof SESSION_STATUS)[keyof typeof SESSION_STATUS]
 
+// `status` is the single source of truth for authorization: only treat the
+// visitor as logged in when `status === 'authenticated'`. `user` may still be
+// populated while `status === 'expired'` (so the UI does not flicker during a
+// token refresh), so never gate access on `user` truthiness alone.
 export interface SessionState<TUser = User> {
   status: SessionStatus
   user: TUser | null

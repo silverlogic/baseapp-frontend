@@ -50,7 +50,7 @@ describe('AllauthStrategy — contract', () => {
   })
 
   describe('login', () => {
-    it('maps a success response to AuthResult { kind: "success" }', async () => {
+    it('maps a success response to AuthResult { kind: "success" } and captures the user', async () => {
       const loginResponse = buildLoginResponse()
       mockedAllAuthApi.login.mockResolvedValue(loginResponse)
 
@@ -62,10 +62,13 @@ describe('AllauthStrategy — contract', () => {
       expect(result.kind).toBe('success')
       expect(result).toMatchObject({
         kind: 'success',
+        // Identity is captured from the response, not decoded from the token.
+        user: { id: 1, email: 'test@example.com' },
         session: {
           accessToken: 'access-tok',
           refreshToken: 'refresh-tok',
           sessionToken: 'session-tok',
+          user: { id: 1, email: 'test@example.com' },
         },
         rawResponse: loginResponse,
         metadata: expect.objectContaining({
@@ -74,6 +77,110 @@ describe('AllauthStrategy — contract', () => {
           sessionToken: 'session-tok',
         }),
       })
+    })
+
+    it('captures the user from the response meta, preferring it over data.user', async () => {
+      const loginResponse = buildLoginResponse({
+        meta: {
+          accessToken: 'access-tok',
+          refreshToken: 'refresh-tok',
+          sessionToken: 'session-tok',
+          id: 'public-uuid',
+          email: 'meta@example.com',
+          isEmailVerified: true,
+        },
+        data: { user: { id: 1, email: 'data@example.com' } },
+      })
+      mockedAllAuthApi.login.mockResolvedValue(loginResponse)
+
+      const result = await strategy.login({
+        email: 'test@example.com',
+        password: 'pass123', // NOSONAR
+      })
+
+      expect(result).toMatchObject({
+        kind: 'success',
+        user: { id: 'public-uuid', email: 'meta@example.com', isEmailVerified: true },
+      })
+    })
+
+    it('excludes the heavy profile blob from the persisted user', async () => {
+      const loginResponse = buildLoginResponse({
+        meta: {
+          accessToken: 'access-tok',
+          refreshToken: 'refresh-tok',
+          sessionToken: 'session-tok',
+          id: 1,
+          email: 'test@example.com',
+          profile: { id: 'p1', name: 'n', image: 'https://cdn.example.com/x.png', urlPath: '/u' },
+        },
+        data: { user: { id: 1, email: 'test@example.com' } },
+      })
+      mockedAllAuthApi.login.mockResolvedValue(loginResponse)
+
+      const result = await strategy.login({
+        email: 'test@example.com',
+        password: 'pass123', // NOSONAR
+      })
+
+      expect(result.kind).toBe('success')
+      // profile is owned by the CurrentProfile cookie, never duplicated on the user
+      expect((result as { user?: { profile?: unknown } }).user?.profile).toBeUndefined()
+    })
+
+    it('resolves the user from id alone when email is absent', async () => {
+      const loginResponse = buildLoginResponse({
+        meta: {
+          accessToken: 'access-tok',
+          refreshToken: 'refresh-tok',
+          sessionToken: 'session-tok',
+        },
+        data: { user: { id: 7 } },
+      })
+      mockedAllAuthApi.login.mockResolvedValue(loginResponse)
+
+      const result = await strategy.login({
+        email: 'test@example.com',
+        password: 'pass123', // NOSONAR
+      })
+
+      expect(result.kind).toBe('success')
+      expect((result as { user?: { id?: unknown } }).user?.id).toBe(7)
+    })
+
+    it('does not leak session/control fields from meta into the user', async () => {
+      const loginResponse = buildLoginResponse({
+        meta: {
+          accessToken: 'access-tok',
+          refreshToken: 'refresh-tok',
+          sessionToken: 'session-tok',
+          isAuthenticated: true,
+          expiresIn: 300,
+          id: 1,
+          email: 'test@example.com',
+          someFutureControlKey: 'secret', // an unknown key the backend might add later
+        },
+        data: { user: { id: 1, email: 'test@example.com' } },
+      })
+      mockedAllAuthApi.login.mockResolvedValue(loginResponse)
+
+      const result = await strategy.login({
+        email: 'test@example.com',
+        password: 'pass123', // NOSONAR
+      })
+
+      const user = (result as { user?: Record<string, unknown> }).user ?? {}
+      expect(user).toMatchObject({ id: 1, email: 'test@example.com' })
+      for (const leaked of [
+        'accessToken',
+        'refreshToken',
+        'sessionToken',
+        'isAuthenticated',
+        'expiresIn',
+        'someFutureControlKey',
+      ]) {
+        expect(user[leaked]).toBeUndefined()
+      }
     })
 
     it('maps a redirect response to AuthResult { kind: "redirect_required" }', async () => {

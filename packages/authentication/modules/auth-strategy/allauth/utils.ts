@@ -1,17 +1,50 @@
-import { decodeJWT } from '@baseapp-frontend/utils/functions/token/decodeJWT'
-import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
-
 import type { AllAuthLoginResponse, AllAuthSignupResponse } from '../../../types/allauth'
 import type { MinimalProfile } from '../../../types/profile'
 import type { User } from '../../../types/user'
 import type { AuthResult } from '../types'
 
-type AccessTokenPayload = JWTContent & Partial<User>
+// Canonical `User` fields sourced from the auth response. This is an allowlist
+// (not "copy everything except known control keys") so token/session/control
+// fields in `meta` can never leak into the persisted user, and adding a field
+// is a deliberate change. `profile` is intentionally excluded: it's large
+// (image/banner URLs), is persisted separately as the CurrentProfile cookie,
+// and is hydrated from /users/me, so duplicating it here would only bloat the
+// cookie and risk drift.
+const USER_FIELDS = [
+  'isEmailVerified',
+  'emailVerificationRequired',
+  'newEmail',
+  'isNewEmailConfirmed',
+  'referralCode',
+  'firstName',
+  'lastName',
+  'phoneNumber',
+  'preferredLanguage',
+] as const
 
-function resolveUser(accessToken?: string): User | null {
-  if (!accessToken) return null
+// Identity is taken from the login response, never decoded from the access
+// token. The backend sends the full (camelized) user in `meta` via the allauth
+// token strategy; allauth's own `data.user` is the sparse fallback. `id`/`email`
+// prefer `meta` so the identity is public-id-aware (an int today, a UUID once
+// public ids are enabled); the remaining fields come from whichever source has
+// them.
+function resolveUser(response: AllAuthLoginResponse): User | null {
+  const meta = (response.meta ?? {}) as Record<string, unknown>
+  const dataUser = (response.data?.user ?? {}) as Record<string, unknown>
 
-  return decodeJWT<AccessTokenPayload>(accessToken) as User | null
+  const id = meta.id ?? dataUser.id
+
+  // `id` is the identity key; email is optional (some account types, and future
+  // strategies, have no email), so only drop the user when there is no id.
+  if (id === undefined || id === null) return null
+
+  const user: Record<string, unknown> = { id, email: meta.email ?? dataUser.email }
+  USER_FIELDS.forEach((field) => {
+    const value = meta[field] ?? dataUser[field]
+    if (value !== undefined) user[field] = value
+  })
+
+  return user as unknown as User
 }
 
 function resolveProfile(response: AllAuthLoginResponse): MinimalProfile | null {
@@ -52,13 +85,16 @@ export function mapLoginResponse(response: AllAuthLoginResponse): AuthResult {
     }
   }
 
+  const user = resolveUser(response)
+
   return {
     kind: 'success',
-    user: resolveUser(response.meta?.accessToken),
+    user,
     session: {
       accessToken: response.meta?.accessToken ?? null,
       refreshToken: response.meta?.refreshToken ?? null,
       sessionToken: response.meta?.sessionToken ?? null,
+      user,
     },
     profile: resolveProfile(response),
     rawResponse: response,

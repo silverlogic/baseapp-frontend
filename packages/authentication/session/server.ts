@@ -1,5 +1,6 @@
 import {
   ACCESS_KEY_NAME,
+  CURRENT_USER_KEY_NAME,
   REFRESH_KEY_NAME,
   SESSION_TOKEN_KEY_NAME,
 } from '@baseapp-frontend/utils/constants/jwt'
@@ -9,8 +10,14 @@ import { SESSION_STATUS } from '../modules/auth-strategy/constants'
 import { getActiveAuthModule } from '../modules/auth-strategy/factory'
 import type { SessionContract, SessionMaterial, SessionState } from '../modules/auth-strategy/types'
 import type { User } from '../types/user'
+import { parseUserCookie } from './user-cookie'
 
-const SESSION_COOKIE_NAMES = [ACCESS_KEY_NAME, REFRESH_KEY_NAME, SESSION_TOKEN_KEY_NAME] as const
+const SESSION_COOKIE_NAMES = [
+  ACCESS_KEY_NAME,
+  REFRESH_KEY_NAME,
+  SESSION_TOKEN_KEY_NAME,
+  CURRENT_USER_KEY_NAME,
+] as const
 const SESSION_COOKIE_CONFIG = { secure: process.env.NODE_ENV === 'production' }
 
 type MiddlewareResponse = {
@@ -94,6 +101,7 @@ function readRequestSession(request: {
     accessToken: request.cookies.get(ACCESS_KEY_NAME)?.value ?? null,
     refreshToken: request.cookies.get(REFRESH_KEY_NAME)?.value ?? null,
     sessionToken: request.cookies.get(SESSION_TOKEN_KEY_NAME)?.value ?? null,
+    user: parseUserCookie(request.cookies.get(CURRENT_USER_KEY_NAME)?.value),
   }
 }
 
@@ -102,6 +110,7 @@ async function readServerSession(): Promise<SessionMaterial> {
     accessToken: (await getTokenSSR(ACCESS_KEY_NAME)) ?? null,
     refreshToken: (await getTokenSSR(REFRESH_KEY_NAME)) ?? null,
     sessionToken: (await getTokenSSR(SESSION_TOKEN_KEY_NAME)) ?? null,
+    user: parseUserCookie(await getTokenSSR(CURRENT_USER_KEY_NAME)),
   }
 }
 

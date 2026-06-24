@@ -33,7 +33,7 @@ describe('StrategySession — allauth — contract', () => {
     jest.resetAllMocks()
   })
 
-  it('evaluate returns authenticated for valid session material', async () => {
+  it('evaluate returns authenticated with the persisted user for valid session material', async () => {
     mockedDecodeJWT.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 } as never)
     mockedIsUserTokenValid.mockReturnValue(true)
 
@@ -41,12 +41,13 @@ describe('StrategySession — allauth — contract', () => {
       accessToken: 'valid-access-token',
       refreshToken: 'valid-refresh-token',
       sessionToken: null,
+      user: { id: 1, email: 'user@company.com' } as unknown as SessionMaterial['user'],
     }
 
     const state: SessionState = await strategySession.evaluate(session)
 
     expect(state.status).toBe('authenticated')
-    expect(state.user).toBeDefined()
+    expect(state.user?.email).toBe('user@company.com')
   })
 
   it('evaluate returns expired when access is missing but refresh exists', async () => {
@@ -72,20 +73,21 @@ describe('StrategySession — allauth — contract', () => {
     expect(state.status).toBe('anonymous')
   })
 
-  it('refresh returns authenticated with fresh tokens on success', async () => {
+  it('refresh returns authenticated with fresh tokens and preserves the user on success', async () => {
     mockedGetTokens.mockResolvedValue({ access: 'fresh-access', refresh: 'fresh-refresh' })
-    mockedDecodeJWT.mockReturnValue({ exp: Math.floor(Date.now() / 1000) + 3600 } as never)
 
     const state: SessionState = await strategySession.refresh({
       accessToken: 'expired-access-token',
       refreshToken: 'valid-refresh-token',
       sessionToken: 'session-tok',
+      user: { id: 1, email: 'user@company.com' } as unknown as SessionMaterial['user'],
     })
 
     expect(state.status).toBe('authenticated')
     expect(state.session.accessToken).toBe('fresh-access')
     expect(state.session.refreshToken).toBe('fresh-refresh')
     expect(state.session.sessionToken).toBe('session-tok')
+    expect(state.user?.email).toBe('user@company.com')
   })
 
   it('refresh returns anonymous on refresh failure', async () => {

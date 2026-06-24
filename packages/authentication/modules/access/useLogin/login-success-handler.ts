@@ -52,8 +52,11 @@ export async function writeMfaSession(response: {
     accessToken: response.access,
     refreshToken: response.refresh,
     sessionToken: null, // MFA completion doesn't issue a session token; the JWT pair is sufficient here
+    // The code-verification response carries no user, so persist null to clear
+    // any previously stored user (prevents cross-account identity bleed).
+    user: null,
   })
-  // TODO(auth-strategy): If MFA completion needs profile hydration in the
-  // unified flow, move that responsibility into the strategy/session layer
-  // instead of decoding JWTs in the hook.
+  // TODO(auth-strategy): hydrate the real user here once the MFA flow is wired
+  // up — capture it from the `mfa_required` step's response (which includes the
+  // user) and pass it through instead of leaving the session user-less.
 }

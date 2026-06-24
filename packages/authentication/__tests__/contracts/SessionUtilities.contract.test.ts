@@ -11,6 +11,7 @@ import {
 } from '@baseapp-frontend/utils/constants/events'
 import {
   ACCESS_KEY_NAME,
+  CURRENT_USER_KEY_NAME,
   REFRESH_KEY_NAME,
   SESSION_TOKEN_KEY_NAME,
 } from '@baseapp-frontend/utils/constants/jwt'
@@ -113,12 +114,53 @@ describe('SessionService — contract', () => {
     )
   })
 
-  it('clear removes all token cookies and profile cookie', async () => {
+  it('read parses the persisted user from cookie storage', () => {
+    mockedGetToken.mockImplementation((key) => {
+      if (key === CURRENT_USER_KEY_NAME) {
+        return JSON.stringify({ id: 1, email: 'user@company.com' })
+      }
+      return undefined
+    })
+
+    const session = sessionService.read() as SessionMaterial
+
+    expect(session.user?.email).toBe('user@company.com')
+  })
+
+  it('write persists the user to cookie storage', async () => {
+    const session: SessionMaterial = {
+      accessToken: 'new-access',
+      refreshToken: 'new-refresh',
+      sessionToken: 'new-session',
+      user: { id: 1, email: 'user@company.com' } as unknown as SessionMaterial['user'],
+    }
+
+    await sessionService.write(session)
+
+    expect(mockedSetTokenAsync).toHaveBeenCalledWith(
+      CURRENT_USER_KEY_NAME,
+      JSON.stringify(session.user),
+      expect.objectContaining({ secure: expect.any(Boolean) }),
+    )
+  })
+
+  it('write clears the user cookie when the session has no user', async () => {
+    await sessionService.write({
+      accessToken: 'new-access',
+      refreshToken: 'new-refresh',
+      sessionToken: 'new-session',
+    })
+
+    expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(CURRENT_USER_KEY_NAME)
+  })
+
+  it('clear removes all token cookies and the user and profile cookies', async () => {
     await sessionService.clear('logout')
 
     expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
     expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(SESSION_TOKEN_KEY_NAME)
+    expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(CURRENT_USER_KEY_NAME)
     expect(mockedRemoveTokenAsync).toHaveBeenCalledWith(CURRENT_PROFILE_KEY_NAME)
     expect(mockedEventEmitter.emit).toHaveBeenCalledWith(AUTH_SESSION_CLEARED, {
       type: AUTH_SESSION_CLEARED,

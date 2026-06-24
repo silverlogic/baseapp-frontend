@@ -9,12 +9,6 @@ import type { SessionMaterial, SessionState, StrategySession } from '../types'
 
 type AccessTokenPayload = JWTContent & Partial<User>
 
-type AuthenticatedPayload = JWTContent & User
-
-function isValidUser(payload: AccessTokenPayload | null): payload is AuthenticatedPayload {
-  return payload !== null && typeof payload.id === 'number' && typeof payload.email === 'string'
-}
-
 const inflightRefreshByToken = new Map<string, Promise<SessionState>>()
 
 function toAnonymousState(): SessionState {
@@ -25,6 +19,7 @@ function toAnonymousState(): SessionState {
       accessToken: null,
       refreshToken: null,
       sessionToken: null,
+      user: null,
     },
   }
 }
@@ -34,23 +29,12 @@ function decodeAccessToken(accessToken?: string | null): AccessTokenPayload | nu
   return decodeJWT<AccessTokenPayload>(accessToken)
 }
 
-function toAuthenticatedState(
-  payload: AccessTokenPayload | null,
-  session: SessionMaterial,
-): SessionState {
-  return {
-    status: SESSION_STATUS.authenticated,
-    user: isValidUser(payload) ? payload : null,
-    session,
-  }
-}
-
 async function evaluate(session: SessionMaterial): Promise<SessionState> {
   if (!session.accessToken) {
     if (session.refreshToken) {
       return {
         status: SESSION_STATUS.expired,
-        user: null,
+        user: session.user ?? null,
         session,
       }
     }
@@ -58,12 +42,15 @@ async function evaluate(session: SessionMaterial): Promise<SessionState> {
     return toAnonymousState()
   }
 
+  // The access token is used only to determine session validity (its `exp`).
+  // User identity comes from the persisted session material, not the token,
+  // because allauth issues a clean token and returns the user in the response.
   const payload = decodeAccessToken(session.accessToken)
   const valid = isUserTokenValid(payload)
 
   return {
     status: valid ? SESSION_STATUS.authenticated : SESSION_STATUS.expired,
-    user: isValidUser(payload) ? payload : null,
+    user: session.user ?? null,
     session,
   }
 }
@@ -75,14 +62,20 @@ async function doRefresh(session: SessionMaterial): Promise<SessionState> {
 
   try {
     const tokens = await getTokens(session.refreshToken)
+    // Refresh only rotates tokens; identity is preserved from the existing
+    // session material (the refresh endpoint returns no user).
     const nextSession: SessionMaterial = {
       accessToken: tokens.access,
       refreshToken: tokens.refresh ?? session.refreshToken,
       sessionToken: session.sessionToken ?? null,
+      user: session.user ?? null,
     }
-    const payload = decodeAccessToken(tokens.access)
 
-    return toAuthenticatedState(payload, nextSession)
+    return {
+      status: SESSION_STATUS.authenticated,
+      user: nextSession.user ?? null,
+      session: nextSession,
+    }
   } catch {
     return toAnonymousState()
   }
