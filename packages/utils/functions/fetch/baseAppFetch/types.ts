@@ -7,6 +7,7 @@ type NextFetchOptions = {
 
 type Config = {
   accessKeyName?: string
+  accessTokenOverride?: string | null
   refreshKeyName?: string
   languageCookieName?: string
   baseUrl?: string
@@ -18,7 +19,6 @@ type Config = {
   stringifyBody?: boolean
   setContentType?: boolean
   throwError?: boolean
-  refreshToken?: boolean
   tokenType?: 'Bearer' | 'Token'
 }
 

@@ -16,12 +16,12 @@ describe('AccountPopover', () => {
   beforeEach(() => {
     cy.viewport('iphone-6')
 
-    cy.stub(authHooks, 'useJWTUser').callsFake(() => ({
+    cy.stub(authHooks, 'useSession').callsFake(() => ({
       user: userMockData,
     }))
 
     const logoutSpy = cy.spy().as('logoutSpy')
-    cy.stub(authHooks, 'useAllAuthLogout').callsFake(() => ({
+    cy.stub(authHooks, 'useLogout').callsFake(() => ({
       logout: logoutSpy,
     }))
 

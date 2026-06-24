@@ -1,22 +1,27 @@
+'use client'
+
 import { useState } from 'react'
 
 import { useNotification } from '@baseapp-frontend/utils'
 
 import type { AllAuthLoginResponse } from '../../../../types/allauth'
-import { useAllAuthSession } from '../useAllAuthSession'
+import type { User } from '../../../../types/user'
+import { mapLoginResponse } from '../../../auth-strategy/allauth/utils'
+import { useCurrentProfile } from '../../../profile'
+import { setProfileExpoStorage } from '../../../profile/utils'
+import {
+  resolveProfileFromAuthResult,
+  writeSessionFromAuthResult,
+} from '../../useLogin/login-success-handler'
 
 export interface UseAllAuthGoogleLoginHandlerOptions {
-  onSuccess?: () => void
+  onSuccess?: (user: User | null) => void | Promise<void>
 }
 
-/**
- * Shared hook for handling Google OAuth login success across login/signup flows.
- * Extracts tokens, starts session, calls success callback, and manages loading state.
- */
 export const useAllAuthGoogleLoginHandler = (options?: UseAllAuthGoogleLoginHandlerOptions) => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const { sendApiErrorToast } = useNotification()
-  const { startSession } = useAllAuthSession()
+  const { setCurrentProfile } = useCurrentProfile()
 
   const startGoogleLogin = () => setIsGoogleLoading(true)
 
@@ -24,17 +29,22 @@ export const useAllAuthGoogleLoginHandler = (options?: UseAllAuthGoogleLoginHand
 
   const handleGoogleLoginSuccess = async (response: AllAuthLoginResponse) => {
     try {
-      const accessToken = response.meta?.accessToken
-      const refreshToken = response.meta?.refreshToken
+      const result = mapLoginResponse(response)
 
-      if (typeof accessToken === 'string' && typeof refreshToken === 'string') {
-        await startSession({
-          accessToken,
-          refreshToken,
-          rawResponse: response,
-        })
+      if (
+        result.kind === 'success' &&
+        result.session?.accessToken &&
+        result.session?.refreshToken
+      ) {
+        await writeSessionFromAuthResult(result)
 
-        options?.onSuccess?.()
+        const profile = resolveProfileFromAuthResult(result)
+        if (profile) {
+          setCurrentProfile(profile)
+          await setProfileExpoStorage(profile)
+        }
+
+        await options?.onSuccess?.(result.user ?? null)
       } else {
         sendApiErrorToast({ message: 'Failed to complete login - tokens not found' })
       }

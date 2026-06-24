@@ -1,90 +1,45 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
-import {
-  ACCESS_KEY_NAME,
-  REFRESH_KEY_NAME,
-  decodeJWT,
-  setFormApiErrors,
-  setTokenAsync,
-} from '@baseapp-frontend/utils'
-import { isMobilePlatform } from '@baseapp-frontend/utils/functions/os'
+import { setFormApiErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 
-import AuthApi from '../../../services/auth'
 import MfaApi from '../../../services/mfa'
-import type {
-  LoginChangeExpiredPasswordRedirectResponse,
-  LoginJWTResponse,
-  LoginMfaRequest,
-} from '../../../types/auth'
-import { User } from '../../../types/user'
-import {
-  isLoginChangeExpiredPasswordRedirectResponse,
-  isLoginMfaResponse,
-} from '../../../utils/login'
+import type { LoginJWTResponse, LoginMfaRequest, LoginResponse } from '../../../types/auth'
+import { getActiveAuthModule } from '../../auth-strategy/factory'
+import type { AuthError, AuthResult } from '../../auth-strategy/types'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useCurrentProfile } from '../../profile'
 import { setProfileExpoStorage } from '../../profile/utils'
 import { DEFAULT_INITIAL_VALUES, DEFAULT_VALIDATION_SCHEMA } from './constants'
+import {
+  resolveProfileFromAuthResult,
+  writeMfaSession,
+  writeSessionFromAuthResult,
+} from './login-success-handler'
 import type { ApiClass, LoginParams, UseLoginOptions } from './types'
 
-const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
+const useLogin = <TApiClass extends ApiClass>({
   loginFormOptions = {},
   loginOptions = {},
   mfaOptions = {},
-  accessKeyName = ACCESS_KEY_NAME,
-  refreshKeyName = REFRESH_KEY_NAME,
-  ApiClass = AuthApi as unknown as TApiClass,
   enableFormApiErrors = true,
 }: UseLoginOptions<TApiClass> = {}) => {
   const [mfaEphemeralToken, setMfaEphemeralToken] = useState<string | null>(null)
   const { setCurrentProfile } = useCurrentProfile()
+  const strategy = useMemo(() => getActiveAuthModule().strategy, [])
 
-  /*
-   * Handles login success  with the auth token in response
-   */
-  async function handleLoginSuccess(
-    response: LoginJWTResponse | LoginChangeExpiredPasswordRedirectResponse,
-  ) {
-    if (isLoginChangeExpiredPasswordRedirectResponse(response)) {
-      return
+  async function handleLoginSuccess(result: AuthResult) {
+    await writeSessionFromAuthResult(result)
+    const profile = resolveProfileFromAuthResult(result)
+    if (profile) {
+      setCurrentProfile(profile)
+      await setProfileExpoStorage(profile)
     }
-
-    const isWebPlatform = !isMobilePlatform()
-
-    const user = decodeJWT<User>(response.access)
-    if (user) {
-      const API_BASE_URL = isWebPlatform
-        ? process.env.NEXT_PUBLIC_API_BASE_URL
-        : process.env.EXPO_PUBLIC_API_BASE_URL
-      const baseUrl = API_BASE_URL?.replace('/v1', '')
-      let absoluteImagePath = null
-      if (user?.profile?.image) {
-        absoluteImagePath = user.profile.image.startsWith('http')
-          ? user.profile.image
-          : `${baseUrl}${user.profile.image}`
-      }
-
-      const currentProfile = {
-        ...user.profile,
-        image: absoluteImagePath,
-      }
-
-      setCurrentProfile(currentProfile)
-      await setProfileExpoStorage(currentProfile)
-    }
-
-    await setTokenAsync(accessKeyName, response.access, {
-      secure: process.env.NODE_ENV === 'production',
-    })
-    await setTokenAsync(refreshKeyName, response.refresh, {
-      secure: process.env.NODE_ENV === 'production',
-    })
   }
 
   const form = useForm<LoginParams<TApiClass>>({
@@ -94,23 +49,27 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
     ...loginFormOptions,
   })
 
-  const mutation = useMutation({
-    mutationFn: (data: LoginParams<TApiClass>) => ApiClass.login(data),
-    ...loginOptions, // needs to be placed bellow all overridable options
-    onError: (err, variables, context) => {
+  const mutation = useMutation<AuthResult, AuthError | Error, LoginParams<TApiClass>>({
+    mutationFn: (data: LoginParams<TApiClass>) => strategy.login(data),
+    ...loginOptions,
+    onError: (error: unknown, variables, context) => {
+      const err = error as AuthError | Error
       loginOptions?.onError?.(err, variables, context)
       if (enableFormApiErrors) {
-        setFormApiErrors(form, err)
+        const errorWithFieldErrors =
+          err && typeof err === 'object' && 'fieldErrors' in err
+            ? { response: { data: err.fieldErrors } }
+            : err
+        setFormApiErrors(form, errorWithFieldErrors)
       }
     },
-    onSuccess: async (response, variables, context) => {
-      if (isLoginMfaResponse(response)) {
-        setMfaEphemeralToken(response.ephemeralToken)
-      } else {
-        await handleLoginSuccess(response)
+    onSuccess: async (result, variables, context) => {
+      if (result.kind === 'mfa_required') {
+        setMfaEphemeralToken(result.ephemeralToken)
+      } else if (result.kind === 'success') {
+        await handleLoginSuccess(result)
       }
-      // onSuccess should only run after we successfully await the handleLoginSuccess (that sets the auth tokens asynchonously)
-      loginOptions?.onSuccess?.(response, variables, context)
+      loginOptions?.onSuccess?.(result, variables, context)
     },
   })
 
@@ -130,8 +89,10 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
       }
     },
     onSuccess: async (response, variables, context) => {
-      if (!isLoginMfaResponse(response)) {
-        await handleLoginSuccess(response)
+      const isTokenResponse = (data: LoginResponse): data is LoginJWTResponse =>
+        'access' in data && 'refresh' in data
+      if (isTokenResponse(response)) {
+        await writeMfaSession(response)
       }
       mfaOptions?.onSuccess?.(response, variables, context)
     },

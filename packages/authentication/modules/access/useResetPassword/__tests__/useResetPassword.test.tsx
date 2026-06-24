@@ -1,33 +1,30 @@
-import {
-  ComponentWithProviders,
-  mockFetch,
-  mockFetchError,
-  renderHook,
-} from '@baseapp-frontend/test'
+import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
 
 import { z } from 'zod'
 
 import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useResetPassword from '../index'
 
+const mockResetPassword = jest.fn()
+
+jest.mock('../../../auth-strategy/factory', () => ({
+  getActiveAuthModule: () => ({
+    strategy: {
+      resetPassword: mockResetPassword,
+    },
+  }),
+}))
+
 describe('useResetPassword', () => {
   const password = '12345#Abcde'
   const token = 'fake-token'
-  const resetPasswordUrl = '/forgot-password/reset'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    mockResetPassword.mockReset()
   })
 
-  test('should run onSuccess', async () => {
-    mockFetch(resetPasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {
-        newPassword: password,
-        token,
-      },
-    })
+  test('should call strategy.resetPassword with newPassword and token, then run onSuccess', async () => {
+    mockResetPassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -52,14 +49,17 @@ describe('useResetPassword', () => {
 
     await result.current.form.handleSubmit()
 
+    expect(mockResetPassword).toHaveBeenCalledWith({
+      newPassword: password,
+      token,
+    })
     expect(hasOnSuccessRan).toBe(true)
   })
 
-  test('should run onError', async () => {
-    mockFetchError(resetPasswordUrl, {
-      method: 'POST',
-      status: 500,
-      error: 'any',
+  test('should run onError when strategy rejects', async () => {
+    mockResetPassword.mockRejectedValueOnce({
+      code: 'validation_error',
+      message: 'Invalid token',
     })
 
     let hasOnErrorRan = false
@@ -88,12 +88,8 @@ describe('useResetPassword', () => {
     expect(hasOnErrorRan).toBe(true)
   })
 
-  test('should run onError when newPassword and confirmNewPassword are different', async () => {
-    mockFetch(resetPasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+  test('should not submit when newPassword and confirmNewPassword are different', async () => {
+    mockResetPassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -122,15 +118,11 @@ describe('useResetPassword', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    mockFetch(resetPasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+    mockResetPassword.mockResolvedValueOnce(undefined)
 
     const customDefaultValues = {
       newPassword: '12345',
-      confirmNewPassword: '123456', // that would pass since the schema is not the default one, and doesnt check for password equality
+      confirmNewPassword: '123456',
     }
     const customValidationSchema = z.object({
       newPassword: z.string().min(1),

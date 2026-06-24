@@ -1,7 +1,10 @@
 import { MinimalProfile } from './profile'
 
 export interface User {
-  id: number
+  // `string | number`: the backend exposes integer pks by default, or opaque
+  // public ids (UUID strings) when public-id logic is enabled. Identity is
+  // never used for arithmetic, so consumers should treat it as an opaque key.
+  id: string | number
   email: string
   isEmailVerified: boolean
   newEmail: string

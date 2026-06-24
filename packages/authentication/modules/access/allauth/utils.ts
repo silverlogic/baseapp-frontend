@@ -9,7 +9,7 @@ export function isAllAuthPasswordChangeRedirect(
   return 'redirectUrl' in response && typeof response.redirectUrl === 'string'
 }
 
-function parseAllAuthErrorPayload(error: unknown): AllAuthResponse | null {
+export function parseAllAuthErrorPayload(error: unknown): AllAuthResponse | null {
   if (typeof error !== 'object' || !error) {
     return null
   }
@@ -34,7 +34,7 @@ function parseAllAuthErrorPayload(error: unknown): AllAuthResponse | null {
   return null
 }
 
-function mapAllAuthErrorsToFields(errors: AllAuthError[]): Record<string, string[]> {
+export function mapAllAuthErrorsToFields(errors: AllAuthError[]): Record<string, string[]> {
   return errors.reduce(
     (accumulator, current) => {
       const fieldKey = current.param || 'detail'
@@ -50,21 +50,4 @@ function mapAllAuthErrorsToFields(errors: AllAuthError[]): Record<string, string
     },
     {} as Record<string, string[]>,
   )
-}
-
-export function normalizeAllAuthError(error: unknown) {
-  const payload = parseAllAuthErrorPayload(error)
-
-  if (!payload || !Array.isArray(payload.errors) || payload.errors.length === 0) {
-    return error
-  }
-
-  const data = mapAllAuthErrorsToFields(payload.errors)
-  const firstMessage = Object.values(data)[0]?.[0] ?? (error as any)?.message
-  const normalizedError = error as any
-
-  normalizedError.response = { ...normalizedError.response, data }
-  normalizedError.message = firstMessage
-
-  return normalizedError
 }

@@ -1,29 +1,29 @@
-import {
-  ComponentWithProviders,
-  mockFetch,
-  mockFetchError,
-  renderHook,
-} from '@baseapp-frontend/test'
+import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
 
 import { z } from 'zod'
 
 import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useRecoverPassword from '../index'
 
-describe('useResetPassword', () => {
+const mockRecoverPassword = jest.fn()
+
+jest.mock('../../../auth-strategy/factory', () => ({
+  getActiveAuthModule: () => ({
+    strategy: {
+      recoverPassword: mockRecoverPassword,
+    },
+  }),
+}))
+
+describe('useRecoverPassword', () => {
   const email = 'test@tsl.io'
-  const forgotPasswordUrl = '/forgot-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    mockRecoverPassword.mockReset()
   })
 
-  test('should run onSuccess', async () => {
-    mockFetch(forgotPasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: { email },
-    })
+  test('should call strategy.recoverPassword and run onSuccess', async () => {
+    mockRecoverPassword.mockResolvedValueOnce(undefined)
 
     let hasOnSuccessRan = false
 
@@ -46,14 +46,15 @@ describe('useResetPassword', () => {
 
     await result.current.form.handleSubmit()
 
+    expect(mockRecoverPassword).toHaveBeenCalledWith({ email })
     expect(hasOnSuccessRan).toBe(true)
   })
 
-  test('should run onError', async () => {
-    mockFetchError(forgotPasswordUrl, {
-      method: 'POST',
-      status: 500,
-      error: 'any',
+  test('should run onError when strategy rejects', async () => {
+    mockRecoverPassword.mockRejectedValueOnce({
+      code: 'validation_error',
+      message: 'Invalid email',
+      fieldErrors: { email: ['Invalid email'] },
     })
 
     let hasOnErrorRan = false
@@ -81,11 +82,7 @@ describe('useResetPassword', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    mockFetch(forgotPasswordUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+    mockRecoverPassword.mockResolvedValueOnce(undefined)
 
     const customDefaultValues = {
       email: 'test@tsl.io',
