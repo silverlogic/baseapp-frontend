@@ -33,6 +33,7 @@ export type CustomizableCommentItemProps = {
   Timestamp?: FC<TimestampProps>
   useProfileId?: boolean
   profilePath?: string
+  prependProfilePath?: boolean
 }
 
 export interface CommentItemProps extends CustomizableCommentItemProps {
