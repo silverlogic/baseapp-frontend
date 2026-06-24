@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 1.3.0
+
+### Minor Changes
+
+- feat: add native navigation icons
+  - Add `CommentsIcon`, `ForumIcon`, `AuthenticationIcon`, `FlatPageIcon`, `FeatureRequestsIcon`, `FeedbackIcon`, and `ActivityLogIcon` to the native icon set (ported from the web icons), so the mobile sidebar can mirror the web navigation.
+
 ## 1.2.13
 
 ### Patch Changes
