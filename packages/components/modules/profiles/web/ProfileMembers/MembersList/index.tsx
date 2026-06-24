@@ -1,9 +1,9 @@
-import { FC, useMemo, useTransition } from 'react'
+import { FC, useMemo, useState, useTransition } from 'react'
 
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { useFragment, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
@@ -11,6 +11,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { MemberItemFragment$key } from '../../../../../__generated__/MemberItemFragment.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
+import InviteMemberDialog from '../InviteMemberDialog'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MEMBER_ROLES, MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
@@ -25,6 +26,7 @@ const MembersList: FC<MembersListProps> = ({
   membersContainerHeight = 400,
 }) => {
   const [isPending, startTransition] = useTransition()
+  const [isInviteOpen, setIsInviteOpen] = useState(false)
   const { control, reset, watch } = useForm({ defaultValues: { search: '' } })
   const { data, loadNext, hasNext, isLoadingNext, refetch } = usePaginationFragment(
     UserMembersListFragment,
@@ -42,6 +44,12 @@ const MembersList: FC<MembersListProps> = ({
     startTransition(() => {
       reset()
       handleSearch('')
+    })
+  }
+
+  const handleInvited = () => {
+    startTransition(() => {
+      refetch({ q: watch('search') })
     })
   }
 
@@ -78,34 +86,13 @@ const MembersList: FC<MembersListProps> = ({
     />
   )
 
-  if (members.length === 0) {
-    return (
-      <>
-        <Searchbar
-          variant="outlined"
-          size="small"
-          isPending={isPending}
-          onChange={(e) => handleSearch(e.target.value)}
-          onClear={() => handleSearchClear()}
-          name="search"
-          control={control}
-          sx={{ mb: 4 }}
-        />
-        <Typography variant="subtitle2" mb={4}>
-          {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
-        </Typography>
-        <MemberItem
-          member={data}
-          memberRole={MEMBER_ROLES.owner}
-          status={MEMBER_STATUSES.active}
-          searchQuery={watch('search')}
-        />
-      </>
-    )
-  }
-
   return (
     <>
+      <InviteMemberDialog
+        open={isInviteOpen}
+        onClose={() => setIsInviteOpen(false)}
+        onInvited={handleInvited}
+      />
       <Searchbar
         variant="outlined"
         size="small"
@@ -116,22 +103,51 @@ const MembersList: FC<MembersListProps> = ({
         control={control}
         sx={{ mb: 4 }}
       />
-      <Typography variant="subtitle2" mb={4}>
-        {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
-      </Typography>
-      <Virtuoso
-        style={{ height: membersContainerHeight }}
-        data={members}
-        itemContent={(_index, member) => member && renderMemberItem(member, _index)}
-        components={{
-          Footer: renderLoadingState,
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 1.5,
+          mb: 4,
         }}
-        endReached={() => {
-          if (hasNext) {
-            loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
-          }
-        }}
-      />
+      >
+        <Typography variant="subtitle2">
+          {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
+        </Typography>
+        {data?.canAddMember && (
+          <Button
+            variant="contained"
+            color="inherit"
+            onClick={() => setIsInviteOpen(true)}
+            sx={{ maxWidth: 'fit-content', whiteSpace: 'nowrap' }}
+          >
+            Add Member
+          </Button>
+        )}
+      </Box>
+      {members.length === 0 ? (
+        <MemberItem
+          member={data}
+          memberRole={MEMBER_ROLES.owner}
+          status={MEMBER_STATUSES.active}
+          searchQuery={watch('search')}
+        />
+      ) : (
+        <Virtuoso
+          style={{ height: membersContainerHeight }}
+          data={members}
+          itemContent={(_index, member) => member && renderMemberItem(member, _index)}
+          components={{
+            Footer: renderLoadingState,
+          }}
+          endReached={() => {
+            if (hasNext) {
+              loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
+            }
+          }}
+        />
+      )}
     </>
   )
 }

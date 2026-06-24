@@ -1,6 +1,7 @@
 // exports common profiles code
 
 export * from './graphql/fragments/AllProfilesList'
+export * from './graphql/fragments/InviteMembersSearch'
 export * from './graphql/fragments/BlockToggle'
 export * from './graphql/fragments/MemberItem'
 export * from './graphql/fragments/ProfileComponent'

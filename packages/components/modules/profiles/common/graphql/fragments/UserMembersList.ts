@@ -10,6 +10,7 @@ export const UserMembersListFragment = graphql`
     q: { type: "String" }
   ) {
     canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")
+    canAddMember: hasPerm(perm: "baseapp_profiles.add_profileuserrole")
     ...ProfileItemFragment
     members(first: $count, after: $cursor, orderBy: $orderBy, q: $q)
       @connection(key: "UserMembersFragment_members", filters: ["orderBy", "q"]) {
