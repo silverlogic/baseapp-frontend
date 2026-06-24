@@ -47,6 +47,9 @@ const MemberListItem: FC<MemberListItemProps> = ({
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
           canChangeMember={data?.canChangeRole || false}
+          invitedEmail={memberFragment?.invitedEmail}
+          invitationExpiresAt={memberFragment?.invitationExpiresAt}
+          invitationId={memberFragment?.id}
           {...MemberItemComponentProps}
         />
       </>
@@ -62,6 +65,9 @@ const MemberListItem: FC<MemberListItemProps> = ({
           status={memberFragment?.status}
           userId={memberFragment?.user?.id}
           canChangeMember={data?.canChangeRole || false}
+          invitedEmail={memberFragment?.invitedEmail}
+          invitationExpiresAt={memberFragment?.invitationExpiresAt}
+          invitationId={memberFragment?.id}
           {...MemberItemComponentProps}
         />
         <Divider />
@@ -83,6 +89,9 @@ const MemberListItem: FC<MemberListItemProps> = ({
       status={memberFragment?.status}
       userId={memberFragment?.user?.id}
       canChangeMember={data?.canChangeRole || false}
+      invitedEmail={memberFragment?.invitedEmail}
+      invitationExpiresAt={memberFragment?.invitationExpiresAt}
+      invitationId={memberFragment?.id}
       {...MemberItemComponentProps}
     />
   )

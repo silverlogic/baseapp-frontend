@@ -910,6 +910,11 @@ type Mutation {
   profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
   profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
   profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
+  profileSendInvitation(input: ProfileSendInvitationInput!): ProfileSendInvitationPayload
+  profileAcceptInvitation(input: ProfileAcceptInvitationInput!): ProfileAcceptInvitationPayload
+  profileDeclineInvitation(input: ProfileDeclineInvitationInput!): ProfileDeclineInvitationPayload
+  profileCancelInvitation(input: ProfileCancelInvitationInput!): ProfileCancelInvitationPayload
+  profileResendInvitation(input: ProfileResendInvitationInput!): ProfileResendInvitationPayload
 }
 
 interface Node {
@@ -1484,6 +1489,76 @@ type ProfileRemoveMemberPayload {
   clientMutationId: String
 }
 
+input ProfileSendInvitationInput {
+  profileId: ID!
+  email: String!
+  role: ProfileRoles!
+  clientMutationId: String
+}
+
+type ProfileSendInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  emailSent: Boolean
+  clientMutationId: String
+}
+
+input ProfileAcceptInvitationInput {
+  token: String!
+  clientMutationId: String
+}
+
+type ProfileAcceptInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  profile: Profile
+  clientMutationId: String
+}
+
+input ProfileDeclineInvitationInput {
+  token: String!
+  clientMutationId: String
+}
+
+type ProfileDeclineInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  success: Boolean
+  clientMutationId: String
+}
+
+input ProfileCancelInvitationInput {
+  invitationId: ID!
+  clientMutationId: String
+}
+
+type ProfileCancelInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  success: Boolean
+  clientMutationId: String
+}
+
+input ProfileResendInvitationInput {
+  invitationId: ID!
+  clientMutationId: String
+}
+
+type ProfileResendInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  emailSent: Boolean
+  clientMutationId: String
+}
+
 """An enumeration."""
 enum ProfileRoles {
   """admin"""
@@ -1503,6 +1578,12 @@ enum ProfileRoleStatus {
 
   """inactive"""
   INACTIVE
+
+  """declined"""
+  DECLINED
+
+  """expired"""
+  EXPIRED
 }
 
 interface ProfilesInterface {
@@ -1553,10 +1634,14 @@ type ProfileUpdatePayload {
 type ProfileUserRole implements Node {
   """The ID of the object"""
   id: ID!
-  user: User!
+  user: User
   role: ProfileRoles
   status: ProfileRoleStatus
   pk: Int
+  invitedEmail: String
+  invitedAt: DateTime
+  invitationExpiresAt: DateTime
+  respondedAt: DateTime
 }
 
 type ProfileUserRoleConnection {
