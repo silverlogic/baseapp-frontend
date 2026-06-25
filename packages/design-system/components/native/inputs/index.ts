@@ -1,4 +1,6 @@
 export { default as PasswordInput } from './PasswordInput'
+export { default as SocialTextInput } from './SocialTextInput'
+export type * from './SocialTextInput/types'
 export { default as TextInput } from './TextInput'
 export type * from './TextInput/types'
 export { default as SearchInput } from './SearchInput'
