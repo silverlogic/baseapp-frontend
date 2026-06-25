@@ -125,7 +125,7 @@ export const StyledNavItem = styled(ListItemButton, {
 export const StyledLink = styled(Link, {
   shouldForwardProp: (prop) => prop !== 'hasTabLayout' && prop !== 'active',
 })<StyledLinkProps>(({ theme, disabled, hasTabLayout, active }) => ({
-  pointerEvents: disabled ? 'none' : 'cursor',
+  pointerEvents: disabled ? 'none' : 'auto',
   color: 'inherit',
   textDecoration: 'none',
   display: 'flex',
