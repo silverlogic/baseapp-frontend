@@ -1,5 +1,19 @@
 # @baseapp-frontend/components
 
+## 1.7.0
+
+### Minor Changes
+
+- feat: shared flat-page components for web and native
+  - Add a `pages` module split across web and native over the shared `pages/common` fragments/queries, exported at `@baseapp-frontend/components/pages/web` and `@baseapp-frontend/components/pages/native`.
+  - `pages/web` `PageComponent` renders the page title, admin edit/delete links, the Markdown body, and comments.
+  - `pages/native` `PageComponent` renders the page title and HTML body via `@native-html/render`, with tightened block spacing and web-like margin collapsing; anchor taps route internal `/…` paths through expo-router and open only allow-listed external schemes (`http(s)`, `mailto`, `tel`).
+  - Add `@native-html/render`, `highlight.js`, and `rehype-highlight` dependencies.
+- feat: native "go to profile" navigation in messages
+  - Add the `getProfilePath` helper (prefers the profile's `urlPath`, falls back to `/profile/:id`).
+  - Expose the other participant's profile `urlPath` and `id` on `RoomTitleFragment`.
+  - Wire "go to profile" from the chat list, chat room, single-chat details, and group member options.
+
 ## 1.6.1
 
 ### Patch Changes

@@ -7,11 +7,12 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
+import { type Href, useRouter } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
-import { formatHandle } from '../../../../../__shared__/common'
+import { formatHandle, getProfilePath } from '../../../../../__shared__/common'
 import { ProfileItemFragment } from '../../../../../profiles/common'
 import { ADMIN_LABEL, CHAT_ROOM_PARTICIPANT_ROLES } from '../../../../common'
 import { useChatRoomToggleAdminMutation } from '../../../../common/graphql/mutations/ChatRoomToggleAdmin'
@@ -33,6 +34,7 @@ const MemberItem: FC<MemberItemProps> = ({
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
+  const router = useRouter()
   const [openRemoveAdminConfirmation, setOpenRemoveAdminConfirmation] = useState(false)
 
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
@@ -130,7 +132,9 @@ const MemberItem: FC<MemberItemProps> = ({
         }}
         handleAdminToggle={handleToggleAdminClicked}
         handleGoToProfile={() => {
-          // TODO: navigate to profile
+          bottomDrawerRef.current?.close()
+          const profilePath = getProfilePath(path, profile?.id)
+          if (profilePath) router.push(profilePath as Href)
         }}
         handleRemoveMember={() => {
           setMemberToRemoveId(profile.id)

@@ -15,6 +15,7 @@ import { OptionsProps } from './type'
 
 const Options: FC<OptionsProps> = ({
   handleArchiveChat,
+  handleGoToProfile,
   isArchiveMutationInFlight,
   isArchived,
 }) => {
@@ -29,13 +30,7 @@ const Options: FC<OptionsProps> = ({
         </Text>
       </View>
       <View style={styles.buttonsContainer}>
-        <Button
-          mode="text"
-          size="medium"
-          onPress={() => {
-            // TODO: Implement see profile for single chat
-          }}
-        >
+        <Button mode="text" size="medium" onPress={handleGoToProfile}>
           <View style={styles.buttons}>
             <ProfileIcon width={20} height={20} />
             <Text variant="buttonMedium" color="high">
