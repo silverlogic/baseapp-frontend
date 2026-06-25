@@ -5,13 +5,13 @@ import { styled } from '@mui/material/styles'
 
 import { DialogProps } from './types'
 
-export const StyledDialog: ComponentType<DialogProps> = styled(MUIDialog)<DialogProps>(
-  ({ customMaxWidth }) => ({
-    '& .MuiDialog-paper': {
-      position: 'relative',
-      ...(customMaxWidth && {
-        maxWidth: customMaxWidth,
-      }),
-    },
-  }),
-)
+export const StyledDialog: ComponentType<DialogProps> = styled(MUIDialog, {
+  shouldForwardProp: (prop) => prop !== 'customMaxWidth',
+})<DialogProps>(({ customMaxWidth }) => ({
+  '& .MuiDialog-paper': {
+    position: 'relative',
+    ...(customMaxWidth && {
+      maxWidth: customMaxWidth,
+    }),
+  },
+}))

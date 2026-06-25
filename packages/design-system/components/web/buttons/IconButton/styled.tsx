@@ -5,9 +5,10 @@ import { styled } from '@mui/material/styles'
 
 import { IconButtonProps } from './types'
 
-export const StyledIconButton: ComponentType<IconButtonProps> = styled((props) => (
-  <MUIIconButton disableRipple {...props} />
-))<IconButtonProps>(({ hasTooltip, theme }) => ({
+export const StyledIconButton: ComponentType<IconButtonProps> = styled(
+  (props) => <MUIIconButton disableRipple {...props} />,
+  { shouldForwardProp: (prop) => prop !== 'hasTooltip' && prop !== 'isLoading' },
+)<IconButtonProps>(({ hasTooltip, theme }) => ({
   '&.Mui-disabled': {
     cursor: 'not-allowed',
     pointerEvents: hasTooltip ? 'none' : 'unset',

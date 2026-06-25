@@ -12,8 +12,7 @@ import { FileUploadButtonProps } from './types'
 const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
   const fileRef = useRef<HTMLInputElement | undefined>(undefined)
   const { sendToast } = useNotification()
-  const { accept, maxSize, ...fileUploadProps } = props
-  const { control, label, name, setFile } = fileUploadProps
+  const { accept, maxSize, control, label, name, setFile, ...buttonProps } = props
 
   return (
     <>
@@ -22,7 +21,7 @@ const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
         color="inherit"
         onClick={() => fileRef?.current?.click()}
         disableRipple
-        {...fileUploadProps}
+        {...buttonProps}
       >
         {label ?? 'Upload File'}
       </Button>

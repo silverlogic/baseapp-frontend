@@ -4,7 +4,9 @@ import { styled } from '@mui/material/styles'
 import { ViewportHeightContainer, ViewportHeightContainerProps } from '../../../navigations/web'
 import { HidableContainerProps } from './types'
 
-export const ChatRoomContainer = styled(Box)<HidableContainerProps>(({ theme, hide }) => ({
+export const ChatRoomContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'hide',
+})<HidableContainerProps>(({ theme, hide }) => ({
   height: '100%',
   width: '100%',
   [theme.breakpoints.down('md')]: {
@@ -29,7 +31,9 @@ export const ChatRoomsContainer = styled(ViewportHeightContainer)<ViewportHeight
   }),
 )
 
-export const ChatRoomsListContainer = styled(Box)<HidableContainerProps>(({ theme, hide }) => ({
+export const ChatRoomsListContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'hide',
+})<HidableContainerProps>(({ theme, hide }) => ({
   borderRight: `1px ${theme.palette.divider} solid`,
   display: 'grid',
   gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
