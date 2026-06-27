@@ -11,7 +11,7 @@ const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
 
   return (
     <Notification.Root>
-      <Notification.Avatar actorAvatar={notification.actor?.image?.url} />
+      <Notification.Avatar actorAvatar={notification.actor?.image ?? undefined} />
       <Notification.Content>
         <Notification.Content.Header
           message={message}

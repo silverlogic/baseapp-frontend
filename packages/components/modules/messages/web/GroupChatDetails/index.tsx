@@ -135,7 +135,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
       />
       <Body
         title={title}
-        avatar={image}
+        avatar={image ?? undefined}
         participantsCount={group?.participantsCount}
         {...BodyProps}
       >

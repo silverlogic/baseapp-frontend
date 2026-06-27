@@ -25,7 +25,12 @@ const Body: FC<BodyProps> = ({
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <GroupHeaderContainer>
-        <CircledAvatar src={avatar} width={avatarSize} height={avatarSize} hasError={false} />
+        <CircledAvatar
+          src={avatar ?? undefined}
+          width={avatarSize}
+          height={avatarSize}
+          hasError={false}
+        />
         <GroupTitleContainer>
           <TypographyWithEllipsis variant="subtitle1" color="text.primary" {...titleProps}>
             {title}

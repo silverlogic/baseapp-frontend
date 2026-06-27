@@ -122,7 +122,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           sx={{ alignSelf: 'center', justifySelf: 'center' }}
           width={48}
           height={48}
-          src={image}
+          src={image ?? undefined}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
           <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>

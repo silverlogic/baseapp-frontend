@@ -59,7 +59,7 @@ const SelectedGroupMembers = () => {
                     <CloseIcon width={16} height={16} color={theme.colors.surface.background} />
                   </IconButton>
                 </View>
-                <AvatarWithPlaceholder imgSource={participant?.image?.url} size={60} />
+                <AvatarWithPlaceholder imgSource={participant?.image ?? undefined} size={60} />
               </View>
               <View style={{ maxWidth: 72, alignItems: 'center' }}>
                 <Text variant="caption" numberOfLines={1}>

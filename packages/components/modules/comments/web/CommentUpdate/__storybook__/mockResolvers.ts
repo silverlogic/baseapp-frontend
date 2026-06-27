@@ -13,9 +13,8 @@ export const mockResolvers = {
     user: {
       id: 'user-1',
       fullName: 'John Doe',
-      avatar: {
-        url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-      },
+      avatar:
+        'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
     },
     reactionsCount: {
       total: 2,

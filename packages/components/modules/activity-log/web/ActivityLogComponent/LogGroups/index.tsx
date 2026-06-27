@@ -49,7 +49,7 @@ const LogGroups: FC<LogGroupsProps> = ({
         width={40}
         height={40}
         className="self-start justify-self-center"
-        src={group.logs[0]?.user?.avatar?.url ?? ''}
+        src={group.logs[0]?.user?.avatar ?? ''}
         sx={{ border: 'none', marginBottom: '4px' }}
       />
     )

@@ -13,7 +13,7 @@ const PostImageSlide: FC<PostImageSlideProps> = ({ imagesRef }) => {
 
   if (!target?.image) return null
 
-  return <ImageSlide draggable={false} src={target.image} alt="Post Image" />
+  return <ImageSlide draggable={false} src={target.image ?? undefined} alt="Post Image" />
 }
 
 export default PostImageSlide

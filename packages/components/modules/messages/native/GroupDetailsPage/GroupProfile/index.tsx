@@ -20,7 +20,7 @@ const GroupProfile: FC<GroupProfileProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.profileCard}>
-        <CircledAvatar imgSource={image} size={128} {...CircledAvatarProps} />
+        <CircledAvatar imgSource={image ?? undefined} size={128} {...CircledAvatarProps} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1" color="high">
             {title}

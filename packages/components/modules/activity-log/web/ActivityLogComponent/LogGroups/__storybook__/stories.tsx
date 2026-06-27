@@ -37,9 +37,7 @@ export const DefaultLogItem: Story = {
               id: 'user-1',
               fullName: 'Alice Doe',
               email: 'alice@example.com',
-              avatar: {
-                url: 'https://placehold.co/48x48',
-              },
+              avatar: 'https://placehold.co/48x48',
             },
           },
           {
@@ -54,9 +52,7 @@ export const DefaultLogItem: Story = {
               id: 'user-2',
               fullName: 'Bob Smith',
               email: 'bob@example.com',
-              avatar: {
-                url: 'https://placehold.co/48x48?text=Bob',
-              },
+              avatar: 'https://placehold.co/48x48?text=Bob',
             },
           },
         ],

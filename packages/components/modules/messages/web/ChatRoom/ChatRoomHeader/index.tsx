@@ -93,7 +93,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             className="self-start justify-self-center"
             width={32}
             height={32}
-            src={image}
+            src={image ?? undefined}
             sx={{ border: 'none', alignSelf: 'center' }}
           />
           <Box>

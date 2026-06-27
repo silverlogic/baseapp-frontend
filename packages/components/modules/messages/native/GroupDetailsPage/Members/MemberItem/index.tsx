@@ -101,7 +101,7 @@ const MemberItem: FC<MemberItemProps> = ({
   return (
     <Pressable onLongPress={onChatCardLongPress} style={styles.memberItemContainer}>
       <View>
-        <AvatarWithPlaceholder imgSource={profile?.image?.url} size={48} />
+        <AvatarWithPlaceholder imgSource={profile?.image ?? undefined} size={48} />
       </View>
       <View>
         <Text variant="subtitle2" color="high">
