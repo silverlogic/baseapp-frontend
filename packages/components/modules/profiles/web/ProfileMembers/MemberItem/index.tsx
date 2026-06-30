@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -53,6 +53,18 @@ const MemberItem: FC<MemberItemProps> = ({
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
   const [openConfirmCancelInvitation, setOpenConfirmCancelInvitation] = useState(false)
 
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    if (status !== MEMBER_STATUSES.pending || !invitationExpiresAt) return undefined
+
+    const expiresAt = new Date(invitationExpiresAt).getTime()
+    if (!Number.isFinite(expiresAt) || expiresAt <= now) return undefined
+
+    const timeoutId = window.setTimeout(() => setNow(Date.now()), expiresAt - now)
+    return () => window.clearTimeout(timeoutId)
+  }, [invitationExpiresAt, now, status])
+
   // An invitation is "expired" once it is flagged EXPIRED by the backend, or
   // while still PENDING past its expiry timestamp (the backend flips the status
   // lazily, so we also check the time client-side).
@@ -60,7 +72,7 @@ const MemberItem: FC<MemberItemProps> = ({
     status === MEMBER_STATUSES.expired ||
     (status === MEMBER_STATUSES.pending &&
       !!invitationExpiresAt &&
-      new Date(invitationExpiresAt).getTime() < Date.now())
+      new Date(invitationExpiresAt).getTime() < now)
 
   // Invitations sent to an email with no account yet have no profile to render;
   // fall back to the invited email so they still appear in the list.

@@ -29,8 +29,14 @@ export const useCancelInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        if (errors?.length) {
-          errors.forEach((error) => sendToast(error.message, { type: 'error' }))
+        const payloadErrors =
+          response?.profileCancelInvitation?.errors?.flatMap((error) => error?.messages ?? []) ?? []
+
+        if (errors?.length || payloadErrors.length) {
+          errors?.forEach((error) => sendToast(error.message, { type: 'error' }))
+          payloadErrors.forEach((message) => sendToast(message, { type: 'error' }))
+        } else if (response?.profileCancelInvitation?.success === false) {
+          sendToast('Invitation could not be removed', { type: 'error' })
         } else {
           sendToast('Invitation removed', { type: 'success' })
         }

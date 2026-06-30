@@ -16,12 +16,17 @@ export const OptionsDropdown = styled(Box)(({ theme }) => ({
   padding: theme.spacing(0.5),
 }))
 
-export const OptionRow = styled(ButtonBase)(({ theme }) => ({
+export const OptionRow = styled(ButtonBase, {
+  shouldForwardProp: (prop) => prop !== 'isActive',
+})<{ isActive?: boolean }>(({ theme, isActive }) => ({
   width: '100%',
   justifyContent: 'space-between',
   gap: theme.spacing(1.5),
   padding: theme.spacing(1, 1.5),
   borderRadius: theme.shape.borderRadius,
+  ...(isActive && {
+    backgroundColor: theme.palette.action.hover,
+  }),
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
   },

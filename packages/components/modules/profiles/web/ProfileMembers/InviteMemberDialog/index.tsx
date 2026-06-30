@@ -14,8 +14,16 @@ import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutati
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
 import MemberSearch from './MemberSearch'
 import { INVITE_MEMBER_DIALOG_COPY as COPY, DEFAULT_INVITE_ROLE } from './constants'
-import { InviteMemberDialogProps, SelectedMember } from './types'
-import { getMemberKey, isSelectedEmail, isSelectedProfile } from './utils'
+import { InviteMemberDialogProps, SelectedEmail, SelectedMember, SelectedProfile } from './types'
+import {
+  BatchError,
+  getMemberKey,
+  getMutationErrorMessage,
+  isFulfilled,
+  isRejected,
+  isSelectedEmail,
+  isSelectedProfile,
+} from './utils'
 
 const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvited }) => {
   const { currentProfile } = useCurrentProfile()
@@ -43,70 +51,85 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
     onClose()
   }
 
+  // Add the batch of selected profiles. Resolves with the members written on success, or
+  // rejects with the same members (so they stay selected) and a message on failure.
+  const addMembers = (profileId: string, members: SelectedProfile[]) =>
+    new Promise<SelectedMember[]>((resolve, reject) => {
+      const usersIds = members.map((member) => member.userId)
+      createMembers({
+        variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE } },
+        onCompleted: (response, errors) => {
+          const message = getMutationErrorMessage(
+            response?.profileUserRoleCreate?.errors,
+            errors,
+            'Failed to add members',
+          )
+          if (message) reject(new BatchError(message, members))
+          else resolve(members)
+        },
+        onError: (error) => reject(new BatchError(error.message, members)),
+      })
+    })
+
+  // Send a single email invitation. Resolves with the invited member on success, or
+  // rejects with it (kept selected) and a message on failure.
+  const inviteEmail = (profileId: string, member: SelectedEmail) =>
+    new Promise<SelectedMember[]>((resolve, reject) => {
+      sendInvitation({
+        variables: { input: { profileId, email: member.email, role: DEFAULT_INVITE_ROLE } },
+        onCompleted: (response, errors) => {
+          const message = getMutationErrorMessage(
+            response?.profileSendInvitation?.errors,
+            errors,
+            `Failed to invite ${member.email}`,
+          )
+          if (message) reject(new BatchError(message, [member]))
+          else resolve([member])
+        },
+        onError: (error) => reject(new BatchError(error.message, [member])),
+      })
+    })
+
   const handleSubmit = async () => {
     const profileId = currentProfile?.id
     if (!profileId || selected.length === 0) return
 
-    const usersIds = selected.filter(isSelectedProfile).map((member) => member.userId)
-    const emails = selected.filter(isSelectedEmail).map((member) => member.email)
+    const profileMembers = selected.filter(isSelectedProfile)
+    const emailMembers = selected.filter(isSelectedEmail)
+
+    const tasks: Promise<SelectedMember[]>[] = []
+    if (profileMembers.length > 0) tasks.push(addMembers(profileId, profileMembers))
+    emailMembers.forEach((member) => tasks.push(inviteEmail(profileId, member)))
 
     setIsSubmitting(true)
-    try {
-      if (usersIds.length > 0) {
-        await new Promise<void>((resolve, reject) => {
-          createMembers({
-            variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE } },
-            onCompleted: (response, errors) => {
-              const mutationErrors = response?.profileUserRoleCreate?.errors
-              if (mutationErrors?.length) {
-                reject(mutationErrors[0]?.messages?.[0] ?? 'Failed to add members')
-              } else if (errors?.length) {
-                reject(errors[0]?.message ?? 'Failed to add members')
-              } else {
-                resolve()
-              }
-            },
-            onError: reject,
-          })
-        })
-      }
+    const results = await Promise.allSettled(tasks)
 
-      await Promise.all(
-        emails.map(
-          (email) =>
-            new Promise<void>((resolve, reject) => {
-              sendInvitation({
-                variables: { input: { profileId, email, role: DEFAULT_INVITE_ROLE } },
-                onCompleted: (response, errors) => {
-                  const mutationErrors = response?.profileSendInvitation?.errors
-                  if (mutationErrors?.length) {
-                    reject(mutationErrors[0]?.messages?.[0] ?? `Failed to invite ${email}`)
-                  } else if (errors?.length) {
-                    reject(errors[0]?.message ?? `Failed to invite ${email}`)
-                  } else {
-                    resolve()
-                  }
-                },
-                onError: reject,
-              })
-            }),
-        ),
-      )
+    const succeeded = results.filter(isFulfilled).flatMap((result) => result.value)
+    const failed = results.filter(isRejected).map((result) => result.reason as BatchError)
+    const failedMembers = failed.flatMap((error) => error.members)
 
-      sendToast(selected.length === 1 ? 'Member added' : `${selected.length} members added`, {
+    // Surface each failure (network errors are also toasted by the mutation hooks, but the
+    // batched/field messages here are more specific).
+    failed.forEach((error) => sendToast(error.message, { type: 'error' }))
+
+    // Refetch after ANY successful write so the list reflects the partial batch.
+    if (succeeded.length > 0) {
+      sendToast(succeeded.length === 1 ? 'Member added' : `${succeeded.length} members added`, {
         type: 'success',
       })
       onInvited?.()
+    }
+
+    if (failedMembers.length === 0) {
       resetState()
       onClose()
-    } catch (error) {
-      // Network errors are already toasted by the mutation hooks; surface field/GraphQL
-      // errors (rejected as strings) here.
-      if (typeof error === 'string') {
-        sendToast(error, { type: 'error' })
-      }
-      setIsSubmitting(false)
+      return
     }
+
+    // Keep only the entries that failed so the user can retry just those.
+    const failedKeys = new Set(failedMembers.map(getMemberKey))
+    setSelected((prev) => prev.filter((member) => failedKeys.has(getMemberKey(member))))
+    setIsSubmitting(false)
   }
 
   return (

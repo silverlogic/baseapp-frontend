@@ -26,3 +26,14 @@ export interface MemberSearchProps {
   onAdd: (member: SelectedMember) => void
   onRemove: (memberKey: string) => void
 }
+
+/** A single navigable option in the member search dropdown (profile result or email row). */
+export type MemberSearchOption =
+  | { kind: 'profile'; profile: SelectedProfile }
+  | { kind: 'email'; email: string }
+
+/** Shape of the `errors` field returned by the invite-flow mutation payloads. */
+export type MutationErrors =
+  | ReadonlyArray<{ readonly messages: ReadonlyArray<string> } | null | undefined>
+  | null
+  | undefined

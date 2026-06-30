@@ -58,7 +58,11 @@ const MembersList: FC<MembersListProps> = ({
     [data?.members?.edges],
   )
 
-  const isOwnerVisible = ownerProfile?.name?.includes(watch('search'))
+  // Match MemberItem's case-insensitive search so the header count stays in sync
+  // with the owner row it actually renders.
+  const isOwnerVisible = ownerProfile?.name
+    ?.toLowerCase()
+    .includes(watch('search').toLowerCase())
 
   const resultsCount = isOwnerVisible ? members.length + 1 : members.length
 
