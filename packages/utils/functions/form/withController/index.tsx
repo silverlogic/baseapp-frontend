@@ -5,7 +5,7 @@ import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
 import { Controller } from 'react-hook-form'
 
 import useDebounce from '../../../hooks/useDebounce'
-import type { DebouncedFunction, WithControllerProps } from './types'
+import type { DebouncedFunction, DebouncedInputChangeFunction, WithControllerProps } from './types'
 
 function withController<T>(
   Component: FC<T>,
@@ -19,14 +19,21 @@ function withController<T>(
     ...props
   }: WithControllerProps<T>) => {
     if (control) {
-      const { onChange, onBlur, ...restOfTheProps } = props
+      const { onChange, onBlur, onInputChange, ...restOfTheProps } = props
       const onChangeWithFallback = onChange ?? (() => {})
+      const onInputChangeWithFallback = onInputChange ?? (() => {})
       const { debouncedFunction: debouncedOnChange } = useDebounce<DebouncedFunction>(
         onChangeWithFallback,
         {
           debounceTime,
         },
       )
+      // useDebounce debounces single-argument functions, so pack onInputChange's
+      // (event, value, reason) arguments into one tuple and spread them back out.
+      const { debouncedFunction: debouncedOnInputChange } =
+        useDebounce<DebouncedInputChangeFunction>((args) => onInputChangeWithFallback(...args), {
+          debounceTime,
+        })
       const shouldDebounce = runtimeShouldDebounce ?? factoryShouldDebounce
 
       return (
@@ -44,6 +51,17 @@ function withController<T>(
                 onChange?.(event)
               }
             }
+            // Autocomplete-style fields surface the typed text through onInputChange
+            // (onChange carries the selected option). Keep the RHF value in sync with
+            // the input text, and debounce the consumer callback when enabled.
+            const handleOnInputChange = (event: unknown, value: string, reason: string) => {
+              field.onChange(value)
+              if (onInputChange && shouldDebounce) {
+                debouncedOnInputChange([event, value, reason])
+              } else {
+                onInputChange?.(event, value, reason)
+              }
+            }
             const handleOnBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
               event,
             ) => {
@@ -57,6 +75,7 @@ function withController<T>(
                 error={!!fieldState.error}
                 name={name}
                 onChange={handleOnChange}
+                onInputChange={onInputChange ? handleOnInputChange : undefined}
                 onBlur={handleOnBlur}
                 helperText={helperText || (!!fieldState.error && fieldState.error?.message)}
                 {...(restOfTheProps as any)}

@@ -73,4 +73,27 @@ describe('withController', () => {
     expect(mockOnBlur).toHaveBeenCalledTimes(1)
     expect(mockFieldOnBlur).toHaveBeenCalledTimes(1)
   })
+
+  it("should trigger the passed onInputChange and the Controller's onChange when the component's onInputChange is called", async () => {
+    const user = userEvent.setup()
+    const mockOnInputChange = jest.fn()
+    // Stand-in for an Autocomplete: forwards the typed text through onInputChange.
+    const AutocompleteLike = (props: any) => (
+      <input
+        data-testid="autocomplete-input"
+        onChange={(event) => props.onInputChange?.(event, event.target.value, 'input')}
+      />
+    )
+    const WrappedAutocomplete = withController(AutocompleteLike)
+    const { findByTestId } = render(
+      <WrappedAutocomplete name="test" control={{}} onInputChange={mockOnInputChange} />,
+    )
+
+    const input = await findByTestId('autocomplete-input')
+    await user.type(input, 'ab')
+
+    // Consumer callback fires per keystroke, and the RHF field tracks the input text.
+    expect(mockOnInputChange).toHaveBeenCalledTimes(2)
+    expect(mockFieldOnChange).toHaveBeenCalled()
+  })
 })
