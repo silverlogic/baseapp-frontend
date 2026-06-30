@@ -1,5 +1,11 @@
 # @baseapp-frontend/utils
 
+## 4.1.0
+
+### Minor Changes
+
+- `withController` now supports Autocomplete-style fields: it debounces `onInputChange`, forwards the selected value (not the raw change event) to the form field, and reads the latest `onChange`/`onInputChange` from refs so debounced callbacks never call stale closures. Existing single-argument inputs are unaffected.
+
 ## 4.0.9
 
 ### Patch Changes
