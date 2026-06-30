@@ -17,7 +17,10 @@ export const SEARCH_DEBOUNCE_MS = 300
 
 export const SEARCH_RESULTS_COUNT = 8
 
-export const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+// Domain labels exclude `.` so each `\.` is an unambiguous separator — this avoids the
+// super-linear backtracking SonarCloud (S8786) flags on adjacent `+` quantifiers over
+// dot-including classes, while still requiring a `local@label.label` shape.
+export const EMAIL_REGEX = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/
 
 /** id linking the search input (combobox) to its options popup (listbox) for ARIA. */
 export const LISTBOX_ID = 'invite-member-search-listbox'

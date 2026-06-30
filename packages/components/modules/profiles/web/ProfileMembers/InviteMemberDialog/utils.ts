@@ -26,12 +26,16 @@ export const getMutationErrorMessage = (
   transportErrors: ReadonlyArray<PayloadError> | null | undefined,
   fallback: string,
 ): string | undefined => {
+  const hasPayloadErrors = Boolean(payloadErrors?.length)
   const payloadMessages = payloadErrors?.flatMap((error) => error?.messages ?? []) ?? []
   if (payloadMessages.length) {
-    return payloadMessages[0] ?? fallback
+    return payloadMessages[0] || fallback
+  }
+  if (hasPayloadErrors) {
+    return fallback
   }
   if (transportErrors?.length) {
-    return transportErrors[0]?.message ?? fallback
+    return transportErrors[0]?.message || fallback
   }
   return undefined
 }

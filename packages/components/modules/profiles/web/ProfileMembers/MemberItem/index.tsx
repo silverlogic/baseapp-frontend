@@ -59,11 +59,12 @@ const MemberItem: FC<MemberItemProps> = ({
     if (status !== MEMBER_STATUSES.pending || !invitationExpiresAt) return undefined
 
     const expiresAt = new Date(invitationExpiresAt).getTime()
-    if (!Number.isFinite(expiresAt) || expiresAt <= now) return undefined
+    const currentTime = Date.now()
+    if (!Number.isFinite(expiresAt) || expiresAt <= currentTime) return undefined
 
-    const timeoutId = window.setTimeout(() => setNow(Date.now()), expiresAt - now)
-    return () => window.clearTimeout(timeoutId)
-  }, [invitationExpiresAt, now, status])
+    const timeoutId = globalThis.setTimeout(() => setNow(Date.now()), expiresAt - currentTime)
+    return () => globalThis.clearTimeout(timeoutId)
+  }, [invitationExpiresAt, status])
 
   // An invitation is "expired" once it is flagged EXPIRED by the backend, or
   // while still PENDING past its expiry timestamp (the backend flips the status
