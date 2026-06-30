@@ -8,7 +8,6 @@ import {
   Autocomplete,
   AutocompleteRenderInputParams,
   CircularProgress,
-  InputAdornment,
   TextField,
 } from '@mui/material'
 
@@ -50,12 +49,13 @@ const AutocompleteField: FC<AutocompleteFieldProps> = ({
           helperText={helperText}
           InputProps={{
             ...params.InputProps,
-            startAdornment: isPending ? (
-              <InputAdornment position="start">
-                <CircularProgress size={16} />
-              </InputAdornment>
-            ) : (
-              params.InputProps.startAdornment
+            // Loading indicator on the right (next to the dropdown arrow) so it never
+            // shifts the typed text the way a startAdornment would.
+            endAdornment: (
+              <>
+                {isPending ? <CircularProgress color="inherit" size={16} sx={{ mr: 0.5 }} /> : null}
+                {params.InputProps.endAdornment}
+              </>
             ),
           }}
         />

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState, useTransition } from 'react'
+import { FC, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
@@ -33,8 +33,15 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
     q: '',
   })
   const { data, refetch } = useInviteMembersSearch(queryRef)
+  const isInitialQuery = useRef(true)
 
   useEffect(() => {
+    // The lazy query already loaded with q:'', so skip the refetch on mount — otherwise
+    // the in-field spinner flashes right after the dialog's initial Suspense fallback.
+    if (isInitialQuery.current) {
+      isInitialQuery.current = false
+      return
+    }
     // Refetch inside a transition so the new search query doesn't suspend the component
     // (which would trigger the parent <Suspense> fallback and unmount the input).
     startTransition(() => {
