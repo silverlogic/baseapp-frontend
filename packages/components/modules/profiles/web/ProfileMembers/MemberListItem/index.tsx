@@ -35,7 +35,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
       <>
         <Divider />
         <MemberItemComponent
-          member={data}
+          member={data?.owner?.profile}
           memberRole={MEMBER_ROLES.owner}
           status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}
@@ -72,7 +72,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
         />
         <Divider />
         <MemberItemComponent
-          member={data}
+          member={data?.owner?.profile}
           memberRole={MEMBER_ROLES.owner}
           status={MEMBER_STATUSES.active}
           searchQuery={searchQuery}

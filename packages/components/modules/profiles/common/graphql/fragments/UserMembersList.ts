@@ -12,6 +12,13 @@ export const UserMembersListFragment = graphql`
     canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")
     canAddMember: hasPerm(perm: "baseapp_profiles.add_profileuserrole")
     ...ProfileItemFragment
+    # The owner row must show the owner *user's* profile, not the org profile itself.
+    owner {
+      id
+      profile {
+        ...ProfileItemFragment
+      }
+    }
     members(first: $count, after: $cursor, orderBy: $orderBy, q: $q)
       @connection(key: "UserMembersFragment_members", filters: ["orderBy", "q"]) {
       totalCount

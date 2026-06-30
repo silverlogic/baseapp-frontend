@@ -32,7 +32,10 @@ const MembersList: FC<MembersListProps> = ({
     UserMembersListFragment,
     userRef,
   )
-  const ownerProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, data)
+  const ownerProfile = useFragment<ProfileItemFragment$key>(
+    ProfileItemFragment,
+    data?.owner?.profile,
+  )
 
   const handleSearch = (value: string) => {
     startTransition(() => {
@@ -132,7 +135,7 @@ const MembersList: FC<MembersListProps> = ({
       </Box>
       {members.length === 0 ? (
         <MemberItem
-          member={data}
+          member={data?.owner?.profile}
           memberRole={MEMBER_ROLES.owner}
           status={MEMBER_STATUSES.active}
           searchQuery={watch('search')}
