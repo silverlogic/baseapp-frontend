@@ -199,7 +199,10 @@ const MemberItem: FC<MemberItemProps> = ({
       }
       return (
         <Box>
-          <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
+          {/* Read-only status: `disabled` keeps it out of the tab order and the a11y
+              tree as an actionable control (vs. pointerEvents:none, which only blocks
+              the mouse). Greyed-out also reads correctly for an expired invitation. */}
+          <Button variant="outlined" color="inherit" disabled>
             Expired
           </Button>
         </Box>

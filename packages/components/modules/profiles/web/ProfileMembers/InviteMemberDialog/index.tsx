@@ -47,6 +47,9 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
   }
 
   const handleClose = () => {
+    // Don't tear down state / close while a submit is still settling — the in-flight
+    // continuation in handleSubmit could otherwise reset or close a reopened dialog.
+    if (isSubmitting) return
     resetState()
     onClose()
   }
