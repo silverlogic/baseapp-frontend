@@ -5,7 +5,12 @@ import type { NonUndefined } from 'react-hook-form'
 import { FormControl } from '../../../types/form'
 
 type OptionalActions = {
-  onChange?: (value: any) => void | ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
+  // The rest args carry Autocomplete's extra onChange payload (selected value, reason);
+  // plain inputs call it with just the event.
+  onChange?: (
+    value: any,
+    ...rest: any[]
+  ) => void | ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>
   onBlur?: (value?: any) => void | FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>
   /**
    * Text-input callback for Autocomplete-style fields. Separate from `onChange`

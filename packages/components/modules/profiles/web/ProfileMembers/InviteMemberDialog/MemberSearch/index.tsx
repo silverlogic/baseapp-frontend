@@ -108,7 +108,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
           const optionData = option as MemberSearchOption
           return optionData.kind === 'email' ? optionData.email : optionData.profile.name
         }}
-        onChange={(_event, value) => {
+        onChange={(_event: unknown, value?: unknown) => {
           if (value) selectOption(value as MemberSearchOption)
         }}
         onInputChange={(_event, value, reason) => {
