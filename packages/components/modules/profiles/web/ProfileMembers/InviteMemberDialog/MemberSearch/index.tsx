@@ -1,13 +1,14 @@
 'use client'
 
-import { FC, KeyboardEvent, MouseEvent, useEffect, useMemo, useState, useTransition } from 'react'
+import { FC, useEffect, useMemo, useState, useTransition } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { AddIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
+import { AutocompleteField } from '@baseapp-frontend/design-system/components/web/inputs'
 import { useDebouncedValue } from '@baseapp-frontend/utils'
 
-import { Box, Popper, TextField, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { InviteMembersSearchQuery as InviteMembersSearchQueryType } from '../../../../../../__generated__/InviteMembersSearchQuery.graphql'
@@ -15,27 +16,17 @@ import { InviteMembersSearchQuery, useInviteMembersSearch } from '../../../../co
 import {
   INVITE_MEMBER_DIALOG_COPY as COPY,
   EMAIL_REGEX,
-  LISTBOX_ID,
   SEARCH_DEBOUNCE_MS,
   SEARCH_RESULTS_COUNT,
 } from '../constants'
 import { MemberSearchOption, MemberSearchProps, SelectedProfile } from '../types'
 import { getMemberKey } from '../utils'
-import {
-  ChipsList,
-  MemberChip,
-  OptionInfo,
-  OptionRow,
-  OptionsDropdown,
-  SearchFieldWrapper,
-} from './styled'
+import { ChipsList, MemberChip, OptionInfo } from './styled'
 
 const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
   const [query, setQuery] = useState('')
-  const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
-  const [isOpen, setIsOpen] = useState(false)
   const debouncedQuery = useDebouncedValue(query, { debounceTime: SEARCH_DEBOUNCE_MS })
-  const [, startTransition] = useTransition()
+  const [isPending, startTransition] = useTransition()
 
   const queryRef = useLazyLoadQuery<InviteMembersSearchQueryType>(InviteMembersSearchQuery, {
     count: SEARCH_RESULTS_COUNT,
@@ -80,8 +71,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
   const isEmail = EMAIL_REGEX.test(trimmedQuery)
   const canAddEmail = isEmail && !selectedKeys.has(`email:${trimmedQuery}`)
 
-  // Flatten profiles + the optional email row into a single indexable list so the same
-  // options drive both mouse selection and keyboard navigation (ARIA combobox/listbox).
+  // Profiles plus the optional "invite this email" row, as a single option list.
   const options = useMemo<MemberSearchOption[]>(() => {
     const next: MemberSearchOption[] = profileOptions.map((profile) => ({
       kind: 'profile',
@@ -93,14 +83,6 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
     return next
   }, [profileOptions, canAddEmail, trimmedQuery])
 
-  const showDropdown = isOpen && Boolean(trimmedQuery) && options.length > 0
-  const [activeIndex, setActiveIndex] = useState(0)
-
-  // Keep the active option in range as the option list changes (e.g. while typing).
-  useEffect(() => {
-    setActiveIndex((index) => Math.min(index, Math.max(options.length - 1, 0)))
-  }, [options.length])
-
   const selectOption = (option: MemberSearchOption) => {
     if (option.kind === 'email') {
       onAdd({ kind: 'email', email: option.email })
@@ -108,146 +90,74 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
       onAdd(option.profile)
     }
     setQuery('')
-    setActiveIndex(0)
   }
-
-  // Select on mousedown (with preventDefault) so the click never blurs the input — keeps
-  // it focused for adding more, and avoids the dropdown closing before the click registers.
-  const handleOptionMouseDown = (event: MouseEvent, option: MemberSearchOption) => {
-    event.preventDefault()
-    selectOption(option)
-  }
-
-  // Keyboard support for the combobox: arrow keys move the active option, Enter/Space
-  // selects it, and Escape closes the dropdown — all while focus stays on the input.
-  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Escape') {
-      setIsOpen(false)
-      return
-    }
-    if (!showDropdown) return
-
-    switch (event.key) {
-      case 'ArrowDown':
-        event.preventDefault()
-        setActiveIndex((index) => (index + 1) % options.length)
-        break
-      case 'ArrowUp':
-        event.preventDefault()
-        setActiveIndex((index) => (index - 1 + options.length) % options.length)
-        break
-      case 'Home':
-        event.preventDefault()
-        setActiveIndex(0)
-        break
-      case 'End':
-        event.preventDefault()
-        setActiveIndex(options.length - 1)
-        break
-      // Enter selects the active option. Space is intentionally left to type a literal
-      // space in the editable combobox (per the WAI-ARIA editable combobox pattern).
-      case 'Enter': {
-        const activeOption = options[activeIndex]
-        if (activeOption) {
-          event.preventDefault()
-          selectOption(activeOption)
-        }
-        break
-      }
-      default:
-        break
-    }
-  }
-
-  const getOptionId = (index: number) => `${LISTBOX_ID}-option-${index}`
 
   return (
     <Box sx={{ display: 'grid', gap: 1.5 }}>
-      <SearchFieldWrapper ref={setAnchorEl}>
-        <TextField
-          fullWidth
-          size="small"
-          value={query}
-          onChange={(event) => {
-            setQuery(event.target.value)
-            setIsOpen(true)
-          }}
-          onFocus={() => setIsOpen(true)}
-          onBlur={() => setIsOpen(false)}
-          onKeyDown={handleKeyDown}
-          placeholder={COPY.searchPlaceholder}
-          autoComplete="off"
-          inputProps={{
-            role: 'combobox',
-            'aria-expanded': showDropdown,
-            'aria-controls': LISTBOX_ID,
-            'aria-autocomplete': 'list',
-            'aria-activedescendant':
-              showDropdown && options[activeIndex] ? getOptionId(activeIndex) : undefined,
-          }}
-        />
-        <Popper
-          open={showDropdown}
-          anchorEl={anchorEl}
-          placement="bottom-start"
-          sx={{ zIndex: (theme) => theme.zIndex.modal + 1, width: anchorEl?.clientWidth }}
-        >
-          <OptionsDropdown id={LISTBOX_ID} role="listbox" aria-label={COPY.searchPlaceholder}>
-            {options.map((option, index) => {
-              const isActive = index === activeIndex
-              if (option.kind === 'email') {
-                return (
-                  <OptionRow
-                    key={`email:${option.email}`}
-                    id={getOptionId(index)}
-                    role="option"
-                    aria-selected={isActive}
-                    isActive={isActive}
-                    onMouseDown={(event) => handleOptionMouseDown(event, option)}
-                    onMouseEnter={() => setActiveIndex(index)}
-                  >
-                    <Typography variant="subtitle2" noWrap>
-                      {option.email}
+      <AutocompleteField
+        options={options}
+        value={null}
+        inputValue={query}
+        isPending={isPending}
+        placeholder={COPY.searchPlaceholder}
+        freeSolo={false}
+        autoComplete
+        // Results are filtered server-side via refetch; keep MUI from re-filtering them.
+        filterOptions={(unfiltered) => unfiltered}
+        getOptionLabel={(option) => {
+          const optionData = option as MemberSearchOption
+          return optionData.kind === 'email' ? optionData.email : optionData.profile.name
+        }}
+        onChange={(_event, value) => {
+          if (value) selectOption(value as MemberSearchOption)
+        }}
+        onInputChange={(_event, value, reason) => {
+          if (reason === 'input') setQuery(value)
+        }}
+        renderOption={(optionProps, option) => {
+          const optionData = option as MemberSearchOption
+          // Extract MUI's per-option key (unique, index-based) so it isn't spread.
+          const { key, ...liProps } = optionProps as typeof optionProps & { key?: string }
+          if (optionData.kind === 'email') {
+            return (
+              <Box
+                component="li"
+                key={key}
+                {...liProps}
+                sx={{ display: 'flex', justifyContent: 'space-between', gap: 1.5 }}
+              >
+                <Typography variant="subtitle2" noWrap>
+                  {optionData.email}
+                </Typography>
+                <AddIcon />
+              </Box>
+            )
+          }
+          const { profile } = optionData
+          return (
+            <Box component="li" key={key} {...liProps}>
+              <OptionInfo>
+                <AvatarWithPlaceholder
+                  src={profile.avatarUrl}
+                  alt={profile.name}
+                  width={32}
+                  height={32}
+                />
+                <Box sx={{ minWidth: 0, textAlign: 'left' }}>
+                  <Typography variant="subtitle2" noWrap>
+                    {profile.name}
+                  </Typography>
+                  {profile.handle && (
+                    <Typography variant="caption" color="text.secondary" noWrap>
+                      {profile.handle}
                     </Typography>
-                    <AddIcon />
-                  </OptionRow>
-                )
-              }
-              const { profile } = option
-              return (
-                <OptionRow
-                  key={getMemberKey(profile)}
-                  id={getOptionId(index)}
-                  role="option"
-                  aria-selected={isActive}
-                  isActive={isActive}
-                  onMouseDown={(event) => handleOptionMouseDown(event, option)}
-                  onMouseEnter={() => setActiveIndex(index)}
-                >
-                  <OptionInfo>
-                    <AvatarWithPlaceholder
-                      src={profile.avatarUrl}
-                      alt={profile.name}
-                      width={32}
-                      height={32}
-                    />
-                    <Box sx={{ minWidth: 0, textAlign: 'left' }}>
-                      <Typography variant="subtitle2" noWrap>
-                        {profile.name}
-                      </Typography>
-                      {profile.handle && (
-                        <Typography variant="caption" color="text.secondary" noWrap>
-                          {profile.handle}
-                        </Typography>
-                      )}
-                    </Box>
-                  </OptionInfo>
-                </OptionRow>
-              )
-            })}
-          </OptionsDropdown>
-        </Popper>
-      </SearchFieldWrapper>
+                  )}
+                </Box>
+              </OptionInfo>
+            </Box>
+          )
+        }}
+      />
 
       {selected.length > 0 && (
         <ChipsList>
