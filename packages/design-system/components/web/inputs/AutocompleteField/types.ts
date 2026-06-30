@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react'
+
 import type { AutocompleteProps } from '@mui/material'
 
 /**
@@ -20,5 +22,9 @@ export type AutocompleteFieldProps<
 > = Omit<AutocompleteProps<Option, Multiple, DisableClearable, FreeSolo>, 'renderInput'> & {
   isPending?: boolean
   placeholder?: string
+  /** Forwarded to the default input (supplied by `withController` for validation). */
+  error?: boolean
+  /** Forwarded to the default input (supplied by `withController` for validation). */
+  helperText?: ReactNode
   renderInput?: AutocompleteProps<Option, Multiple, DisableClearable, FreeSolo>['renderInput']
 }

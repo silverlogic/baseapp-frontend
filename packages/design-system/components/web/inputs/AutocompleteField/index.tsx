@@ -31,6 +31,8 @@ const AutocompleteField: FC<AutocompleteFieldProps> = ({
   handleHomeEndKeys = true,
   disableClearable = true,
   freeSolo = true,
+  error,
+  helperText,
   ...props
 }) => (
   <Autocomplete
@@ -44,6 +46,8 @@ const AutocompleteField: FC<AutocompleteFieldProps> = ({
         <TextField
           {...params}
           placeholder={placeholder}
+          error={error}
+          helperText={helperText}
           InputProps={{
             ...params.InputProps,
             startAdornment: isPending ? (

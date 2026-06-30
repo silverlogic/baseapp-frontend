@@ -74,7 +74,7 @@ describe('withController', () => {
     expect(mockFieldOnBlur).toHaveBeenCalledTimes(1)
   })
 
-  it("should trigger the passed onInputChange and the Controller's onChange when the component's onInputChange is called", async () => {
+  it("should trigger the passed onInputChange when the component's onInputChange is called", async () => {
     const user = userEvent.setup()
     const mockOnInputChange = jest.fn()
     // Stand-in for an Autocomplete: forwards the typed text through onInputChange.
@@ -92,8 +92,30 @@ describe('withController', () => {
     const input = await findByTestId('autocomplete-input')
     await user.type(input, 'ab')
 
-    // Consumer callback fires per keystroke, and the RHF field tracks the input text.
+    // Consumer text callback fires per keystroke. (It does not write the field — the
+    // field tracks the selected value, surfaced through onChange below.)
     expect(mockOnInputChange).toHaveBeenCalledTimes(2)
-    expect(mockFieldOnChange).toHaveBeenCalled()
+  })
+
+  it("should forward the selected value (onChange's 2nd arg) to the Controller's field", async () => {
+    const user = userEvent.setup()
+    const selectedOption = { id: 'opt-1', label: 'Option 1' }
+    // Stand-in for an Autocomplete: passes the selected option as onChange's 2nd arg.
+    const SelectLike = (props: any) => (
+      <button
+        type="button"
+        data-testid="select-option"
+        onClick={(event) => props.onChange?.(event, selectedOption, 'selectOption')}
+      >
+        select
+      </button>
+    )
+    const WrappedSelect = withController(SelectLike)
+    const { findByTestId } = render(<WrappedSelect name="test" control={{}} />)
+
+    await user.click(await findByTestId('select-option'))
+
+    // The field receives the selected option, not the raw event.
+    expect(mockFieldOnChange).toHaveBeenLastCalledWith(selectedOption)
   })
 })
