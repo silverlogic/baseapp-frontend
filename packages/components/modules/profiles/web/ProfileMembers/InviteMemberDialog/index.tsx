@@ -4,11 +4,10 @@ import { FC, Suspense, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
-import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
-import { Box, Typography } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 
 import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
@@ -74,22 +73,28 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
       })
     })
 
-  // Send a single email invitation. Resolves with the invited member on success, or
-  // rejects with it (kept selected) and a message on failure.
-  const inviteEmail = (profileId: string, member: SelectedEmail) =>
+  // Send the batch of email invitations in a single request. Resolves with the invited
+  // members on success, or rejects with them (kept selected) and a message on failure.
+  const inviteEmails = (profileId: string, members: SelectedEmail[]) =>
     new Promise<SelectedMember[]>((resolve, reject) => {
       sendInvitation({
-        variables: { input: { profileId, email: member.email, role: DEFAULT_INVITE_ROLE } },
+        variables: {
+          input: {
+            profileId,
+            emails: members.map((member) => member.email),
+            role: DEFAULT_INVITE_ROLE,
+          },
+        },
         onCompleted: (response, errors) => {
           const message = getMutationErrorMessage(
             response?.profileSendInvitation?.errors,
             errors,
-            `Failed to invite ${member.email}`,
+            'Failed to send invitations',
           )
-          if (message) reject(new BatchError(message, [member]))
-          else resolve([member])
+          if (message) reject(new BatchError(message, members))
+          else resolve(members)
         },
-        onError: (error) => reject(new BatchError(error.message, [member])),
+        onError: (error) => reject(new BatchError(error.message, members)),
       })
     })
 
@@ -102,7 +107,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
 
     const tasks: Promise<SelectedMember[]>[] = []
     if (profileMembers.length > 0) tasks.push(addMembers(profileId, profileMembers))
-    emailMembers.forEach((member) => tasks.push(inviteEmail(profileId, member)))
+    if (emailMembers.length > 0) tasks.push(inviteEmails(profileId, emailMembers))
 
     setIsSubmitting(true)
     const results = await Promise.allSettled(tasks)
@@ -148,7 +153,11 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
             {COPY.description}
           </Typography>
           {open && (
-            <Suspense fallback={<LoadingState CircularProgressProps={{ size: 20 }} />}>
+            <Suspense
+              fallback={
+                <TextField fullWidth size="small" disabled placeholder={COPY.searchPlaceholder} />
+              }
+            >
               <MemberSearch selected={selected} onAdd={handleAdd} onRemove={handleRemove} />
             </Suspense>
           )}

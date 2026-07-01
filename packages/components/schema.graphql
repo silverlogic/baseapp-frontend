@@ -1585,7 +1585,7 @@ enum ProfileRoleStatus {
 
 input ProfileSendInvitationInput {
   profileId: ID!
-  email: String!
+  emails: [String!]!
   role: ProfileRoles!
   clientMutationId: String
 }
@@ -1594,8 +1594,8 @@ type ProfileSendInvitationPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
-  profileUserRole: ProfileUserRole
-  emailSent: Boolean
+  profileUserRoles: [ProfileUserRole]
+  emailsSent: Int
   clientMutationId: String
 }
 

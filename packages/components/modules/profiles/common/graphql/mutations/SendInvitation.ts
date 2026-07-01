@@ -7,14 +7,14 @@ import { SendInvitationMutation } from '../../../../../__generated__/SendInvitat
 export const SendInvitationMutationQuery = graphql`
   mutation SendInvitationMutation($input: ProfileSendInvitationInput!) {
     profileSendInvitation(input: $input) {
-      profileUserRole {
+      profileUserRoles {
         id
         status
         role
         invitedEmail
         invitationExpiresAt
       }
-      emailSent
+      emailsSent
       errors {
         field
         messages

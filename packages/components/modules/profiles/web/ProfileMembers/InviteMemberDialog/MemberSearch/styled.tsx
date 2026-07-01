@@ -12,6 +12,9 @@ export const ChipsList = styled(Box)(({ theme }) => ({
   display: 'flex',
   flexDirection: 'column',
   gap: theme.spacing(1),
+  // Cap the height so a large selection scrolls instead of pushing the dialog long.
+  maxHeight: 240,
+  overflowY: 'auto',
 }))
 
 export const MemberChip = styled(Box)(({ theme }) => ({
