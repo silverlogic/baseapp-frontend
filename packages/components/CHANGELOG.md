@@ -1,5 +1,13 @@
 # @baseapp-frontend/components
 
+## 1.6.2
+
+### Patch Changes
+
+- Comment mentions now honor the design-system `theme.mention` token.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.14
+
 ## 1.6.1
 
 ### Patch Changes
