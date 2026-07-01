@@ -1,4 +1,4 @@
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -34,12 +34,13 @@ export const useResendInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const payloadErrors =
-          response?.profileResendInvitation?.errors?.flatMap((error) => error?.messages ?? []) ?? []
+        const errorMessage = getMutationErrorMessage(
+          response?.profileResendInvitation?.errors,
+          errors,
+        )
 
-        if (errors?.length || payloadErrors.length) {
-          errors?.forEach((error) => sendToast(error.message, { type: 'error' }))
-          payloadErrors.forEach((message) => sendToast(message, { type: 'error' }))
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
         } else if (response?.profileResendInvitation?.emailSent === false) {
           sendToast('Invitation updated, but the email could not be sent', { type: 'warning' })
         } else {

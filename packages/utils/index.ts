@@ -18,6 +18,7 @@ export * from './functions/expo'
 export * from './functions/fetch'
 export * from './functions/file'
 export * from './functions/form'
+export * from './functions/relay'
 export * from './functions/string'
 export * from './functions/token'
 

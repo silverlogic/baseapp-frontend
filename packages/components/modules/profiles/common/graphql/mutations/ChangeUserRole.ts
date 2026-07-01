@@ -1,4 +1,4 @@
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -32,9 +32,10 @@ export const useChangeUserRoleMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        const errorMessage = getMutationErrorMessage(response.profileUserRoleUpdate?.errors, errors)
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
+        }
 
         config?.onCompleted?.(response, errors)
       },

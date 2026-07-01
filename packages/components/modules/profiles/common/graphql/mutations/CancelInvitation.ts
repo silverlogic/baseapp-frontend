@@ -1,4 +1,4 @@
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -29,12 +29,13 @@ export const useCancelInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const payloadErrors =
-          response?.profileCancelInvitation?.errors?.flatMap((error) => error?.messages ?? []) ?? []
+        const errorMessage = getMutationErrorMessage(
+          response?.profileCancelInvitation?.errors,
+          errors,
+        )
 
-        if (errors?.length || payloadErrors.length) {
-          errors?.forEach((error) => sendToast(error.message, { type: 'error' }))
-          payloadErrors.forEach((message) => sendToast(message, { type: 'error' }))
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
         } else if (response?.profileCancelInvitation?.success === false) {
           sendToast('Invitation could not be removed', { type: 'error' })
         } else {

@@ -1,5 +1,5 @@
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { graphql, useMutation } from 'react-relay'
 import { PayloadError } from 'relay-runtime'
@@ -55,9 +55,10 @@ export const useFollowToggle = ({ targetId, perm, onCompleted }: UseFollowToggle
       },
       onCompleted: (_response, errors) => {
         onCompleted?.(_response, errors)
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        const errorMessage = getMutationErrorMessage(undefined, errors)
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
+        }
       },
     })
   }

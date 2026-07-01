@@ -1,4 +1,4 @@
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -34,15 +34,10 @@ export const useChatRoomToggleAdminMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        response.chatRoomToggleAdmin?.errors?.forEach((error) => {
-          error?.messages.forEach((message) => {
-            sendToast(message, { type: 'error' })
-          })
-        })
-
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        const errorMessage = getMutationErrorMessage(response.chatRoomToggleAdmin?.errors, errors)
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
+        }
 
         config?.onCompleted?.(response, errors)
       },

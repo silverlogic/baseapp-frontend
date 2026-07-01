@@ -1,4 +1,4 @@
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -41,9 +41,10 @@ export const useCommentDeleteMutation = (): [
     commitDelete({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        const errorMessage = getMutationErrorMessage(undefined, errors)
+        if (errorMessage) {
+          sendToast(errorMessage, { type: 'error' })
+        }
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

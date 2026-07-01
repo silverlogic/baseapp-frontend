@@ -31,9 +31,3 @@ export interface MemberSearchProps {
 export type MemberSearchOption =
   | { kind: 'profile'; profile: SelectedProfile }
   | { kind: 'email'; email: string }
-
-/** Shape of the `errors` field returned by the invite-flow mutation payloads. */
-export type MutationErrors =
-  | ReadonlyArray<{ readonly messages: ReadonlyArray<string> } | null | undefined>
-  | null
-  | undefined
