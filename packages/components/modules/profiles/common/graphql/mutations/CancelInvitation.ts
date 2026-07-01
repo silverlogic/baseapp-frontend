@@ -20,7 +20,7 @@ export const useCancelInvitationMutation = (): [
   (config: UseMutationConfig<CancelInvitationMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CancelInvitationMutation>(
     CancelInvitationMutationQuery,
   )
@@ -29,16 +29,20 @@ export const useCancelInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const payloadErrors =
-          response?.profileCancelInvitation?.errors?.flatMap((error) => error?.messages ?? []) ?? []
+        const errorMessage = sendMutationErrorToast(
+          response?.profileCancelInvitation?.errors,
+          errors,
+          {
+            defaultMessage: 'Invitation could not be removed',
+          },
+        )
 
-        if (errors?.length || payloadErrors.length) {
-          errors?.forEach((error) => sendToast(error.message, { type: 'error' }))
-          payloadErrors.forEach((message) => sendToast(message, { type: 'error' }))
-        } else if (response?.profileCancelInvitation?.success === false) {
-          sendToast('Invitation could not be removed', { type: 'error' })
-        } else {
-          sendToast('Invitation removed', { type: 'success' })
+        if (!errorMessage) {
+          if (response?.profileCancelInvitation?.success === false) {
+            sendToast('Invitation could not be removed', { type: 'error' })
+          } else {
+            sendToast('Invitation removed', { type: 'success' })
+          }
         }
         config?.onCompleted?.(response, errors)
       },

@@ -23,7 +23,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
   const target = useFragment(BlockToggleFragment, targetRef)
   const [commitMutation, isMutationInFlight] =
     useMutation<BlockToggleMutation>(BlockToggleMutationQuery)
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [open, setOpen] = useState(false)
 
   const isBlockedByMe = target?.isBlockedByMe
@@ -54,9 +54,9 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
         },
       },
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        if (sendMutationErrorToast(undefined, errors)) {
+          return
+        }
         handleSuccess()
         sendToast(
           `${target.name ?? ''} is ${response?.blockToggle?.target?.isBlockedByMe ? 'blocked' : 'unblocked'}`,

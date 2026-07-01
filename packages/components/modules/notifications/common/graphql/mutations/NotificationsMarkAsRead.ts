@@ -23,7 +23,7 @@ export const useNotificationsMarkAsRead = (): [
   (config: UseMutationConfig<NotificationsMarkAsReadMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<NotificationsMarkAsReadMutation>(
     NotificationsMarkAsReadMutationQuery,
   )
@@ -32,9 +32,7 @@ export const useNotificationsMarkAsRead = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
 
         config?.onCompleted?.(response, errors)
       },
