@@ -1,13 +1,18 @@
 import { CSSProperties } from 'react'
 
+import type { CSSObject } from '@mui/material/styles'
+
 import { CustomShadows } from '../types'
 
 declare module '@mui/material/styles' {
   interface Theme {
     customShadows: CustomShadows
+    /** Opt-in style object applied to @-mention chips and editor tokens. Unset = per-surface defaults. */
+    mention?: CSSObject
   }
   interface ThemeOptions {
     customShadows?: CustomShadows
+    mention?: CSSObject
   }
   interface TypographyVariants {
     // @ts-ignore

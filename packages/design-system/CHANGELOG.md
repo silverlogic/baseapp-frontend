@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 1.2.14
+
+### Patch Changes
+
+- Add an opt-in `theme.mention` style token (a `CSSObject`) read by both mention render paths: `MentionChip` (rendered markdown, including comments/posts/notifications) and the `MarkdownEditorField` mention nodes. When unset, each surface keeps its current default (`info.main`, plus `fontWeight: 500` on the chip), so existing consumers are unaffected. Set it via `themeOptions.mention` to restyle every @-mention (color, weight, decoration, hover) from one place.
+
+
 ## 1.2.13
 
 ### Patch Changes
