@@ -1,4 +1,4 @@
-import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -23,7 +23,7 @@ export const useReadMessageMutation = (): [
   (config: UseMutationConfig<ReadMessagesMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
     useMutation<ReadMessagesMutation>(ReadMessagesMutationQuery)
 
@@ -31,10 +31,10 @@ export const useReadMessageMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const errorMessage = getMutationErrorMessage(response.chatRoomReadMessages?.errors, errors)
-        if (errorMessage) {
-          sendToast(errorMessage, { type: 'error' })
-        }
+        // This mutation fires passively (MessagesList marks rooms read from a useEffect on
+        // room open / unread-count changes), so payload validation errors are deliberately
+        // not toasted — they would show up as unattributable errors during navigation.
+        sendMutationErrorToast(undefined, errors)
 
         config?.onCompleted?.(response, errors)
       },

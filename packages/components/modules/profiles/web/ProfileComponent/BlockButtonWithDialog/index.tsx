@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { BlockIcon, UnblockIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, CircularProgress, MenuItem, Typography } from '@mui/material'
 import { useFragment, useMutation } from 'react-relay'
@@ -23,7 +23,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
   const target = useFragment(BlockToggleFragment, targetRef)
   const [commitMutation, isMutationInFlight] =
     useMutation<BlockToggleMutation>(BlockToggleMutationQuery)
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [open, setOpen] = useState(false)
 
   const isBlockedByMe = target?.isBlockedByMe
@@ -54,9 +54,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
         },
       },
       onCompleted: (response, errors) => {
-        const errorMessage = getMutationErrorMessage(undefined, errors)
-        if (errorMessage) {
-          sendToast(errorMessage, { type: 'error' })
+        if (sendMutationErrorToast(undefined, errors)) {
           return
         }
         handleSuccess()

@@ -1,4 +1,4 @@
-import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -24,15 +24,12 @@ export const useReportCreateMutation = (): [
   const [commitMutation, isMutationInFlight] =
     useMutation<ReportCreateMutation>(ReportCreateMutationQuery)
 
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const commit = (config: UseMutationConfig<ReportCreateMutation>) => {
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const errorMessage = getMutationErrorMessage(undefined, errors)
-        if (errorMessage) {
-          sendToast(errorMessage, { type: 'error' })
-        }
+        sendMutationErrorToast(undefined, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

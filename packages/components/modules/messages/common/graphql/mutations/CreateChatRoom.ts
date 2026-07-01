@@ -1,4 +1,4 @@
-import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
@@ -28,7 +28,7 @@ export const useCreateChatRoomMutation = (): [
   (config: UseMutationConfig<CreateChatRoomMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CreateChatRoomMutation>(
     CreateChatRoomMutationQuery,
   )
@@ -38,13 +38,12 @@ export const useCreateChatRoomMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const errorMessage = getMutationErrorMessage(undefined, errors)
-        if (errorMessage) {
-          sendToast(errorMessage, { type: 'error' })
+        const errorMessage = sendMutationErrorToast(response.chatRoomCreate?.errors, errors)
+        if (!errorMessage) {
+          setChatRoom({
+            id: response?.chatRoomCreate?.room?.node?.id,
+          })
         }
-        setChatRoom({
-          id: response?.chatRoomCreate?.room?.node?.id,
-        })
 
         config?.onCompleted?.(response, errors)
       },

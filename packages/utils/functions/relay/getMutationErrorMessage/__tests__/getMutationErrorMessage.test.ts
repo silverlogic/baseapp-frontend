@@ -36,6 +36,14 @@ describe('getMutationErrorMessage', () => {
     expect(getMutationErrorMessage(payloadErrors, undefined)).toBe('Something went wrong.')
   })
 
+  it('should fall back to the transport error message when payload errors carry no messages', () => {
+    const payloadErrors = [{ field: 'email', messages: [] }]
+    const transportErrors = [{ message: 'You do not have permission.' }]
+    expect(getMutationErrorMessage(payloadErrors, transportErrors)).toBe(
+      'You do not have permission.',
+    )
+  })
+
   it('should fall back to the default message when messages are empty strings', () => {
     const payloadErrors = [{ field: 'email', messages: [''] }]
     expect(getMutationErrorMessage(payloadErrors, undefined)).toBe('Something went wrong.')

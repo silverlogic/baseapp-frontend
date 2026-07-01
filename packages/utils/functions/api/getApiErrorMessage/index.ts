@@ -1,9 +1,8 @@
 import isArray from 'lodash/isArray'
 
-export const getApiErrorMessage = (
-  error: any,
-  { defaultMessage = 'Something went wrong.' } = {},
-) => {
+import { DEFAULT_ERROR_MESSAGE } from '../../../constants/errors'
+
+export const getApiErrorMessage = (error: any, { defaultMessage = DEFAULT_ERROR_MESSAGE } = {}) => {
   let message = defaultMessage
 
   if (error?.message) {

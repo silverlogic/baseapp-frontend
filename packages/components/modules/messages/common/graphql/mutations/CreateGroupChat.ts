@@ -1,12 +1,7 @@
 import { useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import {
-  ACCESS_KEY_NAME,
-  getMutationErrorMessage,
-  getToken,
-  useNotification,
-} from '@baseapp-frontend/utils'
+import { ACCESS_KEY_NAME, getToken, useNotification } from '@baseapp-frontend/utils'
 
 import * as FileSystem from 'expo-file-system/legacy'
 import { ConnectionHandler, UseMutationConfig, graphql, useMutation } from 'react-relay'
@@ -41,7 +36,7 @@ export const useCreateGroupChatMutation = (): [
   (config: UseMutationConfig<CreateGroupChatMutation>) => void,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CreateGroupChatMutation>(
     CreateGroupChatMutationQuery,
   )
@@ -112,10 +107,7 @@ export const useCreateGroupChatMutation = (): [
         errors: PayloadError[] | null,
       ) => Promise<void> = async (response, errors) => {
         setImageUploadInProgress(true)
-        const errorMessage = getMutationErrorMessage(undefined, errors)
-        if (errorMessage) {
-          sendToast(errorMessage, { type: 'error' })
-        }
+        sendMutationErrorToast(response?.chatRoomCreate?.errors, errors)
         const roomId = response?.chatRoomCreate?.room?.node?.id
         if (roomId) {
           if (image) {
