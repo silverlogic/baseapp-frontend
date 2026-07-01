@@ -5,8 +5,8 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { ChangeUserRoleMutation } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
 
 export const ChangeUserRoleMutationQuery = graphql`
-  mutation ChangeUserRoleMutation($input: RoleUpdateInput!) {
-    profileRoleUpdate(input: $input) {
+  mutation ChangeUserRoleMutation($input: ProfileUserRoleUpdateInput!) {
+    profileUserRoleUpdate(input: $input) {
       profileUserRole {
         id
         role

@@ -196,7 +196,7 @@ export const fullMembersListNextPageMockData = {
 
 export const updateMemberRoleMockData = {
   data: {
-    profileRoleUpdate: {
+    profileUserRoleUpdate: {
       profileUserRole: {
         id: 'UHJvZmlsZVVzZXJSb2xlOjEx',
         role: 'ADMIN',
