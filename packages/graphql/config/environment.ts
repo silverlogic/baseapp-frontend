@@ -100,8 +100,7 @@ export async function httpFetch(
     // Preserve the structured GraphQL errors so consumers can surface a clean,
     // human-friendly message (see `getGraphQLErrorMessage`) instead of this verbose
     // wrapper, which leaks the query name, variables, and raw backend detail.
-    ;(error as Error & { graphQLErrors?: GraphQLResponse['errors'] }).graphQLErrors =
-      response.errors
+    ;(error as Error & { graphQLErrors?: unknown }).graphQLErrors = response.errors
     throw error
   }
 

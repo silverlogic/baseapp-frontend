@@ -152,7 +152,7 @@ const MembersList: FC<MembersListProps> = ({
               {...LoadingStateProps}
             />
           )}
-          {hasNext && <Box ref={loadMoreRef} />}
+          {hasNext && <div ref={loadMoreRef} aria-hidden />}
         </>
       )}
     </>
