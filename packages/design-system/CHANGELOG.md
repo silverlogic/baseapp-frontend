@@ -1,5 +1,16 @@
 # @baseapp-frontend/design-system
 
+## 1.4.0
+
+### Minor Changes
+
+- Add `AutocompleteField`, a design-system autocomplete/combobox input built on MUI `Autocomplete` — RHF integration via `withController`, debounced text input, an `isPending` spinner, and a default `renderInput`. The member-invite search is its first consumer.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.1.0
+
 ## 1.3.0
 
 ### Minor Changes

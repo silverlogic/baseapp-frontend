@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
@@ -10,8 +10,17 @@ import { useFragment } from 'react-relay'
 import { ProfileRoles } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
+import { useCancelInvitationMutation } from '../../../common/graphql/mutations/CancelInvitation'
 import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
-import { MEMBER_ACTIONS, MEMBER_ROLES, MEMBER_STATUSES, roleOptions } from '../constants'
+import { useResendInvitationMutation } from '../../../common/graphql/mutations/ResendInvitation'
+import {
+  INVITATION_ACTIONS,
+  MEMBER_ACTIONS,
+  MEMBER_ROLES,
+  MEMBER_STATUSES,
+  invitationActionOptions,
+  roleOptions,
+} from '../constants'
 import { capitalizeFirstLetter } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
@@ -26,6 +35,9 @@ const MemberItem: FC<MemberItemProps> = ({
   canChangeMember = false,
   userId,
   searchQuery,
+  invitedEmail,
+  invitationExpiresAt,
+  invitationId,
 }) => {
   const theme = useTheme()
 
@@ -35,10 +47,39 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const [changeUserRole, isChangingUserRole] = useChangeUserRoleMutation()
   const [removeMember, isRemovingMember] = useRemoveMemberMutation()
+  const [resendInvitation, isResendingInvitation] = useResendInvitationMutation()
+  const [cancelInvitation, isCancellingInvitation] = useCancelInvitationMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
+  const [openConfirmCancelInvitation, setOpenConfirmCancelInvitation] = useState(false)
 
-  if (!memberProfile) return null
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    if (status !== MEMBER_STATUSES.pending || !invitationExpiresAt) return undefined
+
+    const expiresAt = new Date(invitationExpiresAt).getTime()
+    const currentTime = Date.now()
+    if (!Number.isFinite(expiresAt) || expiresAt <= currentTime) return undefined
+
+    const timeoutId = globalThis.setTimeout(() => setNow(Date.now()), expiresAt - currentTime)
+    return () => globalThis.clearTimeout(timeoutId)
+  }, [invitationExpiresAt, status])
+
+  // An invitation is "expired" once it is flagged EXPIRED by the backend, or
+  // while still PENDING past its expiry timestamp (the backend flips the status
+  // lazily, so we also check the time client-side).
+  const isExpired =
+    status === MEMBER_STATUSES.expired ||
+    (status === MEMBER_STATUSES.pending &&
+      !!invitationExpiresAt &&
+      new Date(invitationExpiresAt).getTime() < now)
+
+  // Invitations sent to an email with no account yet have no profile to render;
+  // fall back to the invited email so they still appear in the list.
+  const displayName = memberProfile?.name ?? invitedEmail ?? ''
+
+  if (!memberProfile && !invitedEmail) return null
 
   const shouldRenderChangeRoleSelect =
     status === MEMBER_STATUSES.active && memberRole !== MEMBER_ROLES.owner && canChangeMember
@@ -62,6 +103,28 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const handleRemoveMemberDialog = () => {
     setOpenConfirmRemoveMember(!openConfirmRemoveMember)
+  }
+
+  const handleResendInvitation = () => {
+    if (invitationId) {
+      resendInvitation({ variables: { input: { invitationId } } })
+    }
+  }
+
+  const handleCancelInvitationDialog = () => {
+    setOpenConfirmCancelInvitation(!openConfirmCancelInvitation)
+  }
+
+  const confirmCancelInvitation = () => {
+    if (invitationId) {
+      cancelInvitation({
+        variables: { input: { invitationId } },
+        // The mutation returns only `success` (no deletedId), so remove the
+        // record from the store to drop it from the members connection.
+        updater: (store) => store.delete(invitationId),
+      })
+    }
+    setOpenConfirmCancelInvitation(false)
   }
 
   const changeRole = (roleType: ProfileRoles) => {
@@ -95,7 +158,56 @@ const MemberItem: FC<MemberItemProps> = ({
     setOpenConfirmChangeMember(false)
   }
 
+  const handleInvitationAction = (event: SelectChangeEvent<unknown>) => {
+    const { value } = event.target
+    if (value === INVITATION_ACTIONS.resend) {
+      handleResendInvitation()
+    } else if (value === INVITATION_ACTIONS.remove) {
+      handleCancelInvitationDialog()
+    }
+  }
+
   const renderRoleButton = () => {
+    if (isExpired) {
+      if (canChangeMember) {
+        return (
+          <Box>
+            <Select
+              value=""
+              onChange={handleInvitationAction}
+              displayEmpty
+              renderValue={() => 'Expired'}
+              variant="filled"
+              size="small"
+              disabled={isResendingInvitation || isCancellingInvitation}
+            >
+              {invitationActionOptions.map(({ value, label }) => (
+                <MenuItem
+                  key={value}
+                  value={value}
+                  sx={{
+                    color:
+                      value === INVITATION_ACTIONS.remove ? theme.palette.error.main : 'inherit',
+                  }}
+                >
+                  {label}
+                </MenuItem>
+              ))}
+            </Select>
+          </Box>
+        )
+      }
+      return (
+        <Box>
+          {/* Read-only status: `disabled` keeps it out of the tab order and the a11y
+              tree as an actionable control (vs. pointerEvents:none, which only blocks
+              the mouse). Greyed-out also reads correctly for an expired invitation. */}
+          <Button variant="outlined" color="inherit" disabled>
+            Expired
+          </Button>
+        </Box>
+      )
+    }
     if (shouldRenderChangeRoleSelect) {
       return (
         <Box>
@@ -143,12 +255,12 @@ const MemberItem: FC<MemberItemProps> = ({
     return null
   }
 
-  if (searchQuery && !memberProfile?.name?.toLowerCase().includes(searchQuery.toLowerCase())) {
+  if (searchQuery && !displayName.toLowerCase().includes(searchQuery.toLowerCase())) {
     return null
   }
 
   return (
-    <MemberItemContainer>
+    <>
       <ConfirmDialog
         title="Change user permissions?"
         open={openConfirmChangeMember}
@@ -183,22 +295,40 @@ const MemberItem: FC<MemberItemProps> = ({
           </Button>
         }
       />
-      <MemberPersonalInformation isActive={status === MEMBER_STATUSES.active || false}>
-        <AvatarWithPlaceholder
-          width={avatarWidth}
-          height={avatarHeight}
-          src={memberProfile?.image?.url ?? ''}
-          alt="Profile avatar"
-          color="secondary"
-          {...avatarProps}
-        />
-        <Box>
-          <Typography variant="subtitle2">{memberProfile.name}</Typography>
-          <Typography variant="caption">{memberProfile?.urlPath?.path}</Typography>
-        </Box>
-      </MemberPersonalInformation>
-      {renderRoleButton()}
-    </MemberItemContainer>
+      <ConfirmDialog
+        title="Remove invitation"
+        open={openConfirmCancelInvitation}
+        onClose={handleCancelInvitationDialog}
+        content={
+          <Typography variant="body1">
+            Are you sure you want to remove this invitation? It will be deleted from the list.
+          </Typography>
+        }
+        cancelText="Back"
+        action={
+          <Button variant="contained" color="error" onClick={confirmCancelInvitation}>
+            Remove
+          </Button>
+        }
+      />
+      <MemberItemContainer>
+        <MemberPersonalInformation isActive={status === MEMBER_STATUSES.active || false}>
+          <AvatarWithPlaceholder
+            width={avatarWidth}
+            height={avatarHeight}
+            src={memberProfile?.image?.url ?? ''}
+            alt="Profile avatar"
+            color="secondary"
+            {...avatarProps}
+          />
+          <Box>
+            <Typography variant="subtitle2">{displayName}</Typography>
+            <Typography variant="caption">{memberProfile?.urlPath?.path}</Typography>
+          </Box>
+        </MemberPersonalInformation>
+        {renderRoleButton()}
+      </MemberItemContainer>
+    </>
   )
 }
 

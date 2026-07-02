@@ -1,11 +1,11 @@
 'use client'
 
-import { ChangeEventHandler, FC, FocusEventHandler } from 'react'
+import { FC, FocusEventHandler, SyntheticEvent, useRef } from 'react'
 
 import { Controller } from 'react-hook-form'
 
 import useDebounce from '../../../hooks/useDebounce'
-import type { DebouncedFunction, WithControllerProps } from './types'
+import type { DebouncedFunction, DebouncedInputChangeFunction, WithControllerProps } from './types'
 
 function withController<T>(
   Component: FC<T>,
@@ -19,14 +19,28 @@ function withController<T>(
     ...props
   }: WithControllerProps<T>) => {
     if (control) {
-      const { onChange, onBlur, ...restOfTheProps } = props
+      const { onChange, onBlur, onInputChange, ...restOfTheProps } = props
       const onChangeWithFallback = onChange ?? (() => {})
+      const onInputChangeWithFallback = onInputChange ?? (() => {})
+
+      // useDebounce memoizes its function once, so a debounced wrapper that closed
+      // directly over the callbacks would keep calling the first render's closure.
+      // Read the latest callbacks from refs so prop updates take effect.
+      const onChangeRef = useRef(onChangeWithFallback)
+      onChangeRef.current = onChangeWithFallback
+      const onInputChangeRef = useRef(onInputChangeWithFallback)
+      onInputChangeRef.current = onInputChangeWithFallback
+
       const { debouncedFunction: debouncedOnChange } = useDebounce<DebouncedFunction>(
-        onChangeWithFallback,
-        {
-          debounceTime,
-        },
+        (event) => onChangeRef.current(event),
+        { debounceTime },
       )
+      // useDebounce debounces single-argument functions, so pack onInputChange's
+      // (event, value, reason) arguments into one tuple and spread them back out.
+      const { debouncedFunction: debouncedOnInputChange } =
+        useDebounce<DebouncedInputChangeFunction>((args) => onInputChangeRef.current(...args), {
+          debounceTime,
+        })
       const shouldDebounce = runtimeShouldDebounce ?? factoryShouldDebounce
 
       return (
@@ -34,14 +48,28 @@ function withController<T>(
           name={name}
           control={control}
           render={({ field, fieldState }) => {
-            const handleOnChange: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
-              event,
-            ) => {
-              field.onChange(event)
-              if (onChange && shouldDebounce) {
+            // Autocomplete-style components pass the selected value as the second
+            // argument; plain inputs pass only the change event (react-hook-form
+            // reads the value from event.target). Debounce applies only to the
+            // free-text path, never to a discrete selection.
+            const handleOnChange = (event: unknown, ...rest: unknown[]) => {
+              const hasSelectedValue = rest.length > 0
+              field.onChange(hasSelectedValue ? rest[0] : event)
+              if (onChange && shouldDebounce && !hasSelectedValue) {
                 debouncedOnChange(event)
               } else {
-                onChange?.(event)
+                onChange?.(event, ...rest)
+              }
+            }
+            // Free-text input for Autocomplete-style fields. Debounce the consumer
+            // callback so async option queries don't fire on every keystroke; the
+            // selected value flows through onChange above, so this never overwrites
+            // the form field with the raw text.
+            const handleOnInputChange = (event: SyntheticEvent, value: string, reason: string) => {
+              if (onInputChange && shouldDebounce) {
+                debouncedOnInputChange([event, value, reason])
+              } else {
+                onInputChange?.(event, value, reason)
               }
             }
             const handleOnBlur: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement> = (
@@ -57,6 +85,7 @@ function withController<T>(
                 error={!!fieldState.error}
                 name={name}
                 onChange={handleOnChange}
+                onInputChange={onInputChange ? handleOnInputChange : undefined}
                 onBlur={handleOnBlur}
                 helperText={helperText || (!!fieldState.error && fieldState.error?.message)}
                 {...(restOfTheProps as any)}

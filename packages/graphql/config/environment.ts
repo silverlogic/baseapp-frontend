@@ -92,11 +92,16 @@ export async function httpFetch(
   // property of the response. If any exceptions occurred when processing the request,
   // throw an error to indicate to the developer what went wrong.
   if (Array.isArray(response.errors)) {
-    throw new Error(
+    const error = new Error(
       `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
         variables,
       )}': ${JSON.stringify(response.errors)}`,
     )
+    // Preserve the structured GraphQL errors so consumers can surface a clean,
+    // human-friendly message (see `getGraphQLErrorMessage`) instead of this verbose
+    // wrapper, which leaks the query name, variables, and raw backend detail.
+    ;(error as Error & { graphQLErrors?: unknown }).graphQLErrors = response.errors
+    throw error
   }
 
   return response
