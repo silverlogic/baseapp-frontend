@@ -4,7 +4,7 @@ directive @specifiedBy(
   url: String!
 ) on SCALAR
 
-type ActivityLog implements Node {
+type ActivityLog implements Node & ActivityLogWithProfileInterface {
   """The ID of the object"""
   id: ID!
   createdAt: DateTime!
@@ -14,9 +14,9 @@ type ActivityLog implements Node {
   verb: String
   visibility: VisibilityTypes
   url: String
+  profile: Profile
   metadata: GenericScalar
   events(offset: Int, before: String, after: String, first: Int, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal): NodeLogEventConnection
-  profile: Profile
   pk: Int
 }
 
@@ -37,6 +37,10 @@ type ActivityLogEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
+}
+
+interface ActivityLogWithProfileInterface {
+  profile: Profile
 }
 
 type Block implements Node {
@@ -72,8 +76,8 @@ type BlockEdge {
 interface BlocksInterface {
   """The ID of the object"""
   id: ID!
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
+  blockers(first: Int, last: Int, offset: Int, after: String, before: String): BlockConnection
+  blocking(first: Int, last: Int, offset: Int, after: String, before: String): BlockConnection
   blockersCount: Int
   blockingCount: Int
   isBlockedByMe(profileId: ID): Boolean
@@ -96,59 +100,6 @@ type BlockTogglePayload {
   clientMutationId: String
 }
 
-type Bookmark implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  user: User!
-  profile: Profile
-  target: Node
-}
-
-type BookmarkConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [BookmarkEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Bookmark` and its cursor."""
-type BookmarkEdge {
-  """The item at the end of the edge"""
-  node: Bookmark
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface BookmarksInterface {
-  """The ID of the object"""
-  id: ID!
-  bookmarksCount: Int
-  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
-  isBookmarksEnabled: Boolean!
-  isBookmarked(profileId: ID): Boolean
-}
-
-input BookmarkToggleInput {
-  targetObjectId: ID!
-  profileObjectId: ID
-  clientMutationId: String
-}
-
-type BookmarkTogglePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  bookmark: BookmarkEdge
-  target: BookmarksInterface
-  bookmarkDeletedId: ID
-  clientMutationId: String
-}
-
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
@@ -158,8 +109,8 @@ type ChatRoom implements Node {
   lastMessageTime: DateTime
   participantsCount: Int!
   isGroup: Boolean!
-  participants(offset: Int, before: String, after: String, first: Int, last: Int, q: String): ChatRoomParticipantConnection
-  allMessages(offset: Int, before: String, after: String, first: Int, last: Int, verb: Verbs): MessageConnection
+  participants(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection
+  allMessages(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection
   unreadMessages(profileId: ID): UnreadMessageCount
   isArchived(profileId: ID): Boolean
   otherParticipant: ChatRoomParticipant
@@ -334,11 +285,11 @@ interface ChatRoomsInterface {
   """The ID of the object"""
   id: ID!
   chatRooms(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -402,49 +353,11 @@ type ChatRoomUpdatePayload {
   clientMutationId: String
 }
 
-type City implements Node {
-  """The ID of the object"""
-  id: ID!
-  name: String!
-  region: Region
-  country: Country!
-}
-
-type CityConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [CityEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `City` and its cursor."""
-type CityEdge {
-  """The item at the end of the edge"""
-  node: City
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type Comment implements Node & CommentsInterface & ReactionsInterface & PermissionsInterface & NodeActivityLogInterface {
+type Comment implements Node & CommentsInterface & PermissionsInterface & ReactionsInterface & MentionsInterface & NodeActivityLogInterface {
   created: DateTime!
   modified: DateTime!
-  mentionedProfiles(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection!
-  user: User
   profile: Profile
+  user: User
   body: String
 
   """languaged used in the comment"""
@@ -469,15 +382,18 @@ type Comment implements Node & CommentsInterface & ReactionsInterface & Permissi
     orderBy: String
   ): CommentConnection
   isCommentsEnabled: Boolean!
-  reactionsCount: ReactionsCount
-  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
-  isReactionsEnabled: Boolean!
-  myReaction(profileId: ID): Reaction
 
   """
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  isReactionsEnabled: Boolean!
+  myReaction(profileId: ID): Reaction
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: CommentsInterface
   pk: Int
@@ -496,9 +412,9 @@ type CommentConnection {
 input CommentCreateInput {
   targetObjectId: ID!
   inReplyToId: ID
-  profileId: ID
   body: String!
   mentionedProfileIds: [ID]
+  profileId: ID
   clientMutationId: String
 }
 
@@ -594,60 +510,23 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & ReactionsInterface & CommentsInterface & PermissionsInterface & HoneycombInterface & BookmarksInterface & ReportsInterface & HiddensInterface {
+type ContentPost implements Node & MentionsInterface & ReactionsInterface {
   created: DateTime!
   modified: DateTime!
-  mentionedProfiles(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection!
-  isReactionsEnabled: Boolean!
-  user: User!
   profile: Profile
+  user: User!
   content: String!
   images(offset: Int, before: String, after: String, first: Int, last: Int, id: ID, post: ID): ContentPostImageConnection
-  isCommentsEnabled: Boolean!
-  title: String!
-  hive: Hive
 
   """The ID of the object"""
   id: ID!
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   reactionsCount: ReactionsCount
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  isReactionsEnabled: Boolean!
   myReaction(profileId: ID): Reaction
-  commentsCount: CommentsCount!
-  comments(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  honeycombs: [Honeycomb]
-  bookmarksCount: Int
-  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
-  isBookmarksEnabled: Boolean!
-  isBookmarked(profileId: ID): Boolean
-  reportsCount: GenericScalar
-  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReport: Report
-  isHiddenByMe: Boolean
   pk: Int
 }
 
@@ -662,12 +541,8 @@ type ContentPostConnection {
 }
 
 input ContentPostCreateInput {
-  title: String!
   content: String!
   isReactionsEnabled: Boolean!
-  isCommentsEnabled: Boolean!
-  hiveId: ID
-  honeycombNames: [String]
   mentionedProfileIds: [ID]
   clientMutationId: String
 }
@@ -680,19 +555,6 @@ type ContentPostCreatePayload {
   clientMutationId: String
 }
 
-input ContentPostDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-type ContentPostDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
 """A Relay edge containing a `ContentPost` and its cursor."""
 type ContentPostEdge {
   """The item at the end of the edge"""
@@ -700,26 +562,6 @@ type ContentPostEdge {
 
   """A cursor for use in pagination"""
   cursor: String!
-}
-
-input ContentPostEditInput {
-  id: ID!
-  title: String
-  content: String
-  isReactionsEnabled: Boolean
-  isCommentsEnabled: Boolean
-  honeycombNames: [String]
-  removedImageIds: [ID]
-  mentionedProfileIds: [ID]
-  clientMutationId: String
-}
-
-type ContentPostEditPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  contentPost: ContentPostEdge
-  clientMutationId: String
 }
 
 type ContentPostImage implements Node {
@@ -745,33 +587,6 @@ type ContentPostImageConnection {
 type ContentPostImageEdge {
   """The item at the end of the edge"""
   node: ContentPostImage
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-type Country implements Node {
-  """The ID of the object"""
-  id: ID!
-  name: String!
-  code2: String
-  phone: String
-}
-
-type CountryConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [CountryEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Country` and its cursor."""
-type CountryEdge {
-  """The item at the end of the edge"""
-  node: Country
 
   """A cursor for use in pagination"""
   cursor: String!
@@ -873,18 +688,6 @@ type DjangoDebugSQL {
   encoding: String
 }
 
-"""An enumeration."""
-enum employment_type {
-  """Full Time"""
-  FULL_TIME
-
-  """Part Time"""
-  PART_TIME
-
-  """Fractional"""
-  FRACTIONAL
-}
-
 type ErrorType {
   field: String!
   messages: [String!]!
@@ -915,11 +718,6 @@ type FollowConnection {
   edgeCount: Int
 }
 
-enum FollowCountContentType {
-  PROFILE
-  HIVE
-}
-
 """A Relay edge containing a `Follow` and its cursor."""
 type FollowEdge {
   """The item at the end of the edge"""
@@ -932,8 +730,8 @@ type FollowEdge {
 interface FollowsInterface {
   """The ID of the object"""
   id: ID!
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(first: Int, last: Int, offset: Int, after: String, before: String, targetIsFollowingBack: Boolean): FollowConnection
+  following(first: Int, last: Int, offset: Int, after: String, before: String, targetIsFollowingBack: Boolean): FollowConnection
   followersCount: Int
   followingCount: Int
   isFollowedByMe(profileId: ID): Boolean
@@ -963,183 +761,6 @@ String, Boolean, Int, Float, List or Object.
 """
 scalar GenericScalar
 
-type Hidden implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  user: User
-  actorObject: Node
-  targetObject: Node
-}
-
-interface HiddensInterface {
-  """The ID of the object"""
-  id: ID!
-  isHiddenByMe: Boolean
-}
-
-input HideTargetInput {
-  """Relay ID of the object to hide."""
-  targetId: ID!
-  clientMutationId: String
-}
-
-"""
-Hide any target identified by its Relay ID for the current user's profile.
-"""
-type HideTargetPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  hidden: Hidden
-  target: HiddensInterface
-  clientMutationId: String
-}
-
-type Hive implements Node & FollowsInterface & PermissionsInterface & HoneycombInterface {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  honeycombs: [Honeycomb]
-  name: String!
-  image(width: Int!, height: Int!): File
-  bannerImage(width: Int!, height: Int!): File
-  description: String!
-  resources: String!
-  additionalRules: String!
-  owner: User!
-  contentPosts(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-
-    """Ordering"""
-    orderBy: String
-  ): ContentPostConnection!
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  followersCount: Int
-  followingCount: Int
-  isFollowedByMe(profileId: ID): Boolean
-
-  """
-  Determine if the logged in user has a specific permission for this object.
-  """
-  hasPerm(perm: String!): Boolean
-  followerProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
-  isOwner: Boolean
-  pk: Int
-}
-
-type HiveCheckName {
-  isAvailable: Boolean
-  message: String
-}
-
-type HiveConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [HiveEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input HiveCreateInput {
-  name: String!
-  image: String
-  bannerImage: String
-  description: String!
-  resources: String
-  additionalRules: String
-  owner: String
-  honeycombNames: [String]
-  clientMutationId: String
-}
-
-type HiveCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  hive: Hive
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `Hive` and its cursor."""
-type HiveEdge {
-  """The item at the end of the edge"""
-  node: Hive
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input HiveUpdateInput {
-  id: ID!
-  name: String!
-  image: String
-  bannerImage: String
-  description: String!
-  resources: String
-  additionalRules: String
-  honeycombNames: [String]
-  clientMutationId: String
-}
-
-type HiveUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  hive: Hive
-  clientMutationId: String
-}
-
-type Honeycomb implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  modified: DateTime!
-  name: String!
-}
-
-type HoneycombConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [HoneycombEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Honeycomb` and its cursor."""
-type HoneycombEdge {
-  """The item at the end of the edge"""
-  node: Honeycomb
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-interface HoneycombInterface {
-  honeycombs: [Honeycomb]
-}
-
 """
 Allows use of a JSON String for input / output from the GraphQL schema.
 
@@ -1155,21 +776,61 @@ enum Languages {
   pt
 }
 
-type Message implements Node {
+type Mention implements Node {
   """The ID of the object"""
   id: ID!
   created: DateTime!
-  mentionedProfiles(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
+  modified: DateTime!
+  profile: Profile!
+}
 
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection!
+type MentionConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [MentionEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+"""A Relay edge containing a `Mention` and its cursor."""
+type MentionEdge {
+  """The item at the end of the edge"""
+  node: Mention
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+"""
+GraphQL fields exposed on any object type that has mentioned profiles.
+
+Consuming object types (Comment, ContentPost, Message, ...) opt in by
+name via the GraphQL shared interface registry:
+
+    interfaces = graphql_shared_interfaces.get(RelayNode, "MentionsInterface")
+
+The consuming model must expose a `document` `GenericRelation` to
+`baseapp_core.DocumentId` so the optimizer can walk `document__<reverse>`
+as a real Django prefetch path. (`DocumentIdMixin` already declares it,
+so any consumer that inherits the mixin gets this for free.)
+
+All optimizer wiring lives on the fields below — consumers do not need
+to add anything to their own `pre_optimization_hook`.
+"""
+interface MentionsInterface {
+  """The ID of the object"""
+  id: ID!
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
+}
+
+type Message implements Node & MentionsInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
   content(profileId: ID): String
   user: User
   profile: Profile
@@ -1179,6 +840,9 @@ type Message implements Node {
   inReplyTo: Message
   deleted: Boolean!
   extraData: JSONString
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
   actionObject: Node
   isRead(profileId: ID): Boolean
 }
@@ -1222,16 +886,33 @@ type Metadata {
 }
 
 type Mutation {
-  """
-  Hide any target identified by its Relay ID for the current user's profile.
-  """
-  hideTarget(input: HideTargetInput!): HideTargetPayload
-  bookmarkToggle(input: BookmarkToggleInput!): BookmarkTogglePayload
-  hiveCreate(input: HiveCreateInput!): HiveCreatePayload
-  hiveUpdate(input: HiveUpdateInput!): HiveUpdatePayload
-  hiveCheckName(id: ID, name: String!): HiveCheckName
+  reportCreate(input: ReportCreateInput!): ReportCreatePayload
+  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
   rateCreate(input: RateCreateInput!): RateCreatePayload
+  profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
+  profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
+  profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
+  profileUserRoleCreate(input: ProfileUserRoleCreateInput!): ProfileUserRoleCreatePayload
+  profileUserRoleUpdate(input: ProfileUserRoleUpdateInput!): ProfileUserRoleUpdatePayload
+  profileUserRoleDelete(input: ProfileUserRoleDeleteInput!): ProfileUserRoleDeletePayload
+  profileSendInvitation(input: ProfileSendInvitationInput!): ProfileSendInvitationPayload
+  profileAcceptInvitation(input: ProfileAcceptInvitationInput!): ProfileAcceptInvitationPayload
+  profileDeclineInvitation(input: ProfileDeclineInvitationInput!): ProfileDeclineInvitationPayload
+  profileCancelInvitation(input: ProfileCancelInvitationInput!): ProfileCancelInvitationPayload
+  profileResendInvitation(input: ProfileResendInvitationInput!): ProfileResendInvitationPayload
+  pageCreate(input: PageCreateInput!): PageCreatePayload
+  pageEdit(input: PageEditInput!): PageEditPayload
+  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
   organizationCreate(input: OrganizationCreateInput!): OrganizationCreatePayload
+  notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
+  notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
+  notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+  followToggle(input: FollowToggleInput!): FollowTogglePayload
+  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
+  commentCreate(input: CommentCreateInput!): CommentCreatePayload
+  commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
+  commentPin(input: CommentPinInput!): CommentPinPayload
+  commentDelete(input: CommentDeleteInput!): CommentDeletePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
@@ -1241,54 +922,7 @@ type Mutation {
   chatRoomUnread(input: ChatRoomUnreadInput!): ChatRoomUnreadPayload
   chatRoomArchive(input: ChatRoomArchiveInput!): ChatRoomArchivePayload
   chatRoomToggleAdmin(input: ChatRoomToggleAdminInput!): ChatRoomToggleAdminPayload
-
-  """
-  Hive-level override that adds generic self-report detection
-  and ``report_subject`` max-length validation on top of the core
-  report-creation logic.
-  """
-  reportCreate(input: ReportCreateInput!): ReportCreatePayload
-  followToggle(input: FollowToggleInput!): FollowTogglePayload
   blockToggle(input: BlockToggleInput!): BlockTogglePayload
-  reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
-  notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
-  notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
-  notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
-  contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
-  contentPostEdit(input: ContentPostEditInput!): ContentPostEditPayload
-  contentPostDelete(input: ContentPostDeleteInput!): ContentPostDeletePayload
-  commentCreate(input: CommentCreateInput!): CommentCreatePayload
-  commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
-  commentPin(input: CommentPinInput!): CommentPinPayload
-  commentDelete(input: CommentDeleteInput!): CommentDeletePayload
-  pageCreate(input: PageCreateInput!): PageCreatePayload
-  pageEdit(input: PageEditInput!): PageEditPayload
-  pageDelete(input: DeleteNodeInput!): DeleteNodePayload
-  profileCreate(input: ProfileCreateInput!): ProfileCreatePayload
-  profileUpdate(input: ProfileUpdateInput!): ProfileUpdatePayload
-  profileDelete(input: ProfileDeleteInput!): ProfileDeletePayload
-  profileRoleUpdate(input: RoleUpdateInput!): RoleUpdatePayload
-  profileRemoveMember(input: ProfileRemoveMemberInput!): ProfileRemoveMemberPayload
-  profileExperienceCreate(input: ProfileExperienceCreateInput!): ProfileExperienceCreatePayload
-  profileExperienceUpdate(input: ProfileExperienceUpdateInput!): ProfileExperienceUpdatePayload
-
-  """Delete a profile experience by its relay ID."""
-  profileExperienceDelete(input: ProfileExperienceDeleteInput!): ProfileExperienceDeletePayload
-  profileEducationCreate(input: ProfileEducationCreateInput!): ProfileEducationCreatePayload
-  profileEducationUpdate(input: ProfileEducationUpdateInput!): ProfileEducationUpdatePayload
-
-  """Delete a profile education entry by its relay ID."""
-  profileEducationDelete(input: ProfileEducationDeleteInput!): ProfileEducationDeletePayload
-  profileCertificationCreate(input: ProfileCertificationCreateInput!): ProfileCertificationCreatePayload
-  profileCertificationUpdate(input: ProfileCertificationUpdateInput!): ProfileCertificationUpdatePayload
-
-  """Delete a profile certification entry by its relay ID."""
-  profileCertificationDelete(input: ProfileCertificationDeleteInput!): ProfileCertificationDeletePayload
-  profileRecommendationCreate(input: ProfileRecommendationCreateInput!): ProfileRecommendationCreatePayload
-  profileRecommendationUpdate(input: ProfileRecommendationUpdateInput!): ProfileRecommendationUpdatePayload
-
-  """Delete a profile education entry by its relay ID."""
-  profileRecommendationDelete(input: ProfileRecommendationDeleteInput!): ProfileRecommendationDeletePayload
 }
 
 interface Node {
@@ -1484,16 +1118,16 @@ type NotificationsMarkAsReadPayload {
 
 """An enumeration."""
 enum NotificationsNotificationLevelChoices {
-  """success"""
+  """Success"""
   SUCCESS
 
-  """info"""
+  """Info"""
   INFO
 
-  """warning"""
+  """Warning"""
   WARNING
 
-  """error"""
+  """Error"""
   ERROR
 }
 
@@ -1676,69 +1310,18 @@ interface PermissionsInterface {
   hasPerm(perm: String!): Boolean
 }
 
-enum PostTypeEnum {
-  HIVE
-  EXPERT
-}
-
-type Profile implements BookmarksInterface & Node & PermissionsInterface & PageInterface & FollowsInterface & BlocksInterface & ChatRoomsInterface & ReportsInterface {
+type Profile implements Node & PermissionsInterface & ProfileActivityLogInterface & PageInterface & FollowsInterface & ReportsInterface & BlocksInterface & ChatRoomsInterface {
   """The ID of the object"""
   id: ID!
   created: DateTime!
   modified: DateTime!
-  blockersCount: Int
-  blockingCount: Int
-  reportsCount: GenericScalar
-  commentsCount: JSONString!
-  isCommentsEnabled: Boolean!
   name: String
   image(width: Int!, height: Int!): File
   bannerImage(width: Int!, height: Int!): File
   biography: String
-  targetObjectId: Int
   status: ProfilesProfileStatusChoices!
   owner: User!
-  firstName: String!
-  middleName: String!
-  lastName: String!
-  country: Country
-  region: Region
-  city: City
-  title: String
-  headline: String
-  industry: String
-  phoneNumber: String
-  isFoundingMember: Boolean!
-  hourlyRate: Decimal
-  isAvailableForWork: Boolean!
-  resume: File
-  rating: Int
-  comments(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection!
-  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
-  commentsCommentMentions(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): CommentConnection!
-  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
-  user: User
-  activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
+  targetObjectId: Int
   members(
     offset: Int
     before: String
@@ -1751,12 +1334,8 @@ type Profile implements BookmarksInterface & Node & PermissionsInterface & PageI
     orderBy: String
     q: String
   ): ProfileUserRoleConnection
-  skills: [ProfileSkills!]
-  experiences: [ProfileExperience!]
-  education: [ProfileEducation!]
-  certifications: [ProfileCertification!]
-  recommendationsGiven(first: Int, last: Int, offset: Int, after: String, before: String, id: ID, isVisible: Boolean): ProfileRecommendationConnection!
-  recommendationsReceived(first: Int, last: Int, offset: Int, after: String, before: String, id: ID, isVisible: Boolean): ProfileRecommendationConnection!
+  user: User
+  activitylogSet(first: Int, last: Int, offset: Int, after: String, before: String, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection!
   profileCreatedRooms(
     first: Int
     last: Int
@@ -1777,8 +1356,19 @@ type Profile implements BookmarksInterface & Node & PermissionsInterface & PageI
   linkedAsContentActorSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   linkedAsContentTargetSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
   messageSet(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  chatsMessageMentions(first: Int, last: Int, offset: Int, after: String, before: String, verb: Verbs): MessageConnection!
-  bookmarks(postType: PostTypeEnum, offset: Int, before: String, after: String, first: Int, last: Int, id: ID): BookmarkConnection
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection!
+  organization: Organization
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
   contentPosts(
     first: Int
     last: Int
@@ -1789,42 +1379,36 @@ type Profile implements BookmarksInterface & Node & PermissionsInterface & PageI
     """Ordering"""
     orderBy: String
   ): ContentPostConnection!
-  contentFeedContentpostMentions(
-    first: Int
-    last: Int
-    offset: Int
-    after: String
-    before: String
-
-    """Ordering"""
-    orderBy: String
-  ): ContentPostConnection!
-  blocking(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  blockers(offset: Int, before: String, after: String, first: Int, last: Int): BlockConnection
-  organization: Organization
-  bookmarksCount: Int
-  isBookmarksEnabled: Boolean!
-  isBookmarked(profileId: ID): Boolean
+  blocking(first: Int, last: Int, offset: Int, after: String, before: String): BlockConnection
+  blockers(first: Int, last: Int, offset: Int, after: String, before: String): BlockConnection
+  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection!
+  mentionsReceived(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection!
 
   """
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   urlPath: URLPath
   urlPaths: [URLPath]
   metadata: Metadata
-  followers(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
-  following(offset: Int, before: String, after: String, first: Int, last: Int, targetIsFollowingBack: Boolean): FollowConnection
+  followers(first: Int, last: Int, offset: Int, after: String, before: String, targetIsFollowingBack: Boolean): FollowConnection
+  following(first: Int, last: Int, offset: Int, after: String, before: String, targetIsFollowingBack: Boolean): FollowConnection
   followersCount: Int
-  followingCount(contentType: FollowCountContentType): Int
+  followingCount: Int
   isFollowedByMe(profileId: ID): Boolean
+  reportsCount: GenericScalar
+  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
+  myReport: Report
+  blockersCount: Int
+  blockingCount: Int
   isBlockedByMe(profileId: ID): Boolean
   chatRooms(
-    offset: Int
-    before: String
-    after: String
     first: Int
     last: Int
+    offset: Int
+    after: String
+    before: String
     q: String
 
     """Ordering"""
@@ -1835,67 +1419,38 @@ type Profile implements BookmarksInterface & Node & PermissionsInterface & PageI
     isGroup: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
-  reports(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReportConnection
-  myReport: Report
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   target: ProfileInterface
-  networkPreviewProfiles(first: Int = 5): [Profile]
-  isRecommendedByMe: Boolean
-  profileCompletion: StringIntMap
   pk: Int
 }
 
-type ProfileCertification implements Node {
-  """The ID of the object"""
-  id: ID!
-  title: String!
-  dateReceived: Date!
-  description: String
-}
-
-input ProfileCertificationCreateInput {
-  profileId: ID!
-  title: String
-  dateReceived: Date
-  description: String
+input ProfileAcceptInvitationInput {
+  token: String!
   clientMutationId: String
 }
 
-type ProfileCertificationCreatePayload {
+type ProfileAcceptInvitationPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
-  profileCertification: ProfileCertification
+  profileUserRole: ProfileUserRole
+  profile: Profile
   clientMutationId: String
 }
 
-input ProfileCertificationDeleteInput {
-  id: ID!
+interface ProfileActivityLogInterface {
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+}
+
+input ProfileCancelInvitationInput {
+  invitationId: ID!
   clientMutationId: String
 }
 
-"""Delete a profile certification entry by its relay ID."""
-type ProfileCertificationDeletePayload {
+type ProfileCancelInvitationPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-input ProfileCertificationUpdateInput {
-  id: ID!
-  title: String
-  dateReceived: Date
-  description: String
-  clientMutationId: String
-}
-
-type ProfileCertificationUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileCertification: ProfileCertification
+  success: Boolean
   clientMutationId: String
 }
 
@@ -1917,8 +1472,8 @@ input ProfileCreateInput {
   biography: String
   urlPath: String
   target: String
-  targetContentType: String!
-  targetObjectId: Int!
+  targetContentType: String
+  targetObjectId: Int
   clientMutationId: String
 }
 
@@ -1927,6 +1482,19 @@ type ProfileCreatePayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   profile: ProfileEdge
+  clientMutationId: String
+}
+
+input ProfileDeclineInvitationInput {
+  token: String!
+  clientMutationId: String
+}
+
+type ProfileDeclineInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  success: Boolean
   clientMutationId: String
 }
 
@@ -1952,235 +1520,23 @@ type ProfileEdge {
   cursor: String!
 }
 
-type ProfileEducation implements Node {
-  """The ID of the object"""
-  id: ID!
-  schoolName: String!
-  degree: String!
-  fieldOfStudy: String!
-  startDate: Date
-  endDate: Date
-  description: String
-}
-
-input ProfileEducationCreateInput {
-  profileId: ID!
-  schoolName: String!
-  degree: String!
-  fieldOfStudy: String!
-  startDate: Date
-  endDate: Date
-  description: String
-  clientMutationId: String
-}
-
-type ProfileEducationCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileEducation: ProfileEducation
-  clientMutationId: String
-}
-
-input ProfileEducationDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-"""Delete a profile education entry by its relay ID."""
-type ProfileEducationDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-input ProfileEducationUpdateInput {
-  id: ID!
-  schoolName: String
-  degree: String
-  fieldOfStudy: String
-  startDate: Date
-  endDate: Date
-  description: String
-  clientMutationId: String
-}
-
-type ProfileEducationUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileEducation: ProfileEducation
-  clientMutationId: String
-}
-
-type ProfileExperience implements Node {
-  """The ID of the object"""
-  id: ID!
-  companyName: String!
-  jobTitle: String!
-  startDate: Date!
-  endDate: Date
-  description: String
-  isCurrent: Boolean!
-
-  """e.g. full-time, part-time, contract, freelance, etc."""
-  employmentType: ProfilesProfileExperienceEmploymentTypeChoices!
-  country: Country
-  region: Region
-}
-
-input ProfileExperienceCreateInput {
-  profileId: ID!
-  companyName: String!
-  jobTitle: String!
-  startDate: Date!
-  endDate: Date
-  countryId: String
-  regionId: String
-  description: String
-  isCurrent: Boolean
-
-  """e.g. full-time, part-time, contract, freelance, etc."""
-  employmentType: employment_type!
-  clientMutationId: String
-}
-
-type ProfileExperienceCreatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileExperience: ProfileExperience
-  clientMutationId: String
-}
-
-input ProfileExperienceDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-"""Delete a profile experience by its relay ID."""
-type ProfileExperienceDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-input ProfileExperienceUpdateInput {
-  id: ID!
-  companyName: String
-  jobTitle: String
-  startDate: Date!
-  endDate: Date
-  countryId: String
-  regionId: String
-  description: String
-  isCurrent: Boolean
-  employmentType: String
-  clientMutationId: String
-}
-
-type ProfileExperienceUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileExperience: ProfileExperience
-  clientMutationId: String
-}
-
 interface ProfileInterface {
   """The ID of the object"""
   id: ID!
   profile: Profile
 }
 
-type ProfileRecommendation implements Node {
-  """The ID of the object"""
-  id: ID!
-  created: DateTime!
-  author: Profile!
-  target: Profile!
-  isVisible: Boolean!
-  description: String!
-}
-
-type ProfileRecommendationConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [ProfileRecommendationEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-input ProfileRecommendationCreateInput {
-  targetId: ID!
-  authorId: String
-  description: String!
+input ProfileResendInvitationInput {
+  invitationId: ID!
   clientMutationId: String
 }
 
-type ProfileRecommendationCreatePayload {
+type ProfileResendInvitationPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
-  profileRecommendation: ProfileRecommendation
-  clientMutationId: String
-}
-
-input ProfileRecommendationDeleteInput {
-  id: ID!
-  clientMutationId: String
-}
-
-"""Delete a profile education entry by its relay ID."""
-type ProfileRecommendationDeletePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
-  clientMutationId: String
-}
-
-"""A Relay edge containing a `ProfileRecommendation` and its cursor."""
-type ProfileRecommendationEdge {
-  """The item at the end of the edge"""
-  node: ProfileRecommendation
-
-  """A cursor for use in pagination"""
-  cursor: String!
-}
-
-input ProfileRecommendationUpdateInput {
-  id: ID!
-  description: String
-  isVisible: Boolean
-  clientMutationId: String
-}
-
-type ProfileRecommendationUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileRecommendation: ProfileRecommendation
-  clientMutationId: String
-}
-
-input ProfileRemoveMemberInput {
-  profileId: ID!
-  userId: ID!
-  clientMutationId: String
-}
-
-type ProfileRemoveMemberPayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  deletedId: ID
+  profileUserRole: ProfileUserRole
+  emailSent: Boolean
   clientMutationId: String
 }
 
@@ -2203,6 +1559,28 @@ enum ProfileRoleStatus {
 
   """inactive"""
   INACTIVE
+
+  """declined"""
+  DECLINED
+
+  """expired"""
+  EXPIRED
+}
+
+input ProfileSendInvitationInput {
+  profileId: ID!
+  emails: [String!]!
+  role: ProfileRoles!
+  clientMutationId: String
+}
+
+type ProfileSendInvitationPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRoles: [ProfileUserRole]
+  emailsSent: Int
+  clientMutationId: String
 }
 
 interface ProfilesInterface {
@@ -2221,24 +1599,6 @@ interface ProfilesInterface {
   ): ProfileConnection
 }
 
-type ProfileSkills implements Node {
-  """The ID of the object"""
-  id: ID!
-  name: String!
-}
-
-"""An enumeration."""
-enum ProfilesProfileExperienceEmploymentTypeChoices {
-  """Full Time"""
-  FULL_TIME
-
-  """Part Time"""
-  PART_TIME
-
-  """Fractional"""
-  FRACTIONAL
-}
-
 """An enumeration."""
 enum ProfilesProfileStatusChoices {
   """public"""
@@ -2250,9 +1610,6 @@ enum ProfilesProfileStatusChoices {
 
 input ProfileUpdateInput {
   id: ID!
-  experiences: [GenericScalar]
-  education: [GenericScalar]
-  certifications: [GenericScalar]
   owner: String
   name: String
   image: String
@@ -2260,17 +1617,6 @@ input ProfileUpdateInput {
   biography: String
   urlPath: String
   phoneNumber: String
-  firstName: String
-  middleName: String
-  lastName: String
-  countryId: String
-  regionId: String
-  cityId: String
-  title: String
-  headline: String
-  industry: String
-  skills: [String]
-  resume: String
   clientMutationId: String
 }
 
@@ -2285,9 +1631,15 @@ type ProfileUpdatePayload {
 type ProfileUserRole implements Node {
   """The ID of the object"""
   id: ID!
-  user: User!
+  user: User
   role: ProfileRoles
   status: ProfileRoleStatus
+  invitedEmail: String
+  invitedAt: DateTime
+  invitationExpiresAt: DateTime
+  respondedAt: DateTime
+  isExpired: Boolean
+  profile: Profile
   pk: Int
 }
 
@@ -2301,6 +1653,36 @@ type ProfileUserRoleConnection {
   edgeCount: Int
 }
 
+input ProfileUserRoleCreateInput {
+  profileId: ID!
+  usersIds: [ID]
+  emailsToInvite: [String]
+  roleType: ProfileRoles = null
+  clientMutationId: String
+}
+
+type ProfileUserRoleCreatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRoles: [ProfileUserRole]
+  clientMutationId: String
+}
+
+input ProfileUserRoleDeleteInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+type ProfileUserRoleDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  clientMutationId: String
+}
+
 """A Relay edge containing a `ProfileUserRole` and its cursor."""
 type ProfileUserRoleEdge {
   """The item at the end of the edge"""
@@ -2310,45 +1692,22 @@ type ProfileUserRoleEdge {
   cursor: String!
 }
 
-type Query {
-  bookmark(
-    """The ID of the object"""
-    id: ID!
-  ): Bookmark
-  honeycombSuggestions(offset: Int, before: String, after: String, first: Int, last: Int, q: String): HoneycombConnection
-  allHives(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    name: String
-    isFollowedBy: String
+input ProfileUserRoleUpdateInput {
+  profileId: ID!
+  userId: ID!
+  roleType: ProfileRoles!
+  clientMutationId: String
+}
 
-    """Ordering"""
-    orderBy: String
-  ): HiveConnection
-  hive(
-    """The ID of the object"""
-    id: ID!
-  ): Hive
-  hiveByName(name: String!): Hive
-  allCountries(offset: Int, before: String, after: String, first: Int, last: Int, q: String): CountryConnection
-  allRegions(offset: Int, before: String, after: String, first: Int, last: Int, country: String, q: String): RegionConnection
-  allCities(offset: Int, before: String, after: String, first: Int, last: Int, region: String, q: String): CityConnection
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
-  organization(
-    """The ID of the object"""
-    id: ID!
-  ): Organization
-  chatRoom(
-    """The ID of the object"""
-    id: ID!
-  ): ChatRoom
-  rate(
-    """The ID of the object"""
-    id: ID!
-  ): Rate
+type ProfileUserRoleUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
+}
+
+type Query {
   report(
     """The ID of the object"""
     id: ID!
@@ -2358,6 +1717,47 @@ type Query {
     id: ID!
   ): ReportType
   allReportTypes(offset: Int, before: String, after: String, first: Int, last: Int, topLevelOnly: Boolean, targetObjectId: String): ReportTypeConnection
+  reaction(
+    """The ID of the object"""
+    id: ID!
+  ): Reaction
+  rate(
+    """The ID of the object"""
+    id: ID!
+  ): Rate
+  allProfiles(
+    offset: Int
+    before: String
+    after: String
+    first: Int
+    last: Int
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): ProfileConnection
+  profile(
+    """The ID of the object"""
+    id: ID!
+  ): Profile
+
+  """
+  Look up an invitation by its token so the acceptance page can show the right
+  screen on load. Returns null when the token matches no invitation. The token
+  is the authorization (this bypasses the member-only node gate); the org
+  `profile` is hidden once the invitation has expired.
+  """
+  profileInvitation(token: String!): ProfileUserRole
+  urlPath(path: String!): URLPath
+  allPages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection
+  page(
+    """The ID of the object"""
+    id: ID!
+  ): Page
+  organization(
+    """The ID of the object"""
+    id: ID!
+  ): Organization
   contentPost(
     """The ID of the object"""
     id: ID!
@@ -2387,27 +1787,11 @@ type Query {
     """Ordering"""
     orderBy: String
   ): CommentConnection
-  urlPath(path: String!): URLPath
-  allPages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection
-  page(
+  chatRoom(
     """The ID of the object"""
     id: ID!
-  ): Page
-  allProfiles(
-    offset: Int
-    before: String
-    after: String
-    first: Int
-    last: Int
-    q: String
-
-    """Ordering"""
-    orderBy: String
-  ): ProfileConnection
-  profile(
-    """The ID of the object"""
-    id: ID!
-  ): Profile
+  ): ChatRoom
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   users(
     offset: Int
     before: String
@@ -2436,8 +1820,8 @@ type Rate implements Node {
   id: ID!
   created: DateTime!
   modified: DateTime!
-  user: User!
   profile: Profile
+  user: User!
   value: Int!
   target: Node
 }
@@ -2483,7 +1867,7 @@ interface RatingsInterface {
   ratingsCount: Int
   ratingsSum: Int
   ratingsAverage: Float
-  ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection
+  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection
   isRatingsEnabled: Boolean!
   myRating(profileId: ID): Rate
 }
@@ -2493,6 +1877,7 @@ type Reaction implements Node {
   id: ID!
   created: DateTime!
   modified: DateTime!
+  profile: Profile
   user: User!
   reactionType: ReactionTypes
   target: Node
@@ -2534,8 +1919,8 @@ interface ReactionsInterface {
 
 input ReactionToggleInput {
   targetObjectId: ID!
-  profileObjectId: ID
   reactionType: ReactionTypes!
+  profileObjectId: ID
   clientMutationId: String
 }
 
@@ -2556,33 +1941,6 @@ enum ReactionTypes {
 
   """dislike"""
   DISLIKE
-}
-
-type Region implements Node {
-  """The ID of the object"""
-  id: ID!
-  name: String!
-  geonameCode: String
-  country: Country!
-}
-
-type RegionConnection {
-  """Pagination data for this connection."""
-  pageInfo: PageInfo!
-
-  """Contains the nodes in this connection."""
-  edges: [RegionEdge]!
-  totalCount: Int
-  edgeCount: Int
-}
-
-"""A Relay edge containing a `Region` and its cursor."""
-type RegionEdge {
-  """The item at the end of the edge"""
-  node: Region
-
-  """A cursor for use in pagination"""
-  cursor: String!
 }
 
 type Report implements Node {
@@ -2613,11 +1971,6 @@ input ReportCreateInput {
   clientMutationId: String
 }
 
-"""
-Hive-level override that adds generic self-report detection
-and ``report_subject`` max-length validation on top of the core
-report-creation logic.
-"""
 type ReportCreatePayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
@@ -2670,30 +2023,12 @@ type ReportTypeEdge {
   cursor: String!
 }
 
-input RoleUpdateInput {
-  profileId: ID!
-  userId: ID!
-  roleType: ProfileRoles = null
-  clientMutationId: String
-}
-
-type RoleUpdatePayload {
-  """May contain more than one error for same field."""
-  errors: [ErrorType]
-  _debug: DjangoDebug
-  profileUserRole: ProfileUserRole
-  clientMutationId: String
-}
-
-"""A scalar that represents a dict with string keys and int values."""
-scalar StringIntMap
-
 type Subscription {
+  onNotificationChange: OnNotificationChange
+  onCommentChange(targetObjectId: ID): OnCommentChange
   chatRoomOnMessage(profileId: ID!, roomId: ID!): ChatRoomOnMessage
   chatRoomOnRoomUpdate(profileId: ID!): ChatRoomOnRoomUpdate
   chatRoomOnMessagesCountUpdate(profileId: ID!): ChatRoomOnMessagesCountUpdate
-  onNotificationChange: OnNotificationChange
-  onCommentChange(targetObjectId: ID): OnCommentChange
 }
 
 type UnreadMessageCount implements Node {
@@ -2741,7 +2076,7 @@ type URLPath implements Node {
   pk: Int
 }
 
-type User implements Node & PermissionsInterface & NotificationsInterface & PageInterface & RatingsInterface & ProfilesInterface & ProfileInterface {
+type User implements Node & PermissionsInterface & RatingsInterface & UserActivityLogInterface & NotificationsInterface & ProfileInterface & ProfilesInterface & PageInterface {
   lastLogin: DateTime
   isSuperuser: Boolean
   email: String
@@ -2759,7 +2094,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   """
   isActive: Boolean!
   isStaff: Boolean
-  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
+  pages(first: Int, last: Int, offset: Int, after: String, before: String, status: PageStatus): PageConnection!
   comments(
     first: Int
     last: Int
@@ -2771,7 +2106,7 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  pages(first: Int, last: Int, offset: Int, after: String, before: String, status: PageStatus): PageConnection!
+  reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
 
   """The ID of the object"""
   id: ID!
@@ -2780,19 +2115,18 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
   Determine if the logged in user has a specific permission for this object.
   """
   hasPerm(perm: String!): Boolean
+  ratingsCount: Int
+  ratingsSum: Int
+  ratingsAverage: Float
+  ratings(first: Int, last: Int, offset: Int, after: String, before: String): RateConnection
+  isRatingsEnabled: Boolean!
+  myRating(profileId: ID): Rate
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   notificationsUnreadCount: Int
   notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
-  urlPath: URLPath
-  urlPaths: [URLPath]
-  metadata: Metadata
-  ratingsCount: Int
-  ratingsSum: Int
-  ratingsAverage: Float
-  ratings(offset: Int, before: String, after: String, first: Int, last: Int): RateConnection
-  isRatingsEnabled: Boolean!
-  myRating(profileId: ID): Rate
+  profile: Profile
   profiles(
     offset: Int
     before: String
@@ -2804,12 +2138,17 @@ type User implements Node & PermissionsInterface & NotificationsInterface & Page
     """Ordering"""
     orderBy: String
   ): ProfileConnection
-  profile: Profile
-  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  urlPath: URLPath
+  urlPaths: [URLPath]
+  metadata: Metadata
   isAuthenticated: Boolean
   fullName: String
   avatar(width: Int!, height: Int!): File
   pk: Int
+}
+
+interface UserActivityLogInterface {
+  activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
 }
 
 type UserConnection {
