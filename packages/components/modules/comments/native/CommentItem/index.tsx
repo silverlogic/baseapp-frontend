@@ -133,11 +133,11 @@ const CommentItem: FC<CommentItemProps> = ({
       <Pressable onLongPress={() => onLongPress?.(comment)}>
         <View style={styles.rootContainer}>
           <View style={styles.avatarContainer}>
-            <AvatarWithPlaceholder imgSource={comment.user?.avatar?.url} />
+            <AvatarWithPlaceholder imgSource={comment.profile?.image?.url} />
           </View>
           <View style={styles.bodyContainer}>
             <Text variant="subtitle2" color="high">
-              {comment.user?.fullName}
+              {comment.profile?.name}
             </Text>
             <Text variant="body2" color="high">
               {comment.body}
