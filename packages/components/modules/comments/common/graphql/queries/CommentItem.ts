@@ -19,12 +19,10 @@ export const CommentItemFragmentQuery = graphql`
         path
       }
     }
+    # Presence-only: web CommentItem shows a "Deleted User" state when the author
+    # account is gone. Name and avatar are read from profile, not user.
     user {
       id
-      fullName
-      avatar(width: 50, height: 50) {
-        url
-      }
     }
 
     created
