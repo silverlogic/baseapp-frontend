@@ -1,8 +1,8 @@
 export interface InviteMemberDialogProps {
   open: boolean
   onClose: () => void
-  /** Called after members are successfully added/invited (e.g. to refetch the list). */
-  onInvited?: () => void
+  /** Relay connection ids to prepend newly added/invited members into. */
+  connections: string[]
 }
 
 export interface SelectedProfile {

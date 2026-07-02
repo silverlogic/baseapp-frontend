@@ -9,6 +9,7 @@ export const UserMembersListFragment = graphql`
     orderBy: { type: "String" }
     q: { type: "String" }
   ) {
+    id
     canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")
     canAddMember: hasPerm(perm: "baseapp_profiles.add_profileuserrole")
     ...ProfileItemFragment
@@ -23,6 +24,7 @@ export const UserMembersListFragment = graphql`
       @connection(key: "UserMembersFragment_members", filters: ["orderBy", "q"]) {
       totalCount
       edges {
+        cursor
         node {
           ...MemberItemFragment
         }

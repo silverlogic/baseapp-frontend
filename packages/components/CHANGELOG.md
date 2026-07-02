@@ -8,6 +8,7 @@
   - Add an "Add Member" flow: a dialog with an `allProfiles` typeahead (results in a portaled Popper) plus removable chips for selected profiles and free-text emails.
   - Existing profiles are added via `profileUserRoleCreate(usersIds)`; typed emails go through `profileSendInvitation`.
   - Gated on the new `canAddMember` permission.
+  - Newly added/invited members are prepended into the list via Relay's `@prependNode` connection directive instead of refetching.
 - feat: expired-invitation handling in ProfileMembers
   - Extend `MemberItemFragment` with `invitedEmail` and `invitationExpiresAt`.
   - Add `ResendInvitation` (`profileResendInvitation`) and `CancelInvitation` (`profileCancelInvitation`) mutations.

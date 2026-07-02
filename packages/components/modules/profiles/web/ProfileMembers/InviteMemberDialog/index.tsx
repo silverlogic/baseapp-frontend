@@ -25,7 +25,7 @@ import {
   isSelectedProfile,
 } from './utils'
 
-const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvited }) => {
+const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connections }) => {
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
   const [selected, setSelected] = useState<SelectedMember[]>([])
@@ -60,7 +60,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
     new Promise<SelectedMember[]>((resolve, reject) => {
       const usersIds = members.map((member) => member.userId)
       createMembers({
-        variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE } },
+        variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE }, connections },
         onCompleted: (response, errors) => {
           const message = getMutationErrorMessage(
             response?.profileUserRoleCreate?.errors,
@@ -86,6 +86,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
             emails: members.map((member) => member.email),
             role: DEFAULT_INVITE_ROLE,
           },
+          connections,
         },
         onCompleted: (response, errors) => {
           const message = getMutationErrorMessage(
@@ -125,12 +126,10 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
     // batched/field messages here are more specific).
     failed.forEach((error) => sendToast(error.message, { type: 'error' }))
 
-    // Refetch after ANY successful write so the list reflects the partial batch.
     if (succeeded.length > 0) {
       sendToast(succeeded.length === 1 ? 'Member added' : `${succeeded.length} members added`, {
         type: 'success',
       })
-      onInvited?.()
     }
 
     if (failedMembers.length === 0) {

@@ -6,14 +6,16 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { SendInvitationMutation } from '../../../../../__generated__/SendInvitationMutation.graphql'
 
 export const SendInvitationMutationQuery = graphql`
-  mutation SendInvitationMutation($input: ProfileSendInvitationInput!) {
+  mutation SendInvitationMutation($input: ProfileSendInvitationInput!, $connections: [ID!]!) {
     profileSendInvitation(input: $input) {
-      profileUserRoles {
+      profileUserRoles
+        @prependNode(connections: $connections, edgeTypeName: "ProfileUserRoleEdge") {
         id
         status
         role
         invitedEmail
         invitationExpiresAt
+        ...MemberItemFragment
       }
       emailsSent
       errors {

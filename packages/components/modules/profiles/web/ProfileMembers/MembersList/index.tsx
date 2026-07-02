@@ -5,7 +5,7 @@ import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs
 
 import { Box, Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useFragment, usePaginationFragment } from 'react-relay'
+import { ConnectionHandler, useFragment, usePaginationFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
@@ -47,17 +47,17 @@ const MembersList: FC<MembersListProps> = ({
     })
   }
 
-  const handleInvited = () => {
-    startTransition(() => {
-      refetch({ q: watch('search') })
-    })
-  }
-
   const memberEdges = useMemo(
     () => data?.members?.edges?.filter((edge) => edge?.node) ?? [],
     [data?.members?.edges],
   )
   const members = useMemo(() => memberEdges.map((edge) => edge?.node), [memberEdges])
+
+  const membersConnectionId = ConnectionHandler.getConnectionID(
+    data.id,
+    'UserMembersFragment_members',
+    { orderBy: 'status', q: watch('search') },
+  )
 
   // Load the next page when the sentinel at the bottom of the list scrolls into view.
   // The list is rendered plainly so it grows the page (no fixed-height inner scroller and
@@ -87,7 +87,7 @@ const MembersList: FC<MembersListProps> = ({
       <InviteMemberDialog
         open={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
-        onInvited={handleInvited}
+        connections={[membersConnectionId]}
       />
       <Searchbar
         variant="outlined"
