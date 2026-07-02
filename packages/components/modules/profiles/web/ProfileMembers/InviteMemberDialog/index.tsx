@@ -4,6 +4,7 @@ import { FC, Suspense, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
+import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
@@ -69,7 +70,8 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },
-        onError: (error) => reject(new BatchError(error.message, members)),
+        onError: (error) =>
+          reject(new BatchError(getGraphQLErrorMessage(error, 'Failed to add members'), members)),
       })
     })
 
@@ -94,7 +96,10 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, onInvi
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },
-        onError: (error) => reject(new BatchError(error.message, members)),
+        onError: (error) =>
+          reject(
+            new BatchError(getGraphQLErrorMessage(error, 'Failed to send invitations'), members),
+          ),
       })
     })
 

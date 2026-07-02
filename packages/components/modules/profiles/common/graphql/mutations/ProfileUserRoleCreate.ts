@@ -1,3 +1,4 @@
+import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
@@ -33,8 +34,13 @@ export const useProfileUserRoleCreateMutation = (): [
     commitMutation({
       ...config,
       onError: (error) => {
-        sendToast(error.message, { type: 'error' })
-        config?.onError?.(error)
+        // When the caller handles errors (e.g. the invite dialog), let it own the toast
+        // so we don't double-toast; otherwise surface a clean, human-friendly message.
+        if (config?.onError) {
+          config.onError(error)
+          return
+        }
+        sendToast(getGraphQLErrorMessage(error, 'Failed to add members'), { type: 'error' })
       },
     })
 
