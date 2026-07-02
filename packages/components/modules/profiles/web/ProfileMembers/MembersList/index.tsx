@@ -23,7 +23,6 @@ const MembersList: FC<MembersListProps> = ({
   MemberItemProps = {},
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
-  membersContainerHeight = 400,
 }) => {
   const [isPending, startTransition] = useTransition()
   const [isInviteOpen, setIsInviteOpen] = useState(false)
@@ -63,9 +62,7 @@ const MembersList: FC<MembersListProps> = ({
 
   // Match MemberItem's case-insensitive search so the header count stays in sync
   // with the owner row it actually renders.
-  const isOwnerVisible = ownerProfile?.name
-    ?.toLowerCase()
-    .includes(watch('search').toLowerCase())
+  const isOwnerVisible = ownerProfile?.name?.toLowerCase().includes(watch('search').toLowerCase())
 
   const resultsCount = isOwnerVisible ? members.length + 1 : members.length
 
@@ -142,14 +139,19 @@ const MembersList: FC<MembersListProps> = ({
         />
       ) : (
         <Virtuoso
-          style={{ height: membersContainerHeight }}
+          // Grow the page instead of an internal fixed-height scroller (uses the
+          // window/document scroll). `initialItemCount` renders the loaded members on
+          // the first paint so the list appears immediately rather than after Virtuoso's
+          // measurement pass.
+          useWindowScroll
+          initialItemCount={members.length}
           data={members}
           itemContent={(_index, member) => member && renderMemberItem(member, _index)}
           components={{
             Footer: renderLoadingState,
           }}
           endReached={() => {
-            if (hasNext) {
+            if (hasNext && !isLoadingNext) {
               loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
             }
           }}
