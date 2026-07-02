@@ -1,5 +1,7 @@
 'use client'
 
+export { default as AutocompleteField } from './AutocompleteField'
+export type * from './AutocompleteField/types'
 export { default as MarkdownEditorField } from './MarkdownEditorField'
 export type * from './MarkdownEditorField/types'
 export type * from './MarkdownEditorField/Toolbar/types'

@@ -1,6 +1,7 @@
 // exports common profiles code
 
 export * from './graphql/fragments/AllProfilesList'
+export * from './graphql/fragments/InviteMembersSearch'
 export * from './graphql/fragments/BlockToggle'
 export * from './graphql/fragments/MemberItem'
 export * from './graphql/fragments/ProfileComponent'
@@ -13,7 +14,11 @@ export * from './graphql/mutations/BlockToggle'
 export * from './graphql/mutations/ChangeUserRole'
 export * from './graphql/mutations/FollowToggle'
 export * from './graphql/mutations/OrganizationCreate'
+export * from './graphql/mutations/ProfileUserRoleCreate'
 export * from './graphql/mutations/ProfileUpdate'
+export * from './graphql/mutations/SendInvitation'
+export * from './graphql/mutations/ResendInvitation'
+export * from './graphql/mutations/CancelInvitation'
 
 export * from './graphql/queries/AccountSettings'
 export * from './graphql/queries/AddProfilePopover'
