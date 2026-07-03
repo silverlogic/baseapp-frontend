@@ -21,6 +21,7 @@ export const createStyles = (theme: Theme) =>
     },
     disabledContentContainer: {
       flexGrow: 1,
+      paddingHorizontal: 16,
     },
     bottomDrawerActionContainer: {
       paddingHorizontal: 16,
