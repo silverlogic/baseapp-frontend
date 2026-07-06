@@ -4,15 +4,14 @@ import type { ActiveAuthModule, AuthStrategyId } from './types'
 import { getActiveStrategyId } from './utils'
 
 function resolveActiveModule(strategyId: AuthStrategyId): ActiveAuthModule {
-  switch (strategyId) {
-    case ALLAUTH_STRATEGY_ID:
-      return {
-        strategy: createAllauthStrategy(),
-        session: createAllauthSession(),
-      }
-    default:
-      throw new Error(`Unsupported auth strategy: "${strategyId}"`)
+  if (strategyId === ALLAUTH_STRATEGY_ID) {
+    return {
+      strategy: createAllauthStrategy(),
+      session: createAllauthSession(),
+    }
   }
+
+  throw new Error(`Unsupported auth strategy: "${strategyId}"`)
 }
 
 export function getActiveAuthModule(strategy?: AuthStrategyId): ActiveAuthModule {

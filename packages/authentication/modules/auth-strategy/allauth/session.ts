@@ -90,7 +90,7 @@ async function refresh(session: SessionMaterial): Promise<SessionState> {
 
   const inflightRefresh = inflightRefreshByToken.get(refreshToken)
 
-  if (inflightRefresh) {
+  if (inflightRefresh !== undefined) {
     return inflightRefresh
   }
 

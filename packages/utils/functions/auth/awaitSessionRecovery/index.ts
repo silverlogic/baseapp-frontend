@@ -24,7 +24,7 @@ export function awaitSessionRecovery({
   timeoutMs = 5000,
   ...event
 }: AwaitSessionRecoveryInput): Promise<UnauthorizedResolution> {
-  if (inflightRecovery) {
+  if (inflightRecovery !== null) {
     return inflightRecovery
   }
 

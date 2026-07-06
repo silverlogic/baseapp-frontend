@@ -35,7 +35,7 @@ export function parseUserCookie(value?: string | null): User | null {
     })
     .find((result) => result.ok)
 
-  if (parsed && parsed.ok) return parsed.user
+  if (parsed?.ok) return parsed.user
 
   // A non-empty value that fails every parse means the cookie is corrupted or
   // truncated (e.g. it grew past the browser/proxy cookie-size limit). Surface
