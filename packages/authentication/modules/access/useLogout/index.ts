@@ -1,36 +1,27 @@
-import {
-  ACCESS_KEY_NAME,
-  LOGOUT_EVENT,
-  REFRESH_KEY_NAME,
-  eventEmitter,
-  removeTokenAsync,
-} from '@baseapp-frontend/utils'
-import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
-
 import { useQueryClient } from '@tanstack/react-query'
 
 import { MFA_API_KEY } from '../../../services/mfa'
 import { USER_API_KEY } from '../../../services/user'
+import { getSessionService } from '../../../session/client'
+import { getActiveAuthModule } from '../../auth-strategy/factory'
 import type { UseLogoutOptions } from './types'
 
-const useLogout = ({
-  accessKeyName = ACCESS_KEY_NAME,
-  refreshKeyName = REFRESH_KEY_NAME,
-  onLogout,
-  emitLogoutEvent = true,
-}: UseLogoutOptions = {}) => {
+const useLogout = ({ onLogout, emitLogoutEvent = true }: UseLogoutOptions = {}) => {
   const queryClient = useQueryClient()
+  const { strategy } = getActiveAuthModule()
 
   const logout = async () => {
-    await removeTokenAsync(accessKeyName)
-    await removeTokenAsync(refreshKeyName)
-    await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
+    try {
+      await strategy.logout()
+    } catch {
+      // Strategy logout failed; clearing local state anyway
+    }
+
+    const sessionService = getSessionService()
+    await sessionService.clear(emitLogoutEvent ? 'logout' : undefined)
     queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     queryClient.resetQueries({ queryKey: MFA_API_KEY.default })
     onLogout?.()
-    if (emitLogoutEvent) {
-      eventEmitter.emit(LOGOUT_EVENT)
-    }
   }
 
   return {

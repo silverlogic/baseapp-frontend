@@ -24,15 +24,17 @@ If one of the apps wants to consume any package feature, we could simply add tha
 And then just import the feature needed:
 
 ```jsx
-import { useJWTUser } from '@baseapp-frontend/authentication'
+import { useSession } from '@baseapp-frontend/authentication'
 
 export default function Docs() {
-  const {user} = useJWTUser()
+  const { user, isAuthenticated } = useSession()
+
+  if (!isAuthenticated || !user) return null
 
   return (
     <div>
       <h1>Find User</h1>
-      <p>{user.firstName}<p>
+      <p>{user.firstName}</p>
     </div>
   )
 }
@@ -50,6 +52,20 @@ export default function Docs() {
 - `test`: extends `React Testing Library` features and export some util functions, mocks and test configurations.
 - `tsconfig`: reusable `typescript configs`.
 - `utils`: includes `constants`, `functions`, `hooks` and `types` that are generic enough to be reused between apps and packages.
+
+### Authentication Package Documentation
+
+The authentication package includes its own package-level guide covering:
+
+- strategy-based authentication architecture
+- session lifecycle ownership
+- unified auth hooks
+- strategy configuration
+- how to implement new auth strategies
+
+See:
+
+- [packages/authentication/README.md](./packages/authentication/README.md)
 
 ## NVM
 

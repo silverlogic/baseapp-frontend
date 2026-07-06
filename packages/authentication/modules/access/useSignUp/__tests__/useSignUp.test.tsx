@@ -1,34 +1,37 @@
-import {
-  ComponentWithProviders,
-  mockFetch,
-  mockFetchError,
-  renderHook,
-  waitFor,
-} from '@baseapp-frontend/test'
+import { ComponentWithProviders, renderHook, waitFor } from '@baseapp-frontend/test'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
 import type { RegisterRequest } from '../../../../types/auth'
+import type { AuthResult } from '../../../auth-strategy/types'
 import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useSignUp from '../index'
 import request from './fixtures/request.json'
 
-describe('useSignUp', () => {
-  const registerUrl = '/register'
+const mockSignUp = jest.fn()
 
+jest.mock('../../../auth-strategy/factory', () => ({
+  getActiveAuthModule: () => ({
+    strategy: {
+      signUp: mockSignUp,
+    },
+  }),
+}))
+
+const successResult: AuthResult = {
+  kind: 'success',
+  rawResponse: { email: request.email },
+  metadata: { rawResponse: { email: request.email } },
+}
+
+describe('useSignUp', () => {
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    mockSignUp.mockReset()
   })
 
-  test('should run onSuccess', async () => {
-    mockFetch(registerUrl, {
-      method: 'POST',
-      status: 200,
-      response: {
-        email: request.email,
-      },
-    })
+  test('should call strategy.signUp and run onSuccess', async () => {
+    mockSignUp.mockResolvedValueOnce(successResult)
 
     let hasOnSuccessRan = false
 
@@ -52,17 +55,12 @@ describe('useSignUp', () => {
 
     await result.current.form.handleSubmit()
 
+    expect(mockSignUp).toHaveBeenCalled()
     expect(hasOnSuccessRan).toBe(true)
   })
 
   test('should run onSuccess with first and last name field', async () => {
-    mockFetch(registerUrl, {
-      method: 'POST',
-      status: 200,
-      response: {
-        email: request.email,
-      },
-    })
+    mockSignUp.mockResolvedValueOnce(successResult)
 
     let hasOnSuccessRan = false
 
@@ -95,24 +93,20 @@ describe('useSignUp', () => {
 
   test('can use a custom type interface', async () => {
     const customRequest = { ...request, customField: 123 }
-
-    mockFetch(registerUrl, {
-      method: 'POST',
-      status: 200,
-      response: customRequest,
-    })
+    const customResult: AuthResult = {
+      kind: 'success',
+      rawResponse: customRequest,
+      metadata: { rawResponse: customRequest },
+    }
+    mockSignUp.mockResolvedValueOnce(customResult)
 
     interface CustomRegisterRequest extends RegisterRequest {
       customField: number
     }
 
-    interface CustomRegisterResponse {
-      name: string
-    }
-
     const { result } = renderHook(
       () =>
-        useSignUp<CustomRegisterRequest, CustomRegisterResponse>({
+        useSignUp<CustomRegisterRequest>({
           formOptions: {
             defaultValues: customRequest,
           },
@@ -125,14 +119,15 @@ describe('useSignUp', () => {
     result.current.form.handleSubmit()
     await waitFor(() => expect(result.current.mutation.isSuccess).toBeTruthy())
 
-    expect(result.current.mutation.data).toStrictEqual(customRequest)
+    expect(result.current.mutation.data).toMatchObject({ kind: 'success' })
+    expect((result.current.mutation.data as any)?.rawResponse).toStrictEqual(customRequest)
   })
 
-  test('should run onError', async () => {
-    mockFetchError(registerUrl, {
-      method: 'POST',
-      status: 500,
-      error: 'any',
+  test('should run onError when strategy rejects', async () => {
+    mockSignUp.mockRejectedValueOnce({
+      code: 'validation_error',
+      message: 'Email already in use',
+      fieldErrors: { email: ['Email already in use'] },
     })
 
     let hasOnErrorRan = false
@@ -161,11 +156,7 @@ describe('useSignUp', () => {
   })
 
   test('should allow custom defaultValues and validationSchema', async () => {
-    mockFetch(registerUrl, {
-      method: 'POST',
-      status: 200,
-      response: {},
-    })
+    mockSignUp.mockResolvedValueOnce(successResult)
 
     const customDefaultValues = {
       email: 'test@tsl.io',

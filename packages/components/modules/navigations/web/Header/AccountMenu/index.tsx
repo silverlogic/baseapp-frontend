@@ -2,8 +2,7 @@
 
 import { FC } from 'react'
 
-import { User as BaseUser, useJWTUser } from '@baseapp-frontend/authentication'
-import { JWTContent } from '@baseapp-frontend/utils'
+import { User as BaseUser, useSession } from '@baseapp-frontend/authentication'
 
 import { Button } from '@mui/material'
 
@@ -21,7 +20,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
   registerButtonLabel = 'Register',
   registerButtonProps,
 }) => {
-  const { user } = useJWTUser<BaseUser & JWTContent>()
+  const { user, isLoading } = useSession<BaseUser>()
 
   const renderAdditionalComponent = () => {
     if (additionalComponent) return additionalComponent
@@ -31,6 +30,14 @@ const AccountMenu: FC<AccountMenuProps> = ({
   const renderHeaderContent = () => {
     if (children) return children
     return <div />
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid w-full grid-cols-[1fr_max-content_max-content] items-center justify-center gap-1 min-lg:gap-2">
+        {renderHeaderContent()}
+      </div>
+    )
   }
 
   if (!user) {
