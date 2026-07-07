@@ -1,5 +1,12 @@
 import { DEFAULT_ERROR_MESSAGE } from '../../../constants/errors'
 
+const toText = (value: unknown): string => {
+  if (Array.isArray(value)) {
+    return value.join(' ')
+  }
+  return typeof value === 'string' ? value : JSON.stringify(value)
+}
+
 const parseJsonObject = (raw: string): Record<string, unknown> | undefined => {
   try {
     const parsed = JSON.parse(raw)
@@ -11,17 +18,11 @@ const parseJsonObject = (raw: string): Record<string, unknown> | undefined => {
 
 const messageFromParsed = (parsed: Record<string, unknown>, raw: string) => {
   if (parsed.detail != null) {
-    return Array.isArray(parsed.detail) ? parsed.detail.join(' ') : parsed.detail
+    return toText(parsed.detail)
   }
   const firstKey = Object.keys(parsed)[0]
   const potentialMessage = firstKey ? parsed[firstKey] : undefined
-  if (potentialMessage === undefined) {
-    return raw
-  }
-  if (Array.isArray(potentialMessage)) {
-    return potentialMessage.join(' ')
-  }
-  return typeof potentialMessage === 'string' ? potentialMessage : JSON.stringify(potentialMessage)
+  return potentialMessage === undefined ? raw : toText(potentialMessage)
 }
 
 export const getApiErrorMessage = (error: any, { defaultMessage = DEFAULT_ERROR_MESSAGE } = {}) => {
@@ -34,8 +35,7 @@ export const getApiErrorMessage = (error: any, { defaultMessage = DEFAULT_ERROR_
 
   if (error?.response?.data) {
     const dataKey = Object.keys(error.response.data)[0]
-    const potentialMessage = (dataKey && error.response.data?.[dataKey]) ?? message
-    message = Array.isArray(potentialMessage) ? potentialMessage.join(' ') : potentialMessage
+    message = toText((dataKey && error.response.data?.[dataKey]) ?? message)
   }
 
   return message

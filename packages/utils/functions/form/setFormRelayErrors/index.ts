@@ -15,7 +15,11 @@ export const setFormRelayErrors = <T extends FieldValues>(
       if (errorField && form.getValues(errorField) !== undefined) {
         form.setError(errorField, {
           type: 'custom',
-          message: error?.messages?.filter(Boolean).join(', ') || DEFAULT_ERROR_MESSAGE,
+          message:
+            error?.messages
+              ?.map((message) => message?.trim())
+              .filter(Boolean)
+              .join(', ') || DEFAULT_ERROR_MESSAGE,
         })
       }
     })

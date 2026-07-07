@@ -54,7 +54,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
         },
       },
       onCompleted: (response, errors) => {
-        if (sendMutationErrorToast(undefined, errors)) {
+        if (sendMutationErrorToast(response?.blockToggle?.errors, errors)) {
           return
         }
         handleSuccess()

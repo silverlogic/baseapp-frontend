@@ -57,7 +57,7 @@ describe('setFormRelayErrors', () => {
   it('should fall back to a generic message when the error carries no messages', () => {
     mockErrors = [
       { field: 'name', messages: [] },
-      { field: 'age', messages: [''] },
+      { field: 'age', messages: ['   '] },
       { field: 'bio' },
     ]
     setFormRelayErrors(mockForm, mockErrors)
