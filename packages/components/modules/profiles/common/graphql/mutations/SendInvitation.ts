@@ -1,3 +1,4 @@
+import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
@@ -5,14 +6,16 @@ import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay
 import { SendInvitationMutation } from '../../../../../__generated__/SendInvitationMutation.graphql'
 
 export const SendInvitationMutationQuery = graphql`
-  mutation SendInvitationMutation($input: ProfileSendInvitationInput!) {
+  mutation SendInvitationMutation($input: ProfileSendInvitationInput!, $connections: [ID!]!) {
     profileSendInvitation(input: $input) {
-      profileUserRoles {
+      profileUserRoles
+        @prependNode(connections: $connections, edgeTypeName: "ProfileUserRoleEdge") {
         id
         status
         role
         invitedEmail
         invitationExpiresAt
+        ...MemberItemFragment
       }
       emailsSent
       errors {
@@ -36,8 +39,13 @@ export const useSendInvitationMutation = (): [
     commitMutation({
       ...config,
       onError: (error) => {
-        sendToast(error.message, { type: 'error' })
-        config?.onError?.(error)
+        // When the caller handles errors (e.g. the invite dialog), let it own the toast
+        // so we don't double-toast; otherwise surface a clean, human-friendly message.
+        if (config?.onError) {
+          config.onError(error)
+          return
+        }
+        sendToast(getGraphQLErrorMessage(error, 'Failed to send invitations'), { type: 'error' })
       },
     })
 

@@ -1,14 +1,12 @@
-import { FC, useMemo, useState, useTransition } from 'react'
+import { FC, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { Box, Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useFragment, usePaginationFragment } from 'react-relay'
-import { Virtuoso } from 'react-virtuoso'
+import { ConnectionHandler, useFragment, usePaginationFragment } from 'react-relay'
 
-import { MemberItemFragment$key } from '../../../../../__generated__/MemberItemFragment.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
 import InviteMemberDialog from '../InviteMemberDialog'
@@ -23,7 +21,6 @@ const MembersList: FC<MembersListProps> = ({
   MemberItemProps = {},
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
-  membersContainerHeight = 400,
 }) => {
   const [isPending, startTransition] = useTransition()
   const [isInviteOpen, setIsInviteOpen] = useState(false)
@@ -50,55 +47,47 @@ const MembersList: FC<MembersListProps> = ({
     })
   }
 
-  const handleInvited = () => {
-    startTransition(() => {
-      refetch({ q: watch('search') })
-    })
-  }
-
-  const members = useMemo(
-    () => data?.members?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+  const memberEdges = useMemo(
+    () => data?.members?.edges?.filter((edge) => edge?.node) ?? [],
     [data?.members?.edges],
   )
+  const members = useMemo(() => memberEdges.map((edge) => edge?.node), [memberEdges])
+
+  const membersConnectionId = ConnectionHandler.getConnectionID(
+    data.id,
+    'UserMembersFragment_members',
+    { orderBy: 'status', q: watch('search') },
+  )
+
+  // Load the next page when the sentinel at the bottom of the list scrolls into view.
+  // The list is rendered plainly so it grows the page (no fixed-height inner scroller and
+  // no virtualization settle), so we watch the document viewport rather than a container.
+  const loadMoreRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    const sentinel = loadMoreRef.current
+    if (!sentinel || !hasNext) return undefined
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting && hasNext && !isLoadingNext) {
+        loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
+      }
+    })
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasNext, isLoadingNext, loadNext])
 
   // Match MemberItem's case-insensitive search so the header count stays in sync
   // with the owner row it actually renders.
-  const isOwnerVisible = ownerProfile?.name
-    ?.toLowerCase()
-    .includes(watch('search').toLowerCase())
+  const isOwnerVisible = ownerProfile?.name?.toLowerCase().includes(watch('search').toLowerCase())
 
   const resultsCount = isOwnerVisible ? members.length + 1 : members.length
-
-  const renderLoadingState = () => {
-    if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
-
-    return (
-      <LoadingState
-        sx={{ paddingTop: 3, paddingBottom: 1 }}
-        CircularProgressProps={{ size: 15 }}
-        {...LoadingStateProps}
-      />
-    )
-  }
-
-  const renderMemberItem = (member: MemberItemFragment$key, index: number) => (
-    <MemberListItem
-      member={member}
-      data={data}
-      prevMember={members[index - 1]}
-      nextMember={members[index + 1]}
-      MemberItemComponent={MemberItem}
-      MemberItemComponentProps={MemberItemProps}
-      searchQuery={watch('search')}
-    />
-  )
 
   return (
     <>
       <InviteMemberDialog
         open={isInviteOpen}
         onClose={() => setIsInviteOpen(false)}
-        onInvited={handleInvited}
+        connections={[membersConnectionId]}
       />
       <Searchbar
         variant="outlined"
@@ -141,19 +130,30 @@ const MembersList: FC<MembersListProps> = ({
           searchQuery={watch('search')}
         />
       ) : (
-        <Virtuoso
-          style={{ height: membersContainerHeight }}
-          data={members}
-          itemContent={(_index, member) => member && renderMemberItem(member, _index)}
-          components={{
-            Footer: renderLoadingState,
-          }}
-          endReached={() => {
-            if (hasNext) {
-              loadNext(NUMBER_OF_MEMBERS_TO_LOAD_NEXT)
-            }
-          }}
-        />
+        <>
+          {members.map((member, index) =>
+            member ? (
+              <MemberListItem
+                key={memberEdges[index]?.cursor ?? index}
+                member={member}
+                data={data}
+                prevMember={members[index - 1]}
+                nextMember={members[index + 1]}
+                MemberItemComponent={MemberItem}
+                MemberItemComponentProps={MemberItemProps}
+                searchQuery={watch('search')}
+              />
+            ) : null,
+          )}
+          {isLoadingNext && (
+            <LoadingState
+              sx={{ paddingTop: 3, paddingBottom: 1 }}
+              CircularProgressProps={{ size: 15 }}
+              {...LoadingStateProps}
+            />
+          )}
+          {hasNext && <div ref={loadMoreRef} aria-hidden />}
+        </>
       )}
     </>
   )
