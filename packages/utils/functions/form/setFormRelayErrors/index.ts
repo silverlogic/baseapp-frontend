@@ -1,5 +1,6 @@
 import { FieldPath, FieldValues, Path, UseFormReturn } from 'react-hook-form'
 
+import { DEFAULT_ERROR_MESSAGE } from '../../../constants/errors'
 import { MutationPayloadErrors } from '../../relay/getMutationErrorMessage'
 
 export type Fields = FieldPath<any>
@@ -14,7 +15,7 @@ export const setFormRelayErrors = <T extends FieldValues>(
       if (errorField && form.getValues(errorField) !== undefined) {
         form.setError(errorField, {
           type: 'custom',
-          message: error?.messages?.join(', '),
+          message: error?.messages?.filter(Boolean).join(', ') || DEFAULT_ERROR_MESSAGE,
         })
       }
     })
