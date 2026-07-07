@@ -4,6 +4,7 @@ import { FC, useRef, useState, useTransition } from 'react'
 
 import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
+import { removeLeadingSlash } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
 import Link from 'next/link'
@@ -44,6 +45,7 @@ const CommentItem: FC<CommentItemProps> = ({
     CommentContainer = DefaultCommentContainer,
     useProfileId = false,
     profilePath = '/profile',
+    prependProfilePath = false,
   }: CustomizableCommentItemProps = customizableProps
 
   const [comment, refetchCommentItem] = useRefetchableFragment<
@@ -73,8 +75,20 @@ const CommentItem: FC<CommentItemProps> = ({
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
   const profileUrlPath = comment?.profile?.urlPath?.path
-  const profileUrl =
-    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
+
+  const resolveProfileUrl = () => {
+    if (!profileUrlPath || useProfileId) {
+      return `${profilePath}/${comment?.profile?.id}`
+    }
+    // Opt-in: prefix the url_path with `profilePath` (e.g. `/profile/john-doe`) for apps that
+    // serve profiles under a sub-path. Default keeps the raw url_path for backwards compatibility.
+    if (prependProfilePath) {
+      return `${profilePath}/${removeLeadingSlash(profileUrlPath)}`
+    }
+    return profileUrlPath
+  }
+
+  const profileUrl = resolveProfileUrl()
   const hasUser = Boolean(comment?.user)
 
   const showReplies = () => {
