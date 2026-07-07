@@ -101,6 +101,7 @@ const CommentsList: FC<CommentsListProps> = ({
             onShowReplies={showMoreReplies}
             totalRepliesCount={remainingRepliesCount}
             body="Show more replies"
+            isLoading={isLoadingNext}
           />
         )}
         {shouldShowHideRepliesButton && <CommentHideRepliesButton onHideReplies={onHideReplies} />}
