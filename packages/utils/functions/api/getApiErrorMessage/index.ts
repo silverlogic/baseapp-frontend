@@ -18,7 +18,10 @@ const messageFromParsed = (parsed: Record<string, unknown>, raw: string) => {
   if (potentialMessage === undefined) {
     return raw
   }
-  return Array.isArray(potentialMessage) ? potentialMessage.join(' ') : String(potentialMessage)
+  if (Array.isArray(potentialMessage)) {
+    return potentialMessage.join(' ')
+  }
+  return typeof potentialMessage === 'string' ? potentialMessage : JSON.stringify(potentialMessage)
 }
 
 export const getApiErrorMessage = (error: any, { defaultMessage = DEFAULT_ERROR_MESSAGE } = {}) => {
