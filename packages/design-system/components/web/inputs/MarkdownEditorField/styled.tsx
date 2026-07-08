@@ -138,6 +138,8 @@ export const EditorContainer = styled(Box, {
   },
   '& .mdx-mention': {
     color: theme.palette.info.main,
+    // `theme.mention` is an opt-in override; unset keeps the default color.
+    ...theme.mention,
   },
   '& .mdxeditor code': {
     ...theme.typography.body2,
