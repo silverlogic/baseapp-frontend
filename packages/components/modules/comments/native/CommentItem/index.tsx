@@ -1,4 +1,4 @@
-import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
@@ -34,7 +34,7 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const SelectedRepliesList = RepliesList ?? DefaultCommentsList
   const [isRepliesExpanded, setIsRepliesExpanded] = useState(false)
-  const [isLoadingReplies, setIsLoadingReplies] = useState(false)
+  const [isLoadingReplies, startLoadingReplies] = useTransition()
   const [comment, refetch] = useRefetchableFragment<
     CommentItemRefetchQuery,
     CommentItem_comment$key
@@ -52,22 +52,22 @@ const CommentItem: FC<CommentItemProps> = ({
       return
     }
 
-    setIsLoadingReplies(true)
-    refetch(
-      { isRepliesExpanded: true },
-      {
-        fetchPolicy: 'store-or-network',
-        onComplete: (error) => {
-          setIsLoadingReplies(false)
-          if (error) {
-            // eslint-disable-next-line no-console
-            console.error('Error loading replies:', error)
-          } else {
-            setIsRepliesExpanded(true)
-          }
+    startLoadingReplies(() => {
+      refetch(
+        { isRepliesExpanded: true },
+        {
+          fetchPolicy: 'store-or-network',
+          onComplete: (error) => {
+            if (error) {
+              // eslint-disable-next-line no-console
+              console.error('Error loading replies:', error)
+            } else {
+              setIsRepliesExpanded(true)
+            }
+          },
         },
-      },
-    )
+      )
+    })
   }, [isRepliesExpanded, refetch])
 
   const hideReplies = useCallback(() => {
@@ -80,22 +80,22 @@ const CommentItem: FC<CommentItemProps> = ({
 
   useEffect(() => {
     if (commentIdToExpand === comment.id && !isRepliesExpanded && hasReplies) {
-      setIsLoadingReplies(true)
-      refetch(
-        { isRepliesExpanded: true },
-        {
-          fetchPolicy: 'network-only',
-          onComplete: (error) => {
-            setIsLoadingReplies(false)
-            if (error) {
-              // eslint-disable-next-line no-console
-              console.error('Error loading replies:', error)
-            } else {
-              setIsRepliesExpanded(true)
-            }
+      startLoadingReplies(() => {
+        refetch(
+          { isRepliesExpanded: true },
+          {
+            fetchPolicy: 'network-only',
+            onComplete: (error) => {
+              if (error) {
+                // eslint-disable-next-line no-console
+                console.error('Error loading replies:', error)
+              } else {
+                setIsRepliesExpanded(true)
+              }
+            },
           },
-        },
-      )
+        )
+      })
     }
   }, [commentIdToExpand, comment.id, isRepliesExpanded, hasReplies, refetch])
 
@@ -169,6 +169,7 @@ const CommentItem: FC<CommentItemProps> = ({
               <CommentShowRepliesButton
                 onShowReplies={showReplies}
                 totalRepliesCount={comment.commentsCount?.total ?? 0}
+                isLoading={isLoadingReplies}
               />
             )}
           </View>

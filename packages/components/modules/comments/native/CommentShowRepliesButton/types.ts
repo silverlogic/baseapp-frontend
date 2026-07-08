@@ -3,4 +3,5 @@ export interface CommentShowRepliesButtonProps {
   totalRepliesCount: number
   body?: string
   showTotalRepliesCount?: boolean
+  isLoading?: boolean
 }

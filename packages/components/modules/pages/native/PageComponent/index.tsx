@@ -36,30 +36,32 @@ const PageComponent: FC<PageComponentProps> = ({ page: pageRef }) => {
   }
 
   // A Page implements CommentsInterface, so the page node doubles as the comment thread target.
-  // Comments owns the scroll container and renders this page content (its children) above the
-  // scrollable comment list — so the body is a plain View, not its own ScrollView, and drops the
-  // horizontal padding that Comments' scroll container already applies. When the page has comments
-  // disabled the Comments component renders the children alone, so non-commentable pages are safe.
+  // The page content is the comment list's scrollable header (ListHeaderComponent) so the body and
+  // the thread scroll as one list — the native equivalent of the web page's single-document scroll.
+  // The list applies horizontal padding, so the body here only owns its vertical spacing.
   return (
-    <Comments target={page}>
-      <View style={styles.container}>
-        {!!page.title && (
-          <Text variant="h2" style={styles.title}>
-            {page.title}
-          </Text>
-        )}
-        <RenderHtml
-          contentWidth={width - CONTENT_HORIZONTAL_PADDING * 2}
-          source={{ html: page.body ?? '' }}
-          baseStyle={styles.body}
-          tagsStyles={HTML_TAGS_STYLES}
-          renderersProps={{ a: { onPress: (_event, href) => handleLinkPress(href) } }}
-          // Collapse adjacent vertical margins like the web does (RN otherwise adds them,
-          // doubling the gap between headings and paragraphs).
-          enableExperimentalMarginCollapsing
-        />
-      </View>
-    </Comments>
+    <Comments
+      target={page}
+      ListHeaderComponent={
+        <View style={styles.container}>
+          {!!page.title && (
+            <Text variant="h2" style={styles.title}>
+              {page.title}
+            </Text>
+          )}
+          <RenderHtml
+            contentWidth={width - CONTENT_HORIZONTAL_PADDING * 2}
+            source={{ html: page.body ?? '' }}
+            baseStyle={styles.body}
+            tagsStyles={HTML_TAGS_STYLES}
+            renderersProps={{ a: { onPress: (_event, href) => handleLinkPress(href) } }}
+            // Collapse adjacent vertical margins like the web does (RN otherwise adds them,
+            // doubling the gap between headings and paragraphs).
+            enableExperimentalMarginCollapsing
+          />
+        </View>
+      }
+    />
   )
 }
 
