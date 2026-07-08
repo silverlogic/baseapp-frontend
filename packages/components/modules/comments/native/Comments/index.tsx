@@ -48,6 +48,7 @@ const WithComments: FC<CommentsProps> = ({
   SocialInputDrawerProps = { DrawerProps: {}, PlaceholderProps: {} },
   drawerStyle = {},
   maxThreadDepth = 5,
+  ListHeaderComponent,
 }) => {
   const [isEditMode, setIsEditMode] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
@@ -223,14 +224,19 @@ const WithComments: FC<CommentsProps> = ({
   )
 
   if (!target.isCommentsEnabled) {
-    return <View style={styles.contentContainer}>{children}</View>
+    return (
+      <ScrollView contentContainerStyle={styles.disabledContentContainer}>
+        {ListHeaderComponent}
+        {children}
+      </ScrollView>
+    )
   }
 
   return (
     <>
       <View style={[styles.rootContainer, styles.transparent]}>
-        <ScrollView style={styles.contentContainer}>
-          <View style={styles.transparent}>{children}</View>
+        <View style={styles.contentContainer}>
+          {children ? <View style={styles.transparent}>{children}</View> : null}
           <CommentsList
             target={target}
             subscriptionsEnabled={subscriptionsEnabled}
@@ -238,6 +244,7 @@ const WithComments: FC<CommentsProps> = ({
             onLongPress={handleLongPress}
             onReply={handleReply}
             maxThreadDepth={maxThreadDepth}
+            ListHeaderComponent={ListHeaderComponent}
             {...CommentsListProps}
           />
           <SocialInputDrawer.Placeholder
@@ -246,7 +253,7 @@ const WithComments: FC<CommentsProps> = ({
             textHeight={textHeight}
             {...SocialInputDrawerProps.PlaceholderProps}
           />
-        </ScrollView>
+        </View>
         <SocialInputDrawer.Drawer
           form={form}
           isLoading={isCreateMutationInFlight || isUpdateMutationInFlight}
