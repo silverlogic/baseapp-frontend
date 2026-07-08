@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import type { FC, ReactElement } from 'react'
 
 import type { CommentItem_comment$data } from '../../../../__generated__/CommentItem_comment.graphql'
 import type { CommentsList_comments$key } from '../../../../__generated__/CommentsList_comments.graphql'
@@ -18,4 +18,9 @@ export interface CommentsListProps {
   onHideReplies?: () => void
   currentReplyCount?: number
   maxThreadDepth?: number
+  /**
+   * Rendered above the comments as the top-level list header so it scrolls together with the
+   * thread. Only applied to the root (non-reply) list.
+   */
+  ListHeaderComponent?: ReactElement | null
 }

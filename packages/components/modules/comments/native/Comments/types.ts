@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren, ReactElement } from 'react'
 
 import { StyleProp, ViewStyle } from 'react-native'
 
@@ -15,4 +15,10 @@ export interface CommentsProps extends PropsWithChildren {
   SocialInputDrawerProps?: SocialInputDrawerProps
   drawerStyle?: StyleProp<ViewStyle>
   maxThreadDepth?: number
+  /**
+   * Content rendered above the comment thread as the scrollable list header (e.g. a page body).
+   * Scrolls together with the comments. When comments are disabled it is rendered inside a
+   * scroll view alongside `children`.
+   */
+  ListHeaderComponent?: ReactElement | null
 }
