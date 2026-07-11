@@ -69,6 +69,26 @@ export const useFileUploadStore = create<FileUploadState>((set, get) => ({
     })
   },
 
+  recordChunkEtag: (fileId: string, chunkIndex: number, etag: string) => {
+    set((state) => {
+      const newFiles = new Map(state.files)
+      const existing = newFiles.get(fileId)
+
+      if (existing) {
+        const newEtags = [...existing.etags]
+        newEtags[chunkIndex] = etag
+
+        newFiles.set(fileId, {
+          ...existing,
+          etags: newEtags,
+          completedChunks: newEtags.filter(Boolean).length,
+        })
+      }
+
+      return { files: newFiles }
+    })
+  },
+
   removeFile: (id: string) => {
     set((state) => {
       const newFiles = new Map(state.files)

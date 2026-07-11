@@ -5,6 +5,7 @@ export interface FileUploadState {
   addFile: (file: File) => string
   updateFileProgress: (id: string, progress: Partial<FileUploadProgress>) => void
   updateChunkProgress: (fileId: string, chunkIndex: number, loaded: number, total: number) => void
+  recordChunkEtag: (fileId: string, chunkIndex: number, etag: string) => void
   removeFile: (id: string) => void
   pauseFile: (id: string) => void
   resumeFile: (id: string) => void

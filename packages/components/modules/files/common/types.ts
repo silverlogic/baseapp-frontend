@@ -22,14 +22,17 @@ export interface FileUploadProgress {
   chunkProgress: Map<number, ChunkProgress>
   error?: string
   uploadId?: string // Backend upload ID
+  backendId?: string // Backend file id (public_id) for upload endpoints
   fileRelayId?: string // GraphQL relay ID after completion
-  etags: string[] // ETags from S3
+  etags: (string | undefined)[] // ETags from S3, sparse-indexed by chunk
   presignedUrls?: PresignedUrl[]
+  initiatedAt?: number // Epoch ms when the upload was initiated
+  expiresIn?: number // Presigned URL lifetime in seconds
   abortController?: AbortController // For pausing/aborting uploads
 }
 
 export interface InitiateUploadResponse {
-  id: number
+  id: string
   relayId: string
   uploadId: string
   uploadStatus: string

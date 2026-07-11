@@ -329,7 +329,6 @@ const MemberItem: FC<MemberItemProps> = ({
         {renderRoleButton()}
       </MemberItemContainer>
     </>
->>>>>>> origin/master
   )
 }
 

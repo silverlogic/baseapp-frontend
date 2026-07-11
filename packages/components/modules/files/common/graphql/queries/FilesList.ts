@@ -12,6 +12,7 @@ export const FilesListFragment = graphql`
     files(first: $first, after: $after) @connection(key: "FilesList_files") {
       edges {
         node {
+          id
           ...FileItem_file
         }
       }
