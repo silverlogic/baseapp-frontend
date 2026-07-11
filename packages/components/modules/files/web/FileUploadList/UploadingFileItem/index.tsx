@@ -30,7 +30,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   allowRemove = true,
   allowRetry = true,
 }) => {
-  const { removeFile, pauseFile, resumeFile } = useFileUpload()
+  const { removeFile, pauseFile } = useFileUpload()
   const { resumeUpload, retryUpload } = useChunkedUpload()
 
   const getProgress = (): number => {
@@ -51,7 +51,9 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   }
 
   const handleResume = () => {
-    resumeFile(fileProgress.id)
+    // resumeUpload reads the PAUSED status itself and flips it via the store;
+    // calling resumeFile here first would move it to PENDING and make the
+    // hook's PAUSED guard skip the resume.
     resumeUpload(fileProgress.id)
   }
 

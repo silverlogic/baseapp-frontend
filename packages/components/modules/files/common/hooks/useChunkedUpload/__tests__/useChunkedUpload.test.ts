@@ -169,6 +169,61 @@ describe('useChunkedUpload', () => {
     expect(mockUploadChunks).not.toHaveBeenCalled()
   })
 
+  it('pausing mid-upload leaves the file PAUSED, not FAILED, so resume is possible', async () => {
+    // Simulate a pause during chunk upload: pauseFile flips UPLOADING→PAUSED and
+    // aborts, so uploadChunks rejects. The catch must NOT clobber PAUSED.
+    mockAxiosPost.mockResolvedValueOnce(initiateResponse(2) as never)
+    mockUploadChunks.mockImplementation(async () => {
+      const [id] = Array.from(useFileUploadStore.getState().files.keys())
+      useFileUploadStore.getState().pauseFile(id!)
+      throw new Error('Chunk upload aborted')
+    })
+    const onUploadError = jest.fn()
+
+    const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
+    await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')
+
+    const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
+    expect(progress.status).toBe(FileUploadStatus.PAUSED)
+    expect(onUploadError).not.toHaveBeenCalled()
+  })
+
+  it('resumeUpload with every chunk already uploaded only completes, even if URLs expired', async () => {
+    const file = makeFile(2)
+    const { addFile, updateFileProgress } = useFileUploadStore.getState()
+    const fileId = addFile(file)
+
+    // All ETags present, but the presigned URLs are long expired.
+    updateFileProgress(fileId, {
+      status: FileUploadStatus.PAUSED,
+      backendId: 'file-public-id',
+      fileRelayId: 'RmlsZTox',
+      totalChunks: 2,
+      etags: ['etag-0', 'etag-1'],
+      completedChunks: 2,
+      presignedUrls: initiateResponse(2).presignedUrls,
+      initiatedAt: Date.now() - 2 * 3600 * 1000,
+      expiresIn: 3600,
+    })
+
+    mockAxiosPost.mockResolvedValue({} as never)
+
+    const { result } = renderHook(() => useChunkedUpload())
+    await result.current.resumeUpload(fileId)
+
+    // No re-initiate, no re-upload, no DELETE — just the complete call.
+    expect(mockUploadChunks).not.toHaveBeenCalled()
+    expect(mockAxiosDelete).not.toHaveBeenCalled()
+    expect(mockAxiosPost).toHaveBeenCalledTimes(1)
+    expect(mockAxiosPost).toHaveBeenCalledWith('files/uploads/file-public-id/complete', {
+      parts: [
+        { partNumber: 1, etag: 'etag-0' },
+        { partNumber: 2, etag: 'etag-1' },
+      ],
+    })
+    expect(useFileUploadStore.getState().files.get(fileId)!.status).toBe(FileUploadStatus.COMPLETED)
+  })
+
   it('retryUpload restarts a failed upload from scratch', async () => {
     const file = makeFile(1)
     const { addFile, updateFileProgress } = useFileUploadStore.getState()

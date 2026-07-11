@@ -26,6 +26,32 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   const { addFile, updateFileProgress, updateChunkProgress } = useFileUpload()
 
   /**
+   * Translate a thrown upload error into store state. A pause aborts the
+   * in-flight request, which rejects here — but pauseFile has already set the
+   * status to PAUSED (and abortFile to ABORTED), so those must not be clobbered
+   * to FAILED or resume becomes impossible.
+   */
+  const handleUploadError = useCallback(
+    (fileId: string, error: unknown, fallbackMessage: string) => {
+      const current = useFileUploadStore.getState().files.get(fileId)
+      if (
+        current?.status === FileUploadStatus.PAUSED ||
+        current?.status === FileUploadStatus.ABORTED
+      ) {
+        return
+      }
+
+      const errorMessage = error instanceof Error ? error.message : fallbackMessage
+      updateFileProgress(fileId, {
+        status: FileUploadStatus.FAILED,
+        error: errorMessage,
+      })
+      options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
+    },
+    [updateFileProgress, options],
+  )
+
+  /**
    * Initiate a fresh multipart upload for `file` and upload every chunk.
    * Shared by uploadFile, retryUpload and resumeUpload (when the original
    * presigned URLs have expired).
@@ -100,19 +126,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         options?.onUploadComplete?.(fileId, relayId)
         return relayId
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Upload failed'
-
-        updateFileProgress(fileId, {
-          status: FileUploadStatus.FAILED,
-          error: errorMessage,
-        })
-
-        options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
-
+        handleUploadError(fileId, error, 'Upload failed')
         throw error
       }
     },
-    [addFile, startUpload, updateFileProgress, options],
+    [addFile, startUpload, handleUploadError, options],
   )
 
   const pauseUpload = useCallback((fileId: string) => {
@@ -132,9 +150,22 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
       resumeFile(fileId)
 
       try {
-        // The original presigned URLs expire; past the deadline the only safe
-        // path is aborting the stale upload and starting a fresh one.
-        if (areUrlsExpired(fileProgress.initiatedAt, fileProgress.expiresIn)) {
+        const chunks = chunkFile(fileProgress.file)
+        // Chunks complete out of order (parallel uploads), so resume from the
+        // per-index ETag record rather than assuming a contiguous prefix.
+        const pendingIndexes = chunks
+          .map((_, index) => index)
+          .filter((index) => !fileProgress.etags[index])
+
+        // Every chunk already uploaded: only the (URL-free) complete call is
+        // left, so URL expiry is irrelevant — go straight to complete instead
+        // of discarding the whole upload.
+        if (
+          pendingIndexes.length > 0 &&
+          areUrlsExpired(fileProgress.initiatedAt, fileProgress.expiresIn)
+        ) {
+          // The presigned part URLs have expired; abort the stale upload and
+          // start fresh, since we cannot re-sign individual parts.
           if (fileProgress.backendId) {
             await axios.delete(`files/uploads/${fileProgress.backendId}`).catch(() => {})
           }
@@ -143,37 +174,30 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
           return
         }
 
-        const chunks = chunkFile(fileProgress.file)
         const abortController = new AbortController()
-
         updateFileProgress(fileId, {
           status: FileUploadStatus.UPLOADING,
           abortController,
         })
 
-        // Chunks complete out of order (parallel uploads), so resume from the
-        // per-index ETag record rather than assuming a contiguous prefix.
-        const presignedUrls = fileProgress.presignedUrls ?? []
-        const pendingIndexes = chunks
-          .map((_, index) => index)
-          .filter((index) => !fileProgress.etags[index])
-
-        const etags = await uploadChunks({
-          chunks: pendingIndexes.map((index) => chunks[index]!),
-          presignedUrls: pendingIndexes.map((index) => presignedUrls[index]!.url),
-          abortSignal: abortController.signal,
-          onProgress: (chunkIndex, loaded, total) => {
-            updateChunkProgress(fileId, pendingIndexes[chunkIndex]!, loaded, total)
-          },
-          onChunkComplete: (chunkIndex, etag) => {
-            recordChunkEtag(fileId, pendingIndexes[chunkIndex]!, etag)
-          },
-        })
-
         const allEtags = [...fileProgress.etags]
-        pendingIndexes.forEach((originalIndex, i) => {
-          allEtags[originalIndex] = etags[i]
-        })
+        if (pendingIndexes.length > 0) {
+          const presignedUrls = fileProgress.presignedUrls ?? []
+          const etags = await uploadChunks({
+            chunks: pendingIndexes.map((index) => chunks[index]!),
+            presignedUrls: pendingIndexes.map((index) => presignedUrls[index]!.url),
+            abortSignal: abortController.signal,
+            onProgress: (chunkIndex, loaded, total) => {
+              updateChunkProgress(fileId, pendingIndexes[chunkIndex]!, loaded, total)
+            },
+            onChunkComplete: (chunkIndex, etag) => {
+              recordChunkEtag(fileId, pendingIndexes[chunkIndex]!, etag)
+            },
+          })
+          pendingIndexes.forEach((originalIndex, i) => {
+            allEtags[originalIndex] = etags[i]
+          })
+        }
 
         await axios.post(`files/uploads/${fileProgress.backendId}/complete`, {
           parts: buildParts(allEtags),
@@ -186,19 +210,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
 
         options?.onUploadComplete?.(fileId, fileProgress.fileRelayId!)
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Resume failed'
-
-        updateFileProgress(fileId, {
-          status: FileUploadStatus.FAILED,
-          error: errorMessage,
-        })
-
-        options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
-
+        handleUploadError(fileId, error, 'Resume failed')
         throw error
       }
     },
-    [startUpload, updateFileProgress, updateChunkProgress, options],
+    [startUpload, updateFileProgress, updateChunkProgress, handleUploadError, options],
   )
 
   const retryUpload = useCallback(
@@ -215,19 +231,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         options?.onUploadComplete?.(fileId, relayId)
         return relayId
       } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Retry failed'
-
-        updateFileProgress(fileId, {
-          status: FileUploadStatus.FAILED,
-          error: errorMessage,
-        })
-
-        options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
-
+        handleUploadError(fileId, error, 'Retry failed')
         throw error
       }
     },
-    [startUpload, updateFileProgress, options],
+    [startUpload, handleUploadError, options],
   )
 
   return { uploadFile, pauseUpload, resumeUpload, retryUpload }
