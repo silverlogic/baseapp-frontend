@@ -35,6 +35,15 @@ export const simpleMembersListMockData = {
       name: 'Owner Profile',
       image: null,
       urlPath: null,
+      owner: {
+        id: 'owner-user-id',
+        profile: {
+          id: 'owner-profile-id',
+          name: 'Owner Profile',
+          image: null,
+          urlPath: null,
+        },
+      },
       members: {
         totalCount: 1,
         edges: [
@@ -74,6 +83,17 @@ export const allRolesMembersListMockData = {
       name: 'Owner Profile',
       image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
+      owner: {
+        id: 'owner-user-id',
+        profile: {
+          id: 'owner-profile-id',
+          name: 'Owner Profile',
+          image: {
+            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
+          },
+          urlPath: null,
+        },
+      },
       members: {
         totalCount: 3,
         edges: [
@@ -102,6 +122,17 @@ export const fullMembersListMockData = {
       name: 'Owner Profile',
       image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
+      owner: {
+        id: 'owner-user-id',
+        profile: {
+          id: 'owner-profile-id',
+          name: 'Owner Profile',
+          image: {
+            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
+          },
+          urlPath: null,
+        },
+      },
       members: {
         totalCount: 6,
         edges: [
@@ -130,6 +161,17 @@ export const fullMembersListNextPageMockData = {
       name: 'Owner Profile',
       image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
+      owner: {
+        id: 'owner-user-id',
+        profile: {
+          id: 'owner-profile-id',
+          name: 'Owner Profile',
+          image: {
+            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
+          },
+          urlPath: null,
+        },
+      },
       members: {
         totalCount: 9,
         edges: [
@@ -148,7 +190,7 @@ export const fullMembersListNextPageMockData = {
 
 export const updateMemberRoleMockData = {
   data: {
-    profileRoleUpdate: {
+    profileUserRoleUpdate: {
       profileUserRole: {
         id: 'UHJvZmlsZVVzZXJSb2xlOjEx',
         role: 'ADMIN',

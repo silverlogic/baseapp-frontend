@@ -11,5 +11,7 @@ export const MemberItemFragment = graphql`
     }
     role
     status
+    invitedEmail
+    invitationExpiresAt
   }
 `
