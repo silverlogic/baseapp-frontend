@@ -17,9 +17,7 @@ export const InviteMembersSearchFragment = graphql`
         node {
           id
           name
-          image(width: 100, height: 100) {
-            url
-          }
+          image(width: 100, height: 100)
           urlPath {
             path
           }
