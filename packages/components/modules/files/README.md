@@ -422,19 +422,20 @@ Large files are automatically split into chunks for reliable upload:
 
 ### Upload State Management
 
-The file upload state is managed through React Context:
+The file upload state is managed by a global zustand store — no provider wrapper is
+needed. Call the hook from any component:
 
 ```typescript
-import { FileUploadProvider, useFileUpload } from '@baseapp-frontend/components/modules/files/common'
-
-// Wrap your app with the provider
-<FileUploadProvider>
-  <YourApp />
-</FileUploadProvider>
+import { useFileUpload } from '@baseapp-frontend/components/modules/files/common'
 
 // Access upload state anywhere
 const { files, removeFile, pauseFile, resumeFile } = useFileUpload()
 ```
+
+Because the store is a module-level singleton, upload state is shared across every
+mounted `FileUpload`/`FileUploadList`. When rendering multiple upload targets on the
+same screen, in-progress items from all targets appear in each list's "Uploading"
+section until they complete and attach.
 
 ### File Upload Status
 
@@ -456,14 +457,7 @@ File operations respect backend permissions:
 
 ## Best Practices
 
-1. **Always wrap with FileUploadProvider**
-   ```typescript
-   <FileUploadProvider>
-     <FileUpload target={target} />
-   </FileUploadProvider>
-   ```
-
-2. **Handle errors gracefully**
+1. **Handle errors gracefully**
    ```typescript
    <FileUpload
      target={target}
@@ -474,7 +468,7 @@ File operations respect backend permissions:
    />
    ```
 
-3. **Set appropriate file limits**
+2. **Set appropriate file limits**
    ```typescript
    <FileUpload
      target={target}
@@ -484,7 +478,7 @@ File operations respect backend permissions:
    />
    ```
 
-4. **Provide targetObjectId for deletion**
+3. **Provide targetObjectId for deletion**
    ```typescript
    <AttachedFileItem
      file={file}
@@ -492,7 +486,7 @@ File operations respect backend permissions:
    />
    ```
 
-5. **Use platform-specific download handlers**
+4. **Use platform-specific download handlers**
    ```typescript
    // Different implementations for web and native
    const downloadHandler = Platform.select({
@@ -523,8 +517,7 @@ import {
   calculateProgress,
   isImageFile,
 
-  // Context
-  FileUploadProvider,
+  // Store
   useFileUploadStore,
 
   // GraphQL
