@@ -513,7 +513,7 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & MentionsInterface & ReactionsInterface {
+type ContentPost implements Node & MentionsInterface & ReactionsInterface & CommentsInterface {
   created: DateTime!
   modified: DateTime!
   profile: Profile
@@ -530,6 +530,19 @@ type ContentPost implements Node & MentionsInterface & ReactionsInterface {
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   isReactionsEnabled: Boolean!
   myReaction(profileId: ID): Reaction
+  commentsCount: CommentsCount!
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
   pk: Int
 }
 
