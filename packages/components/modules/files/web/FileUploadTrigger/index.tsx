@@ -2,8 +2,10 @@
 
 import type { FC } from 'react'
 
+import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+
 import { AttachFile as AttachFileIcon } from '@mui/icons-material'
-import { IconButton, Tooltip } from '@mui/material'
+import { Tooltip } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { FilesListFragment } from '../../common/graphql/queries/FilesList'
@@ -62,7 +64,13 @@ const FileUploadTrigger: FC<FileUploadTriggerProps> = ({
         <input {...getInputProps()} />
         <Tooltip title={label}>
           <span>
-            <IconButton size="small" onClick={open} disabled={isDisabled} aria-label={label}>
+            <IconButton
+              size="small"
+              onClick={open}
+              disabled={isDisabled}
+              isLoading={isAttaching}
+              aria-label={label}
+            >
               {icon ?? <AttachFileIcon fontSize="small" />}
             </IconButton>
           </span>

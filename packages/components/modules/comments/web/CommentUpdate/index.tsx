@@ -2,7 +2,6 @@
 
 import { FC, useEffect, useMemo, useRef } from 'react'
 
-import { FileUploadTrigger } from '@baseapp-frontend/components/files/web'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -16,6 +15,7 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { useCommentUpdateMutation } from '../../common'
+import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentUpdateProps } from './types'
 
 /**
@@ -157,34 +157,23 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   }, [inputRef])
 
   return (
-    <>
-      <SocialInput
-        ref={inputRef}
-        submit={onSubmit}
-        isLoading={isMutationInFlight}
-        form={form}
-        formId="comment-update"
-        autoFocusInput
-        SubmitActions={UpdateSubmitActions}
-        SubmitActionsProps={{
-          handleEditCancel,
-          formId: 'comment-update',
-          disabled: isMutationInFlight,
-        }}
-        {...mergedSocialInputProps}
-      />
-      <FileUploadTrigger
-        target={comment} // Works with any FilesInterface implementer
-        as="button"
-        maxFiles={5}
-        maxFileSize={100 * 1024 * 1024} // 100MB
-        acceptedFileTypes={{
-          'image/*': ['.png', '.jpg'],
-          'application/pdf': ['.pdf'],
-        }}
-        autoAttach
-      />
-    </>
+    <SocialInput
+      ref={inputRef}
+      submit={onSubmit}
+      isLoading={isMutationInFlight}
+      form={form}
+      formId="comment-update"
+      autoFocusInput
+      SubmitActions={UpdateSubmitActions}
+      SubmitActionsProps={{
+        handleEditCancel,
+        formId: 'comment-update',
+        disabled: isMutationInFlight,
+      }}
+      {...mergedSocialInputProps}
+      SocialUpsertActions={CommentFilesUpsertActions}
+      SocialUpsertActionsProps={{ target: comment }}
+    />
   )
 }
 

@@ -2,13 +2,15 @@
 
 import type { FC } from 'react'
 
+import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+
 import {
   Close as CloseIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
   InsertDriveFile as FileIcon,
 } from '@mui/icons-material'
-import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material'
+import { Box, Card, CardContent, Chip, Stack, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
@@ -81,6 +83,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
               size="small"
               onClick={() => handleDelete(file.id)}
               disabled={isDeletingFile}
+              isLoading={isDeletingFile}
               title="Remove"
               aria-label="Remove"
             >
@@ -153,6 +156,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                   color="error"
                   title="Delete"
                   disabled={isDeletingFile}
+                  isLoading={isDeletingFile}
                 >
                   <DeleteIcon fontSize="small" />
                 </IconButton>
