@@ -10,25 +10,31 @@ import {
   PlayArrow as PlayArrowIcon,
   Replay as ReplayIcon,
 } from '@mui/icons-material'
-import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material'
+import {
+  Box,
+  Card,
+  CardContent,
+  Chip,
+  IconButton,
+  LinearProgress,
+  Stack,
+  Typography,
+} from '@mui/material'
 
 import { FileUploadStatus } from '../../../common/constants'
 import { useFileUpload } from '../../../common/context/useFileUpload'
 import { useChunkedUpload } from '../../../common/hooks/useChunkedUpload'
-import type { FileUploadProgress } from '../../../common/types'
 import { calculateProgress, formatFileSize, isImageFile } from '../../../common/utils/formatters'
+import FileChip from '../../FileChip'
+import FileThumbnail from '../../FileThumbnail'
 import FileProgress from './FileProgress'
-
-interface UploadingFileItemProps {
-  fileProgress: FileUploadProgress
-  allowRemove?: boolean
-  allowRetry?: boolean
-}
+import type { UploadingFileItemProps } from './types'
 
 const UploadingFileItem: FC<UploadingFileItemProps> = ({
   fileProgress,
   allowRemove = true,
   allowRetry = true,
+  variant = 'card',
 }) => {
   const { removeFile, pauseFile } = useFileUpload()
   const { resumeUpload, retryUpload } = useChunkedUpload()
@@ -90,6 +96,61 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
     [thumbnailUrl],
   )
 
+  const actions = (
+    <Stack direction="row" spacing={0.5}>
+      {canPause && (
+        <IconButton size="small" onClick={handlePause} title="Pause">
+          <PauseIcon fontSize="small" />
+        </IconButton>
+      )}
+      {canResume && (
+        <IconButton size="small" onClick={handleResume} title="Resume">
+          <PlayArrowIcon fontSize="small" />
+        </IconButton>
+      )}
+      {canRetry && (
+        <IconButton size="small" onClick={handleRetry} color="error" title="Retry">
+          <ReplayIcon fontSize="small" />
+        </IconButton>
+      )}
+      {canRemove && (
+        <IconButton size="small" onClick={handleRemove} title="Remove">
+          <CloseIcon fontSize="small" />
+        </IconButton>
+      )}
+    </Stack>
+  )
+
+  if (variant === 'chip') {
+    return (
+      <FileChip
+        fixedWidth
+        thumbnail={
+          <FileThumbnail
+            src={thumbnailUrl}
+            contentType={fileProgress.file?.type}
+            alt={fileProgress.fileName}
+          />
+        }
+        name={fileProgress.fileName}
+        subtitle={
+          fileProgress.error ? (
+            <Typography variant="caption" color="error" noWrap>
+              {fileProgress.error}
+            </Typography>
+          ) : (
+            <LinearProgress
+              variant="determinate"
+              value={getProgress()}
+              sx={{ height: 4, borderRadius: 50, mt: 0.5 }}
+            />
+          )
+        }
+        action={actions}
+      />
+    )
+  }
+
   return (
     <Card sx={{ mb: 1 }}>
       <CardContent>
@@ -124,32 +185,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
                 </Typography>
               </Box>
             </Box>
-
-            <Stack direction="row" spacing={0.5}>
-              {canPause && (
-                <IconButton size="small" onClick={handlePause} title="Pause">
-                  <PauseIcon fontSize="small" />
-                </IconButton>
-              )}
-
-              {canResume && (
-                <IconButton size="small" onClick={handleResume} title="Resume">
-                  <PlayArrowIcon fontSize="small" />
-                </IconButton>
-              )}
-
-              {canRetry && (
-                <IconButton size="small" onClick={handleRetry} color="error" title="Retry">
-                  <ReplayIcon fontSize="small" />
-                </IconButton>
-              )}
-
-              {canRemove && (
-                <IconButton size="small" onClick={handleRemove} title="Remove">
-                  <CloseIcon fontSize="small" />
-                </IconButton>
-              )}
-            </Stack>
+            {actions}
           </Box>
 
           <FileProgress progress={getProgress()} status={fileProgress.status} />
@@ -162,3 +198,4 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
 }
 
 export default UploadingFileItem
+export type { UploadingFileItemProps } from './types'

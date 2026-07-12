@@ -3,6 +3,7 @@
 import type { FC } from 'react'
 
 import {
+  Close as CloseIcon,
   Delete as DeleteIcon,
   Download as DownloadIcon,
   InsertDriveFile as FileIcon,
@@ -10,18 +11,25 @@ import {
 import { Box, Card, CardContent, Chip, IconButton, Stack, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import type { FileItem_file$key } from '../../../../__generated__/FileItem_file.graphql'
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
 import { useFileDeleteLogic } from '../../common/hooks/useFileDeleteLogic'
 import { useFileDownloadLogic } from '../../common/hooks/useFileDownloadLogic'
 import { formatDate, formatFileSize, getFileType, isImageFile } from '../../common/utils/formatters'
+import FileChip from '../FileChip'
+import FileThumbnail from '../FileThumbnail'
+import type { AttachedFileItemProps } from './types'
 
-interface AttachedFileItemProps {
-  file: FileItem_file$key
-  targetObjectId?: string
+const getTypeLabel = (fileName?: string | null, contentType?: string | null): string => {
+  const ext = fileName && fileName.includes('.') ? fileName.split('.').pop() : undefined
+  return (ext || getFileType(contentType) || 'file').toUpperCase()
 }
 
-const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObjectId }) => {
+const AttachedFileItem: FC<AttachedFileItemProps> = ({
+  file: fileRef,
+  targetObjectId,
+  variant = 'card',
+  editable = false,
+}) => {
   const file = useFragment(FileItemFragment, fileRef)
 
   const { handleDelete, isDeletingFile } = useFileDeleteLogic({ targetObjectId })
@@ -50,6 +58,48 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObje
   }
 
   const isImage = isImageFile(file.fileContentType)
+
+  if (variant === 'chip') {
+    return (
+      <FileChip
+        thumbnail={
+          <FileThumbnail
+            src={file.thumbnail}
+            contentType={file.fileContentType}
+            alt={file.fileName || 'File preview'}
+          />
+        }
+        name={file.fileName}
+        subtitle={
+          <Typography variant="caption" color="text.secondary">
+            {getTypeLabel(file.fileName, file.fileContentType)}
+          </Typography>
+        }
+        action={
+          editable && canChangeFile ? (
+            <IconButton
+              size="small"
+              onClick={() => handleDelete(file.id)}
+              disabled={isDeletingFile}
+              title="Remove"
+              aria-label="Remove"
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          ) : (
+            <IconButton
+              size="small"
+              onClick={() => handleDownload(file.file)}
+              title="Download"
+              aria-label="Download"
+            >
+              <DownloadIcon fontSize="small" />
+            </IconButton>
+          )
+        }
+      />
+    )
+  }
 
   return (
     <Card sx={{ mb: 1 }}>
@@ -126,3 +176,4 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({ file: fileRef, targetObje
 }
 
 export default AttachedFileItem
+export type { AttachedFileItemProps } from './types'

@@ -175,7 +175,12 @@ const CommentItem: FC<CommentItemProps> = ({
                 {renderCommentContent()}
 
                 <div>
-                  <FileUploadList target={comment} />
+                  <FileUploadList
+                    target={comment}
+                    variant="chips"
+                    layout="horizontal"
+                    editable={isEditMode}
+                  />
                 </div>
               </div>
               <div className="flex justify-between">

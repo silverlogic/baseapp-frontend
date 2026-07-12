@@ -2,7 +2,7 @@
 
 import { FC, useEffect, useMemo, useRef } from 'react'
 
-import { FileUpload } from '@baseapp-frontend/components/files/web'
+import { FileUploadTrigger } from '@baseapp-frontend/components/files/web'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -173,8 +173,9 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         }}
         {...mergedSocialInputProps}
       />
-      <FileUpload
+      <FileUploadTrigger
         target={comment} // Works with any FilesInterface implementer
+        as="button"
         maxFiles={5}
         maxFileSize={100 * 1024 * 1024} // 100MB
         acceptedFileTypes={{
@@ -182,7 +183,6 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
           'application/pdf': ['.pdf'],
         }}
         autoAttach
-        onUploadComplete={(fileIds) => console.log('Uploaded:', fileIds)}
       />
     </>
   )

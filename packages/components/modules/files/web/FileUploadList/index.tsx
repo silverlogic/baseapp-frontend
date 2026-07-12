@@ -1,8 +1,8 @@
 'use client'
 
-import type { FC } from 'react'
+import type { FC, ReactNode } from 'react'
 
-import { Box, Typography } from '@mui/material'
+import { Box, Stack, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import { useFileUpload } from '../../common/context/useFileUpload'
@@ -16,6 +16,9 @@ const FileUploadList: FC<FileUploadListProps> = ({
   showUploadProgress = true,
   allowRemove = true,
   allowRetry = true,
+  variant = 'cards',
+  layout = 'stack',
+  editable = false,
 }) => {
   const target = useFragment(FilesListFragment, targetRef)
   const { files } = useFileUpload()
@@ -27,6 +30,60 @@ const FileUploadList: FC<FileUploadListProps> = ({
 
   if (!hasUploadingFiles && !hasAttachedFiles) {
     return null
+  }
+
+  const itemVariant = variant === 'chips' ? 'chip' : 'card'
+  const isHorizontal = layout === 'horizontal'
+
+  // Chips: uploading + attached share one wrapping/scrolling row (Figma).
+  // Cards: keep the two labelled sections (today's behaviour).
+  const wrap = (children: ReactNode) =>
+    isHorizontal ? (
+      <Box
+        sx={{
+          display: 'flex',
+          flexWrap: 'wrap',
+          gap: 1,
+          overflowX: 'auto',
+        }}
+      >
+        {children}
+      </Box>
+    ) : (
+      <Stack spacing={1}>{children}</Stack>
+    )
+
+  if (variant === 'chips') {
+    return (
+      <Box sx={{ mt: 1 }}>
+        {wrap(
+          <>
+            {showUploadProgress &&
+              uploadingFiles.map((file) => (
+                <UploadingFileItem
+                  key={file.id}
+                  fileProgress={file}
+                  allowRemove={allowRemove}
+                  allowRetry={allowRetry}
+                  variant="chip"
+                />
+              ))}
+            {target.files?.edges?.map((edge) => {
+              if (!edge?.node) return null
+              return (
+                <AttachedFileItem
+                  key={edge.node.id}
+                  file={edge.node}
+                  targetObjectId={target.id}
+                  variant="chip"
+                  editable={editable}
+                />
+              )
+            })}
+          </>,
+        )}
+      </Box>
+    )
   }
 
   return (
@@ -42,6 +99,7 @@ const FileUploadList: FC<FileUploadListProps> = ({
               fileProgress={file}
               allowRemove={allowRemove}
               allowRetry={allowRetry}
+              variant={itemVariant}
             />
           ))}
         </Box>
@@ -55,7 +113,13 @@ const FileUploadList: FC<FileUploadListProps> = ({
           {target.files.edges.map((edge) => {
             if (!edge?.node) return null
             return (
-              <AttachedFileItem key={edge.node.id} file={edge.node} targetObjectId={target.id} />
+              <AttachedFileItem
+                key={edge.node.id}
+                file={edge.node}
+                targetObjectId={target.id}
+                variant={itemVariant}
+                editable={editable}
+              />
             )
           })}
         </Box>
