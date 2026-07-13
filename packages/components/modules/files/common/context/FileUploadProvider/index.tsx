@@ -7,13 +7,14 @@ import type { FileUploadState } from './types'
 export const useFileUploadStore = create<FileUploadState>((set, get) => ({
   files: new Map(),
 
-  addFile: (file: File) => {
+  addFile: (file: File, scope?: string) => {
     const id = `${Date.now()}-${file.name}-${Math.random()}`
     const fileProgress: FileUploadProgress = {
       id,
       file,
       fileName: file.name,
       fileSize: file.size,
+      scope,
       status: FileUploadStatus.PENDING,
       uploadedBytes: 0,
       totalChunks: 0,

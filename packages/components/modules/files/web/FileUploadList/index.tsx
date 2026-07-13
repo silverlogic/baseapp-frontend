@@ -19,11 +19,15 @@ const FileUploadList: FC<FileUploadListProps> = ({
   variant = 'cards',
   layout = 'stack',
   editable = false,
+  scope,
 }) => {
   const target = useFragment(FilesListFragment, targetRef)
   const { files } = useFileUpload()
 
-  const uploadingFiles = Array.from(files.values())
+  // The upload store is global; show only uploads owned by this list (its
+  // target by default) so another composer's uploads don't leak in here.
+  const activeScope = scope ?? target.id
+  const uploadingFiles = Array.from(files.values()).filter((file) => file.scope === activeScope)
 
   const hasUploadingFiles = uploadingFiles.length > 0
   const hasAttachedFiles = (target.files?.edges?.length ?? 0) > 0

@@ -11,4 +11,6 @@ export interface UseDeferredFileAttachmentsReturn {
   reset: () => void
   isUploading: boolean
   isAttaching: boolean
+  /** Upload scope for this composer — pass to UploadingFilesList to show its progress. */
+  scope: string
 }

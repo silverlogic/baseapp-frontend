@@ -118,8 +118,8 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   )
 
   const uploadFile = useCallback(
-    async (file: File) => {
-      const fileId = addFile(file)
+    async (file: File, scope?: string) => {
+      const fileId = addFile(file, scope)
 
       try {
         const relayId = await startUpload(fileId, file)

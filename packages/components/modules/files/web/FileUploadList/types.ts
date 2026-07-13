@@ -11,4 +11,6 @@ export interface FileUploadListProps {
   layout?: 'stack' | 'horizontal'
   /** Edit mode: show a remove control on attached files the user can change. */
   editable?: boolean
+  /** Which uploads to show from the shared store. Defaults to the target's id. */
+  scope?: string
 }

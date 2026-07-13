@@ -4,6 +4,7 @@ import { forwardRef, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { useDeferredFileAttachments } from '@baseapp-frontend/components/files/common'
+import { UploadingFilesList } from '@baseapp-frontend/components/files/web'
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -112,7 +113,12 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     })
     const { setValue } = form
     const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
-    const { handleFilesSelected, attachTo, isUploading } = useDeferredFileAttachments()
+    const {
+      handleFilesSelected,
+      attachTo,
+      isUploading,
+      scope: filesScope,
+    } = useDeferredFileAttachments()
 
     const { mentions, isMentionsActive } = useFormMentions<SocialUpsertForm>({
       setValue,
@@ -181,30 +187,33 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     }
 
     return (
-      <SocialInput
-        ref={ref}
-        placeholder="Comment..."
-        autoFocusInput={autoFocusInput}
-        form={form}
-        formId="comment-create"
-        submit={onSubmit}
-        isLoading={isMutationInFlight}
-        isReply={isReply}
-        replyTargetName={commentReply.name}
-        onCancelReply={commentReply.resetCommentReply}
-        SubmitActionsProps={{
-          ariaLabel: 'create comment',
-        }}
-        {...mergedSocialInputProps}
-        SocialUpsertActions={CommentFilesUpsertActions}
-        SocialUpsertActionsProps={{
-          onFilesSelected: handleFilesSelected,
-          isUploading,
-          maxFiles: MAX_FILES,
-          maxFileSize: MAX_FILE_SIZE,
-          acceptedFileTypes: ACCEPTED_FILE_TYPES,
-        }}
-      />
+      <>
+        <SocialInput
+          ref={ref}
+          placeholder="Comment..."
+          autoFocusInput={autoFocusInput}
+          form={form}
+          formId="comment-create"
+          submit={onSubmit}
+          isLoading={isMutationInFlight}
+          isReply={isReply}
+          replyTargetName={commentReply.name}
+          onCancelReply={commentReply.resetCommentReply}
+          SubmitActionsProps={{
+            ariaLabel: 'create comment',
+          }}
+          {...mergedSocialInputProps}
+          SocialUpsertActions={CommentFilesUpsertActions}
+          SocialUpsertActionsProps={{
+            onFilesSelected: handleFilesSelected,
+            isUploading,
+            maxFiles: MAX_FILES,
+            maxFileSize: MAX_FILE_SIZE,
+            acceptedFileTypes: ACCEPTED_FILE_TYPES,
+          }}
+        />
+        <UploadingFilesList scope={filesScope} variant="chips" layout="horizontal" />
+      </>
     )
   },
 )

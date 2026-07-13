@@ -15,6 +15,8 @@ export interface FileUploadProgress {
   file: File // Original File object
   fileName: string
   fileSize: number
+  /** Owner of this upload (e.g. a target id, or a composer instance) — lets each list show only its own uploads. */
+  scope?: string
   status: FileUploadStatus
   uploadedBytes: number
   totalChunks: number

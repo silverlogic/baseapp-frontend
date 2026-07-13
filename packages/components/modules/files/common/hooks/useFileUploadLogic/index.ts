@@ -31,8 +31,9 @@ export const useFileUploadLogic = ({
       }
 
       try {
-        // Upload all files in parallel
-        const uploadPromises = selectedFiles.map((file) => uploadFile(file))
+        // Upload all files in parallel, scoped to this target so its list shows
+        // only its own uploads.
+        const uploadPromises = selectedFiles.map((file) => uploadFile(file, targetObjectId))
         const fileRelayIds = await Promise.all(uploadPromises)
 
         onUploadComplete?.(fileRelayIds)

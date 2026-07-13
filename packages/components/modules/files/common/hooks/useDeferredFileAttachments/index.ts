@@ -19,13 +19,16 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
   const { clearCompleted } = useFileUploadStore()
   const uploadsRef = useRef<Promise<string>[]>([])
   const inFlightRef = useRef(0)
+  // Stable per-instance scope so this composer's uploads are shown here and not
+  // on unrelated file lists (they share one global upload store).
+  const scopeRef = useRef(`deferred-${Math.random().toString(36).slice(2)}`)
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
       if (!files.length) return
 
-      const promises = files.map((file) => uploadFile(file))
+      const promises = files.map((file) => uploadFile(file, scopeRef.current))
       uploadsRef.current.push(...promises)
       inFlightRef.current += 1
       setIsUploading(true)
@@ -75,5 +78,5 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
     clearCompleted()
   }, [clearCompleted])
 
-  return { handleFilesSelected, attachTo, reset, isUploading, isAttaching }
+  return { handleFilesSelected, attachTo, reset, isUploading, isAttaching, scope: scopeRef.current }
 }
