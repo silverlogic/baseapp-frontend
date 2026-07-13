@@ -72,6 +72,7 @@ const Header: FC<HeaderProps> = ({
           </Logo>
         )}
         <IconButton
+          aria-label="Open navigation menu"
           onClick={onOpenNav}
           sx={{
             display: { xs: 'flex', lg: 'none' },
