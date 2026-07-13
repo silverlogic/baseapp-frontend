@@ -24,7 +24,7 @@ const FileChip: FC<FileChipProps> = ({ thumbnail, name, subtitle, action, fixedW
       borderColor: 'divider',
       bgcolor: 'grey.100',
       width: fixedWidth ? 196 : 'auto',
-      maxWidth: 264,
+      maxWidth: 232,
       flexShrink: 0,
     }}
   >

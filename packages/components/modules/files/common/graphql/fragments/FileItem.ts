@@ -8,6 +8,7 @@ export const FileItemFragment = graphql`
     fileContentType
     uploadStatus
     file
+    url
     description
     created
     createdBy {

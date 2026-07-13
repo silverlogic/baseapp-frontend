@@ -66,7 +66,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
       <FileChip
         thumbnail={
           <FileThumbnail
-            src={file.thumbnail}
+            src={file.thumbnail || file.url}
             contentType={file.fileContentType}
             alt={file.fileName || 'File preview'}
           />
@@ -92,7 +92,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
           ) : (
             <IconButton
               size="small"
-              onClick={() => handleDownload(file.file)}
+              onClick={() => handleDownload(file.url)}
               title="Download"
               aria-label="Download"
             >
@@ -111,10 +111,10 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flex: 1, mr: 2, minWidth: 0 }}>
               <Box sx={{ mr: 1, mt: 0.5, flexShrink: 0 }}>
-                {isImage && file.thumbnail ? (
+                {isImage && (file.thumbnail || file.url) ? (
                   <Box
                     component="img"
-                    src={file.thumbnail}
+                    src={file.thumbnail || file.url || undefined}
                     alt={file.fileName || 'File preview'}
                     sx={{
                       width: 100,
@@ -145,7 +145,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
             </Box>
 
             <Stack direction="row" spacing={0.5}>
-              <IconButton size="small" onClick={() => handleDownload(file.file)} title="Download">
+              <IconButton size="small" onClick={() => handleDownload(file.url)} title="Download">
                 <DownloadIcon fontSize="small" />
               </IconButton>
 
