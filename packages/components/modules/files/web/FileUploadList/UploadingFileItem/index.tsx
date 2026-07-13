@@ -1,7 +1,6 @@
 'use client'
 
 import type { FC } from 'react'
-import { useEffect, useMemo } from 'react'
 
 import {
   Close as CloseIcon,
@@ -24,7 +23,7 @@ import {
 import { FileUploadStatus } from '../../../common/constants'
 import { useFileUpload } from '../../../common/context/useFileUpload'
 import { useChunkedUpload } from '../../../common/hooks/useChunkedUpload'
-import { calculateProgress, formatFileSize, isImageFile } from '../../../common/utils/formatters'
+import { calculateProgress, formatFileSize } from '../../../common/utils/formatters'
 import FileChip from '../../FileChip'
 import FileThumbnail from '../../FileThumbnail'
 import FileProgress from './FileProgress'
@@ -78,24 +77,10 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
 
   const canResume = fileProgress.status === FileUploadStatus.PAUSED
 
-  const isImage = isImageFile(fileProgress.file?.type)
-
-  const thumbnailUrl = useMemo(() => {
-    if (isImage && fileProgress.file) {
-      return URL.createObjectURL(fileProgress.file)
-    }
-    return null
-  }, [isImage, fileProgress.file])
-
-  useEffect(
-    () => () => {
-      if (thumbnailUrl) {
-        URL.revokeObjectURL(thumbnailUrl)
-      }
-    },
-    [thumbnailUrl],
-  )
-
+  // While uploading we show a generic type icon rather than decoding the source
+  // file into a preview (a full-res image would decode into a large bitmap just
+  // to paint a tile). The real thumbnail lands once the attach mutation
+  // prependEdges the committed File node.
   const actions = (
     <Stack direction="row" spacing={0.5}>
       {canPause && (
@@ -127,7 +112,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
         fixedWidth
         thumbnail={
           <FileThumbnail
-            src={thumbnailUrl}
+            src={null}
             contentType={fileProgress.file?.type}
             alt={fileProgress.fileName}
           />
@@ -158,23 +143,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <Box sx={{ display: 'flex', alignItems: 'flex-start', flex: 1, mr: 2, minWidth: 0 }}>
               <Box sx={{ mr: 1, mt: 0.5, flexShrink: 0 }}>
-                {isImage && thumbnailUrl ? (
-                  <Box
-                    component="img"
-                    src={thumbnailUrl}
-                    alt={fileProgress.fileName}
-                    sx={{
-                      width: 100,
-                      height: 100,
-                      objectFit: 'cover',
-                      borderRadius: 1,
-                      border: '1px solid',
-                      borderColor: 'divider',
-                    }}
-                  />
-                ) : (
-                  <FileIcon sx={{ fontSize: 40 }} />
-                )}
+                <FileIcon sx={{ fontSize: 40 }} />
               </Box>
               <Box sx={{ flex: 1, minWidth: 0, overflow: 'hidden' }}>
                 <Typography variant="body2" noWrap>
