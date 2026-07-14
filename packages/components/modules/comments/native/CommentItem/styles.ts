@@ -24,6 +24,12 @@ export const createStyles = () =>
       flexGrow: 1,
       flexShrink: 1,
     },
+    headerContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+    },
     footerContainer: {
       backgroundColor: 'transparent',
       display: 'flex',
