@@ -62,6 +62,8 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
     resumeUpload(fileProgress.id)
   }
 
+  const isCompleted = fileProgress.status === FileUploadStatus.COMPLETED
+
   const canRemove =
     allowRemove &&
     [
@@ -69,6 +71,8 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
       FileUploadStatus.FAILED,
       FileUploadStatus.PAUSED,
       FileUploadStatus.ABORTED,
+      // Uploaded but not yet attached (e.g. a new comment) — let the user undo it.
+      FileUploadStatus.COMPLETED,
     ].includes(fileProgress.status)
 
   const canRetry = allowRetry && fileProgress.status === FileUploadStatus.FAILED
@@ -119,9 +123,14 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
         }
         name={fileProgress.fileName}
         subtitle={
+          // eslint-disable-next-line no-nested-ternary
           fileProgress.error ? (
             <Typography variant="caption" color="error" noWrap>
               {fileProgress.error}
+            </Typography>
+          ) : isCompleted ? (
+            <Typography variant="caption" color="text.secondary" noWrap>
+              {formatFileSize(fileProgress.fileSize)}
             </Typography>
           ) : (
             <LinearProgress
@@ -157,7 +166,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
             {actions}
           </Box>
 
-          <FileProgress progress={getProgress()} status={fileProgress.status} />
+          {!isCompleted && <FileProgress progress={getProgress()} status={fileProgress.status} />}
 
           {fileProgress.error && <Chip label={fileProgress.error} color="error" size="small" />}
         </Stack>

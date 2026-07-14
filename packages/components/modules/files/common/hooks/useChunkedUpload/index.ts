@@ -110,6 +110,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
       updateFileProgress(fileId, {
         status: FileUploadStatus.COMPLETED,
         etags,
+        fileRelayId: data.relayId,
       })
 
       return data.relayId
