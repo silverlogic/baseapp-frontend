@@ -25,7 +25,7 @@ export const useChatRoomToggleAdminMutation = (): [
   (config: UseMutationConfig<ChatRoomToggleAdminMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<ChatRoomToggleAdminMutation>(
     ChatRoomToggleAdminMutationQuery,
   )
@@ -34,15 +34,7 @@ export const useChatRoomToggleAdminMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        response.chatRoomToggleAdmin?.errors?.forEach((error) => {
-          error?.messages.forEach((message) => {
-            sendToast(message, { type: 'error' })
-          })
-        })
-
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response.chatRoomToggleAdmin?.errors, errors)
 
         config?.onCompleted?.(response, errors)
       },

@@ -25,7 +25,7 @@ export const useMessageDeleteMutation = (): [
   (config: UseMutationConfig<MessageDeleteMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<MessageDeleteMutation>(
     MessageDeleteMutationQuery,
   )
@@ -34,9 +34,7 @@ export const useMessageDeleteMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response.chatRoomDeleteMessage?.errors, errors)
 
         config?.onCompleted?.(response, errors)
       },

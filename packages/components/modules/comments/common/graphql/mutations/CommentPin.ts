@@ -19,7 +19,7 @@ export const useCommentPinMutation = (): [
   (config: UseMutationConfig<CommentPinMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
     useMutation<CommentPinMutation>(CommentPinMutationQuery)
 
@@ -27,9 +27,7 @@ export const useCommentPinMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

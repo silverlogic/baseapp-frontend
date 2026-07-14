@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 2.0.0
+
+### Patch Changes
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+  - @baseapp-frontend/utils@4.2.0
+
 ## 1.4.0
 
 ### Minor Changes

@@ -16,7 +16,7 @@ export const useRemoveMemberMutation = (): [
   (config: UseMutationConfig<RemoveMemberMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<RemoveMemberMutation>(
     ProfileRemoveMemberMutationQuery,
   )
@@ -25,7 +25,10 @@ export const useRemoveMemberMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        sendToast('Member removed successfully', { type: 'success' })
+        const errorMessage = sendMutationErrorToast(undefined, errors)
+        if (!errorMessage) {
+          sendToast('Member removed successfully', { type: 'success' })
+        }
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {
