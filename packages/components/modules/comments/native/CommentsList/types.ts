@@ -23,4 +23,5 @@ export interface CommentsListProps {
    * thread. Only applied to the root (non-reply) list.
    */
   ListHeaderComponent?: ReactElement | null
+  onRefetchReady?: (refetch: () => void) => void
 }

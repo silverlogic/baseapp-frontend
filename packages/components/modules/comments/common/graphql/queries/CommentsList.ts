@@ -35,8 +35,13 @@ export const CommentsListFragmentQuery = graphql`
   }
 `
 
-export const useCommentList = (targetRef: CommentsList_comments$key) =>
-  usePaginationFragment<CommentsListPaginationQuery, CommentsList_comments$key>(
+export const useCommentList = (targetRef: CommentsList_comments$key) => {
+  const result = usePaginationFragment<CommentsListPaginationQuery, CommentsList_comments$key>(
     CommentsListFragmentQuery,
     targetRef,
   )
+  return {
+    ...result,
+    refetch: result.refetch,
+  }
+}
