@@ -54,7 +54,8 @@ const CommentItem: FC<CommentItemProps> = ({
     isDeletingComment,
     hasUser,
     totalCommentsCount,
-  } = useCommentItem<HTMLDivElement>({ comment: commentRef })
+    profileUrl,
+  } = useCommentItem<HTMLDivElement>({ comment: commentRef, useProfileId, profilePath })
   const router = useRouter()
 
   const [isEditMode, setIsEditMode] = useState(false)
@@ -66,10 +67,6 @@ const CommentItem: FC<CommentItemProps> = ({
   })
 
   const { actions = defaultCommentOptions, ...restOfActionOverlayProps } = ActionOverlayProps ?? {}
-
-  const profileUrlPath = comment?.profile?.urlPath?.path
-  const profileUrl =
-    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
 
   const replyToComment = () => {
     if (hasUser) {

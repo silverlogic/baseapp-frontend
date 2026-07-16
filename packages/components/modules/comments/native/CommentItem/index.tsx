@@ -4,6 +4,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
+import { type Href, useRouter } from 'expo-router'
 import { Pressable } from 'react-native'
 
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
@@ -37,12 +38,22 @@ const CommentItem: FC<CommentItemProps> = ({
     showReplies,
     hideReplies,
     setAsReplyTarget,
+    hasUser,
     hasReplies,
     canReply,
+    profileUrl,
   } = useCommentItem({ comment: commentRef, threadDepth, maxThreadDepth })
   const { openCommentActions } = useCommentActionsContext()
+  const router = useRouter()
 
   const styles = createStyles()
+
+  const goToProfile = () => {
+    if (!hasUser || !profileUrl) return
+    router.push(profileUrl as Href)
+  }
+
+  const openActions = () => openCommentActions(comment)
 
   const renderCommentsReplies = () => {
     if (!isRepliesExpanded || isLoadingReplies || !canReply) {
@@ -73,16 +84,23 @@ const CommentItem: FC<CommentItemProps> = ({
 
   return (
     <>
-      <Pressable onLongPress={() => openCommentActions(comment)}>
+      <Pressable onLongPress={openActions}>
         <View style={styles.rootContainer}>
           <View style={styles.avatarContainer}>
-            <AvatarWithPlaceholder imgSource={comment.profile?.image?.url} />
+            {/* onLongPress mirrors the row's handler: without it, a long press starting on
+                the avatar/name would be claimed by the inner pressable and never open the
+                action sheet. */}
+            <Pressable onPress={goToProfile} onLongPress={openActions}>
+              <AvatarWithPlaceholder imgSource={comment.profile?.image?.url} />
+            </Pressable>
           </View>
           <View style={styles.bodyContainer}>
             <View style={styles.headerContainer}>
-              <Text variant="subtitle2" color="high">
-                {comment.profile?.name}
-              </Text>
+              <Pressable onPress={goToProfile} onLongPress={openActions}>
+                <Text variant="subtitle2" color="high">
+                  {comment.profile?.name}
+                </Text>
+              </Pressable>
               {comment.isPinned && <CommentPinBadge />}
             </View>
             <Text variant="body2" color="high">
