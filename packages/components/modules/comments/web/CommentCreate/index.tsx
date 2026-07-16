@@ -2,27 +2,14 @@
 
 import { forwardRef, useMemo } from 'react'
 
-import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { setFormRelayErrors } from '@baseapp-frontend/utils'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-import { ConnectionHandler } from 'react-relay'
-
-import {
-  DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
-  SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
-  SocialUpsertForm,
-} from '../../../__shared__/common'
+import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
   useFormMentions,
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
-import { useCommentCreateMutation, useCommentReply } from '../../common'
+import { useCommentCreateForm, useCommentReply } from '../../common'
 import { CommentCreateProps } from './types'
-
-let nextClientMutationId = 0
 
 /**
  * ### CommentCreate Component
@@ -32,11 +19,10 @@ let nextClientMutationId = 0
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  *
- * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and
- * `form` setup for creating comments.
- *
- * It integrates the `useCommentCreateMutation` mutation for submitting new comments and leverages `react-hook-form` and Zod for form validation.
- * Additionally, it supports replying to existing comments by utilizing the `useCommentReply` context to track the comment being replied to.
+ * This component reuses the `SocialInput` component, adding the platform UI around the shared
+ * `useCommentCreateForm` hook, which owns the `GraphQL` mutation and `form` setup for creating
+ * comments (validated with `react-hook-form` + Zod) and tracks the comment being replied to via
+ * the `useCommentReply` context.
  *
  * To enable @-mention tagging, pass `mentionsController` from a consumer-side hook (e.g.
  * `useProfileMentionSearch()`). The controller owns search state, debouncing, and pagination.
@@ -93,16 +79,23 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     },
     ref,
   ) => {
-    const { currentProfile } = useCurrentProfile()
     const commentReply = useCommentReply<HTMLDivElement>()
-    const isReply = !!commentReply.inReplyToId
 
-    const form = useForm<SocialUpsertForm>({
-      defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
-      resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
-    })
+    const { form, submit, isLoading, isReply, replyTargetName, cancelReply } = useCommentCreateForm(
+      {
+        targetObjectId,
+        onSuccess: () => {
+          if (commentReply.commentItemRef?.current) {
+            commentReply.commentItemRef.current.scrollIntoView({
+              block: 'nearest',
+              inline: 'start',
+              behavior: 'smooth',
+            })
+          }
+        },
+      },
+    )
     const { setValue } = form
-    const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
 
     const { mentions, isMentionsActive } = useFormMentions<SocialUpsertForm>({
       setValue,
@@ -115,57 +108,6 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
       [SocialInputProps, mentions],
     )
 
-    const onSubmit = (data: SocialUpsertForm) => {
-      if (isMutationInFlight) return
-
-      nextClientMutationId += 1
-      const clientMutationId = nextClientMutationId.toString()
-
-      const connectionID = ConnectionHandler.getConnectionID(
-        commentReply.inReplyToId ?? targetObjectId,
-        'CommentsList_comments',
-      )
-
-      commitMutation({
-        variables: {
-          input: {
-            body: data.body,
-            targetObjectId,
-            inReplyToId: commentReply.inReplyToId,
-            profileId: currentProfile?.id,
-            ...(isMentionsActive && { mentionedProfileIds: data.mentionedProfileIds }),
-            clientMutationId,
-          },
-          connections: [connectionID],
-        },
-        onCompleted: (response, errors) => {
-          if (errors) {
-            // TODO: handle errors
-            // eslint-disable-next-line no-console
-            console.error(errors)
-            return
-          }
-          const mutationErrors = response?.commentCreate?.errors
-          setFormRelayErrors(form, mutationErrors)
-
-          if (!mutationErrors?.length) {
-            commentReply.resetCommentReply()
-            form.reset()
-            if (commentReply.commentItemRef?.current) {
-              commentReply.commentItemRef.current.scrollIntoView({
-                block: 'nearest',
-                inline: 'start',
-                behavior: 'smooth',
-              })
-            }
-          }
-        },
-        // TODO: handle errors
-        // eslint-disable-next-line no-console
-        onError: console.error,
-      })
-    }
-
     return (
       <SocialInput
         ref={ref}
@@ -173,11 +115,11 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         autoFocusInput={autoFocusInput}
         form={form}
         formId="comment-create"
-        submit={onSubmit}
-        isLoading={isMutationInFlight}
+        submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
+        isLoading={isLoading}
         isReply={isReply}
-        replyTargetName={commentReply.name}
-        onCancelReply={commentReply.resetCommentReply}
+        replyTargetName={replyTargetName}
+        onCancelReply={cancelReply}
         SubmitActionsProps={{
           ariaLabel: 'create comment',
         }}

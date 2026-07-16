@@ -2,19 +2,14 @@
 
 import { FC, useEffect, useMemo, useRef } from 'react'
 
-import { setFormRelayErrors } from '@baseapp-frontend/utils'
-
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
-
-import { SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA, SocialUpsertForm } from '../../../__shared__/common'
+import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
   UpdateSubmitActions,
   useFormMentions,
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
-import { useCommentUpdateMutation } from '../../common'
+import { toCommentEditTarget, useCommentUpdateForm } from '../../common'
 import { CommentUpdateProps } from './types'
 
 /**
@@ -25,10 +20,9 @@ import { CommentUpdateProps } from './types'
  *
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  *
- * This component reuses the `SocialInput` component, adding a layer of `GraphQL` mutation and `form` setup to handle comment updates.
- *
- * It leverages the `useCommentUpdateMutation` mutation for updating comments and integrates form validation using
- * `react-hook-form` and Zod for schema validation.
+ * This component reuses the `SocialInput` component, adding the platform UI around the shared
+ * `useCommentUpdateForm` hook, which owns the `GraphQL` mutation and `form` setup for updating
+ * comments (validated with `react-hook-form` + Zod).
  *
  * ### Extending the Component
  * If you need to customize the form validation schema or the GraphQL query, this component serves as a base.
@@ -82,24 +76,13 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const initialValues = useMemo<SocialUpsertForm>(
-    () => ({
-      body: comment.body ?? '',
-      mentionedProfileIds:
-        comment.mentions?.edges?.flatMap((edge) =>
-          edge?.node?.profile?.id ? [edge.node.profile.id] : [],
-        ) ?? [],
-    }),
-    [comment.body, comment.mentions?.edges],
-  )
+  const target = useMemo(() => toCommentEditTarget(comment), [comment])
 
-  const form = useForm<SocialUpsertForm>({
-    defaultValues: initialValues,
-    resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
+  const { form, submit, isLoading, cancel } = useCommentUpdateForm({
+    target,
+    onClose: onCancel,
   })
   const { setValue } = form
-
-  const [commitUpdate, isMutationInFlight] = useCommentUpdateMutation()
 
   const { mentions, isMentionsActive } = useFormMentions<SocialUpsertForm>({
     setValue,
@@ -112,41 +95,6 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
     [SocialInputProps, mentions],
   )
 
-  const onSubmit = async (data: SocialUpsertForm) => {
-    if (isMutationInFlight) return
-
-    commitUpdate({
-      variables: {
-        input: {
-          id: comment.id,
-          body: data?.body,
-          ...(isMentionsActive && { mentionedProfileIds: data.mentionedProfileIds }),
-        },
-      },
-      onCompleted: (response, errors) => {
-        if (errors) {
-          // TODO: handle errors
-          console.error(errors)
-          return
-        }
-        const mutationErrors = response?.commentUpdate?.errors
-        setFormRelayErrors(form, mutationErrors)
-
-        if (!mutationErrors?.length) {
-          onCancel()
-          form.reset()
-        }
-      },
-      // TODO: handle errors
-      onError: console.error,
-    })
-  }
-
-  const handleEditCancel = () => {
-    onCancel()
-    form.reset(initialValues)
-  }
-
   useEffect(() => {
     if (inputRef.current) {
       const { length } = inputRef.current.value
@@ -158,16 +106,16 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
   return (
     <SocialInput
       ref={inputRef}
-      submit={onSubmit}
-      isLoading={isMutationInFlight}
+      submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
+      isLoading={isLoading}
       form={form}
       formId="comment-update"
       autoFocusInput
       SubmitActions={UpdateSubmitActions}
       SubmitActionsProps={{
-        handleEditCancel,
+        handleEditCancel: cancel,
         formId: 'comment-update',
-        disabled: isMutationInFlight,
+        disabled: isLoading,
       }}
       {...mergedSocialInputProps}
     />
