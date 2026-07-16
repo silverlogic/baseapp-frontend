@@ -11,7 +11,7 @@
     "relay": "relay-compiler",
     "relay:download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay:update-schema": "pnpm relay:download-schema && pnpm relay",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "storybook": "storybook dev -p 6008",
     "storybook:build": "storybook build",
