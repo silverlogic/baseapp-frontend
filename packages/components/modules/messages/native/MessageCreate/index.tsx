@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { MESSAGE_TYPE, useSendMessageMutation } from '@baseapp-frontend/components/messages/common'
-import { useNotification } from '@baseapp-frontend/utils'
+import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
@@ -30,7 +30,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
     ref,
   ) => {
     const { currentProfile } = useCurrentProfile()
-    const { sendMutationErrorToast, sendToast } = useNotification()
+    const { sendToast } = useNotification()
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -86,12 +86,10 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           },
         },
         onCompleted: (response, errors) => {
-          // Transport errors are already toasted by the mutation hook. Payload errors are
-          // toasted here because the native social input doesn't render form field errors.
+          // Transport errors are already toasted by the mutation hook; payload errors are
+          // mapped onto the form fields, mirroring the web SendMessage component.
           if (errors) return
-          sendMutationErrorToast(response?.chatRoomSendMessage?.errors, undefined, {
-            defaultMessage: 'Your last message could not be sent. Please try again.',
-          })
+          setFormRelayErrors(form, response?.chatRoomSendMessage?.errors)
         },
         onError: () => {
           sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
