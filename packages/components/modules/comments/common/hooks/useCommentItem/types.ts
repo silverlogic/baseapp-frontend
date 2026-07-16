@@ -14,6 +14,10 @@ export interface UseCommentItemOptions {
   threadDepth?: number
   /** Depth at which replying is disabled. Web leaves it unbounded; native caps at DEFAULT_MAX_THREAD_DEPTH. */
   maxThreadDepth?: number
+  /** Force id-based profile URLs even when the profile has a `urlPath`. */
+  useProfileId?: boolean
+  /** Prefix for id-based profile URLs. */
+  profilePath?: string
 }
 
 export interface UseCommentItemReturn<TElement = unknown> {
@@ -31,4 +35,6 @@ export interface UseCommentItemReturn<TElement = unknown> {
   hasReplies: boolean
   totalCommentsCount: number
   canReply: boolean
+  /** The comment author's profile URL: `urlPath` when available, else `${profilePath}/${id}`. */
+  profileUrl: string
 }
