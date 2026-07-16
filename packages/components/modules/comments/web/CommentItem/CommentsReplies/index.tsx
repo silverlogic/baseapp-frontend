@@ -1,4 +1,4 @@
-import { FC, useMemo, useTransition } from 'react'
+import { FC, useTransition } from 'react'
 
 import { Box } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
@@ -20,13 +20,8 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   CommentItemProps = {},
   VirtuosoProps,
 }) => {
-  const { data: target, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
+  const { data: target, comments, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
   const [isPending, startTransition] = useTransition()
-
-  const comments = useMemo(
-    () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
-    [target?.comments?.edges],
-  )
 
   const renderCommentItem = (comment: any) => {
     if (!comment) return null

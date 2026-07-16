@@ -9,8 +9,12 @@ export * from './constants'
 
 export * from './utils'
 
+export { default as useCommentActions } from './hooks/useCommentActions'
+export * from './hooks/useCommentActions/types'
 export { default as useCommentCreateForm } from './hooks/useCommentCreateForm'
 export * from './hooks/useCommentCreateForm/types'
+export { default as useCommentItem } from './hooks/useCommentItem'
+export * from './hooks/useCommentItem/types'
 export { default as useCommentUpdateForm } from './hooks/useCommentUpdateForm'
 export * from './hooks/useCommentUpdateForm/types'
 
