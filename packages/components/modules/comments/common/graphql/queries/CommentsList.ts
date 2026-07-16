@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { graphql, usePaginationFragment } from 'react-relay'
 
@@ -51,10 +51,15 @@ export const useCommentList = (targetRef: CommentsList_comments$key) => {
   )
 
   // Re-sorts the already-rendered list (e.g. after pin/unpin) without dropping it while the
-  // network response is in flight.
-  const refetchWithOrder = useCallback(() => {
-    refetch({ orderBy: DEFAULT_COMMENTS_ORDER_BY }, { fetchPolicy: 'store-and-network' })
+  // network response is in flight. Stable identity (ref-backed) so callers can register it
+  // once and never call a stale refetch.
+  const refetchRef = useRef(refetch)
+  useEffect(() => {
+    refetchRef.current = refetch
   }, [refetch])
+  const refetchWithOrder = useCallback(() => {
+    refetchRef.current({ orderBy: DEFAULT_COMMENTS_ORDER_BY }, { fetchPolicy: 'store-and-network' })
+  }, [])
 
   return {
     ...result,

@@ -14,6 +14,7 @@ import { ICommentDeleteDialogProps } from './types'
 const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
   visible,
   onClose,
+  onDeleted,
   commentId,
 }) => {
   const theme = useTheme()
@@ -25,7 +26,10 @@ const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
       variables: { id: commentId },
       // Errors are toasted by the mutation hook; keep the dialog open so the user can retry.
       onCompleted: (_response, errors) => {
-        if (!errors) onClose()
+        if (!errors) {
+          onDeleted?.()
+          onClose()
+        }
       },
     })
   }

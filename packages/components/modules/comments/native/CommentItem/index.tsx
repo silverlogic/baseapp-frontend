@@ -1,17 +1,15 @@
-import { FC, Suspense, lazy, useCallback, useEffect, useMemo, useState, useTransition } from 'react'
+import { FC, Suspense, lazy, useMemo } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/native/avatars'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { Pressable } from 'react-native'
-import { useRefetchableFragment } from 'react-relay'
 
-import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
-import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
-import { CommentItemFragmentQuery } from '../../common'
+import { DEFAULT_MAX_THREAD_DEPTH, useCommentItem } from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
+import { useCommentActionsContext } from '../context/CommentActionsProvider'
 import CommentPinBadge from './CommentPinBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
@@ -20,11 +18,8 @@ import { CommentItemProps } from './types'
 
 const CommentItem: FC<CommentItemProps> = ({
   comment: commentRef,
-  onLongPress,
-  onReply,
-  commentIdToExpand,
   threadDepth = 0,
-  maxThreadDepth = 5,
+  maxThreadDepth = DEFAULT_MAX_THREAD_DEPTH,
   RepliesList,
   RepliesListProps,
   Timestamp = DefaultTimestamp,
@@ -34,71 +29,20 @@ const CommentItem: FC<CommentItemProps> = ({
   const DefaultCommentsList = useMemo(() => lazy(() => import('../CommentsList')), [])
 
   const SelectedRepliesList = RepliesList ?? DefaultCommentsList
-  const [isRepliesExpanded, setIsRepliesExpanded] = useState(false)
-  const [isLoadingReplies, startLoadingReplies] = useTransition()
-  const [comment, refetch] = useRefetchableFragment<
-    CommentItemRefetchQuery,
-    CommentItem_comment$key
-  >(CommentItemFragmentQuery, commentRef)
+
+  const {
+    comment,
+    isRepliesExpanded,
+    isLoadingReplies,
+    showReplies,
+    hideReplies,
+    setAsReplyTarget,
+    hasReplies,
+    canReply,
+  } = useCommentItem({ comment: commentRef, threadDepth, maxThreadDepth })
+  const { openCommentActions } = useCommentActionsContext()
 
   const styles = createStyles()
-
-  const replyCount = comment.commentsCount?.total ?? 0
-  const hasReplies = replyCount > 0
-  const canReply = threadDepth < maxThreadDepth
-
-  const showReplies = useCallback(() => {
-    if (isRepliesExpanded) {
-      setIsRepliesExpanded(false)
-      return
-    }
-
-    startLoadingReplies(() => {
-      refetch(
-        { isRepliesExpanded: true },
-        {
-          fetchPolicy: 'store-or-network',
-          onComplete: (error) => {
-            if (error) {
-              // eslint-disable-next-line no-console
-              console.error('Error loading replies:', error)
-            } else {
-              setIsRepliesExpanded(true)
-            }
-          },
-        },
-      )
-    })
-  }, [isRepliesExpanded, refetch])
-
-  const hideReplies = useCallback(() => {
-    setIsRepliesExpanded(false)
-  }, [])
-
-  const replyToComment = () => {
-    onReply?.(comment)
-  }
-
-  useEffect(() => {
-    if (commentIdToExpand === comment.id && !isRepliesExpanded && hasReplies) {
-      startLoadingReplies(() => {
-        refetch(
-          { isRepliesExpanded: true },
-          {
-            fetchPolicy: 'network-only',
-            onComplete: (error) => {
-              if (error) {
-                // eslint-disable-next-line no-console
-                console.error('Error loading replies:', error)
-              } else {
-                setIsRepliesExpanded(true)
-              }
-            },
-          },
-        )
-      })
-    }
-  }, [commentIdToExpand, comment.id, isRepliesExpanded, hasReplies, refetch])
 
   const renderCommentsReplies = () => {
     if (!isRepliesExpanded || isLoadingReplies || !canReply) {
@@ -109,8 +53,6 @@ const CommentItem: FC<CommentItemProps> = ({
       <SelectedRepliesList
         target={comment}
         subscriptionsEnabled
-        onReply={onReply}
-        onLongPress={onLongPress}
         threadDepth={threadDepth + 1}
         maxThreadDepth={maxThreadDepth}
         isReplyList
@@ -131,7 +73,7 @@ const CommentItem: FC<CommentItemProps> = ({
 
   return (
     <>
-      <Pressable onLongPress={() => onLongPress?.(comment)}>
+      <Pressable onLongPress={() => openCommentActions(comment)}>
         <View style={styles.rootContainer}>
           <View style={styles.avatarContainer}>
             <AvatarWithPlaceholder imgSource={comment.profile?.image?.url} />
@@ -159,7 +101,7 @@ const CommentItem: FC<CommentItemProps> = ({
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
                 {canReply && (
                   <CommentReplyButton
-                    onReply={replyToComment}
+                    onReply={setAsReplyTarget}
                     commentId={comment.id}
                     shouldUseBottomSheetSafeComponents
                   />

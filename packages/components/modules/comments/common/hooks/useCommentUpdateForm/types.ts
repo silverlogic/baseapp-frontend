@@ -9,6 +9,8 @@ export interface UseCommentUpdateFormOptions {
   target?: CommentEditTarget | null
   /** Called when the edit finishes — successful submit or cancel. */
   onClose: () => void
+  /** Called only after a successful submit (e.g. native blurs the composer input). */
+  onSuccess?: () => void
 }
 
 export interface UseCommentUpdateFormReturn {

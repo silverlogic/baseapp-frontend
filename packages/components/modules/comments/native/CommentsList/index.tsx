@@ -1,9 +1,14 @@
-import { FC, useCallback, useEffect, useMemo, useRef } from 'react'
+import { FC, useCallback, useEffect, useRef } from 'react'
 
 import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
-import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
+import {
+  CommentsSubscription,
+  DEFAULT_MAX_THREAD_DEPTH,
+  NUMBER_OF_COMMENTS_TO_LOAD_NEXT,
+  useCommentList,
+} from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
 import CommentHideRepliesButton from './CommentHideRepliesButton'
 import { createStyles } from './styles'
@@ -13,13 +18,10 @@ import type { CommentsListProps } from './types'
 const getDefaultCommentItem = () => require('../CommentItem').default
 
 const CommentsList: FC<CommentsListProps> = ({
-  onReply = () => {},
-  commentIdToExpand,
-  onLongPress,
   target: targetRef,
   subscriptionsEnabled,
   threadDepth = 0,
-  maxThreadDepth = 5,
+  maxThreadDepth = DEFAULT_MAX_THREAD_DEPTH,
   isReplyList = false,
   onHideReplies = () => {},
   CommentItem,
@@ -31,16 +33,14 @@ const CommentsList: FC<CommentsListProps> = ({
   const CommentItemComponent = CommentItem ?? getDefaultCommentItem()
   const theme = useTheme()
   const styles = createStyles(theme)
-  const { data: target, loadNext, hasNext, isLoadingNext, refetch } = useCommentList(targetRef)
-  const refetchRef = useRef(refetch)
-
-  useEffect(() => {
-    refetchRef.current = refetch
-  }, [refetch])
-
-  const refetchWithOrder = useCallback(() => {
-    refetchRef.current({ orderBy: '-is_pinned,-created' }, { fetchPolicy: 'store-and-network' })
-  }, [])
+  const {
+    data: target,
+    comments,
+    loadNext,
+    hasNext,
+    isLoadingNext,
+    refetchWithOrder,
+  } = useCommentList(targetRef)
 
   const onRefetchReadyRef = useRef(onRefetchReady)
   onRefetchReadyRef.current = onRefetchReady
@@ -51,11 +51,6 @@ const CommentsList: FC<CommentsListProps> = ({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  const comments = useMemo(
-    () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
-    [target?.comments?.edges],
-  )
 
   const totalRepliesCount = target?.commentsCount?.total ?? 0
   const loadedRepliesCount = comments.length
@@ -72,15 +67,11 @@ const CommentsList: FC<CommentsListProps> = ({
 
     return (
       <CommentItemComponent
-        target={target}
         key={`comment-${comment.id}`}
         comment={comment}
-        onReply={onReply}
         threadDepth={threadDepth}
         maxThreadDepth={maxThreadDepth}
-        commentIdToExpand={commentIdToExpand}
         RepliesListProps={CommentsListProps}
-        onLongPress={onLongPress}
         {...CommentItemProps}
       />
     )
