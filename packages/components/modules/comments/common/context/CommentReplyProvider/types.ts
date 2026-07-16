@@ -6,15 +6,24 @@ export type CommentEditTarget = {
   mentionedProfileIds?: string[]
 }
 
-export type CommentReplyState = {
-  commentItemRef?: RefObject<HTMLDivElement | undefined>
+export type CommentReplyState<TElement = unknown> = {
+  commentItemRef?: RefObject<TElement | undefined>
   inReplyToId?: string
   name?: string | null
 }
 
-type CommentReplyFunctions = {
-  setCommentReply: (state: CommentReplyState) => void
-  resetCommentReply: () => void
+export type CommentComposerState<TElement = unknown> = CommentReplyState<TElement> & {
+  editingComment?: CommentEditTarget | null
+  commentIdToExpand?: string | null
 }
 
-export type UseCommentReply = CommentReplyState & CommentReplyFunctions
+type CommentComposerFunctions<TElement = unknown> = {
+  setCommentReply: (state: CommentReplyState<TElement>) => void
+  resetCommentReply: () => void
+  setCommentEdit: (target: CommentEditTarget) => void
+  resetCommentEdit: () => void
+  setCommentIdToExpand: (id: string | null) => void
+}
+
+export type UseCommentReply<TElement = unknown> = CommentComposerState<TElement> &
+  CommentComposerFunctions<TElement>

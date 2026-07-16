@@ -94,7 +94,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     ref,
   ) => {
     const { currentProfile } = useCurrentProfile()
-    const commentReply = useCommentReply()
+    const commentReply = useCommentReply<HTMLDivElement>()
     const isReply = !!commentReply.inReplyToId
 
     const form = useForm<SocialUpsertForm>({
