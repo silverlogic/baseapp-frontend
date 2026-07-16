@@ -19,7 +19,7 @@ const UseLeaveGroup = ({
   onClose,
 }: UseLeaveGroupProps) => {
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
 
   const getLeaveGroupDialogTextCopy = (
     type: ValueOf<typeof LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS>,
@@ -51,11 +51,10 @@ const UseLeaveGroup = ({
         connections: [ConnectionHandler.getConnectionID(roomId, 'ChatRoom_participants')],
       },
       onCompleted: (response) => {
-        if (
-          removingParticipantId &&
-          removingParticipantId !== profileId &&
-          !response?.chatRoomUpdate?.errors
-        ) {
+        // Transport errors are already toasted by useUpdateChatRoomMutation's wrapper; this
+        // flow isn't form-backed, so surface the payload errors here.
+        const errorMessage = sendMutationErrorToast(response?.chatRoomUpdate?.errors, undefined)
+        if (!errorMessage && removingParticipantId && removingParticipantId !== profileId) {
           sendToast('Member was successfully removed')
         }
         onClose()

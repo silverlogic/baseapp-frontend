@@ -54,6 +54,28 @@ describe('setFormRelayErrors', () => {
     })
   })
 
+  it('should fall back to a generic message when the error carries no messages', () => {
+    mockErrors = [
+      { field: 'name', messages: [] },
+      { field: 'age', messages: ['   '] },
+      { field: 'bio' },
+    ]
+    setFormRelayErrors(mockForm, mockErrors)
+
+    expect(mockForm.setError).toHaveBeenCalledWith('name', {
+      type: 'custom',
+      message: 'Something went wrong.',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('age', {
+      type: 'custom',
+      message: 'Something went wrong.',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('bio', {
+      type: 'custom',
+      message: 'Something went wrong.',
+    })
+  })
+
   it('should handle absence of errors', () => {
     mockErrors = []
     setFormRelayErrors(mockForm, mockErrors)

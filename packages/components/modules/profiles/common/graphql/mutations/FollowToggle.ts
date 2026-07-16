@@ -39,7 +39,7 @@ interface UseFollowToggleOptions {
 export const useFollowToggle = ({ targetId, perm, onCompleted }: UseFollowToggleOptions) => {
   const [commitMutation, isMutationInFlight] =
     useMutation<FollowToggleMutation>(FollowToggleMutationQuery)
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast } = useNotification()
   const { currentProfile } = useCurrentProfile()
 
   const toggleFollow = () => {
@@ -55,9 +55,7 @@ export const useFollowToggle = ({ targetId, perm, onCompleted }: UseFollowToggle
       },
       onCompleted: (_response, errors) => {
         onCompleted?.(_response, errors)
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
       },
     })
   }

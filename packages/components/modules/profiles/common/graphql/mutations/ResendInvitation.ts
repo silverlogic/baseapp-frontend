@@ -25,7 +25,7 @@ export const useResendInvitationMutation = (): [
   (config: UseMutationConfig<ResendInvitationMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<ResendInvitationMutation>(
     ResendInvitationMutationQuery,
   )
@@ -34,16 +34,17 @@ export const useResendInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        const payloadErrors =
-          response?.profileResendInvitation?.errors?.flatMap((error) => error?.messages ?? []) ?? []
+        const errorMessage = sendMutationErrorToast(
+          response?.profileResendInvitation?.errors,
+          errors,
+        )
 
-        if (errors?.length || payloadErrors.length) {
-          errors?.forEach((error) => sendToast(error.message, { type: 'error' }))
-          payloadErrors.forEach((message) => sendToast(message, { type: 'error' }))
-        } else if (response?.profileResendInvitation?.emailSent === false) {
-          sendToast('Invitation updated, but the email could not be sent', { type: 'warning' })
-        } else {
-          sendToast('Invitation resent successfully', { type: 'success' })
+        if (!errorMessage) {
+          if (response?.profileResendInvitation?.emailSent === false) {
+            sendToast('Invitation updated, but the email could not be sent', { type: 'warning' })
+          } else {
+            sendToast('Invitation resent successfully', { type: 'success' })
+          }
         }
         config?.onCompleted?.(response, errors)
       },

@@ -1,43 +1,41 @@
-import isArray from 'lodash/isArray'
+import { DEFAULT_ERROR_MESSAGE } from '../../../constants/errors'
 
-export const getApiErrorMessage = (
-  error: any,
-  { defaultMessage = 'Something went wrong.' } = {},
-) => {
+const toText = (value: unknown): string => {
+  if (Array.isArray(value)) {
+    return value.join(' ')
+  }
+  return typeof value === 'string' ? value : JSON.stringify(value)
+}
+
+const parseJsonObject = (raw: string): Record<string, unknown> | undefined => {
+  try {
+    const parsed = JSON.parse(raw)
+    return parsed && typeof parsed === 'object' ? parsed : undefined
+  } catch {
+    return undefined
+  }
+}
+
+const messageFromParsed = (parsed: Record<string, unknown>, raw: string) => {
+  if (parsed.detail != null) {
+    return toText(parsed.detail)
+  }
+  const firstKey = Object.keys(parsed)[0]
+  const potentialMessage = firstKey ? parsed[firstKey] : undefined
+  return potentialMessage === undefined ? raw : toText(potentialMessage)
+}
+
+export const getApiErrorMessage = (error: any, { defaultMessage = DEFAULT_ERROR_MESSAGE } = {}) => {
   let message = defaultMessage
 
   if (error?.message) {
-    try {
-      const parsedMessage = JSON.parse(error.message)
-      if (parsedMessage && typeof parsedMessage === 'object') {
-        if (parsedMessage.detail != null) {
-          message = isArray(parsedMessage.detail)
-            ? parsedMessage.detail.join(' ')
-            : parsedMessage.detail
-        } else {
-          const firstKey = Object.keys(parsedMessage)[0]
-          const potentialMessage = firstKey ? parsedMessage[firstKey] : undefined
-          if (potentialMessage !== undefined) {
-            message = isArray(potentialMessage)
-              ? potentialMessage.join(' ')
-              : String(potentialMessage)
-          } else {
-            message = error.message
-          }
-        }
-      } else {
-        message = error.message
-      }
-    } catch {
-      message = error.message
-    }
+    const parsed = parseJsonObject(error.message)
+    message = parsed ? messageFromParsed(parsed, error.message) : error.message
   }
 
   if (error?.response?.data) {
     const dataKey = Object.keys(error.response.data)[0]
-    const potentialMessage = (dataKey && error.response.data?.[dataKey]) ?? message
-
-    message = isArray(potentialMessage) ? potentialMessage.join(' ') : potentialMessage
+    message = toText((dataKey && error.response.data?.[dataKey]) ?? message)
   }
 
   return message

@@ -27,7 +27,7 @@ export const useSendMessageMutation = (): [
   (config: UseMutationConfig<SendMessageMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
     useMutation<SendMessageMutation>(SendMessageMutationQuery)
 
@@ -35,9 +35,7 @@ export const useSendMessageMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
 
         config?.onCompleted?.(response, errors)
       },
