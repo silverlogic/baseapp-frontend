@@ -1,4 +1,5 @@
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { graphql, useFragment, useMutation } from 'react-relay'
 
@@ -47,6 +48,7 @@ const ReactionButton = <TEvent,>({
   const target = useFragment(fragmentQuery, targetRef)
   const [commitMutation, isMutationInFlight] = useMutation<ReactionButtonMutation>(mutationQuery)
   const { currentProfile } = useCurrentProfile()
+  const { sendMutationErrorToast } = useNotification()
   const handleReaction = (e: TEvent) => {
     onClick?.(e)
 
@@ -89,7 +91,11 @@ const ReactionButton = <TEvent,>({
           },
         },
       },
-      onCompleted: () => {
+      onCompleted: (_response, errors) => {
+        if (sendMutationErrorToast(undefined, errors)) {
+          handleError?.()
+          return
+        }
         handleSuccess?.()
       },
       onError: () => {
