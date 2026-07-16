@@ -2,14 +2,25 @@ import { StyleSheet } from 'react-native'
 
 import { Theme } from '../../../../styles/native'
 
+const getBorderColor = (
+  { colors }: Theme,
+  { isFocused, isError }: { isFocused: boolean; isError?: boolean },
+) => {
+  if (isError && isFocused) return colors.error.main
+  if (isFocused) return colors.object.high
+  return colors.surface.border
+}
+
 export const createStyles = (
   theme: Theme,
   {
     isFocused,
+    isError,
     lineHeight,
     maxLines,
   }: {
     isFocused: boolean
+    isError?: boolean
     lineHeight: number
     maxLines: number
   },
@@ -24,7 +35,17 @@ export const createStyles = (
       borderRadius: 8,
       borderWidth: 1,
       borderStyle: 'solid',
-      borderColor: isFocused ? theme.colors.object.high : theme.colors.surface.border,
+      borderColor: getBorderColor(theme, { isFocused, isError }),
+    },
+    errorContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+      backgroundColor: 'transparent',
+    },
+    errorText: {
+      color: theme.colors.error.main,
     },
     toolContainer: {
       display: 'flex',

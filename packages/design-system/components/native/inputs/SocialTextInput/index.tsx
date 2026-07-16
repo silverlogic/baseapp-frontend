@@ -1,5 +1,6 @@
 import { forwardRef, useCallback, useState } from 'react'
 
+import { Ionicons } from '@expo/vector-icons'
 import { LayoutChangeEvent, TextInput as NativeTextInput, Pressable } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
@@ -20,6 +21,8 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
       toolStyle = {},
       editVariables = {},
       replyVariables = {},
+      error,
+      helperText,
       ...props
     },
     ref,
@@ -28,6 +31,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     const theme = useTheme()
     const styles = createStyles(theme, {
       isFocused: !!isFocused,
+      isError: !!error || !!helperText,
       lineHeight,
       maxLines,
     })
@@ -97,6 +101,14 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
           onBlur={handleBlur}
           onFocus={handleFocus}
         />
+        {!!helperText && (
+          <View style={styles.errorContainer}>
+            <Ionicons name="warning" size={15} color={theme.colors.error.main} />
+            <Text variant="caption" style={styles.errorText}>
+              {helperText}
+            </Text>
+          </View>
+        )}
         <View style={[toolStyle, styles.toolContainer]}>{children}</View>
       </View>
     )
