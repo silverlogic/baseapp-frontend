@@ -22,6 +22,7 @@ import { UseCommentUpdateFormOptions, UseCommentUpdateFormReturn } from './types
 const useCommentUpdateForm = ({
   target,
   onClose,
+  onSuccess,
 }: UseCommentUpdateFormOptions): UseCommentUpdateFormReturn => {
   const initialValues = useMemo<SocialUpsertForm>(
     () => ({
@@ -69,6 +70,7 @@ const useCommentUpdateForm = ({
         if (!mutationErrors?.length) {
           onClose()
           form.reset()
+          onSuccess?.()
         }
       },
     })

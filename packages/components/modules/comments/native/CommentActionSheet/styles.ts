@@ -4,39 +4,20 @@ import { StyleSheet } from 'react-native'
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
-    transparent: {
-      backgroundColor: 'transparent',
-    },
-    rootContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: 16,
-      flex: 1,
-      alignSelf: 'stretch',
-    },
-    contentContainer: {
-      display: 'flex',
-      flexDirection: 'column',
-      flex: 1,
-    },
-    disabledContentContainer: {
-      flexGrow: 1,
-      paddingHorizontal: 16,
-    },
-    bottomDrawerActionContainer: {
+    actionContainer: {
       paddingHorizontal: 16,
       paddingVertical: 12,
       gap: 4,
       borderBottomWidth: 1,
       borderBottomColor: theme.colors.surface.disabled,
     },
-    bottomDrawerDivider: {
+    destructiveContainer: {
       paddingHorizontal: 16,
       paddingVertical: 12,
       gap: 4,
       borderBottomWidth: 0,
     },
-    bottomDrawerPressable: {
+    pressable: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'flex-start',
