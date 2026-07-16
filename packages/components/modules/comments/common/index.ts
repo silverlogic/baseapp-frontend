@@ -7,6 +7,8 @@ export { default as withCommentReplyProvider } from './context/withCommentReplyP
 
 export * from './constants'
 
+export * from './utils'
+
 export * from './graphql/mutations/CommentCreate'
 export * from './graphql/mutations/CommentDelete'
 export * from './graphql/mutations/CommentPin'

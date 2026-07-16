@@ -1,6 +1,8 @@
 import { useMemo } from 'react'
 
-import { ConnectionHandler, graphql, useSubscription } from 'react-relay'
+import { graphql, useSubscription } from 'react-relay'
+
+import { getCommentsConnectionId } from '../../utils'
 
 export const CommentsSubscriptionQuery = graphql`
   subscription CommentsSubscription($connections: [ID!]!, $targetObjectId: ID) {
@@ -32,7 +34,7 @@ export const useCommentChangeSubscription = (targetObjectId?: string) => {
     const connections: string[] = []
 
     if (targetObjectId) {
-      connections.push(ConnectionHandler.getConnectionID(targetObjectId, 'CommentsList_comments'))
+      connections.push(getCommentsConnectionId(targetObjectId))
     }
 
     return {

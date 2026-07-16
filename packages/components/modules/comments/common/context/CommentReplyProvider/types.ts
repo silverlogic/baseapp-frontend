@@ -1,5 +1,11 @@
 import { RefObject } from 'react'
 
+export type CommentEditTarget = {
+  id: string
+  body?: string | null
+  mentionedProfileIds?: string[]
+}
+
 export type CommentReplyState = {
   commentItemRef?: RefObject<HTMLDivElement | undefined>
   inReplyToId?: string
