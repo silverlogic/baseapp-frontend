@@ -18,6 +18,8 @@ const useCommentItem = <TElement = unknown>({
   comment: commentRef,
   threadDepth = 0,
   maxThreadDepth = Infinity,
+  useProfileId = false,
+  profilePath = '/profile',
 }: UseCommentItemOptions): UseCommentItemReturn<TElement> => {
   const [comment, refetchCommentItem] = useRefetchableFragment<
     CommentItemRefetchQuery,
@@ -36,6 +38,10 @@ const useCommentItem = <TElement = unknown>({
   const hasReplies = totalCommentsCount > 0
   const hasUser = Boolean(comment?.user)
   const canReply = threadDepth < maxThreadDepth
+
+  const profileUrlPath = comment?.profile?.urlPath?.path
+  const profileUrl =
+    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
 
   const expandReplies = useCallback(
     (fetchPolicy: 'store-or-network' | 'network-only') => {
@@ -114,6 +120,7 @@ const useCommentItem = <TElement = unknown>({
     hasReplies,
     totalCommentsCount,
     canReply,
+    profileUrl,
   }
 }
 
