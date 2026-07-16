@@ -11,7 +11,7 @@ import {
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
-import { setFormRelayErrors } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -67,6 +67,7 @@ const WithComments: FC<CommentsProps> = ({
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
   const { currentProfile } = useCurrentProfile()
+  const { sendMutationErrorToast } = useNotification()
   const target = useFragment(CommentsFragmentQuery, targetRef)
   const [commitCreateMutation, isCreateMutationInFlight] = useCommentCreateMutation()
   const [commitUpdateMutation, isUpdateMutationInFlight] = useCommentUpdateMutation()
@@ -133,16 +134,12 @@ const WithComments: FC<CommentsProps> = ({
           },
         },
         onCompleted: (response, errors) => {
-          if (errors) {
-            console.error(errors)
-            return
-          }
-          const mutationErrors = response?.commentUpdate?.errors
-          setFormRelayErrors(form, mutationErrors)
-          if (!mutationErrors?.length) {
-            form.reset()
-            if (commentCreateRef && 'current' in commentCreateRef) commentCreateRef.current?.blur()
-          }
+          // Transport errors are already toasted by the mutation hook. Payload errors are
+          // toasted here because the native social input doesn't render form field errors.
+          if (errors) return
+          if (sendMutationErrorToast(response?.commentUpdate?.errors, undefined)) return
+          form.reset()
+          if (commentCreateRef && 'current' in commentCreateRef) commentCreateRef.current?.blur()
         },
       })
       handleEditCancel()
@@ -161,23 +158,20 @@ const WithComments: FC<CommentsProps> = ({
         connections: [connectionID],
       },
       onCompleted: (response, errors) => {
-        if (errors) {
-          console.error(errors)
-          return
-        }
-        const mutationErrors = response?.commentCreate?.errors
-        setFormRelayErrors(form, mutationErrors)
+        // Transport errors are already toasted by the mutation hook. Payload errors are
+        // toasted here (and keep the user in reply mode to retry) because the native
+        // social input doesn't render form field errors.
+        if (errors) return
+        if (sendMutationErrorToast(response?.commentCreate?.errors, undefined)) return
         if (replyVariables?.isReplyMode) {
           replyVariables?.onReplyCancel()
-          if (!mutationErrors?.length && id) {
+          if (id) {
             setCommentIdToExpand(id)
             setTimeout(() => setCommentIdToExpand(null), 100)
           }
         }
-        if (!mutationErrors?.length) {
-          form.reset()
-          if (commentCreateRef && 'current' in commentCreateRef) commentCreateRef.current?.blur()
-        }
+        form.reset()
+        if (commentCreateRef && 'current' in commentCreateRef) commentCreateRef.current?.blur()
       },
       onError: console.error,
     })
