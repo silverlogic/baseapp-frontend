@@ -1,7 +1,10 @@
+import { useCallback, useMemo } from 'react'
+
 import { graphql, usePaginationFragment } from 'react-relay'
 
 import { CommentsListPaginationQuery } from '../../../../../__generated__/CommentsListPaginationQuery.graphql'
 import { CommentsList_comments$key } from '../../../../../__generated__/CommentsList_comments.graphql'
+import { DEFAULT_COMMENTS_ORDER_BY } from '../../constants'
 
 export const CommentsListFragmentQuery = graphql`
   fragment CommentsList_comments on CommentsInterface
@@ -40,8 +43,23 @@ export const useCommentList = (targetRef: CommentsList_comments$key) => {
     CommentsListFragmentQuery,
     targetRef,
   )
+  const { data, refetch } = result
+
+  const comments = useMemo(
+    () => data?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
+    [data?.comments?.edges],
+  )
+
+  // Re-sorts the already-rendered list (e.g. after pin/unpin) without dropping it while the
+  // network response is in flight.
+  const refetchWithOrder = useCallback(() => {
+    refetch({ orderBy: DEFAULT_COMMENTS_ORDER_BY }, { fetchPolicy: 'store-and-network' })
+  }, [refetch])
+
   return {
     ...result,
-    refetch: result.refetch,
+    comments,
+    refetch,
+    refetchWithOrder,
   }
 }
