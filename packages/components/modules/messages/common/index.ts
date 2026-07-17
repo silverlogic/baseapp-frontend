@@ -39,5 +39,6 @@ export { default as useLeaveGroup } from './useLeaveGroup'
 export * from './useLeaveGroup/constants'
 
 export * from './constants'
+export * from './toggleGroupSelection'
 export type * from './types'
 export * from './utils'
