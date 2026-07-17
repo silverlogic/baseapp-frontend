@@ -17,6 +17,35 @@ export const CommentContainerWrapper = styled(Box, {
   }
 })
 
+export const ContentContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(1.5),
+}))
+
+export const TitleContainer = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+  justifyContent: 'flex-start',
+})
+
+export const NameRow = styled('div')(({ theme }) => ({
+  alignItems: 'center',
+  display: 'grid',
+  gap: theme.spacing(1),
+  gridTemplateColumns: 'repeat(2, max-content)',
+}))
+
+export const FooterRow = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+})
+
+export const ActionsRow = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateColumns: 'repeat(2, max-content)',
+}))
+
 export const CommentContainer = styled(Box)(({ theme }) => ({
   alignItems: 'self-start',
   backgroundColor: theme.palette.background.default,

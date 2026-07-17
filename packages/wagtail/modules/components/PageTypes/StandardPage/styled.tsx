@@ -2,7 +2,7 @@
 
 import { ComponentType } from 'react'
 
-import { Box, BoxProps, styled } from '@mui/material'
+import { Box, BoxProps, Container, styled } from '@mui/material'
 
 export const ImageBox: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
   position: 'relative',
@@ -21,4 +21,11 @@ export const ImageBox: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
     height: 'auto',
     objectFit: 'cover',
   },
+}))
+
+export const PageContainer = styled(Container)(({ theme }) => ({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(3),
+  marginBottom: theme.spacing(4),
 }))

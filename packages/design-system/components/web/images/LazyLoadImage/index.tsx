@@ -2,10 +2,10 @@
 
 import { forwardRef } from 'react'
 
-import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import { LazyLoadImage as ReactLazyLoadImage } from 'react-lazy-load-image-component'
 
+import { ImageContainer } from './styled'
 import { LazyLoadImageProps } from './types'
 import { getRatio } from './utils'
 
@@ -83,34 +83,22 @@ const LazyLoadImage = forwardRef<HTMLSpanElement, LazyLoadImageProps>(
     )
 
     return (
-      <Box
+      <ImageContainer
         ref={ref}
         component="span"
         className="component-image"
         sx={{
-          overflow: 'hidden',
-          position: 'relative',
-          verticalAlign: 'bottom',
-          display: 'inline-block',
           ...(!!ratio && {
             width: 1,
+            '& span.component-image-wrapper': { pt: getRatio(ratio) },
           }),
-          '& span.component-image-wrapper': {
-            width: 1,
-            height: 1,
-            verticalAlign: 'bottom',
-            backgroundSize: 'cover !important',
-            ...(!!ratio && {
-              pt: getRatio(ratio),
-            }),
-          },
           ...overlayStyles,
           ...sx,
         }}
         {...other}
       >
         {content}
-      </Box>
+      </ImageContainer>
     )
   },
 )

@@ -2,23 +2,16 @@
 
 import { FC } from 'react'
 
-import { Alert, Box, Button, Typography } from '@mui/material'
+import { Alert, Button, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
+
+import { Container } from './styled'
 
 const PermissionDenied: FC = () => {
   const router = useRouter()
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '50vh',
-        px: 3,
-      }}
-    >
+    <Container>
       <Alert severity="error" sx={{ mb: 3, maxWidth: 600 }}>
         <Typography variant="h6" gutterBottom>
           Permission Required
@@ -31,7 +24,7 @@ const PermissionDenied: FC = () => {
       <Button variant="contained" onClick={() => router.back()}>
         Go Back
       </Button>
-    </Box>
+    </Container>
   )
 }
 

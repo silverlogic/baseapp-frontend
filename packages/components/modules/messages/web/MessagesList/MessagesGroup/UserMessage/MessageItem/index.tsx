@@ -7,7 +7,6 @@ import {
   DownloadIcon,
   PenEditIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
-import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
@@ -17,7 +16,7 @@ import { ActionsOverlay, HOVER_OVERLAY_MODES } from '../../../../../../__shared_
 import { MessageItemFragment } from '../../../../../common'
 import { useMessageDeleteMutation } from '../../../../../common/graphql/mutations/MessageDelete'
 import MessageUpdate from '../../../../MessageUpdate'
-import { MessageItemContainer } from './styled'
+import { MessageContent, MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 
 const MessageItem: FC<MessageItemProps> = ({
@@ -70,20 +69,7 @@ const MessageItem: FC<MessageItemProps> = ({
       )
     }
 
-    const messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
-
-    return (
-      <Markdown
-        sx={{
-          maxWidth: '100%',
-          wordBreak: 'normal',
-          overflowWrap: 'anywhere',
-          color: messageColor,
-        }}
-      >
-        {message?.content}
-      </Markdown>
-    )
+    return <MessageContent isOwnMessage={isOwnMessage}>{message?.content}</MessageContent>
   }
 
   return (

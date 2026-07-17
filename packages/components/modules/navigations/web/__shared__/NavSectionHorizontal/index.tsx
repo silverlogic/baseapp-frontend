@@ -1,6 +1,7 @@
 import React, { FC, memo } from 'react'
 
 import NavList from './NavList'
+import { Container, ItemsContainer } from './styled'
 import { NavSectionHorizontalProps } from './types'
 
 const NavSectionHorizontal: FC<NavSectionHorizontalProps> = ({
@@ -8,8 +9,8 @@ const NavSectionHorizontal: FC<NavSectionHorizontalProps> = ({
   slotProps,
   hasTabLayout,
 }) => (
-  <div className="flex min-h-16 w-full items-center justify-around lg:hidden">
-    <div className="flex h-full gap-[6px]">
+  <Container>
+    <ItemsContainer>
       {navData.map((group) =>
         group.items.map((list) => (
           <NavList
@@ -21,8 +22,8 @@ const NavSectionHorizontal: FC<NavSectionHorizontalProps> = ({
           />
         )),
       )}
-    </div>
-  </div>
+    </ItemsContainer>
+  </Container>
 )
 
 export default memo(NavSectionHorizontal)

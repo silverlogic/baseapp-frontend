@@ -8,7 +8,7 @@ import Tooltip from '@mui/material/Tooltip'
 import Link from 'next/link'
 
 import type { NavItemProps } from '../../../../types'
-import { StyledNavItem } from './styled'
+import { IconContainer, StyledNavItem } from './styled'
 
 const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
   (
@@ -35,14 +35,14 @@ const NavItem = forwardRef<HTMLDivElement, NavItemProps>(
         disableRipple={hasChild}
         {...props}
       >
-        <div className="relative">
+        <IconContainer>
           {icon && (
             <Box component="span" className="icon">
               {icon}
             </Box>
           )}
           {hasChild && <ChevronIcon position="right" sx={{ position: 'absolute' }} />}
-        </div>
+        </IconContainer>
 
         {title && (
           <Box component="span" className="label">

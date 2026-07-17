@@ -14,7 +14,7 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Button, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -24,7 +24,7 @@ import { useChatRoom, useRoomListSubscription, useRoomsList } from '../../common
 import DefaultChatRoomItem from './ChatRoomItem'
 import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
 import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from './constants'
-import { Header, MainContainer } from './styled'
+import { CenteredProgress, Header, MainContainer } from './styled'
 import { AllChatRoomsListProps, ChatRoomNode, ChatTabValues } from './types'
 
 const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
@@ -153,19 +153,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
         <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
           {CHAT_TAB_LABEL[tabValue]}
         </Typography>
-        {isLoadingTab && (
-          <CircularProgress
-            size={15}
-            aria-hidden="true"
-            sx={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              marginTop: '-7.5px',
-              marginLeft: '-7.5px',
-            }}
-          />
-        )}
+        {isLoadingTab && <CenteredProgress size={15} aria-hidden="true" />}
       </Box>
     )
   }

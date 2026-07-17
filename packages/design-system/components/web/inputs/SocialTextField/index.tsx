@@ -15,6 +15,7 @@ import {
   Container as DefaultContainer,
   OutsideReplyContainer as DefaultOutsideReplyContainer,
   ReplyContainer as DefaultReplyContainer,
+  ReplyBar,
 } from './styled'
 import { SocialTextFieldProps } from './types'
 
@@ -61,7 +62,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
     <Container>
       {isReply && (
         <OutsideReplyContainer>
-          <div className="flex w-full justify-between rounded-md bg-background-neutral px-2 py-1">
+          <ReplyBar>
             <ReplyContainer>
               <CommentReplyIcon />
               <Typography variant="body2" color="text.secondary">
@@ -74,7 +75,7 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
             <IconButton onClick={onCancelReply} aria-label="cancel reply">
               <CloseIcon />
             </IconButton>
-          </div>
+          </ReplyBar>
         </OutsideReplyContainer>
       )}
       {renderField()}
