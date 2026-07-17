@@ -1,10 +1,9 @@
 'use client'
 
-import { FC, Suspense, useState } from 'react'
+import { FC, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
-import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
@@ -71,23 +70,11 @@ const AddContactToGroupDialog: FC<AddContactToGroupDialogProps> = ({
         },
       }}
       content={
-        open ? (
-          <Suspense
-            fallback={
-              <LoadingState
-                sx={{ paddingTop: 3, paddingBottom: 3 }}
-                CircularProgressProps={{ size: 15 }}
-                aria-label="loading groups"
-              />
-            }
-          >
-            <GroupsList
-              contactProfileId={contactProfileId}
-              selectedIds={selectedIds}
-              onToggle={handleToggle}
-            />
-          </Suspense>
-        ) : null
+        <GroupsList
+          contactProfileId={contactProfileId}
+          selectedIds={selectedIds}
+          onToggle={handleToggle}
+        />
       }
       action={
         <LoadingButton

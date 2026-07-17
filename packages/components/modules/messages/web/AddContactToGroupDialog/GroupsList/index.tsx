@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEventHandler, FC, useTransition } from 'react'
+import { ChangeEventHandler, FC, Suspense, useTransition } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
@@ -79,19 +79,35 @@ const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onTogg
     )
   }
 
-  const renderEmptyState = () => {
-    if (isPending) return <LoadingState CircularProgressProps={{ size: 15 }} />
-    if (searchValue) return <SearchNotFoundState />
+  const renderContent = () => {
+    if (edges.length === 0) {
+      if (isPending) return <LoadingState CircularProgressProps={{ size: 15 }} />
+      if (searchValue) return <SearchNotFoundState />
+
+      return (
+        <Box sx={{ display: 'grid', gap: 1, justifyItems: 'center', padding: 3 }}>
+          <Typography variant="subtitle2" color="text.primary">
+            No groups yet
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            You can only add contacts to groups you manage.
+          </Typography>
+        </Box>
+      )
+    }
 
     return (
-      <Box sx={{ display: 'grid', gap: 1, justifyItems: 'center', padding: 3 }}>
-        <Typography variant="subtitle2" color="text.primary">
-          No groups yet
-        </Typography>
-        <Typography variant="caption" color="text.secondary">
-          You can only add contacts to groups you manage.
-        </Typography>
-      </Box>
+      <Virtuoso
+        data={edges}
+        itemContent={(_index, item) => renderItem(item)}
+        style={{ height: '100vh', maxHeight: '400px', scrollbarWidth: 'none' }}
+        components={{
+          Footer: renderLoadingState,
+        }}
+        endReached={() => {
+          if (hasNext && !isLoadingNext) loadNext(NUMBER_OF_GROUPS_TO_LOAD)
+        }}
+      />
     )
   }
 
@@ -106,23 +122,23 @@ const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onTogg
           isPending={isPending}
         />
       </SearchbarContainer>
-      {edges.length === 0 ? (
-        renderEmptyState()
-      ) : (
-        <Virtuoso
-          data={edges}
-          itemContent={(_index, item) => renderItem(item)}
-          style={{ height: '100vh', maxHeight: '400px', scrollbarWidth: 'none' }}
-          components={{
-            Footer: renderLoadingState,
-          }}
-          endReached={() => {
-            if (hasNext && !isLoadingNext) loadNext(NUMBER_OF_GROUPS_TO_LOAD)
-          }}
-        />
-      )}
+      {renderContent()}
     </>
   )
 }
 
-export default GroupsList
+const SuspendedGroupsList: FC<GroupsListProps> = (props) => (
+  <Suspense
+    fallback={
+      <LoadingState
+        sx={{ paddingTop: 3, paddingBottom: 3 }}
+        CircularProgressProps={{ size: 15 }}
+        aria-label="loading groups"
+      />
+    }
+  >
+    <GroupsList {...props} />
+  </Suspense>
+)
+
+export default SuspendedGroupsList
