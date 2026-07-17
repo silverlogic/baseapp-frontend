@@ -19,7 +19,15 @@ import DefaultCommentPinnedBadge from './CommentPinnedBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
 import CommentsReplies from './CommentsReplies'
-import { CommentContainerWrapper, CommentContainer as DefaultCommentContainer } from './styled'
+import {
+  ActionsRow,
+  CommentContainerWrapper,
+  ContentContainer,
+  CommentContainer as DefaultCommentContainer,
+  FooterRow,
+  NameRow,
+  TitleContainer,
+} from './styled'
 import { CommentItemProps, CustomizableCommentItemProps } from './types'
 import useCommentOptions from './useCommentOptions'
 
@@ -165,16 +173,16 @@ const CommentItem: FC<CommentItemProps> = ({
               onClick={() => router.push(profileUrl)}
             />
 
-            <div className="grid gap-3">
-              <div className="grid grid-cols-1 justify-start">
-                <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-2">
+            <ContentContainer>
+              <TitleContainer>
+                <NameRow>
                   {renderProfileName()}
                   <CommentPinnedBadge isPinned={comment.isPinned} />
-                </div>
+                </NameRow>
                 {renderCommentContent()}
-              </div>
-              <div className="flex justify-between">
-                <div className="grid grid-cols-[repeat(2,max-content)] gap-4">
+              </TitleContainer>
+              <FooterRow>
+                <ActionsRow>
                   <CommentReactionButton target={comment} />
                   <CommentReplyButton
                     onReply={replyToComment}
@@ -183,10 +191,10 @@ const CommentItem: FC<CommentItemProps> = ({
                     totalCommentsCount={totalCommentsCount}
                     isDisabled={!hasUser && (totalCommentsCount ?? 0) === 0}
                   />
-                </div>
+                </ActionsRow>
                 <Timestamp date={comment.created} />
-              </div>
-            </div>
+              </FooterRow>
+            </ContentContainer>
           </CommentContainer>
         </ActionsOverlay>
       </CommentContainerWrapper>

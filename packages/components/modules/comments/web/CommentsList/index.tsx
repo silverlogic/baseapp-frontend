@@ -8,6 +8,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
 import DefaultCommentItem from '../CommentItem'
 import DefaultEmptyState from './EmptyState'
+import { HeaderSpacer, ScrollContainer } from './styled'
 import type { CommentsListProps } from './types'
 
 const CommentsList: FC<CommentsListProps> = ({
@@ -50,7 +51,7 @@ const CommentsList: FC<CommentsListProps> = ({
   const renderHeader = () => {
     if (comments.length === 0) return null
 
-    return <div className="h-2" />
+    return <HeaderSpacer />
   }
 
   const renderLoadingState = () => {
@@ -68,7 +69,8 @@ const CommentsList: FC<CommentsListProps> = ({
   return (
     <>
       {subscriptionsEnabled && <CommentsSubscription targetObjectId={target.id} />}
-      <div className="overflow-x-auto hide-scrollbar">
+      {/* `hide-scrollbar` is a design-system tailwind plugin class kept as a documented exception (BA-3207) */}
+      <ScrollContainer className="hide-scrollbar">
         <Virtuoso
           useWindowScroll
           data={comments}
@@ -86,7 +88,7 @@ const CommentsList: FC<CommentsListProps> = ({
           }}
           {...VirtuosoProps}
         />
-      </div>
+      </ScrollContainer>
     </>
   )
 }

@@ -9,12 +9,13 @@ import {
 import { Typography } from '@mui/material'
 
 import { ReactionButton } from '../../../../__shared__/web'
+import { CounterContainer } from './styled'
 import { CommentReactionButtonProps } from './types'
 
 const CommentReactionButton: FC<CommentReactionButtonProps> = ({ target: targetRef, onClick }) => (
   <ReactionButton onClick={onClick} target={targetRef} reactionType="LIKE">
     {({ handleReaction, target }) => (
-      <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
+      <CounterContainer>
         <IconButton onClick={handleReaction} aria-label={`react to comment ${target.id}`}>
           {target?.myReaction?.id ? (
             <FavoriteSelectedIcon sx={{ color: 'error.main' }} />
@@ -29,7 +30,7 @@ const CommentReactionButton: FC<CommentReactionButtonProps> = ({ target: targetR
         >
           {target?.reactionsCount?.total}
         </Typography>
-      </div>
+      </CounterContainer>
     )}
   </ReactionButton>
 )

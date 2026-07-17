@@ -7,13 +7,7 @@ import { NotificationBellIcon as DefaultNotificationBellIcon } from '@baseapp-fr
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { tw } from '@baseapp-frontend/design-system/utils/web'
 
-import {
-  Button,
-  Badge as DefaultBadge,
-  Drawer as DefaultDrawer,
-  Typography,
-  alpha,
-} from '@mui/material'
+import { Badge as DefaultBadge, Drawer as DefaultDrawer, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { m } from 'framer-motion'
 import { useFragment, useLazyLoadQuery } from 'react-relay'
@@ -27,6 +21,7 @@ import {
   NotificationsPopoverQuery,
 } from '../../common'
 import DefaultNotificationsList from '../NotificationsList'
+import { NotificationsButton } from './styled'
 import { NotificationsPopoverProps } from './types'
 
 const NotificationsPopover: FC<NotificationsPopoverProps> = ({
@@ -72,25 +67,8 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   return (
     <>
       {showLabel ? (
-        <Button
-          sx={{
-            display: 'flex',
-            width: '100%',
-            flexWrap: 'wrap',
-            justifyContent: 'start',
-            alignItems: 'center',
-            gap: 2,
-            p: 1,
-            ...(currentLayout === 'mini' && {
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: 0,
-              p: 0.5,
-            }),
-            '&:hover': {
-              backgroundColor: (theme) => alpha(theme.palette.grey[500], 0.08),
-            },
-          }}
+        <NotificationsButton
+          mini={currentLayout === 'mini'}
           variant="text"
           role="button"
           tabIndex={0}
@@ -116,7 +94,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
               Notifications
             </Typography>
           )}
-        </Button>
+        </NotificationsButton>
       ) : (
         <IconButton
           component={m.button}

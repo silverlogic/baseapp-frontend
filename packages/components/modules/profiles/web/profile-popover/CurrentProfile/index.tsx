@@ -5,13 +5,15 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 
 import { Box, Typography } from '@mui/material'
 
+import { Container } from './styled'
+
 const CurrentProfile: FC = () => {
   const { currentProfile: profile } = useCurrentProfile()
 
   if (!profile) return null
 
   return (
-    <Box sx={{ m: 1.5, mb: 0, px: 1, py: 0.75, gap: 1.5 }} display="flex" alignItems="center">
+    <Container>
       <AvatarWithPlaceholder
         width={40}
         height={40}
@@ -30,7 +32,7 @@ const CurrentProfile: FC = () => {
           </Typography>
         )}
       </Box>
-    </Box>
+    </Container>
   )
 }
 

@@ -5,11 +5,11 @@ import { FC } from 'react'
 import { withController } from '@baseapp-frontend/utils'
 
 import { CircularProgress, InputAdornment } from '@mui/material'
-import { Box } from '@mui/system'
 
 import IconButton from '../../buttons/IconButton'
 import Iconify from '../../images/Iconify'
 import { PureTextField } from '../TextField'
+import { SpinnerContainer } from './styled'
 import { SearchbarProps } from './types'
 
 const Searchbar: FC<SearchbarProps> = ({
@@ -35,16 +35,9 @@ const Searchbar: FC<SearchbarProps> = ({
       startAdornment: (
         <InputAdornment position="start">
           {isPending ? (
-            <Box
-              sx={{
-                display: 'flex',
-                marginRight: '4px',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
+            <SpinnerContainer>
               <CircularProgress size={16} />
-            </Box>
+            </SpinnerContainer>
           ) : (
             <Iconify icon="eva:search-fill" />
           )}

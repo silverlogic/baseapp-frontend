@@ -18,6 +18,7 @@ import { ReactionButtonWithQuery as Query } from '../../../../../../__generated_
 // TODO: review this import
 import { CommentItemFragmentQuery } from '../../../../../comments/common'
 import { ReactionButtonProps } from '../../types'
+import { CounterContainer } from './styled'
 
 const ReactionButtonWithQuery = (props: ReactionButtonProps) => {
   const data = useLazyLoadQuery<Query>(
@@ -35,7 +36,7 @@ const ReactionButtonWithQuery = (props: ReactionButtonProps) => {
   return (
     <ReactionButton {...props} target={comment as CommentItem_comment$data}>
       {({ handleReaction, isLoading, target }) => (
-        <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
+        <CounterContainer>
           <IconButton onClick={handleReaction} isLoading={isLoading}>
             {target?.myReaction?.id ? (
               <FavoriteSelectedIcon sx={{ color: 'error.main' }} />
@@ -46,7 +47,7 @@ const ReactionButtonWithQuery = (props: ReactionButtonProps) => {
           <Typography variant="caption" color="text.secondary">
             {target?.reactionsCount?.total}
           </Typography>
-        </div>
+        </CounterContainer>
       )}
     </ReactionButton>
   )

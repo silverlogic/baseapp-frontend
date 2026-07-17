@@ -3,6 +3,7 @@ import React, { FC } from 'react'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { CheckMarkIcon, CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { ActionsContainer } from './styled'
 import { UpdateSubmitActionsProps } from './types'
 
 const UpdateSubmitActions: FC<UpdateSubmitActionsProps> = ({
@@ -12,14 +13,14 @@ const UpdateSubmitActions: FC<UpdateSubmitActionsProps> = ({
   cancelAriaLabel = 'cancel comment edit',
   handleEditCancel = () => {},
 }) => (
-  <div className="grid grid-cols-[max-content_max-content] gap-2">
+  <ActionsContainer>
     <IconButton onClick={handleEditCancel} aria-label={cancelAriaLabel}>
       <CloseIcon />
     </IconButton>
     <IconButton type="submit" form={formId} aria-label={ariaLabel} disabled={disabled}>
       <CheckMarkIcon />
     </IconButton>
-  </div>
+  </ActionsContainer>
 )
 
 export default UpdateSubmitActions
