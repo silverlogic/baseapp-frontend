@@ -19,3 +19,4 @@ export { default as GroupChatProvider } from '../common/context/GroupChatProvide
 export { useGroupChatCreate } from '../common/context/GroupChatProvider'
 export { default as useCreateGroupChatMutation } from '../common/graphql/mutations/CreateGroupChat'
 export { default as SingleChatDetailsPage } from './SingleChatDetailsPage'
+export { default as AddContactToGroupPage } from './AddContactToGroupPage'

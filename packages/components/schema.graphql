@@ -116,6 +116,9 @@ type ChatRoom implements Node {
   otherParticipant: ChatRoomParticipant
   isSoleAdmin: Boolean
   participantIds: [ID]
+
+  """Whether the given profile is a participant of this room."""
+  isParticipant(profileId: ID!): Boolean
 }
 
 input ChatRoomArchiveInput {
@@ -264,6 +267,38 @@ type ChatRoomReadMessagesPayload {
   clientMutationId: String
 }
 
+input ChatRoomsAddParticipantInput {
+  """Relay id of the acting profile (must be manageable)."""
+  profileId: ID!
+
+  """Relay id of the profile to add to the rooms."""
+  participantProfileId: ID!
+
+  """Relay ids of the group rooms to add the participant to."""
+  roomIds: [ID!]!
+  clientMutationId: String
+}
+
+"""
+Add one profile as a MEMBER participant to multiple group chat rooms at once.
+
+All-or-nothing: if the acting profile can't add participants to any of the
+requested rooms, nothing is written. Rooms where the profile is already a
+participant are silently skipped (idempotent).
+"""
+type ChatRoomsAddParticipantPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+
+  """All requested rooms, after the update."""
+  rooms: [ChatRoom]
+
+  """Participant rows actually created (already-member rooms are skipped)."""
+  addedParticipants: [ChatRoomParticipant]
+  clientMutationId: String
+}
+
 input ChatRoomSendMessageInput {
   roomId: ID!
   profileId: ID!
@@ -298,6 +333,7 @@ interface ChatRoomsInterface {
     unreadMessages: Boolean
     archived: Boolean
     isGroup: Boolean
+    manageable: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
 }
@@ -915,6 +951,15 @@ type Mutation {
   commentDelete(input: CommentDeleteInput!): CommentDeletePayload
   chatRoomCreate(input: ChatRoomCreateInput!): ChatRoomCreatePayload
   chatRoomUpdate(input: ChatRoomUpdateInput!): ChatRoomUpdatePayload
+
+  """
+  Add one profile as a MEMBER participant to multiple group chat rooms at once.
+  
+  All-or-nothing: if the acting profile can't add participants to any of the
+  requested rooms, nothing is written. Rooms where the profile is already a
+  participant are silently skipped (idempotent).
+  """
+  chatRoomsAddParticipant(input: ChatRoomsAddParticipantInput!): ChatRoomsAddParticipantPayload
   chatRoomSendMessage(input: ChatRoomSendMessageInput!): ChatRoomSendMessagePayload
   chatRoomEditMessage(input: ChatRoomEditMessageInput!): ChatRoomEditMessagePayload
   chatRoomDeleteMessage(input: ChatRoomDeleteMessageInput!): ChatRoomDeleteMessagePayload
@@ -1350,6 +1395,7 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
     unreadMessages: Boolean
     archived: Boolean
     isGroup: Boolean
+    manageable: Boolean
   ): ChatRoomConnection!
   chatroomparticipantSet(first: Int, last: Int, offset: Int, after: String, before: String, q: String): ChatRoomParticipantConnection!
   unreadmessagecountSet(first: Int, last: Int, offset: Int, after: String, before: String): UnreadMessageCountConnection!
@@ -1417,6 +1463,7 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
     unreadMessages: Boolean
     archived: Boolean
     isGroup: Boolean
+    manageable: Boolean
   ): ChatRoomConnection
   unreadMessagesCount: Int
   target: ProfileInterface

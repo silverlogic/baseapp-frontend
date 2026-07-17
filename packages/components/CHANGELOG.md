@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 2.0.1
+
+### Patch Changes
+
+- RN add contact to multiple Groups
+
 ## 2.0.0
 
 ### Patch Changes
