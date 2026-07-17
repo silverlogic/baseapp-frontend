@@ -1,3 +1,5 @@
+import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
+
 import { Box, styled } from '@mui/material'
 
 import { MessageItemContainerProps } from './types'
@@ -23,3 +25,12 @@ export const MessageItemContainer = styled(Box, {
     },
   }
 })
+
+export const MessageContent = styled(Markdown, {
+  shouldForwardProp: (prop) => prop !== 'isOwnMessage',
+})<{ isOwnMessage: boolean }>(({ theme, isOwnMessage }) => ({
+  color: isOwnMessage ? theme.palette.text.primary : theme.palette.primary.contrastText,
+  maxWidth: '100%',
+  overflowWrap: 'anywhere',
+  wordBreak: 'normal',
+}))

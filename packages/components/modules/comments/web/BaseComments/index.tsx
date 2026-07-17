@@ -5,6 +5,7 @@ import { useFragment } from 'react-relay'
 import { CommentsFragmentQuery, useCommentReply } from '../../common'
 import DefaultCommentCreate from '../CommentCreate'
 import DefaultCommentsList from '../CommentsList'
+import { Container } from './styled'
 import { BaseCommentsProps } from './types'
 
 /**
@@ -65,7 +66,7 @@ const BaseComments: FC<BaseCommentsProps> = ({
   }
 
   return (
-    <div className="grid pb-4">
+    <Container>
       <CommentsList
         target={target}
         subscriptionsEnabled={subscriptionsEnabledBoolean}
@@ -73,7 +74,7 @@ const BaseComments: FC<BaseCommentsProps> = ({
         {...CommentsListProps}
       />
       <CommentCreate ref={commentCreateRef} targetObjectId={target.id} {...CommentCreateProps} />
-    </div>
+    </Container>
   )
 }
 

@@ -4,18 +4,19 @@ import { PinIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Typography } from '@mui/material'
 
+import { BadgeContainer } from './styled'
 import { CommentPinnedBadgeProps } from './types'
 
 const CommentPinnedBadge: FC<CommentPinnedBadgeProps> = ({ isPinned }) => {
   if (!isPinned) return null
 
   return (
-    <div className="grid grid-cols-[repeat(2,max-content)] items-center gap-1">
+    <BadgeContainer>
       <PinIcon />
       <Typography variant="body2" color="text.secondary">
         Pinned
       </Typography>
-    </div>
+    </BadgeContainer>
   )
 }
 

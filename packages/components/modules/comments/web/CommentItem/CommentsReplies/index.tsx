@@ -8,7 +8,7 @@ import {
   NUMBER_OF_COMMENTS_TO_LOAD_NEXT,
   useCommentList,
 } from '../../../common'
-import { LoadMoreRepliesButton } from './styled'
+import { LoadMoreRepliesButton, Spacer } from './styled'
 import { CommentsRepliesProps } from './types'
 
 const CommentsReplies: FC<CommentsRepliesProps> = ({
@@ -47,7 +47,7 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   const renderHeader = () => {
     if (comments.length === 0) return null
 
-    return <div className="h-2" />
+    return <Spacer />
   }
 
   const renderLoadingMoreButton = () => {

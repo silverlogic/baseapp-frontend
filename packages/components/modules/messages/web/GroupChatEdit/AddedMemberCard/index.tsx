@@ -3,7 +3,6 @@
 import { FC } from 'react'
 
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
-import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { FilledCloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, Typography } from '@mui/material'
@@ -11,7 +10,7 @@ import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment } from '../../../../profiles/common'
-import { MainContainer } from './styled'
+import { MainContainer, RemoveMemberButton } from './styled'
 import { AddedMemberCardProps } from './types'
 
 const AddedMemberCard: FC<AddedMemberCardProps> = ({ profile, handleRemoveMember }) => {
@@ -20,18 +19,9 @@ const AddedMemberCard: FC<AddedMemberCardProps> = ({ profile, handleRemoveMember
   return (
     <MainContainer key={`chat-room-item-${id}`}>
       <Box sx={{ position: 'relative' }}>
-        <IconButton
-          size="small"
-          sx={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            zIndex: 1,
-          }}
-          onClick={() => handleRemoveMember(profile)}
-        >
+        <RemoveMemberButton size="small" onClick={() => handleRemoveMember(profile)}>
           <FilledCloseIcon />
-        </IconButton>
+        </RemoveMemberButton>
         <AvatarWithPlaceholder
           width={64}
           height={64}

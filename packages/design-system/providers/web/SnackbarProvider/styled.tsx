@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Alert, Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const SnackbarContentContainer = styled(Box)(({ theme }) => ({
@@ -19,4 +19,11 @@ export const SnackbarContentContainer = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     maxWidth: '100%',
   },
+}))
+
+export const StyledAlert = styled(Alert)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  border: 'none',
+  color: theme.palette.text.primary,
+  width: '100%',
 }))

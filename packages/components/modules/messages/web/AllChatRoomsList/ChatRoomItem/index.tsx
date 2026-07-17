@@ -24,7 +24,7 @@ import {
   useTitleAndImage,
   useUnreadChatMutation,
 } from '../../../common'
-import { StyledChatCard } from './styled'
+import { Dot, StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
 import { formatDate, getLastMessagePreview } from './utils'
 
@@ -135,16 +135,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
               <Typography variant="caption" color="text.secondary" noWrap>
                 {formatDate(lastMessageTime)}
               </Typography>
-              <Box
-                sx={{
-                  display: 'inline-block',
-                  height: '6px',
-                  width: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: 'text.disabled',
-                  marginX: '8px',
-                }}
-              />
+              <Dot />
               <TypographyWithEllipsis variant="caption" color="text.secondary">
                 {lastMessage}
               </TypographyWithEllipsis>
@@ -153,6 +144,8 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
             <div />
           )}
         </Box>
+        {/* sx kept: `Badge` is a caller-injectable component prop — a static styled() wrapper
+            would drop the styles for injected badges (BA-3207 documented exception) */}
         <Badge
           sx={{ marginRight: '12px', justifySelf: 'center', display: 'flex', alignItems: 'center' }}
           badgeContent={unreadMessagesCountFragment.unreadMessages?.count || ''}
