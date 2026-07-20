@@ -41,16 +41,18 @@ const CommentItem: FC<CommentItemProps> = ({
     hasUser,
     hasReplies,
     canReply,
-    profileUrl,
   } = useCommentItem({ comment: commentRef, threadDepth, maxThreadDepth })
   const { openCommentActions } = useCommentActionsContext()
   const router = useRouter()
 
   const styles = createStyles()
 
+  // Navigate only to a registered urlPath: the id fallback (`/profile/<id>`) is a web route
+  // with no native equivalent — the [...path] catch-all would land on "Not Found".
+  const profileUrlPath = comment?.profile?.urlPath?.path
   const goToProfile = () => {
-    if (!hasUser || !profileUrl) return
-    router.push(profileUrl as Href)
+    if (!hasUser || !profileUrlPath) return
+    router.push(profileUrlPath as Href)
   }
 
   const openActions = () => openCommentActions(comment)
@@ -117,7 +119,10 @@ const CommentItem: FC<CommentItemProps> = ({
             <View style={styles.footerContainer}>
               <View style={styles.buttonContainer}>
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
-                {canReply && (
+                {/* hasUser: replying targets the author; a deleted-user comment would render
+                    an enabled button whose shared handler no-ops (setAsReplyTarget guards on
+                    hasUser), so hide it instead. */}
+                {canReply && hasUser && (
                   <CommentReplyButton
                     onReply={setAsReplyTarget}
                     commentId={comment.id}

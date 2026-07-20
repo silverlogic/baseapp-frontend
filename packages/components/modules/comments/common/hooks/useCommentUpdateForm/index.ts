@@ -23,6 +23,7 @@ const useCommentUpdateForm = ({
   target,
   onClose,
   onSuccess,
+  exitOnSubmit = false,
 }: UseCommentUpdateFormOptions): UseCommentUpdateFormReturn => {
   const initialValues = useMemo<SocialUpsertForm>(
     () => ({
@@ -74,6 +75,10 @@ const useCommentUpdateForm = ({
         }
       },
     })
+
+    if (exitOnSubmit) {
+      onClose()
+    }
   }
 
   const cancel = () => {

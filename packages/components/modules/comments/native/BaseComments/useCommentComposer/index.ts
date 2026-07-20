@@ -38,6 +38,8 @@ const useCommentComposer = ({
     target: editingComment,
     onClose: resetCommentEdit,
     onSuccess: () => onSubmitSuccess?.(),
+    // Pre-refactor native behavior: the edit banner clears as soon as the user submits.
+    exitOnSubmit: true,
   })
 
   const isEditMode = !!editingComment

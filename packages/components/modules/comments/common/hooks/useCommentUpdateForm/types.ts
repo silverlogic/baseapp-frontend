@@ -11,6 +11,12 @@ export interface UseCommentUpdateFormOptions {
   onClose: () => void
   /** Called only after a successful submit (e.g. native blurs the composer input). */
   onSuccess?: () => void
+  /**
+   * Exit the edit optimistically: call `onClose` right after firing the mutation instead of
+   * waiting for it to succeed. The native composer uses this so the "Editing your comment"
+   * banner clears on submit (its pre-refactor behavior); web waits for success.
+   */
+  exitOnSubmit?: boolean
 }
 
 export interface UseCommentUpdateFormReturn {
