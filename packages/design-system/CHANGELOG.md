@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 1.4.1
+
+### Patch Changes
+
+- 5200c84: Fix Dropzone multi-file gallery: clicking the remove (×) icon or the image preview no longer bubbles to the dropzone root and re-opens the file picker; the remove button now has an explicit type="button" so it doesn't submit enclosing forms
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+
 ## 1.4.0
 
 ### Minor Changes
