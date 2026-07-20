@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
 
 import { useRefetchableFragment } from 'react-relay'
+import { useShallow } from 'zustand/react/shallow'
 
 import { CommentItemRefetchQuery } from '../../../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../../../__generated__/CommentItem_comment.graphql'
+import { UseCommentReply } from '../../context/CommentReplyProvider/types'
 import useCommentReply from '../../context/useCommentReply'
 import { useCommentDeleteMutation } from '../../graphql/mutations/CommentDelete'
 import { CommentItemFragmentQuery } from '../../graphql/queries/CommentItem'
@@ -26,8 +28,18 @@ const useCommentItem = <TElement = unknown>({
     CommentItem_comment$key
   >(CommentItemFragmentQuery, commentRef)
 
-  const { commentIdToExpand, setCommentIdToExpand, setCommentReply, resetCommentReply } =
-    useCommentReply<TElement>()
+  // Per-item selective subscription: the store actions are stable and `isExpandTarget` is a
+  // boolean, so this item only re-renders when ITS expand signal flips — not on every
+  // reply/edit/expand store write across the thread.
+  const { isExpandTarget, setCommentIdToExpand, setCommentReply, resetCommentReply } =
+    useCommentReply(
+      useShallow((state: UseCommentReply) => ({
+        isExpandTarget: !!comment?.id && state.commentIdToExpand === comment.id,
+        setCommentIdToExpand: state.setCommentIdToExpand,
+        setCommentReply: state.setCommentReply,
+        resetCommentReply: state.resetCommentReply,
+      })),
+    )
 
   const commentItemRef = useRef<TElement | undefined>(undefined)
   const [isRepliesExpanded, setIsRepliesExpanded] = useState(false)
@@ -77,19 +89,12 @@ const useCommentItem = <TElement = unknown>({
   // Consume-once: expand this comment's thread right after one of its replies is created
   // (`useCommentCreateForm` with `expandRepliesOnSuccess` sets the signal).
   useEffect(() => {
-    if (commentIdToExpand !== comment?.id) return
+    if (!isExpandTarget) return
     if (!isRepliesExpanded && hasReplies) {
       expandReplies('network-only')
     }
     setCommentIdToExpand(null)
-  }, [
-    commentIdToExpand,
-    comment?.id,
-    isRepliesExpanded,
-    hasReplies,
-    expandReplies,
-    setCommentIdToExpand,
-  ])
+  }, [isExpandTarget, isRepliesExpanded, hasReplies, expandReplies, setCommentIdToExpand])
 
   const setAsReplyTarget = () => {
     if (!hasUser) return

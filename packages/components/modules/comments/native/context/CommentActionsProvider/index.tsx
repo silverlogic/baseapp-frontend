@@ -95,13 +95,14 @@ const CommentActionsProvider: FC<CommentActionsProviderProps> = ({ children, onP
   return (
     <CommentActionsContext.Provider value={contextValue}>
       {children}
-      {selectedComment && (
-        <CommentActionSheet
-          actions={actions}
-          bottomDrawerRef={bottomDrawerRef}
-          onActionPress={handleActionPress}
-        />
-      )}
+      {/* Always mounted (closed): gorhom's BottomSheetModal only opens via present() on a
+          mounted ref, so gating the sheet on selectedComment would make the FIRST long-press
+          a no-op — present() would run before the modal exists. */}
+      <CommentActionSheet
+        actions={actions}
+        bottomDrawerRef={bottomDrawerRef}
+        onActionPress={handleActionPress}
+      />
       {selectedComment?.id && (
         <CommentDeleteDialog
           visible={isDeleting}
