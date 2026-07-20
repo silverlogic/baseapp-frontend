@@ -1,5 +1,16 @@
 # @baseapp-frontend/wagtail
 
+## 2.0.1
+
+### Patch Changes
+
+- 087d0b5: Bump axios to 1.18.0 to fix GHSA-42h9-826w-cgv3, GHSA-pmv8-rq9r-6j72 and GHSA-xj6q-8x83-jv6g
+- Updated dependencies [5200c84]
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/design-system@2.0.1
+  - @baseapp-frontend/utils@4.2.1
+  - @baseapp-frontend/graphql@2.0.1
+
 ## 2.0.0
 
 ### Patch Changes
