@@ -16,6 +16,7 @@ import { OptionsProps } from './type'
 const Options: FC<OptionsProps> = ({
   handleArchiveChat,
   handleGoToProfile,
+  handleAddContactToGroup,
   isArchiveMutationInFlight,
   isArchived,
 }) => {
@@ -38,13 +39,7 @@ const Options: FC<OptionsProps> = ({
             </Text>
           </View>
         </Button>
-        <Button
-          mode="text"
-          size="medium"
-          onPress={() => {
-            // TODO: Implement add contact to group
-          }}
-        >
+        <Button mode="text" size="medium" onPress={handleAddContactToGroup}>
           <View style={styles.buttons}>
             <NewGroupIcon />
             <Text variant="buttonMedium" color="high">

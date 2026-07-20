@@ -1,6 +1,4 @@
-import { PayloadError } from 'relay-runtime'
-
-import { MutationErrors, SelectedEmail, SelectedMember, SelectedProfile } from './types'
+import { SelectedEmail, SelectedMember, SelectedProfile } from './types'
 
 // Profile selections are keyed by `userId` (not `profileId`) because the add-member
 // mutation operates on userId — a single user can have multiple profiles, and keying
@@ -14,31 +12,6 @@ export const isSelectedProfile = (member: SelectedMember): member is SelectedPro
 
 export const isSelectedEmail = (member: SelectedMember): member is SelectedEmail =>
   member.kind === 'email'
-
-/**
- * Resolve the first user-facing error message from a mutation's `onCompleted` callback,
- * checking both the payload's field errors and Relay's top-level transport errors.
- * Returns `undefined` when the mutation succeeded. Extracted from the dialog's submit
- * flow so the `onCompleted` handlers stay flat (avoids deeply nested callbacks).
- */
-export const getMutationErrorMessage = (
-  payloadErrors: MutationErrors,
-  transportErrors: ReadonlyArray<PayloadError> | null | undefined,
-  fallback: string,
-): string | undefined => {
-  const hasPayloadErrors = Boolean(payloadErrors?.length)
-  const payloadMessages = payloadErrors?.flatMap((error) => error?.messages ?? []) ?? []
-  if (payloadMessages.length) {
-    return payloadMessages[0] || fallback
-  }
-  if (hasPayloadErrors) {
-    return fallback
-  }
-  if (transportErrors?.length) {
-    return transportErrors[0]?.message || fallback
-  }
-  return undefined
-}
 
 /**
  * Error carrying the selections it relates to, so a partially-failed batch submit can keep
@@ -58,5 +31,6 @@ export const isFulfilled = <T>(
   result: PromiseSettledResult<T>,
 ): result is PromiseFulfilledResult<T> => result.status === 'fulfilled'
 
-export const isRejected = (result: PromiseSettledResult<unknown>): result is PromiseRejectedResult =>
-  result.status === 'rejected'
+export const isRejected = (
+  result: PromiseSettledResult<unknown>,
+): result is PromiseRejectedResult => result.status === 'rejected'
