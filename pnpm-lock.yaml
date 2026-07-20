@@ -53,8 +53,8 @@ catalogs:
       specifier: 22.7.2
       version: 22.7.2
     axios:
-      specifier: 1.16.0
-      version: 1.16.0
+      specifier: 1.18.0
+      version: 1.18.0
     jotai:
       specifier: 2.12.4
       version: 2.12.4
@@ -1431,7 +1431,7 @@ importers:
         version: 5.76.1(react@19.2.0)
       axios-mock-adapter:
         specifier: catalog:test
-        version: 1.22.0(axios@1.16.0)
+        version: 1.22.0(axios@1.18.0)
       js-cookie:
         specifier: 'catalog:'
         version: 3.0.7
@@ -1497,7 +1497,7 @@ importers:
     dependencies:
       axios:
         specifier: 'catalog:'
-        version: 1.16.0
+        version: 1.18.0
       events:
         specifier: catalog:utils
         version: 3.3.0
@@ -1633,7 +1633,7 @@ importers:
         version: 8.6.17(@storybook/test@8.6.17(storybook@8.6.17(prettier@3.8.4)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.17(prettier@3.8.4))(typescript@5.9.2)
       axios:
         specifier: 'catalog:'
-        version: 1.16.0
+        version: 1.18.0
       graphql:
         specifier: catalog:graphql
         version: 16.11.0
@@ -6042,8 +6042,8 @@ packages:
     peerDependencies:
       axios: '>= 0.17.0'
 
-  axios@1.16.0:
-    resolution: {integrity: sha512-6hp5CwvTPlN2A31g5dxnwAX0orzM7pmCRDLnZSX772mv8WDqICwFjowHuPs04Mc8deIld1+ejhtaMn5vp6b+1w==}
+  axios@1.18.0:
+    resolution: {integrity: sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==}
 
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
@@ -16202,9 +16202,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.83.6': {}
 
@@ -17993,19 +17991,21 @@ snapshots:
 
   axe-core@4.12.1: {}
 
-  axios-mock-adapter@1.22.0(axios@1.16.0):
+  axios-mock-adapter@1.22.0(axios@1.18.0):
     dependencies:
-      axios: 1.16.0
+      axios: 1.18.0
       fast-deep-equal: 3.1.3
       is-buffer: 2.0.5
 
-  axios@1.16.0:
+  axios@1.18.0:
     dependencies:
       follow-redirects: 1.16.0
       form-data: 4.0.6
+      https-proxy-agent: 5.0.1
       proxy-from-env: 2.1.0
     transitivePeerDependencies:
       - debug
+      - supports-color
 
   axobject-query@4.1.0: {}
 
