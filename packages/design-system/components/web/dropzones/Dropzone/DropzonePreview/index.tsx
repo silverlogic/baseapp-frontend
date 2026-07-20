@@ -26,7 +26,14 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
 
   return (
     <FileWrapper isMini={isMini}>
-      <button style={{ height: '100%' }} type="button" onClick={() => onFileClick?.(file)}>
+      <button
+        style={{ height: '100%' }}
+        type="button"
+        onClick={(event) => {
+          event.stopPropagation()
+          onFileClick?.(file)
+        }}
+      >
         <img
           src={imageUrl}
           alt={typeof file !== 'string' ? (file as File).name : undefined}
@@ -40,7 +47,14 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
         />
       </button>
 
-      <RemoveFileButton aria-label="Remove file" onClick={handleRemoveFile}>
+      <RemoveFileButton
+        type="button"
+        aria-label="Remove file"
+        onClick={(event) => {
+          event.stopPropagation()
+          handleRemoveFile()
+        }}
+      >
         <CloseRoundedIcon sx={{ color: 'white', width: '20px', height: '20px' }} />
       </RemoveFileButton>
     </FileWrapper>
