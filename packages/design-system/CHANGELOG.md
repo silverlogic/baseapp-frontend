@@ -1,5 +1,14 @@
 # @baseapp-frontend/design-system
 
+## 2.1.0
+
+### Minor Changes
+
+- Native social-input and comments primitives:
+
+  - `SocialTextInput` (native): multiline social composer input with edit/reply banners, tool row, and controller-driven inline field errors — error border while focused plus a warning icon + caption rendered from the form field's error message (via `withNativeController`'s `error`/`helperText`).
+  - New native icons: `EmojiIcon`, `FavoriteIcon`, `FavoriteSelectedIcon`, `PinIcon`, `ReplyIcon`.
+
 ## 2.0.1
 
 ### Patch Changes
