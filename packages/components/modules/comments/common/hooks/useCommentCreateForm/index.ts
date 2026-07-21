@@ -27,6 +27,7 @@ import {
  */
 const useCommentCreateForm = ({
   targetObjectId,
+  form: externalForm,
   expandRepliesOnSuccess = false,
   resetFormOnReplyTargetChange = false,
   onSuccess,
@@ -34,10 +35,11 @@ const useCommentCreateForm = ({
   const { currentProfile } = useCurrentProfile()
   const { inReplyToId, name, resetCommentReply, setCommentIdToExpand } = useCommentReply()
 
-  const form = useForm<SocialUpsertForm>({
+  const internalForm = useForm<SocialUpsertForm>({
     defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
+  const form = externalForm ?? internalForm
 
   const [commitMutation, isMutationInFlight] = useCommentCreateMutation()
 

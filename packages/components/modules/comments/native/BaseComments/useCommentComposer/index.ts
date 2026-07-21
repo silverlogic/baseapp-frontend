@@ -1,13 +1,23 @@
-import { useEffect } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 
+import {
+  DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
+  SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
+  SocialUpsertForm,
+} from '../../../../__shared__/common'
 import { useCommentCreateForm, useCommentReply, useCommentUpdateForm } from '../../../common'
 import { UseCommentComposerOptions, UseCommentComposerReturn } from './types'
 
 /**
- * State machine for the native single bottom composer: it consumes BOTH shared form hooks
- * (`useCommentCreateForm` for create/reply, `useCommentUpdateForm` for edit — driven by the
- * reply store's `editingComment`) and swaps which one backs the always-mounted
- * `SocialInputDrawer`, so the gorhom bottom sheet never remounts when the mode changes.
+ * State machine for the native single bottom composer: it drives ONE form through BOTH
+ * shared form hooks (`useCommentCreateForm` for create/reply, `useCommentUpdateForm` for
+ * edit — selected by the reply store's `editingComment`), so the always-mounted
+ * `SocialInputDrawer` keeps a single `control` for its whole lifetime. Swapping controls
+ * is not an option: react-hook-form's Controller captures its register in a mount-time
+ * ref, so a swapped-in form shows its values while `onChange` keeps writing to the old
+ * form — typed characters instantly revert. Mode seeding (comment body on edit start,
+ * empty on edit end) happens through the update hook's reset-on-target-change effect.
  */
 const useCommentComposer = ({
   targetObjectId,
@@ -15,8 +25,13 @@ const useCommentComposer = ({
 }: UseCommentComposerOptions): UseCommentComposerReturn => {
   const { editingComment, resetCommentEdit } = useCommentReply()
 
+  // The single form behind the drawer, shared by both modes.
+  const form = useForm<SocialUpsertForm>({
+    defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
+    resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
+  })
+
   const {
-    form: createForm,
     submit: submitCreate,
     isLoading: isCreating,
     isReply,
@@ -24,18 +39,19 @@ const useCommentComposer = ({
     cancelReply,
   } = useCommentCreateForm({
     targetObjectId,
+    form,
     expandRepliesOnSuccess: true,
     resetFormOnReplyTargetChange: true,
     onSuccess: () => onSubmitSuccess?.(),
   })
 
   const {
-    form: updateForm,
     submit: submitUpdate,
     isLoading: isUpdating,
     cancel: cancelEdit,
   } = useCommentUpdateForm({
     target: editingComment,
+    form,
     onClose: resetCommentEdit,
     onSuccess: () => onSubmitSuccess?.(),
     // Pre-refactor native behavior: the edit banner clears as soon as the user submits.
@@ -44,24 +60,14 @@ const useCommentComposer = ({
 
   const isEditMode = !!editingComment
 
-  // Entering edit mode discards the create draft (parity with the previous single-form composer).
-  useEffect(() => {
-    if (editingComment) {
-      createForm.reset()
-    }
-    // `createForm` is stable across renders (react-hook-form).
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editingComment?.id])
-
-  const form = isEditMode ? updateForm : createForm
-
-  // The native submit button calls with no payload; read the active form's values directly
+  // The native submit button calls with no payload; read the form values directly
   // (same semantics as the previous `form.watch`-based submit).
   const submit = () => {
+    const values = form.getValues()
     if (isEditMode) {
-      submitUpdate(updateForm.getValues())
+      submitUpdate(values)
     } else {
-      submitCreate(createForm.getValues())
+      submitCreate(values)
     }
   }
 

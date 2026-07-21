@@ -7,6 +7,8 @@ import { CommentSubmitOptions } from '../useCommentCreateForm/types'
 export interface UseCommentUpdateFormOptions {
   /** The comment being edited. `null`/`undefined` keeps the form inert (native's always-mounted composer). */
   target?: CommentEditTarget | null
+  /** Use an external form instead of the hook's own — see UseCommentCreateFormOptions.form. */
+  form?: UseFormReturn<SocialUpsertForm>
   /** Called when the edit finishes — successful submit or cancel. */
   onClose: () => void
   /** Called only after a successful submit (e.g. native blurs the composer input). */
