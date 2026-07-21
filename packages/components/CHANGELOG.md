@@ -1,5 +1,16 @@
 # @baseapp-frontend/components
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [5200c84]
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/design-system@2.0.1
+  - @baseapp-frontend/utils@4.2.1
+  - @baseapp-frontend/authentication@6.0.1
+  - @baseapp-frontend/graphql@2.0.1
+
 ## 2.0.1
 
 ### Patch Changes

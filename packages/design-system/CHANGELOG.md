@@ -1,5 +1,13 @@
 # @baseapp-frontend/design-system
 
+## 2.0.1
+
+### Patch Changes
+
+- 5200c84: Fix Dropzone multi-file gallery: clicking the remove (×) icon or the image preview no longer bubbles to the dropzone root and re-opens the file picker; the remove button now has an explicit type="button" so it doesn't submit enclosing forms
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/utils@4.2.1
+
 ## 2.0.0
 
 ### Patch Changes

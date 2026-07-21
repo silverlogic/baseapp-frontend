@@ -53,13 +53,15 @@
   "pnpm": {
     "overrides": {
       "@xmldom/xmldom": ">=0.9.10",
-      "brace-expansion@^5.0.0": ">=5.0.6",
+      "brace-expansion@^1.0.0": ">=1.1.16 <2",
+      "brace-expansion@^2.0.0": ">=2.1.2 <3",
+      "brace-expansion@^5.0.0": ">=5.0.7",
       "esbuild": ">=0.28.1",
       "form-data": ">=4.0.6",
-      "js-yaml": ">=4.2.0",
+      "js-yaml": ">=4.3.0 <5",
       "read-yaml-file>js-yaml": "^3.14.1",
       "postcss": ">=8.5.10",
-      "shell-quote": ">=1.8.4",
+      "shell-quote": ">=1.9.0",
       "uuid": ">=14.0.0",
       "ws@^8.0.0": ">=8.21.0"
     },
