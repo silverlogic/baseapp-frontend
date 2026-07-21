@@ -1,5 +1,24 @@
 # @baseapp-frontend/components
 
+## 3.0.0
+
+### Minor Changes
+
+- React Native comments, sharing all logic with web through a common hook layer.
+
+  **Native (`comments/native`)**: full comments experience — create, reply (with thread auto-expand after submitting), edit and delete via a long-press action sheet gated on permissions, pin/unpin with a pinned-first re-sort, infinite scrolling, a thread-depth cap, a single morphing bottom composer (`BaseComments` + `useCommentComposer` over one always-mounted `SocialInputDrawer`), and tappable author avatar/name that open the profile (navigates only when the profile has a registered `urlPath`).
+
+  **Shared logic (`comments/common`)**: the behavior both platforms consume now lives in common hooks — `useCommentCreateForm` / `useCommentUpdateForm` (form + submit, connection-id derivation, `setFormRelayErrors`, reset-on-success, optional mentions), `useCommentItem` (replies expansion with a consume-once auto-expand signal, reply targeting, deletion, profile URL), `useCommentActions` (headless share/pin/edit/delete descriptors owning the pin mutation), an extended `useCommentList` (`comments`, stable `refetchWithOrder`), and utils (`getCommentsConnectionId`, `getNextClientMutationId`, `toCommentEditTarget`). The `CommentReplyProvider` store is platform-neutral (generic `commentItemRef`), gains `editingComment` (mutually exclusive with reply mode) and `commentIdToExpand`, and `useCommentReply` accepts a selector for per-item subscriptions.
+
+  **Web**: `CommentCreate`, `CommentUpdate`, `CommentItem`, and `useCommentOptions` are now thin UI layers over the shared hooks — props and behavior unchanged.
+
+  Native `CommentsListProps`/`CommentItemProps` no longer accept `onReply`/`onLongPress`/`commentIdToExpand`/`onEdit`/`target` (reply targeting and the action sheet flow through the reply store and `CommentActionsProvider`), and native `CommentItem` must render inside `Comments`/`BaseComments`.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@2.1.0
+
 ## 2.0.3
 
 ### Patch Changes
