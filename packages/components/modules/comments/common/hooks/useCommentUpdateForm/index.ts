@@ -21,6 +21,7 @@ import { UseCommentUpdateFormOptions, UseCommentUpdateFormReturn } from './types
  */
 const useCommentUpdateForm = ({
   target,
+  form: externalForm,
   onClose,
   onSuccess,
   exitOnSubmit = false,
@@ -33,10 +34,11 @@ const useCommentUpdateForm = ({
     [target?.body, target?.mentionedProfileIds],
   )
 
-  const form = useForm<SocialUpsertForm>({
+  const internalForm = useForm<SocialUpsertForm>({
     defaultValues: initialValues,
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
+  const form = externalForm ?? internalForm
 
   const [commitUpdate, isMutationInFlight] = useCommentUpdateMutation()
 

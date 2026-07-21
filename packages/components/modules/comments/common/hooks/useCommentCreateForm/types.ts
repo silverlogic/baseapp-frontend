@@ -9,6 +9,13 @@ export interface CommentSubmitOptions {
 export interface UseCommentCreateFormOptions {
   targetObjectId: string
   /**
+   * Use an external form instead of the hook's own. Required when one always-mounted input
+   * swaps between hooks (native composer): react-hook-form's Controller captures its
+   * `control.register` in a mount-time ref, so swapping `control` leaves `onChange` writing
+   * into the old form while `value` reads from the new one — typed text instantly reverts.
+   */
+  form?: UseFormReturn<SocialUpsertForm>
+  /**
    * When replying, expand the reply target's thread after a successful submission (via the
    * reply store's `commentIdToExpand`, consumed by `useCommentItem`).
    */
