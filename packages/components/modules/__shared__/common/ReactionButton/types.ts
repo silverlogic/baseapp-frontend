@@ -1,4 +1,4 @@
-import { MouseEvent, ReactElement } from 'react'
+import { ReactElement } from 'react'
 
 import { ReactionTypes } from '../../../../__generated__/ReactionButtonMutation.graphql'
 import {
@@ -6,17 +6,19 @@ import {
   ReactionButton_target$key,
 } from '../../../../__generated__/ReactionButton_target.graphql'
 
-type ReactionButtonChildren = (props: {
-  handleReaction: (e: MouseEvent) => void
+type ReactionButtonChildren<TEvent> = (props: {
+  handleReaction: (e: TEvent) => void
   isLoading: boolean
   target: ReactionButton_target$data
 }) => ReactElement | null
 
-export interface ReactionButtonProps {
+export interface ReactionButtonProps<TEvent> {
   target: ReactionButton_target$key
   reactionType: ReactionTypes
-  children: ReactionButtonChildren
+  children: ReactionButtonChildren<TEvent>
   handleError?: () => void
   handleSuccess?: () => void
-  onClick?: (e: MouseEvent) => void
+  onClick?: (e: TEvent) => void
 }
+
+export interface WebReactionButtonProps extends ReactionButtonProps<React.MouseEvent<Element>> {}

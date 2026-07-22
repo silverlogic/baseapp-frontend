@@ -58,7 +58,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         variables: {
           input: {
             content,
-            profileId: currentProfile?.id,
+            profileId: currentProfile.id,
             roomId: targetObjectId,
             clientMutationId,
           },
@@ -86,15 +86,10 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           },
         },
         onCompleted: (response, errors) => {
-          if (errors) {
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
-          }
-          const mutationErrors = response?.chatRoomSendMessage?.errors
-
-          if (mutationErrors && mutationErrors.length > 0) {
-            setFormRelayErrors(form, mutationErrors)
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
-          }
+          // Transport errors are already toasted by the mutation hook; payload errors are
+          // mapped onto the form fields, mirroring the web SendMessage component.
+          if (errors) return
+          setFormRelayErrors(form, response?.chatRoomSendMessage?.errors)
         },
         onError: () => {
           sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
