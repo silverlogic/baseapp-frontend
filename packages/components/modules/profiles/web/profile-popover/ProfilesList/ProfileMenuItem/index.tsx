@@ -39,7 +39,7 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
       <AvatarWithPlaceholder
         width={width}
         height={height}
-        src={profile.image?.url ?? ''}
+        src={profile.image ?? ''}
         alt="Profile avatar"
         color="secondary"
         {...avatarProps}

@@ -28,7 +28,7 @@ const CommentCreated: FC<CommentCreatedProps> = ({
   return (
     <NotificationRoot>
       <NotificationAvatar
-        actorAvatar={notification.actor?.image?.url}
+        actorAvatar={notification.actor?.image ?? undefined}
         actorName={notification.actor?.name}
         {...NotificationAvatarProps}
       />

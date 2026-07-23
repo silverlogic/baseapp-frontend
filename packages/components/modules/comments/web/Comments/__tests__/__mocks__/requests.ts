@@ -17,9 +17,8 @@ export const replytoCommentMockData = {
       user: {
         id: 'user-2',
         fullName: 'Jane Smith',
-        avatar: {
-          url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
-        },
+        avatar:
+          'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
       },
       __isCommentsInterface: 'Comment',
       comments: {
@@ -37,9 +36,8 @@ export const replytoCommentMockData = {
               user: {
                 id: 'VXNlcjo0',
                 fullName: 'Alexandre Anicio',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-21T23:02:53.693681+00:00',
               commentsCount: {
@@ -163,9 +161,8 @@ export const commentEditMockData = {
                 user: {
                   id: 'VXNlcjo0',
                   fullName: 'Alexandre Anicio',
-                  avatar: {
-                    url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                  },
+                  avatar:
+                    'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
                 created: '2024-08-24T01:03:09.090046+00:00',
                 commentsCount: {
@@ -193,9 +190,8 @@ export const commentEditMockData = {
                 user: {
                   id: 'VXNlcjo0',
                   fullName: 'Alexandre Anicio',
-                  avatar: {
-                    url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                  },
+                  avatar:
+                    'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
                 },
                 created: '2024-08-21T23:02:53.693681+00:00',
                 commentsCount: {
@@ -273,9 +269,8 @@ export const commentsNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -303,9 +298,8 @@ export const commentsNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -333,9 +327,8 @@ export const commentsNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -363,9 +356,8 @@ export const commentsNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -393,9 +385,8 @@ export const commentsNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -422,9 +413,8 @@ export const replytoCommentWithElevenRepliesMockData = {
       user: {
         id: 'user-1',
         fullName: 'John Doe',
-        avatar: {
-          url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-        },
+        avatar:
+          'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
       },
       created: '2024-04-17T19:53:45.601467+00:00',
       commentsCount: {
@@ -449,9 +439,8 @@ export const replytoCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               ted: '2024-08-26T14:45:51.772548+00:00',
               commentsCount: {
@@ -479,9 +468,8 @@ export const replytoCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-25T14:44:51.772548+00:00',
               commentsCount: {
@@ -509,9 +497,8 @@ export const replytoCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-24T14:43:51.772548+00:00',
               commentsCount: {
@@ -539,9 +526,8 @@ export const replytoCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-23T14:42:51.772548+00:00',
               commentsCount: {
@@ -569,9 +555,8 @@ export const replytoCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-22T14:41:51.772548+00:00',
               commentsCount: {
@@ -612,9 +597,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
       user: {
         id: 'user-1',
         fullName: 'John Doe',
-        avatar: {
-          url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-        },
+        avatar:
+          'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
       },
       created: '2024-04-17T19:53:45.601467+00:00',
       commentsCount: {
@@ -639,9 +623,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-21T14:45:51.772548+00:00',
               commentsCount: {
@@ -669,9 +652,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-20T14:45:51.772548+00:00',
               commentsCount: {
@@ -699,9 +681,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-19T14:45:51.772548+00:00',
               commentsCount: {
@@ -729,9 +710,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-18T14:45:51.772548+00:00',
               commentsCount: {
@@ -759,9 +739,8 @@ export const secondPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-17T14:45:51.772548+00:00',
               commentsCount: {
@@ -802,9 +781,8 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
       user: {
         id: 'user-1',
         fullName: 'John Doe',
-        avatar: {
-          url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-        },
+        avatar:
+          'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
       },
       created: '2024-04-17T19:53:45.601467+00:00',
       commentsCount: {
@@ -829,9 +807,8 @@ export const thirdPageOfRepliesCommentWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               created: '2024-08-16T14:45:51.772548+00:00',
               commentsCount: {
@@ -887,9 +864,7 @@ export const commentsTestMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://cdn.example.com/avatar1.png',
-                },
+                avatar: 'https://cdn.example.com/avatar1.png',
               },
               reactionsCount: { total: 2 },
               myReaction: null,
@@ -912,9 +887,7 @@ export const commentsTestMockData = {
               user: {
                 id: 'user-2',
                 fullName: 'Jane Smith',
-                avatar: {
-                  url: 'https://cdn.example.com/avatar2.png',
-                },
+                avatar: 'https://cdn.example.com/avatar2.png',
               },
               reactionsCount: { total: 3 },
               myReaction: {
@@ -960,9 +933,8 @@ export const commentsWithNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -986,9 +958,8 @@ export const commentsWithNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -1012,9 +983,8 @@ export const commentsWithNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -1038,9 +1008,8 @@ export const commentsWithNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -1064,9 +1033,8 @@ export const commentsWithNextPageMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               reactionsCount: {
                 total: 0,
@@ -1110,9 +1078,8 @@ export const commentsWithElevenRepliesMockData = {
               user: {
                 id: 'user-1',
                 fullName: 'John Doe',
-                avatar: {
-                  url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-                },
+                avatar:
+                  'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
               },
               cursor: 'cursor-1',
               reactionsCount: {

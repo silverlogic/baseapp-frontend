@@ -6,18 +6,14 @@ export const SingleChatDetailsFragment = graphql`
     isSoleAdmin
     isGroup
     title
-    image(width: 150, height: 150) {
-      url
-    }
+    image(width: 150, height: 150)
     otherParticipant {
       id
       role
       profile {
         id
         name
-        image(width: 150, height: 150) {
-          url
-        }
+        image(width: 150, height: 150)
         biography
         urlPath {
           path

@@ -81,9 +81,7 @@ export const allRolesMembersListMockData = {
       canChangeRole: true,
       id: 'UHJvZmlsZTox',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',
@@ -122,9 +120,7 @@ export const fullMembersListMockData = {
       canChangeRole: true,
       id: 'owner-id',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',
@@ -163,9 +159,7 @@ export const fullMembersListNextPageMockData = {
       canChangeRole: true,
       id: 'owner-id',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',

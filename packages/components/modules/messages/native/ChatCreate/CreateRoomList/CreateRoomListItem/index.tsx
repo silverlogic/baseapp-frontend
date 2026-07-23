@@ -58,7 +58,7 @@ const ChatRoomListItem = ({ profile: profileRef }: { profile: ProfileItemFragmen
     <Pressable key={`chat-room-item-${node?.id}`} onPress={handleRoomCreation}>
       <View style={styles.cardContainer}>
         <View>
-          <AvatarWithPlaceholder imgSource={node?.image?.url} />
+          <AvatarWithPlaceholder imgSource={node?.image ?? undefined} />
         </View>
         <View>
           <Text variant="subtitle2">{node?.name}</Text>

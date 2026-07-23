@@ -13,6 +13,7 @@ import { useRefetchableFragment } from 'react-relay'
 import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
 import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
 import { ActionsOverlay, Timestamp as DefaultTimestamp } from '../../../__shared__/web'
+import { FileUploadList } from '../../../files/web'
 import { CommentItemFragmentQuery, useCommentDeleteMutation, useCommentReply } from '../../common'
 import DefaultCommentUpdate from '../CommentUpdate'
 import DefaultCommentPinnedBadge from './CommentPinnedBadge'
@@ -161,7 +162,7 @@ const CommentItem: FC<CommentItemProps> = ({
               width={40}
               height={40}
               alt={comment.profile?.name ?? `Comment's user avatar`}
-              src={comment.profile?.image?.url}
+              src={comment.profile?.image || ''}
               onClick={() => router.push(profileUrl)}
             />
 
@@ -172,6 +173,15 @@ const CommentItem: FC<CommentItemProps> = ({
                   <CommentPinnedBadge isPinned={comment.isPinned} />
                 </div>
                 {renderCommentContent()}
+
+                <div>
+                  <FileUploadList
+                    target={comment}
+                    variant="chips"
+                    layout="horizontal"
+                    editable={isEditMode}
+                  />
+                </div>
               </div>
               <div className="flex justify-between">
                 <div className="grid grid-cols-[repeat(2,max-content)] gap-4">

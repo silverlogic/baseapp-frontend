@@ -17,9 +17,7 @@ const MessagesGroupWithQuery = () => {
             profile {
               id
               name
-              image(width: 32, height: 32) {
-                url
-              }
+              image(width: 32, height: 32)
             }
             isRead
             ...MessageItemFragment
@@ -42,7 +40,7 @@ const MessagesGroupWithQuery = () => {
       profile: {
         id: 'profile-456',
         name: 'Alice',
-        image: { url: '' },
+        image: '',
       },
       isRead: true,
     },

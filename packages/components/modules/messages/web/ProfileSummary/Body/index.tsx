@@ -29,7 +29,12 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
       <HeaderContainer>
-        <CircledAvatar src={image} width={avatarSize} height={avatarSize} hasError={false} />
+        <CircledAvatar
+          src={image ?? undefined}
+          width={avatarSize}
+          height={avatarSize}
+          hasError={false}
+        />
         <TitleContainer>
           <TypographyWithEllipsis variant="subtitle1" color="text.primary">
             {title}

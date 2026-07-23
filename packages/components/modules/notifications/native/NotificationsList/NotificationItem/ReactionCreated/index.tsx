@@ -12,7 +12,7 @@ const ReactionCreated: FC<GenericItemProps> = ({ notification }) => {
 
   return (
     <Notification.Root>
-      <Notification.Avatar actorAvatar={notification.actor?.image?.url} />
+      <Notification.Avatar actorAvatar={notification.actor?.image ?? undefined} />
       <NotificationContent>
         <NotificationContent.Header
           message={message}
