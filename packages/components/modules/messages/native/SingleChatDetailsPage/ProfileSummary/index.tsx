@@ -14,7 +14,7 @@ const ProfileSummary: FC<ProfileSummaryProps> = ({ name, avatar, username }) => 
   return (
     <View style={styles.container}>
       <View style={styles.profileCard}>
-        <CircledAvatar imgSource={avatar} size={128} />
+        <CircledAvatar imgSource={avatar ?? undefined} size={128} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1" color="high">
             {name}

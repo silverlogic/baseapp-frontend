@@ -16,7 +16,8 @@ export interface SocialInputProps {
   mode?: SocialTextFieldMode
   SocialTextField?: FC<SocialTextFieldProps>
   SocialTextFieldProps?: Partial<SocialTextFieldProps>
-  SocialUpsertActions?: FC
+  SocialUpsertActions?: FC<any>
+  SocialUpsertActionsProps?: Record<string, any>
   SubmitActions?: FC<SubmitActionsProps>
   SubmitActionsProps?: Partial<SubmitActionsProps>
   Form?: ComponentType<ComponentPropsWithoutRef<'form'>>

@@ -6,12 +6,8 @@ export const ProfileComponentFragment = graphql`
     status
     name
     biography
-    image(height: 96, width: 96) {
-      url
-    }
-    bannerImage(height: 290, width: 868) {
-      url
-    }
+    image(height: 96, width: 96)
+    bannerImage(height: 290, width: 868)
     isFollowedByMe
     followersCount
     followingCount

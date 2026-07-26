@@ -52,7 +52,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
         <FileUploadButton
           control={control}
           disabled={isMutationInFlight}
-          name={FORM_VALUE.image}
+          name={FORM_VALUE.image ?? undefined}
           setFile={setValue}
           accept={DEFAULT_IMAGE_FORMATS}
           maxSize={DEFAULT_IMAGE_MAX_SIZE}

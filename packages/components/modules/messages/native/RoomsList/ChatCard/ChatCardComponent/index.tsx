@@ -138,7 +138,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
       onLongPress={onChatCardLongPress}
     >
       <View style={styles.profileCard}>
-        <AvatarWithPlaceholder imgSource={image} size={48} />
+        <AvatarWithPlaceholder imgSource={image ?? undefined} size={48} />
         <View style={styles.profileInfo}>
           <Text variant="subtitle1">{title}</Text>
           {lastMessage && lastMessageTime ? (

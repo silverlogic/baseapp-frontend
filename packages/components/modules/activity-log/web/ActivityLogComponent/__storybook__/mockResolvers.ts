@@ -12,9 +12,8 @@ export const mockData = {
               id: '1234',
               fullName: 'Activity User',
               email: 'test@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -30,9 +29,8 @@ export const mockData = {
               id: '5678',
               fullName: 'Activity User',
               email: 'test@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -48,9 +46,8 @@ export const mockData = {
               id: '91011',
               fullName: 'Activity User',
               email: 'test@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/2162b9f5-3c50-4b45-8d33-9fdb28f5dee4.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -66,9 +63,8 @@ export const mockData = {
               id: '1213',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -84,9 +80,8 @@ export const mockData = {
               id: '1415',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -102,9 +97,8 @@ export const mockData = {
               id: '1617',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -120,9 +114,8 @@ export const mockData = {
               id: '1819',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -138,9 +131,8 @@ export const mockData = {
               id: '2021',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -220,9 +212,8 @@ export const mockData = {
               id: '3031',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -238,9 +229,8 @@ export const mockData = {
               id: '3233',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -256,9 +246,8 @@ export const mockData = {
               id: '3435',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },
@@ -274,9 +263,8 @@ export const mockData = {
               id: '3637',
               fullName: 'Test User',
               email: 'test2@tsl.io',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-db-staging/media/profile_images/7069d845-181f-45c8-ab45-ca10c0f7937f.JPG.48x48_q85.jpg',
             },
             __typename: 'ActivityLog',
           },

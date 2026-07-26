@@ -176,10 +176,10 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   //       id: profile.id,
   //       name: profile.name ?? null,
   //       urlPath: profile.urlPath?.path ?? null,
-  //       image: profile.image?.url ?? null,
+  //       image: profile?.image ?? null,
   //     })
   //   }
-  // }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
+  // }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image])
 
   const handleRemoveImage = (type: 'image' | 'bannerImage') => {
     clearErrors(type === 'image' ? 'image' : 'bannerImage')

@@ -104,7 +104,7 @@ type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
   title: String
-  image(width: Int!, height: Int!): File
+  image(width: Int!, height: Int!): String
   lastMessage: Message
   lastMessageTime: DateTime
   participantsCount: Int!
@@ -389,7 +389,7 @@ type ChatRoomUpdatePayload {
   clientMutationId: String
 }
 
-type Comment implements Node & CommentsInterface & PermissionsInterface & ReactionsInterface & MentionsInterface & NodeActivityLogInterface {
+type Comment implements Node & CommentsInterface & PermissionsInterface & ReactionsInterface & MentionsInterface & NodeActivityLogInterface & FilesInterface {
   created: DateTime!
   modified: DateTime!
   profile: Profile
@@ -431,6 +431,9 @@ type Comment implements Node & CommentsInterface & PermissionsInterface & Reacti
   mentionsCount: Int
   isMentioningProfile(profileId: ID!): Boolean
   nodeActivityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
+  filesCount: GenericScalar
+  isFilesEnabled: Boolean
+  files(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
   target: CommentsInterface
   pk: Int
 }
@@ -546,7 +549,7 @@ type CommentUpdatePayload {
   clientMutationId: String
 }
 
-type ContentPost implements Node & MentionsInterface & ReactionsInterface {
+type ContentPost implements Node & MentionsInterface & ReactionsInterface & CommentsInterface {
   created: DateTime!
   modified: DateTime!
   profile: Profile
@@ -563,6 +566,19 @@ type ContentPost implements Node & MentionsInterface & ReactionsInterface {
   reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
   isReactionsEnabled: Boolean!
   myReaction(profileId: ID): Reaction
+  commentsCount: CommentsCount!
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
   pk: Int
 }
 
@@ -601,7 +617,7 @@ type ContentPostEdge {
 }
 
 type ContentPostImage implements Node {
-  image(width: Int!, height: Int!): File
+  image(width: Int!, height: Int!): String
   post: ContentPost!
 
   """The ID of the object"""
@@ -729,8 +745,162 @@ type ErrorType {
   messages: [String!]!
 }
 
-type File {
-  url: String!
+type File implements Node & PermissionsInterface & FileInterface & CommentsInterface & ReactionsInterface {
+  """The ID of the object"""
+  id: ID!
+  created: DateTime!
+  modified: DateTime!
+  profile: Profile
+  parent: Node
+  fileContentType: String
+  fileName: String
+
+  """File size in bytes"""
+  fileSize: Int
+  file: String!
+  name: String
+  description: String
+  createdBy: User
+
+  """Status of the file upload"""
+  uploadStatus: FilesFileUploadStatusChoices!
+
+  """S3 multipart upload ID for in-progress uploads"""
+  uploadId: String
+
+  """Total number of parts for multipart upload"""
+  totalParts: Int
+
+  """Tracking uploaded parts with ETags"""
+  uploadedParts: JSONString
+
+  """Expiration time for pending uploads"""
+  uploadExpiresAt: DateTime
+
+  """
+  Determine if the logged in user has a specific permission for this object.
+  """
+  hasPerm(perm: String!): Boolean
+  url: String
+  commentsCount: CommentsCount!
+  comments(
+    first: Int
+    last: Int
+    offset: Int
+    after: String
+    before: String
+    q: String
+
+    """Ordering"""
+    orderBy: String
+  ): CommentConnection
+  isCommentsEnabled: Boolean!
+  reactionsCount: ReactionsCount
+  reactions(offset: Int, before: String, after: String, first: Int, last: Int, id: ID): ReactionConnection
+  isReactionsEnabled: Boolean!
+  myReaction(profileId: ID): Reaction
+  thumbnail(width: Int!, height: Int!): String
+  pk: Int
+}
+
+input FileAttachToTargetInput {
+  fileRelayIds: [ID]!
+  targetObjectId: ID!
+  clientMutationId: String
+}
+
+"""
+Attach one or more files to a target object.
+
+Usage:
+    mutation {
+        fileAttachToTarget(input: {
+            fileRelayIds: ["RmlsZU9iamVjdFR5cGU6MQ==", "RmlsZU9iamVjdFR5cGU6Mg=="]
+            targetObjectId: "Q29tbWVudE9iamVjdFR5cGU6MQ=="
+        }) {
+            attachedFiles {
+                node {
+                    id
+                    fileName
+                }
+            }
+            target {
+                ... on CommentsInterface {
+                    filesCount
+                    isFilesEnabled
+                }
+            }
+        }
+    }
+"""
+type FileAttachToTargetPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  attachedFiles: [FileEdge!]!
+  target: FilesInterface!
+  clientMutationId: String
+}
+
+type FileConnection {
+  """Pagination data for this connection."""
+  pageInfo: PageInfo!
+
+  """Contains the nodes in this connection."""
+  edges: [FileEdge]!
+  totalCount: Int
+  edgeCount: Int
+}
+
+input FileDeleteInput {
+  id: ID!
+  clientMutationId: String
+}
+
+type FileDeletePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  deletedId: ID
+  parent: FilesInterface
+  clientMutationId: String
+}
+
+"""A Relay edge containing a `File` and its cursor."""
+type FileEdge {
+  """The item at the end of the edge"""
+  node: File
+
+  """A cursor for use in pagination"""
+  cursor: String!
+}
+
+interface FileInterface {
+  url: String
+}
+
+"""An enumeration."""
+enum FilesFileUploadStatusChoices {
+  """Pending Upload"""
+  PENDING
+
+  """Upload in Progress"""
+  UPLOADING
+
+  """Upload Completed"""
+  COMPLETED
+
+  """Upload Failed"""
+  FAILED
+
+  """Upload Aborted"""
+  ABORTED
+}
+
+interface FilesInterface {
+  filesCount: GenericScalar
+  isFilesEnabled: Boolean
+  files(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
 }
 
 type Follow implements Node {
@@ -917,7 +1087,7 @@ type Metadata {
   metaDescription: String
   metaRobots: String
   metaOgType: String
-  metaOgImage(width: Int!, height: Int!): File
+  metaOgImage(width: Int!, height: Int!): String
   pk: Int
 }
 
@@ -944,6 +1114,33 @@ type Mutation {
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
+
+  """
+  Attach one or more files to a target object.
+  
+  Usage:
+      mutation {
+          fileAttachToTarget(input: {
+              fileRelayIds: ["RmlsZU9iamVjdFR5cGU6MQ==", "RmlsZU9iamVjdFR5cGU6Mg=="]
+              targetObjectId: "Q29tbWVudE9iamVjdFR5cGU6MQ=="
+          }) {
+              attachedFiles {
+                  node {
+                      id
+                      fileName
+                  }
+              }
+              target {
+                  ... on CommentsInterface {
+                      filesCount
+                      isFilesEnabled
+                  }
+              }
+          }
+      }
+  """
+  fileAttachToTarget(input: FileAttachToTargetInput!): FileAttachToTargetPayload
+  fileDelete(input: FileDeleteInput!): FileDeletePayload
   contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
@@ -1361,8 +1558,8 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
   created: DateTime!
   modified: DateTime!
   name: String
-  image(width: Int!, height: Int!): File
-  bannerImage(width: Int!, height: Int!): File
+  image(width: Int!, height: Int!): String
+  bannerImage(width: Int!, height: Int!): String
   biography: String
   status: ProfilesProfileStatusChoices!
   owner: User!
@@ -1414,6 +1611,7 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
     orderBy: String
   ): CommentConnection!
   organization: Organization
+  files(first: Int, last: Int, offset: Int, after: String, before: String, noParent: Boolean): FileConnection!
   reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
   contentPosts(
     first: Int
@@ -1805,6 +2003,11 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Organization
+  myFiles(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
+  file(
+    """The ID of the object"""
+    id: ID!
+  ): File
   contentPost(
     """The ID of the object"""
     id: ID!
@@ -2190,7 +2393,7 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   metadata: Metadata
   isAuthenticated: Boolean
   fullName: String
-  avatar(width: Int!, height: Int!): File
+  avatar(width: Int!, height: Int!): String
   pk: Int
 }
 

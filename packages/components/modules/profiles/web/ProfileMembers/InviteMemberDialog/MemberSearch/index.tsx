@@ -68,7 +68,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
         userId,
         name: node.name ?? node.urlPath?.path ?? '',
         handle: node.urlPath?.path ?? undefined,
-        avatarUrl: node.image?.url ?? undefined,
+        avatarUrl: node.image ?? undefined,
       })
     }
     return options

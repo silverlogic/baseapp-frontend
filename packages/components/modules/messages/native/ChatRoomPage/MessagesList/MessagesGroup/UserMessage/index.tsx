@@ -43,7 +43,7 @@ const UserMessage: FC<UserMessageProps> = ({
       {!isOwnMessage && (
         <View style={{ ...styles.avatarContainer }}>
           {canShowAvatar && (
-            <AvatarWithPlaceholder size={32} imgSource={message?.profile?.image?.url} />
+            <AvatarWithPlaceholder size={32} imgSource={message?.profile?.image ?? undefined} />
           )}
         </View>
       )}

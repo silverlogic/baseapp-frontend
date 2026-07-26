@@ -35,7 +35,7 @@ const AddedMemberCard: FC<AddedMemberCardProps> = ({ profile, handleRemoveMember
         <AvatarWithPlaceholder
           width={64}
           height={64}
-          src={image?.url}
+          src={image ?? undefined}
           sx={{ alignSelf: 'center', justifySelf: 'center' }}
         />
       </Box>

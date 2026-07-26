@@ -33,9 +33,7 @@ export const DefaultLogItem: Story = {
         id: 'user-1',
         fullName: 'Mock User',
         email: 'mock@tsl.io',
-        avatar: {
-          url: 'https://placehold.co/48x48',
-        },
+        avatar: 'https://placehold.co/48x48',
       },
     },
   },

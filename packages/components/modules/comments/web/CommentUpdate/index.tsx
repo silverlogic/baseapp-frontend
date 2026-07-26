@@ -15,6 +15,7 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { useCommentUpdateMutation } from '../../common'
+import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentUpdateProps } from './types'
 
 /**
@@ -170,6 +171,8 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         disabled: isMutationInFlight,
       }}
       {...mergedSocialInputProps}
+      SocialUpsertActions={CommentFilesUpsertActions}
+      SocialUpsertActionsProps={{ target: comment }}
     />
   )
 }

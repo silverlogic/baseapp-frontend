@@ -108,7 +108,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
     ),
   ].filter(Boolean)
 
-  const bannerSrc = profile?.bannerImage?.url || bannerFallback
+  const bannerSrc = profile?.bannerImage || bannerFallback
 
   return (
     <div className="flex h-full w-full justify-center">
@@ -130,7 +130,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
             className="self-start justify-self-center"
             width={96}
             height={96}
-            src={profile?.image?.url}
+            src={profile?.image ?? undefined}
           />
           <ProfileDescriptionContainer>
             <ProfileNameContainer>

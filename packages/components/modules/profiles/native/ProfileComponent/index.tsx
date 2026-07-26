@@ -23,8 +23,11 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
   return (
     <PageViewWithHeader style={styles.container}>
       <View style={styles.headerContainer}>
-        <Image source={{ uri: profile?.bannerImage?.url }} style={styles.bannerImage} />
-        <Image source={{ uri: profile?.image?.url }} style={styles.profileImage} />
+        <Image
+          source={{ uri: profile?.bannerImage ?? undefined }}
+          style={styles.bannerImage ?? undefined}
+        />
+        <Image source={{ uri: profile?.image ?? undefined }} style={styles.profileImage} />
       </View>
 
       <View style={styles.infoContainer}>

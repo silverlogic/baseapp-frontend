@@ -77,7 +77,7 @@ const UserMessage: FC<UserMessageProps> = ({
             className="self-start justify-self-center"
             width={32}
             height={32}
-            src={message?.profile?.image?.url}
+            src={message?.profile?.image ?? undefined}
             sx={{ border: 'none' }}
             showDeletedUser={isProfileNullOrUndefined}
           />

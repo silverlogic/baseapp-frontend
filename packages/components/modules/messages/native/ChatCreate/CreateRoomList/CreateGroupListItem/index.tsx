@@ -40,7 +40,7 @@ const CreateGroupListItem = ({ profile: profileRef }: { profile: ProfileItemFrag
     <Pressable>
       <View style={styles.cardContainer}>
         <View>
-          <AvatarWithPlaceholder imgSource={node?.image?.url} />
+          <AvatarWithPlaceholder imgSource={node?.image ?? undefined} />
         </View>
         <View>
           <Text variant="subtitle2">{node?.name}</Text>

@@ -16,7 +16,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({ roomHeader, onChatDetailsClic
 
   return (
     <Pressable style={styles.profileCard} onPress={onChatDetailsClicked}>
-      <AvatarWithPlaceholder imgSource={image} size={32} />
+      <AvatarWithPlaceholder imgSource={image ?? undefined} size={32} />
       <View style={styles.profileInfo}>
         <Text variant="subtitle1">{title}</Text>
       </View>

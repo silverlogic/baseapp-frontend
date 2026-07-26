@@ -31,9 +31,7 @@ describe('Members', () => {
               canChangeRole: true,
               id: 'UHJvZmlsZTox',
               name: 'Owner Profile',
-              image: {
-                url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-              },
+              image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
               urlPath: null,
             },
           },
@@ -132,9 +130,7 @@ describe('Members', () => {
               canChangeRole: true,
               id: 'UHJvZmlsZTox',
               name: 'Owner Profile',
-              image: {
-                url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-              },
+              image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
               urlPath: null,
             },
           },

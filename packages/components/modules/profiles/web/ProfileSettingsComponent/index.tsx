@@ -110,11 +110,11 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         id: profile.id,
         name: profile.name ?? null,
         urlPath: profile.urlPath?.path ?? null,
-        image: profile.image?.url ?? null,
+        image: profile?.image ?? null,
       }
       updateProfileIfActive(newProfile)
     }
-  }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image?.url])
+  }, [profile?.id, profile?.name, profile?.urlPath?.path, profile?.image])
 
   const handleRemoveImage = (type: any) => {
     clearErrors(type)
@@ -161,7 +161,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                   )}
                   <FileUploadButton
                     control={control}
-                    name={PROFILE_FORM_VALUE.image}
+                    name={PROFILE_FORM_VALUE.image ?? undefined}
                     setFile={setValue}
                     accept={DEFAULT_IMAGE_FORMATS}
                     maxSize={DEFAULT_IMAGE_MAX_SIZE}
@@ -239,7 +239,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                 <BannerButtonsContainer enableRemove={!!watchBannerImage}>
                   <FileUploadButton
                     control={control}
-                    name={PROFILE_FORM_VALUE.bannerImage}
+                    name={PROFILE_FORM_VALUE.bannerImage ?? undefined}
                     setFile={setValue}
                     accept={DEFAULT_BANNER_IMAGE_FORMATS}
                     maxSize={DEFAULT_BANNER_IMAGE_MAX_SIZE}

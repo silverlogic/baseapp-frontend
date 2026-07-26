@@ -12,9 +12,7 @@ export const mockResolvers = {
     profile: {
       id: 'profile-123',
       name: 'Você',
-      image: {
-        url: '',
-      },
+      image: '',
     },
     messageType: 'USER_MESSAGE',
   }),
