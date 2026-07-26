@@ -18,6 +18,7 @@ export const defaultTheme: ThemeProviderProps = {
     themeLayout: 'vertical',
     themeColorPresets: 'default',
     themeStretch: false,
+    collapsedSidebar: false,
   },
   shadows: createShadows('light'),
   customShadows: createCustomShadows('light'),
