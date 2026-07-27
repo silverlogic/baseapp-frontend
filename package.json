@@ -53,7 +53,7 @@
   "pnpm": {
     "overrides": {
       "@xmldom/xmldom": ">=0.9.10",
-      "brace-expansion@^5.0.0": ">=5.0.7",
+      "brace-expansion@^5.0.0": ">=5.0.8",
       "brace-expansion@^1.1.0": ">=1.1.16 <2",
       "postcss": ">=8.5.18",
       "shell-quote": ">=1.9.0",
