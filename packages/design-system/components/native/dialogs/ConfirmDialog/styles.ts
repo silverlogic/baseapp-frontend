@@ -1,6 +1,6 @@
-import { Theme } from '@baseapp-frontend/design-system/styles/native'
-
 import { StyleSheet } from 'react-native'
+
+import { Theme } from '../../../../styles/native'
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
