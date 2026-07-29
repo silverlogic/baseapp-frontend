@@ -1,0 +1,37 @@
+# Trivy ignore file — dependency vulnerability scan
+#
+# Every entry MUST carry an `exp:` date so a suppression cannot become permanent.
+# Format: <ID> exp:YYYY-MM-DD
+#
+# ---------------------------------------------------------------------------
+# CVE-2026-14257 / GHSA-mh99-v99m-4gvg — brace-expansion
+# "DoS via unbounded expansion length causing an out-of-memory process crash"
+#
+# Why this is suppressed: the vulnerability IS fixed in what we install; the
+# advisory's version range is wrong. GitHub recorded a single range for this
+# CVE — ">= 0, < 5.0.8" — so every patched 1.x/2.x maintenance backport still
+# matches it, because 1.1.17 and 2.1.3 are semver-lower than 5.0.8.
+#
+# What we install (see pnpm.overrides in package.json):
+#   brace-expansion 1.1.17  <- minimatch@3 (ESLint 8 chain)   patched backport
+#   brace-expansion 2.1.3   <- minimatch@9                     patched backport
+#   brace-expansion 5.0.8   <- minimatch@10                    advisory-clean
+#
+# Verified, not assumed: the maxLength / EXPANSION_MAX_LENGTH bound is present
+# and enforced in each package's actual entry point, and the advisory's own PoC
+# (expand('{a,b}'.repeat(1500))) returns in ~0.5s instead of OOM-crashing Node.
+#
+# We cannot simply move everything to 5.0.8: 5.x is ESM-first and exports only
+# { expand }, while minimatch@3/@9 require a callable default export — hence the
+# per-major overrides. Upgrading ESLint does not help either; eslint-plugin-react
+# and eslint-plugin-jsx-a11y still depend on minimatch@3 at their latest versions.
+#
+# Remove this entry when the advisory is corrected — tracked upstream in
+# github/advisory-database PR #8832, which splits the range per branch
+# (fixed: 1.1.17 / 2.1.3 / 3.0.5 / 5.0.8). Once merged, the scan passes with no
+# code change. If the expiry lapses before then, re-verify and extend
+# deliberately rather than by reflex.
+#
+# Added: 2026-07-29
+CVE-2026-14257 exp:2026-08-12
+GHSA-mh99-v99m-4gvg exp:2026-08-12
