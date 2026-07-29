@@ -9,7 +9,6 @@ import {
 import { Typography } from '@mui/material'
 import { graphql, useFragment, useLazyLoadQuery } from 'react-relay'
 
-import ReactionButton from '../..'
 import {
   CommentItem_comment$data,
   CommentItem_comment$key,
@@ -17,9 +16,10 @@ import {
 import { ReactionButtonWithQuery as Query } from '../../../../../../__generated__/ReactionButtonWithQuery.graphql'
 // TODO: review this import
 import { CommentItemFragmentQuery } from '../../../../../comments/common'
-import { ReactionButtonProps } from '../../types'
+import ReactionButton from '../../../../common/ReactionButton'
+import { WebReactionButtonProps } from '../../../../common/ReactionButton/types'
 
-const ReactionButtonWithQuery = (props: ReactionButtonProps) => {
+const ReactionButtonWithQuery = (props: WebReactionButtonProps) => {
   const data = useLazyLoadQuery<Query>(
     graphql`
       query ReactionButtonWithQuery @relay_test_operation {

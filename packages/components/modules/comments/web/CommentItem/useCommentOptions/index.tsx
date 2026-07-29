@@ -1,3 +1,5 @@
+import { ReactNode } from 'react'
+
 import {
   LinkIcon,
   PenEditIcon,
@@ -5,49 +7,34 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { OverlayAction } from '../../../../__shared__/web'
-import { useCommentPinMutation } from '../../../common'
+import { CommentActionId, useCommentActions } from '../../../common'
 import { UseCommentOptionsParams } from './types'
 
+/**
+ * Thin adapter mapping the shared, headless `useCommentActions` descriptors to the web
+ * `ActionsOverlay` action shape — only the icons are decided here.
+ */
 const useCommentOptions = ({
   comment,
   onEdit,
   enableShare = true,
 }: UseCommentOptionsParams): OverlayAction[] => {
-  const [pinComment, isPinningComment] = useCommentPinMutation()
-  const handlePinComment = () => {
-    pinComment({ variables: { id: comment!.id } })
+  const actions = useCommentActions({ comment, onEdit, enableShare })
+
+  const iconByActionId: Partial<Record<CommentActionId, ReactNode>> = {
+    share: <LinkIcon />,
+    pin: <PinIcon sx={{ color: comment?.isPinned ? 'info.main' : 'action.active' }} />,
+    edit: <PenEditIcon />,
   }
 
-  const handleEditComment = () => {
-    onEdit()
-  }
-
-  return [
-    {
-      disabled: true,
-      icon: <LinkIcon />,
-      label: 'Share Comment',
-      onClick: () => {},
-      hasPermission: enableShare,
-      closeOnClick: true,
-    },
-    {
-      disabled: isPinningComment,
-      icon: <PinIcon sx={{ color: comment?.isPinned ? 'info.main' : 'action.active' }} />,
-      label: `${comment?.isPinned ? 'Unpin' : 'Pin'} Comment`,
-      onClick: handlePinComment,
-      hasPermission: comment?.canPin,
-      closeOnClick: true,
-    },
-    {
-      disabled: false,
-      icon: <PenEditIcon />,
-      label: 'Edit Comment',
-      onClick: handleEditComment,
-      hasPermission: comment?.canChange,
-      closeOnClick: true,
-    },
-  ]
+  return actions.map((action) => ({
+    disabled: !!action.disabled,
+    icon: iconByActionId[action.id],
+    label: action.label,
+    onClick: action.onSelect,
+    hasPermission: action.hasPermission,
+    closeOnClick: action.closeOnSelect ?? true,
+  }))
 }
 
 export default useCommentOptions

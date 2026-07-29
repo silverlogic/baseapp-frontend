@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/design-system",
   "description": "Design System components and configurations.",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
@@ -19,6 +19,7 @@
     "./components/native/avatars": "./components/native/avatars/index.ts",
     "./components/native/badges": "./components/native/badges/index.ts",
     "./components/native/buttons": "./components/native/buttons/index.ts",
+    "./components/native/dialogs": "./components/native/dialogs/index.ts",
     "./components/native/displays": "./components/native/displays/index.ts",
     "./components/native/drawers": "./components/native/drawers/index.ts",
     "./components/native/icons": "./components/native/icons/index.ts",

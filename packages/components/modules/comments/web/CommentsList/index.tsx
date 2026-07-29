@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
@@ -19,12 +19,7 @@ const CommentsList: FC<CommentsListProps> = ({
   CommentItemProps,
   VirtuosoProps,
 }) => {
-  const { data: target, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
-
-  const comments = useMemo(
-    () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
-    [target?.comments?.edges],
-  )
+  const { data: target, comments, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
 
   if (comments.length === 0) {
     return <EmptyState />
