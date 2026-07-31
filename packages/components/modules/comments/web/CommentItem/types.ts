@@ -1,5 +1,7 @@
 import type { FC, ReactNode } from 'react'
 
+import type { ClickableAvatarProps } from '@baseapp-frontend/design-system/components/web/avatars'
+
 import type { BoxProps } from '@mui/material'
 
 import type { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
@@ -19,10 +21,16 @@ export type CommentOption = {
   hasPermission?: boolean | null
 }
 
+export interface CommentItemAvatarProps extends ClickableAvatarProps {
+  profileName?: string | null
+}
+
 export type CustomizableCommentItemProps = {
   enableDelete?: boolean
   enableShare?: boolean
   ActionOverlayProps?: Partial<ActionOverlayProps>
+  Avatar?: FC<CommentItemAvatarProps>
+  AvatarProps?: Partial<CommentItemAvatarProps>
   CommentUpdate?: FC<CommentUpdateProps>
   CommentUpdateProps?: Partial<CommentUpdateProps>
   CommentsRepliesProps?: Partial<CommentsRepliesProps>

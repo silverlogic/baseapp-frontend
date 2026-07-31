@@ -2,7 +2,6 @@
 
 import { FC, useRef, useState, useTransition } from 'react'
 
-import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 import { removeLeadingSlash } from '@baseapp-frontend/utils'
 
@@ -20,6 +19,7 @@ import DefaultCommentPinnedBadge from './CommentPinnedBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
 import DefaultCommentReplyButton from './CommentReplyButton'
 import CommentsReplies from './CommentsReplies'
+import DefaultAvatar from './DefaultAvatar'
 import { CommentContainerWrapper, CommentContainer as DefaultCommentContainer } from './styled'
 import { CommentItemProps, CustomizableCommentItemProps } from './types'
 import useCommentOptions from './useCommentOptions'
@@ -34,6 +34,8 @@ const CommentItem: FC<CommentItemProps> = ({
   const {
     enableShare,
     ActionOverlayProps = {},
+    Avatar = DefaultAvatar,
+    AvatarProps = {},
     CommentUpdateProps = {},
     CommentsRepliesProps = {},
     enableDelete = false,
@@ -170,13 +172,15 @@ const CommentItem: FC<CommentItemProps> = ({
           ref={commentItemRef}
         >
           <CommentContainer>
-            <ClickableAvatar
+            <Avatar
               deletedUser={!hasUser}
               width={40}
               height={40}
               alt={comment.profile?.name ?? `Comment's user avatar`}
               src={comment.profile?.image?.url}
               onClick={() => router.push(profileUrl)}
+              profileName={comment.profile?.name}
+              {...AvatarProps}
             />
 
             <div className="grid gap-3">
