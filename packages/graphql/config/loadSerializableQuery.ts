@@ -10,6 +10,9 @@ export interface SerializablePreloadedQuery<
   params: TRequest['params']
   variables: VariablesOf<TQuery>
   response: GraphQLResponse
+  // Epoch ms of the server-side fetch. Lets the client detect and skip replaying
+  // payloads re-delivered later from Next.js router/prefetch caches.
+  fetchedAt: number
 }
 
 // Call into raw network fetch to get serializable GraphQL query response
@@ -27,5 +30,6 @@ export default async function loadSerializableQuery<
     params,
     variables,
     response,
+    fetchedAt: Date.now(),
   }
 }
