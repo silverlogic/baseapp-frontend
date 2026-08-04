@@ -6,7 +6,7 @@
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "rm -rf dist && tsc --watch",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
