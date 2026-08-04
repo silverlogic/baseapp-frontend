@@ -1,14 +1,20 @@
 import type { FC, ReactElement } from 'react'
 
+import type { ClickableAvatarProps } from '@baseapp-frontend/design-system/components/web/avatars'
+
 import type { CSSProperties } from '@mui/material/styles/createMixins'
 
 import type { AddProfileMenuItemProps, ProfilesListProps } from '../../../../../profiles/web'
 import { CurrentProfileMenuProps } from './CurrentProfileMenu/types'
 import type { LogoutItemProps } from './LogoutItem/types'
 
-export interface AccountPopoverProps
-  extends Omit<CurrentProfileMenuProps, 'handlePopoverOnClose' | 'setOpenProfilesList'> {
+export interface AccountPopoverProps extends Omit<
+  CurrentProfileMenuProps,
+  'handlePopoverOnClose' | 'setOpenProfilesList'
+> {
   PopoverStyles?: CSSProperties
+  Avatar?: FC<ClickableAvatarProps>
+  AvatarProps?: Partial<ClickableAvatarProps>
   ProfilesList?: FC<ProfilesListProps>
   ProfilesListProps?: Partial<ProfilesListProps>
   AddProfileMenuItem?: FC<AddProfileMenuItemProps> | null

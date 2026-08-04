@@ -3,7 +3,7 @@
 import { FC, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
+import { ClickableAvatar as DefaultAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 
@@ -22,6 +22,8 @@ import { AccountPopoverProps } from './types'
 
 const AccountPopover: FC<AccountPopoverProps> = ({
   PopoverStyles = {},
+  Avatar = DefaultAvatar,
+  AvatarProps = {},
   MenuItems = DefaultMenuItems,
   MenuItemsProps = {},
   CurrentUser = DefaultCurrentUser,
@@ -63,12 +65,13 @@ const AccountPopover: FC<AccountPopoverProps> = ({
 
   return (
     <>
-      <ClickableAvatar
+      <Avatar
         color="secondary"
         src={profile?.image ?? ''}
         alt="User avatar"
         onClick={popover.onOpen}
         isOpen={!!popover.open}
+        {...AvatarProps}
       />
 
       <Popover
