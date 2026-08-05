@@ -1,5 +1,11 @@
 # @baseapp-frontend/components
 
+## 2.1.1
+
+### Patch Changes
+
+- Web Add contact to multiple groups
+
 ## 2.1.0
 
 ### Minor Changes
