@@ -1,0 +1,16 @@
+id: react-no-data-fetching-in-useeffect
+language: Tsx
+severity: warning
+message: "Don't fetch server data from `useEffect` with manual loading/error state. Use `useQuery` / `useMutation` (Tanstack Query) for REST or Relay for GraphQL — they own caching, dedupe, and request state. See .claude/skills/frontend-patterns/references/rest-data-fetching.md"
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: ^useEffect$
+    - has:
+        stopBy: end
+        kind: call_expression
+        has:
+          field: function
+          regex: '(^|\.)(fetch|baseAppFetch)$|^axios\.(get|post|put|patch|delete)$|Api\.[a-z]'

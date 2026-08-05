@@ -1,0 +1,9 @@
+id: relay-withrelay-requires-fallback
+valid:
+  - |
+    export default withRelay(Profile, { fallback: <ProfileLoadingPage /> })
+invalid:
+  - |
+    export default withRelay(Profile)
+  - |
+    export default withRelay(Profile, { LoadingView: ProfileLoadingPage })

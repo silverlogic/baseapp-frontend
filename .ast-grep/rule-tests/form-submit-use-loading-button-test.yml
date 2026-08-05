@@ -1,0 +1,11 @@
+id: form-submit-use-loading-button
+valid:
+  - |
+    <LoadingButton type="submit" loading={isPending} disabled={!form.formState.isValid} form="my-form">
+      Save
+    </LoadingButton>
+  - |
+    <Button onClick={onClose}>Cancel</Button>
+invalid:
+  - |
+    <Button type="submit" form="my-form">Save</Button>

@@ -1,0 +1,16 @@
+id: query-no-inline-query-key
+language: Tsx
+severity: warning
+message: "Don't hand-write query keys as loose string arrays. Build them from the service's `*_API_KEY` object (`default` + one entry per method) so invalidation stays precise. See .claude/skills/frontend-patterns/references/rest-data-fetching.md"
+rule:
+  kind: pair
+  all:
+    - has:
+        field: key
+        regex: ^queryKey$
+    - has:
+        field: value
+        kind: array
+        has:
+          nthChild: 1
+          kind: string

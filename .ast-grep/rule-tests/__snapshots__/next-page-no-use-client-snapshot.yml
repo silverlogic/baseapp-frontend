@@ -1,0 +1,13 @@
+id: next-page-no-use-client
+snapshots:
+  ? |
+    'use client'
+
+    const CheckoutPage = () => <OrderDetails />
+
+    export default CheckoutPage
+  : labels:
+    - source: '''use client'''
+      style: primary
+      start: 0
+      end: 12

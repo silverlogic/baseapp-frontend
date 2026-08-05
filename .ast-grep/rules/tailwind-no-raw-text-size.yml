@@ -1,0 +1,7 @@
+id: tailwind-no-raw-text-size
+language: Tsx
+severity: warning
+message: "Raw Tailwind text-size utility — use the `prose-*` classes (`prose-body1`, `prose-body2`, `prose-caption`, …) which map to the MUI typography scale. See .claude/skills/frontend-conventions/references/styling.md"
+rule:
+  kind: jsx_attribute
+  regex: '^className=[\s\S]*\btext-(xs|sm|base|lg|xl|[2-9]xl)\b'

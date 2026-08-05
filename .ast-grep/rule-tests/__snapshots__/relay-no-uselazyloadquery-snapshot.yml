@@ -1,0 +1,22 @@
+id: relay-no-uselazyloadquery
+snapshots:
+  ? |
+    const { me } = useLazyLoadQuery<ProfilesListQueryType>(
+      ProfilesListQuery,
+      { count: 10 },
+      { fetchPolicy: 'store-and-network' },
+    )
+  : labels:
+    - source: |-
+        useLazyLoadQuery<ProfilesListQueryType>(
+          ProfilesListQuery,
+          { count: 10 },
+          { fetchPolicy: 'store-and-network' },
+        )
+      style: primary
+      start: 15
+      end: 135
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 15
+      end: 31

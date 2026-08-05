@@ -1,0 +1,17 @@
+id: relay-withrelay-requires-fallback
+language: Tsx
+severity: warning
+message: "`withRelay` wraps the component in a Suspense boundary — always pass a `fallback` so streaming shows the same skeleton as the route's `loading.tsx`. See .claude/skills/frontend-patterns/references/graphql-data-fetching.md"
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: ^withRelay$
+    - not:
+        has:
+          field: arguments
+          has:
+            stopBy: end
+            kind: property_identifier
+            regex: ^fallback$

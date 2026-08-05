@@ -1,0 +1,21 @@
+id: native-use-design-system-theme
+language: Tsx
+severity: warning
+message: "In native code `useTheme` must come from `@baseapp-frontend/design-system/providers/native` — it handles light/dark color-mode switching and maps to the BaseApp tokens. See .claude/skills/frontend-conventions/references/styling.md"
+files:
+  - "apps/mobile/**"
+  - "**/native/**"
+rule:
+  kind: import_statement
+  all:
+    - has:
+        stopBy: end
+        kind: import_specifier
+        has:
+          field: name
+          regex: ^useTheme$
+    # matches the package specifier and the design-system's own relative imports
+    - not:
+        has:
+          field: source
+          regex: "providers/native['\"]$"

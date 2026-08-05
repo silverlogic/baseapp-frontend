@@ -1,0 +1,24 @@
+id: state-no-redux
+snapshots:
+  ? |
+    import { configureStore } from '@reduxjs/toolkit'
+  : labels:
+    - source: import { configureStore } from '@reduxjs/toolkit'
+      style: primary
+      start: 0
+      end: 49
+    - source: '''@reduxjs/toolkit'''
+      style: secondary
+      start: 31
+      end: 49
+  ? |
+    import { useSelector } from 'react-redux'
+  : labels:
+    - source: import { useSelector } from 'react-redux'
+      style: primary
+      start: 0
+      end: 41
+    - source: '''react-redux'''
+      style: secondary
+      start: 28
+      end: 41

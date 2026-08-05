@@ -1,0 +1,21 @@
+id: next-prefer-link-over-router-push
+snapshots:
+  ? |
+    <Button onClick={() => router.push('/settings')}>Go to Settings</Button>
+  : labels:
+    - source: router.push('/settings')
+      style: primary
+      start: 23
+      end: 47
+    - source: router.push
+      style: secondary
+      start: 23
+      end: 34
+    - source: '''/settings'''
+      style: secondary
+      start: 35
+      end: 46
+    - source: '''/settings'''
+      style: secondary
+      start: 35
+      end: 46

@@ -1,0 +1,9 @@
+id: relay-no-uselazyloadquery
+language: Tsx
+severity: warning
+message: "`useLazyLoadQuery` couples fetching to rendering and creates request waterfalls. Preload with `loadSerializableQuery` in the Server Component page and read it with `usePreloadedQuery`. See .claude/skills/frontend-patterns/references/graphql-data-fetching.md"
+rule:
+  kind: call_expression
+  has:
+    field: function
+    regex: ^useLazyLoadQuery$

@@ -1,0 +1,15 @@
+id: next-page-no-use-client
+valid:
+  - |
+    export const metadata = { title: 'Checkout' }
+
+    const CheckoutPage = async () => <OrderDetails />
+
+    export default CheckoutPage
+invalid:
+  - |
+    'use client'
+
+    const CheckoutPage = () => <OrderDetails />
+
+    export default CheckoutPage

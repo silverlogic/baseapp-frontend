@@ -1,0 +1,59 @@
+id: mui-no-hardcoded-color
+snapshots:
+  ? |
+    <Box sx={{ color: '#fff' }}>content</Box>
+  : labels:
+    - source: '''#fff'''
+      style: primary
+      start: 18
+      end: 24
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ color: ''#fff'' }}'
+      style: secondary
+      start: 5
+      end: 27
+  ? |
+    export const StyledElement = styled('div')(() => ({
+      backgroundColor: '#FFFFFF',
+      color: '#0E393D',
+    }))
+  : labels:
+    - source: '''#FFFFFF'''
+      style: primary
+      start: 71
+      end: 80
+    - source: styled('div')
+      style: secondary
+      start: 29
+      end: 42
+    - source: |-
+        styled('div')(() => ({
+          backgroundColor: '#FFFFFF',
+          color: '#0E393D',
+        }))
+      style: secondary
+      start: 29
+      end: 105
+  ? |
+    export const styles = StyleSheet.create({
+      container: { backgroundColor: '#F5F5F5' },
+    })
+  : labels:
+    - source: '''#F5F5F5'''
+      style: primary
+      start: 74
+      end: 83
+    - source: StyleSheet.create
+      style: secondary
+      start: 22
+      end: 39
+    - source: |-
+        StyleSheet.create({
+          container: { backgroundColor: '#F5F5F5' },
+        })
+      style: secondary
+      start: 22
+      end: 89

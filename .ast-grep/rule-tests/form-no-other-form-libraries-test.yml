@@ -1,0 +1,10 @@
+id: form-no-other-form-libraries
+valid:
+  - |
+    import { useForm } from 'react-hook-form'
+    import { zodResolver } from '@hookform/resolvers/zod'
+invalid:
+  - |
+    import { Formik, Field } from 'formik'
+  - |
+    import { Form } from 'react-final-form'

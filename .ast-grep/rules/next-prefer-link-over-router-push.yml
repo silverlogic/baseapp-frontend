@@ -1,0 +1,27 @@
+id: next-prefer-link-over-router-push
+language: Tsx
+severity: warning
+message: "The destination is a static string, so it's known at render time — use `next/link` (`<Link href>` or `component={Link}`) to get prefetching and a client-side transition. Keep `router.push` for destinations that depend on an async result. See .claude/skills/frontend-conventions/references/internal-routing.md"
+# web only — `next/link` has no React Native equivalent
+files:
+  - "apps/web/**"
+  - "**/web/**"
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: ^router\.push$
+    - has:
+        field: arguments
+        has:
+          kind: string
+    # a push from an async callback is resolving a destination that wasn't known
+    # at render time, which is exactly what `router.push` is for
+    - not:
+        inside:
+          stopBy: end
+          kind: pair
+          has:
+            field: key
+            regex: ^on(Success|Error|Settled|Completed|Logout|Login)$

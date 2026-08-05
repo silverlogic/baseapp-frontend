@@ -1,0 +1,24 @@
+id: query-no-inline-query-key
+snapshots:
+  ? |
+    const { data } = useQuery({
+      queryKey: ['customer', customerId],
+      queryFn: () => CustomerApi.getCustomer({ id: customerId }),
+    })
+  : labels:
+    - source: 'queryKey: [''customer'', customerId]'
+      style: primary
+      start: 30
+      end: 64
+    - source: queryKey
+      style: secondary
+      start: 30
+      end: 38
+    - source: '''customer'''
+      style: secondary
+      start: 41
+      end: 51
+    - source: '[''customer'', customerId]'
+      style: secondary
+      start: 40
+      end: 64

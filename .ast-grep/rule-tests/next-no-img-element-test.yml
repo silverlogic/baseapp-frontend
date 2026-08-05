@@ -1,0 +1,11 @@
+id: next-no-img-element
+valid:
+  - |
+    <Image src="/hero.jpg" alt="Hero" width={1200} height={600} priority />
+  - |
+    <ImageWithFallback src={url} alt="avatar" width={40} height={40} />
+invalid:
+  - |
+    <img src="/hero-image.jpg" alt="Hero" />
+  - |
+    <img src={url} alt="External"></img>
