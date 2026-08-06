@@ -105,7 +105,7 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 
 | Rule | Severity | Convention |
 |---|---|---|
-| `relay-no-uselazyloadquery` | warning | Preload + `usePreloadedQuery`, not `useLazyLoadQuery` (graphql-data-fetching.md) |
+| `relay-uselazyloadquery-in-list` | **error** | A `useLazyLoadQuery` component rendered per row — one query per item (graphql-data-fetching.md) |
 | `relay-withrelay-requires-fallback` | warning | `withRelay` always gets a `fallback` (graphql-data-fetching.md) |
 | `query-no-inline-query-key` | warning | Query keys come from the service's `*_API_KEY` object (rest-data-fetching.md) |
 | `form-useform-requires-generic` | warning | `useForm<MyFormType>()` — always typed (forms.md) |
@@ -150,6 +150,13 @@ Some guidelines can't be expressed as AST patterns and stay in code-review terri
   repos are full of legitimate deep relative imports to higher shared levels.
 - **One fragment per component** (graphql.md) — requires knowing which components
   consume a fragment.
+- **`useLazyLoadQuery` rendered per row, across files** — `relay-uselazyloadquery-in-list`
+  only fires when the component and the list that renders it are in the *same* file, since
+  ast-grep has no cross-file symbol resolution. The common layout (`ChatRooms/index.tsx`
+  maps over `ChatRoomItem/index.tsx`) is invisible to it. It also correlates on
+  `const Comp = ...` declarations only — the handful of `function Comp()` components here
+  are page and layout defaults, which are never rendered in a loop. Reviewing whether a
+  query-running component can be rendered more than once stays a human check.
 - **File-structure completeness** — "extract constants to `constants.ts`", "extract
   helpers to `utils.ts`". `ts-types-not-in-index` and `mui-styled-not-in-index` cover
   the two mechanical cases; the rest needs judgement about what counts as a helper.

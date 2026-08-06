@@ -1,0 +1,36 @@
+id: relay-uselazyloadquery-in-list
+language: Tsx
+severity: error
+message: "This component calls `useLazyLoadQuery` and is rendered once per item — every row fires its own query. Lift the data into the list's own query (a fragment on the item, spread from the parent connection) or preload it with `loadSerializableQuery` + `usePreloadedQuery`. A couple of `useLazyLoadQuery` calls per screen is fine; one per row is not. See .claude/skills/frontend-patterns/references/graphql-data-fetching.md"
+rule:
+  any:
+    - pattern: <$COMP $$$/>
+    - pattern: <$COMP $$$>$$$</$COMP>
+  all:
+    # $COMP is declared in this file and calls useLazyLoadQuery
+    - inside:
+        stopBy: end
+        kind: program
+        has:
+          stopBy: end
+          kind: variable_declarator
+          all:
+            - has:
+                field: name
+                pattern: $COMP
+            - has:
+                stopBy: end
+                kind: call_expression
+                has:
+                  field: function
+                  regex: ^useLazyLoadQuery$
+    # ...and is rendered per item, either from a .map() or a list renderer prop
+    - inside:
+        stopBy: end
+        any:
+          - kind: call_expression
+            has:
+              field: function
+              regex: \.(map|flatMap)$
+          - kind: jsx_attribute
+            regex: ^(itemContent|renderItem|ItemContent)=
