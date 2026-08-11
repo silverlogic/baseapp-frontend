@@ -1,9 +1,18 @@
-# TEMPORARY — remove once the GHSA advisory data catches up.
+# Compatibility shim — .trivyignore.yaml is the source of truth for rationale,
+# package scoping (purls) and expiry. Keep the ID lists here in sync with it.
 #
-# brace-expansion DoS (GHSA-mh99-v99m-4gvg). The advisory declares a single
-# range "<= 5.0.7 fixed in 5.0.8", but upstream published backports for the
-# older majors (1.1.17, 2.1.3) that scanners don't recognize yet. This repo
-# resolves only brace-expansion 2.1.3 and 5.0.8 (see pnpm.overrides in
-# package.json), both of which contain the fix, so this finding is a false
-# positive on patched code.
+# This plain file exists because trivy auto-detects `.trivyignore` by filename
+# but needs an explicit `--ignorefile` to load the YAML form. Our own workflow
+# passes the flag, but this repo is also scanned as a submodule path by the
+# baseapp-frontend-template Jenkins pipeline, whose trivy command we don't
+# control (shared library `scanDependencyVulnerabilities`). Without this file
+# that scan would lose the waivers.
+#
+# image-size: no patched release exists in any version line; reached only
+# through metro (React Native bundler) at build time, never shipped in the app
+# bundle. Re-evaluate by 2026-11-11.
+CVE-2025-71329
+CVE-2025-71330
+# brace-expansion: false positive on patched code (overrides pin 1.1.18 /
+# 2.1.4 / 5.0.9). Trivy's data has caught up; retained only for older scanner DBs.
 CVE-2026-14257
