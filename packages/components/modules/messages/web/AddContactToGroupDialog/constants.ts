@@ -1,0 +1,1 @@
+export const NUMBER_OF_GROUPS_TO_LOAD = 20

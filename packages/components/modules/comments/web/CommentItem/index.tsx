@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useRef, useState, useTransition } from 'react'
+import { FC, useState } from 'react'
 
 import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
@@ -8,12 +8,9 @@ import { Markdown } from '@baseapp-frontend/design-system/components/web/markdow
 import { Typography } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useRefetchableFragment } from 'react-relay'
 
-import { CommentItemRefetchQuery } from '../../../../__generated__/CommentItemRefetchQuery.graphql'
-import { CommentItem_comment$key } from '../../../../__generated__/CommentItem_comment.graphql'
 import { ActionsOverlay, Timestamp as DefaultTimestamp } from '../../../__shared__/web'
-import { CommentItemFragmentQuery, useCommentDeleteMutation, useCommentReply } from '../../common'
+import { useCommentItem } from '../../common'
 import DefaultCommentUpdate from '../CommentUpdate'
 import DefaultCommentPinnedBadge from './CommentPinnedBadge'
 import DefaultCommentReactionButton from './CommentReactionButton'
@@ -46,17 +43,22 @@ const CommentItem: FC<CommentItemProps> = ({
     profilePath = '/profile',
   }: CustomizableCommentItemProps = customizableProps
 
-  const [comment, refetchCommentItem] = useRefetchableFragment<
-    CommentItemRefetchQuery,
-    CommentItem_comment$key
-  >(CommentItemFragmentQuery, commentRef)
-  const { setCommentReply } = useCommentReply()
+  const {
+    comment,
+    commentItemRef,
+    isRepliesExpanded,
+    isLoadingReplies,
+    showReplies,
+    setAsReplyTarget,
+    deleteComment,
+    isDeletingComment,
+    hasUser,
+    totalCommentsCount,
+    profileUrl,
+  } = useCommentItem<HTMLDivElement>({ comment: commentRef, useProfileId, profilePath })
   const router = useRouter()
 
-  const commentItemRef = useRef<HTMLDivElement | undefined>(undefined)
-
   const [isEditMode, setIsEditMode] = useState(false)
-  const [isReplyExpanded, setIsReplyExpanded] = useState(false)
 
   const defaultCommentOptions = useCommentOptions({
     comment,
@@ -66,46 +68,10 @@ const CommentItem: FC<CommentItemProps> = ({
 
   const { actions = defaultCommentOptions, ...restOfActionOverlayProps } = ActionOverlayProps ?? {}
 
-  const [isLoadingReplies, startLoadingReplies] = useTransition()
-
-  const { resetCommentReply } = useCommentReply()
-
-  const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
-
-  const profileUrlPath = comment?.profile?.urlPath?.path
-  const profileUrl =
-    !profileUrlPath || useProfileId ? `${profilePath}/${comment?.profile?.id}` : profileUrlPath
-  const hasUser = Boolean(comment?.user)
-
-  const showReplies = () => {
-    if (isReplyExpanded) return
-
-    startLoadingReplies(() => {
-      refetchCommentItem(
-        { isRepliesExpanded: true },
-        {
-          fetchPolicy: 'store-or-network',
-          onComplete: (error) => {
-            if (error) {
-              // eslint-disable-next-line no-console
-              console.error(error)
-            } else {
-              setIsReplyExpanded(true)
-            }
-          },
-        },
-      )
-    })
-  }
-
   const replyToComment = () => {
     if (hasUser) {
       onReplyClick?.()
-      setCommentReply({
-        commentItemRef,
-        inReplyToId: comment.id,
-        name: comment.profile?.name,
-      })
+      setAsReplyTarget()
     }
     showReplies()
   }
@@ -138,18 +104,13 @@ const CommentItem: FC<CommentItemProps> = ({
     return null
   }
 
-  const handleDeleteComment = () => {
-    deleteComment({ variables: { id: comment.id } })
-    resetCommentReply()
-  }
-  const totalCommentsCount = comment.commentsCount.total
   return (
     <div>
       <CommentContainerWrapper currentThreadDepth={currentThreadDepth}>
         <ActionsOverlay
           actions={actions}
           showDeleteButton={enableDelete && comment.canDelete}
-          handleDeleteItem={handleDeleteComment}
+          handleDeleteItem={deleteComment}
           isDeletingItem={isDeletingComment}
           title="Comment"
           {...restOfActionOverlayProps}
@@ -190,7 +151,7 @@ const CommentItem: FC<CommentItemProps> = ({
           </CommentContainer>
         </ActionsOverlay>
       </CommentContainerWrapper>
-      {isReplyExpanded && !isLoadingReplies && (
+      {isRepliesExpanded && !isLoadingReplies && (
         <CommentsReplies
           key={`replies-of-${comment.id}`}
           target={comment}

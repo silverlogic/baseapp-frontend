@@ -1,6 +1,5 @@
-import { FC, MouseEvent } from 'react'
-
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { graphql, useFragment, useMutation } from 'react-relay'
 
@@ -38,18 +37,19 @@ const mutationQuery = graphql`
   }
 `
 
-const ReactionButton: FC<ReactionButtonProps> = ({
+const ReactionButton = <TEvent,>({
   target: targetRef,
   reactionType,
   children,
   handleSuccess,
   handleError,
   onClick,
-}) => {
+}: ReactionButtonProps<TEvent>) => {
   const target = useFragment(fragmentQuery, targetRef)
   const [commitMutation, isMutationInFlight] = useMutation<ReactionButtonMutation>(mutationQuery)
   const { currentProfile } = useCurrentProfile()
-  const handleReaction = (e: MouseEvent) => {
+  const { sendMutationErrorToast } = useNotification()
+  const handleReaction = (e: TEvent) => {
     onClick?.(e)
 
     if (isMutationInFlight) {
@@ -91,7 +91,11 @@ const ReactionButton: FC<ReactionButtonProps> = ({
           },
         },
       },
-      onCompleted: () => {
+      onCompleted: (_response, errors) => {
+        if (sendMutationErrorToast(undefined, errors)) {
+          handleError?.()
+          return
+        }
         handleSuccess?.()
       },
       onError: () => {

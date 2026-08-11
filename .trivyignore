@@ -1,3 +1,12 @@
+# TEMPORARY — remove once the GHSA advisory data catches up.
+#
+# brace-expansion DoS (GHSA-mh99-v99m-4gvg). The advisory declares a single
+# range "<= 5.0.7 fixed in 5.0.8", but upstream published backports for the
+# older majors (1.1.17, 2.1.3) that scanners don't recognize yet. This repo
+# resolves only patched versions (see pnpm.overrides in package.json), so this
+# finding is a false positive on patched code.
+CVE-2026-14257
+
 # image-size — DoS via infinite loops in the JXL/HEIF and ICNS parsers.
 # No patched release exists: the advisories cover every published version
 # (<= 2.0.2), including the 2.x line that @storybook/nextjs 9+ moved to.

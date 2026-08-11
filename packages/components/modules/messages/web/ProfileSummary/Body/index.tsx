@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
@@ -12,6 +12,7 @@ import { Box, Divider, Typography } from '@mui/material'
 
 import { formatHandle } from '../../../../__shared__/common/utils'
 import { useSingleChatDetails } from '../../../common'
+import AddContactToGroupDialog from '../../AddContactToGroupDialog'
 import {
   ButtonContainer,
   HeaderContainer,
@@ -23,6 +24,7 @@ import { BodyProps } from './types'
 
 const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
   const { title, image, username, biography, id } = useSingleChatDetails(chatRoomRef)
+  const [isAddToGroupOpen, setIsAddToGroupOpen] = useState(false)
 
   const profilePath = username ?? (id ? `/profile/${id}` : undefined)
 
@@ -59,6 +61,8 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
             size="small"
             aria-label="add contact to a group"
             sx={{ maxWidth: 'fit-content', gap: '8px' }}
+            onClick={() => setIsAddToGroupOpen(true)}
+            disabled={!id}
           >
             <NewGroupIcon sx={{ fontSize: '18px', color: 'text.primary' }} />
             <Typography variant="subtitle2" color="text.primary">
@@ -66,6 +70,13 @@ const Body: FC<BodyProps> = ({ avatarSize = 144, chatRoomRef }) => {
             </Typography>
           </IconButton>
         </ButtonContainer>
+        {id && (
+          <AddContactToGroupDialog
+            contactProfileId={id}
+            open={isAddToGroupOpen}
+            onClose={() => setIsAddToGroupOpen(false)}
+          />
+        )}
         <Subheader>
           <Typography variant="subtitle2" color="text.primary">
             About

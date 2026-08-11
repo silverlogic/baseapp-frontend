@@ -36,7 +36,7 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
       >
         <img
           src={imageUrl}
-          alt={typeof file !== 'string' ? (file as File).name : undefined}
+          alt={typeof file !== 'string' ? (file as File).name : 'preview'}
           width={isMini ? 72 : undefined}
           height={isMini ? 72 : undefined}
           style={
