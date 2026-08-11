@@ -1,0 +1,9 @@
+# image-size — DoS via infinite loops in the JXL/HEIF and ICNS parsers.
+# No patched release exists: the advisories cover every published version
+# (<= 2.0.2), including the 2.x line that @storybook/nextjs 9+ moved to.
+# Reached only through @storybook/nextjs' next/image loader stub, a dev
+# dependency that never ships in an application bundle.
+# Re-evaluate when image-size publishes a fix.
+# GHSA-5p2g-fcmc-qvqq / GHSA-w3rx-r6r6-pgpr
+CVE-2025-71329
+CVE-2025-71330
