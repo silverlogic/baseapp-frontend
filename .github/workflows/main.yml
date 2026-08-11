@@ -12,6 +12,7 @@ jobs:
   build-and-lint:
     name: Build and Lint Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -38,6 +39,7 @@ jobs:
   test-unit:
     name: Unit Test Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -61,6 +63,7 @@ jobs:
   dependency-scan:
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -85,6 +88,7 @@ jobs:
   test-component:
     name: Component Test Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
