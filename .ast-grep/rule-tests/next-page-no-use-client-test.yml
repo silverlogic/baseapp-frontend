@@ -6,6 +6,11 @@ valid:
     const CheckoutPage = async () => <OrderDetails />
 
     export default CheckoutPage
+  - |
+    const CheckoutPage = async () => {
+      const marker = 'use client'
+      return <OrderDetails marker={marker} />
+    }
 invalid:
   - |
     'use client'

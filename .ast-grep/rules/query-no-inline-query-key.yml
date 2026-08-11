@@ -8,9 +8,14 @@ rule:
     - has:
         field: key
         regex: ^queryKey$
+    # a leading string literal means the key was written by hand; a leading spread
+    # (`[...ORDER_API_KEY.default, …]`) means it came from the service's key object
     - has:
         field: value
         kind: array
         has:
-          nthChild: 1
-          kind: string
+          any:
+            - nthChild: 1
+              kind: string
+            - nthChild: 1
+              kind: template_string

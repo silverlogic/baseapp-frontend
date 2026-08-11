@@ -16,3 +16,8 @@ invalid:
       queryKey: ['customer', customerId],
       queryFn: () => CustomerApi.getCustomer({ id: customerId }),
     })
+  - |
+    const { data } = useQuery({
+      queryKey: [`customer`, customerId],
+      queryFn: () => CustomerApi.getCustomer({ id: customerId }),
+    })

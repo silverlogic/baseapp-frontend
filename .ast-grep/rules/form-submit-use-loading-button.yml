@@ -10,6 +10,13 @@ rule:
     - has:
         field: name
         regex: ^Button$
+    # literal type="submit" only — a computed `type={submitType}` isn't statically submit
     - has:
         kind: jsx_attribute
-        regex: '^type=.*submit'
+        all:
+          - has:
+              kind: property_identifier
+              regex: ^type$
+          - has:
+              kind: string
+              regex: "^['\"]submit['\"]$"

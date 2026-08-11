@@ -8,10 +8,15 @@ rule:
     - has:
         field: function
         regex: ^withRelay$
+    # look only at the keys of an options object passed directly to withRelay —
+    # descending further would find a `fallback` inside the component argument
     - not:
         has:
           field: arguments
           has:
-            stopBy: end
-            kind: property_identifier
-            regex: ^fallback$
+            kind: object
+            has:
+              kind: pair
+              has:
+                field: key
+                regex: ^fallback$

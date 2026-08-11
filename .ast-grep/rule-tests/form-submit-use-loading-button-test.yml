@@ -6,6 +6,10 @@ valid:
     </LoadingButton>
   - |
     <Button onClick={onClose}>Cancel</Button>
+  - |
+    <Button type={submitType} form="my-form">Save</Button>
+  - |
+    <Button form="my-form">Save</Button>
 invalid:
   - |
     <Button type="submit" form="my-form">Save</Button>

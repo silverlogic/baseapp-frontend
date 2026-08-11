@@ -14,3 +14,5 @@ valid:
 invalid:
   - |
     <Button onClick={() => router.push('/settings')}>Go to Settings</Button>
+  - |
+    <Button onClick={() => router.push(`/settings`)}>Go to Settings</Button>

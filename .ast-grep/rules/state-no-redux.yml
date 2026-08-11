@@ -6,4 +6,5 @@ rule:
   kind: import_statement
   has:
     field: source
-    regex: "^['\"](redux|react-redux|@reduxjs/toolkit|redux-thunk|redux-saga)['\"]$"
+    # subpaths too: @reduxjs/toolkit/query/react, redux-saga/effects, …
+    regex: "^['\"](redux|react-redux|@reduxjs/toolkit|redux-thunk|redux-saga)(/[^'\"]*)?['\"]$"

@@ -7,3 +7,6 @@ files:
 rule:
   kind: expression_statement
   regex: "^['\"]use client['\"]"
+  # only a module-level directive creates the client boundary
+  inside:
+    kind: program

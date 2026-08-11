@@ -1,6 +1,17 @@
 id: relay-withrelay-requires-fallback
 snapshots:
   ? |
+    export default withRelay(() => ({ fallback: null }), { query: ProfileQuery })
+  : labels:
+    - source: 'withRelay(() => ({ fallback: null }), { query: ProfileQuery })'
+      style: primary
+      start: 15
+      end: 77
+    - source: withRelay
+      style: secondary
+      start: 15
+      end: 24
+  ? |
     export default withRelay(Profile)
   : labels:
     - source: withRelay(Profile)

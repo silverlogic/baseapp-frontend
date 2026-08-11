@@ -33,4 +33,6 @@ rule:
               field: function
               regex: \.(map|flatMap)$
           - kind: jsx_attribute
-            regex: ^(itemContent|renderItem|ItemContent)=
+            has:
+              kind: property_identifier
+              regex: ^(itemContent|renderItem|ItemContent)$

@@ -12,6 +12,28 @@ snapshots:
       start: 31
       end: 49
   ? |
+    import { createApi } from '@reduxjs/toolkit/query/react'
+  : labels:
+    - source: import { createApi } from '@reduxjs/toolkit/query/react'
+      style: primary
+      start: 0
+      end: 56
+    - source: '''@reduxjs/toolkit/query/react'''
+      style: secondary
+      start: 26
+      end: 56
+  ? |
+    import { takeEvery } from 'redux-saga/effects'
+  : labels:
+    - source: import { takeEvery } from 'redux-saga/effects'
+      style: primary
+      start: 0
+      end: 46
+    - source: '''redux-saga/effects'''
+      style: secondary
+      start: 26
+      end: 46
+  ? |
     import { useSelector } from 'react-redux'
   : labels:
     - source: import { useSelector } from 'react-redux'

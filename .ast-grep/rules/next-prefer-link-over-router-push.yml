@@ -15,7 +15,13 @@ rule:
     - has:
         field: arguments
         has:
-          kind: string
+          any:
+            - kind: string
+            # a template literal with no interpolation is just as static
+            - kind: template_string
+              not:
+                has:
+                  kind: template_substitution
     # a push from an async callback is resolving a destination that wasn't known
     # at render time, which is exactly what `router.push` is for
     - not:

@@ -1,7 +1,7 @@
 id: next-image-no-custom-loader
 language: Tsx
 severity: warning
-message: "A custom `loader` disables ALL Next.js image optimization (format conversion, quality, resizing). Drop it and configure `images.remotePatterns` in `next.config.js` instead. See .claude/skills/frontend-conventions/references/image-optimization.md"
+message: "A per-image `loader` hands URL generation to your own code, so Next.js stops optimizing this image (no format conversion, quality, or resizing). Allow the host under `images.remotePatterns` in `next.config.js` and let the built-in optimizer handle it. If a third-party optimizer is genuinely required, configure it once via `images.loaderFile` rather than per `<Image>`. See .claude/skills/frontend-conventions/references/image-optimization.md"
 rule:
   kind: jsx_attribute
   regex: ^loader=

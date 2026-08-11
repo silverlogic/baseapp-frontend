@@ -14,8 +14,9 @@ rule:
         has:
           field: name
           regex: ^useTheme$
-    # matches the package specifier and the design-system's own relative imports
+    # the package specifier, or a relative path — the design-system package reaches
+    # its own provider relatively. Any other package is what this rule is for.
     - not:
         has:
           field: source
-          regex: "providers/native['\"]$"
+          regex: "^['\"](@baseapp-frontend/design-system/providers/native|\\.[^'\"]*providers/native)['\"]$"

@@ -7,3 +7,5 @@ invalid:
     export default withRelay(Profile)
   - |
     export default withRelay(Profile, { LoadingView: ProfileLoadingPage })
+  - |
+    export default withRelay(() => ({ fallback: null }), { query: ProfileQuery })

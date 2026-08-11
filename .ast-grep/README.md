@@ -150,13 +150,25 @@ Some guidelines can't be expressed as AST patterns and stay in code-review terri
   repos are full of legitimate deep relative imports to higher shared levels.
 - **One fragment per component** (graphql.md) — requires knowing which components
   consume a fragment.
-- **`useLazyLoadQuery` rendered per row, across files** — `relay-uselazyloadquery-in-list`
-  only fires when the component and the list that renders it are in the *same* file, since
-  ast-grep has no cross-file symbol resolution. The common layout (`ChatRooms/index.tsx`
-  maps over `ChatRoomItem/index.tsx`) is invisible to it. It also correlates on
-  `const Comp = ...` declarations only — the handful of `function Comp()` components here
-  are page and layout defaults, which are never rendered in a loop. Reviewing whether a
-  query-running component can be rendered more than once stays a human check.
+- **`useLazyLoadQuery` rendered per row** — `relay-uselazyloadquery-in-list` is a backstop,
+  not coverage. Reviewing whether a query-running component can be rendered more than once
+  stays a human check. Four things it cannot see:
+  - **Across files.** ast-grep has no cross-file symbol resolution, so it only fires when
+    the component and the list that renders it are in the same file. The common layout
+    (`ChatRooms/index.tsx` maps over `ChatRoomItem/index.tsx`) is invisible to it.
+  - **`function Comp()` components.** It correlates on `const Comp = ...` only. Covering
+    both forms needs `any:` over two declaration kinds, and ast-grep 0.45 drops
+    metavariable bindings across `any:` branches, so `$COMP` stops being consistent (and
+    `field:` can't be combined with `stopBy:` to reach the name generically). The
+    workaround — duplicating the whole rule per declaration kind — isn't worth it: every
+    `function` component in these repos is a page or layout default, never a list row.
+  - **Renderers bound to a named helper**, e.g. `renderItem={renderNotificationItem}`
+    where the helper returns the row. Only inline `.map()` / `itemContent` / `renderItem`
+    callbacks are followed. Chasing named helpers would need a name heuristic, which is
+    too loose for an `error`-severity rule.
+  - **Shadowed names.** The declaration search is file-wide, so a nested component sharing
+    a name with a queried one at another scope could produce a false positive. It needs
+    two same-named components in one file, which no code here does.
 - **File-structure completeness** — "extract constants to `constants.ts`", "extract
   helpers to `utils.ts`". `ts-types-not-in-index` and `mui-styled-not-in-index` cover
   the two mechanical cases; the rest needs judgement about what counts as a helper.
