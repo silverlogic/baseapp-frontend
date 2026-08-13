@@ -5,7 +5,6 @@ import { FC, Suspense, useState } from 'react'
 import { varHover } from '@baseapp-frontend/design-system/components/web/animate'
 import { NotificationBellIcon as DefaultNotificationBellIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
-import { tw } from '@baseapp-frontend/design-system/utils/web'
 
 import { Badge as DefaultBadge, Drawer as DefaultDrawer, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
@@ -21,7 +20,7 @@ import {
   NotificationsPopoverQuery,
 } from '../../common'
 import DefaultNotificationsList from '../NotificationsList'
-import { NotificationsButton } from './styled'
+import { NotificationsButton, NotificationsFallbackContainer } from './styled'
 import { NotificationsPopoverProps } from './types'
 
 const NotificationsPopover: FC<NotificationsPopoverProps> = ({
@@ -152,12 +151,7 @@ const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => 
   return (
     <Suspense
       fallback={
-        <div
-          className={tw(
-            'flex w-full flex-wrap items-center gap-2',
-            currentLayout === 'mini' && 'justify-center gap-0',
-          )}
-        >
+        <NotificationsFallbackContainer mini={currentLayout === 'mini'}>
           <IconButton disabled>
             <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
           </IconButton>
@@ -173,7 +167,7 @@ const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => 
                 </Typography>
               ))
             : null}
-        </div>
+        </NotificationsFallbackContainer>
       }
     >
       <NotificationsPopover {...props} />

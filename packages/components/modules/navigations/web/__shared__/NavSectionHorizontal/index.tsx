@@ -9,8 +9,8 @@ const NavSectionHorizontal: FC<NavSectionHorizontalProps> = ({
   slotProps,
   hasTabLayout,
 }) => (
-  <Container>
-    <ItemsContainer>
+  <Container data-testid="nav-section-horizontal">
+    <ItemsContainer data-testid="nav-section-horizontal-items">
       {navData.map((group) =>
         group.items.map((list) => (
           <NavList
