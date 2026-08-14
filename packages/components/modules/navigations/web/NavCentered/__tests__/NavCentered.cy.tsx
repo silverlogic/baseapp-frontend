@@ -111,8 +111,8 @@ describe('NavCentered', () => {
     const mainSection = mockNavData[0]
     if (!mainSection?.items) return
 
-    cy.get('.flex.min-h-16').should('exist')
-    cy.get('.flex.h-full').should('have.css', 'gap', '6px')
+    cy.get('[data-testid="nav-section-horizontal"]').should('exist')
+    cy.get('[data-testid="nav-section-horizontal-items"]').should('have.css', 'gap', '6px')
 
     mainSection.items.forEach((item) => {
       cy.findByRole('link', { name: item.title })
