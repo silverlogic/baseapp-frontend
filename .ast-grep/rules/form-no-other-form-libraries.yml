@@ -1,0 +1,9 @@
+id: form-no-other-form-libraries
+language: Tsx
+severity: error
+message: "This project uses `react-hook-form` + `zod` exclusively — the design-system inputs are wrapped with `withController` and integrate with nothing else. See .claude/skills/frontend-patterns/references/forms.md"
+rule:
+  kind: import_statement
+  has:
+    field: source
+    regex: "^['\"](formik|final-form|react-final-form|redux-form|@tanstack/react-form)['\"]$"

@@ -1,0 +1,63 @@
+id: relay-uselazyloadquery-in-list
+valid:
+  # one query for the screen, not per row — the whole point of the rule
+  - |
+    const ProfilePage = () => {
+      const { me } = useLazyLoadQuery<MeQuery>(ProfileQuery, {})
+      return <Profile me={me} />
+    }
+  # rendered once, not from a list
+  - |
+    const AddProfileMenuItem = () => {
+      const { me } = useLazyLoadQuery<UserQuery>(AddProfilePopoverUserQuery, {})
+      return <MenuItem>{me?.name}</MenuItem>
+    }
+
+    const PopoverContent = () => <AddProfileMenuItem />
+  # the mapped component reads a fragment instead of running its own query
+  - |
+    const RoomItem = ({ roomRef }) => {
+      const room = useFragment(RoomFragment, roomRef)
+      return <div>{room.name}</div>
+    }
+
+    const Rooms = ({ rooms }) => (
+      <div>{rooms.map((room) => <RoomItem key={room.id} roomRef={room} />)}</div>
+    )
+invalid:
+  - |
+    const RoomItem = ({ id }) => {
+      const data = useLazyLoadQuery<RoomQueryType>(RoomQuery, { id })
+      return <div>{data.room.name}</div>
+    }
+
+    const Rooms = ({ ids }) => (
+      <div>{ids.map((id) => <RoomItem key={id} id={id} />)}</div>
+    )
+  - |
+    const MessageItem = ({ id }) => {
+      const data = useLazyLoadQuery<MessageQueryType>(MessageQuery, { id })
+      return <div>{data.message.body}</div>
+    }
+
+    const MessagesList = ({ ids }) => (
+      <Virtuoso data={ids} itemContent={(index) => <MessageItem id={ids[index]} />} />
+    )
+  - |
+    const NotificationItem = ({ id }) => {
+      const data = useLazyLoadQuery<NotificationQueryType>(NotificationQuery, { id })
+      return <Text>{data.notification.title}</Text>
+    }
+
+    const NotificationsList = ({ ids }) => (
+      <FlatList data={ids} renderItem={({ item }) => <NotificationItem id={item} />} />
+    )
+  - |
+    const CommentItem = ({ id }) => {
+      const data = useLazyLoadQuery<CommentQueryType>(CommentQuery, { id })
+      return <div>{data.comment.body}</div>
+    }
+
+    const CommentsList = ({ ids }) => (
+      <div>{ids.map((id) => <CommentItem key={id}>{id}</CommentItem>)}</div>
+    )

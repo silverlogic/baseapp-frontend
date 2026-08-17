@@ -36,6 +36,10 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Rules live in .ast-grep/ and are shared with consuming templates via a symlink.
+      - name: ast-grep
+        run: pnpm lint:ast-grep
+
   test-unit:
     name: Unit Test Packages
     runs-on: ubuntu-latest

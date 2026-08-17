@@ -1,0 +1,16 @@
+id: mui-sx-prop-limit
+language: Tsx
+severity: warning
+message: "More than 3 `sx` properties — extract them into a `styled()` component in a sibling `styled.tsx`. See .claude/skills/frontend-conventions/references/styling.md"
+rule:
+  kind: jsx_attribute
+  all:
+    - has:
+        kind: property_identifier
+        regex: ^sx$
+    - has:
+        kind: jsx_expression
+        has:
+          kind: object
+          has:
+            nthChild: 4

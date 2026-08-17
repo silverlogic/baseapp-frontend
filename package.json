@@ -6,6 +6,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "lint:ast-grep": "ast-grep test && ast-grep scan",
     "test:unit": "turbo run test:unit",
     "test:component": "turbo run test:component",
     "changeset": "changeset",
@@ -19,6 +20,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@ast-grep/cli": "catalog:lint",
     "@changesets/cli": "^2.27.11",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",

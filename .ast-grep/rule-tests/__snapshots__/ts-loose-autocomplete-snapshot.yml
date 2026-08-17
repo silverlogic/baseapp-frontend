@@ -1,0 +1,40 @@
+id: ts-loose-autocomplete
+snapshots:
+  ? |
+    type Loose = 'a' | string
+  : labels:
+    - source: '''a'' | string'
+      style: primary
+      start: 13
+      end: 25
+    - source: string
+      style: secondary
+      start: 19
+      end: 25
+    - source: '''a'''
+      style: secondary
+      start: 13
+      end: 16
+    - source: '''a'''
+      style: secondary
+      start: 13
+      end: 16
+  ? |
+    type ModelNames = 'gpt-5' | 'claude-4.1' | string
+  : labels:
+    - source: '''gpt-5'' | ''claude-4.1'' | string'
+      style: primary
+      start: 18
+      end: 49
+    - source: string
+      style: secondary
+      start: 43
+      end: 49
+    - source: '''gpt-5'''
+      style: secondary
+      start: 18
+      end: 25
+    - source: '''gpt-5'''
+      style: secondary
+      start: 18
+      end: 25
