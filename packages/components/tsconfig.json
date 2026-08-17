@@ -1,7 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
+    "types": ["node"],
     "outDir": "./dist",
     "paths": {
       "@mui/system": ["./node_modules/@mui/system"]
@@ -21,7 +21,7 @@
     "*.tsx",
     "./baseapp-frontend-imports.d.ts",
     "babel.config.js",
-    "cypress.config.ts",
+    "playwright.config.ts",
     "webpack.config.ts",
     ".storybook/**/*",
     ".storybook/**/*.json"
