@@ -57,6 +57,9 @@ test.describe('AccountPopover', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
     await holdUserApi(page)
+    // Switching profiles writes a real `CurrentProfile` cookie via js-cookie.
+    // With `reuseContext: true` that would leak into later tests in the worker.
+    await page.context().clearCookies()
   })
 
   test('should render the account popover without profile and be able to interact with it', async ({
@@ -127,6 +130,57 @@ test.describe('AccountPopover', () => {
       await page.getByRole('menuitem', { name: /switch profile/i }).click()
       await resolve(page, 'resolveProfilesList')
       await expect(page.getByLabel('List of available profiles')).toBeAttached()
+    })
+  })
+
+  /**
+   * Covers the two blocks the Cypress spec had to disable behind
+   * "TODO: Enable after finding a fix for handling window.location.reload() in
+   * cypress tests".
+   *
+   * `handleProfileChange` in ProfilesList does, in order: `setCurrentProfile()`,
+   * `sendToast('Switched to …')`, then `window.location.reload()`. The reload is
+   * what defeated Cypress. It defeats a toast assertion here too — `reload` is
+   * non-configurable in both engines so it cannot be stubbed, and aborting the
+   * navigation only keeps the document alive in WebKit, not Chromium.
+   *
+   * What *is* assertable: `setCurrentProfile` persists to a real `CurrentProfile`
+   * cookie through js-cookie before the reload, so the committed switch survives
+   * it. And the no-change path never reloads at all, because
+   * `handleProfileChange` is guarded by `currentProfile?.id !== profile.id`.
+   */
+  test('switching profile persists it, and re-selecting the current one does not', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithProfile`)
+    const { profile, profileList } = await fixtures(page)
+    const secondProfile = profileList.data.me.profiles.edges[1]!.node
+
+    await component.getByRole('button').click()
+    await openProfilesList(page, /switch profile/i)
+
+    await test.step('re-selecting the current profile is a no-op', async () => {
+      await page.getByLabel(`Switch to ${profile.name}`).click()
+
+      // Guard rejects it, so no toast and — crucially — no reload, which is why
+      // this half is fully assertable.
+      await expect(
+        page.getByText(`Switched to ${profile.name}`, { exact: true }),
+      ).not.toBeAttached()
+      await expect(page.getByLabel('List of available profiles')).toBeAttached()
+    })
+
+    await test.step('selecting a different profile persists it to the cookie', async () => {
+      await page.getByLabel(`Switch to ${secondProfile.name}`).click()
+
+      await expect
+        .poll(async () => {
+          const cookies = await page.context().cookies()
+          const current = cookies.find((cookie) => cookie.name === 'CurrentProfile')
+          return current ? decodeURIComponent(current.value) : ''
+        })
+        .toContain(secondProfile.name!)
     })
   })
 
