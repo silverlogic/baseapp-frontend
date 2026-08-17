@@ -54,6 +54,11 @@ cypress/videos
 cypress/screenshots
 cypress/downloads
 
+# playwright
+playwright/gallery/dist
+playwright/test-results
+playwright/report
+
 # Sentry Config File
 .sentryclirc
 
