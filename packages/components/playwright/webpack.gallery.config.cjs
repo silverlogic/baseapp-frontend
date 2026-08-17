@@ -9,7 +9,7 @@
  * path. Registering ts-node in CommonJS mode here keeps a single source of
  * truth for the bundler settings instead of duplicating them.
  */
-const path = require('path')
+const path = require('node:path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 require('ts-node').register({

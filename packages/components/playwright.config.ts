@@ -2,7 +2,7 @@
 // @playwright/test is a devDependency and this is a test-runner config, not
 // published source.
 import { defineConfig, devices } from '@playwright/test'
-import path from 'path'
+import path from 'node:path'
 
 /**
  * Playwright component testing for @baseapp-frontend/components.
