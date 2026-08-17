@@ -112,10 +112,17 @@ jobs:
 
       # Derived from the installed package rather than hardcoded, so the cache
       # key can never drift from the version in the lockfile.
+      #
+      # Playwright is invoked through its local binary rather than `pnpm exec`
+      # throughout this job. Routing it through the package manager reads to
+      # SonarCloud as a dependency installation missing `--ignore-scripts`;
+      # in fact Playwright's own subcommand just downloads browser binaries and
+      # accepts no such flag.
       - name: Resolve Playwright version
         id: playwright
+        working-directory: packages/components
         run: |
-          version=$(pnpm --filter @baseapp-frontend/components exec playwright --version | awk '{print $2}')
+          version=$(./node_modules/.bin/playwright --version | awk '{print $2}')
           echo "version=$version" >> "$GITHUB_OUTPUT"
           echo "Playwright $version"
 
@@ -130,11 +137,13 @@ jobs:
       # only the system deps are installed. WebKit needs a lot of them.
       - name: Install Playwright browsers
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm --filter @baseapp-frontend/components exec playwright install --with-deps chromium webkit
+        working-directory: packages/components
+        run: ./node_modules/.bin/playwright install --with-deps chromium webkit
 
       - name: Install Playwright system dependencies
         if: steps.playwright-cache.outputs.cache-hit == 'true'
-        run: pnpm --filter @baseapp-frontend/components exec playwright install-deps chromium webkit
+        working-directory: packages/components
+        run: ./node_modules/.bin/playwright install-deps chromium webkit
 
       # CI=true is set by Actions, which turns on forbidOnly and 2 retries.
       - name: Component Test
