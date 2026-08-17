@@ -16,7 +16,10 @@
     "storybook:build": "storybook build",
     "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
     "cypress:open": "cypress open --browser chrome",
+    "gallery": "webpack serve --config playwright/webpack.gallery.config.cjs",
     "test:component": "pnpm relay && cypress run --component --browser chrome --headed",
+    "test:component:pw": "pnpm relay && playwright test",
+    "test:component:pw:ui": "pnpm relay && playwright test --ui",
     "test:unit": "jest --config ./jest.config.ts",
     "prepublishOnly": "pnpm run build"
   },
@@ -120,6 +123,7 @@
     "@chromatic-com/storybook": "catalog:storybook",
     "@cypress/webpack-dev-server": "catalog:test",
     "@faker-js/faker": "catalog:test",
+    "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",
