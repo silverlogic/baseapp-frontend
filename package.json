@@ -73,9 +73,6 @@
       "allowedVersions": {
         "isomorphic-ws>ws": "8"
       }
-    },
-    "patchedDependencies": {
-      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
     }
   }
 }
