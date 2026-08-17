@@ -1,5 +1,5 @@
 import { type Locator, type Page, expect, test } from '@playwright/test'
-import path from 'path'
+import path from 'node:path'
 
 import type { ProfileSettingsControls } from './__utils__/ProfileSettings.story'
 
