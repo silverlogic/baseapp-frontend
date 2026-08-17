@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // @playwright/test is a devDependency and this is a test-runner config, not
-// published source. `cypress.config.ts` gets the same exemption via
-// `ignorePatterns` in @baseapp-frontend/config's eslintrc.
+// published source.
 import { defineConfig, devices } from '@playwright/test'
 import path from 'path'
 
@@ -10,18 +9,18 @@ import path from 'path'
  *
  * Uses the built-in `mount` fixture (Playwright >= 1.62) against a story
  * gallery served by this package's own webpack dev server — see
- * `playwright/webpack.gallery.config.ts`. Stories live next to their components
- * as `*.story.tsx`.
+ * `playwright/webpack.gallery.config.cjs`. Stories live beside their components
+ * in `__tests__/__utils__/` as `*.story.tsx`.
  *
  * Run:
- *   pnpm relay && pnpm test:component:pw
+ *   pnpm test:component        (headless, both engines)
+ *   pnpm test:component:ui     (interactive UI mode)
  */
 const GALLERY_URL = 'http://127.0.0.1:3100/'
 
 export default defineConfig({
-  // Specs live beside their component in `__tests__/`, mirroring the Cypress
-  // layout (`specPattern` in cypress.config.ts). The `.pw.ts` suffix keeps them
-  // out of Jest's `**/*.(spec|test).(ts|tsx)` testMatch.
+  // Specs live beside their component in `__tests__/`. The `.pw.ts` suffix keeps
+  // them out of Jest's `**/*.(spec|test).(ts|tsx)` testMatch.
   testDir: path.join(__dirname, 'modules'),
   testMatch: '**/__tests__/*.pw.ts',
   outputDir: path.join(__dirname, 'playwright/test-results'),

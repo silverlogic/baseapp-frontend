@@ -9,7 +9,6 @@
     "lint:ast-grep": "ast-grep test && ast-grep scan",
     "test:unit": "turbo run test:unit",
     "test:component": "turbo run test:component",
-    "test:component:pw": "turbo run test:component:pw",
     "changeset": "changeset",
     "version-packages": "changeset version",
     "release": "turbo run build && changeset publish",

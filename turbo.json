@@ -19,10 +19,6 @@
       "dependsOn": ["^build"],
       "outputs": []
     },
-    "test:component:pw": {
-      "dependsOn": ["^build"],
-      "outputs": []
-    },
     "clean": {
       "cache": false
     },
