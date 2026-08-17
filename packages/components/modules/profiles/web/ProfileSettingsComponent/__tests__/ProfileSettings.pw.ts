@@ -15,8 +15,8 @@ import type { ProfileSettingsControls } from './__utils__/ProfileSettings.story'
  */
 const STORY = 'profiles/web/ProfileSettingsComponent/ProfileSettings'
 
-/** Same fixture the Cypress spec passed to `selectFile`. */
-const LOGO = path.join(__dirname, '../../../../../cypress/fixtures/tsl-logo.png')
+/** Upload fixture, moved out of `cypress/fixtures/` when Cypress was removed. */
+const LOGO = path.join(__dirname, '../../../../../playwright/fixtures/tsl-logo.png')
 
 const resolve = (page: Page, key: keyof ProfileSettingsControls) =>
   page.evaluate((k) => window.__profileSettingsControls[k](), key)
