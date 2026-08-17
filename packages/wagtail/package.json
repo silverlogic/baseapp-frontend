@@ -14,9 +14,7 @@
     "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "storybook": "storybook dev -p 6008",
-    "storybook:build": "storybook build",
-    "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
-    "cypress:open": "cypress open --browser chrome"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@mui/material": "catalog:material-ui",
@@ -42,7 +40,6 @@
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
-    "@cypress/webpack-dev-server": "catalog:test",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",
     "@storybook/addon-links": "catalog:storybook",
@@ -52,7 +49,6 @@
     "@storybook/react-webpack5": "catalog:storybook",
     "@storybook/test": "catalog:storybook",
     "@tailwindcss/typography": "catalog:tailwind",
-    "@testing-library/cypress": "catalog:test",
     "@types/js-cookie": "catalog:",
     "@types/luxon": "catalog:",
     "@types/react": "catalog:react19",
@@ -63,8 +59,6 @@
     "babel-loader": "catalog:storybook",
     "babel-plugin-relay": "catalog:graphql",
     "css-loader": "catalog:storybook",
-    "cypress": "catalog:test",
-    "cypress-plugin-steps": "catalog:test",
     "dotenv": "catalog:components",
     "dotenv-cli": "catalog:components",
     "eslint-plugin-storybook": "catalog:lint",

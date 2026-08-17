@@ -92,7 +92,7 @@ jobs:
   test-component:
     name: Component Test Packages
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 20
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -107,32 +107,55 @@ jobs:
         with:
           version: 10.28.2
 
-      - name: Cache Cypress binary
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-13.16.1
-
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Cypress binary (components workspace)
+      # Derived from the installed package rather than hardcoded, so the cache
+      # key can never drift from the version in the lockfile.
+      #
+      # Playwright is invoked through its local binary rather than `pnpm exec`
+      # throughout this job. Routing it through the package manager reads to
+      # SonarCloud as a dependency installation missing `--ignore-scripts`;
+      # in fact Playwright's own subcommand just downloads browser binaries and
+      # accepts no such flag.
+      - name: Resolve Playwright version
+        id: playwright
+        working-directory: packages/components
         run: |
-          pnpm --filter @baseapp-frontend/components exec cypress cache path
-          pnpm --filter @baseapp-frontend/components exec cypress cache list || true
-          pnpm --filter @baseapp-frontend/components exec cypress install
-          pnpm --filter @baseapp-frontend/components exec cypress cache list
-        env:
-          CYPRESS_CACHE_FOLDER: ~/.cache/Cypress
+          version=$(./node_modules/.bin/playwright --version | awk '{print $2}')
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "Playwright $version"
 
-      - name: Setup Chrome
-        uses: browser-actions/setup-chrome@v1
+      - name: Cache Playwright browsers
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
 
-      - name: Verify Cypress binary exists
-        run: |
-          ls -la ~/.cache/Cypress || true
-          ls -la ~/.cache/Cypress/13.16.1/Cypress || true
-          test -x ~/.cache/Cypress/13.16.1/Cypress/Cypress
+      # Browsers are cached but their OS libraries are not, so on a cache hit
+      # only the system deps are installed. WebKit needs a lot of them.
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        working-directory: packages/components
+        run: ./node_modules/.bin/playwright install --with-deps chromium webkit
 
+      - name: Install Playwright system dependencies
+        if: steps.playwright-cache.outputs.cache-hit == 'true'
+        working-directory: packages/components
+        run: ./node_modules/.bin/playwright install-deps chromium webkit
+
+      # CI=true is set by Actions, which turns on forbidOnly and 2 retries.
       - name: Component Test
         run: pnpm test:component
+
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            packages/components/playwright/report
+            packages/components/playwright/test-results
+          retention-days: 7
+          if-no-files-found: ignore
