@@ -58,6 +58,36 @@ jobs:
       - name: Unit Test
         run: pnpm test:unit
 
+  utils-runner-comparison:
+    name: Utils — Jest vs Vitest (comparison)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Both lanes run back-to-back on the same runner so their durations are
+      # directly comparable. `if: always()` ensures Vitest still runs (and its
+      # timing is captured) even if the Jest lane fails.
+      - name: Jest lane (utils)
+        run: pnpm --filter @baseapp-frontend/utils test:unit
+
+      - name: Vitest lane (utils)
+        if: always()
+        run: pnpm --filter @baseapp-frontend/utils test:unit:vitest
+
   dependency-scan:
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest

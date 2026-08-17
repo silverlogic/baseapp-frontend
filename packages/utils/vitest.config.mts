@@ -16,7 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: [path.resolve(__dirname, 'vitest.setup.ts'), mock('console.ts'), mock('fetch.ts')],
-    include: ['**/*.(test|spec).(ts|tsx)'],
+    include: ['**/*.vitest.test.(ts|tsx)'],
     coverage: { provider: 'v8', reporter: ['text-summary'] },
   },
   resolve: {

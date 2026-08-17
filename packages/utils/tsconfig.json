@@ -1,7 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["node", "vitest/globals"],
+    "types": ["node", "jest"],
     "outDir": "./dist"
   },
   "include": [
@@ -12,8 +12,13 @@
     "*.ts",
     "*.tsx",
     "index.d.ts",
-    "vitest.config.mts",
-    "vitest.setup.ts"
+    "jest.config.ts"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.vitest.test.ts",
+    "**/*.vitest.test.tsx",
+    "vitest.setup.ts"
+  ]
 }

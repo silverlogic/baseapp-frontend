@@ -2,11 +2,11 @@ import { render, userEvent } from '@baseapp-frontend/test'
 
 import withController from '..'
 
-const mockFieldOnChange = jest.fn()
-const mockFieldOnBlur = jest.fn()
+const mockFieldOnChange = vi.fn()
+const mockFieldOnBlur = vi.fn()
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', async () => ({
+  ...(await vi.importActual('react-hook-form')),
   Controller: ({ render: r }: { render: any }) =>
     r({
       field: {
@@ -47,7 +47,7 @@ describe('withController', () => {
 
   it("should trigger the passed onChange function and the built-in Controller's onChange when the component's onChange is called", async () => {
     const user = userEvent.setup()
-    const mockOnChange = jest.fn()
+    const mockOnChange = vi.fn()
     const { findByTestId } = render(
       <WrappedComponent name="test" control={{}} onChange={mockOnChange} />,
     )
@@ -61,7 +61,7 @@ describe('withController', () => {
 
   it("should trigger the passed onBlur function and the built-in Controller's onBlur when the component's onBlur is called", async () => {
     const user = userEvent.setup()
-    const mockOnBlur = jest.fn()
+    const mockOnBlur = vi.fn()
     const { findByTestId } = render(
       <WrappedComponent name="test" control={{}} onBlur={mockOnBlur} />,
     )
@@ -76,7 +76,7 @@ describe('withController', () => {
 
   it("should trigger the passed onInputChange when the component's onInputChange is called", async () => {
     const user = userEvent.setup()
-    const mockOnInputChange = jest.fn()
+    const mockOnInputChange = vi.fn()
     // Stand-in for an Autocomplete: forwards the typed text through onInputChange.
     const AutocompleteLike = (props: any) => (
       <input
