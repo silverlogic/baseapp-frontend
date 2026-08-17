@@ -25,12 +25,18 @@ const fixtures = (page: Page) =>
 
 /**
  * `useJWTUser` decodes the seeded cookie into `placeholderData` and *also* fetches
- * the user via react-query. Abort that fetch so the placeholder is what renders —
- * mirroring the Cypress stub, which always returned the mock user. Fulfilling it
- * instead would replace the placeholder with the response body.
+ * the user via react-query. Never answer that request, so the query stays pending
+ * and the placeholder keeps rendering — which is what the Cypress stub did in
+ * effect, since it always returned the mock user.
+ *
+ * The two obvious alternatives both break: `fulfill()` replaces the placeholder
+ * with the response body, and `abort()` settles the query to `error`, after which
+ * react-query drops `placeholderData`. The latter was a real flake — the name
+ * assertion caught the pending window and the email assertion, running moments
+ * later, did not.
  */
-const blockUserApi = async (page: Page) => {
-  await page.route('**/users/**', (route) => route.abort())
+const holdUserApi = async (page: Page) => {
+  await page.route('**/users/**', () => {})
 }
 
 /**
@@ -50,7 +56,7 @@ const openProfilesList = async (page: Page, label: RegExp) => {
 test.describe('AccountPopover', () => {
   test.beforeEach(async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 })
-    await blockUserApi(page)
+    await holdUserApi(page)
   })
 
   test('should render the account popover without profile and be able to interact with it', async ({
