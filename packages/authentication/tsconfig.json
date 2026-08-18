@@ -15,5 +15,11 @@
     "*.d.ts",
     "jest.config.ts"
   ],
-  "exclude": ["node_modules", "dist"]
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.vitest.test.ts",
+    "**/*.vitest.test.tsx",
+    "vitest.setup.ts"
+  ]
 }

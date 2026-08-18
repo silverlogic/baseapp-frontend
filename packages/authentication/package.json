@@ -8,7 +8,8 @@
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "rm -rf dist && tsc --watch",
-    "test:unit": "rm -rf dist && jest --config ./jest.config.ts",
+    "test:unit": "rm -rf dist && jest --config ./jest.config.ts --coverage",
+    "test:unit:vitest": "rm -rf dist && vitest run --config ./vitest.config.mts --coverage",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "storybook": "echo Authentication: No storybook found",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -45,7 +46,11 @@
     "jest-environment-jsdom": "catalog:test",
     "ts-jest": "catalog:test",
     "ts-node": "catalog:test",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^29.1.1"
   },
   "license": "MIT",
   "repository": {

@@ -10,7 +10,8 @@
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
-    "test:unit": "jest --config ./jest.config.ts",
+    "test:unit": "jest --config ./jest.config.ts --coverage",
+    "test:unit:vitest": "vitest run --config ./vitest.config.mts --coverage",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
@@ -182,7 +183,11 @@
     "ts-jest": "catalog:test",
     "ts-node": "catalog:test",
     "tsup": "catalog:",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.10",
+    "@vitejs/plugin-react": "^6.0.4",
+    "jsdom": "^29.1.1"
   },
   "license": "MIT",
   "repository": {

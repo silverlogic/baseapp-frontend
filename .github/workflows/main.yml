@@ -88,6 +88,65 @@ jobs:
         if: always()
         run: pnpm --filter @baseapp-frontend/utils test:unit:vitest
 
+  authentication-runner-comparison:
+    name: Authentication — Jest vs Vitest (comparison, +coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Component/hook-heavy package (React Testing Library + React Query + Relay),
+      # run WITH coverage — the scenario where Vitest's esbuild transform + V8
+      # coverage are expected to beat Jest's ts-jest/babel + istanbul.
+      - name: Jest lane (authentication, +coverage)
+        run: pnpm --filter @baseapp-frontend/authentication test:unit
+
+      - name: Vitest lane (authentication, +coverage)
+        if: always()
+        run: pnpm --filter @baseapp-frontend/authentication test:unit:vitest
+
+  design-system-runner-comparison:
+    name: Design System — Jest vs Vitest (comparison, +coverage)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.13.0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.28.2
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Small JSX/hook package (2 specs) — right category but tiny, so expect a
+      # noisier signal dominated by fixed startup overhead.
+      - name: Jest lane (design-system, +coverage)
+        run: pnpm --filter @baseapp-frontend/design-system test:unit
+
+      - name: Vitest lane (design-system, +coverage)
+        if: always()
+        run: pnpm --filter @baseapp-frontend/design-system test:unit:vitest
+
   dependency-scan:
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest

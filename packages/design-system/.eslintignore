@@ -1,0 +1,6 @@
+# Vitest comparison lane — excluded from tsconfig, so the typed ESLint parser
+# can't resolve these. Jest specs (*.test.*) remain linted as usual.
+**/*.vitest.test.ts
+**/*.vitest.test.tsx
+vitest.setup.ts
+vitest.config.mts
