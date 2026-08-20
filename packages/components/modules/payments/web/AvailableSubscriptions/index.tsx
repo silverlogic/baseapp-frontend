@@ -10,8 +10,11 @@ import { useRouter } from 'next/navigation'
 
 import useStripeHook from '../hooks/useStripeHook'
 import SubscriptionCard from './SubscriptionCard'
+import { AvailableSubscriptionsProps } from './types'
 
-const AvailableSubscriptions = () => {
+const AvailableSubscriptions = ({
+  manageSubscriptionUrl = '/user/settings?tab=subscription',
+}: AvailableSubscriptionsProps = {}) => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')
 
   const { useListProducts, useGetCustomer } = useStripeHook()
@@ -72,7 +75,7 @@ const AvailableSubscriptions = () => {
               isActive={!!isActive}
               smDown={smDown}
               selectedTerm={selectedTerm}
-              onManageClick={() => router.push('/user/settings?tab=subscription')}
+              onManageClick={() => router.push(manageSubscriptionUrl)}
               onSubscribeClick={() =>
                 router.push(`/subscriptions/checkout?productId=${product.id}`)
               }

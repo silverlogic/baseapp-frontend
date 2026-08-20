@@ -58,11 +58,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     useGetCustomer,
   } = useStripeHook()
   const { data: customer, refetch: refetchCustomer } = useGetCustomer(entityId)
-  const {
-    data: subscription,
-    isLoading: isLoadingSubscription,
-    refetch: refetchSubscription,
-  } = useGetSubscription(subscriptionId ?? '')
+  const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscription(
+    subscriptionId ?? '',
+  )
   const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(
     subscription?.id ?? '',
@@ -136,8 +134,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
 
   useEffect(() => {
     if (customer?.subscriptions?.[0]?.id) {
+      // Setting the id flips the query's `enabled` guard, which fetches on its own. Refetching here
+      // would run in the same tick with the previous (empty) id and request `/subscriptions/`.
       setSubscriptionId(customer.subscriptions[0].id)
-      refetchSubscription()
     }
   }, [customer])
 
