@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { FC, useState } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
@@ -12,9 +12,9 @@ import useStripeHook from '../hooks/useStripeHook'
 import SubscriptionCard from './SubscriptionCard'
 import { AvailableSubscriptionsProps } from './types'
 
-const AvailableSubscriptions = ({
+const AvailableSubscriptions: FC<AvailableSubscriptionsProps> = ({
   manageSubscriptionUrl = '/user/settings?tab=subscription',
-}: AvailableSubscriptionsProps = {}) => {
+}) => {
   const [selectedTerm, setSelectedTerm] = useState<'monthly' | 'yearly'>('monthly')
 
   const { useListProducts, useGetCustomer } = useStripeHook()

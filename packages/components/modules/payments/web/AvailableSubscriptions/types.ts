@@ -1,10 +1,7 @@
 import { Product } from '../types'
 
 export interface AvailableSubscriptionsProps {
-  /**
-   * Where the "Manage Subscription" action navigates. The subscription settings route is defined by
-   * the host app, so it must be supplied here; the default is kept only for backwards compatibility.
-   */
+  /** Defined by the host app's routing; the default is kept only for backwards compatibility. */
   manageSubscriptionUrl?: string
 }
 
