@@ -36,11 +36,21 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
     }
   }, [data.children])
 
+  // Children are revealed on hover here, so there is no open transition to gate on: a
+  // parent click just navigates. Leaves are left to their own <Link>.
+  const handleClick = useCallback(() => {
+    if (!data.children) {
+      return
+    }
+    data.onClick?.()
+  }, [data])
+
   return (
     <>
       <NavItem
         ref={navRef}
         open={openMenu}
+        onClick={handleClick}
         onMouseEnter={handleOpenMenu}
         onMouseLeave={handleCloseMenu}
         itemData={data}

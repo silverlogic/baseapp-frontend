@@ -28,10 +28,16 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
   }, [pathname])
 
   const handleToggleMenu = useCallback(() => {
-    if (data.children) {
-      setOpenMenu((prev) => !prev)
+    if (!data.children) {
+      return
     }
-  }, [data.children])
+    // Navigate on the open transition only: collapsing a group must not pull the user off
+    // the child page they are currently on. Leaves are left to their own <Link>.
+    if (!openMenu) {
+      data.onClick?.()
+    }
+    setOpenMenu((prev) => !prev)
+  }, [data, openMenu])
 
   return (
     <>
