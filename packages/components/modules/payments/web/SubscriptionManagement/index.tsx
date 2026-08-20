@@ -76,11 +76,10 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const { mutateAsync: updateSubscription } = useUpdateSubscription(subscription?.id ?? '', {
     onSuccess: () => {
       invalidateCustomer()
+      // One filter per key: a single queryKey holding two key arrays matches no query at all.
+      queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listPaymentMethods()] })
       queryClient.invalidateQueries({
-        queryKey: [
-          STRIPE_API_KEY.listPaymentMethods(),
-          STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
-        ],
+        queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
       })
       sendToast('Subscription updated successfully.', { type: 'success' })
     },
@@ -261,10 +260,10 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
             onConfirm={() => {
               cancelSubscription()
               queryClient.invalidateQueries({
-                queryKey: [
-                  STRIPE_API_KEY.getCustomer(entityId),
-                  STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
-                ],
+                queryKey: [STRIPE_API_KEY.getCustomer(entityId)],
+              })
+              queryClient.invalidateQueries({
+                queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
               })
               setIsCancelSubscriptionModalOpen(false)
             }}
