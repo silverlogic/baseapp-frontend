@@ -1,4 +1,5 @@
 export { default as useStripeHook } from './hooks/useStripeHook'
+export { default as useEnsureStripeCustomer } from './hooks/useEnsureStripeCustomer'
 
 export { default as AvailableSubscriptions } from './AvailableSubscriptions'
 export { default as CheckoutComponent } from './CheckoutComponent'
