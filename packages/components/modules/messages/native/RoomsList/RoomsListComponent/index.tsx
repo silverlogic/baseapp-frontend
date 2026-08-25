@@ -15,6 +15,7 @@ import ChatCard from '../ChatCard'
 import EmptyChatRoomsState from '../EmptyChatRoomsState'
 import { RoomsListProps } from '../types'
 import { CHAT_TAB_VALUES } from './constants'
+import { styles } from './styles'
 
 const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => {
   const [, startTransition] = useTransition()
@@ -87,6 +88,7 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
       }}
       ListEmptyComponent={handleEmptyState}
       isLoading={isLoadingNext}
+      contentContainerStyle={styles.contentContainer}
     />
   )
 }

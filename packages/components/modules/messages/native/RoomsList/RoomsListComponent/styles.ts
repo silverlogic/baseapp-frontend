@@ -1,9 +1,8 @@
-// import { Theme } from '@baseapp-frontend/design-system/styles/native'
 import { StyleSheet } from 'react-native'
 
-export const createStyles = () =>
-  StyleSheet.create({
-    chatRoomsContainer: {
-      flex: 1,
-    },
-  })
+export const styles = StyleSheet.create({
+  // clears the 56px FabButton sitting 16px from the bottom
+  contentContainer: {
+    paddingBottom: 88,
+  },
+})
