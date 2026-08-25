@@ -42,6 +42,10 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
   const groups = useGroupChatCreate()
+  const { resetGroupChat } = groups
+
+  // this group's context must not outlive the screen, or it leaks into the new group flow
+  useEffect(() => () => resetGroupChat(), [resetGroupChat])
 
   const handleSetMemberToRemove = (id: string | null) => {
     setMemberToRemoveId(id)
