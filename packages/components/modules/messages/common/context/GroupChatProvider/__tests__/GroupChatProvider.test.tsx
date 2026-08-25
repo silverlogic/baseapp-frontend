@@ -20,6 +20,36 @@ describe('GroupChatProvider', () => {
     expect(result.current.roomId).toBeUndefined()
   })
 
+  it('does not re-render consumers when the group context is re-set to the same value', () => {
+    let renders = 0
+    const { result } = renderHook(
+      () => {
+        renders += 1
+        return useGroupChatCreate()
+      },
+      { wrapper },
+    )
+
+    act(() => {
+      result.current.setExistingParticipants(['profile-1', 'profile-2'])
+      result.current.setRoomId('room-1')
+    })
+    const rendersAfterFirstWrite = renders
+
+    // GroupDetailsPage re-runs this on every focus and on every Relay snapshot read
+    act(() => {
+      result.current.setExistingParticipants(['profile-1', 'profile-2'])
+      result.current.setRoomId('room-1')
+    })
+    expect(renders).toBe(rendersAfterFirstWrite)
+
+    act(() => {
+      result.current.setExistingParticipants(['profile-1'])
+    })
+    expect(renders).toBeGreaterThan(rendersAfterFirstWrite)
+    expect(result.current.existingParticipants).toEqual(['profile-1'])
+  })
+
   it('clears every draft field on reset', () => {
     const { result } = renderHook(() => useGroupChatCreate(), { wrapper })
 
