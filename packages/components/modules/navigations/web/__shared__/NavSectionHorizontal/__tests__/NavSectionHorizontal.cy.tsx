@@ -65,7 +65,7 @@ describe('NavSectionHorizontal', () => {
       </ThemeProvider>,
     )
 
-    cy.get('.flex.min-h-16').should('exist')
+    cy.get('[data-testid="nav-section-horizontal"]').should('exist')
 
     mockNavData.items.forEach((item) => {
       cy.findByRole('link', { name: item.title })
@@ -73,7 +73,7 @@ describe('NavSectionHorizontal', () => {
         .and('have.attr', 'href', item.path)
     })
 
-    cy.get('.flex.h-full').should('have.css', 'gap', '6px')
+    cy.get('[data-testid="nav-section-horizontal-items"]').should('have.css', 'gap', '6px')
     cy.findAllByRole('link').should('have.length', mockNavData.items.length)
   })
 

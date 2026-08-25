@@ -1,4 +1,4 @@
-import { toggleGroupSelection } from '../utils'
+import { toggleGroupSelection } from '../toggleGroupSelection'
 
 describe('toggleGroupSelection', () => {
   it('adds a group id that is not selected', () => {

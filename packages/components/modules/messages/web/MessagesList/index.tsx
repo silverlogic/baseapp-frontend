@@ -18,6 +18,7 @@ import {
 } from '../../common'
 import DefaultMessagesGroup from './MessagesGroup'
 import { MESSAGES_TO_LOAD_NEXT } from './constants'
+import { HeaderSpacer } from './styled'
 import { MessagesListProps } from './types'
 
 const MessagesList: FC<MessagesListProps> = ({
@@ -97,7 +98,7 @@ const MessagesList: FC<MessagesListProps> = ({
   const renderHeader = () => {
     if (allMessages.length === 0) return null
 
-    return <div className="h-2" />
+    return <HeaderSpacer />
   }
 
   const renderMessagesGroup = useCallback(

@@ -1,6 +1,5 @@
 import { FC } from 'react'
 
-import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 import { AvatarDeletedUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, CircularProgress, Typography } from '@mui/material'
@@ -9,6 +8,7 @@ import { Virtuoso } from 'react-virtuoso'
 import { Timestamp } from '../../../../__shared__/web'
 import { ActivityLogNode, LogGroup } from '../../../common'
 import LogItem from '../LogItem'
+import { GroupAvatar, ScrollContainer } from './styled'
 import { LogGroupsProps } from './types'
 
 const LogGroups: FC<LogGroupsProps> = ({
@@ -44,15 +44,7 @@ const LogGroups: FC<LogGroupsProps> = ({
   }
   const renderAvatar = (group: LogGroup) => {
     if (group.logs[0]?.user == null) return <AvatarDeletedUserIcon />
-    return (
-      <AvatarWithPlaceholder
-        width={40}
-        height={40}
-        className="self-start justify-self-center"
-        src={group.logs[0]?.user?.avatar?.url ?? ''}
-        sx={{ border: 'none', marginBottom: '4px' }}
-      />
-    )
+    return <GroupAvatar width={40} height={40} src={group.logs[0]?.user?.avatar?.url ?? ''} />
   }
 
   const renderItemContent = (group: LogGroup) => (
@@ -79,7 +71,8 @@ const LogGroups: FC<LogGroupsProps> = ({
   )
 
   return (
-    <div className="overflow-x-auto hide-scrollbar">
+    /* `hide-scrollbar` is a design-system tailwind plugin class kept as a documented exception (BA-3207) */
+    <ScrollContainer className="hide-scrollbar">
       <Virtuoso
         useWindowScroll
         data={logGroups}
@@ -94,7 +87,7 @@ const LogGroups: FC<LogGroupsProps> = ({
         }}
         {...VirtuosoProps}
       />
-    </div>
+    </ScrollContainer>
   )
 }
 

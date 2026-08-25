@@ -12,6 +12,7 @@ import { allowMentionUrls, createDefaultComponents } from './utils'
 
 const Markdown: FC<MarkdownProps> = ({
   children,
+  className,
   sx,
   variant = 'body2',
   LinkComponentProps,
@@ -28,7 +29,11 @@ const Markdown: FC<MarkdownProps> = ({
   if (!children) return null
 
   return (
-    <StyledMarkdown variant={variant} sx={sx}>
+    // `className` is applied here, not spread onto ReactMarkdown below — react-markdown
+    // doesn't document a className prop, so a styled(Markdown) wrapper's generated class
+    // must land on a node this component controls directly, not on react-markdown's
+    // internal output (whose shape varies across versions).
+    <StyledMarkdown className={className} variant={variant} sx={sx}>
       <ReactMarkdown
         remarkPlugins={[remarkGfm, ...(remarkPlugins ?? [])]}
         rehypePlugins={[rehypeRaw, ...(rehypePlugins ?? [])]}

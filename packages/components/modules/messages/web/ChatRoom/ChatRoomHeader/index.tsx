@@ -90,11 +90,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
           isClickable={isGroup}
         >
           <AvatarWithPlaceholder
-            className="self-start justify-self-center"
             width={32}
             height={32}
             src={image}
-            sx={{ border: 'none', alignSelf: 'center' }}
+            sx={{ border: 'none', alignSelf: 'center', justifySelf: 'center' }}
           />
           <Box>
             <TypographyWithEllipsis

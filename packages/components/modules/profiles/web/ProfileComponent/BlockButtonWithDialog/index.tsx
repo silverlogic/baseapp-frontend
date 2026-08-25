@@ -10,7 +10,7 @@ import { useFragment, useMutation } from 'react-relay'
 import { BlockToggleMutation } from '../../../../../__generated__/BlockToggleMutation.graphql'
 import { BlockToggleFragment, BlockToggleMutationQuery } from '../../../common'
 import { BLOCK_UNBLOCK_DIALOG_TEXTS } from './constants'
-import { ActionButton } from './styled'
+import { ActionButton, DialogTitleContainer } from './styled'
 import { BlockButtonWithDialogProps } from './types'
 
 const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
@@ -112,10 +112,10 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
       <ConfirmDialog
         open={open}
         title={
-          <div className="grid grid-cols-[min-content_1fr] gap-4 text-text-primary responsive-h6">
+          <DialogTitleContainer>
             {isBlockedByMe ? <UnblockIcon /> : <BlockIcon />}
             {`${isBlockedByMe ? BLOCK_UNBLOCK_DIALOG_TEXTS.unblock.title : BLOCK_UNBLOCK_DIALOG_TEXTS.block.title} ${target.name}?`}
-          </div>
+          </DialogTitleContainer>
         }
         content={
           isBlockedByMe

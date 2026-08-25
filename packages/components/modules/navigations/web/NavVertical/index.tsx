@@ -7,7 +7,6 @@ import { Scrollbar } from '@baseapp-frontend/design-system/components/web/scroll
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
 
 import DefaultAccountMenu from '../Header/AccountMenu'
 import DefaultNavAccountSection from '../__shared__/NavAccountSection'
@@ -15,6 +14,7 @@ import NavSectionVertical from '../__shared__/NavSectionVertical'
 import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NAV_WIDTH } from '../constants'
+import { NavContainer } from './styled'
 import { NavVerticalProps } from './types'
 
 const NavVertical: FC<NavVerticalProps> = ({
@@ -57,14 +57,7 @@ const NavVertical: FC<NavVerticalProps> = ({
       }}
     >
       {!hideToggleButton && <NavToggleButton {...NavToggleButtonProps} />}
-      <Stack
-        sx={{
-          height: 1,
-          position: 'fixed',
-          width: NAV_WIDTH.VERTICAL,
-          borderRight: (theme) => `solid 1px ${theme.palette.divider}`,
-        }}
-      >
+      <NavContainer>
         <Scrollbar
           sx={{
             height: 1,
@@ -93,7 +86,7 @@ const NavVertical: FC<NavVerticalProps> = ({
             />
           )}
         </Scrollbar>
-      </Stack>
+      </NavContainer>
     </Box>
   )
 }

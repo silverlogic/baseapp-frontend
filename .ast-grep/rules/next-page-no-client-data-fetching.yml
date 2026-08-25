@@ -1,0 +1,11 @@
+id: next-page-no-client-data-fetching
+language: Tsx
+severity: warning
+message: "Don't fetch at the page level with a client hook. Prefetch server-side (`prefetchQuery` + `HydrationBoundary`, or `loadSerializableQuery`) and hydrate in a child. See .claude/skills/frontend-patterns/references/rest-data-fetching.md"
+files:
+  - "**/page.tsx"
+rule:
+  kind: call_expression
+  has:
+    field: function
+    regex: ^(useQuery|useSuspenseQuery|useLazyLoadQuery)$
