@@ -2,15 +2,13 @@ import { Theme } from '@baseapp-frontend/design-system/styles/native'
 
 import { StyleSheet } from 'react-native'
 
-import { CONTENT_HORIZONTAL_PADDING } from './constants'
-
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
+    // Horizontal padding is applied by the enclosing Comments scroll container, so the page
+    // content only owns its vertical rhythm here.
     container: {
-      flexGrow: 1,
-      paddingHorizontal: CONTENT_HORIZONTAL_PADDING,
       paddingTop: 16,
-      paddingBottom: 24,
+      paddingBottom: 16,
     },
     title: {
       marginBottom: 16,

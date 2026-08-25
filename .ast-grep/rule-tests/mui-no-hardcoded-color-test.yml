@@ -1,0 +1,21 @@
+id: mui-no-hardcoded-color
+valid:
+  - |
+    export const StyledElement = styled('div')(({ theme }) => ({
+      backgroundColor: theme.palette.surface[50],
+      color: theme.palette.primary[700],
+    }))
+  - |
+    const TRACKING_ID = '#not-a-color'
+invalid:
+  - |
+    export const StyledElement = styled('div')(() => ({
+      backgroundColor: '#FFFFFF',
+      color: '#0E393D',
+    }))
+  - |
+    <Box sx={{ color: '#fff' }}>content</Box>
+  - |
+    export const styles = StyleSheet.create({
+      container: { backgroundColor: '#F5F5F5' },
+    })

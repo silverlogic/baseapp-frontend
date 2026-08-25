@@ -1,0 +1,12 @@
+id: next-page-no-use-client
+language: Tsx
+severity: warning
+message: "`page.tsx` must stay a Server Component — `\"use client\"` here disables server-side prefetching and `metadata` exports. Push interactivity into a child client component. See .claude/skills/frontend-conventions/references/server-components.md"
+files:
+  - "**/page.tsx"
+rule:
+  kind: expression_statement
+  regex: "^['\"]use client['\"]"
+  # only a module-level directive creates the client boundary
+  inside:
+    kind: program

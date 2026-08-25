@@ -3,7 +3,7 @@ import { FC, useEffect, useMemo, useRef, useState, useTransition } from 'react'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Button, Typography } from '@mui/material'
+import { Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler, useFragment, usePaginationFragment } from 'react-relay'
 
@@ -13,6 +13,7 @@ import InviteMemberDialog from '../InviteMemberDialog'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MEMBER_ROLES, MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
+import { CountRow } from './styled'
 import { MembersListProps } from './types'
 
 const MembersList: FC<MembersListProps> = ({
@@ -99,15 +100,7 @@ const MembersList: FC<MembersListProps> = ({
         control={control}
         sx={{ mb: 4 }}
       />
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 1.5,
-          mb: 4,
-        }}
-      >
+      <CountRow>
         <Typography variant="subtitle2">
           {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
         </Typography>
@@ -121,7 +114,7 @@ const MembersList: FC<MembersListProps> = ({
             Add Member
           </Button>
         )}
-      </Box>
+      </CountRow>
       {members.length === 0 ? (
         <MemberItem
           member={data?.owner?.profile}

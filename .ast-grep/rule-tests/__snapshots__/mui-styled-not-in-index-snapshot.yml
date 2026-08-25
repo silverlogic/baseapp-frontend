@@ -1,0 +1,18 @@
+id: mui-styled-not-in-index
+snapshots:
+  ? |
+    const Container = styled(Box)(({ theme }) => ({
+      display: 'flex',
+      padding: theme.spacing(2),
+    }))
+
+    const Component = () => <Container>hi</Container>
+  : labels:
+    - source: styled(Box)
+      style: primary
+      start: 18
+      end: 29
+    - source: styled
+      style: secondary
+      start: 18
+      end: 24

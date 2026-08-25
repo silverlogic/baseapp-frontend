@@ -1,0 +1,29 @@
+id: ts-no-type-name-prefix
+snapshots:
+  ? |
+    export interface ICustomer {
+      id: number
+    }
+  : labels:
+    - source: |-
+        interface ICustomer {
+          id: number
+        }
+      style: primary
+      start: 7
+      end: 43
+    - source: ICustomer
+      style: secondary
+      start: 17
+      end: 26
+  ? |
+    type TUserRole = 'admin' | 'user'
+  : labels:
+    - source: type TUserRole = 'admin' | 'user'
+      style: primary
+      start: 0
+      end: 33
+    - source: TUserRole
+      style: secondary
+      start: 5
+      end: 14

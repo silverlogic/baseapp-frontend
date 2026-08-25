@@ -6,7 +6,7 @@ import { Popover } from '@baseapp-frontend/design-system/components/web/popovers
 
 import { MenuItem, MenuList, Typography } from '@mui/material'
 
-import { ActionOverlayTooltipContainer } from '../styled'
+import { TooltipContainer } from './styled'
 import { ThreeDotsMenuHoverOverlayProps } from './types'
 
 const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
@@ -20,17 +20,7 @@ const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
   handleClosePopover,
   popover,
 }) => (
-  <ActionOverlayTooltipContainer
-    offsetRight={offsetRight}
-    offsetTop={offsetTop}
-    aria-label="actions overlay"
-    sx={{
-      position: 'unset',
-      marginX: '4px',
-      borderRadius: '500px',
-      alignSelf: 'baseline',
-    }}
-  >
+  <TooltipContainer offsetRight={offsetRight} offsetTop={offsetTop} aria-label="actions overlay">
     <IconButton onClick={popover.onOpen} aria-label="Show menu options">
       <ThreeDotsIcon sx={{ fontSize: '18px' }} />
     </IconButton>
@@ -72,7 +62,7 @@ const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
         )}
       </MenuList>
     </Popover>
-  </ActionOverlayTooltipContainer>
+  </TooltipContainer>
 )
 
 export default ThreeDotsMenuHoverOverlay

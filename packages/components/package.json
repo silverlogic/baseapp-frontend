@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "2.0.3",
+  "version": "2.1.1",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -9,7 +9,7 @@
     "relay": "relay-compiler",
     "relay:download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay:update-schema": "pnpm relay:download-schema && pnpm relay",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "prettier": "prettier --write .",
     "storybook": "pnpm relay && storybook dev -p 6007",
@@ -105,7 +105,8 @@
     "@baseapp-frontend/graphql": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "react-native-safe-area-context": "catalog:react-native"
   },
   "devDependencies": {
     "@babel/cli": "catalog:components",

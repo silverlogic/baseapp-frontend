@@ -132,3 +132,7 @@ export const StyledNavItem = styled(ListItemButton, {
     },
   }
 })
+
+export const IconContainer = styled('div')({
+  position: 'relative',
+})
