@@ -223,7 +223,7 @@ consumer's `<rootDir>` — miss one and jest fails inside an unrelated module. C
 are web-only; reuse `createTestEnvironment` and `withGraphqlTestProviders` from
 `@baseapp-frontend/graphql`.
 
-Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybook coverage to a block, writing the changeset, running the four done gates, or diagnosing a CI failure on a new package.
+Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybook coverage to a block, writing the changeset, running the five done gates, or diagnosing a CI failure on a new package.
 
 ---
 
