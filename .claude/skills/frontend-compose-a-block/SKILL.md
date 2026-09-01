@@ -124,3 +124,27 @@ barrel. Third-party deps are `catalog:` specs, cross-package deps are `peerDepen
 list them under `dependencies` and the consumer resolves a second React instance.
 
 Read `references/package-manifest.md` when: writing a package's `exports` map, choosing between `dependencies`, `peerDependencies`, and `catalog:` specs, publishing a new subpath, or debugging an import that resolves to nothing.
+
+---
+
+### 3. Module scaffold
+A module is `packages/components/modules/<name>/` split into `common/`, `web/`, and `native/`. A web
+component directory is `index.tsx` + `styled.tsx` + `types.ts`; a native one replaces `styled.tsx`
+with `styles.ts` exporting a `createStyles()` factory. Hook directories are `index.ts` + `types.ts`
+carrying `Use<Name>Options` / `Use<Name>Return`; context ships as the `<Name>Provider` / `use<Name>`
+/ `with<Name>Provider` triplet. Model on `modules/comments`, not `messages` or `activity-log`.
+
+Read `references/module-scaffold.md` when: adding a module under `packages/components/modules/`, laying out a component or hook directory, naming leaf files, or reviewing a module that mixes `<Name>.tsx` and `type.ts` conventions.
+
+---
+
+### 4. The common/web/native contract
+`common/` imports only `common/`; `web/` may import `common/` but never `native/`; `native/` may
+import `common/` but never `web/`. `packages/config/.eslintrc-with-restricted-paths.js:6-33`
+enforces it, opted into via the package's own `.eslintrc.js` — only `components` and `design-system`
+do.
+The rule polices paths, not packages, so a `react-native` or `expo-*` import inside `common/` passes
+lint and dies on web at runtime, exactly as `messages/common/graphql/mutations/CreateGroupChat.ts`
+does today.
+
+Read `references/platform-split.md` when: deciding whether code belongs in `common/`, `web/`, or `native/`, sharing a hook across the two UI legs, injecting a platform-only capability, or debugging a `common/` import that crashes on one platform.
