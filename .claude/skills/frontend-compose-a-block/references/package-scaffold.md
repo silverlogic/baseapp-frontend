@@ -49,3 +49,34 @@ packages/<name>/
 ├── .storybook/                # +storybook — main.ts, preview.ts
 └── public/mockServiceWorker.js # +storybook — pair with the msw.workerDirectory field
 ```
+
+## The 11 always-required files
+
+| # | File | Why |
+|---|---|---|
+| 1 | `package.json` | The contract: `exports`, `files`, `catalog:` deps, scripts, `sideEffects`. |
+| 2 | `tsconfig.json` | Extends `packages/tsconfig/lib.json`; ESLint resolves it as its project. |
+| 3 | `tsconfig.build.json` | Extends `./tsconfig.json`, drops tests — `tsc --build` targets it. |
+| 4 | `.eslintrc.js` | Re-exports `packages/config/.eslintrc.js` or its restricted-paths twin. |
+| 5 | `.prettierrc.js` | Re-exports the shared prettier config; lint-staged runs on `packages/**`. |
+| 6 | `README.md` | Every package ships one; `packages/graphql/README.md` is the template. |
+| 7 | `CHANGELOG.md` | Changesets appends here; seed with the package-name heading alone. |
+| 8 | `exports` map + `files` allowlist | The entrypoint. No `main`, no root barrel — see below. |
+| 9 | An `index.ts` per source dir | The ast-grep rules assume the index/types/styled leaf layout. |
+| 10 | `.changeset/<slug>.md` | Required before merge; the release workflow publishes from it. |
+| 11 | A bullet in the root `README.md` | Its "Apps and Packages" list enumerates every package. |
+
+Rows 10 and 11 live outside `packages/<name>/`. The other nine are files in the directory.
+
+Every buildable package declares `build`, `dev`, `lint`, `clean`, and `storybook`, plus `test:unit`
+when it has unit tests. Declare `storybook` even with no stories — the echo stub
+`echo <Name>: No storybook found`, as in `packages/provider/package.json`. Without it nothing
+satisfies the turbo `storybook` task.
+
+**Shape B is the target for a new package**: an `exports` map whose targets are TypeScript source
+subpaths, a `files` allowlist, `sideEffects: false`, and no `main`. That is what
+`packages/components/package.json` and `packages/design-system/package.json` do — the two most
+recently maintained packages. Counter-example: the six barrel packages (`authentication`, `graphql`,
+`provider`, `test`, `utils`, `wagtail`) pair `main: "./index.ts"`, which is source, with
+`types: "dist/index.d.ts"`, which is built, so the two fields disagree about what ships. Do not copy
+that pair forward.
