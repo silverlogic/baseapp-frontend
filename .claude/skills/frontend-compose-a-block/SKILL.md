@@ -115,7 +115,6 @@ that reaches outside the directory — `.github/workflows/main.yml` hardcodes
 Read `references/package-scaffold.md` when: starting a new `packages/<name>/`, deciding which conditional file sets a package needs, adding tests or Relay to an existing package, or auditing a package for a missing conventional file.
 
 ---
-
 ### 2. Package manifest, exports, and dependencies
 New packages take Shape B: an `exports` map over TypeScript source subpaths, a `files` allowlist,
 `sideEffects: false`, no `main`. One subpath per module leg, so a consumer never deep-imports past a
@@ -126,7 +125,6 @@ list them under `dependencies` and the consumer resolves a second React instance
 Read `references/package-manifest.md` when: writing a package's `exports` map, choosing between `dependencies`, `peerDependencies`, and `catalog:` specs, publishing a new subpath, or debugging an import that resolves to nothing.
 
 ---
-
 ### 3. Module scaffold
 A module is `packages/components/modules/<name>/` split into `common/`, `web/`, and `native/`. A web
 component directory is `index.tsx` + `styled.tsx` + `types.ts`; a native one replaces `styled.tsx`
@@ -137,7 +135,6 @@ carrying `Use<Name>Options` / `Use<Name>Return`; context ships as the `<Name>Pro
 Read `references/module-scaffold.md` when: adding a module under `packages/components/modules/`, laying out a component or hook directory, naming leaf files, or reviewing a module that mixes `<Name>.tsx` and `type.ts` conventions.
 
 ---
-
 ### 4. The common/web/native contract
 `common/` imports only `common/`; `web/` may import `common/` but never `native/`; `native/` may
 import `common/` but never `web/`. `packages/config/.eslintrc-with-restricted-paths.js:6-33`
@@ -150,7 +147,6 @@ does today.
 Read `references/platform-split.md` when: deciding whether code belongs in `common/`, `web/`, or `native/`, sharing a hook across the two UI legs, injecting a platform-only capability, or debugging a `common/` import that crashes on one platform.
 
 ---
-
 ### 5. Barrels and the public API
 Every leg gets an explicit `index.ts` — `export { default as X } from './X'` plus
 `export type * from './X/types'`, never a star-glob, capped at the module's public surface.
@@ -161,7 +157,6 @@ from two legs and a consumer importing both gets whichever resolved last.
 Read `references/barrels-and-api.md` when: writing a leg's `index.ts`, deciding what a module exposes publicly, re-exporting types, or tracking down a shadowed export across two barrels.
 
 ---
-
 ### 6. Relay fragments
 One fragment per component, named `<Component>_<propName>`; the component takes a fragment ref,
 never raw data, and never reads a field it did not declare. `@argumentDefinitions` / `@arguments`
@@ -172,7 +167,6 @@ carry the legacy `<Name>Fragment` name; `comments` shows the target, `messages` 
 Read `references/relay-fragments.md` when: adding a fragment to a component, parameterizing one with `@argumentDefinitions`, composing fragments across modules, or reviewing a component that reads data it never declared.
 
 ---
-
 ### 7. Root-query ownership
 Two shapes ship here and neither wins. Fragment-ref-driven: `comments/web/BaseComments` takes a
 `target` fragment ref and runs no query, composing into any page query — the app then owns keeping
@@ -184,7 +178,6 @@ severity `error` because a lazy query in a list row fetches once per row.
 Read `references/relay-queries.md` when: deciding whether a module owns its root query or takes a fragment ref, placing a Suspense boundary, choosing a `fetchPolicy`, or diagnosing a request waterfall in a list row.
 
 ---
-
 ### 8. Connections and pagination
 `@connection(key: "<FragmentName>_<fieldName>")`, without exception; `filters:` when the field takes
 result-altering args, `filters: []` when it must survive an `orderBy` change. Extract the key to a
@@ -194,7 +187,6 @@ result-altering args, `filters: []` when it must survive an `orderBy` change. Ex
 Read `references/relay-pagination.md` when: adding `usePaginationFragment` to a list, naming a `@connection` key, deriving a connection id for a mutation, or debugging a list that does not update after an insert.
 
 ---
-
 ### 9. Mutations and store updates
 One file per mutation under `<module>/common/graphql/mutations/`: a `<Name>MutationQuery` document
 plus a `use<Name>Mutation` hook returning `[commit, isInFlight]`, toasting via `useNotification()`.
@@ -204,7 +196,6 @@ Select `errors { field messages }` in every payload and map them with `setFormRe
 Read `references/relay-mutations.md` when: writing a `use<Name>Mutation` wrapper, updating a connection from a mutation payload, surfacing payload errors on a form, or reviewing a hand-rolled `updater`.
 
 ---
-
 ### 10. Subscriptions
 One document and one `use<X>Subscription` per file in `<module>/common/graphql/subscriptions/`, the
 config wrapped in `useMemo` — unmemoized it re-subscribes on every render. Connection ids come from
@@ -214,7 +205,6 @@ config wrapped in `useMemo` — unmemoized it re-subscribes on every render. Con
 Read `references/relay-subscriptions.md` when: adding a subscription to a module, keeping counters live after a push update, memoizing a subscription config, or debugging a subscription that re-establishes on every render.
 
 ---
-
 ### 11. Testing, storybook, and shipping
 Unit-test `common/` hooks and utils with `renderHook`; per-platform tests stay thin and mock the
 shared hook. A tested package physically owns all nine `__mocks__` shims, because
@@ -226,7 +216,6 @@ are web-only; reuse `createTestEnvironment` and `withGraphqlTestProviders` from
 Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybook coverage to a block, writing the changeset, running the five done gates, or diagnosing a CI failure on a new package.
 
 ---
-
 ## Definition of done
 
 Five gates, each with the directory it runs from. The submodule root and a package directory are not
