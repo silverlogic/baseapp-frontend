@@ -212,3 +212,15 @@ config wrapped in `useMemo` — unmemoized it re-subscribes on every render. Con
 `graphql-ws` link at `packages/graphql/config/environment.ts:110-150`; never `new Environment`.
 
 Read `references/relay-subscriptions.md` when: adding a subscription to a module, keeping counters live after a push update, memoizing a subscription config, or debugging a subscription that re-establishes on every render.
+
+---
+
+### 11. Testing, storybook, and shipping
+Unit-test `common/` hooks and utils with `renderHook`; per-platform tests stay thin and mock the
+shared hook. A tested package physically owns all nine `__mocks__` shims, because
+`packages/test/jest.config.ts` resolves `setupFilesAfterEnv` and `moduleNameMapper` against the
+consumer's `<rootDir>` — miss one and jest fails inside an unrelated module. Cypress and Storybook
+are web-only; reuse `createTestEnvironment` and `withGraphqlTestProviders` from
+`@baseapp-frontend/graphql`.
+
+Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybook coverage to a block, writing the changeset, running the four done gates, or diagnosing a CI failure on a new package.
