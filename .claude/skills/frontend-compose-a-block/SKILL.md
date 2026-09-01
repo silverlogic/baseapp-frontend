@@ -170,3 +170,25 @@ carry call-site variance — page size, sort, an `@include`-gated section. Docum
 carry the legacy `<Name>Fragment` name; `comments` shows the target, `messages` the counter-example.
 
 Read `references/relay-fragments.md` when: adding a fragment to a component, parameterizing one with `@argumentDefinitions`, composing fragments across modules, or reviewing a component that reads data it never declared.
+
+---
+
+### 7. Root-query ownership
+Two shapes ship here and neither wins. Fragment-ref-driven: `comments/web/BaseComments` takes a
+`target` fragment ref and runs no query, composing into any page query — the app then owns keeping
+that query in sync with the fragment chain. Query-driven: `messages`, `profiles`, `notifications`
+run their own root queries and drop in unchanged, paying a render-time fetch the app cannot hoist
+or preload. `useLazyLoadQuery` stays on the table; ast-grep `relay-uselazyloadquery-in-list` is
+severity `error` because a lazy query in a list row fetches once per row.
+
+Read `references/relay-queries.md` when: deciding whether a module owns its root query or takes a fragment ref, placing a Suspense boundary, choosing a `fetchPolicy`, or diagnosing a request waterfall in a list row.
+
+---
+
+### 8. Connections and pagination
+`@connection(key: "<FragmentName>_<fieldName>")`, without exception; `filters:` when the field takes
+result-altering args, `filters: []` when it must survive an `orderBy` change. Extract the key to a
+`*_CONNECTION_KEY` constant in `common/constants.ts`, derive ids through `get<X>ConnectionId` in
+`common/utils.ts`. Eleven live keys use four casings; a mismatch writes where nothing is reading.
+
+Read `references/relay-pagination.md` when: adding `usePaginationFragment` to a list, naming a `@connection` key, deriving a connection id for a mutation, or debugging a list that does not update after an insert.
