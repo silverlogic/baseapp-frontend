@@ -224,3 +224,18 @@ are web-only; reuse `createTestEnvironment` and `withGraphqlTestProviders` from
 `@baseapp-frontend/graphql`.
 
 Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybook coverage to a block, writing the changeset, running the four done gates, or diagnosing a CI failure on a new package.
+
+---
+
+## Definition of done
+
+Five gates, each with the directory it runs from. The submodule root and a package directory are not
+interchangeable — the root has no `relay` script, and a package has no `changeset`.
+
+1. **Unit tests** — `pnpm test:unit` in the package dir (`jest --config ./jest.config.ts`).
+2. **Relay artifacts** — `pnpm relay` in the package dir, then `git status --porcelain` over
+   `__generated__/` and `schema.graphql`; any diff means code and committed schema disagree.
+3. **Lint and types** — `pnpm lint` in the package dir: `eslint --cache` plus `tsc --noEmit`, i.e.
+   `eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental`.
+4. **Changeset** — `pnpm changeset` at the submodule root; without one the release ships nothing.
+5. **ast-grep** — `pnpm lint:ast-grep` at the submodule root (`ast-grep test && ast-grep scan`).
