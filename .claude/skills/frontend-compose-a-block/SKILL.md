@@ -19,3 +19,29 @@ file locations, and several half-finished migrations. Where the codebase diverge
 the divergence is named — under `## Before you start: known-stale sources` here, or in a reference's
 `## Anti-patterns` — so you can recognize it and leave it alone. Copying the nearest sibling is the
 most reliable way to get a block wrong.
+
+## Scope
+
+This skill governs code **inside the submodule** — `baseapp-frontend/packages/**`. A consuming
+template's own `apps/` and `packages/` are different ground: the template ships
+`frontend-conventions`, `frontend-patterns`, and `frontend-design-system` for that code. Those three
+also own several areas a block's UI touches. Use them alongside this skill rather than instead of
+it — this skill names the owner and routes to it, and never restates the rule itself.
+
+| Topic | Owner |
+|---|---|
+| Styling — `styled()` vs `sx` vs Tailwind, the no-hardcoded-color rule | `frontend-conventions` |
+| TypeScript and GraphQL file conventions in a consuming template | `frontend-conventions` |
+| Forms, dialogs, modals, drawers | `frontend-patterns` |
+| Permission gates around a queried surface | `frontend-patterns` |
+| Zustand store construction; app-level query preloading and infinite scroll | `frontend-patterns` |
+| Design tokens and the primitive inventory | `frontend-design-system` |
+| Package scaffold, manifest, the leg contract, barrels, the Relay layer, shipping | this skill |
+
+One boundary is worth stating outright because it reads like a contradiction and is not.
+`frontend-conventions/references/code-sharing.md` governs the **template** repo's `packages/` — "do
+not move code to `packages/` preemptively", "do not put UI components in `packages/`". This skill
+governs the **submodule**, where UI in `packages/` is the whole point —
+`@baseapp-frontend/components` exists to ship UI. The two rules are complementary, not in conflict;
+they address different repositories. Inside `baseapp-frontend/`, this skill applies; one directory
+up, `code-sharing.md` does.
