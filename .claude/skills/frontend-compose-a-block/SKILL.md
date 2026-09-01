@@ -100,3 +100,27 @@ through it.
 two fields describe different distribution models, so neither tells you which one the repo means.
 Do not infer a manifest shape from them: a new package takes Shape B (section 2), an `exports` map
 over source subpaths with no `main` at all.
+
+---
+
+## Sections
+
+### 1. Package scaffold
+A package is a directory at `packages/<name>/`, registered by the `packages/*` glob — no
+`pnpm-workspace.yaml` and no `turbo.json` edit. Eleven files are always required; unit tests, Relay,
+web styling, Cypress, and Storybook each add a conditional set on top. Cypress is the one addition
+that reaches outside the directory — `.github/workflows/main.yml` hardcodes
+`--filter @baseapp-frontend/components`, so a new package's component tests silently never run.
+
+Read `references/package-scaffold.md` when: starting a new `packages/<name>/`, deciding which conditional file sets a package needs, adding tests or Relay to an existing package, or auditing a package for a missing conventional file.
+
+---
+
+### 2. Package manifest, exports, and dependencies
+New packages take Shape B: an `exports` map over TypeScript source subpaths, a `files` allowlist,
+`sideEffects: false`, no `main`. One subpath per module leg, so a consumer never deep-imports past a
+barrel. Third-party deps are `catalog:` specs, cross-package deps are `peerDependencies` at
+`workspace:*`, and React, React Native, MUI, `react-relay`, and `relay-runtime` are always peers —
+list them under `dependencies` and the consumer resolves a second React instance.
+
+Read `references/package-manifest.md` when: writing a package's `exports` map, choosing between `dependencies`, `peerDependencies`, and `catalog:` specs, publishing a new subpath, or debugging an import that resolves to nothing.
