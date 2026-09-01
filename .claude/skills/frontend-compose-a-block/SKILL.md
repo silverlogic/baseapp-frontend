@@ -192,3 +192,23 @@ result-altering args, `filters: []` when it must survive an `orderBy` change. Ex
 `common/utils.ts`. Eleven live keys use four casings; a mismatch writes where nothing is reading.
 
 Read `references/relay-pagination.md` when: adding `usePaginationFragment` to a list, naming a `@connection` key, deriving a connection id for a mutation, or debugging a list that does not update after an insert.
+
+---
+
+### 9. Mutations and store updates
+One file per mutation under `<module>/common/graphql/mutations/`: a `<Name>MutationQuery` document
+plus a `use<Name>Mutation` hook returning `[commit, isInFlight]`, toasting via `useNotification()`.
+Select `errors { field messages }` in every payload and map them with `setFormRelayErrors`. Prefer
+`@prependEdge` / `@deleteEdge` / `@deleteRecord` over a hand-written `updater` — 18 to 3 here.
+
+Read `references/relay-mutations.md` when: writing a `use<Name>Mutation` wrapper, updating a connection from a mutation payload, surfacing payload errors on a form, or reviewing a hand-rolled `updater`.
+
+---
+
+### 10. Subscriptions
+One document and one `use<X>Subscription` per file in `<module>/common/graphql/subscriptions/`, the
+config wrapped in `useMemo` — unmemoized it re-subscribes on every render. Connection ids come from
+`ConnectionHandler.getConnectionID` fed the extracted `*_CONNECTION_KEY`. Subscriptions ride the
+`graphql-ws` link at `packages/graphql/config/environment.ts:110-150`; never `new Environment`.
+
+Read `references/relay-subscriptions.md` when: adding a subscription to a module, keeping counters live after a push update, memoizing a subscription config, or debugging a subscription that re-establishes on every render.
