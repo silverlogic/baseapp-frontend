@@ -156,3 +156,34 @@ Before adding a fifth Storybook instance, consider composing the package's stori
 No `pnpm-workspace.yaml` edit — the `packages/*` glob picks the directory up. No `turbo.json` edit —
 turbo matches tasks by script name. No `.npmrc`, no `.npmignore`. No CI edit **except Cypress**,
 above, which is the single CI-touching step in the whole scaffold.
+
+## Build command
+
+The build is `tsc --build tsconfig.build.json`. There is no bundler step. The canonical script is
+
+```text
+"build": "rm -rf dist && tsc --build tsconfig.build.json"
+```
+
+as in `packages/authentication/package.json`. A Relay package prefixes codegen —
+`rm -rf dist && pnpm relay && tsc --build tsconfig.build.json`, per
+`packages/components/package.json` — so generated artifacts exist before the typecheck.
+
+On a Shape B package the build is a typecheck-and-emit gate for CI, not the publish artifact:
+`files` omits `dist`, every `exports` target resolves to a `.ts`, and the consumer compiles source.
+
+## Copy from
+
+Copy the scaffold from `packages/components` or `packages/design-system`. They are the two most
+recently maintained packages, both on Shape B, and `components` is the only one wired end to end for
+Relay, jest, Cypress, and Storybook at once — so its config files are the ones that have been run.
+
+Never copy `packages/wagtail`. Three reasons, each of which produces a package that looks configured
+and is not:
+
+- Its Cypress setup is half-built — `cypress.config.ts` and the cypress devDeps are there, but there
+  is no `test:component` script and no `cypress/support/` directory, so no spec can run.
+- Its Relay wiring is vestigial — `relay.config.js` is present, but `build` never invokes the
+  compiler, so `__generated__` goes stale without a signal.
+- Its `.gitignore` omits `/__generated__` and `!/__generated__/.keep`, so a copy commits generated
+  Relay artifacts on the first run.
