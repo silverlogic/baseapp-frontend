@@ -148,3 +148,25 @@ lint and dies on web at runtime, exactly as `messages/common/graphql/mutations/C
 does today.
 
 Read `references/platform-split.md` when: deciding whether code belongs in `common/`, `web/`, or `native/`, sharing a hook across the two UI legs, injecting a platform-only capability, or debugging a `common/` import that crashes on one platform.
+
+---
+
+### 5. Barrels and the public API
+Every leg gets an explicit `index.ts` — `export { default as X } from './X'` plus
+`export type * from './X/types'`, never a star-glob, capped at the module's public surface.
+Cross-module imports go through the sibling's leg barrel, never a deep relative path. Re-exporting a
+`common/` symbol through a platform barrel shadows it: `messages` exports `useRoomListSubscription`
+from two legs and a consumer importing both gets whichever resolved last.
+
+Read `references/barrels-and-api.md` when: writing a leg's `index.ts`, deciding what a module exposes publicly, re-exporting types, or tracking down a shadowed export across two barrels.
+
+---
+
+### 6. Relay fragments
+One fragment per component, named `<Component>_<propName>`; the component takes a fragment ref,
+never raw data, and never reads a field it did not declare. `@argumentDefinitions` / `@arguments`
+carry call-site variance — page size, sort, an `@include`-gated section. Documents live under
+`<module>/common/graphql/`; `$key` types refs, `$data` types read results. 26 of 37 fragments still
+carry the legacy `<Name>Fragment` name; `comments` shows the target, `messages` the counter-example.
+
+Read `references/relay-fragments.md` when: adding a fragment to a component, parameterizing one with `@argumentDefinitions`, composing fragments across modules, or reviewing a component that reads data it never declared.
