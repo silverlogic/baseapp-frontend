@@ -45,3 +45,31 @@ governs the **submodule**, where UI in `packages/` is the whole point —
 `@baseapp-frontend/components` exists to ship UI. The two rules are complementary, not in conflict;
 they address different repositories. Inside `baseapp-frontend/`, this skill applies; one directory
 up, `code-sharing.md` does.
+
+## How to use this skill
+
+Each section below summarizes one area. When a task touches that area, read the corresponding
+reference file before writing code — the references carry the real code, the anchors, and the
+anti-patterns.
+
+Pick a route first. The choice is decidable from this file; you do not need to open a reference to
+make it.
+
+**Package route** — you are adding a directory at `packages/<name>/` that publishes as
+`@baseapp-frontend/<name>` and owns a `package.json`. Read sections **1 → 2 in order**: scaffold,
+then manifest. They are a single sequence and skipping one leaves the package unbuildable or
+unpublishable — a directory that compiles locally and resolves to nothing from a consumer.
+
+**Module route** — you are adding a feature directory inside a package that already exists,
+canonically `packages/components/modules/<name>/`, with `common/`, `web/`, and `native/` legs. Read
+sections **3 → 4 → 5 in order**: directory layout, then which leg each artefact belongs in, then how
+the module leaves the package through its barrels. Out of order you will place files before you know
+the leg rules, and the import lint fails after the fact.
+
+Tiebreaker when both look plausible: does the code need its own `package.json`, version, and
+changelog? Yes — package route. No — module route. A module never gets one.
+
+Relay sections **6-10 apply to both routes**; a block's data layer is the same whether it ships as a
+new package or a new module. Read them in order when the block reads or writes GraphQL, and skip
+them entirely when it does not. Section **11 closes both routes** — tests, stories, changeset — and
+`## Definition of done` is the list CI actually enforces.
