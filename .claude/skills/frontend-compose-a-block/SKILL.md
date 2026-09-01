@@ -73,3 +73,30 @@ Relay sections **6-10 apply to both routes**; a block's data layer is the same w
 new package or a new module. Read them in order when the block reads or writes GraphQL, and skip
 them entirely when it does not. Section **11 closes both routes** — tests, stories, changeset — and
 `## Definition of done` is the list CI actually enforces.
+
+---
+
+## Before you start: known-stale sources
+
+Three things here look authoritative and are not. Each is the kind of file a new block gets by
+pattern-matching against its neighbours, and each carries a specific failure.
+
+**The dead `tsup` pair.** `packages/components/tsup.config.ts` and
+`packages/design-system/tsup.config.ts` both exist, and both packages still list `tsup` in
+devDependencies — nothing invokes either file. The build in both packages is
+`tsc --build tsconfig.build.json` (`components` prefixes it with `pnpm relay`). Copying a tsup
+config into a new package leaves you tuning a bundler step that never runs, and hides the fact that
+`tsconfig.build.json` is the file that actually decides what ships.
+
+**`packages/wagtail`'s Relay wiring.** It carries `relay.config.js`, a `__generated__/` directory,
+and a 2,189-line `schema.graphql` — a complete Relay setup with zero `graphql` tagged documents
+behind it. Nothing there was ever exercised by a real query, so it reads as a working reference
+while proving nothing. Take Relay wiring from `packages/components`, which has queries running
+through it.
+
+**`main` and `types` disagree on the six Shape A packages.** In `packages/authentication`,
+`packages/graphql`, `packages/provider`, `packages/test`, `packages/utils`, and `packages/wagtail`,
+`main` is `./index.ts` — TypeScript source — while `types` is `dist/index.d.ts`, built output. The
+two fields describe different distribution models, so neither tells you which one the repo means.
+Do not infer a manifest shape from them: a new package takes Shape B (section 2), an `exports` map
+over source subpaths with no `main` at all.
