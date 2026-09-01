@@ -187,3 +187,22 @@ and is not:
   compiler, so `__generated__` goes stale without a signal.
 - Its `.gitignore` omits `/__generated__` and `!/__generated__/.keep`, so a copy commits generated
   Relay artifacts on the first run.
+
+## Anti-patterns
+
+- Building a package with tsup. `packages/components/tsup.config.ts` and
+  `packages/design-system/tsup.config.ts` exist and nothing invokes them — the build is
+  `tsc --build tsconfig.build.json`, so edits to either file change nothing that ships.
+- Copying `packages/wagtail` as the Relay or Cypress reference — half a Cypress setup, no
+  `/__generated__` ignore.
+- Giving a new package `main: "./index.ts"` alongside `types: "dist/index.d.ts"` — the two fields
+  disagree about whether the package ships source or `dist`.
+- Shipping a package with no `storybook` script — the turbo `storybook` task has nothing to run.
+- Leaving the nine `__mocks__` shims in `packages/test/` — the shared jest config resolves them
+  against the consuming package's `<rootDir>`, not against `packages/test/`.
+- Adding Cypress specs without adding the workspace to `.github/workflows/main.yml` — the specs
+  never run and CI stays green.
+- Merging a package with no `.changeset/` entry — the release workflow has nothing to publish.
+- Committing `__generated__/` — copy the two relay `.gitignore` lines along with the Relay config.
+- Editing `pnpm-workspace.yaml` or `turbo.json` to register a package — neither is read for that.
+- Publishing a subpath that deep-imports past a barrel — one `exports` entry per module leg, always.
