@@ -26,13 +26,13 @@ Paths below are relative to `packages/components/modules/`.
 
 `usePaginationFragment` needs `@refetchable` and `@connection` on the same fragment. Name the key
 after the fragment that declares it plus the field as selected — no other scheme, no exceptions.
-`profiles/common/graphql/fragments/AllProfilesList.ts` (`AllProfilesListFragmentQuery`) is the
+`profiles/common/graphql/fragments/AllProfilesList.ts` (exported as `fragmentQuery`) is the
 conforming shape:
 
 ```graphql
 fragment AllProfilesListFragment on Query
 @refetchable(queryName: "AllProfilesListPaginationQuery")
-@argumentDefinitions(count: { type: "Int", defaultValue: 10 }, cursor: { type: "String" }) {
+@argumentDefinitions(count: { type: "Int", defaultValue: 5 }, cursor: { type: "String" }) {
   allProfiles(after: $cursor, first: $count, orderBy: $orderBy, q: $q)
     @connection(key: "AllProfilesListFragment_allProfiles") {
     edges { node { id ...ProfileItemFragment } }
