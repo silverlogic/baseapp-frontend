@@ -1,0 +1,70 @@
+{
+  "skill_name": "frontend-compose-a-block",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a new baseapp-frontend package called 'bookmarks' that ships a web and a native bookmark button and reads its data through Relay. Scaffold the package.",
+      "expected_output": "Should create the eleven always-required files under packages/bookmarks/ plus the Relay and unit-test conditional sets, build with tsc --build tsconfig.build.json, and register the package nowhere else.",
+      "files": [],
+      "assertions": [
+        "Creates the eleven always-required files under packages/bookmarks/, including tsconfig.build.json, .prettierrc.js, and a CHANGELOG.md seeded with the package-name heading",
+        "Sets build to 'rm -rf dist && pnpm relay && tsc --build tsconfig.build.json', the Relay form packages/components/package.json uses, with no bundler step",
+        "Copies the scaffold from packages/components or packages/design-system, not from packages/wagtail, whose Cypress setup has no test:component script and whose .gitignore omits /__generated__",
+        "Declares a storybook script even with no stories, as packages/provider/package.json does with its 'echo <Name>: No storybook found' stub, so the turbo storybook task has something to run",
+        "Does NOT add a tsup.config.ts, and does NOT edit pnpm-workspace.yaml or turbo.json to register the package — the packages/* glob picks the directory up and turbo matches by script name"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I'm writing package.json for the new @baseapp-frontend/bookmarks package. It renders MUI components on web, runs Relay queries, and imports @baseapp-frontend/design-system. What do exports and the dependency sections look like?",
+      "expected_output": "Should use Shape B — an exports map over TypeScript source subpaths, a files allowlist, and sideEffects: false with no main — and put every runtime library in peerDependencies at a catalog: spec.",
+      "files": [],
+      "assertions": [
+        "Uses Shape B: an exports map whose targets are TypeScript source subpaths plus a files allowlist covering every target, with no main, no types, and no root index.ts barrel",
+        "Writes one exports subpath per module leg — ./bookmarks/common, ./bookmarks/web, ./bookmarks/native — with no directory root and no wildcard, and keeps './package.json': './package.json' in the map",
+        "Declares react-native, the three @mui/* packages, react-relay, and relay-runtime under peerDependencies, not dependencies, because a second relay-runtime gives a second store no fragment written against the first can read",
+        "Gives @baseapp-frontend/design-system a peerDependencies entry at workspace:*, puts @baseapp-frontend/config, eslint-plugin, and tsconfig in devDependencies, and specs every third-party version as catalog: or a named catalog such as catalog:material-ui",
+        "Does NOT pair main: './index.ts' with types: 'dist/index.d.ts' — that is Shape A's defect across authentication, graphql, provider, test, utils, and wagtail, where the two fields disagree about what ships"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Add a 'reactions' module to packages/components. It needs a list component on web and on native, plus one hook both legs share. Lay out the directories and name the files.",
+      "expected_output": "Should create packages/components/modules/reactions/ with common/, web/, and native/ legs, index.tsx + styled.tsx + types.ts leaves on web, a createStyles() factory on native, and the shared hook under common/hooks/.",
+      "files": [],
+      "assertions": [
+        "Creates the three legs common/, web/, and native/ under packages/components/modules/reactions/, each with its own index.ts barrel matching one exports subpath",
+        "Names every web component leaf index.tsx plus styled.tsx plus types.ts, never <Name>.tsx, and adds constants.ts or utils.ts only when the component needs them",
+        "Puts the shared hook at common/hooks/useReactions/ as index.ts plus types.ts exporting UseReactionsOptions and UseReactionsReturn, with the return type annotated on the signature rather than inferred",
+        "Has the native leaf export a createStyles() factory returning StyleSheet.create({...}) from styles.ts, not a plain style object, so a call site can pass theme values in later",
+        "Models the module on modules/comments and does NOT copy modules/messages or modules/activity-log — messages supplies all thirteen type.ts files and a second __shared__/ per UI leg, and activity-log/native/index.ts is a 0-byte file with a live exports entry"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "Our shared upload hook lives in modules/uploads/common/ and I need the file size before uploading. Can I just import expo-file-system there? ESLint isn't complaining.",
+      "expected_output": "Should reject the expo-file-system import in common/, explain that the restricted-paths zones match file paths and not package specifiers, and move the call into the native leg or behind a headless common/ store.",
+      "files": [],
+      "assertions": [
+        "Rejects importing expo-file-system from common/, and names messages/common/graphql/mutations/CreateGroupChat.ts as the one file in the tree that already does it and has no resolution on web",
+        "Explains that packages/config/.eslintrc-with-restricted-paths.js:6-33 configures import/no-restricted-paths over paths, so a package specifier like expo-file-system or react-native clears every zone and fails at runtime instead of at lint",
+        "Keeps the state headless in common/ and renders the surface per platform, or hosts the platform-only affordance in that leg's own context/, or imports the platform package directly inside the platform leg",
+        "Notes that common/ must not read process.env.EXPO_PUBLIC_* or process.env.NEXT_PUBLIC_* either, and routes that through packages/graphql/config/environment.ts instead",
+        "Does NOT ship a new .ast-grep rule as part of the block — it recommends the rule as its own change, with its own snapshot tests in .ast-grep/rule-tests/ and its own baseline decision"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Write the web barrel for the new reactions module. Export everything under web/ so a consuming app can reach whatever it needs.",
+      "expected_output": "Should write explicit named re-export pairs capped at the module's public surface, refuse a star-glob over a directory, and keep each exported name coming from exactly one leg.",
+      "files": [],
+      "assertions": [
+        "Writes the pair export { default as ReactionList } from './ReactionList' and export type * from './ReactionList/types', one pair per component directory, under the leg's // exports web reactions components comment",
+        "Refuses a star-glob over a directory — pages/web/index.ts is the single line export * from './PageComponent', so the module's surface is whatever that directory happens to export today",
+        "Uses export type * rather than plain export * on a types file, because the type-only form erases at compile time while export * leaves the bundler an import to resolve",
+        "Caps the barrel at what a consumer outside the module needs, treating more than 20 re-exports as a defect — messages/common/index.ts carries 36 and profiles/common/index.ts 28, and neither is a target to copy",
+        "Does NOT re-export a common/ symbol through the web or native barrel, and does NOT export one name from two legs — messages/common/index.ts and messages/native/index.ts both ship useRoomListSubscription, so importing both shadows one by resolution order"
+      ]
+    }
+  ]
+}
