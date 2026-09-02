@@ -161,7 +161,7 @@ Read `references/barrels-and-api.md` when: writing a leg's `index.ts`, deciding 
 One fragment per component, named `<Component>_<propName>`; the component takes a fragment ref,
 never raw data, and never reads a field it did not declare. `@argumentDefinitions` / `@arguments`
 carry call-site variance — page size, sort, an `@include`-gated section. Documents live under
-`<module>/common/graphql/`; `$key` types refs, `$data` types read results. 26 of 37 fragments still
+`<module>/common/graphql/`; `$key` types refs, `$data` types read results. 32 of 37 fragments still
 carry the legacy `<Name>Fragment` name; `comments` shows the target, `messages` the counter-example.
 
 Read `references/relay-fragments.md` when: adding a fragment to a component, parameterizing one with `@argumentDefinitions`, composing fragments across modules, or reviewing a component that reads data it never declared.
