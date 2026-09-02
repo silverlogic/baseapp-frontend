@@ -173,7 +173,8 @@ corrects itself; `network-only` on an action whose point is fresh data — a sea
 Nothing passed means `store-or-network`, right when a sibling already owns the record;
 `useCommentItem`'s `expandReplies` is the one place naming it. `store-and-network` also makes an
 app-level preload worth something to a query-driven module: the environment's `QueryResponseCache`
-holds 100 entries on a 5-second TTL (`packages/graphql/config/environment.ts:28`).
+holds 100 entries (`packages/graphql/config/environment.ts:178`) on a 5-second `CACHE_TTL`
+(`packages/graphql/config/environment.ts:28`).
 
 ## Per-package Relay wiring
 
@@ -203,6 +204,25 @@ Relay-shaped neighbour. It carries `relay.config.js`, the same three `relay:*` s
 2,189-line committed `schema.graphql` — and **zero `graphql` tagged documents**. Its `build` skips
 the compiler (`rm -rf dist && tsc --build tsconfig.build.json`) and its `.gitignore` never got the
 `/__generated__` entries. Copy it and you inherit a schema nothing validates against.
+
+## Reuse from `@baseapp-frontend/graphql`, never rebuild
+
+A block consumes this package's Relay surface. Rebuild any of it and you get two environments in
+one app, each with its own store.
+
+- **`createEnvironment`** (`packages/graphql/config/environment.ts`) — never `new Environment`.
+  Exactly one occurrence of that constructor exists repo-wide, and it is inside this factory.
+- **`useEnvironment`** (`packages/graphql/config/useEnvironment`) — returns a fresh environment per
+  SSR render and a memoised singleton on the client. Do not memoise one yourself.
+- **`RelayProvider`** (`packages/graphql/providers/RelayProvider`) — mount this, not
+  `RelayEnvironmentProvider` directly; the wrapper carries the `'use client'` boundary.
+- **`getGraphQLErrorMessage`** (`packages/graphql/utils/getGraphQLErrorMessage`) — pulls the
+  server's text off `error.graphQLErrors`. Reading `error.message` gets the verbose
+  `Error fetching GraphQL query …` wrapper instead.
+- **`useInvalidateRelayStore`** (`packages/graphql/config/useInvalidateRelayStore.ts`) — the
+  sanctioned way to clear the store on logout, rather than hand-rolling `commitLocalUpdate`.
+
+`createTestEnvironment` and `withGraphqlTestProviders` come from the same package.
 
 ## Where the neighbouring skills take over
 
