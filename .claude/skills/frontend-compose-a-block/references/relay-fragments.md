@@ -22,12 +22,16 @@ in production, inside a consuming app you do not control. All 37 fragments in th
 Every component that renders GraphQL-backed data declares exactly one fragment, accepts a **fragment
 ref** as a prop, and reads it with `useFragment`, `useRefetchableFragment` or
 `usePaginationFragment`. It never accepts already-read data, and never reads a field it did not
-declare. `comments/web/CommentItem/types.ts` is the shape to copy — the prop is the ref, not a row:
+declare. `comments/web/CommentItem/types.ts` is the shape to copy — the prop is the ref, not a
+row, with the injectable-slot props on `CustomizableCommentItemProps` elided:
 
 ```ts
-export interface CommentItemProps {
+export interface CommentItemProps extends CustomizableCommentItemProps {
   comment: CommentItem_comment$key
   target: CommentItem_target$key
+  currentThreadDepth: number
+  subscriptionsEnabled: boolean
+  onReplyClick?: () => void
 }
 ```
 
@@ -115,16 +119,25 @@ optional section — parameterize its fragment with `@argumentDefinitions` rathe
 component or over-fetching in the parent. 18 fragment files declare argument definitions; 12 spread
 sites pass `@arguments`. Three uses, all present in the tree.
 
-**Call-site sizing and sort** — `comments/common/graphql/queries/CommentsList.ts`:
+**Call-site sizing, sort and search** — `comments/common/graphql/queries/CommentsList.ts`, with the
+connection's own selection set elided. Every declared argument is threaded into the field: a
+definition you do not pass is dead weight, and a field argument with no definition will not compile.
 
 ```graphql
 fragment CommentsList_comments on CommentsInterface
+@refetchable(queryName: "CommentsListPaginationQuery")
 @argumentDefinitions(
   count: { type: "Int", defaultValue: 5 }
   cursor: { type: "String" }
   orderBy: { type: "String", defaultValue: "-is_pinned,-created" }
+  q: { type: "String" }
 ) {
-  comments(first: $count, after: $cursor, orderBy: $orderBy) { ... }
+  id
+  comments(first: $count, after: $cursor, q: $q, orderBy: $orderBy)
+    @connection(key: "CommentsList_comments", filters: []) {
+    edges { node { id isPinned ...CommentItem_comment } }
+  }
+  ...CommentItem_target
 }
 ```
 
@@ -133,7 +146,10 @@ fragment CommentsList_comments on CommentsInterface
 
 ```graphql
 fragment CommentsFragment on CommentsInterface
+@refetchable(queryName: "CommentsRefetchQuery")
 @argumentDefinitions(isCommentsOpened: { type: "Boolean", defaultValue: true }) {
+  id
+  # __typename, isCommentsEnabled and commentsCount elided
   ...CommentsList_comments @include(if: $isCommentsOpened)
   ...CommentItem_target
 }
@@ -164,9 +180,13 @@ import {
 
 export interface UseCommentItemOptions {
   comment: CommentItem_comment$key
+  // four presentational options elided: threadDepth, maxThreadDepth,
+  // useProfileId, profilePath
 }
 export interface UseCommentItemReturn<TElement = unknown> {
   comment: CommentItem_comment$data
+  refetchCommentItem: RefetchFnDynamic<CommentItemRefetchQuery, CommentItem_comment$key>
+  // thirteen further members elided: the expand/reply/delete handlers and their flags
 }
 ```
 
