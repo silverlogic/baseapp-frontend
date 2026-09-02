@@ -11,6 +11,7 @@ export const UpdateChatRoomMutationQuery = graphql`
         node {
           id
           participantsCount
+          participantIds
           ...LastMessageFragment
           ...TitleFragment
           ...UnreadMessagesCountFragment
