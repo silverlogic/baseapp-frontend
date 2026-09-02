@@ -222,8 +222,9 @@ Five gates, each with the directory it runs from. The submodule root and a packa
 interchangeable — the root has no `relay` script, and a package has no `changeset`.
 
 1. **Unit tests** — `pnpm test:unit` in the package dir (`jest --config ./jest.config.ts`).
-2. **Relay artifacts** — `pnpm relay` in the package dir, then `git status --porcelain` over
-   `__generated__/` and `schema.graphql`; any diff means code and committed schema disagree.
+2. **Relay artifacts** — `pnpm relay` in the package dir. Its exit code is the gate: the compiler
+   fails when a document does not typecheck against the committed `schema.graphql`. Do not check
+   `git status` over `__generated__/` — it is gitignored and can never report drift.
 3. **Lint and types** — `pnpm lint` in the package dir: `eslint --cache` plus `tsc --noEmit`, i.e.
    `eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental`.
 4. **Changeset** — `pnpm changeset` at the submodule root; without one the release ships nothing.
