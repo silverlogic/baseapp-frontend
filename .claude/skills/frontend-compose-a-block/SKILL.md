@@ -182,7 +182,7 @@ Read `references/relay-queries.md` when: deciding whether a module owns its root
 `@connection(key: "<FragmentName>_<fieldName>")`, without exception; `filters:` when the field takes
 result-altering args, `filters: []` when it must survive an `orderBy` change. Extract the key to a
 `*_CONNECTION_KEY` constant in `common/constants.ts`, derive ids through `get<X>ConnectionId` in
-`common/utils.ts`. Eleven live keys use four casings; a mismatch writes where nothing is reading.
+`common/utils.ts`. Twelve live keys use four casings; a mismatch writes where nothing is reading.
 
 Read `references/relay-pagination.md` when: adding `usePaginationFragment` to a list, naming a `@connection` key, deriving a connection id for a mutation, or debugging a list that does not update after an insert.
 
