@@ -64,8 +64,9 @@ the working threshold from the same literature is **more than 20 re-exports in o
 it as a defect**. The cost is not only bytes: every entry is a module the TypeScript server and the
 dev server resolve on each edit.
 
-Four barrels are already over the line — `messages/common/index.ts` (36 re-exports),
-`profiles/common/index.ts` (28), `navigations/web/index.ts` (26), and `messages/web/index.ts` (22).
+Six barrels are already over the line — `messages/common/index.ts` (36 re-exports),
+`profiles/common/index.ts` (28), `navigations/web/index.ts` (26), `messages/web/index.ts` (22),
+`comments/common/index.ts` (22), and `notifications/web/index.ts` (21).
 None of them is a target to copy. What pushes them over is re-exporting internals: individual
 graphql documents, per-hook constants, sub-components that only the module's own entry point
 renders.
