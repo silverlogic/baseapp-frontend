@@ -136,13 +136,11 @@ Read `references/module-scaffold.md` when: adding a module under `packages/compo
 
 ---
 ### 4. The common/web/native contract
-`common/` imports only `common/`; `web/` may import `common/` but never `native/`; `native/` may
-import `common/` but never `web/`. `packages/config/.eslintrc-with-restricted-paths.js:6-33`
-enforces it, opted into via the package's own `.eslintrc.js` — only `components` and `design-system`
-do.
-The rule polices paths, not packages, so a `react-native` or `expo-*` import inside `common/` passes
-lint and dies on web at runtime, exactly as `messages/common/graphql/mutations/CreateGroupChat.ts`
-does today.
+`common/` imports only `common/`; `web/` and `native/` may import `common/` but never each other.
+`packages/config/.eslintrc-with-restricted-paths.js:6-33` enforces it, opted into via the package's
+own `.eslintrc.js` — only `components` and `design-system` do. The rule polices paths, not packages,
+so a `react-native` or `expo-*` import inside `common/` passes lint and dies on web at runtime,
+exactly as `messages/common/graphql/mutations/CreateGroupChat.ts` does today.
 
 Read `references/platform-split.md` when: deciding whether code belongs in `common/`, `web/`, or `native/`, sharing a hook across the two UI legs, injecting a platform-only capability, or debugging a `common/` import that crashes on one platform.
 
@@ -182,14 +180,14 @@ Read `references/relay-queries.md` when: deciding whether a module owns its root
 `@connection(key: "<FragmentName>_<fieldName>")`, without exception; `filters:` when the field takes
 result-altering args, `filters: []` when it must survive an `orderBy` change. Extract the key to a
 `*_CONNECTION_KEY` constant in `common/constants.ts`, derive ids through `get<X>ConnectionId` in
-`common/utils.ts`. Twelve live keys use four casings; a mismatch writes where nothing is reading.
+`common/utils.ts`. Twelve live keys use four shapes; a mismatch writes where nothing is reading.
 
 Read `references/relay-pagination.md` when: adding `usePaginationFragment` to a list, naming a `@connection` key, deriving a connection id for a mutation, or debugging a list that does not update after an insert.
 
 ---
 ### 9. Mutations and store updates
-One file per mutation under `<module>/common/graphql/mutations/`: a `<Name>MutationQuery` document
-plus a `use<Name>Mutation` hook returning `[commit, isInFlight]`, toasting via `useNotification()`.
+One file per mutation under `<module>/common/graphql/mutations/`: a `<Name>MutationQuery` plus a
+`use<Name>Mutation` hook returning `[commit, isMutationInFlight]`, toasting via `useNotification()`.
 Select `errors { field messages }` in every payload and map them with `setFormRelayErrors`. Prefer
 `@prependEdge` / `@deleteEdge` / `@deleteRecord` over a hand-written `updater` — 18 to 3 here.
 
@@ -197,10 +195,11 @@ Read `references/relay-mutations.md` when: writing a `use<Name>Mutation` wrapper
 
 ---
 ### 10. Subscriptions
-One document and one `use<X>Subscription` per file in `<module>/common/graphql/subscriptions/`, the
-config wrapped in `useMemo` — unmemoized it re-subscribes on every render. Connection ids come from
-`ConnectionHandler.getConnectionID` fed the extracted `*_CONNECTION_KEY`. Subscriptions ride the
-`graphql-ws` link at `packages/graphql/config/environment.ts:110-150`; never `new Environment`.
+The operation name must match the filename — Relay prefixes it with the module — while the hook name
+is free: `CommentsSubscription.tsx` exports `useCommentChangeSubscription`. Both share one file
+under `<module>/common/graphql/subscriptions/`, config in `useMemo`; unmemoized it re-subscribes
+every render. Derive connection ids through the module's own `get<X>ConnectionId` helper, and ride
+the `graphql-ws` link at `packages/graphql/config/environment.ts:110-150`, never `new Environment`.
 
 Read `references/relay-subscriptions.md` when: adding a subscription to a module, keeping counters live after a push update, memoizing a subscription config, or debugging a subscription that re-establishes on every render.
 
