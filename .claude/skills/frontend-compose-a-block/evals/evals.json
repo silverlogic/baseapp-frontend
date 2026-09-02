@@ -65,6 +65,71 @@
         "Caps the barrel at what a consumer outside the module needs, treating more than 20 re-exports as a defect — messages/common/index.ts carries 36 and profiles/common/index.ts 28, and neither is a target to copy",
         "Does NOT re-export a common/ symbol through the web or native barrel, and does NOT export one name from two legs — messages/common/index.ts and messages/native/index.ts both ship useRoomListSubscription, so importing both shadows one by resolution order"
       ]
+    },
+    {
+      "id": 6,
+      "prompt": "Our ReactionList needs five reactions on the profile page and twenty on the feed. Do I fork the component? And what should the fragment be called — the neighbouring modules all use a Fragment suffix.",
+      "expected_output": "Should name the fragment ReactionList_reactions in the <Component>_<propName> form and parameterize the page size with @argumentDefinitions plus @arguments at the spread instead of forking the component.",
+      "files": [],
+      "assertions": [
+        "Names the fragment ReactionList_reactions in the <Component>_<propName> form, and identifies the neighbouring Fragment suffix as legacy — 32 of the 37 fragments carry it and only 5 use the target form",
+        "Parameterizes the page size with @argumentDefinitions(count: { type: \"Int\", defaultValue: 5 }) and passes @arguments at each spread site, rather than forking the component or over-fetching in the parent",
+        "Files the document under modules/reactions/common/graphql/fragments/, not inline beside the component and not under a platform leg, so both UI legs can consume one document",
+        "Types the component prop as ReactionList_reactions$key and the read result as ReactionList_reactions$data, importing both from __generated__/ by a relative path rather than an alias",
+        "Does NOT accept an already-read $data value as a prop — 30 props across 29 files do, and each makes the child unusable in any query its parent does not also run"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Should the new ReactionsList module run its own root query with useLazyLoadQuery like notifications does, or take a fragment ref the way comments/web/BaseComments does? Pick one for me.",
+      "expected_output": "Should present both ownership shapes with the cost of each, decline to name a repo default, and flag the one per-row case that ast-grep fails at error severity.",
+      "files": [],
+      "assertions": [
+        "Presents both shapes — fragment-ref-driven, as comments/web/BaseComments does with useFragment and no query, and query-driven, as messages, profiles, and notifications do — with the cost row for each",
+        "Does NOT ban useLazyLoadQuery: it reports the 18 production call sites in the package and leaves the ownership choice to the module rather than prescribing one shape",
+        "Names .ast-grep/rules/relay-uselazyloadquery-in-list.yml at severity error as the case that fails the build — a component calling useLazyLoadQuery and then rendered from a .map, or passed to an itemContent, renderItem, or ItemContent prop",
+        "Ships a query-driven component as a self-suspending default export that wraps the working component in <Suspense> with a fallback the consumer can replace through props",
+        "Warns that the entry prop is the module's public API, so switching a shipped module between the two shapes breaks every consumer, and does not reach for withRelay or loadSerializableQuery inside modules/, where they have zero usages"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Adding pagination to the reactions list, and a mutation that prepends a newly created reaction. What is the @connection key, and how does the mutation find the list again?",
+      "expected_output": "Should name the key ReactionsListFragment_reactions, extract it to a *_CONNECTION_KEY constant in common/constants.ts, and derive every id through a get<X>ConnectionId helper in common/utils.ts.",
+      "files": [],
+      "assertions": [
+        "Names the @connection key after the declaring fragment plus the field as selected — ReactionsListFragment_reactions — and notes that only four of the twelve keys in the tree follow it while the other eight use three further shapes",
+        "Extracts the key to REACTIONS_LIST_CONNECTION_KEY in reactions/common/constants.ts and derives ids with getReactionsConnectionId in reactions/common/utils.ts, wrapping ConnectionHandler.getConnectionID, plus one jest test pinning the two together",
+        "Declares filters: with only the arguments that must split the list, or filters: [] when a sort change has to resolve against the list already on screen, as comments/common/graphql/queries/CommentsList.ts does",
+        "Wraps usePaginationFragment in a common/ hook exported beside its document, spreads the hook's whole result so a caller keeps hasNext and loadPrevious, and passes both type parameters as <PaginationQueryType, Fragment$key>",
+        "Does NOT retype the key at a getConnectionID call site, as messages does eleven times, and does NOT name the key after the GraphQL type the way ChatRoom_participants and chatRoom_allMessages do"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "The reaction I create only shows up after a refresh, so I wrote an updater that walks the connection by hand. My subscription also re-opens its socket on every render. Review the mutation hook and the subscription.",
+      "expected_output": "Should replace the hand-written updater with @prependEdge and @deleteRecord, select errors { field messages }, return [commit, isMutationInFlight] from the wrapper, and memoize the subscription config.",
+      "files": [],
+      "assertions": [
+        "Replaces the hand-written updater with @prependEdge(connections: $connections) on the payload edge and @deleteRecord on the returned deleted id, and reserves an updater for the two cases where the target connections are not derivable at the call site or the payload lacks the id",
+        "Exports a <Name>MutationQuery document plus a use<Name>Mutation hook returning [commit, isMutationInFlight], spreading ...config first so a caller's variables, updater, and optimisticResponse survive, and annotating the tuple with Disposable",
+        "Selects errors { field messages } in the payload and hands them to exactly one consumer — setFormRelayErrors on the form or sendMutationErrorToast from useNotification() — never both",
+        "Wraps the useSubscription config in useMemo with every variable the config reads in the dependency list, stabilises any array, object, or callback at the call site, and gives the config onError: console.error",
+        "Does NOT call new Environment inside the module and does NOT take a Relay Environment as a hook prop — the graphql-ws link at packages/graphql/config/environment.ts:110-150 already carries every subscription, and useRelayEnvironment reads the object from context"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "The reactions module is finished and I want to open the PR. What has to pass first, and where do I run each thing from?",
+      "expected_output": "Should name all five gates with the directory each runs from — three inside packages/components and the changeset plus ast-grep at the submodule root — and add the changeset before merge.",
+      "files": [],
+      "assertions": [
+        "Runs pnpm test:unit, pnpm relay, and pnpm lint from packages/components, and pnpm changeset and pnpm lint:ast-grep from the submodule root, since the root has no relay script and a package has no changeset",
+        "Treats the exit code of pnpm relay as the codegen gate, not git status over __generated__/ — nothing there is committed, so a clean git status can never report drift",
+        "Runs pnpm relay before pnpm lint, because pnpm lint is eslint --cache plus tsc --noEmit and the typecheck reads the generated types, so a stale __generated__ fails for a reason that reads as unrelated",
+        "Names the three error-severity ast-grep rules that can fail a package — relay-uselazyloadquery-in-list, form-no-other-form-libraries, and state-no-redux — while next-no-img-element is scoped to apps/web/**",
+        "Writes a .changeset/*.md with the package-to-bump frontmatter map and commits the file itself, since .changeset/config.json sets commit: false and the release workflow publishes from that file"
+      ]
     }
   ]
 }
