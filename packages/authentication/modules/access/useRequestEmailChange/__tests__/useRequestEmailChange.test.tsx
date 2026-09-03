@@ -15,7 +15,7 @@ describe('useRequestEmailChange', () => {
   const requestEmailChangeUrl = '/change-email'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as Mock).mockClear()
   })
 
   test('should run onSuccess', async () => {

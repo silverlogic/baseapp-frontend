@@ -1,17 +1,9 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
+    "types": ["node", "vitest/globals"],
     "outDir": "./dist"
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.d.ts",
-    ".eslintrc.js",
-    "*.ts",
-    "*.tsx",
-    "index.d.ts",
-    "jest.config.ts"
-  ],
-  "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
+  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx", "index.d.ts"],
+  "exclude": ["node_modules", "dist"]
 }

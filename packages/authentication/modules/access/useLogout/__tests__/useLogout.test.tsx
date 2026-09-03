@@ -12,21 +12,21 @@ import { USER_API_KEY } from '../../../../services/user'
 import { withAuthenticationTestProviders } from '../../../tests/utils'
 import useLogout from '../index'
 
-const mockResetQueries = jest.fn()
-jest.mock('@tanstack/react-query', () => ({
-  ...jest.requireActual('@tanstack/react-query'),
+const { mockResetQueries } = vi.hoisted(() => ({ mockResetQueries: vi.fn() }))
+vi.mock('@tanstack/react-query', async () => ({
+  ...(await vi.importActual('@tanstack/react-query')),
   useQueryClient: () => ({
     resetQueries: mockResetQueries,
   }),
 }))
-jest.mock('@baseapp-frontend/utils', () => ({
-  ...jest.requireActual('@baseapp-frontend/utils'),
-  removeTokenAsync: jest.fn(),
+vi.mock('@baseapp-frontend/utils', async () => ({
+  ...(await vi.importActual('@baseapp-frontend/utils')),
+  removeTokenAsync: vi.fn(),
 }))
 
 describe('useLogout hook', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   test('should remove tokens and invalidate queries', async () => {
@@ -41,7 +41,7 @@ describe('useLogout hook', () => {
   })
 
   test('should call the onLogout callback if provided', async () => {
-    const mockOnLogout = jest.fn()
+    const mockOnLogout = vi.fn()
     const { result } = renderHook(() => useLogout({ onLogout: mockOnLogout }), {
       wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
@@ -52,7 +52,7 @@ describe('useLogout hook', () => {
   })
 
   test('should emit the logout event if the flag emitLogoutEvent is set to true', async () => {
-    const emitSpy = jest.spyOn(eventEmitter, 'emit')
+    const emitSpy = vi.spyOn(eventEmitter, 'emit')
     const { result } = renderHook(() => useLogout({ emitLogoutEvent: true }), {
       wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })
@@ -63,7 +63,7 @@ describe('useLogout hook', () => {
   })
 
   test('should not emit the logout event if emitLogoutEvent is set to false', async () => {
-    const emitSpy = jest.spyOn(eventEmitter, 'emit')
+    const emitSpy = vi.spyOn(eventEmitter, 'emit')
     const { result } = renderHook(() => useLogout({ emitLogoutEvent: false }), {
       wrapper: withAuthenticationTestProviders(ComponentWithProviders),
     })

@@ -1,7 +1,13 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["cypress", "@testing-library/cypress", "cypress-plugin-steps", "node"],
+    "types": [
+      "cypress",
+      "@testing-library/cypress",
+      "cypress-plugin-steps",
+      "node",
+      "vitest/globals"
+    ],
     "outDir": "./dist",
     "paths": {
       "@mui/system": ["./node_modules/@mui/system"]

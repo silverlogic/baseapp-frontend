@@ -1,30 +1,31 @@
 import { deleteItemAsync } from 'expo-secure-store'
+import type { Mock } from 'vitest'
 
 import { removeTokenAsync } from '..'
 import { removeCookie } from '../../../cookie'
 import { isMobilePlatform } from '../../../os'
 
-jest.mock('expo-secure-store', () => ({
-  deleteItemAsync: jest.fn(),
+vi.mock('expo-secure-store', async () => ({
+  deleteItemAsync: vi.fn(),
 }))
 
-jest.mock('../../../cookie', () => ({
-  removeCookie: jest.fn(),
+vi.mock('../../../cookie', async () => ({
+  removeCookie: vi.fn(),
 }))
 
-jest.mock('../../../os', () => ({
-  isMobilePlatform: jest.fn(),
+vi.mock('../../../os', async () => ({
+  isMobilePlatform: vi.fn(),
 }))
 
 describe('removeTokenAsync', () => {
   const mockKey = 'test-key'
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should call deleteItemAsync on mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
+    ;(isMobilePlatform as Mock).mockReturnValue(true)
 
     await removeTokenAsync(mockKey)
 
@@ -34,7 +35,7 @@ describe('removeTokenAsync', () => {
   })
 
   it('should call removeCookie on non-mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
 
     await removeTokenAsync(mockKey)
 
@@ -44,8 +45,8 @@ describe('removeTokenAsync', () => {
   })
 
   it('should not throw error when deleteItemAsync fails on mobile', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
-    ;(deleteItemAsync as jest.Mock).mockImplementationOnce(async () => {
+    ;(isMobilePlatform as Mock).mockReturnValue(true)
+    ;(deleteItemAsync as Mock).mockImplementationOnce(async () => {
       throw new Error('SecureStore Error')
     })
 
@@ -56,8 +57,8 @@ describe('removeTokenAsync', () => {
   })
 
   it('should not throw error when removeCookie fails on non-mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
-    ;(removeCookie as jest.Mock).mockImplementationOnce(() => {
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
+    ;(removeCookie as Mock).mockImplementationOnce(() => {
       throw new Error('Cookie Error')
     })
 
