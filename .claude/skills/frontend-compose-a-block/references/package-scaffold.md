@@ -50,7 +50,7 @@ packages/<name>/
 └── public/mockServiceWorker.js # +storybook — pair with the msw.workerDirectory field
 ```
 
-## The 11 always-required files
+## The 11 always-required items
 
 | # | File | Why |
 |---|---|---|
@@ -66,7 +66,9 @@ packages/<name>/
 | 10 | `.changeset/<slug>.md` | Required before merge; the release workflow publishes from it. |
 | 11 | A bullet in the root `README.md` | Its "Apps and Packages" list enumerates every package. |
 
-Rows 10 and 11 live outside `packages/<name>/`. The other nine are files in the directory.
+Not all eleven are files in `packages/<name>/`. Rows 1-7 are. Row 8 is two fields inside row 1's
+manifest. Row 9 is one file per source directory, so its count varies with the layout. Rows 10 and
+11 live outside the package — in `.changeset/` and the root `README.md`.
 
 Every buildable package declares `build`, `dev`, `lint`, `clean`, and `storybook`, plus `test:unit`
 when it has unit tests. Declare `storybook` even with no stories — the echo stub

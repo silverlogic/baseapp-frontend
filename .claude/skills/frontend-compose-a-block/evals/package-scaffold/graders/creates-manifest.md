@@ -1,6 +1,6 @@
 ---
 type: file_exists
-path: "**/package.json"
+path: "**/packages/scheduling/package.json"
 target: files
 ---
 

@@ -1,6 +1,6 @@
 ---
 type: regex
-pattern: '@connection\(key: "\w+_\w+"'
+pattern: '@connection\(\s*key:\s*"\w+_\w+"'
 match: contains
 target: last_message
 ---

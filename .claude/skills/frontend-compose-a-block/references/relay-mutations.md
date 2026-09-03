@@ -134,8 +134,10 @@ have to justify in a comment.
 | `@deleteRecord` | the payload returns the deleted id; drop it everywhere | 6 |
 | `@deleteEdge(connections:)` | the record survives; only named membership ends | 2 |
 
-Every directive takes `connections: $connections`, an `[ID!]!` variable the call site fills with ids
-derived from the `@connection` key, which keeps the document connection-agnostic. Naming that key
+Every connection-editing directive that accepts a `connections` argument takes `connections:
+$connections`, an `[ID!]!` variable the call site fills with ids derived from the `@connection` key,
+which keeps the document connection-agnostic. `@deleteRecord` is the exception — it evicts by id and
+takes no argument at all. Naming that key
 and deriving the id is this skill's pagination section; get it wrong and the write lands nowhere.
 
 `@deleteRecord` versus `@deleteEdge` is not a style choice. `@deleteRecord` evicts the record, so it

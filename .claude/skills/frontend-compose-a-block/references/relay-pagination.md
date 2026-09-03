@@ -32,7 +32,12 @@ conforming shape:
 ```graphql
 fragment AllProfilesListFragment on Query
 @refetchable(queryName: "AllProfilesListPaginationQuery")
-@argumentDefinitions(count: { type: "Int", defaultValue: 5 }, cursor: { type: "String" }) {
+@argumentDefinitions(
+  cursor: { type: "String" }
+  count: { type: "Int", defaultValue: 5 }
+  orderBy: { type: "String", defaultValue: "name" }
+  q: { type: "String", defaultValue: null }
+) {
   allProfiles(after: $cursor, first: $count, orderBy: $orderBy, q: $q)
     @connection(key: "AllProfilesListFragment_allProfiles") {
     edges { node { id ...ProfileItemFragment } }

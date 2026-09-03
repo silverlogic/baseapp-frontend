@@ -42,7 +42,8 @@ from a `dist/` that `main` never touches. Neither package declares `files`, so `
 anyway and the contradiction stays invisible until the two trees drift.
 
 Shape B removes the question. There is no `main`, no root barrel, and no `dist` in `files`; every
-`exports` target is a `.ts` path under a source directory. `build` — `tsc --build
+module `exports` target is a `.ts` path under a source directory — CSS assets are the exception,
+exported through an explicit condition object (see below). `build` — `tsc --build
 tsconfig.build.json` — becomes a typecheck-and-emit gate for CI, not the publish artifact.
 
 ## Shape B in full

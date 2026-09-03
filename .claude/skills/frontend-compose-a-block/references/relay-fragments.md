@@ -19,11 +19,12 @@ in production, inside a consuming app you do not control. All 37 fragments in th
 
 ## One fragment per component
 
-Every component that renders GraphQL-backed data declares exactly one fragment, accepts a **fragment
-ref** as a prop, and reads it with `useFragment`, `useRefetchableFragment` or
-`usePaginationFragment`. It never accepts already-read data, and never reads a field it did not
-declare. `comments/web/CommentItem/types.ts` is the shape to copy — the prop is the ref, not a
-row, with the injectable-slot props on `CustomizableCommentItemProps` elided:
+Every component that renders GraphQL-backed data declares one fragment **per data-bearing prop**,
+accepts each as a **fragment ref**, and reads it with `useFragment`, `useRefetchableFragment` or
+`usePaginationFragment`. One prop is the common case; `CommentItem` takes two because it renders a
+comment against a separate target. It never accepts already-read data, and never reads a field
+it did not declare. `comments/web/CommentItem/types.ts` is the shape to copy — the prop is the
+ref, not a row, with the injectable-slot props on `CustomizableCommentItemProps` elided:
 
 ```ts
 export interface CommentItemProps extends CustomizableCommentItemProps {

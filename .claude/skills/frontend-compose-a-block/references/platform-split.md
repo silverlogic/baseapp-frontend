@@ -3,8 +3,10 @@
 A module's three legs form a one-way dependency chain: `common/` is platform-neutral, and `web/` and
 `native/` each consume it while never touching each other. Every module README states the rule and
 `packages/config/.eslintrc-with-restricted-paths.js:6-33` enforces it — but only over *paths*. A
-native-only npm package imported into `common/` clears the gate and throws at runtime on the
-platform that cannot resolve it. That failure is the one this file exists to prevent.
+native-only npm package imported into `common/` clears the gate and breaks on the platform that
+cannot use it — at module resolution or bundling when the platform cannot resolve it at all, at
+runtime when it resolves but its native module is absent. That failure is the one this file
+exists to prevent.
 
 Paths below are relative to `packages/components/modules/`.
 
