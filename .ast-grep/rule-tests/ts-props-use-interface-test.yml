@@ -1,0 +1,18 @@
+id: ts-props-use-interface
+valid:
+  - |
+    export interface ProfileCardProps {
+      name: string
+    }
+  - |
+    export type ProfileCardProps = ComponentProps<typeof ProfileCard>
+  - |
+    export type EditProfileForm = {
+      email: string
+    }
+invalid:
+  - |
+    export type ProfileCardProps = {
+      name: string
+      avatarUrl: string
+    }

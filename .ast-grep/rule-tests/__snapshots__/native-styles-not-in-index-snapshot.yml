@@ -1,0 +1,16 @@
+id: native-styles-not-in-index
+snapshots:
+  ? |
+    const styles = StyleSheet.create({
+      container: { paddingVertical: 32 },
+    })
+
+    const SignUpPage = () => <View style={styles.container} />
+  : labels:
+    - source: |-
+        StyleSheet.create({
+          container: { paddingVertical: 32 },
+        })
+      style: primary
+      start: 15
+      end: 75

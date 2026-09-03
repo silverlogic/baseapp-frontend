@@ -9,7 +9,6 @@ import {
   ShareIcon,
   ThreeDotsIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
-import { ImageWithFallback } from '@baseapp-frontend/design-system/components/web/images'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { useNotification } from '@baseapp-frontend/utils'
 
@@ -22,6 +21,14 @@ import BlockButtonWithDialog from './BlockButtonWithDialog'
 import FollowToggleButton from './FollowToggleButton'
 import ReportButtonWithDialog from './ReportButtonWithDialog'
 import {
+  ActionButtonsContainer,
+  ActionsContainer,
+  Banner,
+  Biography,
+  CountContainer,
+  FollowCountsContainer,
+  NameContainer,
+  PageContainer,
   ProfileContainer,
   ProfileContentContainer,
   ProfileDescriptionContainer,
@@ -73,7 +80,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
       )
     }
     return (
-      <div className="flex flex-row gap-2">
+      <ActionButtonsContainer>
         {!profile?.isBlockedByMe && (
           <FollowToggleButton targetId={profile?.id} isFollowedByMe={profile?.isFollowedByMe} />
         )}
@@ -84,7 +91,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
             currentProfileId={currentProfileId}
           />
         )}
-      </div>
+      </ActionButtonsContainer>
     )
   }
 
@@ -111,9 +118,9 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
   const bannerSrc = profile?.bannerImage?.url || bannerFallback
 
   return (
-    <div className="flex h-full w-full justify-center">
+    <PageContainer>
       <ProfileContainer>
-        <ImageWithFallback
+        <Banner
           src={bannerSrc}
           fallbackSrc={bannerFallback}
           alt="Home Banner"
@@ -122,48 +129,47 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
             290 /* Some css height: auto takes precedence,
             so also set as style below */
           }
-          className="overflow-hidden rounded-lg"
           style={{ height: '290px', objectFit: 'cover' }}
         />
         <ProfileContentContainer>
           <AvatarWithPlaceholder
-            className="self-start justify-self-center"
+            sx={{ alignSelf: 'start', justifySelf: 'center' }}
             width={96}
             height={96}
             src={profile?.image?.url}
           />
           <ProfileDescriptionContainer>
             <ProfileNameContainer>
-              <div className="justify-self-start sm:col-span-full sm:justify-self-center">
+              <NameContainer>
                 <Typography component="h6" variant="h6">
                   {profile?.name}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {profile?.urlPath?.path ? `@${profile.urlPath.path}` : ''}
                 </Typography>
-              </div>
-              <div className="flex w-full justify-self-stretch">
-                <div className="flex-grow border-r border-dashed border-divider text-center sm:w-full">
+              </NameContainer>
+              <FollowCountsContainer>
+                <CountContainer withDivider>
                   <Typography component="h6" variant="h6">
                     {formatFollowCount(profile?.followersCount)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Followers
                   </Typography>
-                </div>
-                <div className="flex-grow text-center sm:w-full">
+                </CountContainer>
+                <CountContainer>
                   <Typography component="h6" variant="h6">
                     {formatFollowCount(profile?.followingCount)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     Following
                   </Typography>
-                </div>
-              </div>
+                </CountContainer>
+              </FollowCountsContainer>
             </ProfileNameContainer>
-            <p className="prose-caption text-text-secondary">{profile?.biography}</p>
+            <Biography>{profile?.biography}</Biography>
           </ProfileDescriptionContainer>
-          <div className="grid grid-cols-[auto_min-content] gap-3 min-sm:col-start-2 min-sm:grid-cols-[fit-content_min-content] min-sm:justify-end">
+          <ActionsContainer>
             {renderProfileUpdatesButtons()}
             <Button
               color="inherit"
@@ -183,10 +189,10 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
                 {menuOptions}
               </SwipeableDrawer>
             )}
-          </div>
+          </ActionsContainer>
         </ProfileContentContainer>
       </ProfileContainer>
-    </div>
+    </PageContainer>
   )
 }
 

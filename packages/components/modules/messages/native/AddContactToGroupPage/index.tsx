@@ -19,11 +19,14 @@ import { useForm } from 'react-hook-form'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { AddContactToGroupsQuery as AddContactToGroupsQueryType } from '../../../../__generated__/AddContactToGroupsQuery.graphql'
-import { AddContactToGroupsQuery, useAddParticipantToChatRoomsMutation } from '../../common'
+import {
+  AddContactToGroupsQuery,
+  toggleGroupSelection,
+  useAddParticipantToChatRoomsMutation,
+} from '../../common'
 import GroupsList from './GroupsList'
 import { createStyles } from './styles'
 import { AddContactToGroupPageProps } from './types'
-import { toggleGroupSelection } from './utils'
 
 const AddContactToGroupPage: FC<AddContactToGroupPageProps> = ({ contactProfileId }) => {
   const theme = useTheme()

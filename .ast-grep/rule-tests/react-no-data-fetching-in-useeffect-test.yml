@@ -1,0 +1,24 @@
+id: react-no-data-fetching-in-useeffect
+valid:
+  - |
+    const { data, isLoading } = useQuery({
+      queryKey: CUSTOMER_API_KEY.getCustomer(id),
+      queryFn: () => CustomerApi.getCustomer({ id }),
+    })
+  - |
+    useEffect(() => {
+      const subscription = subscribe(roomId)
+      return () => subscription.unsubscribe()
+    }, [roomId])
+invalid:
+  - |
+    useEffect(() => {
+      setIsLoading(true)
+      fetch('/api/items')
+        .then(setData)
+        .finally(() => setIsLoading(false))
+    }, [])
+  - |
+    useEffect(() => {
+      CustomerApi.getCustomer({ id }).then(setCustomer)
+    }, [id])

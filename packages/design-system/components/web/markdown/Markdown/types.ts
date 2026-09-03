@@ -7,4 +7,5 @@ export interface MarkdownProps extends Omit<Options, 'components'> {
   variant?: 'body1' | 'body2'
   LinkComponentProps?: Partial<LinkProps>
   components?: Options['components']
+  className?: string
 }

@@ -1,4 +1,4 @@
-import { FC, useMemo, useTransition } from 'react'
+import { FC, useTransition } from 'react'
 
 import { Box } from '@mui/material'
 import { Virtuoso } from 'react-virtuoso'
@@ -8,7 +8,7 @@ import {
   NUMBER_OF_COMMENTS_TO_LOAD_NEXT,
   useCommentList,
 } from '../../../common'
-import { LoadMoreRepliesButton } from './styled'
+import { LoadMoreRepliesButton, Spacer } from './styled'
 import { CommentsRepliesProps } from './types'
 
 const CommentsReplies: FC<CommentsRepliesProps> = ({
@@ -20,13 +20,8 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   CommentItemProps = {},
   VirtuosoProps,
 }) => {
-  const { data: target, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
+  const { data: target, comments, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
   const [isPending, startTransition] = useTransition()
-
-  const comments = useMemo(
-    () => target?.comments?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
-    [target?.comments?.edges],
-  )
 
   const renderCommentItem = (comment: any) => {
     if (!comment) return null
@@ -47,7 +42,7 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
   const renderHeader = () => {
     if (comments.length === 0) return null
 
-    return <div className="h-2" />
+    return <Spacer />
   }
 
   const renderLoadingMoreButton = () => {

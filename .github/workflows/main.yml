@@ -12,6 +12,7 @@ jobs:
   build-and-lint:
     name: Build and Lint Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -35,9 +36,14 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      # Rules live in .ast-grep/ and are shared with consuming templates via a symlink.
+      - name: ast-grep
+        run: pnpm lint:ast-grep
+
   test-unit:
     name: Unit Test Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -61,6 +67,7 @@ jobs:
   dependency-scan:
     name: Dependency Vulnerability Scan
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -75,14 +82,17 @@ jobs:
         run: |
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
+            -w /workspace \
             registry.tsl.io/baseapp-github/trivy:baseapp \
             fs --scanners vuln --pkg-types library \
             --severity CRITICAL,HIGH,MEDIUM --exit-code 1 \
+            --ignorefile /workspace/.trivyignore.yaml \
             --format table /workspace
 
   test-component:
     name: Component Test Packages
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4

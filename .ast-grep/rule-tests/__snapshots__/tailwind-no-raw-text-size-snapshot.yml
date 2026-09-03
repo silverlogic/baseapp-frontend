@@ -1,0 +1,24 @@
+id: tailwind-no-raw-text-size
+snapshots:
+  ? |
+    <p className="mb-2 md:text-2xl">Title</p>
+  : labels:
+    - source: className="mb-2 md:text-2xl"
+      style: primary
+      start: 3
+      end: 31
+    - source: className
+      style: secondary
+      start: 3
+      end: 12
+  ? |
+    <span className="text-sm text-text-secondary">Subtitle</span>
+  : labels:
+    - source: className="text-sm text-text-secondary"
+      style: primary
+      start: 6
+      end: 45
+    - source: className
+      style: secondary
+      start: 6
+      end: 15

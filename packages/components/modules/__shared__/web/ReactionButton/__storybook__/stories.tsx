@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 
-import ReactionButton from '..'
+import ReactionButton from '../../../common/ReactionButton'
 import ReactionButtonWithQuery from './ReactionButtonWithQuery'
 import { mockResolvers } from './mockResolvers'
 

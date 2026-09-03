@@ -1,0 +1,24 @@
+id: next-image-explicit-dimensions
+snapshots:
+  ? |
+    <Image src="/image.jpg" alt="Image" style={{ width: '100%', height: 'auto' }} />
+  : labels:
+    - source: '<Image src="/image.jpg" alt="Image" style={{ width: ''100%'', height: ''auto'' }} />'
+      style: primary
+      start: 0
+      end: 80
+    - source: Image
+      style: secondary
+      start: 1
+      end: 6
+  ? |
+    <Image src="/image.jpg" alt="Image" width={800} />
+  : labels:
+    - source: <Image src="/image.jpg" alt="Image" width={800} />
+      style: primary
+      start: 0
+      end: 50
+    - source: Image
+      style: secondary
+      start: 1
+      end: 6

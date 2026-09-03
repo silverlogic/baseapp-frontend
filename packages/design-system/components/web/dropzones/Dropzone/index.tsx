@@ -17,7 +17,9 @@ import {
   AddFileWrapper,
   ButtonContainer,
   CancelIcon,
+  ContentContainer,
   DropzoneContainer,
+  DropzoneGrid,
   DropzoneText,
   InputContainer,
 } from './styled'
@@ -93,7 +95,7 @@ const Dropzone: FC<DropzoneProps> = ({
     const ariaLabel = 'Drag and drop files to upload'
 
     return (
-      <div className="container w-full max-w-none">
+      <ContentContainer>
         {!hasFiles && (
           <InputContainer
             {...getRootProps({ isFocused, isDragAccept, isDragReject })}
@@ -171,12 +173,12 @@ const Dropzone: FC<DropzoneProps> = ({
             />
           </Card>
         )}
-      </div>
+      </ContentContainer>
     )
   }
 
   return (
-    <div className="grid grid-rows-[1fr_min-content] gap-4">
+    <DropzoneGrid>
       {renderContent()}
       {includeActionButton && (
         <ButtonContainer>
@@ -190,7 +192,7 @@ const Dropzone: FC<DropzoneProps> = ({
           )}
         </ButtonContainer>
       )}
-    </div>
+    </DropzoneGrid>
   )
 }
 
