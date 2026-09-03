@@ -20,18 +20,19 @@ interface UseJWTUserOptionsReturn<TUser> extends Omit<UseQueryResult<TUser, unkn
   user?: TUser
 }
 
+const { useQueryClientMock } = vi.hoisted(() => ({ useQueryClientMock: vi.fn() }))
+
+vi.mock('@tanstack/react-query', async () => ({
+  ...(await vi.importActual('@tanstack/react-query')),
+  useQueryClient: useQueryClientMock,
+}))
+
 describe('useJWTUser', () => {
   let useJWTUser: <TUser extends Partial<User>>(
     props?: UseJWTUserOptions<TUser>,
   ) => UseJWTUserOptionsReturn<TUser>
 
   const decodeJWTMock = vi.fn()
-  const { useQueryClientMock } = vi.hoisted(() => ({ useQueryClientMock: vi.fn() }))
-
-  vi.mock('@tanstack/react-query', async () => ({
-    ...(await vi.importActual('@tanstack/react-query')),
-    useQueryClient: useQueryClientMock,
-  }))
 
   afterEach(() => {
     ;(global.fetch as Mock).mockClear()

@@ -3,7 +3,7 @@ import path from 'node:path'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
-// Vitest comparison lane. Mirrors the shared Jest base
+// Vitest config. Mirrors the shared Jest base
 // (@baseapp-frontend/test/jest.config.ts): jsdom, the same mock files
 // (moduleNameMapper → resolve.alias), and the same setup files (console/fetch),
 // reused via a globalThis.jest = vi shim (see vitest.setup.ts). Coverage ON
@@ -18,6 +18,11 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: [path.resolve(__dirname, 'vitest.setup.ts'), mock('console.ts'), mock('fetch.ts')],
     include: ['**/*.(test|spec).(ts|tsx)'],
+    // NOTE: design-system is a UI package — its real coverage is the component
+    // (Cypress) layer, not unit. Whole-surface v8 (`all: true`) both errors on some
+    // source files and reports a meaningless ~6%, so this package is NOT subject to
+    // the unit no-regress gate (see docs/coverage-baseline.md). This is informational
+    // (touched-files) coverage only.
     coverage: { provider: 'v8', reporter: ['text-summary'] },
   },
   resolve: {

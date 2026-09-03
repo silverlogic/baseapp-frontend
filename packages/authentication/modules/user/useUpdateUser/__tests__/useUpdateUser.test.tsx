@@ -20,24 +20,23 @@ interface UseUpdateUserReturn<TUser> extends Omit<UseMutationResult<TUser, unkno
   user?: TUser
 }
 
+const { decodeJWTMock, refreshAccessTokenMock, useQueryClientMock } = vi.hoisted(() => ({
+  decodeJWTMock: vi.fn(),
+  refreshAccessTokenMock: vi.fn(),
+  useQueryClientMock: vi.fn(),
+}))
+vi.mock('@baseapp-frontend/utils', async () => ({
+  ...(await vi.importActual('@baseapp-frontend/utils')),
+  decodeJWT: decodeJWTMock,
+  refreshAccessToken: refreshAccessTokenMock,
+}))
+vi.mock('@tanstack/react-query', async () => ({
+  ...(await vi.importActual('@tanstack/react-query')),
+  useQueryClient: useQueryClientMock,
+}))
+
 // TODO: BA-1308: improve tests
 describe('useUpdateUser', () => {
-  const { decodeJWTMock, refreshAccessTokenMock, useQueryClientMock } = vi.hoisted(() => ({
-    decodeJWTMock: vi.fn(),
-    refreshAccessTokenMock: vi.fn(),
-    useQueryClientMock: vi.fn(),
-  }))
-  vi.mock('@baseapp-frontend/utils', async () => ({
-    ...(await vi.importActual('@baseapp-frontend/utils')),
-    decodeJWT: decodeJWTMock,
-    refreshAccessToken: refreshAccessTokenMock,
-  }))
-
-  vi.mock('@tanstack/react-query', async () => ({
-    ...(await vi.importActual('@tanstack/react-query')),
-    useQueryClient: useQueryClientMock,
-  }))
-
   beforeAll(async () => {
     vi.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
   })

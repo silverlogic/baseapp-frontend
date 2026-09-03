@@ -213,7 +213,7 @@ vi.useFakeTimers({ toFake: ['Date'] }).setSystemTime(new Date(2020, 9, 1, 7))
 | factory refs `const mockX = jest.fn()` | `const { mockX } = vi.hoisted(() => ({ mockX: vi.fn() }))` | Jest's `mock`-prefix escape hatch is gone |
 | default-export mock `() => ({ get, set })` | `() => ({ default: api, ...api })` | needs `default` |
 | `jest.useFakeTimers()` | `vi.useFakeTimers({ toFake: ['Date'] })` | avoid faking timers `waitFor` needs |
-| `jest.Mock` / `jest.Mocked` (types) | `Mock` / `Mocked` (or leave as-is) | erased at runtime; only matters for tsc, and the `*.vitest.test.*` lane is excluded from tsc |
+| `jest.Mock` / `jest.Mocked` (types) | `Mock` / `Mocked` / `MockedFunction` | port them: in a migrated package the specs are `.test.*` and tsc checks them. Types come from `vitest/globals`; add a small `vitest.d.ts` ambient (`declare global { type Mock<T…> = import('vitest').Mock<T> }`) if a bare `Mock` doesn't resolve. Erased at runtime, so only tsc/lint cares. |
 
 ## Anti-patterns (reject these)
 

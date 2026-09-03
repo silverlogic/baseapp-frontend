@@ -85,7 +85,7 @@
     },
     {
       "id": 8,
-      "prompt": "Port authentication's useLogout.test.tsx to the Vitest comparison lane (*.vitest.test.tsx). The original mocks @tanstack/react-query and @baseapp-frontend/utils and uses a `const mockResetQueries = jest.fn()` referenced inside the mock factory.",
+      "prompt": "Port authentication's useLogout Jest spec to Vitest (the package is migrating to Vitest-only). The original mocks @tanstack/react-query and @baseapp-frontend/utils and uses a `const mockResetQueries = jest.fn()` referenced inside the mock factory.",
       "expected_output": "Agent applies the Vitest porting rules: outer-var mock fns move to vi.hoisted (vi.mock can't reference outer vars), factories become async with awaited vi.importActual, default-export modules get a `default`.",
       "files": [],
       "assertions": [
