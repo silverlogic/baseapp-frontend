@@ -15,7 +15,7 @@ describe('useResetPassword', () => {
   const forgotPasswordUrl = '/forgot-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as Mock).mockClear()
   })
 
   test('should run onSuccess', async () => {

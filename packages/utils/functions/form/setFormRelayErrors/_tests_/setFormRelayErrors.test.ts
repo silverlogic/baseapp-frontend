@@ -6,7 +6,7 @@ describe('setFormRelayErrors', () => {
 
   beforeEach(() => {
     mockForm = {
-      getValues: jest.fn().mockImplementation(
+      getValues: vi.fn().mockImplementation(
         (fieldKey: string) =>
           ({
             name: 'John',
@@ -15,7 +15,7 @@ describe('setFormRelayErrors', () => {
             bio: '',
           })[fieldKey],
       ),
-      setError: jest.fn(),
+      setError: vi.fn(),
     }
 
     mockErrors = [

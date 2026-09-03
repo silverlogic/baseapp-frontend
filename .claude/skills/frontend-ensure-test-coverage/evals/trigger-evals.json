@@ -1,0 +1,35 @@
+[
+  {
+    "query": "I finished the notifications settings feature, ready to merge.",
+    "should_trigger": true
+  },
+  {
+    "query": "Coverage dropped a bit after my change — is that ok to ship?",
+    "should_trigger": true
+  },
+  {
+    "query": "Does Cypress measure code coverage in this repo?",
+    "should_trigger": true
+  },
+  {
+    "query": "Which test types actually contribute to our coverage number?",
+    "should_trigger": true
+  },
+  {
+    "query": "How do I run coverage on the utils package?",
+    "should_trigger": true
+  },
+  {
+    "query": "Mark this frontend task complete — all done.",
+    "should_trigger": true
+  },
+  {
+    "query": "Explain what the @baseapp-frontend/test wrapper does.",
+    "should_trigger": false
+  },
+  {
+    "query": "Update the README with the new coverage commands.",
+    "should_trigger": false
+  },
+  { "query": "What version of Vitest are we on?", "should_trigger": false }
+]

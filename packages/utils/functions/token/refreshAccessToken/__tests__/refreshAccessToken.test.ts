@@ -1,35 +1,41 @@
+import type { Mock } from 'vitest'
+
 import { refreshAccessToken } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../../constants/jwt'
+import { getAccessToken } from '../../getAccessToken'
+import { getToken } from '../../getToken'
+import { removeTokenAsync } from '../../removeTokenAsync'
+import { setTokenAsync } from '../../setTokenAsync'
 
-jest.mock('../../getAccessToken', () => ({
-  getAccessToken: jest.fn(),
+vi.mock('../../getAccessToken', async () => ({
+  getAccessToken: vi.fn(),
 }))
 
-jest.mock('../../getToken', () => ({
-  getToken: jest.fn(),
+vi.mock('../../getToken', async () => ({
+  getToken: vi.fn(),
 }))
 
-jest.mock('../../setTokenAsync', () => ({
-  setTokenAsync: jest.fn(),
+vi.mock('../../setTokenAsync', async () => ({
+  setTokenAsync: vi.fn(),
 }))
 
-jest.mock('../../removeTokenAsync', () => ({
-  removeTokenAsync: jest.fn(),
+vi.mock('../../removeTokenAsync', async () => ({
+  removeTokenAsync: vi.fn(),
 }))
 
-jest.mock('js-cookie', () => ({
-  set: jest.fn(),
-  remove: jest.fn(),
+vi.mock('js-cookie', async () => ({
+  set: vi.fn(),
+  remove: vi.fn(),
 }))
 
 describe('refreshAccessToken', () => {
-  const mockGetAccessToken = require('../../getAccessToken').getAccessToken
-  const mockGetToken = require('../../getToken').getToken
-  const mockSetTokenAsync = require('../../setTokenAsync').setTokenAsync
-  const mockRemoveTokenAsync = require('../../removeTokenAsync').removeTokenAsync
+  const mockGetAccessToken = getAccessToken as Mock
+  const mockGetToken = getToken as Mock
+  const mockSetTokenAsync = setTokenAsync as Mock
+  const mockRemoveTokenAsync = removeTokenAsync as Mock
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should refresh the access token and set it in cookies', async () => {

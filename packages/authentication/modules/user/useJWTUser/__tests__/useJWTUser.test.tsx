@@ -25,22 +25,25 @@ describe('useJWTUser', () => {
     props?: UseJWTUserOptions<TUser>,
   ) => UseJWTUserOptionsReturn<TUser>
 
-  const decodeJWTMock = jest.fn()
-  const useQueryClientMock = jest.fn()
+  const decodeJWTMock = vi.fn()
+  const { useQueryClientMock } = vi.hoisted(() => ({ useQueryClientMock: vi.fn() }))
 
-  jest.mock('@tanstack/react-query', () => ({
-    ...jest.requireActual('@tanstack/react-query'),
+  vi.mock('@tanstack/react-query', async () => ({
+    ...(await vi.importActual('@tanstack/react-query')),
     useQueryClient: useQueryClientMock,
   }))
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as Mock).mockClear()
   })
 
   beforeAll(async () => {
     // @ts-ignore
     useJWTUser = (await import('../index')).default as any
-    jest.useFakeTimers().setSystemTime(new Date(2020, 9, 1, 7))
+    // Fake ONLY Date (freeze system time so the fixture JWT stays unexpired). Faking
+    // setTimeout/setInterval too would deadlock Testing Library's `waitFor` polling
+    // under Vitest, which — unlike Jest — doesn't auto-advance faked timers for it.
+    vi.useFakeTimers({ toFake: ['Date'] }).setSystemTime(new Date(2020, 9, 1, 7))
   })
 
   const token =
@@ -57,7 +60,7 @@ describe('useJWTUser', () => {
   }
 
   it(`should call the user's endpoint if there is no initial data`, async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
+    ;(Cookies.get as CookiesGetByNameFn) = vi.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)
 
     mockFetch('/users/me', {
@@ -80,7 +83,7 @@ describe('useJWTUser', () => {
     // No CookieProvider in this wrapper — useOptionalCookie returns `cookies: undefined`
     // and useJWTUser must fall back to `getToken()`, which reads via js-cookie on web
     // and expo-secure-store on mobile. We mock js-cookie here to stand in for either.
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
+    ;(Cookies.get as CookiesGetByNameFn) = vi.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)
 
     mockFetch('/users/me', {
@@ -100,9 +103,9 @@ describe('useJWTUser', () => {
   })
 
   it('should run custom onError and resetQueries on 401', async () => {
-    ;(Cookies.get as CookiesGetByNameFn) = jest.fn(() => token)
+    ;(Cookies.get as CookiesGetByNameFn) = vi.fn(() => token)
     decodeJWTMock.mockImplementation(() => undefined)
-    const resetQueriesMock = jest.fn()
+    const resetQueriesMock = vi.fn()
     useQueryClientMock.mockImplementation(() => ({ resetQueries: resetQueriesMock }))
 
     mockFetchError('/users/me', {

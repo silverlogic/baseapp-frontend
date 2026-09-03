@@ -1,0 +1,51 @@
+{
+  "skill_name": "frontend-ensure-test-coverage",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I added a filter to the notifications hook. Coverage on the package dropped from 78% to 76%, but the feature works — I'm done.",
+      "expected_output": "Agent does NOT accept the task as done: coverage regressed below the package baseline. It reads the missing-lines report and adds targeted tests for the new branch until coverage is back at/above baseline.",
+      "files": [],
+      "assertions": [
+        "Agent refuses to mark the task complete because coverage regressed below baseline",
+        "Agent enforces no-regress (not a fixed % — matches/raises the package baseline)",
+        "Agent reads the uncovered-lines report and adds targeted tests for the branch that dropped",
+        "Agent does not suggest lowering the baseline to pass"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Instead of unit tests, can I just rely on my Playwright e2e login test to cover the auth helpers so coverage counts it?",
+      "expected_output": "Agent explains e2e (Playwright) is generally not a coverage source here and does not contribute to the no-regress gate; the gate is driven by the unit layer (Jest istanbul / Vitest v8). Cypress component coverage is separate and only counts if explicitly merged.",
+      "files": [],
+      "assertions": [
+        "Agent says Playwright e2e is not a standard coverage source and does not feed the unit baseline",
+        "Agent states the gate is driven by the unit layer (Jest istanbul / Vitest v8)",
+        "Agent notes Cypress component coverage is separate and only counts if the project merges it",
+        "Agent redirects to adding unit tests for the auth helpers"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "How do I check coverage on the authentication package? Its test:unit runs jest.",
+      "expected_output": "Agent runs jest with istanbul coverage via direct exec, and warns not to pass -- --coverage through the test:unit script.",
+      "files": [],
+      "assertions": [
+        "Agent detects the runner (Jest) from test:unit and uses the istanbul provider",
+        "Agent runs `pnpm --filter @baseapp-frontend/authentication exec jest --config ./jest.config.ts --coverage`",
+        "Agent warns against `test:unit -- --coverage` (Jest treats it as a path pattern)"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "New package @baseapp-frontend/widgets is on Vitest. How do I measure and gate its coverage?",
+      "expected_output": "Agent uses the v8 provider via vitest run --coverage, applies the no-regress policy against the package's baseline, and doesn't try to use istanbul.",
+      "files": [],
+      "assertions": [
+        "Agent uses the v8 provider (vitest run --config ./vitest.config.mts --coverage), not istanbul",
+        "Agent applies no-regress against the package baseline (docs/coverage-baseline.md)",
+        "Agent defers test-authoring patterns to the frontend-unit-testing skill"
+      ]
+    }
+  ]
+}

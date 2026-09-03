@@ -1,0 +1,122 @@
+{
+  "skill_name": "frontend-unit-testing",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I just added a `isEmailUnverified` helper in packages/utils, I'm done.",
+      "expected_output": "Agent does NOT accept the task as done. It requires a colocated Jest unit test (__tests__/*.test.ts), running the package suite via pnpm exec jest, and checking coverage doesn't regress — before completing.",
+      "files": [],
+      "assertions": [
+        "Agent does not accept the task as complete without a unit test",
+        "Agent places the test in a colocated __tests__/ folder named *.test.ts(x)",
+        "Agent runs the suite via pnpm --filter <pkg> exec jest (not the bare test:unit script with -- --coverage)",
+        "Agent checks coverage does not regress"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Write unit tests for the useUserWithPermissions hook in apps/web.",
+      "expected_output": "Agent uses renderHook from @baseapp-frontend/test, mocks the boundaries (useJWTUser, useQuery) with the requireActual spread pattern, and covers the granted/empty/loading/error branches.",
+      "files": ["apps/web/hooks/useUserWithPermissions/index.ts"],
+      "assertions": [
+        "Agent imports renderHook from @baseapp-frontend/test, not directly from @testing-library/react",
+        "Agent mocks boundaries (useJWTUser and/or useQuery) using jest.mock with ...jest.requireActual",
+        "Agent does NOT mock the hook under test itself",
+        "Agent covers multiple branches (e.g. no-user, loading, error, granted-permissions)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "I refactored the authorization helpers in packages/utils to use the new fetch wrapper. Ship it.",
+      "expected_output": "Agent runs the existing suite first, mocks only baseAppFetch (not the logic), and verifies coverage did not drop before shipping.",
+      "files": [],
+      "assertions": [
+        "Agent runs the existing unit suite before/around the refactor",
+        "Agent mocks only the network boundary (baseAppFetch), keeping the logic real via requireActual",
+        "Agent verifies coverage did not regress",
+        "Agent does not mark the refactor done without green tests"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm testing a component. To keep it simple I'll mock the whole @baseapp-frontend/utils module including the formatting helpers the component uses, and import render from @testing-library/react directly.",
+      "expected_output": "Agent pushes back: don't mock the pure logic under test, and use render from @baseapp-frontend/test (provider wrapper) rather than @testing-library/react.",
+      "files": [],
+      "assertions": [
+        "Agent pushes back on mocking the pure logic/helpers the component actually uses",
+        "Agent says to import render from @baseapp-frontend/test, not @testing-library/react directly",
+        "Agent explains mocks are for boundaries (network/data), not the code under test"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Coverage dropped a bit after my change. I'll add a test that imports the index barrel file and a snapshot of the whole page component to bring it back up.",
+      "expected_output": "Agent pushes back on barrel/re-export and large snapshot tests as coverage padding; recommends covering the real branches/logic that changed.",
+      "files": [],
+      "assertions": [
+        "Agent pushes back on testing re-export/barrel files or big snapshots purely to inflate coverage",
+        "Agent recommends covering the real logic/branches that changed instead",
+        "Agent still requires coverage not to regress via meaningful tests"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "The unit suite feels slow while I iterate on one util. How do I run just that file with coverage?",
+      "expected_output": "Agent shows filtering to one package/test (pnpm --filter <pkg> exec jest -t / path, plus --coverage) and warns not to pass -- --coverage through the test:unit script.",
+      "files": [],
+      "assertions": [
+        "Agent scopes the run to one package/file (pnpm --filter <pkg> exec jest with a path or -t name)",
+        "Agent keeps --coverage available via direct jest exec",
+        "Agent warns against `test:unit -- --coverage` (Jest treats it as a path pattern)"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "Add unit tests for the useThing hook in packages/foo. Heads up: packages/foo's test:unit runs `vitest run --config ./vitest.config.mts`.",
+      "expected_output": "Agent detects the package is on Vitest (test:unit runs vitest) and writes vi.* — vi.mock with an async factory + awaited vi.importActual for boundaries, renderHook from @baseapp-frontend/test — NOT jest.* or ts-jest patterns.",
+      "files": [],
+      "assertions": [
+        "Agent detects the runner is Vitest from the package's test:unit script (does not assume Jest)",
+        "Agent uses vi.mock with `async () => ({ ...(await vi.importActual('m')), thing: vi.fn() })` for boundaries",
+        "Agent uses renderHook from @baseapp-frontend/test, not @testing-library/react",
+        "Agent does NOT emit jest.mock / jest.requireActual for this package",
+        "Agent runs the suite via pnpm --filter packages/foo exec vitest run (coverage provider v8)"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "Port authentication's useLogout.test.tsx to the Vitest comparison lane (*.vitest.test.tsx). The original mocks @tanstack/react-query and @baseapp-frontend/utils and uses a `const mockResetQueries = jest.fn()` referenced inside the mock factory.",
+      "expected_output": "Agent applies the Vitest porting rules: outer-var mock fns move to vi.hoisted (vi.mock can't reference outer vars), factories become async with awaited vi.importActual, default-export modules get a `default`.",
+      "files": [],
+      "assertions": [
+        "Agent moves `mockResetQueries` into `const { mockResetQueries } = vi.hoisted(() => ({ mockResetQueries: vi.fn() }))`",
+        "Agent converts jest.mock factories to async with `...(await vi.importActual(...))`",
+        "Agent explains vi.mock is hoisted above the file and cannot reference outer variables (no jest mock-prefix escape hatch)",
+        "Agent does not leave `jest.requireActual` or a non-async importActual factory"
+      ]
+    },
+    {
+      "id": 9,
+      "prompt": "My Vitest test throws 'Cannot access mockFetch before initialization'. I have `const mockFetch = vi.fn()` at the top and reference it inside `vi.mock('@baseapp-frontend/utils', () => ({ baseAppFetch: mockFetch }))`.",
+      "expected_output": "Agent diagnoses the vi.mock hoisting rule and fixes it with vi.hoisted (or by inlining vi.fn() in the factory), explaining why Jest's mock-prefix trick doesn't apply in Vitest.",
+      "files": [],
+      "assertions": [
+        "Agent identifies that vi.mock is hoisted above the const, so the outer variable isn't initialized yet",
+        "Agent fixes it via `const { mockFetch } = vi.hoisted(() => ({ mockFetch: vi.fn() }))`",
+        "Agent notes this differs from Jest (no `mock`-prefixed outer-var exception in Vitest)"
+      ]
+    },
+    {
+      "id": 10,
+      "prompt": "Starting a brand-new package @baseapp-frontend/widgets — React components + hooks, coverage-heavy, no tests yet. Set up its unit testing.",
+      "expected_output": "Agent scaffolds Vitest for a new component/coverage-heavy package (per the decision record: that's where Vitest wins), not Jest — vitest.config.mts, v8 coverage, test:unit running vitest.",
+      "files": [],
+      "assertions": [
+        "Agent chooses Vitest for a new component/coverage-heavy package (cites the decision to migrate component-heavy packages to Vitest)",
+        "Agent sets up vitest.config.mts (jsdom, @vitejs/plugin-react, v8 coverage) and test:unit running vitest run",
+        "Agent uses the @baseapp-frontend/test wrapper + boundary-only mocking conventions",
+        "Agent does not default the new package to Jest"
+      ]
+    }
+  ]
+}
