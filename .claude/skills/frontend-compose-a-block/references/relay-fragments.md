@@ -121,8 +121,10 @@ component or over-fetching in the parent. 18 fragment files declare argument def
 sites pass `@arguments`. Three uses, all present in the tree.
 
 **Call-site sizing, sort and search** — `comments/common/graphql/queries/CommentsList.ts`, with the
-connection's own selection set elided. Every declared argument is threaded into the field: a
-definition you do not pass is dead weight, and a field argument with no definition will not compile.
+connection's own selection set elided. A field argument must have a matching definition or the
+document will not compile. The reverse does not hold: a definition can drive an `@include` or a
+nested spread rather than a field, as `isCommentsOpened` does below, and a defaulted argument may be
+omitted at a spread site — that is what `defaultValue` is for.
 
 ```graphql
 fragment CommentsList_comments on CommentsInterface
