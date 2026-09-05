@@ -12,6 +12,7 @@ const MainContainer: FC<MainContainerProps> = ({
   isNavHorizontal,
   BoxProps,
 }) => {
+
   if (isNavCentered) {
     return (
       <NavCenteredContainer component="main" {...BoxProps}>

@@ -16,5 +16,5 @@ export interface NotificationsPopoverProps {
   useNotificationsSubscription?: (userId: string) => void
   showLabel?: boolean
   labelComponent?: React.ReactNode
-  currentLayout?: 'vertical' | 'mini' | 'horizontal' | 'centered'
+  currentLayout?: 'vertical' | 'mini' | 'horizontal' | 'centered' | 'sidebar'
 }
