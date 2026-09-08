@@ -179,10 +179,10 @@
     "ts-node": "catalog:test",
     "tsup": "catalog:",
     "typescript": "catalog:",
-    "vitest": "^4.1.10",
-    "@vitest/coverage-v8": "^4.1.10",
-    "@vitejs/plugin-react": "^6.0.4",
-    "jsdom": "^29.1.1"
+    "vitest": "catalog:test",
+    "@vitest/coverage-v8": "catalog:test",
+    "@vitejs/plugin-react": "catalog:test",
+    "jsdom": "catalog:test"
   },
   "license": "MIT",
   "repository": {

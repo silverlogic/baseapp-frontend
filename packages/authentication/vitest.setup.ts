@@ -1,6 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies, @typescript-eslint/no-explicit-any */
+/* eslint-disable import/no-extraneous-dependencies */
 import { vi } from 'vitest'
 
+// The jest→vi shim now comes from the shared @baseapp-frontend/test/vitest/setup
+// (loaded first by createVitestConfig). This file only registers the package-specific
+// global mock:
+//
 // The shared helper @baseapp-frontend/test/utils/mocks.ts does `jest.mock('js-cookie')`
 // then `cookiesMock = jest.mocked(Cookies)`. Vitest can't auto-mock from that runtime
 // call (vi.mock must be statically hoisted), so we register the mock here — a setup-file
@@ -17,9 +21,3 @@ vi.mock('js-cookie', () => {
   }
   return { default: api, ...api }
 })
-
-// Lets the shared Jest helpers (@baseapp-frontend/test) and setup files
-// (console.ts / fetch.ts), which call `jest.fn()`, run unchanged under Vitest.
-// Must be listed BEFORE those files in `setupFiles`.
-const g = globalThis as any
-g.jest = vi

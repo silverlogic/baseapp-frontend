@@ -1,32 +1,13 @@
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vitest/config'
+import { createVitestConfig } from '@baseapp-frontend/test/vitest/config'
 
-// Vitest config. Mirrors the shared Jest base (@baseapp-frontend/test/jest.config.ts):
-// jsdom, the same mock files (moduleNameMapper → resolve.alias) and setup files
-// (console/fetch), reused via a globalThis.jest = vi shim (see vitest.setup.ts), plus
-// the package's own graphql-ws module mock (also in vitest.setup.ts).
-const MOCKS = path.resolve(__dirname, '../test/__mocks__')
-const mock = (f: string) => path.join(MOCKS, f)
+// Shared skeleton from `createVitestConfig`; this package adds its own vitest.setup.ts
+// (a global graphql-ws vi.mock). UI package — real coverage is the component (Cypress)
+// layer, not unit; the factory default (v8, text-summary) is informational only.
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-export default defineConfig({
-  plugins: [react()],
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: [path.resolve(__dirname, 'vitest.setup.ts'), mock('console.ts'), mock('fetch.ts')],
-    include: ['**/*.(test|spec).(ts|tsx)'],
-    // UI package — real coverage is the component (Cypress) layer, not unit; informational only.
-    coverage: { provider: 'v8', reporter: ['text-summary'] },
-  },
-  resolve: {
-    alias: {
-      'react-native': mock('react-native.ts'),
-      'expo-constants': mock('expo-constants.ts'),
-      'expo-modules-core': mock('expo-modules-core.ts'),
-      'expo-secure-store': mock('expo-secure-store.ts'),
-      'next/font/google': mock('next-font.ts'),
-    },
-  },
+export default createVitestConfig({
+  setupFiles: [path.join(__dirname, 'vitest.setup.ts')],
 })
