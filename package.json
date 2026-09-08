@@ -47,7 +47,7 @@
   "engines": {
     "node": ">=22.11.0"
   },
-  "packageManager": "pnpm@10.28.2",
+  "packageManager": "pnpm@10.34.5",
   "resolutions": {
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
@@ -64,7 +64,7 @@
       "form-data": ">=4.0.6",
       "js-yaml": ">=4.3.1 <5",
       "read-yaml-file>js-yaml": "^3.15.1",
-      "nanoid@^3.0.0": ">=3.3.17 <4",
+      "nanoid@^3.0.0": ">=3.3.18 <4",
       "postcss": ">=8.5.23",
       "qs": ">=6.16.0",
       "sharp@^0.34.0": ">=0.35.3",
