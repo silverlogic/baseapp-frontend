@@ -16,7 +16,7 @@ describe('useLogin', () => {
   const loginUrl = '/auth/login'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as Mock).mockClear()
     cookiesMock.set.mockClear()
   })
 

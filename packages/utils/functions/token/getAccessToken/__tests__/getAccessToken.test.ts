@@ -1,9 +1,11 @@
+import type { Mock } from 'vitest'
+
 import { getAccessToken } from '..'
 
-global.fetch = jest.fn()
+global.fetch = vi.fn()
 
 const mockFetchResponse = (body = {}, ok = true, status = 200) => {
-  const fetchMock = global.fetch as jest.Mock
+  const fetchMock = global.fetch as Mock
   fetchMock.mockResolvedValueOnce({
     ok,
     status,
@@ -13,7 +15,7 @@ const mockFetchResponse = (body = {}, ok = true, status = 200) => {
 
 describe('getAccessToken', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should throw an error if no refresh token is provided', async () => {
@@ -50,7 +52,7 @@ describe('getAccessToken', () => {
 
   it('should handle fetch errors gracefully', async () => {
     const errorMessage = 'Network error'
-    const fetchMock = global.fetch as jest.Mock
+    const fetchMock = global.fetch as Mock
     fetchMock.mockRejectedValueOnce(new Error(errorMessage))
 
     await expect(getAccessToken('valid-refresh-token')).rejects.toThrow(errorMessage)

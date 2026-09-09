@@ -119,6 +119,10 @@ catalogs:
     "@mui/x-date-pickers": 7.6.2
 
   test:
+    vitest: ^4.1.10
+    "@vitest/coverage-v8": ^4.1.10
+    "@vitejs/plugin-react": ^6.0.4
+    jsdom: ^29.1.1
     "@cypress/webpack-dev-server": 3.10.1
     "@faker-js/faker": ^9.0.3
     "@testing-library/cypress": 10.0.2

@@ -11,13 +11,14 @@ import useCurrentProfile from '..'
 import { MISSING_PROFILE_STORE_ERROR } from '../constants'
 import { mockUserProfileFactory } from './__mock__/profiles'
 
-jest.mock('js-cookie', () => ({
-  get: jest.fn(),
-  set: jest.fn(),
-  remove: jest.fn(),
-}))
+vi.mock('js-cookie', () => {
+  // Vitest needs a `default` export for `import Cookies from 'js-cookie'`; share one
+  // object so Cookies.* (app code) and mockedCookies.* (assertions) are the same vi.fn().
+  const api = { get: vi.fn(), set: vi.fn(), remove: vi.fn() }
+  return { default: api, ...api }
+})
 
-const mockedCookies = Cookies as jest.Mocked<typeof Cookies>
+const mockedCookies = Cookies as Mocked<typeof Cookies>
 
 describe('useCurrentProfile', () => {
   const renderWithProviders = (initialCookies = {}) => {
@@ -30,11 +31,11 @@ describe('useCurrentProfile', () => {
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe('initialization', () => {

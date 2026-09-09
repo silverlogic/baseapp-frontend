@@ -7,15 +7,16 @@ import useUISettings, { UISettingsProvider } from '..'
 import { createPalette } from '../../../../styles/web'
 import { DEFAULT_UI_SETTINGS, UI_SETTINGS_KEY_NAME } from '../constants'
 
-jest.mock('js-cookie', () => ({
-  set: jest.fn(),
-  get: jest.fn(),
-  remove: jest.fn(),
-}))
+vi.mock('js-cookie', () => {
+  // Vitest needs a `default` export for `import Cookies from 'js-cookie'`; share one
+  // object so Cookies.* (app code) and mockCookiesSet (assertions) are the same vi.fn().
+  const api = { set: vi.fn(), get: vi.fn(), remove: vi.fn() }
+  return { default: api, ...api }
+})
 
-const mockCookiesSet = Cookies.set as jest.MockedFunction<typeof Cookies.set>
+const mockCookiesSet = Cookies.set as MockedFunction<typeof Cookies.set>
 
-const mockToggle = jest.fn()
+const mockToggle = vi.fn()
 Object.defineProperty(document, 'documentElement', {
   value: {
     classList: {
@@ -26,9 +27,9 @@ Object.defineProperty(document, 'documentElement', {
 })
 
 Object.defineProperty(document, 'querySelector', {
-  value: jest.fn(() => ({
+  value: vi.fn(() => ({
     style: {
-      setProperty: jest.fn(),
+      setProperty: vi.fn(),
     },
   })),
   writable: true,
@@ -36,7 +37,7 @@ Object.defineProperty(document, 'querySelector', {
 
 describe('useUISettings', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockToggle.mockClear()
   })
 

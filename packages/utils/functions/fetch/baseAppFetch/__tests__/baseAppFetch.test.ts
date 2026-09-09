@@ -1,91 +1,97 @@
 import humps from 'humps'
+import * as nextHeadersNS from 'next/headers'
+import type { Mock, MockInstance } from 'vitest'
 
 import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
 import { broadcastEvent } from '../../../events'
+import * as getLanguageNS from '../../../language/getLanguage'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
+import * as decodeJWTNS from '../../../token/decodeJWT'
+import * as getTokenNS from '../../../token/getToken'
 import { getTokenSSR } from '../../../token/getTokenSSR'
+import * as isUserTokenValidNS from '../../../token/isUserTokenValid'
+import * as refreshAccessTokenNS from '../../../token/refreshAccessToken'
 
-global.fetch = jest.fn()
+global.fetch = vi.fn()
 
 Object.defineProperty(global, 'window', {
   value: {},
   writable: true,
 })
 
-jest.mock('humps', () => ({
-  decamelizeKeys: jest.fn().mockImplementation((keys) => keys),
-  camelizeKeys: jest.fn().mockImplementation((keys) => keys),
+vi.mock('humps', async () => {
+  const fns = {
+    decamelizeKeys: vi.fn().mockImplementation((keys) => keys),
+    camelizeKeys: vi.fn().mockImplementation((keys) => keys),
+  }
+  return { ...fns, default: fns }
+})
+vi.mock('../../../events', async () => ({
+  broadcastEvent: vi.fn(),
 }))
-jest.mock('../../../events', () => ({
-  broadcastEvent: jest.fn(),
+vi.mock('../../../token', async () => ({
+  getToken: vi.fn(),
+  isUserTokenValid: vi.fn(),
+  refreshAccessToken: vi.fn(),
+  decodeJWT: vi.fn().mockImplementation(() => ({ exp: Date.now() / 1000 + 5000 })),
 }))
-jest.mock('../../../token', () => ({
-  getToken: jest.fn(),
-  isUserTokenValid: jest.fn(),
-  refreshAccessToken: jest.fn(),
-  decodeJWT: jest.fn().mockImplementation(() => ({ exp: Date.now() / 1000 + 5000 })),
+vi.mock('../../../token/refreshAccessToken', async () => ({
+  refreshAccessToken: vi.fn(),
 }))
-jest.mock('../../../token/refreshAccessToken', () => ({
-  refreshAccessToken: jest.fn(),
+vi.mock('../../../token/isUserTokenValid', async () => ({
+  isUserTokenValid: vi.fn(),
 }))
-jest.mock('../../../token/isUserTokenValid', () => ({
-  isUserTokenValid: jest.fn(),
+vi.mock('../../../token/decodeJWT', async () => ({
+  decodeJWT: vi.fn(),
 }))
-jest.mock('../../../token/decodeJWT', () => ({
-  decodeJWT: jest.fn(),
+vi.mock('../../../token/getToken', async () => ({
+  getToken: vi.fn(),
 }))
-jest.mock('../../../token/getToken', () => ({
-  getToken: jest.fn(),
+vi.mock('../../../language/getLanguage', async () => ({
+  getLanguage: vi.fn(),
 }))
-jest.mock('../../../language/getLanguage', () => ({
-  getLanguage: jest.fn(),
+vi.mock('../../../token/getTokenSSR', async () => ({
+  getTokenSSR: vi.fn(),
 }))
-jest.mock('../../../token/getTokenSSR', () => ({
-  getTokenSSR: jest.fn(),
-}))
-jest.mock('next/headers', () => ({
-  cookies: jest.fn(),
+vi.mock('next/headers', async () => ({
+  cookies: vi.fn(),
 }))
 
 const DEFAULT_FETCH_RESPONSE = {
   ok: true,
   status: 200,
   headers: {
-    get: jest.fn().mockReturnValue('application/json'),
+    get: vi.fn().mockReturnValue('application/json'),
   },
-  json: jest.fn().mockResolvedValue({}),
+  json: vi.fn().mockResolvedValue({}),
 } as Partial<Omit<Response, 'headers'>>
 
 const mockFetch = (response = DEFAULT_FETCH_RESPONSE) => {
-  const fetchMock = global.fetch as jest.Mock
+  const fetchMock = global.fetch as Mock
   fetchMock.mockResolvedValue(response)
 
   return response
 }
 
-let stringifySpy: jest.SpyInstance
+let stringifySpy: MockInstance
 
 describe('baseAppFetch', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
-    const humpsMock = humps.decamelizeKeys as jest.Mock
+    vi.clearAllMocks()
+    const humpsMock = humps.decamelizeKeys as Mock
     humpsMock.mockClear()
-    stringifySpy = jest.spyOn(JSON, 'stringify')
+    stringifySpy = vi.spyOn(JSON, 'stringify')
 
-    const { getToken: dynamicGetToken } = require('../../../token/getToken')
-    const { getLanguage: dynamicGetLanguage } = require('../../../language/getLanguage')
-    const {
-      refreshAccessToken: specificRefreshAccessToken,
-    } = require('../../../token/refreshAccessToken')
-    const {
-      isUserTokenValid: specificIsUserTokenValid,
-    } = require('../../../token/isUserTokenValid')
-    const { decodeJWT: specificDecodeJWT } = require('../../../token/decodeJWT')
+    const dynamicGetToken = getTokenNS.getToken as Mock
+    const dynamicGetLanguage = getLanguageNS.getLanguage as Mock
+    const specificRefreshAccessToken = refreshAccessTokenNS.refreshAccessToken as Mock
+    const specificIsUserTokenValid = isUserTokenValidNS.isUserTokenValid as Mock
+    const specificDecodeJWT = decodeJWTNS.decodeJWT as Mock
 
-    const staticGetTokenMock = getToken as jest.Mock
-    const staticRefreshAccessTokenMock = refreshAccessToken as jest.Mock
-    const staticIsUserTokenValidMock = isUserTokenValid as jest.Mock
+    const staticGetTokenMock = getToken as Mock
+    const staticRefreshAccessTokenMock = refreshAccessToken as Mock
+    const staticIsUserTokenValidMock = isUserTokenValid as Mock
 
     dynamicGetToken.mockImplementation((...args: any[]) => staticGetTokenMock(...args))
     specificRefreshAccessToken.mockImplementation((...args: any[]) =>
@@ -153,11 +159,11 @@ describe('baseAppFetch', () => {
   })
 
   it('should refresh token if it is invalid and auth is required', async () => {
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(false)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    const refreshAccessTokenMock = refreshAccessToken as Mock
     refreshAccessTokenMock.mockResolvedValue('new-token')
 
     await baseAppFetch('/test', {})
@@ -174,11 +180,11 @@ describe('baseAppFetch', () => {
   })
 
   it('should not attempt to refresh token if it is valid', async () => {
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('valid-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(true)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    const refreshAccessTokenMock = refreshAccessToken as Mock
     refreshAccessTokenMock.mockClear()
 
     await baseAppFetch('/test', {})
@@ -187,9 +193,9 @@ describe('baseAppFetch', () => {
   })
 
   it('should not attempt to refresh token if refreshToken is false', async () => {
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(false)
 
     await baseAppFetch('/test', { refreshToken: false })
@@ -198,7 +204,7 @@ describe('baseAppFetch', () => {
   })
 
   it('should not require auth for paths marked as not requiring a token', async () => {
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('any-token')
     const path = '/no-auth-required'
 
@@ -216,11 +222,11 @@ describe('baseAppFetch', () => {
   })
 
   it('should handle refreshAccessToken failure by emitting logout event', async () => {
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('old-token')
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(false)
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    const refreshAccessTokenMock = refreshAccessToken as Mock
     refreshAccessTokenMock.mockRejectedValue(new Error('Failed to refresh'))
 
     await expect(baseAppFetch('/test', {})).rejects.toThrow('Failed to refresh')
@@ -229,15 +235,15 @@ describe('baseAppFetch', () => {
 
   it('should set Authorization header correctly when using jwt token', async () => {
     const token = 'test-token'
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue(token)
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(true)
 
-    const { getToken: dynamicGetToken } = require('../../../token/getToken')
+    const dynamicGetToken = getTokenNS.getToken as Mock
     dynamicGetToken.mockReturnValue(token)
 
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    const refreshAccessTokenMock = refreshAccessToken as Mock
     refreshAccessTokenMock.mockClear()
 
     await baseAppFetch('/test', {})
@@ -255,15 +261,15 @@ describe('baseAppFetch', () => {
 
   it('should set Authorization header when using Token tokentype', async () => {
     const token = 'test-token'
-    const getTokenMock = getToken as jest.Mock
+    const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue(token)
-    const isUserTokenValidMock = isUserTokenValid as jest.Mock
+    const isUserTokenValidMock = isUserTokenValid as Mock
     isUserTokenValidMock.mockReturnValue(true)
 
-    const { getToken: dynamicGetToken } = require('../../../token/getToken')
+    const dynamicGetToken = getTokenNS.getToken as Mock
     dynamicGetToken.mockReturnValue(token)
 
-    const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+    const refreshAccessTokenMock = refreshAccessToken as Mock
     refreshAccessTokenMock.mockClear()
 
     await baseAppFetch('/test', { tokenType: 'Token' })
@@ -361,7 +367,7 @@ describe('baseAppFetch', () => {
     const dataResponse = { testData: 'value' }
     mockFetch({
       ...DEFAULT_FETCH_RESPONSE,
-      json: jest.fn().mockResolvedValue(dataResponse),
+      json: vi.fn().mockResolvedValue(dataResponse),
     })
 
     const response = await baseAppFetch('/test', {})
@@ -373,7 +379,7 @@ describe('baseAppFetch', () => {
     const dataResponse = { test_data: 'value' }
     mockFetch({
       ...DEFAULT_FETCH_RESPONSE,
-      json: jest.fn().mockResolvedValue(dataResponse),
+      json: vi.fn().mockResolvedValue(dataResponse),
     })
 
     const response = await baseAppFetch('/test', { camelizeResponseDataKeys: false })
@@ -394,14 +400,14 @@ describe('baseAppFetch', () => {
     })
 
     it('should use getTokenSSR in SSR environment', async () => {
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue('ssr-access-token')
 
       // Mock next/headers cookies
       const mockCookies = {
-        get: jest.fn().mockReturnValue({ value: 'en' }),
+        get: vi.fn().mockReturnValue({ value: 'en' }),
       }
-      const { cookies } = require('next/headers')
+      const cookies = nextHeadersNS.cookies as Mock
       cookies.mockResolvedValue(mockCookies)
 
       await baseAppFetch('/test', {})
@@ -420,22 +426,22 @@ describe('baseAppFetch', () => {
     })
 
     it('should handle SSR token refresh when token is invalid', async () => {
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock
         .mockResolvedValueOnce('Current-Profile')
         .mockResolvedValueOnce('invalid-access-token') // access token
         .mockResolvedValueOnce('ssr-refresh-token') // refresh token
 
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      const isUserTokenValidMock = isUserTokenValid as Mock
       isUserTokenValidMock.mockReturnValue(false)
 
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      const refreshAccessTokenMock = refreshAccessToken as Mock
       refreshAccessTokenMock.mockResolvedValue('new-ssr-access-token')
 
       const mockCookies = {
-        get: jest.fn().mockReturnValue({ value: 'fr' }),
+        get: vi.fn().mockReturnValue({ value: 'fr' }),
       }
-      const { cookies } = require('next/headers')
+      const cookies = nextHeadersNS.cookies as Mock
       cookies.mockResolvedValue(mockCookies)
 
       await baseAppFetch('/test', {})
@@ -459,7 +465,7 @@ describe('baseAppFetch', () => {
     })
 
     it('should not use getTokenSSR when no auth is required in SSR', async () => {
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue('ssr-token')
 
       const path = '/public-endpoint'
@@ -477,13 +483,13 @@ describe('baseAppFetch', () => {
     })
 
     it('should handle SSR language header from cookies', async () => {
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue(null) // No token
 
       const mockCookies = {
-        get: jest.fn().mockReturnValue({ value: 'es' }),
+        get: vi.fn().mockReturnValue({ value: 'es' }),
       }
-      const { cookies } = require('next/headers')
+      const cookies = nextHeadersNS.cookies as Mock
       cookies.mockResolvedValue(mockCookies)
 
       await baseAppFetch('/test', { languageCookieName: 'custom_language' })
@@ -500,13 +506,13 @@ describe('baseAppFetch', () => {
     })
 
     it('should handle missing language cookie in SSR', async () => {
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue(null)
 
       const mockCookies = {
-        get: jest.fn().mockReturnValue(undefined),
+        get: vi.fn().mockReturnValue(undefined),
       }
-      const { cookies } = require('next/headers')
+      const cookies = nextHeadersNS.cookies as Mock
       cookies.mockResolvedValue(mockCookies)
 
       await baseAppFetch('/test', {})

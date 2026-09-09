@@ -1,22 +1,23 @@
 import { cookies } from 'next/headers'
+import type { Mock } from 'vitest'
 
 import { getTokenSSR } from '..'
 import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
 
 const mockTokenValue = 'mock-jwt-token'
 
-jest.mock('next/headers', () => ({
-  cookies: jest.fn(),
+vi.mock('next/headers', async () => ({
+  cookies: vi.fn(),
 }))
 
 describe('getTokenSSR', () => {
   const mockCookieStore = {
-    get: jest.fn(),
+    get: vi.fn(),
   }
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    ;(cookies as jest.Mock).mockResolvedValue(mockCookieStore)
+    vi.clearAllMocks()
+    ;(cookies as Mock).mockResolvedValue(mockCookieStore)
   })
 
   it('should retrieve the token from cookies when token exists', async () => {

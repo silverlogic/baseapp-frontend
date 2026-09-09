@@ -7,6 +7,7 @@ import React from 'react'
 import { act, render, renderHook, waitFor } from '@baseapp-frontend/test'
 
 import ClientCookies from 'js-cookie'
+import type { Mocked } from 'vitest'
 
 import useCookie, { CookieProvider, useOptionalCookie } from '..'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
@@ -14,13 +15,12 @@ import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { removeCookie, setCookie } from '../../../functions/cookie'
 import { COOKIE_CHANGE_EVENT } from '../constants'
 
-jest.mock('js-cookie', () => ({
-  get: jest.fn(),
-  set: jest.fn(),
-  remove: jest.fn(),
-}))
+vi.mock('js-cookie', async () => {
+  const api = { get: vi.fn(), set: vi.fn(), remove: vi.fn() }
+  return { ...api, default: api }
+})
 
-const mockedCookies = ClientCookies as jest.Mocked<typeof ClientCookies>
+const mockedCookies = ClientCookies as Mocked<typeof ClientCookies>
 
 // jsdom doesn't expose BroadcastChannel here. Stub matching real semantics: same-name
 // channels receive each other's posts; a channel never receives its own.
@@ -61,7 +61,7 @@ afterAll(() => {
 
 describe('useCookie event-bridge sync', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   const wrapWith =
@@ -143,8 +143,8 @@ describe('useCookie event-bridge sync', () => {
   })
 
   it('cleans up the listener on Provider unmount; future setCookie does not error', () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
-    const removeListenerSpy = jest.spyOn(window, 'removeEventListener')
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const removeListenerSpy = vi.spyOn(window, 'removeEventListener')
 
     const { unmount } = render(
       <CookieProvider initialCookies={{ [ACCESS_KEY_NAME]: 'a' }}>
@@ -163,7 +163,7 @@ describe('useCookie event-bridge sync', () => {
   })
 
   it('does not throw when setCookie is called with no Provider mounted', () => {
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
     expect(() => setCookie(ACCESS_KEY_NAME, 'value')).not.toThrow()
     expect(() => removeCookie(ACCESS_KEY_NAME)).not.toThrow()
@@ -196,7 +196,7 @@ describe('useCookie event-bridge sync', () => {
   })
 
   it('attaches a listener exactly once per Provider mount', () => {
-    const addListenerSpy = jest.spyOn(window, 'addEventListener')
+    const addListenerSpy = vi.spyOn(window, 'addEventListener')
 
     render(
       <CookieProvider initialCookies={{ [ACCESS_KEY_NAME]: 'a' }}>
@@ -234,7 +234,7 @@ describe('useCookie event-bridge sync', () => {
     type GetByName = (name: string) => string | undefined
 
     it('does not throw outside a Provider; synthesizes cookies from getToken', () => {
-      ;(ClientCookies.get as GetByName) = jest.fn((key: string) =>
+      ;(ClientCookies.get as GetByName) = vi.fn((key: string) =>
         key === ACCESS_KEY_NAME ? 'token-from-getToken' : undefined,
       )
 
@@ -246,7 +246,7 @@ describe('useCookie event-bridge sync', () => {
     })
 
     it('returns undefined for keys with no stored token outside a Provider', () => {
-      ;(ClientCookies.get as GetByName) = jest.fn(() => undefined)
+      ;(ClientCookies.get as GetByName) = vi.fn(() => undefined)
 
       const { result } = renderHook(() => useOptionalCookie())
 
@@ -254,7 +254,7 @@ describe('useCookie event-bridge sync', () => {
     })
 
     it('reads from the Provider when one is mounted (does not call getToken)', () => {
-      ;(ClientCookies.get as GetByName) = jest.fn(() => 'should-not-be-used')
+      ;(ClientCookies.get as GetByName) = vi.fn(() => 'should-not-be-used')
 
       const { result } = renderHook(() => useOptionalCookie(), {
         wrapper: wrapWith({ [ACCESS_KEY_NAME]: 'from-provider' }),
@@ -274,7 +274,7 @@ describe('useCookie event-bridge sync', () => {
 
     unmount()
 
-    const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation()
+    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
     const externalChannel = new BroadcastChannel(COOKIE_CHANGE_EVENT)
     externalChannel.postMessage({ type: 'set', key: ACCESS_KEY_NAME, value: 'after-unmount' })
     externalChannel.close()

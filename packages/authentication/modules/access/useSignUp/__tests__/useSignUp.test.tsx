@@ -18,7 +18,7 @@ describe('useSignUp', () => {
   const registerUrl = '/register'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear()
+    ;(global.fetch as Mock).mockClear()
   })
 
   test('should run onSuccess', async () => {

@@ -1,16 +1,16 @@
 import { isUserTokenValid } from '..'
 
-jest.mock('server-only', () => ({}))
+vi.mock('server-only', async () => ({}))
 
 describe('isUserTokenValid function', () => {
   const mockCurrentTime = 1000000
 
   beforeAll(() => {
-    jest.spyOn(Date, 'now').mockReturnValue(mockCurrentTime * 1000)
+    vi.spyOn(Date, 'now').mockReturnValue(mockCurrentTime * 1000)
   })
 
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('returns true for a valid token', () => {
