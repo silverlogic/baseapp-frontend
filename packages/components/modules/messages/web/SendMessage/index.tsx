@@ -149,7 +149,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
-          if (mutationErrors) {
+          if (mutationErrors?.length) {
             setFormRelayErrors(form, mutationErrors)
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
