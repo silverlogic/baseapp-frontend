@@ -1,4 +1,4 @@
-import { createVitestConfig } from '@baseapp-frontend/test/vitest/config'
+import { createVitestConfig } from '@baseapp-frontend/test/vitest/config.mjs'
 
 // Vitest config for @baseapp-frontend/utils (migration pilot — biggest package, 29 specs).
 // Shared skeleton (react plugin, jsdom, jest→vi shim + console/fetch setup, RN/expo/next-font

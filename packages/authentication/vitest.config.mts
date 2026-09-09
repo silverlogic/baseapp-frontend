@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
-import { createVitestConfig } from '@baseapp-frontend/test/vitest/config'
+import { createVitestConfig } from '@baseapp-frontend/test/vitest/config.mjs'
 
 // Shared skeleton from `createVitestConfig`; this package adds its own vitest.setup.ts
 // (a global js-cookie vi.mock) and keeps whole-surface v8 coverage.

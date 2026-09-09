@@ -1,4 +1,4 @@
-import { createVitestConfig } from '@baseapp-frontend/test/vitest/config'
+import { createVitestConfig } from '@baseapp-frontend/test/vitest/config.mjs'
 
 // design-system is a UI package — its real coverage is the component (Cypress) layer,
 // not unit. Whole-surface v8 (`all: true`) both errors on some source files and reports
