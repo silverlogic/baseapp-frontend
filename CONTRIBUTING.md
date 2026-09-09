@@ -41,41 +41,51 @@ If you have an idea for a new feature or enhancement in BaseApp, please follow t
 
 ## Contributing Code
 
-We welcome code contributions to BaseApp! To contribute code, please follow these steps:
+We welcome code contributions to BaseApp! How you get your branch onto a Pull Request depends on your
+access; everything after that is the same.
 
-1. Fork the BaseApp repository to your GitHub account.
+### Getting your branch up
 
-2. Clone your forked repository to your local development environment.
+**With write access to this repository**, clone it and branch directly. **The branch name must start with
+`feature/`, `epic/` or `hotfix/`.** A repository ruleset rejects any other new branch with
+`GH013: Cannot create ref due to creations being restricted`, so a name outside those three prefixes fails
+on push rather than at review. Use `hotfix/` for a bug fix or dependency bump, `feature/` for new work,
+`epic/` for a long-lived branch that several PRs will target. A Jira ID is optional and goes after the
+prefix:
 
-3. Create a new branch for your feature or bug fix. If it is tied to a Jira ID, please use the format `BA-<JIRA-ID>-feature-name` for your branch name. If it's not tied to a Jira ID, you can simply use the format `BA-feature-name`:
+```
+git checkout -b feature/BA-1234-comment-reactions
+git checkout -b hotfix/stale-data-after-navigation
+```
+
+**Without write access**, fork the repository and push your branch to your fork. The branch-prefix
+ruleset applies only to this repository, so your fork can use any branch name.
+
+### Then, either way
+
+1. Make your changes, write tests if applicable, and ensure the existing tests pass.
+
+2. Commit with a [Conventional Commits](https://www.conventionalcommits.org) subject. `feat:`, `fix:` and
+   `chore:` cover nearly everything in this repository's history; the spec defines the rest:
 
    ```
-   git checkout -b BA-feature-name
+   git commit -m "fix: prevent sending messages that contain only whitespace"
    ```
 
-4. Make your changes, write tests if applicable, and ensure that the existing tests pass.
+3. Open a Pull Request against `master`, with a descriptive title and an explanation of what changed and
+   why.
 
-5. Commit your changes with a clear and concise commit message. If it is tied to a Jira ID, please use `BA-<JIRA-ID>:` as a prefix. If it's not tied to a Jira ID, you can simply use the prefix `BA:`:
+4. Add a changeset (`pnpm changeset`) if your change should publish a new package version. A PR that
+   touches no package source — documentation, CI, repository config — does not need one, and the
+   changeset bot's warning can be ignored in that case.
 
-   ```
-   git commit -m "BA: Your feature description"
-   ```
+5. Participate in review, addressing feedback as it comes.
 
-6. Push your changes to your forked repository:
+6. Before submitting, read the
+   [Packages Versioning and Publishing](README.md#packages-versioning-and-publishing) section of the
+   README.
 
-   ```
-   git push origin BA-feature-name
-   ```
-
-7. Open a Pull Request (PR) against the `master` branch of the BaseApp repository.
-
-8. Provide a descriptive PR title and include details about the changes you've made.
-
-9. Participate in the PR review process, addressing any feedback or comments.
-
-10. Once your PR is approved and passes continuous integration checks, it will be merged into the master repository.
-
-11. Before submitting your PR, please make sure you have read and understood the versioning section in the [README](https://github.com/silverlogic/baseapp-frontend/blob/master/README.md?plain=1#L96).
+Once the PR is approved with CI green, a maintainer merges it into `master`.
 
 ## Code of Conduct
 
