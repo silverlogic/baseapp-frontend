@@ -52,3 +52,7 @@ tsconfig.tsbuildinfo
 
 # Lint caches
 .eslintcache
+
+# Claude Code — skills are shared, per-machine settings are not
+.claude/settings.local.json
+.claude/logs/
