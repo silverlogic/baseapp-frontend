@@ -48,7 +48,7 @@ export const STRIPE_API_KEY = {
 
 export class StripeApi {
   static getCustomer = (entityId?: string): Promise<Customer> =>
-    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}`)
+    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/`)
 
   static createCustomer = (entityId?: string): Promise<Customer> =>
     axios.post(`${baseUrl}/stripe/customers/`, { entityId })
@@ -57,7 +57,7 @@ export class StripeApi {
     axios.post(`${baseUrl}/stripe/customers/${entityId}/payment-methods/`)
 
   static listPaymentMethods = (entityId?: string): Promise<PaymentMethod[]> =>
-    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/payment-methods`)
+    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/payment-methods/`)
 
   static updatePaymentMethod = (
     entityId: string,
@@ -82,14 +82,14 @@ export class StripeApi {
     page: number,
     entityId?: string,
   ): Promise<DjangoPaginatedResponse<Invoice>> =>
-    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/invoices`, {
+    axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/invoices/`, {
       params: { page },
     })
 
-  static listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products`)
+  static listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products/`)
 
   static getProduct = (productId: string): Promise<Product> =>
-    axios.get(`${baseUrl}/stripe/products/${productId}`)
+    axios.get(`${baseUrl}/stripe/products/${productId}/`)
 
   static createSubscription = ({
     entityId,
@@ -110,7 +110,7 @@ export class StripeApi {
   }
 
   static getSubscription = (subscriptionId: string): Promise<Subscription> =>
-    axios.get(`${baseUrl}/stripe/subscriptions/${subscriptionId}`, {})
+    axios.get(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`, {})
 
   static cancelSubscription = (subscriptionId: string): Promise<void> =>
     axios.delete(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`)

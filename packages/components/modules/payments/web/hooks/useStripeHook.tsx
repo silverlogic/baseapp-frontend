@@ -139,9 +139,9 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: (options: CreateSubscriptionOptions) => StripeApi.createSubscription(options),
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [STRIPE_API_KEY.getCustomer(), STRIPE_API_KEY.getSubscription()],
-        })
+        // One filter per key: a single queryKey holding two key arrays matches no query at all.
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer()] })
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getSubscription()] })
       },
       mutationKey: [STRIPE_API_KEY.createSubscription()],
     })
@@ -164,9 +164,8 @@ const useStripeHook = () => {
       mutationFn: (updateData: UpdateSubscriptionOptions) =>
         StripeApi.updateSubscription(subscriptionId, updateData),
       onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: [STRIPE_API_KEY.getCustomer(), STRIPE_API_KEY.getSubscription()],
-        })
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer()] })
+        queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getSubscription()] })
         options?.onSuccess?.()
       },
       onError: (error) => {

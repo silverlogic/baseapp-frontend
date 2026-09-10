@@ -28,7 +28,7 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
     <ConfirmDialog
       hideCancelButton
       customMaxWidth={400}
-      title={<Typography variant="h6"> Successfully Subscribed</Typography>}
+      title="Successfully Subscribed"
       content={
         <>
           <Box>
