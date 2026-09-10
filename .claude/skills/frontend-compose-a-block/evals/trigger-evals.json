@@ -1,0 +1,25 @@
+[
+  { "query": "add a new baseapp-frontend package for user badges", "should_trigger": true },
+  { "query": "add a comments-style module to components", "should_trigger": true },
+  { "query": "does this hook go in common or web", "should_trigger": true },
+  { "query": "my new packages exports map resolves to nothing from the app", "should_trigger": true },
+  { "query": "what do i name the fragment on this reaction list component", "should_trigger": true },
+  { "query": "the connection key doesnt match after the mutation runs", "should_trigger": true },
+  { "query": "add usepaginationfragment to the reactions list in components", "should_trigger": true },
+  { "query": "my new comment isnt showing up in the list until i refresh", "should_trigger": true },
+  { "query": "wire up a subscription so the reactions list updates live", "should_trigger": true },
+  { "query": "two barrels export the same hook name and i get the wrong one", "should_trigger": true },
+  { "query": "what tests does a new module in packages/components need", "should_trigger": true },
+  { "query": "do i need a changeset before merging this package", "should_trigger": true },
+  { "query": "review this module against the common web native contract", "should_trigger": true },
+  { "query": "is this how the comments module does it", "should_trigger": true },
+
+  { "query": "add a django viewset for bookmarks in the backend", "should_trigger": false },
+  { "query": "bump next from 15.2.1 to 15.2.4", "should_trigger": false },
+  { "query": "fix the typo in the readme and the changelog entry", "should_trigger": false },
+  { "query": "whats the difference between usefragment and uselazyloadquery", "should_trigger": false },
+  { "query": "build the settings screen in apps/web for this project", "should_trigger": false },
+  { "query": "apply the figma design tokens to the button palette", "should_trigger": false },
+  { "query": "run pnpm lint on the components package", "should_trigger": false },
+  { "query": "which file declares the graphql ws endpoint", "should_trigger": false }
+]
