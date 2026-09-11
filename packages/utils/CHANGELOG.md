@@ -1,5 +1,22 @@
 # @baseapp-frontend/utils
 
+## 4.2.1
+
+### Patch Changes
+
+- 087d0b5: Bump axios to 1.18.1 to fix GHSA-42h9-826w-cgv3, GHSA-pmv8-rq9r-6j72 and GHSA-xj6q-8x83-jv6g
+
+## 4.2.0
+
+### Minor Changes
+
+- 007b2ae: Add shared Relay mutation error handling:
+
+  - `getMutationErrorMessage(payloadErrors, transportErrors, { defaultMessage })` (source in `functions/relay/getMutationErrorMessage`) resolves the first user-facing error from a mutation's `onCompleted` args: the first message in the payload's `errors[].messages`, else the first top-level transport error message, else `defaultMessage`; `undefined` when the mutation succeeded. The parameter types (`MutationPayloadErrors`, `MutationTransportErrors`) are structural, so generated Relay payload errors and `PayloadError[]` pass straight through without this package depending on `relay-runtime`.
+  - `sendMutationErrorToast(payloadErrors, transportErrors, options?)` on the `useNotification` store composes `getMutationErrorMessage` with an error toast (mirroring the existing `sendApiErrorToast`) and returns the toasted message (or `undefined`), so callers can branch on it for success toasts / early returns.
+  - `DEFAULT_ERROR_MESSAGE` constant (`'Something went wrong.'`) exported from `constants/errors` and used as the default by both `getApiErrorMessage` and `getMutationErrorMessage`.
+  - `setFormRelayErrors` now accepts the shared `MutationPayloadErrors` type (a supertype of its previous private type — no call-site changes needed) and normalizes empty/blank `messages` to `DEFAULT_ERROR_MESSAGE` so fields are never marked invalid with blank helper text.
+
 ## 4.1.0
 
 ### Minor Changes

@@ -36,7 +36,7 @@ export const useCreateGroupChatMutation = (): [
   (config: UseMutationConfig<CreateGroupChatMutation>) => void,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CreateGroupChatMutation>(
     CreateGroupChatMutationQuery,
   )
@@ -107,9 +107,7 @@ export const useCreateGroupChatMutation = (): [
         errors: PayloadError[] | null,
       ) => Promise<void> = async (response, errors) => {
         setImageUploadInProgress(true)
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response?.chatRoomCreate?.errors, errors)
         const roomId = response?.chatRoomCreate?.room?.node?.id
         if (roomId) {
           if (image) {

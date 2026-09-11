@@ -6,7 +6,6 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/avatars'
 import { FileUploadButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { UsernameIcon } from '@baseapp-frontend/design-system/components/web/icons'
-import { ImageWithFallback } from '@baseapp-frontend/design-system/components/web/images'
 import {
   PhoneNumberField,
   TextField,
@@ -34,7 +33,17 @@ import {
   getProfileDefaultValues,
   useProfileMutation,
 } from '../../common'
-import { BannerButtonsContainer } from './styled'
+import {
+  AvatarUploadContainer,
+  Banner,
+  BannerButtonsContainer,
+  BannerUploadContainer,
+  ErrorContainer,
+  FieldsContainer,
+  FooterActions,
+  Form,
+  TwoColumnGrid,
+} from './styled'
 import { ProfileSettingsComponentProps } from './types'
 
 const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: profileRef }) => {
@@ -128,10 +137,9 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
   return (
     <Card sx={{ maxWidth: '600px' }}>
       <CardContent>
-        <form
+        <Form
           // @ts-ignore TODO: check typing issue with zodResolver
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-rows-[min-content_auto_auto_auto_auto] gap-8"
         >
           <div>
             <Typography component="h4" variant="h4" mb={1}>
@@ -141,10 +149,10 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
               Manage your personal information you and other people see.
             </Typography>
           </div>
-          <div className="grid grid-cols-2 grid-rows-1 gap-8 sm:grid-cols-1 sm:grid-rows-2">
+          <TwoColumnGrid>
             <Card variant="outlined" sx={{ boxShadow: 'none' }}>
               <CardContent>
-                <div className="grid grid-rows-[1fr_min-content] justify-center justify-items-center gap-2">
+                <AvatarUploadContainer>
                   <CircledAvatar
                     src={imageUrl}
                     width={144}
@@ -153,11 +161,11 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     alt="Avatar image"
                   />
                   {getFieldState('image').error && (
-                    <div className="text-center">
+                    <ErrorContainer>
                       <Typography color="error.main" variant="caption">
                         {getFieldState('image').error!.message}
                       </Typography>
-                    </div>
+                    </ErrorContainer>
                   )}
                   <FileUploadButton
                     control={control}
@@ -179,15 +187,15 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                       Remove
                     </LoadingButton>
                   )}
-                </div>
+                </AvatarUploadContainer>
               </CardContent>
             </Card>
-            <div className="grid auto-rows-auto">
+            <FieldsContainer>
               <TextField
                 label="Name"
                 control={control}
                 name={PROFILE_FORM_VALUE.name}
-                className="h-[min-content]"
+                sx={{ height: 'min-content' }}
               />
               <TextField
                 label="Username"
@@ -206,8 +214,8 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                 control={control}
                 name={PROFILE_FORM_VALUE.phoneNumber}
               />
-            </div>
-          </div>
+            </FieldsContainer>
+          </TwoColumnGrid>
           <TextareaField
             label="Bio"
             control={control}
@@ -216,8 +224,8 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
           />
           <Card variant="outlined" sx={{ boxShadow: 'none' }}>
             <CardContent sx={{ padding: '16px' }}>
-              <div className="grid grid-rows-[1fr_min-content] justify-center gap-4">
-                <ImageWithFallback
+              <BannerUploadContainer>
+                <Banner
                   src={bannerImageUrl || '/png/profile-banner-edit-page-fallback.png'}
                   fallbackSrc="/png/profile-banner-edit-page-fallback.png"
                   alt="Home Banner"
@@ -226,15 +234,14 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     290 /* Some css height: auto takes precedence,
                     so also set as style below */
                   }
-                  className="overflow-hidden rounded-lg"
                   style={{ height: '290px', objectFit: 'cover' }}
                 />
                 {getFieldState('bannerImage').error && (
-                  <div className="text-center">
+                  <ErrorContainer>
                     <Typography color="error.main" variant="caption">
                       {getFieldState('bannerImage').error!.message}
                     </Typography>
-                  </div>
+                  </ErrorContainer>
                 )}
                 <BannerButtonsContainer enableRemove={!!watchBannerImage}>
                   <FileUploadButton
@@ -260,10 +267,10 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                     </LoadingButton>
                   )}
                 </BannerButtonsContainer>
-              </div>
+              </BannerUploadContainer>
             </CardContent>
           </Card>
-          <div className="flex flex-row justify-end gap-4">
+          <FooterActions>
             <LoadingButton
               color="inherit"
               type="submit"
@@ -273,8 +280,8 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
             >
               Save Changes
             </LoadingButton>
-          </div>
-        </form>
+          </FooterActions>
+        </Form>
       </CardContent>
     </Card>
   )

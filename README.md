@@ -94,6 +94,17 @@ To develop all apps and packages, run the following command:
 pnpm dev
 ```
 
+## Lint
+
+Beyond ESLint/Prettier (`pnpm lint`), this repo hosts the [ast-grep rules](.ast-grep/README.md)
+that statically enforce the BaseApp frontend code guidelines. They live in `.ast-grep/` and are
+shared with consuming templates, which symlink the directory the same way they symlink the agent
+skills.
+
+```bash
+pnpm lint:ast-grep   # test the rules + scan the packages (what CI runs)
+```
+
 ## **PNPM Catalog Overview**
 
 This monorepo manages some dependencies using pnpm catalogs. As a rule of thumb, we often add dependencies to the catalogs that are reused across multiple packages, rather than arbitrarily adding dependencies to these lists. This approach ensures that shared dependencies are centrally managed and consistently applied across the codebase.

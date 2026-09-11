@@ -1,0 +1,30 @@
+id: ts-no-enum
+snapshots:
+  ? |
+    enum DocumentStatus {
+      Draft = 'draft',
+      Published = 'published',
+    }
+  : labels:
+    - source: |-
+        enum DocumentStatus {
+          Draft = 'draft',
+          Published = 'published',
+        }
+      style: primary
+      start: 0
+      end: 69
+  ? |
+    export const enum Direction {
+      Up,
+      Down,
+    }
+  : labels:
+    - source: |-
+        const enum Direction {
+          Up,
+          Down,
+        }
+      style: primary
+      start: 7
+      end: 45

@@ -1,5 +1,74 @@
 # @baseapp-frontend/components
 
+## 2.1.1
+
+### Patch Changes
+
+- Web Add contact to multiple groups
+
+## 2.1.0
+
+### Minor Changes
+
+- React Native comments, sharing all logic with web through a common hook layer.
+
+  **Native (`comments/native`)**: full comments experience — create, reply (with thread auto-expand after submitting), edit and delete via a long-press action sheet gated on permissions, pin/unpin with a pinned-first re-sort, infinite scrolling, a thread-depth cap, a single morphing bottom composer (`BaseComments` + `useCommentComposer` over one always-mounted `SocialInputDrawer`), and tappable author avatar/name that open the profile (navigates only when the profile has a registered `urlPath`).
+
+  **Shared logic (`comments/common`)**: the behavior both platforms consume now lives in common hooks — `useCommentCreateForm` / `useCommentUpdateForm` (form + submit, connection-id derivation, `setFormRelayErrors`, reset-on-success, optional mentions), `useCommentItem` (replies expansion with a consume-once auto-expand signal, reply targeting, deletion, profile URL), `useCommentActions` (headless share/pin/edit/delete descriptors owning the pin mutation), an extended `useCommentList` (`comments`, stable `refetchWithOrder`), and utils (`getCommentsConnectionId`, `getNextClientMutationId`, `toCommentEditTarget`). The `CommentReplyProvider` store is platform-neutral (generic `commentItemRef`), gains `editingComment` (mutually exclusive with reply mode) and `commentIdToExpand`, and `useCommentReply` accepts a selector for per-item subscriptions.
+
+  **Web**: `CommentCreate`, `CommentUpdate`, `CommentItem`, and `useCommentOptions` are now thin UI layers over the shared hooks — props and behavior unchanged.
+
+  Native `CommentsListProps`/`CommentItemProps` no longer accept `onReply`/`onLongPress`/`commentIdToExpand`/`onEdit`/`target` (reply targeting and the action sheet flow through the reply store and `CommentActionsProvider`), and native `CommentItem` must render inside `Comments`/`BaseComments`.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@2.1.0
+
+## 2.0.3
+
+### Patch Changes
+
+- 57ab98e: Prevent sending messages that contain only whitespace: reject markdown-escaped whitespace-only bodies (e.g. `&#x20;`) in the social upsert validation schema and run validation on the native MessageCreate submit
+
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [5200c84]
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/design-system@2.0.1
+  - @baseapp-frontend/utils@4.2.1
+  - @baseapp-frontend/authentication@6.0.1
+  - @baseapp-frontend/graphql@2.0.1
+
+## 2.0.1
+
+### Patch Changes
+
+- RN add contact to multiple Groups
+
+## 2.0.0
+
+### Patch Changes
+
+- 007b2ae: Replace the per-module one-off Relay error handling in mutation hooks (messages, profiles, notifications, comments) and in `InviteMemberDialog`/`BlockButtonWithDialog` with the shared helpers from `@baseapp-frontend/utils` (`sendMutationErrorToast` / `getMutationErrorMessage`). Behavior notes:
+
+  - Error toasts show the first error message instead of one toast per message.
+  - Hooks whose GraphQL documents select `errors { field messages }` but previously ignored them now surface those payload errors: chat create (1:1 and group), chat delete/unread/archive message flows, `profileUserRoleUpdate`, and the leave-group flow. Hooks whose payload errors are already form-handled by their components (send/edit message, chat room update, organization create, comment create/update) stay transport-only to avoid double display.
+  - `ReadMessages` stays transport-only on purpose: it fires passively from `useEffect`s, so payload validation errors would surface as unattributable toasts during navigation.
+  - `useCreateChatRoomMutation` no longer activates the chat room (`setChatRoom`) on an error response, and `GroupChatCreate` drops its duplicate generic toast (the hook now toasts the specific message; field errors still map to the form).
+  - `RemoveMember` no longer shows "Member removed successfully" when the mutation completes with top-level GraphQL errors.
+  - `BlockButtonWithDialog` no longer closes the dialog and toasts success when the mutation returns transport errors.
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+- Updated dependencies [c2f042d]
+  - @baseapp-frontend/utils@4.2.0
+  - @baseapp-frontend/design-system@2.0.0
+  - @baseapp-frontend/authentication@6.0.0
+  - @baseapp-frontend/graphql@2.0.0
+
 ## 1.8.0
 
 ### Minor Changes

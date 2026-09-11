@@ -1,11 +1,11 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useCallback, useEffect, useState } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AppBar } from '@baseapp-frontend/design-system/components/native/appbars'
 import { CloseIcon, EditIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 
-import { useRouter } from 'expo-router'
+import { useFocusEffect, useRouter } from 'expo-router'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
@@ -42,6 +42,10 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
   const groups = useGroupChatCreate()
+  const { resetGroupChat, setExistingParticipants, setRoomId } = groups
+
+  // this group's context must not outlive the screen, or it leaks into the new group flow
+  useEffect(() => () => resetGroupChat(), [resetGroupChat])
 
   const handleSetMemberToRemove = (id: string | null) => {
     setMemberToRemoveId(id)
@@ -59,12 +63,16 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
     },
   )
 
-  useEffect(() => {
-    if (group?.participantIds) {
-      groups.setExistingParticipants(group.participantIds.filter((id): id is string => id != null))
-    }
-    groups.setRoomId(roomId)
-  }, [roomId, group?.participantIds])
+  // on focus, not just on mount: the add members and edit screens reset the store when they
+  // finish, and this screen stays mounted underneath them
+  useFocusEffect(
+    useCallback(() => {
+      if (group?.participantIds) {
+        setExistingParticipants(group.participantIds.filter((id): id is string => id != null))
+      }
+      setRoomId(roomId)
+    }, [roomId, group?.participantIds, setExistingParticipants, setRoomId]),
+  )
 
   const { data, loadNext, isLoadingNext, hasNext } = usePaginationFragment<
     ChatRoomParticipantsPaginationQuery,

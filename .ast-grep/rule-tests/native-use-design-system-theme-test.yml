@@ -1,0 +1,15 @@
+id: native-use-design-system-theme
+valid:
+  - |
+    import { useTheme } from '@baseapp-frontend/design-system/providers/native'
+  - |
+    import { useTheme } from '../../../providers/native'
+  - |
+    import { useNavigation } from '@react-navigation/native'
+invalid:
+  - |
+    import { useTheme } from 'react-native-paper'
+  - |
+    import { useTheme } from '@mui/material'
+  - |
+    import { useTheme } from '@other/design-system/providers/native'

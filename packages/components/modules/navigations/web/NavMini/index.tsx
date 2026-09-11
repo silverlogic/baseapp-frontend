@@ -4,10 +4,8 @@ import { FC } from 'react'
 
 import { Logo } from '@baseapp-frontend/design-system/components/web/logos'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
-import { hideScroll } from '@baseapp-frontend/design-system/styles/web'
 
 import Box from '@mui/material/Box'
-import Stack from '@mui/material/Stack'
 
 import DefaultAccountMenu from '../Header/AccountMenu'
 import DefaultNavAccountSection from '../__shared__/NavAccountSection'
@@ -15,6 +13,7 @@ import NavToggleButton from '../__shared__/NavToggleButton'
 import VerticalDrawer from '../__shared__/VerticalDrawer'
 import { NAV_WIDTH } from '../constants'
 import NavSectionMini from './NavSectionMini'
+import { NavContainer } from './styled'
 import { NavMiniProps } from './types'
 
 const NavMini: FC<NavMiniProps> = ({
@@ -67,16 +66,7 @@ const NavMini: FC<NavMiniProps> = ({
           }}
         />
       )}
-      <Stack
-        sx={{
-          pb: 2,
-          height: 1,
-          position: 'fixed',
-          width: NAV_WIDTH.MINI,
-          borderRight: (theme) => `solid 1px ${theme.palette.divider}`,
-          ...hideScroll.x,
-        }}
-      >
+      <NavContainer>
         {LogoIcon && (
           <Logo {...LogoProps} sx={{ mx: 'auto', my: 2, ...LogoProps?.sx }}>
             <LogoIcon />
@@ -94,7 +84,7 @@ const NavMini: FC<NavMiniProps> = ({
             {...NavAccountSectionProps}
           />
         )}
-      </Stack>
+      </NavContainer>
     </Box>
   )
 }

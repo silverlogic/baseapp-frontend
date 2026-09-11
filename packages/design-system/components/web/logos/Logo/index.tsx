@@ -2,28 +2,17 @@
 
 import { forwardRef } from 'react'
 
-import { Box, Link } from '@mui/material'
+import { Link } from '@mui/material'
 
+import { LogoContainer } from './styled'
 import { LogoProps } from './types'
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
   ({ children, disabledLink = false, sx, ...other }, ref) => {
     const logo = (
-      <Box
-        ref={ref}
-        component="div"
-        sx={{
-          width: 40,
-          height: 40,
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          ...sx,
-        }}
-        {...other}
-      >
+      <LogoContainer ref={ref} sx={sx} {...other}>
         {children}
-      </Box>
+      </LogoContainer>
     )
 
     if (disabledLink) {

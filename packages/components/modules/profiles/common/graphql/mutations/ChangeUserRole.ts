@@ -23,7 +23,7 @@ export const useChangeUserRoleMutation = (): [
   (config: UseMutationConfig<ChangeUserRoleMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<ChangeUserRoleMutation>(
     ChangeUserRoleMutationQuery,
   )
@@ -32,9 +32,7 @@ export const useChangeUserRoleMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response.profileUserRoleUpdate?.errors, errors)
 
         config?.onCompleted?.(response, errors)
       },

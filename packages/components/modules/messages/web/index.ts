@@ -1,5 +1,8 @@
 // exports web messages components
 
+export { default as AddContactToGroupDialog } from './AddContactToGroupDialog'
+export type * from './AddContactToGroupDialog/types'
+
 export { default as AllChatRoomsList } from './AllChatRoomsList'
 export type * from './AllChatRoomsList/types'
 

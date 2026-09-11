@@ -11,3 +11,13 @@ export const ActionButton = styled(Button, {
     backgroundColor: isBlocked ? theme.palette.grey[900] : theme.palette.error.dark,
   },
 }))
+
+// the tailwind `responsive-h6` overrides match theme.typography.h6's built-in
+// responsive sizes exactly, so the token alone is sufficient
+export const DialogTitleContainer = styled('div')(({ theme }) => ({
+  ...theme.typography.h6,
+  color: theme.palette.text.primary,
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateColumns: 'min-content 1fr',
+}))

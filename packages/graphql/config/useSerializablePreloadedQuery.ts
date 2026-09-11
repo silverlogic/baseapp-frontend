@@ -7,13 +7,26 @@ import { useMemo } from 'react'
 import { PreloadFetchPolicy, PreloadedQuery } from 'react-relay'
 import { ConcreteRequest, Environment, OperationType } from 'relay-runtime'
 
-import { getCacheByEnvironment } from './environment'
+import { CACHE_TTL, getCacheByEnvironment } from './environment'
 import { SerializablePreloadedQuery } from './loadSerializableQuery'
+
+// Next.js can re-deliver an old RSC payload (client router cache on back/forward
+// navigation, prefetch entries). Replaying its embedded query response would
+// overwrite newer store data — e.g. fields just changed by a mutation — so only
+// responses younger than the response cache TTL are written. Skipping the write
+// makes `store-and-network` fall through to a real network fetch instead.
+// A missing `fetchedAt` (payload serialized by an older server build) is treated
+// as fresh to keep rolling deploys safe.
+function isStalePreloadedQuery(fetchedAt: number | undefined): boolean {
+  return fetchedAt != null && Date.now() - fetchedAt > CACHE_TTL
+}
 
 function writePreloadedQueryToCache<TRequest extends ConcreteRequest, TQuery extends OperationType>(
   preloadedQueryObject: SerializablePreloadedQuery<TRequest, TQuery>,
   environment: Environment,
 ) {
+  if (isStalePreloadedQuery(preloadedQueryObject.fetchedAt)) return
+
   const cacheKey = preloadedQueryObject.params.id ?? preloadedQueryObject.params.cacheID
   const responseCache = getCacheByEnvironment(environment)
 

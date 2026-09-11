@@ -12,7 +12,6 @@ import { ConnectionHandler } from 'react-relay'
 import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
-  SOCIAL_UPSERT_FORM,
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
 } from '../../../__shared__/common/constants'
 import DefaultSocialInputDrawer from '../SocialInputDrawer'
@@ -38,7 +37,6 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
     })
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
-    const body = form.watch(SOCIAL_UPSERT_FORM.body)
 
     const { onFocusChange, textHeight, onTextHeightChange, keyboardHeight } =
       SocialInputDrawer.useTextInputProperties()
@@ -47,20 +45,20 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
       return null
     }
 
-    const onSubmit = () => {
+    const onSubmit = (data: SocialUpsertForm) => {
       if (isMutationInFlight || !currentProfile) return
 
       nextClientMutationId += 1
       const clientMutationId = nextClientMutationId.toString()
 
       const connectionID = ConnectionHandler.getConnectionID(targetObjectId, 'chatRoom_allMessages')
-      const content = body
+      const content = data.body
 
       commitMutation({
         variables: {
           input: {
             content,
-            profileId: currentProfile?.id,
+            profileId: currentProfile.id,
             roomId: targetObjectId,
             clientMutationId,
           },
@@ -88,15 +86,10 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           },
         },
         onCompleted: (response, errors) => {
-          if (errors) {
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
-          }
-          const mutationErrors = response?.chatRoomSendMessage?.errors
-
-          if (mutationErrors && mutationErrors.length > 0) {
-            setFormRelayErrors(form, mutationErrors)
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
-          }
+          // Transport errors are already toasted by the mutation hook; payload errors are
+          // mapped onto the form fields, mirroring the web SendMessage component.
+          if (errors) return
+          setFormRelayErrors(form, response?.chatRoomSendMessage?.errors)
         },
         onError: () => {
           sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
@@ -121,7 +114,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           showHandle={showHandle}
           ref={ref}
           style={drawerStyle}
-          submit={onSubmit}
+          submit={form.handleSubmit(onSubmit)}
           {...SocialInputDrawerProps.DrawerProps}
         />
       </>

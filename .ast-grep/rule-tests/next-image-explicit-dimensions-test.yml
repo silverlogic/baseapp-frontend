@@ -1,0 +1,13 @@
+id: next-image-explicit-dimensions
+valid:
+  - |
+    <Image src="/image.jpg" alt="Image" width={800} height={600} />
+  - |
+    <Image src="/image.jpg" alt="Image" fill style={{ objectFit: 'cover' }} />
+  - |
+    <Image src="/image.jpg" alt="Image" {...imageProps} />
+invalid:
+  - |
+    <Image src="/image.jpg" alt="Image" style={{ width: '100%', height: 'auto' }} />
+  - |
+    <Image src="/image.jpg" alt="Image" width={800} />

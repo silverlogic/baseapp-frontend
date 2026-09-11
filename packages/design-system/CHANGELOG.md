@@ -1,5 +1,31 @@
 # @baseapp-frontend/design-system
 
+## 2.1.0
+
+### Minor Changes
+
+- Native social-input and comments primitives:
+
+  - `SocialTextInput` (native): multiline social composer input with edit/reply banners, tool row, and controller-driven inline field errors — error border while focused plus a warning icon + caption rendered from the form field's error message (via `withNativeController`'s `error`/`helperText`).
+  - `ConfirmDialog` (native): confirmation dialog mirroring the web `ConfirmDialog` API (`title`, `content`, `cancelText`, `action` slot) built on react-native-paper's `Portal` + `Dialog`, with a close (X) button in the title row and a built-in outlined Cancel button.
+  - New native icons: `EmojiIcon`, `FavoriteIcon`, `FavoriteSelectedIcon`, `PinIcon`, `ReplyIcon`.
+
+## 2.0.1
+
+### Patch Changes
+
+- 5200c84: Fix Dropzone multi-file gallery: clicking the remove (×) icon or the image preview no longer bubbles to the dropzone root and re-opens the file picker; the remove button now has an explicit type="button" so it doesn't submit enclosing forms
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/utils@4.2.1
+
+## 2.0.0
+
+### Patch Changes
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+  - @baseapp-frontend/utils@4.2.0
+
 ## 1.4.0
 
 ### Minor Changes

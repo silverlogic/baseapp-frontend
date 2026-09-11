@@ -1,0 +1,20 @@
+id: next-page-no-use-client
+valid:
+  - |
+    export const metadata = { title: 'Checkout' }
+
+    const CheckoutPage = async () => <OrderDetails />
+
+    export default CheckoutPage
+  - |
+    const CheckoutPage = async () => {
+      const marker = 'use client'
+      return <OrderDetails marker={marker} />
+    }
+invalid:
+  - |
+    'use client'
+
+    const CheckoutPage = () => <OrderDetails />
+
+    export default CheckoutPage

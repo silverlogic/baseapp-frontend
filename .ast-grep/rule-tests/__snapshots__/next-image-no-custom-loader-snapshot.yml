@@ -1,0 +1,30 @@
+id: next-image-no-custom-loader
+snapshots:
+  ? |
+    <Image
+      src="https://cdn.example.com/a.jpg"
+      alt="Image"
+      width={800}
+      height={600}
+      loader={({ src, width }) => `${src}?w=${width}`}
+    />
+  : labels:
+    - source: loader={({ src, width }) => `${src}?w=${width}`}
+      style: primary
+      start: 90
+      end: 138
+    - source: Image
+      style: secondary
+      start: 1
+      end: 6
+    - source: |-
+        <Image
+          src="https://cdn.example.com/a.jpg"
+          alt="Image"
+          width={800}
+          height={600}
+          loader={({ src, width }) => `${src}?w=${width}`}
+        />
+      style: secondary
+      start: 0
+      end: 141

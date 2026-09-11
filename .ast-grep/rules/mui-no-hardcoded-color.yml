@@ -1,0 +1,22 @@
+id: mui-no-hardcoded-color
+language: Tsx
+severity: warning
+message: "Hardcoded hex color in a style block — use a theme token (`theme.palette.*`) so brand updates and dark mode apply everywhere. Web tokens live in `apps/web/styles`, mobile tokens in `apps/mobile/styles`. See .claude/skills/frontend-conventions/references/styling.md"
+rule:
+  kind: string
+  regex: "^['\"]#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})['\"]$"
+  inside:
+    stopBy: end
+    any:
+      - kind: call_expression
+        has:
+          field: function
+          regex: ^styled
+      - kind: call_expression
+        has:
+          field: function
+          regex: ^StyleSheet\.create$
+      - kind: jsx_attribute
+        has:
+          kind: property_identifier
+          regex: ^sx$

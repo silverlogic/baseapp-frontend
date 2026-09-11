@@ -1,0 +1,15 @@
+id: ts-props-use-interface
+language: Tsx
+severity: warning
+message: "Declare component props as an `interface`, not a `type` alias — `extends` composes variant prop sets in a way an intersection can't. See .claude/skills/frontend-conventions/references/typescript.md"
+ignores:
+  - "**/__generated__/**"
+rule:
+  kind: type_alias_declaration
+  all:
+    - has:
+        field: name
+        regex: Props$
+    - has:
+        field: value
+        kind: object_type

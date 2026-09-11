@@ -1,12 +1,19 @@
+// Deep imports instead of the `styles/web` barrel: the barrel re-exports
+// componentsOverrides from material/overrides, which pulls in .tsx MUI
+// component overrides. jiti (used by prettier-plugin-tailwindcss and other
+// tooling that loads this config) cannot resolve .tsx modules, which broke
+// `prettier --write` on any wagtail file. Each deep path below resolves to
+// the exact same source as the barrel — see packages/design-system/package.json
+// "exports" map — so this is a load-path change only, not a value change.
 const {
   responsiveTypography,
   hideScrollbar,
-  breakpoints,
-  typography,
-  createPalette,
-  createShadows,
-  createCustomShadows,
-} = require('@baseapp-frontend/design-system/styles/web')
+} = require('@baseapp-frontend/design-system/styles/web/tailwind/plugins')
+const { breakpoints } = require('@baseapp-frontend/design-system/styles/web/breakpoint')
+const { createPalette } = require('@baseapp-frontend/design-system/styles/web/palette')
+const { createShadows } = require('@baseapp-frontend/design-system/styles/web/shadow')
+const { createCustomShadows } = require('@baseapp-frontend/design-system/styles/web/customShadow')
+const { typography } = require('@baseapp-frontend/design-system/styles/web/typography')
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {

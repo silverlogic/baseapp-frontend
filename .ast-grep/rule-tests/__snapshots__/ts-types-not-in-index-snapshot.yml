@@ -1,0 +1,36 @@
+id: ts-types-not-in-index
+snapshots:
+  ? |
+    export type TabValue = 'active' | 'archived'
+  : labels:
+    - source: type TabValue = 'active' | 'archived'
+      style: primary
+      start: 7
+      end: 44
+    - source: export type TabValue = 'active' | 'archived'
+      style: secondary
+      start: 0
+      end: 44
+  ? |
+    interface ProfileCardProps {
+      name: string
+    }
+
+    const ProfileCard = ({ name }: ProfileCardProps) => <div>{name}</div>
+  : labels:
+    - source: |-
+        interface ProfileCardProps {
+          name: string
+        }
+      style: primary
+      start: 0
+      end: 45
+    - source: |
+        interface ProfileCardProps {
+          name: string
+        }
+
+        const ProfileCard = ({ name }: ProfileCardProps) => <div>{name}</div>
+      style: secondary
+      start: 0
+      end: 117

@@ -1,0 +1,22 @@
+id: next-page-no-client-data-fetching
+valid:
+  - |
+    const CheckoutPage = async ({ params }) => {
+      const queryClient = new QueryClient()
+      await queryClient.prefetchQuery({
+        queryKey: ORDER_API_KEY.getOrder(quoteId),
+        queryFn: () => OrderApi.getOrder({ quoteId }),
+      })
+      return <HydrationBoundary state={dehydrate(queryClient)} />
+    }
+invalid:
+  - |
+    const CheckoutPage = () => {
+      const { data } = useQuery({ queryKey: ORDER_API_KEY.default, queryFn: fetchOrder })
+      return <OrderDetails order={data} />
+    }
+  - |
+    const ProfilePage = () => {
+      const { me } = useLazyLoadQuery(ProfilesListQuery, { count: 10 })
+      return <Profiles me={me} />
+    }

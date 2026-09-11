@@ -1,0 +1,25 @@
+id: form-submit-use-loading-button
+snapshots:
+  ? |
+    <Button type="submit" form="my-form">Save</Button>
+  : labels:
+    - source: <Button type="submit" form="my-form">
+      style: primary
+      start: 0
+      end: 37
+    - source: Button
+      style: secondary
+      start: 1
+      end: 7
+    - source: type
+      style: secondary
+      start: 8
+      end: 12
+    - source: '"submit"'
+      style: secondary
+      start: 13
+      end: 21
+    - source: type="submit"
+      style: secondary
+      start: 8
+      end: 21

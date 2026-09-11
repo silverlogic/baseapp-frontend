@@ -8,7 +8,7 @@ import { Alert, Snackbar, useTheme } from '@mui/material'
 
 import ProgressAnimation from './ProgressBar'
 import { HIDE_DURATION, OUTLINED_ALERT_ICONS } from './constants'
-import { SnackbarContentContainer } from './styled'
+import { SnackbarContentContainer, StyledAlert } from './styled'
 import { SnackbarProviderProps } from './types'
 
 const SnackbarProvider: FC<SnackbarProviderProps> = ({
@@ -88,21 +88,15 @@ const SnackbarProvider: FC<SnackbarProviderProps> = ({
         {...props}
       >
         <SnackbarContentContainer>
-          <Alert
+          <StyledAlert
             onClose={handleClose}
             severity={type}
             variant="standard"
-            sx={{
-              width: '100%',
-              border: 'none',
-              backgroundColor: theme.palette.background.paper,
-              color: theme.palette.text.primary,
-            }}
             iconMapping={OUTLINED_ALERT_ICONS}
             slotProps={{ closeIcon: { sx: { color: theme.palette.action.active } } }}
           >
             {message}
-          </Alert>
+          </StyledAlert>
           <ProgressAnimation severity={type} animationTime={HIDE_DURATION} />
         </SnackbarContentContainer>
       </Snackbar>

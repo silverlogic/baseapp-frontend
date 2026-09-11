@@ -61,6 +61,10 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
     if (profilePath) router.push(profilePath as Href)
   }
 
+  const handleAddContactToGroup = () => {
+    if (profile?.id) router.push(`/add-contact-to-group/${profile.id}` as Href)
+  }
+
   return (
     <View style={{ flexGrow: 1, flex: 1 }}>
       <AppBar title="Chat Details" onBack={() => router.back()} BackIcon={CloseIcon} />
@@ -74,6 +78,7 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
           isArchiveMutationInFlight={isMutationInFlight}
           handleArchiveChat={handleArchiveChat}
           handleGoToProfile={handleGoToProfile}
+          handleAddContactToGroup={handleAddContactToGroup}
           isArchived={!!chatRoom?.isArchived}
         />
         <About biography={profile?.biography} />

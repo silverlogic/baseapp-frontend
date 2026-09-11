@@ -5,7 +5,7 @@ import { FC, Suspense, useState } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
-import { useNotification } from '@baseapp-frontend/utils'
+import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, TextField, Typography } from '@mui/material'
@@ -18,7 +18,6 @@ import { InviteMemberDialogProps, SelectedEmail, SelectedMember, SelectedProfile
 import {
   BatchError,
   getMemberKey,
-  getMutationErrorMessage,
   isFulfilled,
   isRejected,
   isSelectedEmail,
@@ -62,11 +61,9 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
       createMembers({
         variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE }, connections },
         onCompleted: (response, errors) => {
-          const message = getMutationErrorMessage(
-            response?.profileUserRoleCreate?.errors,
-            errors,
-            'Failed to add members',
-          )
+          const message = getMutationErrorMessage(response?.profileUserRoleCreate?.errors, errors, {
+            defaultMessage: 'Failed to add members',
+          })
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },
@@ -89,11 +86,9 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
           connections,
         },
         onCompleted: (response, errors) => {
-          const message = getMutationErrorMessage(
-            response?.profileSendInvitation?.errors,
-            errors,
-            'Failed to send invitations',
-          )
+          const message = getMutationErrorMessage(response?.profileSendInvitation?.errors, errors, {
+            defaultMessage: 'Failed to send invitations',
+          })
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },

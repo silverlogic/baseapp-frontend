@@ -25,7 +25,7 @@ export const useArchiveChatRoomMutation = (): [
   (config: UseMutationConfig<ArchiveChatRoomMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<ArchiveChatRoomMutation>(
     ArchiveChatRoomMutationQuery,
   )
@@ -35,9 +35,7 @@ export const useArchiveChatRoomMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response.chatRoomArchive?.errors, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

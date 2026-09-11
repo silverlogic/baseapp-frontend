@@ -10,7 +10,7 @@ import { Components, Virtuoso } from 'react-virtuoso'
 import { useContentPosts } from '../../common'
 import { ContentFeedProps, ContentPostEdges } from '../ContentFeed/types'
 import PostItem from '../PostItem'
-import { PostsListContainer } from './styled'
+import { HeaderSpacer, PostsListContainer } from './styled'
 
 const Scroller: Components['List'] = React.forwardRef(({ style, children }, ref) => (
   <PostsListContainer style={style} ref={ref}>
@@ -46,7 +46,7 @@ const PostList: FC<ContentFeedProps> = ({ preloadedQuery }) => {
   const renderHeader = () => {
     if (contentPosts?.edges?.length === 0) return null
 
-    return <div className="h-2" />
+    return <HeaderSpacer />
   }
 
   return (

@@ -1,0 +1,19 @@
+id: ts-no-type-name-prefix
+valid:
+  - |
+    export interface Customer {
+      id: number
+    }
+  - |
+    export type UserRole = 'admin' | 'user'
+  - |
+    export interface ItemTitle {
+      title: Item['name']
+    }
+invalid:
+  - |
+    export interface ICustomer {
+      id: number
+    }
+  - |
+    type TUserRole = 'admin' | 'user'

@@ -42,6 +42,14 @@ describe('getApiErrorMessage', () => {
     expect(result).toBe(errorMessage)
   })
 
+  it('should stringify non-string error values instead of returning them raw', () => {
+    const objectError = { response: { data: { error: { code: 1 } } } }
+    expect(getApiErrorMessage(objectError)).toBe('{"code":1}')
+
+    const numericDetail = { message: JSON.stringify({ detail: 42 }) }
+    expect(getApiErrorMessage(numericDetail)).toBe('42')
+  })
+
   it('should return default message when error has no recognizable properties', () => {
     const defaultMessage = 'Something went wrong.'
     const error = { unknownProperty: 'Unknown value' }
