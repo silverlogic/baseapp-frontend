@@ -4,8 +4,6 @@ import { unreadNotificationsMockData } from './__mocks__/requests'
 import type { NotificationsControls } from './__utils__/NotificationsPopover.story'
 
 /**
- * Playwright port of `NotificationsPopover.cy.tsx` in this folder.
- *
  * Everything the drawer renders is portaled outside `#root`, so it is queried
  * through `page`; only the bell button lives inside the `mount()` locator.
  */
@@ -26,86 +24,113 @@ const ORDINALS = [
   'tenth',
 ]
 
+const CUSTOM_ITEM_COUNT = 10
+
 const resolve = (page: Page, key: keyof NotificationsControls) =>
   page.evaluate((k) => window.__notificationsControls[k](), key)
 
-/** Cypress's cy.scrollIntoView() always scrolls; scrollIntoViewIfNeeded() may not. */
-const scrollTo = (locator: Locator) => locator.evaluate((el: Element) => el.scrollIntoView())
+/** `scrollIntoViewIfNeeded()` is a no-op for a visible element, so it never advances the list. */
+const scrollTo = (locator: Locator) =>
+  locator.evaluate((element: Element) => element.scrollIntoView())
 
 const bellFor = (component: Locator) =>
   component.getByRole('button', { name: /see notifications/i })
 
 const drawer = (page: Page) => page.getByRole('presentation')
 
-test.describe('Notifications', () => {
-  test('should render show notification drawer with empty state', async ({ mount, page }) => {
-    await page.setViewportSize({ width: 1024, height: 768 })
+const customItem = (page: Page, index: number) =>
+  page.getByText(`Someone replied to your comment ${index}.`, { exact: true })
 
-    const component = await mount(`${STORY}/EmptyState`)
+const openDrawer = async (component: Locator, page: Page) => {
+  await expect(drawer(page)).not.toBeAttached()
+  await bellFor(component).click()
+  await expect(drawer(page)).toBeVisible()
+}
 
-    await test.step('See the notification bell and icon', async () => {
+const expectCustomItems = async (page: Page) => {
+  for (let index = 1; index <= CUSTOM_ITEM_COUNT; index += 1) {
+    await expect(customItem(page, index)).toBeAttached()
+    if (index === 8) await scrollTo(customItem(page, index))
+  }
+}
+
+test.describe('Component: NotificationsPopover', () => {
+  test('GIVEN no notifications, WHEN the drawer is opened, THEN the empty state is shown and the backdrop closes it', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN no notifications', async () => {
+      await page.setViewportSize({ width: 1024, height: 768 })
+
+      const mounted = await mount(`${STORY}/EmptyState`)
       await expect(drawer(page)).not.toBeAttached()
-      await expect(bellFor(component)).toBeAttached()
-      await bellFor(component).click()
+      await expect(bellFor(mounted)).toBeAttached()
+
+      return mounted
     })
 
-    await test.step('Open notifications drawer from right', async () => {
+    await test.step('WHEN the drawer is opened, THEN it anchors to the right', async () => {
+      await bellFor(component).click()
+
       await expect(drawer(page)).toBeVisible()
       await expect(page.locator('.MuiDrawer-paper')).toHaveClass(/MuiDrawer-paperAnchorRight/)
     })
 
-    await test.step('See the loading state', async () => {
+    await test.step('THEN it loads, and the empty state is shown', async () => {
       await expect(page.getByRole('progressbar')).toBeAttached()
       await resolve(page, 'resolveEmptyList')
-    })
 
-    await test.step('See the empty state', async () => {
       await expect(page.getByText('You don’t have notifications.', { exact: true })).toBeAttached()
       await expect(
         page.getByText('Your future notifications will be shown here.', { exact: true }),
       ).toBeAttached()
     })
 
-    await test.step('Close notifications drawer on backdrop click', async () => {
+    await test.step('WHEN the backdrop is clicked, THEN the drawer closes', async () => {
       await page.locator('.MuiBackdrop-root').click()
+
       await expect(drawer(page)).not.toBeAttached()
     })
   })
 
-  test('should render notifications and be able to interact with it', async ({ mount, page }) => {
-    // cy.viewport('iphone-x')
-    await page.setViewportSize({ width: 375, height: 812 })
+  test('GIVEN unread notifications on a phone viewport, WHEN the drawer is opened, THEN the list pages, marks one as read and updates the bell count', async ({
+    mount,
+    page,
+  }) => {
+    const component =
+      await test.step('GIVEN unread notifications on a phone viewport', async () => {
+        await page.setViewportSize({ width: 375, height: 812 })
 
-    const component = await mount(`${STORY}/WithNotifications`)
+        const mounted = await mount(`${STORY}/WithNotifications`)
+        await expect(drawer(page)).not.toBeAttached()
+        await expect(bellFor(mounted)).toContainText(String(UNREAD_COUNT))
+
+        return mounted
+      })
+
     const reply = (ordinal: string) =>
       page.getByText(`This is the ${ordinal} comment reply.`, { exact: true })
 
-    await test.step('See the notification bell and icon', async () => {
-      await expect(drawer(page)).not.toBeAttached()
-      await expect(bellFor(component)).toContainText(String(UNREAD_COUNT))
+    await test.step('WHEN the drawer is opened, THEN it anchors to the bottom', async () => {
       await bellFor(component).click()
-    })
 
-    await test.step('Open notifications drawer from bottom', async () => {
       await expect(drawer(page)).toBeVisible()
       await expect(page.locator('.MuiDrawer-paper')).toHaveClass(/MuiDrawer-paperAnchorBottom/)
     })
 
-    await test.step('See the loading state', async () => {
+    await test.step('WHEN the list resolves, THEN every notification renders as it scrolls into the window', async () => {
       await expect(page.getByRole('progressbar')).toBeAttached()
       await resolve(page, 'resolveList')
-    })
 
-    await test.step('See the notifications list', async () => {
-      // Assert then scroll, one row at a time — scrolling is what renders the next.
       for (const ordinal of ORDINALS) {
         await expect(reply(ordinal)).toBeAttached()
         await scrollTo(reply(ordinal))
       }
     })
 
-    await test.step('Load more notifications', async () => {
+    await test.step('WHEN the bottom is reached, THEN the next page is fetched and appended', async () => {
       const loader = page.getByRole('progressbar')
+
       await expect(loader).toBeAttached()
       await scrollTo(loader)
       await resolve(page, 'resolveNextPage')
@@ -114,79 +139,81 @@ test.describe('Notifications', () => {
       await scrollTo(reply('eleventh'))
     })
 
-    await test.step('Mark notification as read', async () => {
+    await test.step('WHEN a notification is opened, THEN it is marked as read and moved under the older divider', async () => {
       await expect(reply('twelfth')).toBeAttached()
       await reply('twelfth').click()
       await resolve(page, 'resolveMarkAsRead')
-    })
 
-    await test.step('See read notifications and older divider', async () => {
       await expect(page.getByText('Older', { exact: true })).toBeAttached()
       await expect(reply('twelfth')).toBeAttached()
     })
 
-    await test.step('Close notifications drawer', async () => {
+    await test.step('WHEN the drawer is closed, THEN the bell count has dropped by one', async () => {
       await page.getByRole('button', { name: /close notifications/i }).click()
-    })
 
-    await test.step('See the notification bell count updated', async () => {
       await expect(bellFor(component)).toContainText(String(UNREAD_COUNT - 1))
     })
   })
 
-  test('should render custom components for list', async ({ mount, page }) => {
-    const component = await mount(`${STORY}/CustomList`)
+  test('GIVEN a custom list component, WHEN the drawer is opened, THEN the custom list is rendered', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN a custom list component', async () => {
+      const mounted = await mount(`${STORY}/CustomList`)
+      await resolve(page, 'resolvePopoverQuery')
+      await expect(bellFor(mounted)).toContainText(String(UNREAD_COUNT))
 
-    // The Cypress spec resolved the popover query again immediately after mount.
-    await resolve(page, 'resolvePopoverQuery')
+      return mounted
+    })
 
-    await expect(drawer(page)).not.toBeAttached()
-    await expect(bellFor(component)).toContainText(String(UNREAD_COUNT))
-    await bellFor(component).click()
+    await test.step('WHEN the drawer is opened', () => openDrawer(component, page))
 
-    await expect(drawer(page)).toBeVisible()
-    await resolve(page, 'resolveList')
+    await test.step('THEN the custom list is rendered', async () => {
+      await resolve(page, 'resolveList')
 
-    await expect(page.getByText('Custom notifications list', { exact: true })).toBeAttached()
-  })
-
-  test('should render custom components for item', async ({ mount, page }) => {
-    const component = await mount(`${STORY}/CustomItem`)
-
-    await expect(drawer(page)).not.toBeAttached()
-    await expect(bellFor(component)).toContainText(String(UNREAD_COUNT))
-    await bellFor(component).click()
-
-    await expect(drawer(page)).toBeVisible()
-    await resolve(page, 'resolveList')
-
-    await test.step('See the custom notification items', async () => {
-      for (let index = 1; index <= 10; index += 1) {
-        const item = page.getByText(`Someone replied to your comment ${index}.`, { exact: true })
-        await expect(item).toBeAttached()
-        if (index === 8) await scrollTo(item)
-      }
+      await expect(page.getByText('Custom notifications list', { exact: true })).toBeAttached()
     })
   })
 
-  test('should render custom components for list and item', async ({ mount, page }) => {
-    const component = await mount(`${STORY}/CustomListAndItem`)
+  test('GIVEN a custom item component, WHEN the drawer is opened, THEN every notification renders with it', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN a custom item component', async () => {
+      const mounted = await mount(`${STORY}/CustomItem`)
+      await expect(bellFor(mounted)).toContainText(String(UNREAD_COUNT))
 
-    await expect(drawer(page)).not.toBeAttached()
-    await expect(bellFor(component)).toContainText(String(UNREAD_COUNT))
-    await bellFor(component).click()
+      return mounted
+    })
 
-    await expect(drawer(page)).toBeVisible()
-    await resolve(page, 'resolveList')
+    await test.step('WHEN the drawer is opened', () => openDrawer(component, page))
 
-    await expect(page.getByText('Custom notifications list', { exact: true })).toBeAttached()
+    await test.step('THEN every notification renders with it', async () => {
+      await resolve(page, 'resolveList')
 
-    await test.step('See the custom notification items', async () => {
-      for (let index = 1; index <= 10; index += 1) {
-        const item = page.getByText(`Someone replied to your comment ${index}.`, { exact: true })
-        await expect(item).toBeAttached()
-        if (index === 8) await scrollTo(item)
-      }
+      await expectCustomItems(page)
+    })
+  })
+
+  test('GIVEN custom list and item components, WHEN the drawer is opened, THEN both are rendered', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN custom list and item components', async () => {
+      const mounted = await mount(`${STORY}/CustomListAndItem`)
+      await expect(bellFor(mounted)).toContainText(String(UNREAD_COUNT))
+
+      return mounted
+    })
+
+    await test.step('WHEN the drawer is opened', () => openDrawer(component, page))
+
+    await test.step('THEN both are rendered', async () => {
+      await resolve(page, 'resolveList')
+
+      await expect(page.getByText('Custom notifications list', { exact: true })).toBeAttached()
+      await expectCustomItems(page)
     })
   })
 })

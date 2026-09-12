@@ -1,12 +1,8 @@
 import { type Locator, expect, test } from '@playwright/test'
 
 /**
- * Playwright port of `NavHorizontal.cy.tsx` in this folder.
- *
  * Open-drawer content is portaled outside `#root`, so those queries go through
- * `page`; the closed/desktop cases stay inside the `mount()` locator. Role names
- * carry `{ exact: true }` because Playwright matches accessible names as
- * substrings by default.
+ * `page`; the closed/desktop cases stay inside the `mount()` locator.
  */
 const STORY = 'navigations/web/NavHorizontal/NavHorizontal'
 
@@ -26,65 +22,76 @@ const expectNavLinks = async (scope: Locator, { withHref = true } = {}) => {
   }
 }
 
-test.describe('NavHorizontal', () => {
-  test('displays accessible drawer menu on mobile screens', async ({ mount, page }) => {
-    await page.setViewportSize({ width: 375, height: 667 })
+const dashboardColour = (scope: Locator) =>
+  scope
+    .getByRole('link', { name: 'Dashboard', exact: true })
+    .evaluate((element) => getComputedStyle(element).color)
 
-    const component = await mount(`${STORY}/Open`)
-
-    await expect(page.getByRole('presentation')).toBeVisible()
-    await expectNavLinks(page.getByRole('navigation'), { withHref: false })
-
-    // Satisfied by VerticalDrawer's mount-time `useEffect(..., [pathname])` —
-    // the Cypress original's `should('have.been.called')` needed no interaction.
-    await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
-  })
-
-  test('displays horizontal navigation bar with accessible tabs on desktop', async ({
+test.describe('Component: NavHorizontal', () => {
+  test('GIVEN a mobile viewport and an open drawer, THEN the drawer lists every navigation item and the close callback has already fired at mount', async ({
     mount,
     page,
   }) => {
-    await page.setViewportSize({ width: 1280, height: 800 })
+    const component = await test.step('GIVEN a mobile viewport and an open drawer', async () => {
+      await page.setViewportSize({ width: 375, height: 667 })
+      return mount(`${STORY}/Open`)
+    })
 
-    const component = await mount(`${STORY}/ClosedLight`)
+    await test.step('THEN the drawer lists every navigation item', async () => {
+      await expect(page.getByRole('presentation')).toBeVisible()
+      await expectNavLinks(page.getByRole('navigation'), { withHref: false })
+    })
 
-    await expect(page.locator('[role="presentation"]')).not.toBeAttached()
-    await expectNavLinks(component)
+    await test.step('THEN the close callback has already fired at mount', async () => {
+      await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    })
   })
 
-  test('adapts styling based on theme mode while maintaining accessibility', async ({
+  test('GIVEN a desktop viewport and a closed drawer, THEN the navigation renders inline with every href', async ({
     mount,
     page,
   }) => {
-    await page.setViewportSize({ width: 1280, height: 800 })
+    const component = await test.step('GIVEN a desktop viewport and a closed drawer', async () => {
+      await page.setViewportSize({ width: 1280, height: 800 })
+      return mount(`${STORY}/ClosedLight`)
+    })
 
-    const dashboardColour = async (scope: Locator) =>
-      scope
-        .getByRole('link', { name: 'Dashboard', exact: true })
-        .evaluate((el) => getComputedStyle(el).color)
+    await test.step('THEN the navigation renders inline with every href', async () => {
+      await expect(page.locator('[role="presentation"]')).not.toBeAttached()
+      await expectNavLinks(component)
+    })
+  })
 
-    const light = await mount(`${STORY}/ClosedLight`)
-    const lightColour = await dashboardColour(light)
+  test('GIVEN the navigation in the light theme, WHEN it is rendered in the dark theme, THEN the link colour changes and the links stay accessible', async ({
+    mount,
+    page,
+  }) => {
+    const lightColour = await test.step('GIVEN the navigation in the light theme', async () => {
+      await page.setViewportSize({ width: 1280, height: 800 })
+      return dashboardColour(await mount(`${STORY}/ClosedLight`))
+    })
 
-    const dark = await mount(`${STORY}/ClosedDark`)
-    const darkColour = await dashboardColour(dark)
+    const dark = await test.step('WHEN it is rendered in the dark theme', () =>
+      mount(`${STORY}/ClosedDark`))
 
-    // The Cypress original asserted `should('have.css', 'color')` with no
-    // expected value, which passes for any element. Comparing the two modes
-    // actually tests the adaptation the test is named for.
-    expect(darkColour).not.toBe(lightColour)
-
-    await test.step('Links stay accessible in dark mode', async () => {
+    await test.step('THEN the link colour changes and the links stay accessible', async () => {
+      expect(await dashboardColour(dark)).not.toBe(lightColour)
       await expectNavLinks(dark)
     })
   })
 
-  test('provides accessible navigation with scroll on tablet screens', async ({ mount, page }) => {
-    await page.setViewportSize({ width: 800, height: 600 })
+  test('GIVEN a tablet viewport and an open drawer, THEN the drawer lists every navigation item', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN a tablet viewport and an open drawer', async () => {
+      await page.setViewportSize({ width: 800, height: 600 })
+      return mount(`${STORY}/Open`)
+    })
 
-    const component = await mount(`${STORY}/Open`)
-
-    await expectNavLinks(page.getByRole('presentation'))
-    await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    await test.step('THEN the drawer lists every navigation item', async () => {
+      await expectNavLinks(page.getByRole('presentation'))
+      await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    })
   })
 })
