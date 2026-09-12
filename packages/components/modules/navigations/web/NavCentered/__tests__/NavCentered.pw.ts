@@ -1,12 +1,9 @@
 import { type Locator, expect, test } from '@playwright/test'
 
 /**
- * Playwright port of `NavCentered.cy.tsx` in this folder.
- *
  * When the drawer is open its content is portaled outside `#root`, so those
  * queries go through `page`; the closed/desktop case stays inside the `mount()`
- * locator. Role names use `{ exact: true }` because Playwright matches the
- * accessible name as a substring by default.
+ * locator.
  */
 const STORY = 'navigations/web/NavCentered/NavCentered'
 
@@ -28,51 +25,64 @@ const expectNavItems = async (scope: Locator) => {
   }
 }
 
-test.describe('NavCentered', () => {
-  test('provides accessible navigation drawer on mobile screens', async ({ mount, page }) => {
-    await page.setViewportSize({ width: 375, height: 667 })
-
-    const component = await mount(`${STORY}/Open`)
-    const drawer = page.getByRole('presentation')
-
-    await expect(drawer).toBeVisible()
-    await expectNavItems(drawer)
-
-    // The Cypress original asserted `should('have.been.called')`. That is
-    // satisfied by VerticalDrawer's `useEffect(..., [pathname])`, which fires
-    // once on mount while openNav is true — see VerticalDrawer.pw.ts.
-    await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
-  })
-
-  test('displays centered navigation bar with accessible links on desktop', async ({
+test.describe('Component: NavCentered', () => {
+  test('GIVEN a mobile viewport and an open drawer, THEN the drawer lists every navigation item and the close callback has already fired at mount', async ({
     mount,
     page,
   }) => {
-    await page.setViewportSize({ width: 1280, height: 800 })
+    const component = await test.step('GIVEN a mobile viewport and an open drawer', async () => {
+      await page.setViewportSize({ width: 375, height: 667 })
+      return mount(`${STORY}/Open`)
+    })
 
-    const component = await mount(`${STORY}/Closed`)
+    await test.step('THEN the drawer lists every navigation item', async () => {
+      const drawer = page.getByRole('presentation')
 
-    await expect(page.locator('[role="presentation"]')).not.toBeAttached()
+      await expect(drawer).toBeVisible()
+      await expectNavItems(drawer)
+    })
 
-    await expect(component.locator('[data-testid="nav-section-horizontal"]')).toBeAttached()
-    await expect(component.locator('[data-testid="nav-section-horizontal-items"]')).toHaveCSS(
-      'gap',
-      '6px',
-    )
-
-    await expectNavItems(component)
+    await test.step('THEN the close callback has already fired at mount', async () => {
+      await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    })
   })
 
-  test('provides accessible navigation with scroll functionality on tablet', async ({
+  test('GIVEN a desktop viewport and a closed drawer, THEN the navigation renders inline with spaced items', async ({
     mount,
     page,
   }) => {
-    await page.setViewportSize({ width: 800, height: 600 })
+    const component = await test.step('GIVEN a desktop viewport and a closed drawer', async () => {
+      await page.setViewportSize({ width: 1280, height: 800 })
+      return mount(`${STORY}/Closed`)
+    })
 
-    const component = await mount(`${STORY}/Open`)
-    const drawer = page.getByRole('presentation')
+    await test.step('THEN no drawer is rendered', async () => {
+      await expect(page.locator('[role="presentation"]')).not.toBeAttached()
+    })
 
-    await expectNavItems(drawer)
-    await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    await test.step('THEN the navigation renders inline with spaced items', async () => {
+      await expect(component.locator('[data-testid="nav-section-horizontal"]')).toBeAttached()
+      await expect(component.locator('[data-testid="nav-section-horizontal-items"]')).toHaveCSS(
+        'gap',
+        '6px',
+      )
+
+      await expectNavItems(component)
+    })
+  })
+
+  test('GIVEN a tablet viewport and an open drawer, THEN the drawer lists every navigation item', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN a tablet viewport and an open drawer', async () => {
+      await page.setViewportSize({ width: 800, height: 600 })
+      return mount(`${STORY}/Open`)
+    })
+
+    await test.step('THEN the drawer lists every navigation item', async () => {
+      await expectNavItems(page.getByRole('presentation'))
+      await expect(component.getByTestId('close-nav-count')).toHaveValue('1')
+    })
   })
 })

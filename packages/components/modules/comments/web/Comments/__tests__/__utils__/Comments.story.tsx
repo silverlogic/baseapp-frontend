@@ -27,17 +27,15 @@ import CommentsForTesting from './CommentsForTesting'
 /**
  * Stories for the Playwright component-testing gallery.
  *
- * Ported from `__tests__/Comments.cy.tsx`, which drives Relay from the *test*
- * process: it builds the mock environment with `createTestEnvironment()`, passes
- * it in as a prop and calls `resolveMostRecentOperation()` between UI actions.
- *
- * Playwright runs the test in Node, so the environment is created here in the
- * browser and every resolution point the specs need is exposed on
- * `window.__relayControls` for the test to trigger via `page.evaluate()`.
+ * The spec runs in Node, so the Relay environment is created here in the browser
+ * and every resolution point the spec needs is exposed on
+ * `window.__commentsControls` for it to trigger via `page.evaluate()`. The key is
+ * namespaced per component: two stories declaring the same key with different
+ * shapes is a collision only `tsc` catches.
  * All resolvers are built for every story — they are closures, so the unused
  * ones cost nothing and the surface stays uniformly typed.
  */
-export interface RelayControls {
+export interface CommentsControls {
   resolveCommentCreate: () => void
   resolveCommentReply: () => void
   resolveLike: () => void
@@ -55,7 +53,7 @@ export interface RelayControls {
 
 declare global {
   interface Window {
-    __relayControls: RelayControls
+    __commentsControls: CommentsControls
   }
 }
 
@@ -72,7 +70,7 @@ const routerMock = {
 
 type TestEnvironment = ReturnType<typeof createTestEnvironment>
 
-const makeControls = ({ resolveMostRecentOperation }: TestEnvironment): RelayControls => ({
+const makeControls = ({ resolveMostRecentOperation }: TestEnvironment): CommentsControls => ({
   resolveCommentCreate: () => resolveMostRecentOperation({ mockResolvers: commentCreateResolver }),
   resolveCommentReply: () => resolveMostRecentOperation({ mockResolvers: commentReplyResolver }),
   resolveLike: () => resolveMostRecentOperation({ data: likeACommentMockData }),
@@ -101,7 +99,7 @@ const useSeededEnvironment = (data: unknown) =>
       data,
     })
 
-    window.__relayControls = makeControls(testEnvironment)
+    window.__commentsControls = makeControls(testEnvironment)
 
     return testEnvironment.environment
     // eslint-disable-next-line react-hooks/exhaustive-deps

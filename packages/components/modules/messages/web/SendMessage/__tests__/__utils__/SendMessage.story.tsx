@@ -21,9 +21,8 @@ import SendMessageForTesting from './SendMessageForTesting'
  *
  * The Relay environment is created here in the browser and every resolution
  * point a spec needs is exposed on `window.__sendMessageControls`. The key is
- * namespaced per component: `Comments.story.tsx` already owns `__relayControls`,
- * and two stories declaring the same key with different shapes is a collision
- * only `tsc` catches.
+ * namespaced per component, so that two stories declaring the same key with
+ * different shapes — a collision only `tsc` catches — cannot happen.
  */
 export interface SendMessageControls {
   /** The operation Relay has in flight, or `null` before anything is committed. */
