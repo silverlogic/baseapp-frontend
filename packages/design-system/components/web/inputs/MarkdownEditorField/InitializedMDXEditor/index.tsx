@@ -22,6 +22,7 @@ import {
 import DefaultToolbar from '../Toolbar'
 import { CODE_BLOCK_LANGUAGES, DEFAULT_TOOLBAR_CONFIG } from '../constants'
 import { keyboardCommandsPlugin } from './plugins/keyboard-commands'
+import { mentionsPlugin } from './plugins/mentions'
 import { InitializedMDXEditorProps } from './types'
 
 const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
@@ -33,6 +34,7 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
   showUndoRedo = false,
   Toolbar = DefaultToolbar,
   ToolbarProps: toolbarOverrideProps,
+  mentions,
   ...props
 }) => {
   const mergedConfig = useMemo(
@@ -71,8 +73,9 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
       keyboardCommandsPlugin({ onKeyDown, onPaste }),
       toolbarPlugin({ toolbarContents }),
       markdownShortcutPlugin(),
+      ...(mentions ? [mentionsPlugin(mentions)] : []),
     ],
-    [onKeyDown, onPaste, toolbarContents],
+    [onKeyDown, onPaste, toolbarContents, mentions],
   )
 
   return (

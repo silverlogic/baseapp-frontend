@@ -14,7 +14,7 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
-import { useRouter } from 'expo-router'
+import { type Href, useRouter } from 'expo-router'
 import { Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
@@ -22,6 +22,7 @@ import { LastMessageFragment$key } from '../../../../../../__generated__/LastMes
 import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
+import { getProfilePath } from '../../../../../__shared__/common'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
 import { RoomTitleFragment } from '../../../../common/graphql/fragments/RoomTitle'
 import { TitleFragment } from '../../../../common/graphql/fragments/Title'
@@ -60,7 +61,8 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   const { title, image } = useTitleAndImage(titleFragment)
   const { lastMessageTime } = lastMessageFragment
 
-  const { isSoleAdmin } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
+  const roomTitleFragment = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
+  const isSoleAdmin = roomTitleFragment?.isSoleAdmin
 
   const lastMessage = lastMessageFragment.lastMessage?.content
   const hasUnreadMessages =
@@ -114,7 +116,11 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
   }
   const handleGoToProfile = () => {
     bottomDrawerRef.current?.close()
-    console.log('Not implemented yet.')
+    const profilePath = getProfilePath(
+      roomTitleFragment?.otherParticipant?.profile?.urlPath?.path,
+      roomTitleFragment?.otherParticipant?.profile?.id,
+    )
+    if (profilePath) router.push(profilePath as Href)
   }
   const handleDeleteChat = () => {
     bottomDrawerRef.current?.close()

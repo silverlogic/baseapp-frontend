@@ -21,6 +21,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
   LogoProps,
   AccountMenu,
   AccountMenuProps,
+  HeaderCenterComponent,
   NavAccountSection,
   NavAccountSectionProps,
   NotificationsPopover,
@@ -60,6 +61,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
               ...AccountMenuProps,
               additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
+            HeaderCenterComponent={HeaderCenterComponent}
             ToolbarProps={ToolbarProps}
             CustomAppBarProps={CustomAppBarProps}
           >
@@ -92,6 +94,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
               ...AccountMenuProps,
               additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
+            HeaderCenterComponent={HeaderCenterComponent}
             ToolbarProps={ToolbarProps}
             CustomAppBarProps={CustomAppBarProps}
           />
@@ -123,6 +126,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
               ...AccountMenuProps,
               additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
             }}
+            HeaderCenterComponent={HeaderCenterComponent}
             ToolbarProps={ToolbarProps}
             CustomAppBarProps={CustomAppBarProps}
           />
@@ -171,6 +175,7 @@ const NavigationLayout: FC<NavigationLayoutProps> = ({
             ...AccountMenuProps,
             additionalComponent: notificationsComponent ?? AccountMenuProps?.additionalComponent,
           }}
+          HeaderCenterComponent={HeaderCenterComponent}
           ToolbarProps={ToolbarProps}
           CustomAppBarProps={CustomAppBarProps}
         />

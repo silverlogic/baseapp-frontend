@@ -1,6 +1,10 @@
 import { Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
+export const ErrorContainer = styled('div')({
+  textAlign: 'center',
+})
+
 export const UploadImageContainer = styled(Box)(({ theme }) => ({
   display: 'grid',
   gridTemplateRows: '1fr min-content',

@@ -5,6 +5,7 @@ import React, { type PropsWithChildren, createContext, useContext, useRef } from
 import { createStore, useStore } from 'zustand'
 
 import { getApiErrorMessage } from '../../functions/api'
+import { getMutationErrorMessage } from '../../functions/relay'
 import { INITIAL_NOTIFICATION_STATE } from './constants'
 import type { UseNotification } from './types'
 
@@ -22,6 +23,14 @@ const createNotificationStore = () =>
         open: true,
         shouldShowProgress,
       }),
+    sendMutationErrorToast: (payloadErrors, transportErrors, options = {}) => {
+      const { shouldShowProgress, ...messageOptions } = options
+      const message = getMutationErrorMessage(payloadErrors, transportErrors, messageOptions)
+      if (message) {
+        set({ message, type: 'error', open: true, shouldShowProgress })
+      }
+      return message
+    },
     closeToast: () => set({ open: false }),
   }))
 

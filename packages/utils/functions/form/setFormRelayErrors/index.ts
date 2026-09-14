@@ -1,22 +1,13 @@
 import { FieldPath, FieldValues, Path, UseFormReturn } from 'react-hook-form'
 
-export type Fields = FieldPath<any>
+import { DEFAULT_ERROR_MESSAGE } from '../../../constants/errors'
+import { MutationPayloadErrors } from '../../relay/getMutationErrorMessage'
 
-type RelayMutationErrors =
-  | ReadonlyArray<
-      | {
-          readonly field: string
-          readonly messages: ReadonlyArray<string>
-        }
-      | null
-      | undefined
-    >
-  | null
-  | undefined
+export type Fields = FieldPath<any>
 
 export const setFormRelayErrors = <T extends FieldValues>(
   form: UseFormReturn<T>,
-  errors: RelayMutationErrors,
+  errors: MutationPayloadErrors,
 ) => {
   if (errors?.length) {
     errors.forEach((error) => {
@@ -24,7 +15,11 @@ export const setFormRelayErrors = <T extends FieldValues>(
       if (errorField && form.getValues(errorField) !== undefined) {
         form.setError(errorField, {
           type: 'custom',
-          message: error?.messages.join(', '),
+          message:
+            error?.messages
+              ?.map((message) => message?.trim())
+              .filter(Boolean)
+              .join(', ') || DEFAULT_ERROR_MESSAGE,
         })
       }
     })

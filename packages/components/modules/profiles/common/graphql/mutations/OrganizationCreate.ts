@@ -29,7 +29,7 @@ export const useOrganizationCreateMutation = (): [
   (config: UseMutationConfig<OrganizationCreateMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<OrganizationCreateMutation>(
     OrganizationCreateMutationQuery,
   )
@@ -39,9 +39,7 @@ export const useOrganizationCreateMutation = (): [
       ...config,
 
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

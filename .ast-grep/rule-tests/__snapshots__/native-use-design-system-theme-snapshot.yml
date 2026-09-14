@@ -1,0 +1,47 @@
+id: native-use-design-system-theme
+snapshots:
+  ? |
+    import { useTheme } from '@mui/material'
+  : labels:
+    - source: import { useTheme } from '@mui/material'
+      style: primary
+      start: 0
+      end: 40
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17
+  ? |
+    import { useTheme } from '@other/design-system/providers/native'
+  : labels:
+    - source: import { useTheme } from '@other/design-system/providers/native'
+      style: primary
+      start: 0
+      end: 64
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17
+  ? |
+    import { useTheme } from 'react-native-paper'
+  : labels:
+    - source: import { useTheme } from 'react-native-paper'
+      style: primary
+      start: 0
+      end: 45
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17
+    - source: useTheme
+      style: secondary
+      start: 9
+      end: 17

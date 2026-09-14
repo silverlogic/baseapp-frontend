@@ -2,7 +2,7 @@ import humps from 'humps'
 
 import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
-import { eventEmitter } from '../../../events'
+import { broadcastEvent } from '../../../events'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
 import { getTokenSSR } from '../../../token/getTokenSSR'
 
@@ -18,10 +18,7 @@ jest.mock('humps', () => ({
   camelizeKeys: jest.fn().mockImplementation((keys) => keys),
 }))
 jest.mock('../../../events', () => ({
-  eventEmitter: {
-    emit: jest.fn(),
-    listenerCount: jest.fn().mockReturnValue(1),
-  },
+  broadcastEvent: jest.fn(),
 }))
 jest.mock('../../../token', () => ({
   getToken: jest.fn(),
@@ -227,7 +224,7 @@ describe('baseAppFetch', () => {
     refreshAccessTokenMock.mockRejectedValue(new Error('Failed to refresh'))
 
     await expect(baseAppFetch('/test', {})).rejects.toThrow('Failed to refresh')
-    expect(eventEmitter.emit).toHaveBeenCalledWith(LOGOUT_EVENT)
+    expect(broadcastEvent).toHaveBeenCalledWith(LOGOUT_EVENT)
   })
 
   it('should set Authorization header correctly when using jwt token', async () => {

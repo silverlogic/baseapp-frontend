@@ -1,5 +1,52 @@
 # @baseapp-frontend/utils
 
+## 4.2.1
+
+### Patch Changes
+
+- 087d0b5: Bump axios to 1.18.1 to fix GHSA-42h9-826w-cgv3, GHSA-pmv8-rq9r-6j72 and GHSA-xj6q-8x83-jv6g
+
+## 4.2.0
+
+### Minor Changes
+
+- 007b2ae: Add shared Relay mutation error handling:
+
+  - `getMutationErrorMessage(payloadErrors, transportErrors, { defaultMessage })` (source in `functions/relay/getMutationErrorMessage`) resolves the first user-facing error from a mutation's `onCompleted` args: the first message in the payload's `errors[].messages`, else the first top-level transport error message, else `defaultMessage`; `undefined` when the mutation succeeded. The parameter types (`MutationPayloadErrors`, `MutationTransportErrors`) are structural, so generated Relay payload errors and `PayloadError[]` pass straight through without this package depending on `relay-runtime`.
+  - `sendMutationErrorToast(payloadErrors, transportErrors, options?)` on the `useNotification` store composes `getMutationErrorMessage` with an error toast (mirroring the existing `sendApiErrorToast`) and returns the toasted message (or `undefined`), so callers can branch on it for success toasts / early returns.
+  - `DEFAULT_ERROR_MESSAGE` constant (`'Something went wrong.'`) exported from `constants/errors` and used as the default by both `getApiErrorMessage` and `getMutationErrorMessage`.
+  - `setFormRelayErrors` now accepts the shared `MutationPayloadErrors` type (a supertype of its previous private type — no call-site changes needed) and normalizes empty/blank `messages` to `DEFAULT_ERROR_MESSAGE` so fields are never marked invalid with blank helper text.
+
+## 4.1.0
+
+### Minor Changes
+
+- `withController` now supports Autocomplete-style fields: it debounces `onInputChange`, forwards the selected value (not the raw change event) to the form field, and reads the latest `onChange`/`onInputChange` from refs so debounced callbacks never call stale closures. Existing single-argument inputs are unaffected.
+
+## 4.0.9
+
+### Patch Changes
+
+- Add `useOptionalCookie` — a cross-platform variant of `useCookie` that does not throw when called outside a `<CookieProvider>`. Inside a provider it returns the provider state; outside one it synthesizes `cookies` from the platform-aware `getToken()` (mobile → `expo-secure-store`, web → `js-cookie`), so callers can read `cookies?.[ACCESS_KEY_NAME]` uniformly without per-call fallbacks. `setCookie` / `removeCookie` are no-ops outside a provider — use the imperative `setCookie`/`removeCookie` from `functions/cookie` instead.
+- Add `NOOP_COOKIE_STORE` export to `@baseapp-frontend/utils/hooks/useCookie/constants` (used internally by `useOptionalCookie` as a stable subscription target when no provider is mounted).
+
+## 4.0.8
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the cookie store — the store is now created fresh per `CookieProvider` mount. Cross-tree sync between imperative `setCookie`/`removeCookie` callers and `useCookie()` consumers now happens via a new `baseapp:cookie-change` `CustomEvent` instead of a shared module-level reference.
+- Cross-tab sync: `setCookie`/`removeCookie` also post to a same-named `BroadcastChannel`, and `CookieProvider` listens on it. Login / logout / token refresh in one tab now propagate to other open tabs of the same origin without requiring a navigation.
+- Add `broadcastEvent(name, payload?)` and `subscribeToBroadcastEvent(name, callback)` in `@baseapp-frontend/utils/functions/events/broadcastEvent`. `broadcastEvent` emits locally (via `eventEmitter`) and posts on a per-event `BroadcastChannel` so subscribers in other same-origin tabs receive it too. `useEventSubscription` now listens on both, so existing consumers automatically pick up cross-tab events. The interceptor logout paths in `baseAppFetch` and `createAxiosInstance`, and `useLogout` from `@baseapp-frontend/authentication`, now use `broadcastEvent` — logout in one tab triggers the `LOGOUT_EVENT` listeners (e.g., `EventHandler` redirect to `/login`) in every open tab of the same origin.
+- Add `COOKIE_CHANGE_EVENT` constant and `CookieChangeEventDetail` type (exported from `@baseapp-frontend/utils/hooks/useCookie/constants`) for consumers that want to dispatch or listen to cookie changes directly.
+- Remove the internal `getCookieFromStore`, `setCookieInStore`, `removeCookieFromStore`, and `getCookieStore` exports (the public `getCookie`/`setCookie`/`removeCookie` API is unchanged).
+
+## 4.0.7
+
+### Patch Changes
+
+- Add `useDebouncedValue` hook for reactive value debouncing (used by mention search).
+- Add `removeLeadingSlash` string utility.
+
 ## 4.0.6
 
 ### Patch Changes

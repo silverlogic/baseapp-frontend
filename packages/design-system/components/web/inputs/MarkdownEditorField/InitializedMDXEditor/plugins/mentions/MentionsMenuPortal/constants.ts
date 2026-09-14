@@ -1,0 +1,3 @@
+export const MENTION_ROW_HEIGHT = 36
+export const MENTION_VISIBLE_ROWS = 3
+export const SKELETON_PLACEHOLDER_ROWS = 3

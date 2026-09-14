@@ -32,7 +32,7 @@ export const useCommentDeleteMutation = (): [
   (config: UseMutationConfig<CommentDeleteMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitDelete, isMutationInFlight] = useMutation<CommentDeleteMutation>(
     CommentDeleteMutationQuery,
   )
@@ -41,9 +41,7 @@ export const useCommentDeleteMutation = (): [
     commitDelete({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

@@ -1,5 +1,88 @@
 # @baseapp-frontend/wagtail
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@2.1.0
+
+## 2.0.1
+
+### Patch Changes
+
+- 087d0b5: Bump axios to 1.18.1 to fix GHSA-42h9-826w-cgv3, GHSA-pmv8-rq9r-6j72 and GHSA-xj6q-8x83-jv6g
+- Updated dependencies [5200c84]
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/design-system@2.0.1
+  - @baseapp-frontend/utils@4.2.1
+  - @baseapp-frontend/graphql@2.0.1
+
+## 2.0.0
+
+### Patch Changes
+
+- Updated dependencies [007b2ae]
+- Updated dependencies [c2f042d]
+  - @baseapp-frontend/utils@4.2.0
+  - @baseapp-frontend/design-system@2.0.0
+  - @baseapp-frontend/graphql@2.0.0
+
+## 1.0.62
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.3
+
+## 1.0.61
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.9
+  - @baseapp-frontend/graphql@1.4.2
+  - @baseapp-frontend/design-system@1.2.13
+
+## 1.0.60
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.12
+  - @baseapp-frontend/utils@4.0.8
+  - @baseapp-frontend/graphql@1.4.1
+
+## 1.0.59
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.0
+
+## 1.0.58
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.11
+  - @baseapp-frontend/utils@4.0.7
+  - @baseapp-frontend/graphql@1.3.10
+
+## 1.0.57
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.10
+
+## 1.0.56
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.9
+
 ## 1.0.55
 
 ### Patch Changes

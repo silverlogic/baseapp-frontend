@@ -2,6 +2,7 @@
 
 import { setItemAsync } from 'expo-secure-store'
 
+import { emitCookieChange } from '../../../hooks/useCookie/emitter'
 import { setCookie } from '../../cookie'
 import { isMobilePlatform } from '../../os'
 
@@ -49,6 +50,9 @@ export const setTokenAsync = async (key: string, value: string, config?: CookieA
   try {
     if (isMobilePlatform()) {
       await setItemAsync(key, value)
+      // Bridge the secure-store write into the in-tree CookieProvider so consumers
+      // like `useJWTUser` see the new token without waiting for an app restart.
+      emitCookieChange({ type: 'set', key, value })
     } else {
       setCookie(key, value, config)
     }

@@ -14,7 +14,7 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/components/web/inputs'
 
-import { Box, Button, CircularProgress, Tab, Tabs, Typography } from '@mui/material'
+import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -24,7 +24,7 @@ import { useChatRoom, useRoomListSubscription, useRoomsList } from '../../common
 import DefaultChatRoomItem from './ChatRoomItem'
 import DefaultEmptyChatRoomsState from './EmptyChatRoomsState'
 import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from './constants'
-import { Header, MainContainer } from './styled'
+import { CenteredProgress, Header, MainContainer } from './styled'
 import { AllChatRoomsListProps, ChatRoomNode, ChatTabValues } from './types'
 
 const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
@@ -61,7 +61,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: value,
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isInGroupTab,
+          isGroup: isInGroupTab ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -76,7 +76,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: '',
           unreadMessages: isInUnreadTab,
           archived: isInArchivedTab,
-          isGroup: isInGroupTab,
+          isGroup: isInGroupTab ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -92,7 +92,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
           q: searchValue,
           unreadMessages: newTab === CHAT_TAB_VALUES.unread,
           archived: newTab === CHAT_TAB_VALUES.archived,
-          isGroup: newTab === CHAT_TAB_VALUES.groups,
+          isGroup: newTab === CHAT_TAB_VALUES.groups ? true : null,
         },
         { fetchPolicy: 'network-only' },
       )
@@ -149,15 +149,11 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     const isLoadingTab = isRefetchPending && tab === tabValue
 
     return (
-      <Box display="grid" gridTemplateColumns="1fr max-content" alignItems="center">
-        <Typography variant="subtitle2" color="text.primary">
+      <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+        <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
           {CHAT_TAB_LABEL[tabValue]}
         </Typography>
-        <CircularProgress
-          size={15}
-          aria-hidden={!isLoadingTab}
-          sx={{ visibility: isLoadingTab ? 'visible' : 'hidden' }}
-        />
+        {isLoadingTab && <CenteredProgress size={15} aria-hidden="true" />}
       </Box>
     )
   }

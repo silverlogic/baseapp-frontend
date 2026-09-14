@@ -1,5 +1,44 @@
 # @baseapp-frontend/authentication
 
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/utils@4.2.1
+
+## 6.0.0
+
+### Patch Changes
+
+- Updated dependencies [007b2ae]
+  - @baseapp-frontend/utils@4.2.0
+
+## 5.1.3
+
+### Patch Changes
+
+- Fix `useJWTUser` throwing `MISSING_COOKIE_STORE_ERROR` on mobile (and any web build that does not mount a `<CookieProvider>`). The hook now reads the access token via the new `useOptionalCookie()` from `@baseapp-frontend/utils`, which falls back to the platform-aware `getToken()` (mobile → `expo-secure-store`) outside a provider. Web behavior is unchanged — the SSR-seeded cookie still drives first-paint user data when `<CookieProvider>` is mounted.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.9
+
+## 5.1.2
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the current-profile store — the store is now created fresh per `CurrentProfileProvider` mount.
+- `useJWTUser` now reads the access token from `useCookie()` context instead of `getToken()`, so first-paint user data on logged-in renders flows through the seed cookie passed by the dynamic-layout. A `<CookieProvider>` ancestor is required (already provided by the template's `RootLayout`).
+- Remove the unused `getCurrentProfileFromStore`, `setCurrentProfileInStore`, `updateProfileIfActiveInStore`, `resetProfileStore`, and `getProfileStore` exports — `useCurrentProfile()` and the hook setters are unchanged.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.8
+
+## 5.1.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
 ## 5.1.0
 
 ### Minor Changes

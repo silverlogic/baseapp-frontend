@@ -2,14 +2,13 @@
 
 import { useEffect } from 'react'
 
-import { ACCESS_KEY_NAME, getToken } from '@baseapp-frontend/utils'
+import { ACCESS_KEY_NAME, decodeJWT, useOptionalCookie } from '@baseapp-frontend/utils'
 import type { JWTContent } from '@baseapp-frontend/utils/types/jwt'
 
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 
 import UserApi, { USER_API_KEY } from '../../../services/user'
 import type { User } from '../../../types/user'
-import getUser from '../getUser'
 import type { UseJWTUserOptions } from './types'
 
 /**
@@ -19,6 +18,9 @@ import type { UseJWTUserOptions } from './types'
  * data is mutated, ensuring UI stays in sync with server state.
  *
  * Use this when you need fresh user data and automatic updates after user mutations.
+ *
+ * Cross-platform: reads the access token from `CookieProvider` on web (SSR-seeded for
+ * correct first paint) and from `getToken()` on mobile (expo-secure-store).
  */
 const useJWTUser = <TUser extends Partial<User> & JWTContent>({
   options,
@@ -27,8 +29,9 @@ const useJWTUser = <TUser extends Partial<User> & JWTContent>({
 }: UseJWTUserOptions<TUser> = {}) => {
   // TODO: placeholderData generic type is not working as expected, open an issue on react-query github
   type NonFunctionGuard<T> = T extends Function ? never : T
-  const token = getToken(accessKeyName) ?? ''
-  const placeholderData = getUser<TUser>({ accessKeyName }) as NonFunctionGuard<TUser>
+  const { cookies } = useOptionalCookie<Record<string, string | undefined>>()
+  const token = cookies?.[accessKeyName] ?? ''
+  const placeholderData = (token ? decodeJWT<TUser>(token) : null) as NonFunctionGuard<TUser>
 
   const queryClient = useQueryClient()
 

@@ -61,5 +61,5 @@ cypress/downloads
 .editorconfig
 
 # relay
-/__generated__
+/__generated__/*
 !/__generated__/.keep

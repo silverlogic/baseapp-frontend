@@ -1,0 +1,18 @@
+id: next-prefer-link-over-router-push
+valid:
+  - |
+    <Button variant="contained" component={Link} href="/create-post">
+      Create Post
+    </Button>
+  - |
+    const handleSubmit = async () => {
+      const result = await createPost(formData)
+      router.push(`/posts/${result.id}`)
+    }
+  - |
+    const { logout } = useLogout({ onLogout: () => router.push('/login') })
+invalid:
+  - |
+    <Button onClick={() => router.push('/settings')}>Go to Settings</Button>
+  - |
+    <Button onClick={() => router.push(`/settings`)}>Go to Settings</Button>

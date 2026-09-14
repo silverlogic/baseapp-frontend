@@ -1,0 +1,16 @@
+id: ds-prefer-baseapp-wrapper
+valid:
+  - |
+    import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+    import { TextField } from '@baseapp-frontend/design-system/components/web/inputs'
+  - |
+    import { Box, Stack, Typography } from '@mui/material'
+  - |
+    import { LoadingButton } from '@mui/lab'
+invalid:
+  - |
+    import { IconButton, Stack } from '@mui/material'
+  - |
+    import IconButton from '@mui/material/IconButton'
+  - |
+    import { Dialog } from '@mui/material'

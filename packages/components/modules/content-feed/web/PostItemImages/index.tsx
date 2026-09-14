@@ -9,12 +9,12 @@ import {
   ChevronRight as ChevronRightIcon,
   Circle as CircleIcon,
 } from '@mui/icons-material'
-import { Fab, IconButton } from '@mui/material'
+import { IconButton } from '@mui/material'
 import RMCarousel, { ArrowProps, DotProps } from 'react-multi-carousel'
 import 'react-multi-carousel/lib/styles.css'
 
 import PostImageSlide from '../PostImageSlide'
-import { ImageCarouselContainer } from './styled'
+import { ArrowFab, ImageCarouselContainer } from './styled'
 import { PostItemImagesProps } from './types'
 
 // @ts-ignore
@@ -29,9 +29,9 @@ const CustomDot: FC<DotProps> = ({ onClick, active }) => (
     }}
   >
     {active ? (
-      <PillIcon sx={{ color: '#fff' }} />
+      <PillIcon sx={{ color: 'common.white' }} />
     ) : (
-      <CircleIcon sx={{ color: '#fff', fontSize: 8, opacity: active ? 1 : 0.5 }} />
+      <CircleIcon sx={{ color: 'common.white', fontSize: 8, opacity: active ? 1 : 0.5 }} />
     )}
   </IconButton>
 )
@@ -40,21 +40,9 @@ const CustomArrow: FC<ArrowProps & { orientation: 'left' | 'right' }> = ({
   onClick,
   orientation,
 }) => (
-  <Fab
-    onClick={onClick}
-    sx={{
-      position: 'absolute',
-      left: orientation === 'left' ? 0 : undefined,
-      right: orientation === 'right' ? 0 : undefined,
-      opacity: 0.72,
-      m: 1,
-    }}
-    color="default"
-    variant="soft"
-    size="small"
-  >
+  <ArrowFab onClick={onClick} orientation={orientation} color="default" variant="soft" size="small">
     {orientation === 'left' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-  </Fab>
+  </ArrowFab>
 )
 
 const PostItemImages: FC<PostItemImagesProps> = ({ post }) => {

@@ -8,9 +8,9 @@ import { styled } from '@mui/material/styles'
 
 import { AvatarWithPlaceholderProps } from './types'
 
-export const AvatarStyled: ComponentType<AvatarWithPlaceholderProps> = styled(
-  Avatar,
-)<AvatarWithPlaceholderProps>(({ theme, width, height, borderStyle, borderWidth }) => ({
+export const AvatarStyled: ComponentType<AvatarWithPlaceholderProps> = styled(Avatar, {
+  shouldForwardProp: (prop) => prop !== 'borderStyle' && prop !== 'borderWidth',
+})<AvatarWithPlaceholderProps>(({ theme, width, height, borderStyle, borderWidth }) => ({
   width,
   height,
   border: `${borderStyle} ${borderWidth} ${theme.palette.background.default}`,

@@ -1,12 +1,14 @@
 import { bgBlur } from '@baseapp-frontend/design-system/styles/web'
 
-import { AppBar } from '@mui/material'
+import { AppBar, Box } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 import { HEADER_HEIGHT, NAV_WIDTH } from '../constants'
 import { CustomAppBarProps } from './types'
 
-export const CustomAppBar = styled(AppBar)<CustomAppBarProps>(({ theme, themeLayout }) => {
+export const CustomAppBar = styled(AppBar, {
+  shouldForwardProp: (prop) => prop !== 'themeLayout',
+})<CustomAppBarProps>(({ theme, themeLayout }) => {
   const isNavHorizontal = themeLayout === 'horizontal'
   const isNavVertical = themeLayout === 'vertical'
   const isNavCentered = themeLayout === 'centered'
@@ -39,3 +41,11 @@ export const CustomAppBar = styled(AppBar)<CustomAppBarProps>(({ theme, themeLay
     },
   }
 })
+
+export const HeaderCenterContainer = styled(Box)(() => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  flex: 1,
+  minWidth: 0,
+}))

@@ -11,6 +11,7 @@ import { Box } from '@mui/system'
 
 import AccountPopover from './AccountPopover'
 import VerticalFooter from './VerticalFooter'
+import { CurrentProfileRow, ProfileContainer, SwitchProfileRow } from './styled'
 import { AccountMenuProps } from './types'
 
 const AccountMenu: FC<AccountMenuProps> = ({
@@ -42,7 +43,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
   if (!user) {
     if (vertical) {
       return (
-        <div className="flex w-full flex-col items-center justify-center gap-2">
+        <ProfileContainer>
           {children}
           {onRegisterClick && onLoginClick && (
             <>
@@ -60,12 +61,12 @@ const AccountMenu: FC<AccountMenuProps> = ({
               </Button>
             </>
           )}
-        </div>
+        </ProfileContainer>
       )
     }
 
     return (
-      <div className="grid w-full grid-cols-[1fr_max-content_max-content] items-center justify-center gap-1 min-lg:gap-2">
+      <SwitchProfileRow>
         {renderHeaderContent()}
         {onRegisterClick && onLoginClick && (
           <>
@@ -83,7 +84,7 @@ const AccountMenu: FC<AccountMenuProps> = ({
             </Button>
           </>
         )}
-      </div>
+      </SwitchProfileRow>
     )
   }
 
@@ -123,11 +124,11 @@ const AccountMenu: FC<AccountMenuProps> = ({
   }
 
   return (
-    <div className="grid w-full grid-cols-[1fr_40px_40px] items-center justify-center gap-1 min-lg:gap-2">
+    <CurrentProfileRow>
       {renderHeaderContent()}
       {renderAdditionalComponent()}
       <AccountPopover {...AccountPopoverProps} />
-    </div>
+    </CurrentProfileRow>
   )
 }
 

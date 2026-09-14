@@ -1,0 +1,17 @@
+id: ts-loose-autocomplete
+language: Tsx
+severity: warning
+message: "A bare `string` in a union with string literals erases every autocomplete suggestion. Use the loose-autocomplete form `'a' | 'b' | (string & {})`. See .claude/skills/frontend-conventions/references/typescript.md"
+ignores:
+  - "**/__generated__/**"
+rule:
+  kind: union_type
+  all:
+    - has:
+        kind: predefined_type
+        regex: ^string$
+    - has:
+        stopBy: end
+        kind: literal_type
+        has:
+          kind: string

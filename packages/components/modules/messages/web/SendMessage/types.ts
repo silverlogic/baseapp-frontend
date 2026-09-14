@@ -6,4 +6,5 @@ export interface SendMessageProps {
   roomId: string
   SocialInput?: FC<SocialInputProps>
   SocialInputProps?: Partial<SocialInputProps>
+  disableMentions?: boolean
 }

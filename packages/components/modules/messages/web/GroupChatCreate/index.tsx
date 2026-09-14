@@ -3,7 +3,7 @@
 import { FC, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
-import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
+import { filterDirtyValues, setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box } from '@mui/material'
@@ -35,7 +35,6 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
   onValidSubmission,
   onBackButtonClicked,
 }) => {
-  const { sendToast } = useNotification()
   const {
     data: { allProfiles },
     loadNext,
@@ -93,7 +92,7 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
       onCompleted: (response) => {
         const errors = response?.chatRoomCreate?.errors
         if (errors) {
-          sendToast('Something went wrong', { type: 'error' })
+          // The hook already toasts the payload error message; only map the field errors here.
           // @ts-ignore TODO: check typing issue with zodResolver
           setFormRelayErrors(formReturn, errors)
         } else {

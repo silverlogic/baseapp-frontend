@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.5.18",
+  "version": "2.1.1",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -9,7 +9,7 @@
     "relay": "relay-compiler",
     "relay:download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay:update-schema": "pnpm relay:download-schema && pnpm relay",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "prettier": "prettier --write .",
     "storybook": "pnpm relay && storybook dev -p 6007",
@@ -100,7 +100,9 @@
     "./content-feed/common": "./modules/content-feed/common/index.ts",
     "./content-feed/web": "./modules/content-feed/web/index.ts",
     "./content-feed/native": "./modules/content-feed/native/index.ts",
-    "./pages/common": "./modules/pages/common/index.ts"
+    "./pages/common": "./modules/pages/common/index.ts",
+    "./pages/web": "./modules/pages/web/index.ts",
+    "./pages/native": "./modules/pages/native/index.ts"
   },
   "files": [
     "modules",
@@ -121,6 +123,7 @@
     "@mui/material": "catalog:material-ui",
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
+    "@native-html/render": "catalog:react-native",
     "@storybook/react": "catalog:storybook",
     "@stripe/react-stripe-js": "^3.6.0",
     "@stripe/stripe-js": "^7.0.0",
@@ -130,6 +133,7 @@
     "expo-router": "catalog:react-native",
     "framer-motion": "catalog:components",
     "graphql": "catalog:graphql",
+    "highlight.js": "catalog:design-system",
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
@@ -138,9 +142,10 @@
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
     "react-native-paper": "catalog:react-native",
-    "react-native-safe-area-context": "5.4.1",
+    "react-native-safe-area-context": "catalog:react-native",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
+    "rehype-highlight": "catalog:design-system",
     "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
     "slugify": "catalog:components",
@@ -154,7 +159,8 @@
     "@baseapp-frontend/graphql": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "react-native-safe-area-context": "catalog:react-native"
   },
   "devDependencies": {
     "@babel/cli": "catalog:components",

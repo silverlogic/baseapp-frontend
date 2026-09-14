@@ -6,11 +6,12 @@ import { MenuIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { Logo } from '@baseapp-frontend/design-system/components/web/logos'
 import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 
+import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Toolbar from '@mui/material/Toolbar'
 
 import DefaultAccountMenu from './AccountMenu'
-import { CustomAppBar } from './styled'
+import { CustomAppBar, HeaderCenterContainer as DefaultHeaderCenterContainer } from './styled'
 import { HeaderProps } from './types'
 
 const Header: FC<HeaderProps> = ({
@@ -20,12 +21,30 @@ const Header: FC<HeaderProps> = ({
   LogoProps,
   AccountMenu = DefaultAccountMenu,
   AccountMenuProps,
+  HeaderCenterComponent,
   ToolbarProps,
   CustomAppBarProps = {},
+  HeaderCenterContainer = DefaultHeaderCenterContainer,
 }) => {
   const { settings } = useUISettings()
   const isNavHorizontal = settings.themeLayout === 'horizontal'
   const isNavCentered = settings.themeLayout === 'centered'
+
+  const renderAccountMenu = () => {
+    // If the layout is centered, we render the AccountMenu in the header. We might want to figure out a better way to handle this in the future once we define designs for this extra component.
+    if (HeaderCenterComponent && !isNavCentered) {
+      return (
+        <>
+          <HeaderCenterContainer>{HeaderCenterComponent}</HeaderCenterContainer>
+          <Box sx={{ flexShrink: 0 }}>
+            <AccountMenu {...AccountMenuProps}>{children}</AccountMenu>
+          </Box>
+        </>
+      )
+    }
+
+    return <AccountMenu {...AccountMenuProps}>{children}</AccountMenu>
+  }
 
   return (
     <CustomAppBar {...CustomAppBarProps} themeLayout={settings.themeLayout}>
@@ -60,7 +79,7 @@ const Header: FC<HeaderProps> = ({
         >
           <MenuIcon />
         </IconButton>
-        <AccountMenu {...AccountMenuProps}>{children}</AccountMenu>
+        {renderAccountMenu()}
       </Toolbar>
     </CustomAppBar>
   )

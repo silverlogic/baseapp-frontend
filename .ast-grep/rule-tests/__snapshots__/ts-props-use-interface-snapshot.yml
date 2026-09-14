@@ -1,0 +1,28 @@
+id: ts-props-use-interface
+snapshots:
+  ? |
+    export type ProfileCardProps = {
+      name: string
+      avatarUrl: string
+    }
+  : labels:
+    - source: |-
+        type ProfileCardProps = {
+          name: string
+          avatarUrl: string
+        }
+      style: primary
+      start: 7
+      end: 69
+    - source: ProfileCardProps
+      style: secondary
+      start: 12
+      end: 28
+    - source: |-
+        {
+          name: string
+          avatarUrl: string
+        }
+      style: secondary
+      start: 31
+      end: 69

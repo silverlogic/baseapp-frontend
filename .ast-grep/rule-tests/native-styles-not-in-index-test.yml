@@ -1,0 +1,13 @@
+id: native-styles-not-in-index
+valid:
+  - |
+    import { styles } from './styles'
+
+    const SignUpPage = () => <View style={styles.container} />
+invalid:
+  - |
+    const styles = StyleSheet.create({
+      container: { paddingVertical: 32 },
+    })
+
+    const SignUpPage = () => <View style={styles.container} />

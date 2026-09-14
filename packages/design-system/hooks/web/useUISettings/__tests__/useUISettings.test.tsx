@@ -6,7 +6,6 @@ import Cookies from 'js-cookie'
 import useUISettings, { UISettingsProvider } from '..'
 import { createPalette } from '../../../../styles/web'
 import { DEFAULT_UI_SETTINGS, UI_SETTINGS_KEY_NAME } from '../constants'
-import { resetSettingsStore } from '../store'
 
 jest.mock('js-cookie', () => ({
   set: jest.fn(),
@@ -38,7 +37,6 @@ Object.defineProperty(document, 'querySelector', {
 describe('useUISettings', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-    resetSettingsStore()
     mockToggle.mockClear()
   })
 
@@ -161,9 +159,7 @@ describe('useUISettings', () => {
   })
 
   describe('Error Handling', () => {
-    it('should throw error when useUISettings is used without provider and no global store', () => {
-      resetSettingsStore()
-
+    it('should throw error when useUISettings is used without provider', () => {
       expect(() => {
         renderHook(() => useUISettings())
       }).toThrow('Settings store has not been initialized')

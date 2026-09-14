@@ -6,6 +6,7 @@
     "build": "turbo run build",
     "dev": "turbo run dev --parallel",
     "lint": "turbo run lint",
+    "lint:ast-grep": "ast-grep test && ast-grep scan",
     "test:unit": "turbo run test:unit",
     "test:component": "turbo run test:component",
     "changeset": "changeset",
@@ -19,6 +20,7 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@ast-grep/cli": "catalog:lint",
     "@changesets/cli": "^2.27.11",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
@@ -43,11 +45,40 @@
     ]
   },
   "engines": {
-    "node": ">=20.17.0"
+    "node": ">=22.11.0"
   },
-  "packageManager": "pnpm@10.14.0",
+  "packageManager": "pnpm@10.34.5",
   "resolutions": {
     "wrap-ansi": "7.0.0",
     "string-width": "4.1.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "@xmldom/xmldom": ">=0.9.12",
+      "brace-expansion@^1.0.0": ">=1.1.18 <2",
+      "brace-expansion@^2.0.0": ">=2.1.4 <3",
+      "brace-expansion@^5.0.0": ">=5.0.9",
+      "browserslist": ">=4.28.7",
+      "decode-uri-component": ">=0.5.0",
+      "esbuild": ">=0.28.1",
+      "form-data": ">=4.0.6",
+      "js-yaml": ">=4.3.2 <5",
+      "read-yaml-file>js-yaml": "^3.15.2",
+      "nanoid@^3.0.0": ">=3.3.18 <4",
+      "postcss": ">=8.5.23",
+      "qs": ">=6.16.0",
+      "sharp@^0.34.0": ">=0.35.4",
+      "shell-quote": ">=1.9.0",
+      "uuid": ">=14.0.0",
+      "ws@^8.0.0": ">=8.21.0"
+    },
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "isomorphic-ws>ws": "8"
+      }
+    },
+    "patchedDependencies": {
+      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
+    }
   }
 }
