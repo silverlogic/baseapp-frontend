@@ -41,7 +41,7 @@ sets that precedent for the family rather than matching it.
 
 Open a fresh Claude Code session (**set the model `Sonnet 4.6` and `medium` effort**) and paste this prompt:
 
-```
+```text
 Run frontend-compose-a-block skill evals following the "Content evals" section of .claude/skills/frontend-compose-a-block/EVAL-ITERATIONS.md.
 
 - Iteration: N (next number after existing iterations)

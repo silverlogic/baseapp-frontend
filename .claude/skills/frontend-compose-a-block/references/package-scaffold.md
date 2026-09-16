@@ -206,7 +206,8 @@ and is not:
 - Leaving the nine `__mocks__` shims in `packages/test/` — the shared jest config resolves them
   against the consuming package's `<rootDir>`, not against `packages/test/`.
 - Resolving a Cypress version other than the one the workflow caches — the specs still run, but the
-  warmed cache misses and the `Verify Cypress binary exists` step has nothing to find.
+  package downloads its own binary mid-job, and `Verify Cypress binary exists` never catches it
+  because that step only ever tests the `13.16.1` path.
 - Merging a package with no `.changeset/` entry — the release workflow has nothing to publish.
 - Committing `__generated__/` — copy the two relay `.gitignore` lines along with the Relay config.
 - Editing `pnpm-workspace.yaml` or `turbo.json` to register a package — neither is read for that.
