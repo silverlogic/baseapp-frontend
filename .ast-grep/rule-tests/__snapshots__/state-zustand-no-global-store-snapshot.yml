@@ -1,0 +1,20 @@
+id: state-zustand-no-global-store
+snapshots:
+  ? |
+    export const useBearStore = create<BearStore>((set) => ({
+      bears: 0,
+      increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+    }))
+  : labels:
+    - source: |-
+        create<BearStore>((set) => ({
+          bears: 0,
+          increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+        }))
+      style: primary
+      start: 28
+      end: 147
+    - source: create
+      style: secondary
+      start: 28
+      end: 34

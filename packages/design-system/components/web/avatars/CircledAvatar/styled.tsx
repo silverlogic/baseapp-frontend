@@ -5,9 +5,9 @@ import { alpha, styled } from '@mui/material/styles'
 
 import { AvatarContainerProps } from './types'
 
-export const AvatarContainer: ComponentType<AvatarContainerProps> = styled(
-  Box,
-)<AvatarContainerProps>(({ theme, width, height, hasError }) => ({
+export const AvatarContainer: ComponentType<AvatarContainerProps> = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'hasError',
+})<AvatarContainerProps>(({ theme, width, height, hasError }) => ({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',

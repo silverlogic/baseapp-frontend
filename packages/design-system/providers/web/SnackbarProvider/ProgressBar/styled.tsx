@@ -3,7 +3,9 @@ import { styled } from '@mui/material/styles'
 
 import { AlertContainerProps, ProgressBarContainerProps } from './types'
 
-export const ProgressContainer = styled(Box)<AlertContainerProps>(({ theme, severity }) => ({
+export const ProgressContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'severity',
+})<AlertContainerProps>(({ theme, severity }) => ({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'flex-start',
@@ -15,20 +17,19 @@ export const ProgressContainer = styled(Box)<AlertContainerProps>(({ theme, seve
       : alpha(theme.palette[severity].main, 0.24),
 }))
 
-export const ProgressBarContainer = styled(Box)<ProgressBarContainerProps>(
-  ({ theme, animationTime, severity }) => ({
-    borderRadius: '50px',
-    animation: `increase-width ${animationTime}ms linear forwards`,
-    '@keyframes increase-width': {
-      from: {
-        width: 0,
-      },
-      to: {
-        width: '100%',
-      },
+export const ProgressBarContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'animationTime' && prop !== 'severity',
+})<ProgressBarContainerProps>(({ theme, animationTime, severity }) => ({
+  borderRadius: '50px',
+  animation: `increase-width ${animationTime}ms linear forwards`,
+  '@keyframes increase-width': {
+    from: {
+      width: 0,
     },
-    height: '100%',
-    backgroundColor:
-      severity === 'info' ? theme.palette.text.primary : theme.palette[severity].main,
-  }),
-)
+    to: {
+      width: '100%',
+    },
+  },
+  height: '100%',
+  backgroundColor: severity === 'info' ? theme.palette.text.primary : theme.palette[severity].main,
+}))

@@ -1,0 +1,10 @@
+id: state-no-redux
+language: Tsx
+severity: error
+message: "This project uses Zustand for shared client state — Redux adds actions/reducers/middleware boilerplate without a proportional benefit. Server data belongs in the Tanstack Query or Relay cache, not a store. See .claude/skills/frontend-patterns/references/state-management.md"
+rule:
+  kind: import_statement
+  has:
+    field: source
+    # subpaths too: @reduxjs/toolkit/query/react, redux-saga/effects, …
+    regex: "^['\"](redux|react-redux|@reduxjs/toolkit|redux-thunk|redux-saga)(/[^'\"]*)?['\"]$"

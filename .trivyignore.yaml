@@ -1,0 +1,39 @@
+# Scanner waivers. Each rule is scoped to the package it applies to via `purls`
+# and carries an expiry so it gets re-examined instead of living forever.
+# Consumed explicitly via `--ignorefile` in .github/workflows/main.yml.
+vulnerabilities:
+  # No patched release exists. Both advisories (GHSA-5p2g-fcmc-qvqq,
+  # GHSA-w3rx-r6r6-pgpr) list every published version as vulnerable, including
+  # the 2.x line, so there is no version to upgrade to. image-size reaches us
+  # only through metro, the React Native bundler: it runs on a developer machine
+  # or in CI to read asset dimensions while producing a bundle, and is not part
+  # of the shipped app. Triggering the DoS requires feeding the bundler a
+  # hostile image, which means committing one to our own assets.
+  - id: CVE-2025-71329
+    purls:
+      - "pkg:npm/image-size"
+    expired_at: 2026-11-11
+    statement: >-
+      No patched version exists in any release line. Reached only through metro
+      (build-time bundler), not shipped in the app bundle.
+  - id: CVE-2025-71330
+    purls:
+      - "pkg:npm/image-size"
+    expired_at: 2026-11-11
+    statement: >-
+      No patched version exists in any release line. Reached only through metro
+      (build-time bundler), not shipped in the app bundle.
+
+  # The advisory declared a single range ("<= 5.0.7, fixed in 5.0.8") while
+  # upstream had published backports for the older majors (1.1.17, 2.1.3) that
+  # scanners did not yet recognize. Our overrides resolve only patched versions
+  # (1.1.18 / 2.1.4 / 5.0.9). Trivy's data has since caught up and no longer
+  # reports this, so the rule is retained only in case CI's pinned scanner image
+  # carries an older DB — it should be droppable at the expiry below.
+  - id: CVE-2026-14257
+    purls:
+      - "pkg:npm/brace-expansion"
+    expired_at: 2026-11-11
+    statement: >-
+      False positive on patched code: overrides pin 1.1.18 / 2.1.4 / 5.0.9, all
+      of which contain the fix.

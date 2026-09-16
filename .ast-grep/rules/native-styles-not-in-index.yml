@@ -1,0 +1,8 @@
+id: native-styles-not-in-index
+language: Tsx
+severity: warning
+message: "Move `StyleSheet.create` into a sibling `styles.ts` — export `styles` directly, or `createStyles(theme)` when the styles need theme access. See .claude/skills/frontend-conventions/references/styling.md"
+files:
+  - "**/index.tsx"
+rule:
+  pattern: StyleSheet.create($$$)

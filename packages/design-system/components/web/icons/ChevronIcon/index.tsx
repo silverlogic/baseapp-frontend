@@ -1,24 +1,14 @@
 import { FC } from 'react'
 
-import { SvgIcon } from '@mui/material'
-
 import { OPPOSITE_POSITION, POSITION_DEGREE } from './constants'
+import { RotatingSvgIcon } from './styled'
 import { ChevronIconProps } from './types'
 
 const ChevronIcon: FC<ChevronIconProps> = ({ isOpen, position = 'bottom', sx, ...props }) => {
   const dynamicPosition = isOpen ? OPPOSITE_POSITION[position] : position
 
   return (
-    <SvgIcon
-      sx={{
-        fontSize: 24,
-        color: 'grey.800',
-        transform: `rotate(${POSITION_DEGREE[dynamicPosition]}deg)`,
-        transition: 'all 0.25s linear',
-        ...sx,
-      }}
-      {...props}
-    >
+    <RotatingSvgIcon rotation={POSITION_DEGREE[dynamicPosition]} sx={sx} {...props}>
       <svg
         width="24"
         height="24"
@@ -34,7 +24,7 @@ const ChevronIcon: FC<ChevronIconProps> = ({ isOpen, position = 'bottom', sx, ..
           strokeLinejoin="round"
         />
       </svg>
-    </SvgIcon>
+    </RotatingSvgIcon>
   )
 }
 

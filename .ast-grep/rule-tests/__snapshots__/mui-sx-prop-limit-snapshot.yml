@@ -1,0 +1,56 @@
+id: mui-sx-prop-limit
+snapshots:
+  ? |
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        padding: 3,
+        backgroundColor: 'surface.main',
+      }}
+    >
+      content
+    </Box>
+  : labels:
+    - source: |-
+        sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            padding: 3,
+            backgroundColor: 'surface.main',
+          }}
+      style: primary
+      start: 7
+      end: 132
+    - source: sx
+      style: secondary
+      start: 7
+      end: 9
+    - source: 'padding: 3'
+      style: secondary
+      start: 79
+      end: 89
+    - source: |-
+        {
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            padding: 3,
+            backgroundColor: 'surface.main',
+          }
+      style: secondary
+      start: 11
+      end: 131
+    - source: |-
+        {{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2,
+            padding: 3,
+            backgroundColor: 'surface.main',
+          }}
+      style: secondary
+      start: 10
+      end: 132

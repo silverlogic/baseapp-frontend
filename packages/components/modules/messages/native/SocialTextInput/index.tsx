@@ -5,10 +5,10 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { withNativeController } from '@baseapp-frontend/design-system/utils/native'
 
 import {
+  type BlurEvent,
+  type FocusEvent,
   LayoutChangeEvent,
-  NativeSyntheticEvent,
   TextInput as NativeTextInput,
-  TextInputFocusEventData,
 } from 'react-native'
 
 import { createStyles } from './styles'
@@ -44,7 +44,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     )
 
     const handleBlur = useCallback(
-      (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      (args: BlurEvent) => {
         props.onBlur?.(args)
         props.onFocusChange?.(false)
         setIsFocused(false)
@@ -53,7 +53,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     )
 
     const handleFocus = useCallback(
-      (args: NativeSyntheticEvent<TextInputFocusEventData>) => {
+      (args: FocusEvent) => {
         props.onFocus?.(args)
         props.onFocusChange?.(true)
         setIsFocused(true)

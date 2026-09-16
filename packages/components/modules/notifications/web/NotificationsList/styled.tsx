@@ -15,3 +15,7 @@ export const HeaderContainer = styled(Box)(({ theme }) => ({
 export const ListContainer = styled(Box)(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
 }))
+
+export const HeaderSpacer = styled('div')(({ theme }) => ({
+  height: theme.spacing(1),
+}))

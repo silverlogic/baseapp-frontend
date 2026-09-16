@@ -7,7 +7,7 @@ import { TextField } from '@baseapp-frontend/design-system/components/web/inputs
 import { Box, Button, Typography, useTheme } from '@mui/material'
 
 import { DEFAULT_IMAGE_FORMATS, DEFAULT_IMAGE_MAX_SIZE } from './constants'
-import { UploadImageContainer } from './styled'
+import { ErrorContainer, UploadImageContainer } from './styled'
 import { EditGroupTitleAndImageProps } from './types'
 import { getImageUrl } from './utils'
 
@@ -43,11 +43,11 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
       <UploadImageContainer>
         <CircledAvatar src={imageUrl} width={144} height={144} hasError={!!imageError} />
         {imageError && (
-          <div className="text-center">
+          <ErrorContainer>
             <Typography color="error.main" variant="caption">
               {imageError.message}
             </Typography>
-          </div>
+          </ErrorContainer>
         )}
         <FileUploadButton
           control={control}
@@ -75,7 +75,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
         control={control}
         disabled={isMutationInFlight}
         name={FORM_VALUE.title}
-        className="h-[min-content]"
+        sx={{ height: 'min-content' }}
         onKeyUp={() => {
           trigger(FORM_VALUE.title)
         }}

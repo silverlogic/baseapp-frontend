@@ -17,4 +17,14 @@ export const createStyles = (theme: Theme) =>
       height: 1,
       backgroundColor: theme.colors.error.main,
     },
+    dateGroup: {
+      alignSelf: 'center',
+      backgroundColor: theme.colors.surface.active,
+      borderRadius: 4,
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      marginTop: 16,
+      marginBottom: 8,
+      textAlign: 'center',
+    },
   })

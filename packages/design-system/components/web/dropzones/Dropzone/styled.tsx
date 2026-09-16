@@ -162,3 +162,14 @@ export const ButtonContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) 
   width: 'fit-content',
   gap: theme.spacing(2),
 }))
+
+export const ContentContainer = styled('div')({
+  maxWidth: 'none',
+  width: '100%',
+})
+
+export const DropzoneGrid = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateRows: '1fr min-content',
+}))

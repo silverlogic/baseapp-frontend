@@ -18,4 +18,10 @@ export interface MemberItemProps {
   canChangeMember?: boolean
   userId?: string
   searchQuery?: string
+  /** Email the invitation was sent to (for invitations whose user has no account yet). */
+  invitedEmail?: string | null
+  /** ISO datetime the invitation expires at (used to detect time-based expiry). */
+  invitationExpiresAt?: string | null
+  /** Relay id of the ProfileUserRole (invitation), used for resend/cancel mutations. */
+  invitationId?: string
 }

@@ -3,10 +3,10 @@
 import { FC, useCallback, useState } from 'react'
 
 import Collapse from '@mui/material/Collapse'
-import ListSubheader from '@mui/material/ListSubheader'
 import Stack from '@mui/material/Stack'
 
 import NavList from './NavList'
+import { GroupSubheader } from './styled'
 import type { GroupProps } from './types'
 
 const Group: FC<GroupProps> = ({ subheader, items, slotProps }) => {
@@ -24,30 +24,15 @@ const Group: FC<GroupProps> = ({ subheader, items, slotProps }) => {
     <Stack sx={{ px: 2 }}>
       {subheader ? (
         <>
-          <ListSubheader
+          <GroupSubheader
             disableGutters
             disableSticky
             onClick={handleToggle}
-            sx={{
-              fontSize: 11,
-              cursor: 'pointer',
-              typography: 'overline',
-              display: 'inline-flex',
-              color: 'text.disabled',
-              mb: `${slotProps?.gap ?? 4}px`,
-              p: (theme) => theme.spacing(2, 1, 1, 1.5),
-              transition: (theme) =>
-                theme.transitions.create(['color'], {
-                  duration: theme.transitions.duration.shortest,
-                }),
-              '&:hover': {
-                color: 'text.primary',
-              },
-              ...slotProps?.subheader,
-            }}
+            gap={slotProps?.gap}
+            sx={slotProps?.subheader}
           >
             {subheader}
-          </ListSubheader>
+          </GroupSubheader>
 
           <Collapse in={open}>{content}</Collapse>
         </>

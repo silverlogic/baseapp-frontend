@@ -1,11 +1,12 @@
 'use client'
 
-import { forwardRef } from 'react'
+import { forwardRef, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
 import { ConnectionHandler } from 'react-relay'
 
@@ -14,7 +15,11 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../__shared__/common'
-import { SocialInput as DefaultSocialInput } from '../../../__shared__/web'
+import {
+  SocialInput as DefaultSocialInput,
+  useFormMentions,
+  withMentionsInSocialInputProps,
+} from '../../../__shared__/web'
 import { MESSAGE_TYPE, useSendMessageMutation } from '../../common'
 import { SendMessageProps } from './types'
 
@@ -74,7 +79,10 @@ let nextClientMutationId = 0
  * ```
  */
 const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
-  ({ roomId, SocialInput = DefaultSocialInput, SocialInputProps = {} }, ref) => {
+  (
+    { roomId, SocialInput = DefaultSocialInput, SocialInputProps = {}, disableMentions = true },
+    ref,
+  ) => {
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
 
@@ -82,7 +90,18 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
     })
+    const { setValue } = form
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
+
+    const { mentions } = useFormMentions<SocialUpsertForm>({
+      setValue,
+      disabled: disableMentions,
+    })
+
+    const mergedSocialInputProps = useMemo(
+      () => withMentionsInSocialInputProps(SocialInputProps, mentions),
+      [SocialInputProps, mentions],
+    )
 
     const onSubmit = (data: SocialUpsertForm) => {
       if (isMutationInFlight || !currentProfile) return
@@ -144,13 +163,15 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
     }
 
     return (
-      <SocialInput
-        ref={ref}
-        form={form}
-        submit={onSubmit}
-        isLoading={isMutationInFlight}
-        {...SocialInputProps}
-      />
+      <Box paddingRight={2}>
+        <SocialInput
+          ref={ref}
+          form={form}
+          submit={onSubmit}
+          isLoading={isMutationInFlight}
+          {...mergedSocialInputProps}
+        />
+      </Box>
     )
   },
 )

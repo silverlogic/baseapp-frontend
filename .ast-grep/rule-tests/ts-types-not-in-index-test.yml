@@ -1,0 +1,15 @@
+id: ts-types-not-in-index
+valid:
+  - |
+    import type { ProfileCardProps } from './types'
+
+    const ProfileCard = ({ name }: ProfileCardProps) => <div>{name}</div>
+invalid:
+  - |
+    interface ProfileCardProps {
+      name: string
+    }
+
+    const ProfileCard = ({ name }: ProfileCardProps) => <div>{name}</div>
+  - |
+    export type TabValue = 'active' | 'archived'

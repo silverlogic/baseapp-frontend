@@ -1,0 +1,218 @@
+id: relay-uselazyloadquery-in-list
+snapshots:
+  ? |
+    const CommentItem = ({ id }) => {
+      const data = useLazyLoadQuery<CommentQueryType>(CommentQuery, { id })
+      return <div>{data.comment.body}</div>
+    }
+
+    const CommentsList = ({ ids }) => (
+      <div>{ids.map((id) => <CommentItem key={id}>{id}</CommentItem>)}</div>
+    )
+  : labels:
+    - source: <CommentItem key={id}>{id}</CommentItem>
+      style: primary
+      start: 209
+      end: 249
+    - source: CommentItem
+      style: secondary
+      start: 6
+      end: 17
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 49
+      end: 65
+    - source: useLazyLoadQuery<CommentQueryType>(CommentQuery, { id })
+      style: secondary
+      start: 49
+      end: 105
+    - source: |-
+        CommentItem = ({ id }) => {
+          const data = useLazyLoadQuery<CommentQueryType>(CommentQuery, { id })
+          return <div>{data.comment.body}</div>
+        }
+      style: secondary
+      start: 6
+      end: 147
+    - source: |
+        const CommentItem = ({ id }) => {
+          const data = useLazyLoadQuery<CommentQueryType>(CommentQuery, { id })
+          return <div>{data.comment.body}</div>
+        }
+
+        const CommentsList = ({ ids }) => (
+          <div>{ids.map((id) => <CommentItem key={id}>{id}</CommentItem>)}</div>
+        )
+      style: secondary
+      start: 0
+      end: 260
+    - source: ids.map
+      style: secondary
+      start: 193
+      end: 200
+    - source: ids.map((id) => <CommentItem key={id}>{id}</CommentItem>)
+      style: secondary
+      start: 193
+      end: 250
+  ? |
+    const MessageItem = ({ id }) => {
+      const data = useLazyLoadQuery<MessageQueryType>(MessageQuery, { id })
+      return <div>{data.message.body}</div>
+    }
+
+    const MessagesList = ({ ids }) => (
+      <Virtuoso data={ids} itemContent={(index) => <MessageItem id={ids[index]} />} />
+    )
+  : labels:
+    - source: <MessageItem id={ids[index]} />
+      style: primary
+      start: 232
+      end: 263
+    - source: MessageItem
+      style: secondary
+      start: 6
+      end: 17
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 49
+      end: 65
+    - source: useLazyLoadQuery<MessageQueryType>(MessageQuery, { id })
+      style: secondary
+      start: 49
+      end: 105
+    - source: |-
+        MessageItem = ({ id }) => {
+          const data = useLazyLoadQuery<MessageQueryType>(MessageQuery, { id })
+          return <div>{data.message.body}</div>
+        }
+      style: secondary
+      start: 6
+      end: 147
+    - source: |
+        const MessageItem = ({ id }) => {
+          const data = useLazyLoadQuery<MessageQueryType>(MessageQuery, { id })
+          return <div>{data.message.body}</div>
+        }
+
+        const MessagesList = ({ ids }) => (
+          <Virtuoso data={ids} itemContent={(index) => <MessageItem id={ids[index]} />} />
+        )
+      style: secondary
+      start: 0
+      end: 270
+    - source: itemContent
+      style: secondary
+      start: 208
+      end: 219
+    - source: itemContent={(index) => <MessageItem id={ids[index]} />}
+      style: secondary
+      start: 208
+      end: 264
+  ? |
+    const NotificationItem = ({ id }) => {
+      const data = useLazyLoadQuery<NotificationQueryType>(NotificationQuery, { id })
+      return <Text>{data.notification.title}</Text>
+    }
+
+    const NotificationsList = ({ ids }) => (
+      <FlatList data={ids} renderItem={({ item }) => <NotificationItem id={item} />} />
+    )
+  : labels:
+    - source: <NotificationItem id={item} />
+      style: primary
+      start: 262
+      end: 292
+    - source: NotificationItem
+      style: secondary
+      start: 6
+      end: 22
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 54
+      end: 70
+    - source: useLazyLoadQuery<NotificationQueryType>(NotificationQuery, { id })
+      style: secondary
+      start: 54
+      end: 120
+    - source: |-
+        NotificationItem = ({ id }) => {
+          const data = useLazyLoadQuery<NotificationQueryType>(NotificationQuery, { id })
+          return <Text>{data.notification.title}</Text>
+        }
+      style: secondary
+      start: 6
+      end: 170
+    - source: |
+        const NotificationItem = ({ id }) => {
+          const data = useLazyLoadQuery<NotificationQueryType>(NotificationQuery, { id })
+          return <Text>{data.notification.title}</Text>
+        }
+
+        const NotificationsList = ({ ids }) => (
+          <FlatList data={ids} renderItem={({ item }) => <NotificationItem id={item} />} />
+        )
+      style: secondary
+      start: 0
+      end: 299
+    - source: renderItem
+      style: secondary
+      start: 236
+      end: 246
+    - source: renderItem={({ item }) => <NotificationItem id={item} />}
+      style: secondary
+      start: 236
+      end: 293
+  ? |
+    const RoomItem = ({ id }) => {
+      const data = useLazyLoadQuery<RoomQueryType>(RoomQuery, { id })
+      return <div>{data.room.name}</div>
+    }
+
+    const Rooms = ({ ids }) => (
+      <div>{ids.map((id) => <RoomItem key={id} id={id} />)}</div>
+    )
+  : labels:
+    - source: <RoomItem key={id} id={id} />
+      style: primary
+      start: 190
+      end: 219
+    - source: RoomItem
+      style: secondary
+      start: 6
+      end: 14
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 46
+      end: 62
+    - source: useLazyLoadQuery<RoomQueryType>(RoomQuery, { id })
+      style: secondary
+      start: 46
+      end: 96
+    - source: |-
+        RoomItem = ({ id }) => {
+          const data = useLazyLoadQuery<RoomQueryType>(RoomQuery, { id })
+          return <div>{data.room.name}</div>
+        }
+      style: secondary
+      start: 6
+      end: 135
+    - source: |
+        const RoomItem = ({ id }) => {
+          const data = useLazyLoadQuery<RoomQueryType>(RoomQuery, { id })
+          return <div>{data.room.name}</div>
+        }
+
+        const Rooms = ({ ids }) => (
+          <div>{ids.map((id) => <RoomItem key={id} id={id} />)}</div>
+        )
+      style: secondary
+      start: 0
+      end: 230
+    - source: ids.map
+      style: secondary
+      start: 174
+      end: 181
+    - source: ids.map((id) => <RoomItem key={id} id={id} />)
+      style: secondary
+      start: 174
+      end: 220

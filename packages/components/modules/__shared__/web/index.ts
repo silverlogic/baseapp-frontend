@@ -1,11 +1,12 @@
 // exports web __shared__ components
 
+export { default as useFormMentions } from './hooks/useFormMentions'
+export { withMentionsInSocialInputProps } from './hooks/useFormMentions'
+export type * from './hooks/useFormMentions/types'
+
 export { default as ActionsOverlay } from './ActionsOverlay'
 export * from './ActionsOverlay/constants'
 export type * from './ActionsOverlay/types'
-
-export { default as ReactionButton } from './ReactionButton'
-export type * from './ReactionButton/types'
 
 export { default as SocialInput } from './SocialInput'
 export type * from './SocialInput/types'

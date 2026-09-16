@@ -9,6 +9,7 @@ import { DateTime } from 'luxon'
 import { MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME } from '../../../../common'
 import DefaultMessageItem from './MessageItem'
 import Timestamp from './Timestamp'
+import { MessageColumn, MessageRow } from './styled'
 import { UserMessageProps } from './types'
 
 const UserMessage: FC<UserMessageProps> = ({
@@ -70,29 +71,19 @@ const UserMessage: FC<UserMessageProps> = ({
   if (!message) return null
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'row', alignSelf: flexAlignments, width: '100%' }}>
+    <MessageRow alignment={flexAlignments}>
       {canShowAvatar && (
         <Box paddingRight="12px">
           <AvatarWithPlaceholder
-            className="self-start justify-self-center"
             width={32}
             height={32}
             src={message?.profile?.image?.url}
-            sx={{ border: 'none' }}
+            sx={{ alignSelf: 'start', border: 'none', justifySelf: 'center' }}
             showDeletedUser={isProfileNullOrUndefined}
           />
         </Box>
       )}
-      <Box
-        sx={{
-          display: 'flex',
-          ml: isFirstGroupedMessage ? 0 : 5.5,
-          alignSelf: flexAlignments,
-          alignItems: flexAlignments,
-          flexDirection: 'column',
-          width: '100%',
-        }}
-      >
+      <MessageColumn alignment={flexAlignments} grouped={isFirstGroupedMessage}>
         {canShowName && (
           <Typography variant="subtitle2" color="text.primary" marginBottom={1 / 2}>
             {isProfileNullOrUndefined ? 'Deleted User' : message?.profile?.name}
@@ -105,8 +96,8 @@ const UserMessage: FC<UserMessageProps> = ({
           {...MessageItemProps}
         />
         {renderLastMessageTime(messageIndex)}
-      </Box>
-    </Box>
+      </MessageColumn>
+    </MessageRow>
   )
 }
 

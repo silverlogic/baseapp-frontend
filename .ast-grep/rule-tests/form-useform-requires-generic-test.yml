@@ -1,0 +1,14 @@
+id: form-useform-requires-generic
+valid:
+  - |
+    const form = useForm<EditProfileForm>({
+      mode: 'onBlur',
+      resolver: zodResolver(VALIDATION_SCHEMA),
+      defaultValues: DEFAULT_FORM_VALUES,
+    })
+invalid:
+  - |
+    const form = useForm({
+      resolver: zodResolver(VALIDATION_SCHEMA),
+      defaultValues: DEFAULT_FORM_VALUES,
+    })

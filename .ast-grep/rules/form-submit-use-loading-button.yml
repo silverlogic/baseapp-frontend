@@ -1,0 +1,22 @@
+id: form-submit-use-loading-button
+language: Tsx
+severity: warning
+message: "Use `LoadingButton` from `@mui/lab` for submit and other async actions, with `loading` and `disabled` wired to the mutation state — a plain `Button` gives no in-flight feedback. See .claude/skills/frontend-patterns/references/forms.md"
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  all:
+    - has:
+        field: name
+        regex: ^Button$
+    # literal type="submit" only — a computed `type={submitType}` isn't statically submit
+    - has:
+        kind: jsx_attribute
+        all:
+          - has:
+              kind: property_identifier
+              regex: ^type$
+          - has:
+              kind: string
+              regex: "^['\"]submit['\"]$"

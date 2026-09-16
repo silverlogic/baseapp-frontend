@@ -1,5 +1,186 @@
 # @baseapp-frontend/components
 
+## 2.1.1
+
+### Patch Changes
+
+- Web Add contact to multiple groups
+
+## 2.1.0
+
+### Minor Changes
+
+- React Native comments, sharing all logic with web through a common hook layer.
+
+  **Native (`comments/native`)**: full comments experience — create, reply (with thread auto-expand after submitting), edit and delete via a long-press action sheet gated on permissions, pin/unpin with a pinned-first re-sort, infinite scrolling, a thread-depth cap, a single morphing bottom composer (`BaseComments` + `useCommentComposer` over one always-mounted `SocialInputDrawer`), and tappable author avatar/name that open the profile (navigates only when the profile has a registered `urlPath`).
+
+  **Shared logic (`comments/common`)**: the behavior both platforms consume now lives in common hooks — `useCommentCreateForm` / `useCommentUpdateForm` (form + submit, connection-id derivation, `setFormRelayErrors`, reset-on-success, optional mentions), `useCommentItem` (replies expansion with a consume-once auto-expand signal, reply targeting, deletion, profile URL), `useCommentActions` (headless share/pin/edit/delete descriptors owning the pin mutation), an extended `useCommentList` (`comments`, stable `refetchWithOrder`), and utils (`getCommentsConnectionId`, `getNextClientMutationId`, `toCommentEditTarget`). The `CommentReplyProvider` store is platform-neutral (generic `commentItemRef`), gains `editingComment` (mutually exclusive with reply mode) and `commentIdToExpand`, and `useCommentReply` accepts a selector for per-item subscriptions.
+
+  **Web**: `CommentCreate`, `CommentUpdate`, `CommentItem`, and `useCommentOptions` are now thin UI layers over the shared hooks — props and behavior unchanged.
+
+  Native `CommentsListProps`/`CommentItemProps` no longer accept `onReply`/`onLongPress`/`commentIdToExpand`/`onEdit`/`target` (reply targeting and the action sheet flow through the reply store and `CommentActionsProvider`), and native `CommentItem` must render inside `Comments`/`BaseComments`.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@2.1.0
+
+## 2.0.3
+
+### Patch Changes
+
+- 57ab98e: Prevent sending messages that contain only whitespace: reject markdown-escaped whitespace-only bodies (e.g. `&#x20;`) in the social upsert validation schema and run validation on the native MessageCreate submit
+
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [5200c84]
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/design-system@2.0.1
+  - @baseapp-frontend/utils@4.2.1
+  - @baseapp-frontend/authentication@6.0.1
+  - @baseapp-frontend/graphql@2.0.1
+
+## 2.0.1
+
+### Patch Changes
+
+- RN add contact to multiple Groups
+
+## 2.0.0
+
+### Patch Changes
+
+- 007b2ae: Replace the per-module one-off Relay error handling in mutation hooks (messages, profiles, notifications, comments) and in `InviteMemberDialog`/`BlockButtonWithDialog` with the shared helpers from `@baseapp-frontend/utils` (`sendMutationErrorToast` / `getMutationErrorMessage`). Behavior notes:
+
+  - Error toasts show the first error message instead of one toast per message.
+  - Hooks whose GraphQL documents select `errors { field messages }` but previously ignored them now surface those payload errors: chat create (1:1 and group), chat delete/unread/archive message flows, `profileUserRoleUpdate`, and the leave-group flow. Hooks whose payload errors are already form-handled by their components (send/edit message, chat room update, organization create, comment create/update) stay transport-only to avoid double display.
+  - `ReadMessages` stays transport-only on purpose: it fires passively from `useEffect`s, so payload validation errors would surface as unattributable toasts during navigation.
+  - `useCreateChatRoomMutation` no longer activates the chat room (`setChatRoom`) on an error response, and `GroupChatCreate` drops its duplicate generic toast (the hook now toasts the specific message; field errors still map to the form).
+  - `RemoveMember` no longer shows "Member removed successfully" when the mutation completes with top-level GraphQL errors.
+  - `BlockButtonWithDialog` no longer closes the dialog and toasts success when the mutation returns transport errors.
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+- Updated dependencies [c2f042d]
+  - @baseapp-frontend/utils@4.2.0
+  - @baseapp-frontend/design-system@2.0.0
+  - @baseapp-frontend/authentication@6.0.0
+  - @baseapp-frontend/graphql@2.0.0
+
+## 1.8.0
+
+### Minor Changes
+
+- feat: member invite dialog for ProfileMembers
+  - Add an "Add Member" flow: a dialog with an `allProfiles` typeahead (results in a portaled Popper) plus removable chips for selected profiles and free-text emails.
+  - Existing profiles are added via `profileUserRoleCreate(usersIds)`; typed emails go through `profileSendInvitation`.
+  - Gated on the new `canAddMember` permission.
+  - Newly added/invited members are prepended into the list via Relay's `@prependNode` connection directive instead of refetching.
+- feat: expired-invitation handling in ProfileMembers
+  - Extend `MemberItemFragment` with `invitedEmail` and `invitationExpiresAt`.
+  - Add `ResendInvitation` (`profileResendInvitation`) and `CancelInvitation` (`profileCancelInvitation`) mutations.
+  - Render expired invitations in the members list — including email-only invites with no account — with an "Expired" label and an action dropdown (Resend Invitation / Remove); dialogs lifted to fragment level.
+
+## 1.7.0
+
+### Minor Changes
+
+- feat: shared flat-page components for web and native
+  - Add a `pages` module split across web and native over the shared `pages/common` fragments/queries, exported at `@baseapp-frontend/components/pages/web` and `@baseapp-frontend/components/pages/native`.
+  - `pages/web` `PageComponent` renders the page title, admin edit/delete links, the Markdown body, and comments.
+  - `pages/native` `PageComponent` renders the page title and HTML body via `@native-html/render`, with tightened block spacing and web-like margin collapsing; anchor taps route internal `/…` paths through expo-router and open only allow-listed external schemes (`http(s)`, `mailto`, `tel`).
+  - Add `@native-html/render`, `highlight.js`, and `rehype-highlight` dependencies.
+- feat: native "go to profile" navigation in messages
+  - Add the `getProfilePath` helper (prefers the profile's `urlPath`, falls back to `/profile/:id`).
+  - Expose the other participant's profile `urlPath` and `id` on `RoomTitleFragment`.
+  - Wire "go to profile" from the chat list, chat room, single-chat details, and group member options.
+
+## 1.6.1
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.3
+
+## 1.6.0
+
+### Minor Changes
+
+- fix: include groups in active/unread chat tabs and overlay tab loading spinner
+  - Drop `defaultValue: false` on `isGroup` in `RoomsListFragment` so unset means "no filter" (returns both group and non-group rooms).
+  - In `AllChatRoomsList`, send `isGroup: true` only on the Groups tab and `null` on Active / Unread / Archived, so groups also appear in those tabs.
+  - Update `useRoomListSubscription` connection matcher to treat a `null`, `isGroup` on a stored connection as "match any room", so newly arrived group rooms slot into Active / Unread / Archived connections.
+  - Render the tab loading `CircularProgress` overlaid on top of the tab label (LoadingButton-style) instead of pushing it to the side, keeping the tab width stable while refetching.
+
+## 1.5.26
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.3
+  - @baseapp-frontend/utils@4.0.9
+  - @baseapp-frontend/graphql@1.4.2
+  - @baseapp-frontend/design-system@1.2.13
+
+## 1.5.25
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/authentication@5.1.2
+  - @baseapp-frontend/design-system@1.2.12
+  - @baseapp-frontend/utils@4.0.8
+  - @baseapp-frontend/graphql@1.4.1
+
+## 1.5.24
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/graphql@1.4.0
+
+## 1.5.23
+
+### Patch Changes
+
+- Add `useFormMentions` hook and `withMentionsInSocialInputProps` helper for wiring `MarkdownEditorField` mentions into `SocialInput`-based forms.
+- Comments, messages, and content-feed mutations now thread `mentionedProfileIds` through their submit payloads.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.11
+  - @baseapp-frontend/utils@4.0.7
+  - @baseapp-frontend/authentication@5.1.1
+  - @baseapp-frontend/graphql@1.3.10
+
+## 1.5.22
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.10
+
+## 1.5.21
+
+### Patch Changes
+
+- Add Extra Centered Header component
+
+## 1.5.20
+
+### Patch Changes
+
+- Make notifications subscription customizable
+- Fix duplicate Older divider when mark as read
+
+## 1.5.19
+
+### Patch Changes
+
+- Use `Mardown` componentes on `comments`, `messages` and `content-feed` modules.
+- Updated dependencies
+  - @baseapp-frontend/design-system@1.2.9
+
 ## 1.5.18
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useRef } from 'react'
+import { FC, useEffect, useMemo, useRef } from 'react'
 
 import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
@@ -12,7 +12,12 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../__shared__/common'
-import { SocialInput as DefaultSocialInput, UpdateSubmitActions } from '../../../__shared__/web'
+import {
+  SocialInput as DefaultSocialInput,
+  UpdateSubmitActions,
+  useFormMentions,
+  withMentionsInSocialInputProps,
+} from '../../../__shared__/web'
 import { useMessageUpdateMutation } from '../../common/graphql/mutations/MessageUpdate'
 import { MessageUpdateProps } from './types'
 
@@ -76,15 +81,27 @@ const MessageUpdate: FC<MessageUpdateProps> = ({
   onCancel,
   SocialInput = DefaultSocialInput,
   SocialInputProps = {},
+  disableMentions = true,
 }) => {
   const inputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<SocialUpsertForm>({
-    defaultValues: { body: message.content ?? '' },
+    defaultValues: { body: message.content ?? '', mentionedProfileIds: [] },
     resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
   })
+  const { setValue } = form
 
   const [commitUpdate, isMutationInFlight] = useMessageUpdateMutation()
+
+  const { mentions } = useFormMentions<SocialUpsertForm>({
+    setValue,
+    disabled: disableMentions,
+  })
+
+  const mergedSocialInputProps = useMemo(
+    () => withMentionsInSocialInputProps(SocialInputProps, mentions),
+    [SocialInputProps, mentions],
+  )
 
   const onSubmit = async (data: SocialUpsertForm) => {
     if (isMutationInFlight) return
@@ -144,7 +161,7 @@ const MessageUpdate: FC<MessageUpdateProps> = ({
         ariaLabel: 'save message edit',
         cancelAriaLabel: 'cancel message edit',
       }}
-      {...SocialInputProps}
+      {...mergedSocialInputProps}
     />
   )
 }

@@ -1,0 +1,22 @@
+id: ts-no-enum
+valid:
+  - |
+    export const DOCUMENT_STATUS = {
+      draft: 'draft',
+      published: 'published',
+    } as const
+
+    export type DocumentStatus = ValueOf<typeof DOCUMENT_STATUS>
+  - |
+    type DocumentStatus = 'draft' | 'published' | 'archived'
+invalid:
+  - |
+    enum DocumentStatus {
+      Draft = 'draft',
+      Published = 'published',
+    }
+  - |
+    export const enum Direction {
+      Up,
+      Down,
+    }

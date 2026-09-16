@@ -16,7 +16,7 @@ import { ActionsOverlay, HOVER_OVERLAY_MODES } from '../../../../../../__shared_
 import { MessageItemFragment } from '../../../../../common'
 import { useMessageDeleteMutation } from '../../../../../common/graphql/mutations/MessageDelete'
 import MessageUpdate from '../../../../MessageUpdate'
-import { MessageItemContainer } from './styled'
+import { MessageContent, MessageItemContainer } from './styled'
 import { MessageItemProps } from './types'
 
 const MessageItem: FC<MessageItemProps> = ({
@@ -61,28 +61,15 @@ const MessageItem: FC<MessageItemProps> = ({
       return <MessageUpdate message={message} onCancel={() => setIsEditMode(false)} />
     }
 
-    let messageColor = isOwnMessage ? 'text.primary' : 'primary.contrastText'
-
     if (deletedMessage) {
-      messageColor = 'text.disabled'
+      return (
+        <Typography variant="body2" color="text.disabled" sx={{ maxWidth: '100%' }}>
+          <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} /> {message?.content}
+        </Typography>
+      )
     }
 
-    return (
-      <Typography
-        variant="body2"
-        color={messageColor}
-        sx={{
-          maxWidth: '100%',
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'normal',
-          overflowWrap: 'anywhere',
-        }}
-      >
-        {deletedMessage && <BlockIcon sx={{ fontSize: '20px', color: 'grey.500' }} />}
-        {deletedMessage && ' '}
-        {message?.content}
-      </Typography>
-    )
+    return <MessageContent isOwnMessage={isOwnMessage}>{message?.content}</MessageContent>
   }
 
   return (

@@ -1,0 +1,15 @@
+id: tailwind-no-raw-text-size
+valid:
+  - |
+    <span className="prose-body2 text-text-secondary">Subtitle</span>
+  - |
+    <div className="flex items-center gap-2 text-left">content</div>
+  - |
+    <span className="icon-text-sm prose-body2">Subtitle</span>
+  - |
+    <span className="text-sm-foo">Subtitle</span>
+invalid:
+  - |
+    <span className="text-sm text-text-secondary">Subtitle</span>
+  - |
+    <p className="mb-2 md:text-2xl">Title</p>

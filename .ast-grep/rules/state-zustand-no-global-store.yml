@@ -1,0 +1,23 @@
+id: state-zustand-no-global-store
+language: Tsx
+severity: warning
+message: "Module-level `create(...)` builds one store for the whole process. In App Router, module scope in a `'use client'` file persists across HTTP requests and leaks state between users. Move it into a `createStore` factory called from a Provider that holds it in a `useRef`. See .claude/skills/frontend-patterns/references/state-management.md"
+ignores:
+  # stories are never server-rendered
+  - "**/__storybook__/**"
+  - "**/*.stories.tsx"
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: ^create$
+    # a call inside any function body is per-mount, which is what the pattern requires
+    - not:
+        inside:
+          stopBy: end
+          any:
+            - kind: statement_block
+            - kind: arrow_function
+            - kind: function_declaration
+            - kind: method_definition

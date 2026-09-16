@@ -23,7 +23,7 @@ export const useUnreadChatMutation = (): [
   (config: UseMutationConfig<UnreadChatMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
     useMutation<UnreadChatMutation>(UnreadChatMutationQuery)
 
@@ -31,9 +31,7 @@ export const useUnreadChatMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(response.chatRoomUnread?.errors, errors)
 
         config?.onCompleted?.(response, errors)
       },

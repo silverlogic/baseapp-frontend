@@ -1,5 +1,89 @@
 # @baseapp-frontend/design-system
 
+## 2.1.0
+
+### Minor Changes
+
+- Native social-input and comments primitives:
+
+  - `SocialTextInput` (native): multiline social composer input with edit/reply banners, tool row, and controller-driven inline field errors — error border while focused plus a warning icon + caption rendered from the form field's error message (via `withNativeController`'s `error`/`helperText`).
+  - `ConfirmDialog` (native): confirmation dialog mirroring the web `ConfirmDialog` API (`title`, `content`, `cancelText`, `action` slot) built on react-native-paper's `Portal` + `Dialog`, with a close (X) button in the title row and a built-in outlined Cancel button.
+  - New native icons: `EmojiIcon`, `FavoriteIcon`, `FavoriteSelectedIcon`, `PinIcon`, `ReplyIcon`.
+
+## 2.0.1
+
+### Patch Changes
+
+- 5200c84: Fix Dropzone multi-file gallery: clicking the remove (×) icon or the image preview no longer bubbles to the dropzone root and re-opens the file picker; the remove button now has an explicit type="button" so it doesn't submit enclosing forms
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/utils@4.2.1
+
+## 2.0.0
+
+### Patch Changes
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+  - @baseapp-frontend/utils@4.2.0
+
+## 1.4.0
+
+### Minor Changes
+
+- Add `AutocompleteField`, a design-system autocomplete/combobox input built on MUI `Autocomplete` — RHF integration via `withController`, debounced text input, an `isPending` spinner, and a default `renderInput`. The member-invite search is its first consumer.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.1.0
+
+## 1.3.0
+
+### Minor Changes
+
+- feat: add native navigation icons
+  - Add `CommentsIcon`, `ForumIcon`, `AuthenticationIcon`, `FlatPageIcon`, `FeatureRequestsIcon`, `FeedbackIcon`, and `ActivityLogIcon` to the native icon set (ported from the web icons), so the mobile sidebar can mirror the web navigation.
+
+## 1.2.13
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.9
+
+## 1.2.12
+
+### Patch Changes
+
+- Fix cross-request data leak by removing the module-level singleton from the UI settings store — the store is now created fresh per `UISettingsProvider` mount.
+- Remove the unused `getUISettingsFromStore`, `setUISettingsInStore`, `resetSettingsStore`, and `getSettingsStore` exports — `useUISettings()` and the hook setter are unchanged.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.8
+
+## 1.2.11
+
+### Patch Changes
+
+- Add `@`-mention support to `MarkdownEditorField` via the new `mentions` prop (`MentionsConfig` — active arm with a `MentionsSearchController`, or `{ disabled: true }`).
+- `Markdown` component now renders persisted `[@name](mention://id)` links as a `MentionChip`.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.0.7
+
+## 1.2.10
+
+### Patch Changes
+
+- fix identation for bullet and numbered lists under MarkdownEditorField
+
+## 1.2.9
+
+### Patch Changes
+
+- Creates the `Markdown` component to translate markdown content created by the `MarkdownEditorField`.
+- `MarkdownEditorField` has now `maxHeight` and `labelBackgroundColor` props.
+- `SocialTextField` now defaults `mode` to `rich-text`.
+- Create `LazyLoadImage` component to be used on the `Markdown` component.
+
 ## 1.2.8
 
 ### Patch Changes

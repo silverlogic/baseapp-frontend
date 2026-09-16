@@ -15,7 +15,6 @@ import {
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
-  useNotificationsSubscription,
 } from '../../common'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
@@ -23,6 +22,7 @@ import DefaultNotificationItem from './NotificationItem'
 import {
   HeaderContainer as DefaultHeaderContainer,
   ListContainer as DefaultListContainer,
+  HeaderSpacer,
 } from './styled'
 import { NotificationsListProps } from './types'
 
@@ -49,12 +49,14 @@ const NotificationsList: FC<NotificationsListProps> = ({
     NotificationsListFragment$key
   >(NotificationsListFragment, me)
 
-  useNotificationsSubscription(me?.id)
-
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
 
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
@@ -67,6 +69,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
           <NotificationItem
             key={`notification-${notification.id}`}
             notification={notification}
+            refetchNotifications={refetchNotifications}
             {...NotificationItemProps}
           />
         </>
@@ -76,12 +79,13 @@ const NotificationsList: FC<NotificationsListProps> = ({
       <NotificationItem
         key={`notification-${notification.id}`}
         notification={notification}
+        refetchNotifications={refetchNotifications}
         {...NotificationItemProps}
       />
     )
   }
 
-  const renderVirtuosoHeader = () => <div className="h-2" />
+  const renderVirtuosoHeader = () => <HeaderSpacer />
 
   const renderVirtuosoLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
@@ -118,10 +122,6 @@ const NotificationsList: FC<NotificationsListProps> = ({
         />
       </ListContainer>
     )
-  }
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
   }
 
   return (

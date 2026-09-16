@@ -16,7 +16,7 @@ import {
 
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { zodResolver } from '@hookform/resolvers/zod'
-import * as FileSystem from 'expo-file-system'
+import * as FileSystem from 'expo-file-system/legacy'
 import * as ImagePicker from 'expo-image-picker'
 import { FieldValues, useForm } from 'react-hook-form'
 import { Image, Platform, Pressable } from 'react-native'

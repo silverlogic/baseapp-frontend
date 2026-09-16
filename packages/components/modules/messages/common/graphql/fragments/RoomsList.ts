@@ -11,7 +11,7 @@ export const RoomsListFragment = graphql`
     q: { type: "String", defaultValue: "" }
     unreadMessages: { type: "Boolean", defaultValue: false }
     archived: { type: "Boolean", defaultValue: false }
-    isGroup: { type: "Boolean", defaultValue: false }
+    isGroup: { type: "Boolean" }
   )
   @refetchable(queryName: "chatRoomsPaginationQuery") {
     chatRooms(

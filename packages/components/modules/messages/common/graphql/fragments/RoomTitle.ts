@@ -8,5 +8,13 @@ export const RoomTitleFragment = graphql`
       url
     }
     title
+    otherParticipant {
+      profile {
+        id
+        urlPath {
+          path
+        }
+      }
+    }
   }
 `

@@ -19,7 +19,7 @@ import { ComponentWithPreloadedQuery, ComponentWithQueryRef, WithRelayOptions } 
 const withRelay =
   <QueryNode extends ConcreteRequest, Query extends OperationType, Props = {}>(
     Component: FC<Props & ComponentWithQueryRef<Query>>,
-    { fallback = 'Loading...', fetchPolicy = 'store-or-network' }: WithRelayOptions = {},
+    { fallback = 'Loading...', fetchPolicy = 'store-and-network' }: WithRelayOptions = {},
   ) =>
   (props: Props & ComponentWithPreloadedQuery<QueryNode, Query>) => {
     const { preloadedQuery } = props

@@ -34,3 +34,12 @@ export const ReplyContainer: ComponentType<BoxProps> = styled(Box)(({ theme }) =
   gap: theme.spacing(0.5),
   gridTemplateColumns: 'repeat(3, max-content)',
 }))
+
+export const ReplyBar = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.background.neutral,
+  borderRadius: 6,
+  display: 'flex',
+  justifyContent: 'space-between',
+  padding: theme.spacing(0.5, 1),
+  width: '100%',
+}))

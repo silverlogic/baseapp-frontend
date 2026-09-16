@@ -1,0 +1,16 @@
+id: ts-no-type-name-prefix
+language: Tsx
+severity: warning
+message: "Use prefix-less names for interfaces and types — no `I` prefix on interfaces, no `T` prefix on type aliases. See .claude/skills/frontend-conventions/references/typescript.md"
+ignores:
+  - "**/__generated__/**"
+rule:
+  any:
+    - kind: interface_declaration
+      has:
+        field: name
+        regex: ^I[A-Z]
+    - kind: type_alias_declaration
+      has:
+        field: name
+        regex: ^T[A-Z]

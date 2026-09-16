@@ -1,0 +1,23 @@
+id: query-no-inline-query-key
+valid:
+  - |
+    const { data } = useQuery({
+      queryKey: CUSTOMER_API_KEY.getCustomer(customerId),
+      queryFn: () => CustomerApi.getCustomer({ id: customerId }),
+    })
+  - |
+    await queryClient.prefetchQuery({
+      queryKey: [...ORDER_API_KEY.default, 'getOrder', quoteId],
+      queryFn: () => OrderApi.getOrder(quoteId),
+    })
+invalid:
+  - |
+    const { data } = useQuery({
+      queryKey: ['customer', customerId],
+      queryFn: () => CustomerApi.getCustomer({ id: customerId }),
+    })
+  - |
+    const { data } = useQuery({
+      queryKey: [`customer`, customerId],
+      queryFn: () => CustomerApi.getCustomer({ id: customerId }),
+    })

@@ -1,0 +1,29 @@
+id: next-image-explicit-dimensions
+language: Tsx
+severity: warning
+message: "`<Image>` needs explicit `width` and `height` (or `fill` inside a positioned container) — without them Next.js can't prevent layout shift. See .claude/skills/frontend-conventions/references/image-optimization.md"
+rule:
+  any:
+    - kind: jsx_opening_element
+    - kind: jsx_self_closing_element
+  all:
+    - has:
+        field: name
+        regex: ^Image$
+    # props spread in from elsewhere may carry the dimensions — don't guess
+    - not:
+        has:
+          kind: jsx_expression
+    - not:
+        has:
+          kind: jsx_attribute
+          regex: ^fill($|=)
+    - any:
+        - not:
+            has:
+              kind: jsx_attribute
+              regex: ^width=
+        - not:
+            has:
+              kind: jsx_attribute
+              regex: ^height=

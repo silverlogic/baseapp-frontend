@@ -1,0 +1,21 @@
+id: mui-sx-prop-limit
+valid:
+  - |
+    <Box sx={{ mt: 2, display: 'flex' }}>content</Box>
+  - |
+    <Box sx={{ display: 'flex', alignItems: 'center', padding: 2 }}>content</Box>
+  - |
+    <Container>content</Container>
+invalid:
+  - |
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 2,
+        padding: 3,
+        backgroundColor: 'surface.main',
+      }}
+    >
+      content
+    </Box>
