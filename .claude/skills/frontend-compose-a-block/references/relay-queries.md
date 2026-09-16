@@ -173,8 +173,8 @@ corrects itself; `network-only` on an action whose point is fresh data — a sea
 Nothing passed means `store-or-network`, right when a sibling already owns the record;
 `useCommentItem`'s `expandReplies` is the one place naming it. `store-and-network` also makes an
 app-level preload worth something to a query-driven module: the environment's `QueryResponseCache`
-holds 100 entries (`packages/graphql/config/environment.ts:178`) on a 5-second `CACHE_TTL`
-(`packages/graphql/config/environment.ts:28`).
+holds 100 entries — `size: 100` in `createQueryCache` — on a 5-second `CACHE_TTL`, both in
+`packages/graphql/config/environment.ts`.
 
 ## Per-package Relay wiring
 
@@ -184,8 +184,8 @@ Wiring is per package, not per monorepo, and it is five things. Copy them from
 1. **`relay.config.js`** — one line, no local options:
    `module.exports = require('@baseapp-frontend/config/relay.config.ts')`. The shared config sets
    `src: './'`, `schema: './schema.graphql'` and `language: 'typescript'`
-   (`packages/config/relay.config.ts:2-3,14`), and centralises output with
-   `artifactDirectory: './__generated__'` (`:15`).
+   (`src`, `schema` and `language` in `packages/config/relay.config.ts`), and centralises output
+   with its `artifactDirectory: './__generated__'`.
 2. **`schema.graphql` at the package root, committed** — 2,236 lines in `packages/components`.
    It is the compiler's input, so it is code, not a build artifact.
 3. **`__generated__/` gitignored with a tracked `.keep`** — `packages/components/.gitignore` ends

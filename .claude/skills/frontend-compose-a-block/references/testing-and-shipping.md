@@ -82,7 +82,7 @@ directory: the base config's `modulePathIgnorePatterns` excludes non-test `__moc
 
 ## The nine shims
 
-`packages/test/jest.config.ts:16` sets `setupFilesAfterEnv` and `:17-26` sets `moduleNameMapper`,
+`packages/test/jest.config.ts` sets `setupFilesAfterEnv` and `moduleNameMapper`,
 and every path in both is written `<rootDir>/__mocks__/*.ts`. Jest resolves `<rootDir>` to the
 package running the test — the **consumer** — never to `packages/test`. The mock bodies live in
 `packages/test/__mocks__/`, but the files jest looks for must exist in the package under test.
@@ -174,7 +174,7 @@ the only typecheck there is — no package declares a separate `typecheck` scrip
 root forms that fan out through turbo, each `dependsOn: ["^build"]`, so a filtered run builds
 upstream workspace deps first. Gates 4 and 5 have no package form at all.
 
-Gate 2 needs care. `packages/config/relay.config.ts:15` sets `artifactDirectory: './__generated__'`,
+Gate 2 needs care. `packages/config/relay.config.ts` sets `artifactDirectory: './__generated__'`,
 one directory at the package root, and `packages/components/.gitignore` ignores `/__generated__`
 while keeping its `.keep`. **No generated artifact is committed anywhere in the repo**, so
 `git status` can never show `__generated__` drift — what drifts is your documents against the
@@ -220,7 +220,7 @@ workflow runs `pnpm release`; neither is yours to run.
 
 ## Anti-patterns
 
-- Leaving the nine `__mocks__` shims in `packages/test/` — `packages/test/jest.config.ts:16-26`
+- Leaving the nine `__mocks__` shims in `packages/test/` — `packages/test/jest.config.ts`
   resolves them against the consuming package's `<rootDir>`, so jest cannot see them there.
 - Copying `packages/wagtail`'s test setup. It has `cypress.config.ts`, `webpack.config.ts`, the four
   cypress devDeps, and `cypress:open` / `cypress:clean` scripts, but no `test:component` script and

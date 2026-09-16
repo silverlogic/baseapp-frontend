@@ -188,7 +188,7 @@ Import it from `'react-relay'`. Two exceptions exist and only one is justified:
 `messages/common/utils.ts` imports `relay-connection-handler-plus` because it needs
 `getConnections`, which returns every filtered variant of a connection at once — the environment
 registers that handler for the `connection` handle at
-`packages/graphql/config/environment.ts:185-192`, so the plus variant is wired and safe.
+`packages/graphql/config/environment.ts` `handlerProvider`, so the plus variant is wired and safe.
 `messages/web/GroupChatCreate` imports from `'relay-runtime'` for no reason; it is the same object
 reached by a different path.
 

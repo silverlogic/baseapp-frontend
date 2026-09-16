@@ -47,7 +47,7 @@
       "files": [],
       "assertions": [
         "Rejects importing expo-file-system from common/, and names messages/common/graphql/mutations/CreateGroupChat.ts as the one file in the tree that already does it and has no resolution on web",
-        "Explains that packages/config/.eslintrc-with-restricted-paths.js:6-33 configures import/no-restricted-paths over paths, so a package specifier like expo-file-system or react-native clears every zone and fails at runtime instead of at lint",
+        "Explains that packages/config/.eslintrc-with-restricted-paths.js configures import/no-restricted-paths over paths, so a package specifier like expo-file-system or react-native clears every zone and fails at runtime instead of at lint",
         "Keeps the state headless in common/ and renders the surface per platform, or hosts the platform-only affordance in that leg's own context/, or imports the platform package directly inside the platform leg",
         "Notes that common/ must not read process.env.EXPO_PUBLIC_* or process.env.NEXT_PUBLIC_* either, and routes that through packages/graphql/config/environment.ts instead",
         "Does NOT ship a new .ast-grep rule as part of the block — it recommends the rule as its own change, with its own snapshot tests in .ast-grep/rule-tests/ and its own baseline decision"
@@ -115,7 +115,7 @@
         "Exports a <Name>MutationQuery document plus a use<Name>Mutation hook returning [commit, isMutationInFlight], spreading ...config first so a caller's variables, updater, and optimisticResponse survive, and annotating the tuple with Disposable",
         "Selects errors { field messages } in the payload and hands them to exactly one consumer — setFormRelayErrors on the form or sendMutationErrorToast from useNotification() — never both",
         "Wraps the useSubscription config in useMemo with every variable the config reads in the dependency list, stabilises any array, object, or callback at the call site, and gives the config onError: console.error",
-        "Does NOT call new Environment inside the module and does NOT take a Relay Environment as a hook prop — the graphql-ws link at packages/graphql/config/environment.ts:110-150 already carries every subscription, and useRelayEnvironment reads the object from context"
+        "Does NOT call new Environment inside the module and does NOT take a Relay Environment as a hook prop — the graphql-ws link built by wsClient in packages/graphql/config/environment.ts already carries every subscription, and useRelayEnvironment reads the object from context"
       ]
     },
     {

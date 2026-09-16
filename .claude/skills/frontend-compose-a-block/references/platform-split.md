@@ -2,7 +2,7 @@
 
 A module's three legs form a one-way dependency chain: `common/` is platform-neutral, and `web/` and
 `native/` each consume it while never touching each other. Every module README states the rule and
-`packages/config/.eslintrc-with-restricted-paths.js:6-33` enforces it — but only over *paths*. A
+`packages/config/.eslintrc-with-restricted-paths.js` enforces it — but only over *paths*. A
 native-only npm package imported into `common/` clears the gate and breaks on the platform that
 cannot use it — at module resolution or bundling when the platform cannot resolve it at all, at
 runtime when it resolves but its native module is absent. That failure is the one this file
@@ -23,7 +23,7 @@ Paths below are relative to `packages/components/modules/`.
 
 ## The three import rules
 
-Verbatim from `modules/comments/README.md:3-15`. The same block is repeated in the READMEs of
+Verbatim from the opening block of `modules/comments/README.md`. It is repeated in the READMEs of
 `__shared__`, `activity-log`, `messages`, `navigations`, `notifications`, and `profiles` — a new
 module copies it unchanged:
 
@@ -41,7 +41,8 @@ module copies it unchanged:
 >   - Must not import from `web/`.
 
 The enforcer is `import/no-restricted-paths`, configured with four zones at
-`packages/config/.eslintrc-with-restricted-paths.js:6-33`: `common !<- web`, `common !<- native`,
+`packages/config/.eslintrc-with-restricted-paths.js` under `zones`: `common !<- web`,
+`common !<- native`,
 `web !<- native`, `native !<- web`. It is a **separate config file**, not part of the base one, so a
 package gets it only by opting in from its own `.eslintrc.js`:
 
@@ -156,8 +157,9 @@ navigation (`expo-router` in native, `next/navigation` and `next/link` in web) o
 The moment such an import moves up into `common/` it becomes mechanism 1's job instead.
 
 Environment access follows the same line. `common/` must not read `process.env.EXPO_PUBLIC_*` or
-`process.env.NEXT_PUBLIC_*` directly; `packages/graphql/config/environment.ts:79-82` resolves Expo
-constants and `:114-118` resolves the token, and shared code goes through those.
+`process.env.NEXT_PUBLIC_*` directly; in `packages/graphql/config/environment.ts`, `fetchResponse`
+resolves Expo constants via `getExpoConstant` and `connectionParams` resolves the token via
+`getToken`, and shared code goes through those.
 
 ## What native does not have
 

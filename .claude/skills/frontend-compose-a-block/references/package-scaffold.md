@@ -136,10 +136,13 @@ explicit `{ "default": ... }` condition object.
 | `cypress/support/` (4 files) | `commands.ts`, `component.ts`, `component-index.html`, `types.ts` |
 | `test:component` script | Nothing runs the specs without it. |
 
-**This is the one addition that reaches outside the package directory.**
-`.github/workflows/main.yml:119-124` hardcodes `--filter @baseapp-frontend/components` across its
-four Cypress install steps, so a new package's component tests never run in CI until it is added
-there. Failure mode: green CI, zero component tests executed.
+**Declaring `test:component` is enough for the specs to run.** The root script is
+`turbo run test:component` and the `turbo.json` task carries no filter, so every workspace package
+declaring that script is picked up with no workflow edit. What is package-specific is the binary: in
+`.github/workflows/main.yml`, job `test-component` step `Install Cypress binary (components
+workspace)` filters to `@baseapp-frontend/components`, and its neighbours `Cache Cypress binary` and
+`Verify Cypress binary exists` pin a single Cypress version. Failure mode: a package resolving a
+different Cypress version finds no warmed cache.
 
 ### Storybook — +4
 
@@ -202,8 +205,8 @@ and is not:
 - Shipping a package with no `storybook` script — the turbo `storybook` task has nothing to run.
 - Leaving the nine `__mocks__` shims in `packages/test/` — the shared jest config resolves them
   against the consuming package's `<rootDir>`, not against `packages/test/`.
-- Adding Cypress specs without adding the workspace to `.github/workflows/main.yml` — the specs
-  never run and CI stays green.
+- Resolving a Cypress version other than the one the workflow caches — the specs still run, but the
+  warmed cache misses and the `Verify Cypress binary exists` step has nothing to find.
 - Merging a package with no `.changeset/` entry — the release workflow has nothing to publish.
 - Committing `__generated__/` — copy the two relay `.gitignore` lines along with the Relay config.
 - Editing `pnpm-workspace.yaml` or `turbo.json` to register a package — neither is read for that.

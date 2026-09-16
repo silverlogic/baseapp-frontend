@@ -105,16 +105,16 @@ skill's pagination section prescribes. Pass an empty array when there is no targ
 
 ## Reuse the transport
 
-The environment already speaks WebSocket. `packages/graphql/config/environment.ts:110-150` builds a
-`graphql-ws` client — endpoint from `NEXT_PUBLIC_WS_RELAY_ENDPOINT` or its Expo equivalent, auth
+The environment already speaks WebSocket. `wsClient` in `packages/graphql/config/environment.ts`
+builds a `graphql-ws` client — endpoint from `NEXT_PUBLIC_WS_RELAY_ENDPOINT` or its Expo equivalent, auth
 headers from cookies in `connectionParams`, retry with backoff and jitter — and wraps it in an
 `Observable` named `websocketFetch`, the **second** argument to
-`Network.create(fetchResponse, websocketFetch)` at `:172`. That is the whole wiring: any operation
-of kind `subscription` rides the socket with no per-module setup.
+`Network.create(fetchResponse, websocketFetch)` inside `createNetwork`. That is the whole wiring:
+any operation of kind `subscription` rides the socket with no per-module setup.
 
 So a module never constructs an environment. Exactly one `new Environment` call exists in the repo,
-at `packages/graphql/config/environment.ts:199`; a second opens a second socket over a second store,
-so subscription writes land where no component reads. Take it from context with
+in `createEnvironment`, in `packages/graphql/config/environment.ts`; a second opens a second socket
+over a second store, so subscription writes land where no component reads. Take it from context with
 `useRelayEnvironment` when you need the object, and never as a prop — `messages/native/ChatRooms`
 calls `useRelayEnvironment` only to feed `useRoomListSubscription`, which carries `environment` in
 its public props for no gain.
@@ -139,11 +139,11 @@ conditionally. All three call sites gate it —
 ## When imperative is the only option
 
 `messages/common/graphql/subscriptions/useRoomListSubscription.tsx` holds the single imperative
-`updater` among the seven, at `:58-87`, and has a genuine reason: a room moves to the top of
+`updater` among the seven, and it has a genuine reason: a room moves to the top of
 whichever filtered connection now matches its `isArchived` and `isGroup` values, so the target list
 is chosen at runtime and cannot be named in a `$connections` variable. It deletes the node from
 every stale connection, rebuilds an edge with `ConnectionHandler.buildConnectionEdge` and
-`insertEdgeBefore`, and uses `onNext` (`:88-95`) for side effects that are not store writes.
+`insertEdgeBefore`, and uses `onNext` for side effects that are not store writes.
 `onNext` is fine; reach for `updater` only when the connections are unknowable at the call site.
 
 The cost shows in the same file: the document still declares
@@ -156,7 +156,7 @@ Do not reimplement a working hook per platform.
 `messages/native/graphql/subscriptions/useMessagesListSubscription.tsx` imports the document from
 `'../../../common'` and rebuilds the hook around `requestSubscription`, a `Disposable` ref, manual
 `dispose`, `useFocusEffect` and `useAppStateSubscription`. It exports its `common/` sibling's symbol
-name, both are re-exported (`messages/common/index.ts:34`, `messages/native/index.ts:2`), and a
+name, and both are re-exported from `messages/common/index.ts` and `messages/native/index.ts`, so a
 consumer importing both barrels silently gets one. Extend the shared hook behind an option instead.
 
 ## Where the neighbouring skill takes over

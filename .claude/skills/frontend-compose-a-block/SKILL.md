@@ -28,6 +28,11 @@ template's own `apps/` and `packages/` are different ground: the template ships
 also own several areas a block's UI touches. Use them alongside this skill rather than instead of
 it — this skill names the owner and routes to it, and never restates the rule itself.
 
+Those three live in the consuming template, at `baseapp-frontend-template/.claude/skills/`, not in
+this repo. In a workspace checkout they load normally. In a standalone clone of `baseapp-frontend`
+they are absent, so every pointer to them below — including the ones that name a file inside them —
+is a name to search for, not a path you can open from here.
+
 | Topic | Owner |
 |---|---|
 | Styling — `styled()` vs `sx` vs Tailwind, the no-hardcoded-color rule | `frontend-conventions` |
@@ -72,7 +77,7 @@ changelog? Yes — package route. No — module route. A module never gets one.
 Relay sections **6-10 apply to both routes**; a block's data layer is the same whether it ships as a
 new package or a new module. Read them in order when the block reads or writes GraphQL, and skip
 them entirely when it does not. Section **11 closes both routes** — tests, stories, changeset — and
-`## Definition of done` is the list CI actually enforces.
+`## Definition of done` is four gates CI enforces plus a changeset the release needs.
 
 ---
 
@@ -109,8 +114,9 @@ over source subpaths with no `main` at all.
 A package is a directory at `packages/<name>/`, registered by the `packages/*` glob — no
 `pnpm-workspace.yaml` and no `turbo.json` edit. Eleven files are always required; unit tests, Relay,
 web styling, Cypress, and Storybook each add a conditional set on top. Cypress is the one addition
-that reaches outside the directory — `.github/workflows/main.yml` hardcodes
-`--filter @baseapp-frontend/components`, so a new package's component tests silently never run.
+with a CI caveat: the specs themselves run anywhere, because `turbo run test:component` is
+unfiltered, but the workflow pre-installs and caches the Cypress binary for one package at one
+pinned version.
 
 Read `references/package-scaffold.md` when: starting a new `packages/<name>/`, deciding which conditional file sets a package needs, adding tests or Relay to an existing package, or auditing a package for a missing conventional file.
 
@@ -137,8 +143,9 @@ Read `references/module-scaffold.md` when: adding a module under `packages/compo
 ---
 ### 4. The common/web/native contract
 `common/` imports only `common/`; `web/` and `native/` may import `common/` but never each other.
-`packages/config/.eslintrc-with-restricted-paths.js:6-33` enforces it, opted into via the package's
-own `.eslintrc.js` — only `components` and `design-system` do. The rule polices paths, not packages,
+`packages/config/.eslintrc-with-restricted-paths.js` enforces it with `import/no-restricted-paths`,
+opted into via the package's own `.eslintrc.js` — only `components` and `design-system` do. The rule
+polices paths, not packages,
 so a `react-native` or `expo-*` import inside `common/` passes lint and dies on web at runtime,
 exactly as `messages/common/graphql/mutations/CreateGroupChat.ts` does today.
 
@@ -199,7 +206,8 @@ The operation name must match the filename — Relay prefixes it with the module
 is free: `CommentsSubscription.tsx` exports `useCommentChangeSubscription`. Both share one file
 under `<module>/common/graphql/subscriptions/`, config in `useMemo`; unmemoized it re-subscribes
 every render. Derive connection ids through the module's own `get<X>ConnectionId` helper, and ride
-the `graphql-ws` link at `packages/graphql/config/environment.ts:110-150`, never `new Environment`.
+the `graphql-ws` link built by `wsClient` in `packages/graphql/config/environment.ts`, never
+`new Environment`.
 
 Read `references/relay-subscriptions.md` when: adding a subscription to a module, keeping counters live after a push update, memoizing a subscription config, or debugging a subscription that re-establishes on every render.
 
@@ -217,14 +225,22 @@ Read `references/testing-and-shipping.md` when: adding jest, Cypress, or Storybo
 ---
 ## Definition of done
 
-Five gates, each with the directory it runs from. The submodule root and a package directory are not
-interchangeable — the root has no `relay` script, and a package has no `changeset`.
+Five gates, each with the directory it runs from. **Four of them CI enforces; the changeset it does
+not.** The submodule root and a package directory are not interchangeable — the root has no `relay`
+script, and a package has no `changeset`.
 
-1. **Unit tests** — `pnpm test:unit` in the package dir (`jest --config ./jest.config.ts`).
+1. **Unit tests** — `pnpm test:unit` in the package dir (`jest --config ./jest.config.ts`). CI runs
+   it as job `test-unit`. It never compiles Relay: the `test:unit` turbo task declares
+   `dependsOn: ["^build"]`, which builds a package's dependencies, not the package itself.
 2. **Relay artifacts** — `pnpm relay` in the package dir. Its exit code is the gate: the compiler
    fails when a document does not typecheck against the committed `schema.graphql`. Do not check
-   `git status` over `__generated__/` — it is gitignored and can never report drift.
+   `git status` over `__generated__/` — it is gitignored and can never report drift. CI enforces it
+   indirectly: `pnpm relay` is not a named workflow step, but it sits in the middle of the
+   `packages/components` `build` script, so a compiler failure reddens job `build-and-lint`.
 3. **Lint and types** — `pnpm lint` in the package dir: `eslint --cache` plus `tsc --noEmit`, i.e.
    `eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental`.
 4. **Changeset** — `pnpm changeset` at the submodule root; without one the release ships nothing.
+   **No CI job checks this.** The changesets action lives in `release.yml`, which triggers on
+   `master` only, and the bot that comments on the PR never blocks it. A PR with no changeset merges
+   green and then publishes nothing.
 5. **ast-grep** — `pnpm lint:ast-grep` at the submodule root (`ast-grep test && ast-grep scan`).
