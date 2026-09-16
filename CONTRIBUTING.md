@@ -75,15 +75,12 @@ ruleset applies only to this repository, so your fork can use any branch name.
 3. Open a Pull Request against `master`, with a descriptive title and an explanation of what changed and
    why.
 
-4. Add a changeset (`pnpm changeset`) if your change should publish a new package version. A PR that
-   touches no package source — documentation, CI, repository config — does not need one, and the
-   changeset bot's warning can be ignored in that case.
+4. Add a changeset (`pnpm changeset`) if your change should publish a new package version —
+   [Packages Versioning and Publishing](README.md#packages-versioning-and-publishing) in the README
+   covers the full flow. A PR that touches no package source — documentation, CI, repository
+   config — does not need one, and the changeset bot's warning can be ignored in that case.
 
 5. Participate in review, addressing feedback as it comes.
-
-6. Before submitting, read the
-   [Packages Versioning and Publishing](README.md#packages-versioning-and-publishing) section of the
-   README.
 
 Once the PR is approved with CI green, a maintainer merges it into `master`.
 
