@@ -49,9 +49,8 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const invalidateCustomer = () => {
     queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer(entityId)] })
   }
-  // Runs from the cancel mutation's onSuccess. Invalidating at click time raced the
-  // in-flight DELETE, so the refetch could land first and restore the still-active
-  // subscription into the cache.
+  // Invalidating at click time raced the in-flight DELETE, so the refetch could land
+  // first and restore the still-active subscription into the cache.
   const invalidateAfterCancel = () => {
     invalidateCustomer()
     queryClient.invalidateQueries({

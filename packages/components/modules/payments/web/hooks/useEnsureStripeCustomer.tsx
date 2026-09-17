@@ -12,9 +12,9 @@ const useEnsureStripeCustomer = (entityId: string) => {
   // `isCreatingCustomer` transition.
   const hasAttemptedCreate = useRef(false)
   const { useGetCustomer, useCreateCustomer } = useStripeHook()
-  // Scoped to `entityId`, not the default `me`. The settings pages run this for the
-  // profile in the URL, so checking `me` let an existing personal customer suppress
-  // creation for a profile that had none, leaving that page permanently on a 404.
+  // The settings pages run this for the profile in the URL, so checking the default
+  // `me` customer let an existing personal one suppress creation for a profile that
+  // had none, leaving that page permanently on a 404.
   const {
     data: customer,
     isLoading: isLoadingCustomer,
