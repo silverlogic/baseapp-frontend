@@ -4,6 +4,7 @@ export const DATE_FORMAT = {
   2: 'LLL d, yyyy',
   3: 'dd MMM yyyy',
   api: 'yyyy-MM-dd',
+  iso: 'yyyy-MM-ddTHH:mm:ss.SSS',
 } as const
 
 export const TIME_FORMAT = {

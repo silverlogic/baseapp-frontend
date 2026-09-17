@@ -16,6 +16,7 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   action,
   cancelText = 'Cancel',
   onClose,
+  hideCancelButton = false,
   DialogTitleProps = {},
   DialogContentProps = {},
   DialogActionsProps = {},
@@ -44,9 +45,11 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
       }}
       {...DialogActionsProps}
     >
-      <Button variant="outlined" color="inherit" onClick={onClose}>
-        {cancelText}
-      </Button>
+      {!hideCancelButton && (
+        <Button variant="outlined" color="inherit" onClick={onClose}>
+          {cancelText}
+        </Button>
+      )}
       {action}
     </DialogActions>
   </Dialog>
