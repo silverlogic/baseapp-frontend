@@ -49,6 +49,14 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const invalidateCustomer = () => {
     queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer(entityId)] })
   }
+  // Invalidating at click time raced the in-flight DELETE, so the refetch could land
+  // first and restore the still-active subscription into the cache.
+  const invalidateAfterCancel = () => {
+    invalidateCustomer()
+    queryClient.invalidateQueries({
+      queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
+    })
+  }
 
   const {
     useListPaymentMethods,
@@ -58,15 +66,13 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     useGetCustomer,
   } = useStripeHook()
   const { data: customer, refetch: refetchCustomer } = useGetCustomer(entityId)
-  const {
-    data: subscription,
-    isLoading: isLoadingSubscription,
-    refetch: refetchSubscription,
-  } = useGetSubscription(subscriptionId ?? '')
+  const { data: subscription, isLoading: isLoadingSubscription } = useGetSubscription(
+    subscriptionId ?? '',
+  )
   const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(
     subscription?.id ?? '',
-    invalidateCustomer,
+    invalidateAfterCancel,
   )
   const { sendToast } = useNotification()
   const elements = useElements()
@@ -78,11 +84,10 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const { mutateAsync: updateSubscription } = useUpdateSubscription(subscription?.id ?? '', {
     onSuccess: () => {
       invalidateCustomer()
+      // One filter per key: a single queryKey holding two key arrays matches no query at all.
+      queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listPaymentMethods()] })
       queryClient.invalidateQueries({
-        queryKey: [
-          STRIPE_API_KEY.listPaymentMethods(),
-          STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
-        ],
+        queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
       })
       sendToast('Subscription updated successfully.', { type: 'success' })
     },
@@ -136,8 +141,9 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
 
   useEffect(() => {
     if (customer?.subscriptions?.[0]?.id) {
+      // Setting the id flips the query's `enabled` guard, which fetches on its own. Refetching here
+      // would run in the same tick with the previous (empty) id and request `/subscriptions/`.
       setSubscriptionId(customer.subscriptions[0].id)
-      refetchSubscription()
     }
   }, [customer])
 
@@ -261,12 +267,6 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
             onClose={() => setIsCancelSubscriptionModalOpen(false)}
             onConfirm={() => {
               cancelSubscription()
-              queryClient.invalidateQueries({
-                queryKey: [
-                  STRIPE_API_KEY.getCustomer(entityId),
-                  STRIPE_API_KEY.getSubscription(subscriptionId ?? ''),
-                ],
-              })
               setIsCancelSubscriptionModalOpen(false)
             }}
           />
