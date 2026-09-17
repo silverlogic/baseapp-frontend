@@ -10,10 +10,11 @@ const useStripeHook = () => {
   const { sendToast } = useNotification()
   const queryClient = useQueryClient()
 
-  const useGetCustomer = (entityId?: string) =>
+  const useGetCustomer = (entityId?: string, options: { enabled?: boolean } = {}) =>
     useQuery({
       queryKey: [STRIPE_API_KEY.getCustomer(entityId?.toString() ?? 'me')],
       queryFn: () => StripeApi.getCustomer(entityId),
+      ...options,
     })
 
   const useCreateCustomer = () =>

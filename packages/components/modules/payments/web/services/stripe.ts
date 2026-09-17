@@ -19,8 +19,12 @@ const baseUrl = '/payments'
 
 export const STRIPE_API_KEY = {
   default: ['stripe'],
+  // The id is spread in only when supplied, so `getCustomer()` is the method-level
+  // prefix that matches every customer query. Defaulting it to 'me' here instead
+  // made the no-arg call a concrete key, so invalidating it left entity-scoped
+  // customers stale.
   getCustomer: (entityId?: string) =>
-    [...STRIPE_API_KEY.default, 'getCustomer', entityId ?? 'me'] as QueryKey,
+    [...STRIPE_API_KEY.default, 'getCustomer', ...(entityId ? [entityId] : [])] as QueryKey,
   createSetupIntent: (...params: string[]) =>
     [...STRIPE_API_KEY.default, 'createSetupIntent', ...params] as QueryKey,
   listPaymentMethods: (...params: string[]) =>

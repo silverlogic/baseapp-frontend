@@ -49,6 +49,15 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const invalidateCustomer = () => {
     queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.getCustomer(entityId)] })
   }
+  // Runs from the cancel mutation's onSuccess. Invalidating at click time raced the
+  // in-flight DELETE, so the refetch could land first and restore the still-active
+  // subscription into the cache.
+  const invalidateAfterCancel = () => {
+    invalidateCustomer()
+    queryClient.invalidateQueries({
+      queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
+    })
+  }
 
   const {
     useListPaymentMethods,
@@ -64,7 +73,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const { data: paymentMethods, isLoading: isLoadingMethods } = useListPaymentMethods(entityId)
   const { mutate: cancelSubscription } = useCancelSubscription(
     subscription?.id ?? '',
-    invalidateCustomer,
+    invalidateAfterCancel,
   )
   const { sendToast } = useNotification()
   const elements = useElements()
@@ -259,12 +268,6 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
             onClose={() => setIsCancelSubscriptionModalOpen(false)}
             onConfirm={() => {
               cancelSubscription()
-              queryClient.invalidateQueries({
-                queryKey: [STRIPE_API_KEY.getCustomer(entityId)],
-              })
-              queryClient.invalidateQueries({
-                queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
-              })
               setIsCancelSubscriptionModalOpen(false)
             }}
           />

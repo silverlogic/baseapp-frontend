@@ -174,11 +174,12 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               if (paymentMethods?.length && paymentMethods.length > 0) {
                 setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
               }
+              // One filter per key: a single queryKey holding two key arrays matches no query at all.
               queryClient.invalidateQueries({
-                queryKey: [
-                  STRIPE_API_KEY.listPaymentMethods(entityId),
-                  STRIPE_API_KEY.getCustomer(entityId),
-                ],
+                queryKey: [STRIPE_API_KEY.listPaymentMethods(entityId)],
+              })
+              queryClient.invalidateQueries({
+                queryKey: [STRIPE_API_KEY.getCustomer(entityId)],
               })
             }
             setConfirmationModalOpen(true)

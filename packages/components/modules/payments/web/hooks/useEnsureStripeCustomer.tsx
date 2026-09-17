@@ -6,22 +6,20 @@ import { STRIPE_API_KEY } from '../services/stripe'
 import { Customer } from '../types'
 import useStripeHook from './useStripeHook'
 
-/**
- * Both the default (`me`) and entity-scoped cache entries are seeded: `AvailableSubscriptions`
- * reads `useGetCustomer()` while `CheckoutComponent` and `SubscriptionManagement` read
- * `useGetCustomer(entityId)`.
- */
 const useEnsureStripeCustomer = (entityId: string) => {
   const queryClient = useQueryClient()
   // Never reset: a persistent failure would otherwise re-trigger this effect on every
   // `isCreatingCustomer` transition.
   const hasAttemptedCreate = useRef(false)
   const { useGetCustomer, useCreateCustomer } = useStripeHook()
+  // Scoped to `entityId`, not the default `me`. The settings pages run this for the
+  // profile in the URL, so checking `me` let an existing personal customer suppress
+  // creation for a profile that had none, leaving that page permanently on a 404.
   const {
     data: customer,
     isLoading: isLoadingCustomer,
     isFetching: isFetchingCustomer,
-  } = useGetCustomer()
+  } = useGetCustomer(entityId, { enabled: Boolean(entityId) })
   const { mutate: createCustomerMutation, isPending: isCreatingCustomer } = useCreateCustomer()
 
   useEffect(() => {
@@ -31,7 +29,6 @@ const useEnsureStripeCustomer = (entityId: string) => {
     hasAttemptedCreate.current = true
     createCustomerMutation(entityId, {
       onSuccess: (createdCustomer: Customer) => {
-        queryClient.setQueryData([STRIPE_API_KEY.getCustomer()], createdCustomer)
         queryClient.setQueryData([STRIPE_API_KEY.getCustomer(entityId)], createdCustomer)
         // Anything that ran before the customer existed resolved to a 404, and react-query does not
         // retry a settled error. Without this, `useListPaymentMethods` stays in its error state and
