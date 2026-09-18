@@ -49,11 +49,6 @@ next-env.d.ts
 # lighthouse
 .lighthouseci
 
-# cypress
-cypress/videos
-cypress/screenshots
-cypress/downloads
-
 # Sentry Config File
 .sentryclirc
 
