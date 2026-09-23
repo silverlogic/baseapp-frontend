@@ -694,6 +694,12 @@ importers:
       '@storybook/react':
         specifier: catalog:storybook
         version: 8.6.17(@storybook/test@8.6.17(storybook@8.6.17(prettier@3.8.4)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.17(prettier@3.8.4))(typescript@5.9.2)
+      '@stripe/react-stripe-js':
+        specifier: ^3.6.0
+        version: 3.11.0(@stripe/stripe-js@7.10.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@stripe/stripe-js':
+        specifier: ^7.0.0
+        version: 7.10.0
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.76.1(react@19.2.0)
@@ -5157,6 +5163,17 @@ packages:
     resolution: {integrity: sha512-IttFvRqozpuzN5MlQEWGOzUA2rZg86688Dyv1d+bjpYcFHtY1X4XyTCGwv1BPTaTsB959oM8R2yoNYWQkABbBA==}
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
+
+  '@stripe/react-stripe-js@3.11.0':
+    resolution: {integrity: sha512-5L2Qsg68ELyDGdiQb6mnT4fgyl6V6GN4nJzGdKmVJ3CfbQFv1H157/LJTjJVyQGLN2bZ20cFYFMn2YwZ2TJElw==}
+    peerDependencies:
+      '@stripe/stripe-js': '>=1.44.1 <8.0.0'
+      react: '>=16.8.0 <20.0.0'
+      react-dom: '>=16.8.0 <20.0.0'
+
+  '@stripe/stripe-js@7.10.0':
+    resolution: {integrity: sha512-LKrDpCop593iWnPxOHgjYmZGngOdgzPYLjyVzUdQ7f7bSnAEKkBMEwsOmWRrq40TR8KG96woms5xPUmffZkJ0Q==}
+    engines: {node: '>=12.16'}
 
   '@swc/helpers@0.5.15':
     resolution: {integrity: sha512-JQ5TuMi45Owi4/BIMAJBoSQoOJu12oOk/gADqlcUL9JEdHB8vyjUSsxqeNXnmXHjYKMi2WcYtezGEEhqUI/E2g==}
@@ -16322,7 +16339,9 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
+      - bufferutil
       - supports-color
+      - utf-8-validate
 
   '@react-native/normalize-colors@0.83.6': {}
 
@@ -17101,6 +17120,15 @@ snapshots:
   '@storybook/theming@8.6.17(storybook@8.6.17(prettier@3.8.4))':
     dependencies:
       storybook: 8.6.17(prettier@3.8.4)
+
+  '@stripe/react-stripe-js@3.11.0(@stripe/stripe-js@7.10.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+    dependencies:
+      '@stripe/stripe-js': 7.10.0
+      prop-types: 15.8.1
+      react: 19.2.0
+      react-dom: 19.2.0(react@19.2.0)
+
+  '@stripe/stripe-js@7.10.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:
