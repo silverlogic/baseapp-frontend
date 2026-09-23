@@ -26,6 +26,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   ConfirmationSubscriptionModal = DefaultConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
   onSuccess,
+  planDetailsUrl = '/user/settings?tab=subscription',
 }) => {
   const [isAddCardModalOpen, setIsAddCardModalOpen] = useState(false)
   const [orderNumber, setOrderNumber] = useState<string | null>(null)
@@ -173,11 +174,12 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               if (paymentMethods?.length && paymentMethods.length > 0) {
                 setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
               }
+              // One filter per key: a single queryKey holding two key arrays matches no query at all.
               queryClient.invalidateQueries({
-                queryKey: [
-                  STRIPE_API_KEY.listPaymentMethods(entityId),
-                  STRIPE_API_KEY.getCustomer(entityId),
-                ],
+                queryKey: [STRIPE_API_KEY.listPaymentMethods(entityId)],
+              })
+              queryClient.invalidateQueries({
+                queryKey: [STRIPE_API_KEY.getCustomer(entityId)],
               })
             }
             setConfirmationModalOpen(true)
@@ -237,7 +239,9 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
 
   useEffect(() => {
     if (!paymentMethods || paymentMethods.length === 0) return
-    const defaultPaymentMethod = paymentMethods?.find((pm) => pm.isDefault)
+    // A newly added card comes back with isDefault false, so fall back to the first available
+    // method - matching SubscriptionManagement - instead of leaving the selection empty.
+    const defaultPaymentMethod = paymentMethods.find((pm) => pm.isDefault) ?? paymentMethods[0]
     setSelectedPaymentMethodId(defaultPaymentMethod?.id ?? 'empty')
   }, [paymentMethods])
 
@@ -360,7 +364,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
         orderNumber={orderNumber}
-        planDetails={() => router.push('/user/settings?tab=subscription')}
+        planDetails={() => router.push(planDetailsUrl)}
       />
     </Box>
   )
@@ -373,6 +377,7 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
   ConfirmationSubscriptionModal,
   ConfirmationSubscriptionModalProps,
   onSuccess,
+  planDetailsUrl,
 }) => (
   <Elements stripe={getStripePromise(stripePublishableKey)}>
     <CheckoutComponent
@@ -381,6 +386,7 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
       ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
       ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
       onSuccess={onSuccess}
+      planDetailsUrl={planDetailsUrl}
     />
   </Elements>
 )
