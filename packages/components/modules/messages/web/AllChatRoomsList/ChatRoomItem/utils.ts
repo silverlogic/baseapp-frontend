@@ -13,8 +13,13 @@ import { DateTime } from 'luxon'
 // fixed character class and length.
 const MAX_PREVIEW_INPUT_LENGTH = 1000
 
+// Inline formatting the markdown editor serializes as raw HTML (e.g. underline as `<u>`).
+const INLINE_HTML_TAG_REGEX =
+  /<\/?(?:u|ins|s|del|strike|b|strong|i|em|code|mark|sup|sub|span|br)(?:\s[^<>]{0,200})?\/?>/gi
+
 const stripMarkdownSafely = (line: string) =>
   line
+    .replace(INLINE_HTML_TAG_REGEX, '')
     .replace(/!\[([^\]]{0,200})\]\([^)]{0,200}\)/g, '$1')
     .replace(/\[([^\]]{1,200})\]\([^)]{0,200}\)/g, '$1')
     .replace(/`{1,3}([^`]{1,200})`{1,3}/g, '$1')
