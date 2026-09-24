@@ -7,7 +7,9 @@ export const createStyles = (theme: Theme) =>
     container: {
       backgroundColor: theme.colors.surface.background,
       flex: 1,
-      paddingTop: 0,
+    },
+    contentContainer: {
+      flexGrow: 1,
       paddingHorizontal: 16,
       paddingBottom: 16,
     },
