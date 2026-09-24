@@ -3,10 +3,10 @@ import { act, renderHook } from '@baseapp-frontend/test'
 import useDebouncedValue from '../index'
 
 describe('useDebouncedValue', () => {
-  jest.useFakeTimers()
+  vi.useFakeTimers()
 
   afterEach(() => {
-    jest.clearAllTimers()
+    vi.clearAllTimers()
   })
 
   it('returns the initial value synchronously on first render', () => {
@@ -24,12 +24,12 @@ describe('useDebouncedValue', () => {
     expect(result.current).toBe('a')
 
     act(() => {
-      jest.advanceTimersByTime(199)
+      vi.advanceTimersByTime(199)
     })
     expect(result.current).toBe('a')
 
     act(() => {
-      jest.advanceTimersByTime(1)
+      vi.advanceTimersByTime(1)
     })
     expect(result.current).toBe('b')
   })
@@ -42,19 +42,19 @@ describe('useDebouncedValue', () => {
 
     rerender({ value: 'b' })
     act(() => {
-      jest.advanceTimersByTime(150)
+      vi.advanceTimersByTime(150)
     })
     rerender({ value: 'c' })
 
     // Original 200ms window from 'b' would have fired by now; the rerender to
     // 'c' should reset it, so we still see 'a'.
     act(() => {
-      jest.advanceTimersByTime(50)
+      vi.advanceTimersByTime(50)
     })
     expect(result.current).toBe('a')
 
     act(() => {
-      jest.advanceTimersByTime(150)
+      vi.advanceTimersByTime(150)
     })
     expect(result.current).toBe('c')
   })
@@ -67,11 +67,11 @@ describe('useDebouncedValue', () => {
 
     rerender({ value: 'b' })
     act(() => {
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
     })
     unmount()
     act(() => {
-      jest.advanceTimersByTime(200)
+      vi.advanceTimersByTime(200)
     })
 
     // The hook is unmounted; we just assert no error was thrown and the
@@ -86,12 +86,12 @@ describe('useDebouncedValue', () => {
 
     rerender({ value: 2 })
     act(() => {
-      jest.advanceTimersByTime(399)
+      vi.advanceTimersByTime(399)
     })
     expect(result.current).toBe(1)
 
     act(() => {
-      jest.advanceTimersByTime(1)
+      vi.advanceTimersByTime(1)
     })
     expect(result.current).toBe(2)
   })
@@ -105,7 +105,7 @@ describe('useDebouncedValue', () => {
     rerender({ value: 'b', time: 100 })
 
     act(() => {
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
     })
     expect(result.current).toBe('b')
   })
@@ -123,7 +123,7 @@ describe('useDebouncedValue', () => {
     expect(result.current).toBe(initial)
 
     act(() => {
-      jest.advanceTimersByTime(100)
+      vi.advanceTimersByTime(100)
     })
     expect(result.current).toBe(next)
   })

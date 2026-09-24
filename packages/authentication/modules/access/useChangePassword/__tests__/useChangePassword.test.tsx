@@ -16,7 +16,7 @@ describe('useChangePassword', () => {
   const changePasswordUrl = '/users/change-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
+    ;(global.fetch as Mock).mockClear() // Clear the mock between tests
   })
 
   test('should run onSuccess', async () => {
@@ -171,7 +171,7 @@ describe('useChangePassword with token for expired passwords', () => {
   const changePasswordUrl = '/change-expired-password'
 
   afterEach(() => {
-    ;(global.fetch as jest.Mock).mockClear() // Clear the mock between tests
+    ;(global.fetch as Mock).mockClear() // Clear the mock between tests
   })
 
   // This is just to ensure that running with token has the same behavior as running without token

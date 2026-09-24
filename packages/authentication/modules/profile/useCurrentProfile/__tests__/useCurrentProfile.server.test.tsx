@@ -1,5 +1,5 @@
 /**
- * @jest-environment node
+ * @vitest-environment node
  *
  * Cross-request isolation regression: two `initializeProfileStore` calls must produce
  * separate `StoreApi` instances. Runs under `node` to mirror the SSR runtime.

@@ -1,44 +1,60 @@
 import humps from 'humps'
+import type { Mock } from 'vitest'
 
 import { createAxiosInstance } from '..'
+import { broadcastEvent } from '../../../events'
+import { getTokenSSR } from '../../../token/getTokenSSR'
+import { isUserTokenValid } from '../../../token/isUserTokenValid'
+import { refreshAccessToken } from '../../../token/refreshAccessToken'
 
-jest.mock('humps', () => ({
-  decamelize: jest.fn().mockImplementation((key) => key.replace(/([A-Z])/g, '_$1').toLowerCase()),
-  decamelizeKeys: jest.fn().mockImplementation((keys) => keys),
-  camelizeKeys: jest.fn().mockImplementation((keys) => keys),
-}))
-jest.mock('axios', () => ({
-  ...jest.requireActual('axios'),
-  create: () => ({
-    defaults: jest.requireActual('axios').create().defaults,
-    interceptors: {
-      ...jest.requireActual('axios').create().interceptors,
-      request: { eject: jest.fn(), use: jest.fn() },
-      response: { eject: jest.fn(), use: jest.fn() },
+vi.mock('humps', async () => {
+  const fns = {
+    decamelize: vi.fn().mockImplementation((key) => key.replace(/([A-Z])/g, '_$1').toLowerCase()),
+    decamelizeKeys: vi.fn().mockImplementation((keys) => keys),
+    camelizeKeys: vi.fn().mockImplementation((keys) => keys),
+  }
+  return { ...fns, default: fns }
+})
+vi.mock('axios', async () => {
+  const actual = await vi.importActual<any>('axios')
+  const realAxios = actual.default ?? actual
+  const mockedAxios = {
+    ...realAxios,
+    create: () => {
+      const inst = realAxios.create()
+      return {
+        defaults: inst.defaults,
+        interceptors: {
+          ...inst.interceptors,
+          request: { eject: vi.fn(), use: vi.fn() },
+          response: { eject: vi.fn(), use: vi.fn() },
+        },
+      }
     },
-  }),
-}))
-jest.mock('js-cookie', () => ({
-  ...jest.requireActual('js-cookie'),
+  }
+  return { ...actual, default: mockedAxios }
+})
+vi.mock('js-cookie', async () => ({
+  ...(await vi.importActual('js-cookie')),
   get: () => 'someLanguage',
 }))
-jest.mock('../../../token/decodeJWT', () => ({
-  decodeJWT: jest.fn(() => ({ exp: 1234567890 })),
+vi.mock('../../../token/decodeJWT', async () => ({
+  decodeJWT: vi.fn(() => ({ exp: 1234567890 })),
 }))
-jest.mock('../../../token/isUserTokenValid', () => ({
-  isUserTokenValid: jest.fn(() => true),
+vi.mock('../../../token/isUserTokenValid', async () => ({
+  isUserTokenValid: vi.fn(() => true),
 }))
-jest.mock('../../../token/refreshAccessToken', () => ({
-  refreshAccessToken: jest.fn().mockResolvedValue('refreshedAuthToken'),
+vi.mock('../../../token/refreshAccessToken', async () => ({
+  refreshAccessToken: vi.fn().mockResolvedValue('refreshedAuthToken'),
 }))
-jest.mock('../../../token/getToken', () => ({
-  getToken: jest.fn().mockReturnValue('someAuthToken'),
+vi.mock('../../../token/getToken', async () => ({
+  getToken: vi.fn().mockReturnValue('someAuthToken'),
 }))
-jest.mock('../../../token/getTokenSSR', () => ({
-  getTokenSSR: jest.fn().mockResolvedValue('someAuthToken'),
+vi.mock('../../../token/getTokenSSR', async () => ({
+  getTokenSSR: vi.fn().mockResolvedValue('someAuthToken'),
 }))
-jest.mock('../../../events', () => ({
-  broadcastEvent: jest.fn(),
+vi.mock('../../../events', async () => ({
+  broadcastEvent: vi.fn(),
 }))
 
 // Mock the global window object
@@ -49,7 +65,7 @@ Object.defineProperty(global, 'window', {
 
 describe('createAxiosInstance', () => {
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should set default headers for post, patch, and put methods', () => {
@@ -77,7 +93,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance({ tokenType: 'Token' })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const request = {
       headers: { Authorization: undefined },
@@ -98,7 +114,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance()
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
     const request = { headers: { Authorization: undefined }, url: 'someUrl' }
 
     await interceptorFn(request)
@@ -117,7 +133,7 @@ describe('createAxiosInstance', () => {
       servicesWithoutToken: [/\/someUrl$/, /\/someUrl\/\d+\/withSomethingInTheMiddle$/],
     })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     let request = { headers: { Authorization: undefined }, url: '/someUrl' }
     await interceptorFn(request)
@@ -166,7 +182,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance({ file: true, useFormData: true })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const request = {
       data: { someKey: 'someValue' },
@@ -187,7 +203,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance()
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const requestBody = { testKey: 'testValue' }
     const request = { data: requestBody, method: 'POST', headers: {} }
@@ -207,7 +223,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance({ stringifyBody: false })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const requestBody = { testKey: 'testValue' }
     const request = { data: requestBody, method: 'POST', headers: {} }
@@ -227,7 +243,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance({ decamelizeRequestBodyKeys: false })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const requestBody = { testKey: 'testValue' }
     const request = { data: requestBody, method: 'POST', headers: {} }
@@ -247,7 +263,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance()
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const params = { testParam: 'value' }
     const request = { params, headers: {}, method: 'GET' }
@@ -266,7 +282,7 @@ describe('createAxiosInstance', () => {
       },
     } = createAxiosInstance({ decamelizeRequestParamsKeys: false })
 
-    const [[interceptorFn]] = (use as jest.Mock).mock.calls
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
 
     const params = { testParam: 'value' }
     const request = { params, headers: {}, method: 'GET' }
@@ -290,8 +306,7 @@ describe('createAxiosInstance', () => {
     })
 
     it('should use getTokenSSR in SSR environment', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue('ssr-access-token')
 
       const {
@@ -302,7 +317,7 @@ describe('createAxiosInstance', () => {
         },
       } = createAxiosInstance()
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
 
       const request = {
         headers: { Authorization: undefined },
@@ -317,19 +332,15 @@ describe('createAxiosInstance', () => {
     })
 
     it('should handle SSR token refresh when token is invalid', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock
         .mockResolvedValueOnce('invalid-access-token') // access token
         .mockResolvedValueOnce('ssr-refresh-token') // refresh token
 
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      const isUserTokenValidMock = isUserTokenValid as Mock
       isUserTokenValidMock.mockReturnValue(false)
 
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      const refreshAccessTokenMock = refreshAccessToken as Mock
       refreshAccessTokenMock.mockResolvedValue('new-ssr-access-token')
 
       const {
@@ -340,7 +351,7 @@ describe('createAxiosInstance', () => {
         },
       } = createAxiosInstance()
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
 
       const request = {
         headers: { Authorization: undefined },
@@ -360,8 +371,7 @@ describe('createAxiosInstance', () => {
     })
 
     it('should not use getTokenSSR when no auth is required in SSR', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue('ssr-token')
 
       const {
@@ -374,7 +384,7 @@ describe('createAxiosInstance', () => {
         servicesWithoutToken: [/\/public-endpoint/],
       })
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
 
       const request = {
         headers: { Authorization: undefined },
@@ -388,20 +398,15 @@ describe('createAxiosInstance', () => {
     })
 
     it('should handle SSR token refresh failure by emitting logout event', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-      const { broadcastEvent } = require('../../../events')
-
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock
         .mockResolvedValueOnce('invalid-access-token') // access token
         .mockResolvedValueOnce('ssr-refresh-token') // refresh token
 
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      const isUserTokenValidMock = isUserTokenValid as Mock
       isUserTokenValidMock.mockReturnValue(false)
 
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      const refreshAccessTokenMock = refreshAccessToken as Mock
       refreshAccessTokenMock.mockRejectedValue(new Error('Refresh failed'))
 
       const {
@@ -412,7 +417,7 @@ describe('createAxiosInstance', () => {
         },
       } = createAxiosInstance()
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
 
       const request = {
         headers: { Authorization: undefined },
@@ -425,17 +430,13 @@ describe('createAxiosInstance', () => {
     })
 
     it('should not attempt to refresh token if refreshToken is false in SSR', async () => {
-      const { getTokenSSR } = require('../../../token/getTokenSSR')
-      const { isUserTokenValid } = require('../../../token/isUserTokenValid')
-      const { refreshAccessToken } = require('../../../token/refreshAccessToken')
-
-      const getTokenSSRMock = getTokenSSR as jest.Mock
+      const getTokenSSRMock = getTokenSSR as Mock
       getTokenSSRMock.mockResolvedValue('invalid-access-token')
 
-      const isUserTokenValidMock = isUserTokenValid as jest.Mock
+      const isUserTokenValidMock = isUserTokenValid as Mock
       isUserTokenValidMock.mockReturnValue(false)
 
-      const refreshAccessTokenMock = refreshAccessToken as jest.Mock
+      const refreshAccessTokenMock = refreshAccessToken as Mock
 
       const {
         axios: {
@@ -445,7 +446,7 @@ describe('createAxiosInstance', () => {
         },
       } = createAxiosInstance({ refreshToken: false })
 
-      const [[interceptorFn]] = (use as jest.Mock).mock.calls
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
 
       const request = {
         headers: { Authorization: undefined },

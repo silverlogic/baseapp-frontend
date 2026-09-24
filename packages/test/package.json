@@ -23,7 +23,17 @@
     "@storybook/react": "catalog:storybook"
   },
   "peerDependencies": {
-    "react": "catalog:react19"
+    "react": "catalog:react19",
+    "@vitejs/plugin-react": "catalog:test",
+    "vitest": "catalog:test"
+  },
+  "peerDependenciesMeta": {
+    "@vitejs/plugin-react": {
+      "optional": true
+    },
+    "vitest": {
+      "optional": true
+    }
   },
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
@@ -37,12 +47,16 @@
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",
     "@types/react-dom": "catalog:react19",
+    "@vitejs/plugin-react": "catalog:test",
+    "@vitest/coverage-v8": "catalog:test",
     "babel-jest": "catalog:test",
     "jest": "catalog:test",
     "jest-environment-jsdom": "catalog:test",
+    "jsdom": "catalog:test",
     "ts-jest": "catalog:test",
     "ts-node": "catalog:test",
-    "typescript": "catalog:"
+    "typescript": "catalog:",
+    "vitest": "catalog:test"
   },
   "license": "MIT",
   "repository": {

@@ -1,19 +1,20 @@
 import { setItemAsync } from 'expo-secure-store'
+import type { Mock } from 'vitest'
 
 import { setTokenAsync } from '..'
 import { setCookie } from '../../../cookie'
 import { isMobilePlatform } from '../../../os'
 
-jest.mock('expo-secure-store', () => ({
-  setItemAsync: jest.fn(),
+vi.mock('expo-secure-store', async () => ({
+  setItemAsync: vi.fn(),
 }))
 
-jest.mock('../../../cookie', () => ({
-  setCookie: jest.fn(),
+vi.mock('../../../cookie', async () => ({
+  setCookie: vi.fn(),
 }))
 
-jest.mock('../../../os', () => ({
-  isMobilePlatform: jest.fn(),
+vi.mock('../../../os', async () => ({
+  isMobilePlatform: vi.fn(),
 }))
 
 describe('setTokenAsync', () => {
@@ -21,11 +22,11 @@ describe('setTokenAsync', () => {
   const mockValue = 'test-value'
 
   afterEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should call setItemAsync on mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
+    ;(isMobilePlatform as Mock).mockReturnValue(true)
 
     await setTokenAsync(mockKey, mockValue)
 
@@ -36,7 +37,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should call setCookie on non-mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
 
     await setTokenAsync(mockKey, mockValue)
 
@@ -47,8 +48,8 @@ describe('setTokenAsync', () => {
   })
 
   it('should not throw error when setItemAsync fails on mobile', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
-    ;(setItemAsync as jest.Mock).mockImplementationOnce(async () => {
+    ;(isMobilePlatform as Mock).mockReturnValue(true)
+    ;(setItemAsync as Mock).mockImplementationOnce(async () => {
       throw new Error('SecureStore Error')
     })
 
@@ -59,8 +60,8 @@ describe('setTokenAsync', () => {
   })
 
   it('should not throw error when setCookie fails on non-mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
-    ;(setCookie as jest.Mock).mockImplementationOnce(() => {
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
+    ;(setCookie as Mock).mockImplementationOnce(() => {
       throw new Error('Cookie Error')
     })
 
@@ -71,7 +72,7 @@ describe('setTokenAsync', () => {
   })
 
   it('should call setCookie with the configuration object on non-mobile platform', async () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
     const mockConfig = { secure: true }
 
     await setTokenAsync(mockKey, mockValue, mockConfig)

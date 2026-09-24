@@ -1,4 +1,5 @@
 import ClientCookies from 'js-cookie'
+import type { Mock, MockInstance } from 'vitest'
 
 import { getCookie, removeCookie, setCookie } from '..'
 import {
@@ -7,18 +8,17 @@ import {
 } from '../../../hooks/useCookie/constants'
 import { SetCookieOptions } from '../types'
 
-jest.mock('js-cookie', () => ({
-  get: jest.fn(),
-  set: jest.fn(),
-  remove: jest.fn(),
-}))
+vi.mock('js-cookie', async () => {
+  const api = { get: vi.fn(), set: vi.fn(), remove: vi.fn() }
+  return { ...api, default: api }
+})
 
 describe('Cookie Functions', () => {
-  let dispatchSpy: jest.SpyInstance
+  let dispatchSpy: MockInstance
 
   beforeEach(() => {
-    jest.clearAllMocks()
-    dispatchSpy = jest.spyOn(window, 'dispatchEvent')
+    vi.clearAllMocks()
+    dispatchSpy = vi.spyOn(window, 'dispatchEvent')
   })
 
   afterEach(() => {
@@ -28,7 +28,7 @@ describe('Cookie Functions', () => {
   describe('getCookie', () => {
     it('should get a cookie from ClientCookies', () => {
       const mockCookie = 'test-cookie'
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(mockCookie)
+      ;(ClientCookies.get as Mock).mockReturnValue(mockCookie)
 
       const result = getCookie('test')
 
@@ -38,7 +38,7 @@ describe('Cookie Functions', () => {
 
     it('should parse JSON when parseJSON is true', () => {
       const mockCookie = JSON.stringify({ key: 'value' })
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(mockCookie)
+      ;(ClientCookies.get as Mock).mockReturnValue(mockCookie)
 
       const result = getCookie('test', { parseJSON: true })
 
@@ -47,7 +47,7 @@ describe('Cookie Functions', () => {
 
     it('should return raw cookie if JSON parsing fails', () => {
       const malformedJson = '{"malformedJson":'
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(malformedJson)
+      ;(ClientCookies.get as Mock).mockReturnValue(malformedJson)
 
       const result = getCookie('test', { parseJSON: true })
 
@@ -56,7 +56,7 @@ describe('Cookie Functions', () => {
 
     it('should not parse the cookie if parseJSON is false', () => {
       const mockCookie = '{"key": "value"}'
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(mockCookie)
+      ;(ClientCookies.get as Mock).mockReturnValue(mockCookie)
 
       const result = getCookie('test', { parseJSON: false })
 
@@ -64,7 +64,7 @@ describe('Cookie Functions', () => {
     })
 
     it('should return undefined when cookie does not exist', () => {
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(undefined)
+      ;(ClientCookies.get as Mock).mockReturnValue(undefined)
 
       const result = getCookie('nonexistent')
 
@@ -72,7 +72,7 @@ describe('Cookie Functions', () => {
     })
 
     it('should return undefined when cookie is undefined and parseJSON is true', () => {
-      ;(ClientCookies.get as jest.Mock).mockReturnValue(undefined)
+      ;(ClientCookies.get as Mock).mockReturnValue(undefined)
 
       const result = getCookie('nonexistent', { parseJSON: true })
 
@@ -118,9 +118,9 @@ describe('Cookie Functions', () => {
     })
 
     it('should handle errors gracefully and not dispatch on failure', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const error = new Error('Cookie set error')
-      ;(ClientCookies.set as jest.Mock).mockImplementation(() => {
+      ;(ClientCookies.set as Mock).mockImplementation(() => {
         throw error
       })
 
@@ -160,9 +160,9 @@ describe('Cookie Functions', () => {
     })
 
     it('should handle errors gracefully and not dispatch on failure', () => {
-      const consoleSpy = jest.spyOn(console, 'error').mockImplementation()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
       const error = new Error('Cookie remove error')
-      ;(ClientCookies.remove as jest.Mock).mockImplementation(() => {
+      ;(ClientCookies.remove as Mock).mockImplementation(() => {
         throw error
       })
 
