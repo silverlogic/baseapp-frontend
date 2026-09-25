@@ -17,7 +17,6 @@ export const StyledMarkdown = styled(Box, {
 
   return {
     ...theme.typography[variant],
-    whiteSpace: 'pre-wrap',
     wordBreak: 'break-word',
 
     // Headings
@@ -29,8 +28,12 @@ export const StyledMarkdown = styled(Box, {
     h6: { margin: 0, ...theme.typography.h6 },
 
     // Paragraphs
-    p: { margin: 0, ...theme.typography[variant] },
-    '& p + p': { marginTop: '0.5em' },
+    // `pre-wrap` is scoped to paragraphs (not the root) so the editor's soft line breaks
+    // (Shift+Enter, exported as "\n") still wrap, while the "\n" text nodes react-markdown
+    // emits *between* blocks collapse instead of rendering as an extra blank line.
+    // No margin between paragraphs: pressing Enter in the editor creates a new paragraph,
+    // and the editor shows them without a gap.
+    p: { margin: 0, whiteSpace: 'pre-wrap', ...theme.typography[variant] },
 
     // Line breaks
     br: {
