@@ -1130,3 +1130,76 @@ export const commentsWithElevenRepliesMockData = {
     },
   },
 }
+
+// Pressing Enter in the rich-text comment input starts a new paragraph, so a comment typed as
+// "First line" ⏎ "Second line" ⏎ "Third line" is stored with blank lines between the lines,
+// while Shift+Enter keeps the text in the same paragraph with a single "\n".
+export const commentsWithMultiLineBodiesMockData = {
+  data: {
+    target: {
+      id: 'test-id',
+      __typename: 'Page',
+      __isCommentsInterface: 'Page',
+      isCommentsEnabled: true,
+      commentsCount: { total: 2 },
+      comments: {
+        edges: [
+          {
+            node: {
+              id: 'comment-1',
+              __typename: 'Comment',
+              body: 'First line\n\nSecond line\n\nThird line',
+              isPinned: false,
+              created: '2024-04-11T17:08:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: true,
+              canDelete: true,
+              canReport: true,
+              canPin: true,
+              user: {
+                id: 'user-1',
+                fullName: 'John Doe',
+                avatar: {
+                  url: 'https://cdn.example.com/avatar1.png',
+                },
+              },
+              reactionsCount: { total: 0 },
+              myReaction: null,
+              __isReactionsInterface: 'Comment',
+              __isCommentsInterface: 'Comment',
+            },
+          },
+          {
+            node: {
+              id: 'comment-2',
+              __typename: 'Comment',
+              body: 'Soft break line one\nSoft break line two',
+              isPinned: false,
+              created: '2024-04-21T19:18:58.505961+00:00',
+              commentsCount: { total: 0 },
+              canChange: false,
+              canDelete: false,
+              canReport: true,
+              canPin: false,
+              user: {
+                id: 'user-2',
+                fullName: 'Jane Smith',
+                avatar: {
+                  url: 'https://cdn.example.com/avatar2.png',
+                },
+              },
+              reactionsCount: { total: 0 },
+              myReaction: null,
+              __isReactionsInterface: 'Comment',
+              __isCommentsInterface: 'Comment',
+            },
+          },
+        ],
+        pageInfo: {
+          endCursor: 'cursor-2',
+          hasNextPage: false,
+        },
+      },
+    },
+  },
+}

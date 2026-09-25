@@ -10,6 +10,7 @@ import {
   commentsNextPageMockData,
   commentsTestMockData,
   commentsWithElevenRepliesMockData,
+  commentsWithMultiLineBodiesMockData,
   commentsWithNextPageMockData,
   likeACommentMockData,
   pinACommentMockData,
@@ -291,5 +292,43 @@ describe('Comments', () => {
       })
     cy.findByText('Eleventh newest reply').should('exist')
     cy.findByRole('button', { name: /show more replies/i }).should('not.exist')
+  })
+
+  it('should render a multi-line comment without gaps between its lines', () => {
+    const { environment, queueOperationResolver } = createTestEnvironment()
+
+    queueOperationResolver({
+      queryName: 'CommentsForTestingQuery',
+      data: commentsWithMultiLineBodiesMockData,
+    })
+
+    cy.mockNextRouter().then((router) => {
+      cy.mount(
+        <AppRouterContext.Provider value={router}>
+          <CommentsForTesting environment={environment} />
+        </AppRouterContext.Provider>,
+      )
+    })
+
+    cy.findByText('First line').then(($first) => {
+      cy.findByText('Second line').then(($second) => {
+        cy.findByText('Third line').then(($third) => {
+          const first = $first[0]!.getBoundingClientRect()
+          const second = $second[0]!.getBoundingClientRect()
+          const third = $third[0]!.getBoundingClientRect()
+          // Each line starts right where the previous one ends: no blank line or margin between them
+          expect(second.top).to.be.closeTo(first.bottom, 1)
+          expect(third.top).to.be.closeTo(second.bottom, 1)
+        })
+      })
+    })
+
+    cy.step('A soft line break still renders the text on two lines')
+    cy.findByText('First line').then(($line) => {
+      const lineHeight = $line[0]!.getBoundingClientRect().height
+      cy.findByText(/Soft break line one/).then(($paragraph) => {
+        expect($paragraph[0]!.getBoundingClientRect().height).to.be.closeTo(lineHeight * 2, 1)
+      })
+    })
   })
 })
