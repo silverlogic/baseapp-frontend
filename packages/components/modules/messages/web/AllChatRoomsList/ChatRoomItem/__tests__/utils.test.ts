@@ -22,6 +22,11 @@ describe('getLastMessagePreview', () => {
     expect(getLastMessagePreview('<u></u>\nsecond line')).toBe('second line')
   })
 
+  it('treats <br> as a line break instead of joining the words around it', () => {
+    expect(getLastMessagePreview('one<br>two')).toBe('one')
+    expect(getLastMessagePreview('<br/><u>HEllo</u>')).toBe('HEllo')
+  })
+
   it('returns an empty string for empty content', () => {
     expect(getLastMessagePreview(null)).toBe('')
     expect(getLastMessagePreview('')).toBe('')

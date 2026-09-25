@@ -36,6 +36,6 @@ export const MessageContent = styled(Markdown, {
   // The shared Markdown inline-code highlight is a light surface meant for dark text; on the
   // dark bubble of a received message it would put the light text on a light highlight.
   ...(!isOwnMessage && {
-    '& code': { backgroundColor: alpha(theme.palette.grey[500], 0.24) },
+    '& :not(pre) > code': { backgroundColor: alpha(theme.palette.grey[500], 0.24) },
   }),
 }))
