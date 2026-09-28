@@ -20,6 +20,9 @@ const LINE_BREAK_REGEX = /\r?\n|<br(?:\s[^<>]{0,200})?\/?>/i
 const INLINE_HTML_TAG_REGEX =
   /<\/?(?:u|ins|s|del|strike|b|strong|i|em|code|mark|sup|sub|span)(?:\s[^<>]{0,200})?\/?>/gi
 
+// The chat list shows the last message as a single line of plain text, not through the
+// `Markdown` renderer the message bubble uses, so this is a best-effort strip of the common
+// syntax rather than a full parse.
 const stripMarkdownSafely = (line: string) =>
   line
     .replace(INLINE_HTML_TAG_REGEX, '')
