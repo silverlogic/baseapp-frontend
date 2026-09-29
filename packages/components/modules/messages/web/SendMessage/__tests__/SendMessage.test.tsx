@@ -2,28 +2,29 @@ import { Suspense } from 'react'
 
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { useController, useFormState } from 'react-hook-form'
+import { vi } from 'vitest'
 
 import SendMessage from '../index'
 
-const mockCommitMutation = jest.fn()
+const { mockCommitMutation } = vi.hoisted(() => ({ mockCommitMutation: vi.fn() }))
 
-jest.mock('@baseapp-frontend/authentication', () => ({
+vi.mock('@baseapp-frontend/authentication', () => ({
   useCurrentProfile: () => ({ currentProfile: { id: 'profile-1' } }),
 }))
 
-jest.mock('@baseapp-frontend/utils', () => ({
-  ...jest.requireActual('@baseapp-frontend/utils'),
-  useNotification: () => ({ sendToast: jest.fn() }),
+vi.mock('@baseapp-frontend/utils', async () => ({
+  ...(await vi.importActual('@baseapp-frontend/utils')),
+  useNotification: () => ({ sendToast: vi.fn() }),
 }))
 
-jest.mock('../../../common', () => ({
+vi.mock('../../../common', () => ({
   MESSAGE_TYPE: { user: 'USER_MESSAGE' },
   useSendMessageMutation: () => [mockCommitMutation, false],
 }))
 
-// the shared barrels pull in relay fragments, which jest can't compile without the relay transform
-jest.mock('../../../../__shared__/common', () => {
-  const { z } = jest.requireActual('zod')
+// the shared barrels pull in relay fragments, which the transform can't compile here
+vi.mock('../../../../__shared__/common', async () => {
+  const { z } = await vi.importActual<typeof import('zod')>('zod')
   return {
     SOCIAL_UPSERT_FORM: { body: 'body', mentionedProfileIds: 'mentionedProfileIds', id: 'id' },
     DEFAULT_SOCIAL_UPSERT_FORM_VALUES: { body: '', mentionedProfileIds: [], id: '' },
@@ -31,8 +32,10 @@ jest.mock('../../../../__shared__/common', () => {
   }
 })
 
-jest.mock('../../../../__shared__/web', () => ({
-  SocialInput: jest.requireActual('../../../../__shared__/web/SocialInput').default,
+vi.mock('../../../../__shared__/web', async () => ({
+  SocialInput: (
+    await vi.importActual<{ default: unknown }>('../../../../__shared__/web/SocialInput')
+  ).default,
   useFormMentions: () => ({ mentions: { disabled: true } }),
   withMentionsInSocialInputProps: (props: object) => props,
 }))
