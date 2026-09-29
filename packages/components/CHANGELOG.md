@@ -1,5 +1,23 @@
 # @baseapp-frontend/components
 
+## 2.1.3
+
+### Patch Changes
+
+- 9229430: Allow scrolling through long biographies on native profile screens. `ProfileComponent` rendered inside a non-scrolling `PageViewWithHeader`, so a long bio pushed the Edit/Share actions below the screen edge with no way to reach them. It now renders in the design-system `ScrollView` (`avoidKeyboard={false}`, since the screen has no inputs), with the horizontal and bottom padding moved to a `flexGrow: 1` content container so short profiles still fill the screen.
+
+## 2.1.2
+
+### Patch Changes
+
+- be2d578: Fix the native chat rooms list not resting at the bottom, leaving its last card untappable with 20+ rooms. `InfiniteScrollerView` sized its container with `height: '100%'`, which resolves against the whole parent rather than the space left over — and on the Messages screen the list is the last child of a flex column that also holds the title, search input and tabs, so its scroll viewport ran past the bottom of the screen. iOS caps scrolling at `contentHeight - viewportHeight`, making that overhang unreachable: the list snapped back short of the end and the final cards sat below the device edge. The container now uses `flex: 1` so it takes only the remaining space, which also fixes the same overflow in the add-contact-to-group list (previously papered over with a 40px content padding); `CreateRoomList` and `NotificationsList` pin the height in their own wrappers and are unaffected. The list's own footer spacer supplies the gap below the last card.
+- 7a55042: Fix group member selection going out of sync with the actual group. `GroupDetailsPage` wrote the viewed group's members into the app-wide group-chat store and never cleared them, so the new group flow rendered those members pre-checked and disabled; it now clears the draft on unmount. It also only wrote that context on mount, while the add-members and edit-group screens reset the store when they finish and leave it mounted underneath — so after adding a member once, reopening "Add members" lost the room id ("Room ID is missing") and showed existing members as unselected. The context is now re-established on focus, `UpdateChatRoomMutation` returns `participantIds` so newly added members are reflected right away, and `resetGroupChat` clears `roomId` (it was missing from the initial state, so Zustand's shallow merge left it behind). `setExistingParticipants` and `setRoomId` now no-op when the value is unchanged, so re-establishing the context on focus does not re-render every store consumer on each incoming message.
+- 103adad: Fix formatted text in received chat messages being unreadable. The shared `Markdown` inline-code highlight is a light surface, so on the dark bubble of a received message the light text sat on a light highlight; `MessageContent` now uses a translucent grey highlight for inline code in received messages. The chat rooms list preview also strips the inline HTML tags the markdown editor emits (e.g. underline as `<u>`), so it shows `HEllo` instead of `<u>HEllo</u>`.
+- Updated dependencies [be2d578]
+- Updated dependencies [99086c8]
+  - @baseapp-frontend/design-system@2.1.1
+  - @baseapp-frontend/graphql@2.0.2
+
 ## 2.1.1
 
 ### Patch Changes
