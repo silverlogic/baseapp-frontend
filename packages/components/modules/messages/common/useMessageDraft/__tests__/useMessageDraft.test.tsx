@@ -25,7 +25,9 @@ const renderDraft = (storage: MessageDraftStorage, roomId = 'room-1') =>
   renderHook(() => {
     const form = useForm<SocialUpsertForm>({ defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES })
     const draft = useMessageDraft({ form, roomId, profileId: 'profile-1', storage })
-    return { form, ...draft }
+    // read during render, so the form tracks it
+    const { isDirty } = form.formState
+    return { form, isDirty, ...draft }
   })
 
 const draftKey = 'baseapp:messages:draft:profile-1:room-1'
@@ -36,6 +38,18 @@ describe('useMessageDraft', () => {
     const { result } = renderDraft(storage)
 
     await waitFor(() => expect(result.current.form.getValues('body')).toBe('Hello'))
+  })
+
+  it('restores the draft as an edit, so it can be sent and then cleared by a reset', async () => {
+    const { items, storage } = createAsyncStorage({ [draftKey]: JSON.stringify({ body: 'Hello' }) })
+    const { result } = renderDraft(storage)
+
+    await waitFor(() => expect(result.current.form.getValues('body')).toBe('Hello'))
+    await waitFor(() => expect(result.current.isDirty).toBe(true))
+
+    act(() => result.current.form.reset())
+    expect(result.current.form.getValues('body')).toBe('')
+    await waitFor(() => expect(items[draftKey]).toBeUndefined())
   })
 
   it('does not overwrite text typed before the draft finished loading', async () => {

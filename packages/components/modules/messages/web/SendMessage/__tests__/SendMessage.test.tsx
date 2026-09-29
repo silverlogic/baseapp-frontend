@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { useFormState } from 'react-hook-form'
 
 import SendMessage from '../index'
 
@@ -33,19 +34,26 @@ jest.mock('../../../../__shared__/web', () => ({
   withMentionsInSocialInputProps: (props: object) => props,
 }))
 
-// stands in for the rich SocialInput: a plain input bound to the same form
-const SocialInput = ({ form, submit }: any) => (
-  <form onSubmit={form.handleSubmit(submit)}>
-    <input aria-label="message" {...form.register('body')} />
-    <button type="submit">send</button>
-  </form>
-)
+// stands in for the rich SocialInput: a plain input bound to the same form, with the same
+// send button rule as the real one
+const SocialInput = ({ form, submit }: any) => {
+  const { isValid, isDirty } = useFormState({ control: form.control })
+  return (
+    <form onSubmit={form.handleSubmit(submit)}>
+      <input aria-label="message" {...form.register('body')} />
+      <button type="submit" disabled={!isValid || !isDirty}>
+        send
+      </button>
+    </form>
+  )
+}
 
 const renderRoom = (roomId: string) => (
   <SendMessage key={roomId} roomId={roomId} SocialInput={SocialInput} />
 )
 
 const messageInput = () => screen.getByLabelText('message') as HTMLInputElement
+const sendButton = () => screen.getByText('send') as HTMLButtonElement
 
 describe('SendMessage', () => {
   beforeEach(() => {
@@ -74,7 +82,8 @@ describe('SendMessage', () => {
     const { rerender } = render(renderRoom('room-1'))
 
     fireEvent.change(messageInput(), { target: { value: 'Hello' } })
-    fireEvent.click(screen.getByText('send'))
+    await waitFor(() => expect(sendButton().disabled).toBe(false))
+    fireEvent.click(sendButton())
     await waitFor(() => expect(mockCommitMutation).toHaveBeenCalledTimes(1))
     expect(messageInput().value).toBe('')
 
@@ -90,6 +99,22 @@ describe('SendMessage', () => {
 
     render(renderRoom('room-1'))
     expect(messageInput().value).toBe('Hello')
+  })
+
+  it('enables sending a restored draft, and forgets it once sent', async () => {
+    const { unmount } = render(renderRoom('room-1'))
+    fireEvent.change(messageInput(), { target: { value: 'Hello' } })
+    unmount()
+
+    render(renderRoom('room-1'))
+    expect(messageInput().value).toBe('Hello')
+    await waitFor(() => expect(sendButton().disabled).toBe(false))
+
+    fireEvent.click(sendButton())
+    await waitFor(() => expect(mockCommitMutation).toHaveBeenCalledTimes(1))
+    expect(mockCommitMutation.mock.calls[0][0].variables.input.content).toBe('Hello')
+    expect(messageInput().value).toBe('')
+    expect(window.localStorage.length).toBe(0)
   })
 
   it('removes the saved draft once the text is deleted', () => {

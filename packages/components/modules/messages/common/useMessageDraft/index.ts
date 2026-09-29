@@ -39,7 +39,13 @@ const useMessageDraft = ({ form, roomId, profileId, storage }: UseMessageDraftPr
     const restoreDraft = (value: string | null) => {
       const draft = parseMessageDraft(value)
       // never overwrite text typed while an async storage was still loading the draft
-      if (isActive && draft && !form.getValues('body')) form.reset(draft)
+      if (!isActive || !draft || form.getValues('body')) return
+      // set the values instead of `form.reset(draft)`: resetting would make the draft the form's
+      // default values, so the form wouldn't be dirty (send button disabled) and the `form.reset()`
+      // after sending would bring the draft back
+      const options = { shouldDirty: true, shouldValidate: true }
+      form.setValue('mentionedProfileIds', draft.mentionedProfileIds, options)
+      form.setValue('body', draft.body, options)
     }
     const storedValue = storage.getItem(storageKey)
     if (storedValue instanceof Promise) {
