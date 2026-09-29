@@ -80,4 +80,29 @@ describe('useMessageDraft', () => {
 
     expect(result.current.form.getValues('body')).toBe('')
   })
+
+  it('keeps working when an async storage fails', async () => {
+    const onUnhandledRejection = jest.fn()
+    process.on('unhandledRejection', onUnhandledRejection)
+    const failure = () => Promise.reject(new Error('storage unavailable'))
+    const storage: MessageDraftStorage = {
+      getItem: failure,
+      setItem: failure,
+      removeItem: failure,
+    }
+    const { result } = renderDraft(storage)
+    await act(async () => {})
+
+    act(() => result.current.form.setValue('body', 'Hello'))
+    act(() => result.current.form.setValue('body', ''))
+    act(() => result.current.clearDraft())
+    await act(async () => {})
+    await new Promise((resolve) => {
+      setTimeout(resolve, 0)
+    })
+
+    process.off('unhandledRejection', onUnhandledRejection)
+    expect(onUnhandledRejection).not.toHaveBeenCalled()
+    expect(result.current.form.getValues('body')).toBe('')
+  })
 })

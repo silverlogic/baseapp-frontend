@@ -114,16 +114,16 @@ describe('SendMessage', () => {
     await waitFor(() => expect(mockCommitMutation).toHaveBeenCalledTimes(1))
     expect(mockCommitMutation.mock.calls[0][0].variables.input.content).toBe('Hello')
     expect(messageInput().value).toBe('')
-    expect(window.localStorage.length).toBe(0)
+    expect(window.localStorage).toHaveLength(0)
   })
 
   it('removes the saved draft once the text is deleted', () => {
     render(renderRoom('room-1'))
 
     fireEvent.change(messageInput(), { target: { value: 'Hello' } })
-    expect(window.localStorage.length).toBe(1)
+    expect(window.localStorage).toHaveLength(1)
 
     fireEvent.change(messageInput(), { target: { value: '' } })
-    expect(window.localStorage.length).toBe(0)
+    expect(window.localStorage).toHaveLength(0)
   })
 })

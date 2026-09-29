@@ -22,6 +22,11 @@ const parseMessageDraft = (value: string | null): SocialUpsertForm | null => {
   }
 }
 
+// storage writes are fire-and-forget: a failed write only means the draft isn't kept
+const ignoreStorageFailure = (result: void | Promise<void>) => {
+  if (result instanceof Promise) result.catch(() => undefined)
+}
+
 /**
  * Keeps the unsent message of a chat room in `storage`, so it survives switching rooms,
  * leaving the screen and reloading the page (or restarting the app).
@@ -49,7 +54,7 @@ const useMessageDraft = ({ form, roomId, profileId, storage }: UseMessageDraftPr
     }
     const storedValue = storage.getItem(storageKey)
     if (storedValue instanceof Promise) {
-      storedValue.then(restoreDraft)
+      storedValue.then(restoreDraft, () => undefined)
     } else {
       restoreDraft(storedValue)
     }
@@ -63,9 +68,9 @@ const useMessageDraft = ({ form, roomId, profileId, storage }: UseMessageDraftPr
             (id): id is string => typeof id === 'string',
           ),
         }
-        storage.setItem(storageKey, JSON.stringify(draft))
+        ignoreStorageFailure(storage.setItem(storageKey, JSON.stringify(draft)))
       } else {
-        storage.removeItem(storageKey)
+        ignoreStorageFailure(storage.removeItem(storageKey))
       }
     })
 
@@ -76,7 +81,7 @@ const useMessageDraft = ({ form, roomId, profileId, storage }: UseMessageDraftPr
   }, [form, storage, storageKey])
 
   const clearDraft = useCallback(() => {
-    if (storageKey) storage.removeItem(storageKey)
+    if (storageKey) ignoreStorageFailure(storage.removeItem(storageKey))
   }, [storage, storageKey])
 
   return { clearDraft }
