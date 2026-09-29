@@ -39,7 +39,6 @@ export interface Price {
   id: string
   unitAmount: number
   currency?: string
-  locale?: string
   recurring?: {
     interval: string
   }

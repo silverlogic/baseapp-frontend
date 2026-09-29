@@ -190,7 +190,7 @@ const useStripeHook = () => {
 
   const useListInvoices = ({ page = 1, entityId }: { page?: number; entityId?: string }) =>
     useQuery({
-      queryKey: [STRIPE_API_KEY.listInvoices(page.toString())],
+      queryKey: [STRIPE_API_KEY.listInvoices(page.toString(), entityId ?? 'me')],
       queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 

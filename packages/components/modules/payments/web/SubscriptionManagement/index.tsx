@@ -127,7 +127,6 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
       await updateSubscription({
         defaultPaymentMethod: paymentMethodId,
       })
-      setLastAddedPaymentMethodIdDuringSession(paymentMethodId)
     } catch (error) {
       console.error('Error updating subscription:', error)
     }
@@ -221,7 +220,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
                     entityId={entityId}
                     paymentMethods={paymentMethods ?? []}
                     selectedPaymentMethodId={selectedPaymentMethodId ?? ''}
-                    setSelectedPaymentMethodId={handleUpdateSubscription}
+                    setSelectedPaymentMethodId={setLastAddedPaymentMethodIdDuringSession}
                     elements={elements}
                     stripe={stripe}
                     isAddCardModalOpen={isAddCardModalOpen}

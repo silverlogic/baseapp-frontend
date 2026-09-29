@@ -259,7 +259,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
           <Box display="flex" flexDirection="column" gap={2}>
             <ProductContainer>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                {product?.images.length > 0 && (
+                {!!product.images?.length && (
                   <Box
                     component="img"
                     src={product?.images[0]}
@@ -277,7 +277,9 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                     <Typography variant="body2" fontWeight={700}>
                       {formatPrice(
                         product?.defaultPrice?.unitAmount,
-                        product?.defaultPrice?.locale,
+                        // Price carries no locale, so this fell back to en-US anyway.
+                        // Sourcing a real one from the user is a separate change.
+                        undefined,
                         product?.defaultPrice?.currency,
                       )}
                     </Typography>

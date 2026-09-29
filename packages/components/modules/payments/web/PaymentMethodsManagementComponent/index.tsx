@@ -8,11 +8,9 @@ import { Add } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
-import { useQueryClient } from '@tanstack/react-query'
 
 import AddCardModal from '../AddCardModal'
 import useStripeHook from '../hooks/useStripeHook'
-import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
 import PaymentMethodsItem from './PaymentMethodsItem'
 import { PaymentMethodsManagementComponentProps } from './types'
@@ -31,7 +29,6 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     useStripeHook()
   const elements = useElements()
   const stripe = useStripe()
-  const queryClient = useQueryClient()
 
   const {
     data: paymentMethods,
@@ -179,7 +176,6 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
             setIsAddCardModalOpen(false)
-            queryClient.invalidateQueries({ queryKey: STRIPE_API_KEY.getProduct() })
           }}
         />
       )}
