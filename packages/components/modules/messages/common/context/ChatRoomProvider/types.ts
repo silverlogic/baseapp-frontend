@@ -1,5 +1,6 @@
 import { ValueOf } from '@baseapp-frontend/utils'
 
+import { SocialUpsertForm } from '../../../../__shared__/common'
 import { LEFT_PANEL_CONTENT } from '../useChatRoom/constants'
 
 export type ChatRoomState = {
@@ -10,6 +11,11 @@ export type ChatRoomState = {
 
 export type LeftPanelContentValues = ValueOf<typeof LEFT_PANEL_CONTENT>
 
+type ChatRoomDrafts = {
+  /** unsent message per room, kept across room switches and not cleared by `resetChatRoom` */
+  drafts: Record<string, SocialUpsertForm>
+}
+
 type ChatRoomFunctions = {
   setChatRoom: (
     partial: Partial<ChatRoomState> | ((state: ChatRoomState) => Partial<ChatRoomState>),
@@ -17,6 +23,8 @@ type ChatRoomFunctions = {
   ) => void
   resetChatRoom: () => void
   setLeftPanelContent: (content: LeftPanelContentValues) => void
+  setDraft: (roomId: string, draft: SocialUpsertForm) => void
+  clearDraft: (roomId: string) => void
 }
 
-export type UseChatRoom = ChatRoomState & ChatRoomFunctions
+export type UseChatRoom = ChatRoomState & ChatRoomDrafts & ChatRoomFunctions

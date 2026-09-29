@@ -1,6 +1,6 @@
 'use client'
 
-import { forwardRef, useMemo } from 'react'
+import { forwardRef, useContext, useEffect, useMemo } from 'react'
 
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
@@ -21,6 +21,7 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { MESSAGE_TYPE, useSendMessageMutation } from '../../common'
+import { ChatRoomContext } from '../../common/context/ChatRoomProvider'
 import { SendMessageProps } from './types'
 
 let nextClientMutationId = 0
@@ -85,12 +86,32 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
   ) => {
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
+    // optional: without a ChatRoomProvider the form simply doesn't keep drafts
+    const chatRoomStore = useContext(ChatRoomContext)
 
     const form = useForm<SocialUpsertForm>({
-      defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
+      defaultValues: chatRoomStore?.getState().drafts[roomId] ?? DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
     })
     const { setValue } = form
+
+    // keep the unsent message saved under its room, so switching away and back restores it
+    useEffect(() => {
+      if (!chatRoomStore) return undefined
+      const { unsubscribe } = form.watch((values) => {
+        const { setDraft, clearDraft } = chatRoomStore.getState()
+        if (values.body) {
+          setDraft(roomId, {
+            ...DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
+            ...values,
+            mentionedProfileIds: [...(values.mentionedProfileIds ?? [])] as string[],
+          })
+        } else {
+          clearDraft(roomId)
+        }
+      })
+      return unsubscribe
+    }, [chatRoomStore, form, roomId])
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
 
     const { mentions } = useFormMentions<SocialUpsertForm>({
@@ -160,6 +181,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         },
       })
       form.reset()
+      chatRoomStore?.getState().clearDraft(roomId)
     }
 
     return (

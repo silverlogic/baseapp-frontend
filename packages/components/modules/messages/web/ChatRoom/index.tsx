@@ -52,7 +52,7 @@ const ChatRoom: FC<ChatRoomProps> = ({
       />
       <ChatBodyContainer>
         <MessagesList roomRef={chatRoom} {...MessagesListProps} />
-        {/* keyed by room so an unsent draft is never carried over into another conversation */}
+        {/* keyed by room so each conversation loads its own saved draft instead of the previous room's text */}
         <SendMessage key={roomId} roomId={roomId} {...SendMessageProps} />
       </ChatBodyContainer>
     </ChatRoomContainer>

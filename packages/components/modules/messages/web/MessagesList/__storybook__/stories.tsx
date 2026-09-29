@@ -11,6 +11,9 @@ const mockChatRoomStore = create<UseChatRoom>((set) => ({
   setChatRoom: (newState) => set(newState),
   resetChatRoom: () => set({ id: '' }),
   setLeftPanelContent: (_content) => {},
+  drafts: {},
+  setDraft: (_roomId, _draft) => {},
+  clearDraft: (_roomId) => {},
 }))
 
 const meta: Meta<typeof MessageListWithQuery> = {
