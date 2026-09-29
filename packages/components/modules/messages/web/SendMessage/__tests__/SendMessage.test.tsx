@@ -1,5 +1,7 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react'
-import { useFormState } from 'react-hook-form'
+import { Suspense } from 'react'
+
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { useController, useFormState } from 'react-hook-form'
 
 import SendMessage from '../index'
 
@@ -23,13 +25,14 @@ jest.mock('../../../common', () => ({
 jest.mock('../../../../__shared__/common', () => {
   const { z } = jest.requireActual('zod')
   return {
+    SOCIAL_UPSERT_FORM: { body: 'body', mentionedProfileIds: 'mentionedProfileIds', id: 'id' },
     DEFAULT_SOCIAL_UPSERT_FORM_VALUES: { body: '', mentionedProfileIds: [], id: '' },
     SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA: z.object({ body: z.string().min(1) }),
   }
 })
 
 jest.mock('../../../../__shared__/web', () => ({
-  SocialInput: () => null,
+  SocialInput: jest.requireActual('../../../../__shared__/web/SocialInput').default,
   useFormMentions: () => ({ mentions: { disabled: true } }),
   withMentionsInSocialInputProps: (props: object) => props,
 }))
@@ -50,6 +53,35 @@ const SocialInput = ({ form, submit }: any) => {
 
 const renderRoom = (roomId: string) => (
   <SendMessage key={roomId} roomId={roomId} SocialInput={SocialInput} />
+)
+
+// the real SocialInput, with a plain input instead of the markdown editor
+const PlainTextField = ({ name, control, children }: any) => {
+  const { field } = useController({ name, control })
+  return (
+    <>
+      <input aria-label="message" {...field} />
+      {children}
+    </>
+  )
+}
+
+// suspends like ChatRoom does while it loads the room it switched to
+let pendingRoom: Promise<void> | undefined
+const RoomQuery = () => {
+  if (pendingRoom) throw pendingRoom
+  return null
+}
+
+const renderSuspendingRoom = (roomId: string) => (
+  <Suspense fallback="loading">
+    <RoomQuery />
+    <SendMessage
+      key={roomId}
+      roomId={roomId}
+      SocialInputProps={{ SocialTextField: PlainTextField }}
+    />
+  </Suspense>
 )
 
 const messageInput = () => screen.getByLabelText('message') as HTMLInputElement
@@ -115,6 +147,27 @@ describe('SendMessage', () => {
     expect(mockCommitMutation.mock.calls[0][0].variables.input.content).toBe('Hello')
     expect(messageInput().value).toBe('')
     expect(window.localStorage).toHaveLength(0)
+  })
+
+  it('enables sending a restored draft when the room loads after switching', async () => {
+    const { rerender } = render(renderSuspendingRoom('room-1'))
+    fireEvent.change(messageInput(), { target: { value: 'Hello' } })
+    rerender(renderSuspendingRoom('room-2'))
+
+    let loadRoom = () => {}
+    pendingRoom = new Promise<void>((resolve) => {
+      loadRoom = resolve
+    })
+    rerender(renderSuspendingRoom('room-1'))
+    await act(async () => {
+      pendingRoom = undefined
+      loadRoom()
+    })
+
+    expect(messageInput().value).toBe('Hello')
+    await waitFor(() =>
+      expect((screen.getByLabelText('submit actions') as HTMLButtonElement).disabled).toBe(false),
+    )
   })
 
   it('removes the saved draft once the text is deleted', () => {
