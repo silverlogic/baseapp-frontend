@@ -1,6 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 
-import ChatRoomProvider from '../../../common/context/ChatRoomProvider'
 import SendMessage from '../index'
 
 const mockCommitMutation = jest.fn()
@@ -43,15 +42,16 @@ const SocialInput = ({ form, submit }: any) => (
 )
 
 const renderRoom = (roomId: string) => (
-  <ChatRoomProvider>
-    <SendMessage key={roomId} roomId={roomId} SocialInput={SocialInput} />
-  </ChatRoomProvider>
+  <SendMessage key={roomId} roomId={roomId} SocialInput={SocialInput} />
 )
 
 const messageInput = () => screen.getByLabelText('message') as HTMLInputElement
 
 describe('SendMessage', () => {
-  beforeEach(() => mockCommitMutation.mockClear())
+  beforeEach(() => {
+    mockCommitMutation.mockClear()
+    window.localStorage.clear()
+  })
 
   it('keeps an unsent draft under its own room', () => {
     const { rerender } = render(renderRoom('room-1'))
@@ -81,5 +81,24 @@ describe('SendMessage', () => {
     rerender(renderRoom('room-2'))
     rerender(renderRoom('room-1'))
     expect(messageInput().value).toBe('')
+  })
+
+  it('restores the draft after a page reload', () => {
+    const { unmount } = render(renderRoom('room-1'))
+    fireEvent.change(messageInput(), { target: { value: 'Hello' } })
+    unmount()
+
+    render(renderRoom('room-1'))
+    expect(messageInput().value).toBe('Hello')
+  })
+
+  it('removes the saved draft once the text is deleted', () => {
+    render(renderRoom('room-1'))
+
+    fireEvent.change(messageInput(), { target: { value: 'Hello' } })
+    expect(window.localStorage.length).toBe(1)
+
+    fireEvent.change(messageInput(), { target: { value: '' } })
+    expect(window.localStorage.length).toBe(0)
   })
 })

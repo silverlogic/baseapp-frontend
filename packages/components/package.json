@@ -72,6 +72,7 @@
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
     "@native-html/render": "catalog:react-native",
+    "@react-native-async-storage/async-storage": "catalog:react-native",
     "@storybook/react": "catalog:storybook",
     "@tanstack/react-query": "catalog:",
     "expo-file-system": "catalog:react-native",
