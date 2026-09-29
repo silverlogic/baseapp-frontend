@@ -1,5 +1,0 @@
----
-"@baseapp-frontend/components": patch
----
-
-Fix unsent message text carrying over to another conversation. `ChatRoom` kept the same `SendMessage` form mounted when the selected room changed, so a draft typed in one chat stayed in the input (with the send button active) after switching, and sending it posted to the wrong room. Unsent messages are now saved per room and per profile by the new `useMessageDraft` hook: in `localStorage` on web (`SendMessage`) and in `AsyncStorage` on mobile (`MessageCreate`). Each room restores its own draft when it's opened again, including after a page reload or an app restart, and the draft is cleared once the message is sent or the text is deleted. `ChatRoom` keys `SendMessage` by `roomId` so a room you haven't typed in opens with an empty box. `@react-native-async-storage/async-storage` is now a dependency of `@baseapp-frontend/components`. `SocialInput` now reads both `formState.isValid` and `formState.isDirty` on every render, so its send button enables for a restored draft even when the room mounts inside a suspended boundary.
