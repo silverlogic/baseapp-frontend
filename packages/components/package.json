@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "2.1.1",
+  "version": "2.1.5",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -124,6 +124,7 @@
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
     "@native-html/render": "catalog:react-native",
+    "@react-native-async-storage/async-storage": "catalog:react-native",
     "@storybook/react": "catalog:storybook",
     "@stripe/react-stripe-js": "catalog:payments",
     "@stripe/stripe-js": "catalog:payments",

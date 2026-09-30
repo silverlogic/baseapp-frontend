@@ -1,6 +1,6 @@
 import { Markdown } from '@baseapp-frontend/design-system/components/web/markdown'
 
-import { Box, styled } from '@mui/material'
+import { Box, alpha, styled } from '@mui/material'
 
 import { MessageItemContainerProps } from './types'
 
@@ -33,4 +33,9 @@ export const MessageContent = styled(Markdown, {
   maxWidth: '100%',
   overflowWrap: 'anywhere',
   wordBreak: 'normal',
+  // The shared Markdown inline-code highlight is a light surface meant for dark text; on the
+  // dark bubble of a received message it would put the light text on a light highlight.
+  ...(!isOwnMessage && {
+    '& :not(pre) > code': { backgroundColor: alpha(theme.palette.grey[500], 0.24) },
+  }),
 }))

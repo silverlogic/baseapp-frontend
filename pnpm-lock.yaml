@@ -698,6 +698,9 @@ importers:
       '@native-html/render':
         specifier: catalog:react-native
         version: 1.0.3(@types/react@19.2.14)(react-native@0.83.6(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.0))(react@19.2.0)
+      '@react-native-async-storage/async-storage':
+        specifier: catalog:react-native
+        version: 2.2.0(react-native@0.83.6(@babel/core@7.29.7)(@react-native/metro-config@0.86.0(@babel/core@7.29.7))(@types/react@19.2.14)(react@19.2.0))
       '@storybook/react':
         specifier: catalog:storybook
         version: 8.6.17(@storybook/test@8.6.17(storybook@8.6.17(prettier@3.8.4)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.17(prettier@3.8.4))(typescript@5.9.2)
