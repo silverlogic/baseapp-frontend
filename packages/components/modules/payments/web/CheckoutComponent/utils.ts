@@ -7,7 +7,7 @@ export const maskEmail = (
   visibleDomainChars: number = 2,
   maskChar: string = '*',
 ): string => {
-  if (!email || !email.includes('@')) return ''
+  if (!email?.includes('@')) return ''
 
   const [username, domain] = email.split('@')
 
@@ -17,7 +17,7 @@ export const maskEmail = (
   const maskedUsername =
     username.slice(0, visibleLength) + maskChar.repeat(username.length - visibleLength)
 
-  if (maskDomain && domain && domain.includes('.')) {
+  if (maskDomain && domain?.includes('.')) {
     const [domainName, ...tldParts] = domain.split('.')
     const topLevelDomain = tldParts.join('.')
 

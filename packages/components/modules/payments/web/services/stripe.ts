@@ -50,19 +50,19 @@ export const STRIPE_API_KEY = {
 }
 
 export class StripeApi {
-  static getCustomer = (entityId?: string): Promise<Customer> =>
+  static readonly getCustomer = (entityId?: string): Promise<Customer> =>
     axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/`)
 
-  static createCustomer = (entityId?: string): Promise<Customer> =>
+  static readonly createCustomer = (entityId?: string): Promise<Customer> =>
     axios.post(`${baseUrl}/stripe/customers/`, { entityId })
 
-  static createSetupIntent = (entityId: string): Promise<SetupIntent> =>
+  static readonly createSetupIntent = (entityId: string): Promise<SetupIntent> =>
     axios.post(`${baseUrl}/stripe/customers/${entityId}/payment-methods/`)
 
-  static listPaymentMethods = (entityId?: string): Promise<PaymentMethod[]> =>
+  static readonly listPaymentMethods = (entityId?: string): Promise<PaymentMethod[]> =>
     axios.get(`${baseUrl}/stripe/customers/${entityId ?? 'me'}/payment-methods/`)
 
-  static updatePaymentMethod = (
+  static readonly updatePaymentMethod = (
     entityId: string,
     paymentMethodId: string,
     payload: UpdatePaymentMethodRequestBody,
@@ -72,7 +72,7 @@ export class StripeApi {
       payload,
     )
 
-  static deletePaymentMethod = (
+  static readonly deletePaymentMethod = (
     entityId: string,
     paymentMethodId: string,
     isDefault: boolean,
@@ -81,7 +81,7 @@ export class StripeApi {
       params: { isDefault },
     })
 
-  static listInvoices = (
+  static readonly listInvoices = (
     page: number,
     entityId?: string,
   ): Promise<DjangoPaginatedResponse<Invoice>> =>
@@ -89,12 +89,12 @@ export class StripeApi {
       params: { page },
     })
 
-  static listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products/`)
+  static readonly listProducts = (): Promise<Product[]> => axios.get(`${baseUrl}/stripe/products/`)
 
-  static getProduct = (productId: string): Promise<Product> =>
+  static readonly getProduct = (productId: string): Promise<Product> =>
     axios.get(`${baseUrl}/stripe/products/${productId}/`)
 
-  static createSubscription = ({
+  static readonly createSubscription = ({
     entityId,
     priceId,
     paymentMethodId,
@@ -112,13 +112,13 @@ export class StripeApi {
     return axios.post(`${baseUrl}/stripe/subscriptions/`, requestBody)
   }
 
-  static getSubscription = (subscriptionId: string): Promise<Subscription> =>
+  static readonly getSubscription = (subscriptionId: string): Promise<Subscription> =>
     axios.get(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`, {})
 
-  static cancelSubscription = (subscriptionId: string): Promise<void> =>
+  static readonly cancelSubscription = (subscriptionId: string): Promise<void> =>
     axios.delete(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`)
 
-  static updateSubscription = (
+  static readonly updateSubscription = (
     subscriptionId: string,
     updateData: UpdateSubscriptionOptions,
   ): Promise<Subscription> =>
