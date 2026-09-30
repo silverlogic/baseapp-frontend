@@ -1,14 +1,14 @@
-import { FC, ReactElement } from 'react'
+import { FC } from 'react'
 
 import { Box, Typography } from '@mui/material'
 
-import { PaymentMethod } from '../../types'
+import { PaymentMethodDisplayProps } from './types'
 
-const PaymentMethodDisplay: FC<{
-  pm: PaymentMethod
-  getCardIcon: (brand?: string) => ReactElement
-  isSelected?: boolean
-}> = ({ pm, getCardIcon, isSelected = false }) => (
+const PaymentMethodDisplay: FC<PaymentMethodDisplayProps> = ({
+  pm,
+  getCardIcon,
+  isSelected = false,
+}) => (
   <Box display="flex" alignItems="center" sx={{ py: isSelected ? 1 : 0 }}>
     <Box mr={2}>{getCardIcon(pm?.card?.brand)}</Box>
     <Box display="flex" flexDirection="column">

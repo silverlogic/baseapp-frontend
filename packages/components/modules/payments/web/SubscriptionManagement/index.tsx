@@ -21,9 +21,11 @@ import {
 } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
-import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
+import { SUBSCRIPTIONS_URL } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
@@ -77,7 +79,6 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   const { sendToast } = useNotification()
   const elements = useElements()
   const stripe = useStripe()
-  const router = useRouter()
   const searchParams = useSearchParams()
   const tabRedirect = searchParams.get('tab')
   const isLoading = isLoadingMethods || isLoadingSubscription
@@ -152,7 +153,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   }, [tabRedirect])
 
   if (!hasSubscription && !isLoading) {
-    return <FreePlanComponent onPlanChange={() => router.push('/subscriptions')} />
+    return <FreePlanComponent planChangeUrl={SUBSCRIPTIONS_URL} />
   }
 
   return (
@@ -190,11 +191,13 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
                   </RowFlexContainer>
                 )}
                 <Divider
-                  sx={{
-                    width: 'calc(100% + 48px)',
+                  // Bleeds the rule out through the container's horizontal padding:
+                  // the width has to grow by exactly what marginLeft pulls back, twice.
+                  sx={(theme) => ({
+                    width: `calc(100% + ${theme.spacing(6)})`,
                     marginLeft: -3,
                     marginY: 2,
-                  }}
+                  })}
                 />
               </SubscriptionPlanContainer>
               <PaymentMethodContainer>
@@ -253,7 +256,8 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
             <Button
               variant="contained"
               color="inherit"
-              onClick={() => router.push('/subscriptions')}
+              component={Link}
+              href={SUBSCRIPTIONS_URL}
               sx={{
                 width: 'fit-content',
               }}

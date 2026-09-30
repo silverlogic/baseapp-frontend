@@ -1,9 +1,11 @@
 import { Check } from '@mui/icons-material'
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import Link from 'next/link'
 
 import { RowFlexContainer, SubscriptionPlanContainer } from '../styled'
+import { FreePlanComponentProps } from './types'
 
-const FreePlanComponent = ({ onPlanChange }: { onPlanChange: () => void }) => {
+const FreePlanComponent = ({ planChangeUrl }: FreePlanComponentProps) => {
   const freeFeatures = [
     'Access to core features',
     'Limited storage space',
@@ -43,7 +45,8 @@ const FreePlanComponent = ({ onPlanChange }: { onPlanChange: () => void }) => {
       <Button
         variant="contained"
         color="inherit"
-        onClick={onPlanChange}
+        component={Link}
+        href={planChangeUrl}
         sx={{
           alignSelf: 'flex-end',
           width: 'fit-content',

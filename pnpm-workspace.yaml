@@ -51,6 +51,14 @@ catalog:
   react-multi-carousel: 2.8.6
 
 catalogs:
+  payments:
+    # Exact, not a range. The add-card flow calls elements.update({ clientSecret }),
+    # which stripe-js implements but does not declare in StripeElementsUpdateOptions -
+    # a floating minor on the SDK is how that stops working on someone else's install,
+    # with no diff in this repo.
+    "@stripe/react-stripe-js": 3.11.0
+    "@stripe/stripe-js": 7.10.0
+
   react19:
     "@types/react": 19.2.14
     "@types/react-dom": 19.2.3

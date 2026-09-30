@@ -9,6 +9,7 @@ import { Divider, Grid, Typography } from '@mui/material'
 import { Box, Theme, useMediaQuery } from '@mui/system'
 import { AddressElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
@@ -17,8 +18,10 @@ import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
+import { PRODUCT_THUMBNAIL_SIZE } from './constants'
 import { ProductContainer, StyledLoadingButton } from './styled'
 import { CheckoutComponentProps, CheckoutComponentWithElementProps } from './types'
+import { buildAddressOptions, extractErrorMessage } from './utils'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
   entityId,
@@ -84,33 +87,11 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     [selectedPaymentMethodId, paymentMethods],
   )
 
-  const addressOptions = {
-    mode: 'billing' as const,
-    ...{
-      defaultValues: {
-        name: selectedMethod?.billingDetails?.name || '',
-        address: {
-          line1: selectedMethod?.billingDetails?.address?.line1 || '',
-          line2: selectedMethod?.billingDetails?.address?.line2 || '',
-          city: selectedMethod?.billingDetails?.address?.city || '',
-          state: selectedMethod?.billingDetails?.address?.state || '',
-          postal_code: selectedMethod?.billingDetails?.address?.postalCode || '',
-          country: selectedMethod?.billingDetails?.address?.country || 'US',
-        },
-      },
-    },
-  }
+  const addressOptions = buildAddressOptions(selectedMethod)
   const shouldRenderAddressElement =
     !isAddCardModalOpen && !isLoadingMethods && (paymentMethods?.length ?? 0) > 0
   const isNotReady =
     isLoadingMethods || isErrorMethods || isLoadingProduct || isErrorProduct || !product
-
-  const extractErrorMessage = (error: any): string =>
-    error?.response?.data?.nonFieldErrors?.[0] ||
-    error?.response?.data?.error ||
-    (Array.isArray(error?.response?.data) && error?.response?.data[0]) ||
-    error?.message ||
-    'An unexpected error occurred. Please try again.'
 
   const handlePlaceOrder = async () => {
     if (!elements) return
@@ -260,12 +241,14 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
             <ProductContainer>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
                 {!!product.images?.length && (
-                  <Box
-                    component="img"
-                    src={product?.images[0]}
-                    alt={product?.name}
-                    sx={{ width: 48, height: 48, borderRadius: 1 }}
-                  />
+                  <Box sx={{ display: 'flex', borderRadius: 1, overflow: 'hidden' }}>
+                    <Image
+                      src={product.images[0] ?? ''}
+                      alt={product.name}
+                      width={PRODUCT_THUMBNAIL_SIZE}
+                      height={PRODUCT_THUMBNAIL_SIZE}
+                    />
+                  </Box>
                 )}
                 <Typography variant="body2" fontWeight={700}>
                   {product?.name}

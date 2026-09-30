@@ -6,6 +6,8 @@ import {
   VisaCreditCardIcon,
 } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { CARD_ICON_FONT_SIZE } from '../constants'
+
 // Stripe quotes amounts in the currency's minor unit, except for these, which have
 // none: ¥500 arrives as 500, and dividing by 100 rendered it as ¥5.
 // https://docs.stripe.com/currencies#zero-decimal
@@ -55,9 +57,9 @@ export const getCardIcon = (brand?: string) => {
 
   switch (cardBrand) {
     case 'visa':
-      return <VisaCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
+      return <VisaCreditCardIcon sx={{ mr: 1, fontSize: CARD_ICON_FONT_SIZE }} />
     case 'mastercard':
-      return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: 28 }} />
+      return <MastercardCreditCardIcon sx={{ mr: 1, fontSize: CARD_ICON_FONT_SIZE }} />
     default:
       return <CreditCardIcon sx={{ mr: 1, color: 'primary.main' }} />
   }

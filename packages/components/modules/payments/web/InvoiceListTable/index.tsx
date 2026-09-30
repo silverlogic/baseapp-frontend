@@ -1,3 +1,5 @@
+'use client'
+
 import { ChangeEvent, useEffect, useState } from 'react'
 
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'

@@ -1,3 +1,5 @@
+'use client'
+
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Stripe } from '@stripe/stripe-js'

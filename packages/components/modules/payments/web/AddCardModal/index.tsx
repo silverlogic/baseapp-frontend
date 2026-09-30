@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useState } from 'react'
 
 import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'

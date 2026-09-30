@@ -1,3 +1,5 @@
+'use client'
+
 import { FC } from 'react'
 
 import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
@@ -10,10 +12,9 @@ import { SetupIntent } from '../types'
 import { getCardIcon } from '../utils'
 import AddPaymentMethodItem from './AddPaymentMethodItem'
 import PaymentMethodDisplay from './PaymentMethodDisplay'
+import { ADD_NEW_PAYMENT_METHOD } from './constants'
 import { StyledButton } from './styled'
 import { PaymentDropdownProps } from './types'
-
-const ADD_NEW_PAYMENT_METHOD = 'add-new'
 
 const PaymentDropdown: FC<PaymentDropdownProps> = ({
   paymentMethods,
