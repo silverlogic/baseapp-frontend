@@ -2,6 +2,7 @@ import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/ic
 
 import { Box, Button, CardContent, Chip, Typography } from '@mui/material'
 import Image from 'next/image'
+import Link from 'next/link'
 
 import { SubscriptionCardWrapper } from '../styled'
 import { SubscriptionCardProps } from '../types'
@@ -11,8 +12,8 @@ const SubscriptionCard = ({
   isActive,
   smDown,
   selectedTerm,
-  onManageClick,
-  onSubscribeClick,
+  manageHref,
+  subscribeHref,
 }: SubscriptionCardProps) => {
   const dolarPrice = Math.floor((sub.defaultPrice?.unitAmount ?? 0) / 100)
   const centsPrice = ((sub.defaultPrice?.unitAmount ?? 0) % 100).toString().padStart(2, '0')
@@ -40,11 +41,11 @@ const SubscriptionCard = ({
         </Box>
         <Typography variant="body2">{sub.description}</Typography>
         {isActive ? (
-          <Button variant="soft" color="inherit" onClick={onManageClick}>
+          <Button variant="soft" color="inherit" component={Link} href={manageHref}>
             Manage Subscription
           </Button>
         ) : (
-          <Button variant="contained" color="inherit" onClick={onSubscribeClick}>
+          <Button variant="contained" color="inherit" component={Link} href={subscribeHref}>
             Subscribe
           </Button>
         )}

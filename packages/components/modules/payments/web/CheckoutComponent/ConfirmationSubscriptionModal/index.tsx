@@ -6,6 +6,7 @@ import { getUser } from '@baseapp-frontend/authentication/modules/user'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Button, Typography } from '@mui/material'
+import Link from 'next/link'
 
 import { maskEmail } from '../utils'
 import { ConfirmationSubscriptionModalProps } from './types'
@@ -14,15 +15,10 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
   open,
   onClose,
   orderNumber,
-  planDetails,
+  planDetailsHref,
 }) => {
   const user = getUser()
   const maskedEmail = user?.email ? maskEmail(user.email) : ''
-
-  const handleViewPlanDetails = () => {
-    planDetails()
-    onClose()
-  }
 
   return (
     <ConfirmDialog
@@ -65,7 +61,10 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
         <Button
           variant="outlined"
           color="inherit"
-          onClick={handleViewPlanDetails}
+          component={Link}
+          href={planDetailsHref}
+          // Still closes: the dialog stays mounted behind a client-side transition.
+          onClick={onClose}
           sx={{
             minWidth: 'auto',
             px: 3,

@@ -10,7 +10,6 @@ import { Box, Theme, useMediaQuery } from '@mui/system'
 import { AddressElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 
 import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
@@ -44,7 +43,6 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   const elements = useElements()
   const stripe = useStripe()
   const queryClient = useQueryClient()
-  const router = useRouter()
   const {
     useListPaymentMethods,
     useGetProduct,
@@ -349,7 +347,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
         open={confirmationModalOpen}
         onClose={() => setConfirmationModalOpen(false)}
         orderNumber={orderNumber}
-        planDetails={() => router.push(planDetailsUrl)}
+        planDetailsHref={planDetailsUrl}
       />
     </Box>
   )

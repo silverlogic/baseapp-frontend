@@ -6,8 +6,8 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
-import { useRouter } from 'next/navigation'
 
+import { CHECKOUT_URL } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import SubscriptionCard from './SubscriptionCard'
 import { AvailableSubscriptionsProps } from './types'
@@ -21,7 +21,6 @@ const AvailableSubscriptions: FC<AvailableSubscriptionsProps> = ({
   const { data: products, isLoading: isLoadingProducts } = useListProducts()
   const { data: customer, isLoading: isLoadingCustomer } = useGetCustomer()
   const smDown = useResponsive('down', 'sm')
-  const router = useRouter()
 
   const monthlySubs = products?.filter(
     (product) => product.defaultPrice?.recurring?.interval === 'month',
@@ -75,10 +74,8 @@ const AvailableSubscriptions: FC<AvailableSubscriptionsProps> = ({
               isActive={!!isActive}
               smDown={smDown}
               selectedTerm={selectedTerm}
-              onManageClick={() => router.push(manageSubscriptionUrl)}
-              onSubscribeClick={() =>
-                router.push(`/subscriptions/checkout?productId=${product.id}`)
-              }
+              manageHref={manageSubscriptionUrl}
+              subscribeHref={`${CHECKOUT_URL}?productId=${product.id}`}
             />
           )
         })}
