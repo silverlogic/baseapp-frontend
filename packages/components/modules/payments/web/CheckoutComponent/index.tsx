@@ -185,7 +185,7 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   const handleRetry = async () => {
     if (!pendingClientSecret) {
       setIsRetry(false)
-      handlePlaceOrder()
+      await handlePlaceOrder()
       return
     }
     try {

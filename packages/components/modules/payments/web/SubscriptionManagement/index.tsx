@@ -123,19 +123,18 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     }
   }
 
-  const handleUpdateSubscription = async (paymentMethodId: string) => {
-    try {
-      await updateSubscription({
-        defaultPaymentMethod: paymentMethodId,
-      })
-    } catch (error) {
-      console.error('Error updating subscription:', error)
-    }
-  }
+  const handleUpdateSubscription = (paymentMethodId: string) =>
+    updateSubscription({
+      defaultPaymentMethod: paymentMethodId,
+    })
 
   useEffect(() => {
     if (lastAddedPaymentMethodIdDuringSession) {
-      handleUpdateSubscription(lastAddedPaymentMethodIdDuringSession)
+      // An effect callback cannot be async, so the rejection is handled here rather
+      // than left floating. This is the only caller, so one catch covers it.
+      handleUpdateSubscription(lastAddedPaymentMethodIdDuringSession).catch((error) => {
+        console.error('Error updating subscription:', error)
+      })
     }
   }, [lastAddedPaymentMethodIdDuringSession])
 

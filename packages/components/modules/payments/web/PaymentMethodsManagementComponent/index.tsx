@@ -67,7 +67,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     setIsAddCardModalOpen(false)
   }
 
-  const handleUpdatePaymentMethod = async () => {
+  const handleUpdatePaymentMethod = () => {
     if (!elements) {
       console.error('Stripe elements not initialized')
       return
@@ -79,7 +79,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     })
   }
 
-  const handleDeletePaymentMethod = async () => {
+  const handleDeletePaymentMethod = () => {
     if (!elements) {
       console.error('Stripe elements not initialized')
       return
