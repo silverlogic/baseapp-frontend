@@ -1,18 +1,19 @@
 import { useState } from 'react'
 
 import { fireEvent, render, screen } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import ChatRoom from '../index'
 
-jest.mock('react-relay', () => ({
-  ...jest.requireActual('react-relay'),
+vi.mock('react-relay', async () => ({
+  ...(await vi.importActual('react-relay')),
   useLazyLoadQuery: () => ({ chatRoom: { isArchived: false, participantsCount: 2 } }),
 }))
 
-jest.mock('../../../common', () => ({ ChatRoomQuery: {} }))
-jest.mock('../ChatRoomHeader', () => () => null)
-jest.mock('../../MessagesList', () => () => null)
-jest.mock('../../SendMessage', () => () => null)
+vi.mock('../../../common', () => ({ ChatRoomQuery: {} }))
+vi.mock('../ChatRoomHeader', () => ({ default: () => null }))
+vi.mock('../../MessagesList', () => ({ default: () => null }))
+vi.mock('../../SendMessage', () => ({ default: () => null }))
 
 const MessagesList = () => null
 

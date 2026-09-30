@@ -1,5 +1,6 @@
 import { act, renderHook, waitFor } from '@testing-library/react'
 import { useForm } from 'react-hook-form'
+import { vi } from 'vitest'
 
 import { DEFAULT_SOCIAL_UPSERT_FORM_VALUES } from '../../../../__shared__/common/constants'
 import { SocialUpsertForm } from '../../../../__shared__/common/types'
@@ -82,7 +83,7 @@ describe('useMessageDraft', () => {
   })
 
   it('keeps working when an async storage fails', async () => {
-    const onUnhandledRejection = jest.fn()
+    const onUnhandledRejection = vi.fn()
     process.on('unhandledRejection', onUnhandledRejection)
     const failure = () => Promise.reject(new Error('storage unavailable'))
     const storage: MessageDraftStorage = {
