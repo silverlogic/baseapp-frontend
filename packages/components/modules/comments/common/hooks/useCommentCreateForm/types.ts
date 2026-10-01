@@ -25,7 +25,7 @@ export interface UseCommentCreateFormOptions {
    * leaving reply mode. Used by the native single composer; web keeps the draft.
    */
   resetFormOnReplyTargetChange?: boolean
-  onSuccess?: (context: { inReplyToId?: string }) => void
+  onSuccess?: (context: { inReplyToId?: string; commentId?: string }) => void
 }
 
 export interface UseCommentCreateFormReturn {

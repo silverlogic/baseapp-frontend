@@ -44,7 +44,7 @@ const LogGroups: FC<LogGroupsProps> = ({
   }
   const renderAvatar = (group: LogGroup) => {
     if (group.logs[0]?.user == null) return <AvatarDeletedUserIcon />
-    return <GroupAvatar width={40} height={40} src={group.logs[0]?.user?.avatar?.url ?? ''} />
+    return <GroupAvatar width={40} height={40} src={group.logs[0]?.user?.avatar ?? ''} />
   }
 
   const renderItemContent = (group: LogGroup) => (

@@ -67,6 +67,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       SocialTextField = DefaultSocialTextField,
       SocialTextFieldProps = {},
       SocialUpsertActions = DefaultSocialUpsertActions,
+      SocialUpsertActionsProps = {},
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
       Form = DefaultForm,
@@ -116,7 +117,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
           onCancelReply={onCancelReply}
           {...SocialTextFieldProps}
         >
-          <SocialUpsertActions />
+          <SocialUpsertActions {...SocialUpsertActionsProps} />
           <SubmitActions
             formId={formId}
             disabled={isCreateButtonDisabled}

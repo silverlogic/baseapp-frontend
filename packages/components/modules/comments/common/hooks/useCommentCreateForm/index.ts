@@ -81,7 +81,7 @@ const useCommentCreateForm = ({
           if (expandRepliesOnSuccess && inReplyToId) {
             setCommentIdToExpand(inReplyToId)
           }
-          onSuccess?.({ inReplyToId })
+          onSuccess?.({ inReplyToId, commentId: response?.commentCreate?.comment?.node?.id })
         }
       },
     })

@@ -40,7 +40,7 @@ export const FromOtherUser: Story = {
         profile: {
           id: 'profile-456',
           name: 'Alice',
-          image: { url: '' },
+          image: '',
         },
         messageType: 'USER_MESSAGE',
       }),

@@ -6,9 +6,7 @@ export const AddContactToGroupItemFragment = graphql`
     id
     title
     participantsCount
-    image(width: 100, height: 100) {
-      url
-    }
+    image(width: 100, height: 100)
     isParticipant(profileId: $contactProfileId)
   }
 `

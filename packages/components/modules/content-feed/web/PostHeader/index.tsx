@@ -19,7 +19,7 @@ const PostHeader: FC<PostHeaderProps> = ({ post }) => {
   return (
     <Stack p={1.5} gap={1} direction="row" justifyContent="space-between">
       <Stack direction="row" gap={1}>
-        <Avatar sizes="small" sx={{ p: 0 }} src={image?.url} />
+        <Avatar sizes="small" sx={{ p: 0 }} src={image ?? undefined} />
         <Stack>
           <Typography variant="subtitle2">{name}</Typography>
           <Typography variant="caption" color="text.secondary">

@@ -93,7 +93,7 @@ const CommentItem: FC<CommentItemProps> = ({
                 the avatar/name would be claimed by the inner pressable and never open the
                 action sheet. */}
             <Pressable onPress={goToProfile} onLongPress={openActions}>
-              <AvatarWithPlaceholder imgSource={comment.profile?.image?.url} />
+              <AvatarWithPlaceholder imgSource={comment.profile?.image ?? undefined} />
             </Pressable>
           </View>
           <View style={styles.bodyContainer}>

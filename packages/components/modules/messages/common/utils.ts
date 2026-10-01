@@ -14,7 +14,7 @@ export const useTitleAndImage = (titleRef: RoomTitleFragment$key | null | undefi
   const data = useFragment(RoomTitleFragment, titleRef ?? null)
   return {
     title: data?.title,
-    image: data?.image?.url,
+    image: data?.image ?? undefined,
   }
 }
 
@@ -28,7 +28,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
       isGroup,
       isSoleAdmin,
       title,
-      image: image?.url,
+      image: image ?? undefined,
     }
   }
   if (!participant) {
@@ -54,7 +54,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
     roomId: id,
     isGroup,
     title: participant?.profile?.name,
-    image: participant?.profile?.image?.url,
+    image: participant?.profile?.image ?? undefined,
     username: participant?.profile?.urlPath?.path,
     biography: participant?.profile?.biography,
     id: participant?.profile?.id,
