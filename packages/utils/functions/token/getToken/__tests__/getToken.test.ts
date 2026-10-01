@@ -1,4 +1,5 @@
 import { getItem } from 'expo-secure-store'
+import type { Mock } from 'vitest'
 
 import { getToken } from '..'
 import { ACCESS_KEY_NAME } from '../../../../constants/jwt'
@@ -8,28 +9,28 @@ import { isMobilePlatform } from '../../../os'
 const clientCookieValue = 'client-value'
 const mobileTokenValue = 'mobile-token-value'
 
-jest.mock('expo-secure-store', () => ({
-  getItem: jest.fn(),
+vi.mock('expo-secure-store', async () => ({
+  getItem: vi.fn(),
 }))
 
-jest.mock('../../../cookie', () => ({
-  getCookie: jest.fn(),
+vi.mock('../../../cookie', async () => ({
+  getCookie: vi.fn(),
 }))
 
-jest.mock('../../../os', () => ({
-  isMobilePlatform: jest.fn(),
+vi.mock('../../../os', async () => ({
+  isMobilePlatform: vi.fn(),
 }))
 
 describe('getToken', () => {
   const accessKeyName = ACCESS_KEY_NAME
 
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should retrieve the token from SecureStore on mobile platform', () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(true)
-    ;(getItem as jest.Mock).mockReturnValue(mobileTokenValue)
+    ;(isMobilePlatform as Mock).mockReturnValue(true)
+    ;(getItem as Mock).mockReturnValue(mobileTokenValue)
 
     const result = getToken(accessKeyName)
 
@@ -39,8 +40,8 @@ describe('getToken', () => {
   })
 
   it('should retrieve the token using getCookie on non-mobile platform', () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
-    ;(getCookie as jest.Mock).mockReturnValue(clientCookieValue)
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
+    ;(getCookie as Mock).mockReturnValue(clientCookieValue)
 
     const result = getToken(accessKeyName)
 
@@ -50,8 +51,8 @@ describe('getToken', () => {
   })
 
   it('should use default ACCESS_KEY_NAME when no key is provided', () => {
-    ;(isMobilePlatform as jest.Mock).mockReturnValue(false)
-    ;(getCookie as jest.Mock).mockReturnValue(clientCookieValue)
+    ;(isMobilePlatform as Mock).mockReturnValue(false)
+    ;(getCookie as Mock).mockReturnValue(clientCookieValue)
 
     const result = getToken()
 

@@ -52,3 +52,8 @@ tsconfig.tsbuildinfo
 
 # Lint caches
 .eslintcache
+
+# skill workspaces and local agent settings
+.claude/skills/*-workspace/
+**/skills/*-workspace/
+.claude/settings.local.json

@@ -14,7 +14,9 @@ import {
   DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
 } from '../../../__shared__/common/constants'
+import useMessageDraft from '../../common/useMessageDraft'
 import DefaultSocialInputDrawer from '../SocialInputDrawer'
+import { ASYNC_STORAGE_MESSAGE_DRAFT_STORAGE } from './constants'
 import { CommentCreateProps } from './types'
 
 let nextClientMutationId = 0
@@ -35,6 +37,13 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
+    })
+    // the unsent message is kept per room in AsyncStorage, so it survives leaving the room and app restarts
+    const { clearDraft } = useMessageDraft({
+      form,
+      roomId: targetObjectId,
+      profileId: currentProfile?.id,
+      storage: ASYNC_STORAGE_MESSAGE_DRAFT_STORAGE,
     })
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
 
@@ -96,6 +105,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
         },
       })
       form.reset()
+      clearDraft()
     }
 
     return (
