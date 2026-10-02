@@ -23,3 +23,16 @@ vulnerabilities:
     statement: >-
       No patched version exists in any release line. Reached only through metro
       (build-time bundler), not shipped in the app bundle.
+  # No patched release exists. GHSA-86w9-cpqp-85rv lists node-forge <= 1.4.0 as
+  # vulnerable and 1.4.0 is the latest published version. node-forge reaches us
+  # only through dev tooling: @expo/cli (via @expo/code-signing-certificates, for
+  # dev-server manifest signing) and webpack-dev-server (via selfsigned, to
+  # generate a local HTTPS cert). Neither runs in a shipped bundle or verifies
+  # untrusted signatures in production.
+  - id: CVE-2026-85393
+    purls:
+      - "pkg:npm/node-forge"
+    expired_at: 2026-12-31
+    statement: >-
+      No patched version exists. Reached only through dev tooling (@expo/cli,
+      webpack-dev-server), not shipped in any app bundle.

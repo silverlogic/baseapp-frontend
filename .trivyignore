@@ -13,3 +13,9 @@
 # bundle. Re-evaluate by 2026-11-11.
 CVE-2025-71329
 CVE-2025-71330
+#
+# node-forge: no patched release exists (advisory covers <= 1.4.0, the latest).
+# Reached only through dev tooling — @expo/cli (dev-server code signing) and
+# webpack-dev-server's selfsigned cert generator — never shipped in an app
+# bundle. Re-evaluate by 2026-12-31.
+CVE-2026-85393
