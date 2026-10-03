@@ -1,27 +1,28 @@
 import { axios } from '@baseapp-frontend/utils'
 
 import { renderHook } from '@testing-library/react'
+import { type MockedFunction, vi } from 'vitest'
 
 import { FileUploadStatus } from '../../../constants'
 import { useFileUploadStore } from '../../../context/FileUploadProvider'
 import { uploadChunks } from '../../../utils'
 import { useChunkedUpload } from '../index'
 
-jest.mock('@baseapp-frontend/utils', () => ({
+vi.mock('@baseapp-frontend/utils', () => ({
   axios: {
-    post: jest.fn(),
-    delete: jest.fn(),
+    post: vi.fn(),
+    delete: vi.fn(),
   },
 }))
 
-jest.mock('../../../utils', () => ({
-  ...jest.requireActual('../../../utils'),
-  uploadChunks: jest.fn(),
+vi.mock('../../../utils', async () => ({
+  ...(await vi.importActual<typeof import('../../../utils')>('../../../utils')),
+  uploadChunks: vi.fn(),
 }))
 
-const mockAxiosPost = axios.post as jest.MockedFunction<typeof axios.post>
-const mockAxiosDelete = axios.delete as jest.MockedFunction<typeof axios.delete>
-const mockUploadChunks = uploadChunks as jest.MockedFunction<typeof uploadChunks>
+const mockAxiosPost = axios.post as MockedFunction<typeof axios.post>
+const mockAxiosDelete = axios.delete as MockedFunction<typeof axios.delete>
+const mockUploadChunks = uploadChunks as MockedFunction<typeof uploadChunks>
 
 const CHUNK_SIZE = 5 * 1024 * 1024
 const makeFile = (chunks: number) =>
@@ -41,7 +42,7 @@ const initiateResponse = (numParts: number, expiresIn = 3600) => ({
 
 describe('useChunkedUpload', () => {
   beforeEach(() => {
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     useFileUploadStore.setState({ files: new Map() })
   })
 
@@ -178,7 +179,7 @@ describe('useChunkedUpload', () => {
       useFileUploadStore.getState().pauseFile(id!)
       throw new Error('Chunk upload aborted')
     })
-    const onUploadError = jest.fn()
+    const onUploadError = vi.fn()
 
     const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
     await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')

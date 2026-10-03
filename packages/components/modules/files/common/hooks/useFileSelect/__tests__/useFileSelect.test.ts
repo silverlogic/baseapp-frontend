@@ -1,4 +1,5 @@
 import { renderHook } from '@testing-library/react'
+import { vi } from 'vitest'
 
 import { useFileSelect } from '../index'
 
@@ -21,7 +22,7 @@ describe('useFileSelect', () => {
   it('builds the accept attribute from mime types and extensions', () => {
     const { result } = renderHook(() =>
       useFileSelect({
-        onFilesSelected: jest.fn(),
+        onFilesSelected: vi.fn(),
         acceptedFileTypes: { 'image/*': ['.png', '.jpg'], 'application/pdf': ['.pdf'] },
       }),
     )
@@ -29,14 +30,14 @@ describe('useFileSelect', () => {
   })
 
   it('sets multiple only when maxFiles > 1', () => {
-    const single = renderHook(() => useFileSelect({ onFilesSelected: jest.fn(), maxFiles: 1 }))
-    const many = renderHook(() => useFileSelect({ onFilesSelected: jest.fn(), maxFiles: 5 }))
+    const single = renderHook(() => useFileSelect({ onFilesSelected: vi.fn(), maxFiles: 1 }))
+    const many = renderHook(() => useFileSelect({ onFilesSelected: vi.fn(), maxFiles: 5 }))
     expect(single.result.current.getInputProps().multiple).toBe(false)
     expect(many.result.current.getInputProps().multiple).toBe(true)
   })
 
   it('filters out files over maxFileSize and caps at maxFiles', () => {
-    const onFilesSelected = jest.fn()
+    const onFilesSelected = vi.fn()
     const { result } = renderHook(() =>
       useFileSelect({ onFilesSelected, maxFiles: 2, maxFileSize: 1000 }),
     )
@@ -54,7 +55,7 @@ describe('useFileSelect', () => {
   })
 
   it('does not fire the callback when nothing valid was selected, and resets the input', () => {
-    const onFilesSelected = jest.fn()
+    const onFilesSelected = vi.fn()
     const { result } = renderHook(() => useFileSelect({ onFilesSelected, maxFileSize: 100 }))
 
     const target = fireChange(result.current.getInputProps().onChange, [makeFile('big', 999)])
@@ -64,9 +65,7 @@ describe('useFileSelect', () => {
   })
 
   it('open() does not throw when no input is mounted and respects disabled', () => {
-    const { result } = renderHook(() =>
-      useFileSelect({ onFilesSelected: jest.fn(), disabled: true }),
-    )
+    const { result } = renderHook(() => useFileSelect({ onFilesSelected: vi.fn(), disabled: true }))
     expect(() => result.current.open()).not.toThrow()
     expect(result.current.getInputProps().disabled).toBe(true)
   })

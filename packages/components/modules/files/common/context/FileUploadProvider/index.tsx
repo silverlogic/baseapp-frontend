@@ -2,13 +2,14 @@ import { create } from 'zustand'
 
 import { FileUploadStatus } from '../../constants'
 import type { FileUploadProgress } from '../../types'
+import { nextLocalId } from '../../utils/localId'
 import type { FileUploadState } from './types'
 
 export const useFileUploadStore = create<FileUploadState>((set, get) => ({
   files: new Map(),
 
   addFile: (file: File, scope?: string) => {
-    const id = `${Date.now()}-${file.name}-${Math.random()}`
+    const id = `${nextLocalId()}-${file.name}`
     const fileProgress: FileUploadProgress = {
       id,
       file,

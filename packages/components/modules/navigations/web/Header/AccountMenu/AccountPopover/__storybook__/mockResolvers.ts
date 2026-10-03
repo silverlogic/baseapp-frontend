@@ -8,9 +8,7 @@ export const mockResolvers = {
       profile: {
         id: 'profile-1',
         name: 'Profile 1',
-        image: {
-          url: Profile1Img,
-        },
+        image: Profile1Img,
         urlPath: {
           path: '/profile/1',
         },
@@ -19,9 +17,7 @@ export const mockResolvers = {
         {
           id: 'profile-2',
           name: 'Profile 2',
-          image: {
-            url: Profile2Img,
-          },
+          image: Profile2Img,
           urlPath: {
             path: '/profile/2',
           },
@@ -29,9 +25,7 @@ export const mockResolvers = {
         {
           id: 'profile-3',
           name: 'Profile 3',
-          image: {
-            url: Profile3Img,
-          },
+          image: Profile3Img,
           urlPath: {
             path: '/profile/3',
           },

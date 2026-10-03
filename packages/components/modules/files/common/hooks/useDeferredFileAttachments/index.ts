@@ -5,6 +5,7 @@ import { ConnectionHandler } from 'react-relay'
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
+import { nextLocalId } from '../../utils/localId'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { UseDeferredFileAttachmentsReturn } from './types'
 
@@ -21,7 +22,7 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
   const inFlightRef = useRef(0)
   // Stable per-instance scope so this composer's uploads are shown here and not
   // on unrelated file lists (they share one global upload store).
-  const scopeRef = useRef(`deferred-${Math.random().toString(36).slice(2)}`)
+  const scopeRef = useRef(`deferred-${nextLocalId()}`)
   const [isUploading, setIsUploading] = useState(false)
 
   const handleFilesSelected = useCallback(
