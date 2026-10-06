@@ -5,6 +5,7 @@ import type { Mock, MockInstance } from 'vitest'
 import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
 import { broadcastEvent } from '../../../events'
+import { getExpoConstant } from '../../../expo'
 import * as getLanguageNS from '../../../language/getLanguage'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
 import * as decodeJWTNS from '../../../token/decodeJWT'
@@ -56,7 +57,12 @@ vi.mock('../../../token/getTokenSSR', async () => ({
 }))
 vi.mock('next/headers', async () => ({
   cookies: vi.fn(),
+  headers: vi.fn(),
 }))
+vi.mock('../../../expo', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../../expo')>()
+  return { getExpoConstant: vi.fn(actual.getExpoConstant) }
+})
 
 const DEFAULT_FETCH_RESPONSE = {
   ok: true,
@@ -523,6 +529,98 @@ describe('baseAppFetch', () => {
           headers: expect.objectContaining({
             'Accept-Language': expect.any(String),
           }),
+        }),
+      )
+    })
+  })
+
+  describe('API address', () => {
+    let originalWindow: any
+
+    beforeEach(() => {
+      originalWindow = global.window
+      vi.stubEnv('INTERNAL_API_ORIGIN', 'http://web:8000')
+      const cookies = nextHeadersNS.cookies as Mock
+      cookies.mockResolvedValue({ get: vi.fn().mockReturnValue(undefined) })
+      const incomingHeaders = nextHeadersNS.headers as Mock
+      incomingHeaders.mockResolvedValue(
+        new Headers({ host: 'tenant.example.com', 'x-forwarded-protocol': 'https' }),
+      )
+    })
+
+    afterEach(() => {
+      global.window = originalWindow
+      vi.unstubAllEnvs()
+    })
+
+    it.each([
+      ['in the browser', () => {}],
+      [
+        'on the server',
+        () => {
+          delete (global as any).window
+        },
+      ],
+    ])('calls an absolute address unchanged %s', async (_, setUp) => {
+      setUp()
+
+      await baseAppFetch('/users', { baseUrl: 'https://api.example.com/v1' })
+
+      expect(fetch).toHaveBeenCalledWith('https://api.example.com/v1/users', {
+        headers: { Accept: 'application/json, text/plain, */*', 'Current-Profile': '' },
+      })
+      expect(nextHeadersNS.headers).not.toHaveBeenCalled()
+    })
+
+    it('calls the Expo address unchanged in a mobile app', async () => {
+      // This suite's `window` has no `location`, like React Native's; the app has no NEXT_PUBLIC_*.
+      vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', undefined)
+      ;(getExpoConstant as Mock).mockReturnValueOnce('http://192.168.3.4:8000/v1')
+
+      await baseAppFetch('/users')
+
+      expect(getExpoConstant).toHaveBeenCalledWith('EXPO_PUBLIC_API_BASE_URL')
+      expect(fetch).toHaveBeenCalledWith('http://192.168.3.4:8000/v1/users', {
+        headers: { Accept: 'application/json, text/plain, */*', 'Current-Profile': '' },
+      })
+      expect(nextHeadersNS.headers).not.toHaveBeenCalled()
+    })
+
+    it('calls a relative address on the page host in the browser', async () => {
+      await baseAppFetch('/users', { baseUrl: '/v1' })
+
+      expect(fetch).toHaveBeenCalledWith('/v1/users', {
+        headers: { Accept: 'application/json, text/plain, */*', 'Current-Profile': '' },
+      })
+    })
+
+    it('calls a relative address through the internal origin on the server, forwarding the host', async () => {
+      delete (global as any).window
+
+      await baseAppFetch('/users', { baseUrl: '/v1' })
+
+      expect(fetch).toHaveBeenCalledWith('http://web:8000/v1/users', {
+        headers: {
+          Accept: 'application/json, text/plain, */*',
+          'Current-Profile': '',
+          'X-Forwarded-Host': 'tenant.example.com',
+          'X-Forwarded-Protocol': 'https',
+        },
+      })
+    })
+
+    it('lets explicit request headers override the forwarded ones', async () => {
+      delete (global as any).window
+
+      await baseAppFetch('/users', {
+        baseUrl: '/v1',
+        headers: { 'X-Forwarded-Host': 'other.example.com' },
+      })
+
+      expect(fetch).toHaveBeenCalledWith(
+        'http://web:8000/v1/users',
+        expect.objectContaining({
+          headers: expect.objectContaining({ 'X-Forwarded-Host': 'other.example.com' }),
         }),
       )
     })

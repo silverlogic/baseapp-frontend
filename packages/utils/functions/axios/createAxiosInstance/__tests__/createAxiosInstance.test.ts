@@ -1,8 +1,11 @@
+import _axios from 'axios'
 import humps from 'humps'
+import { headers as incomingHeaders } from 'next/headers'
 import type { Mock } from 'vitest'
 
 import { createAxiosInstance } from '..'
 import { broadcastEvent } from '../../../events'
+import { getExpoConstant } from '../../../expo'
 import { getTokenSSR } from '../../../token/getTokenSSR'
 import { isUserTokenValid } from '../../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../../token/refreshAccessToken'
@@ -20,7 +23,7 @@ vi.mock('axios', async () => {
   const realAxios = actual.default ?? actual
   const mockedAxios = {
     ...realAxios,
-    create: () => {
+    create: vi.fn(() => {
       const inst = realAxios.create()
       return {
         defaults: inst.defaults,
@@ -30,7 +33,7 @@ vi.mock('axios', async () => {
           response: { eject: vi.fn(), use: vi.fn() },
         },
       }
-    },
+    }),
   }
   return { ...actual, default: mockedAxios }
 })
@@ -56,6 +59,13 @@ vi.mock('../../../token/getTokenSSR', async () => ({
 vi.mock('../../../events', async () => ({
   broadcastEvent: vi.fn(),
 }))
+vi.mock('next/headers', async () => ({
+  headers: vi.fn(),
+}))
+vi.mock('../../../expo', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('../../../expo')>()
+  return { getExpoConstant: vi.fn(actual.getExpoConstant) }
+})
 
 // Mock the global window object
 Object.defineProperty(global, 'window', {
@@ -457,6 +467,86 @@ describe('createAxiosInstance', () => {
 
       expect(refreshAccessTokenMock).not.toHaveBeenCalled()
       expect(request.headers.Authorization).toBe('Bearer invalid-access-token')
+    })
+  })
+
+  describe('API address', () => {
+    let originalWindow: any
+
+    const runRequestInterceptor = async (baseUrl: string) => {
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance({ baseUrl })
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
+      const request = { baseURL: baseUrl, headers: {} as Record<string, string>, url: '/users' }
+      await interceptorFn(request)
+      return request
+    }
+
+    beforeEach(() => {
+      originalWindow = global.window
+      vi.stubEnv('INTERNAL_API_ORIGIN', 'http://web:8000')
+      ;(incomingHeaders as Mock).mockResolvedValue(new Headers({ host: 'tenant.example.com' }))
+      ;(isUserTokenValid as Mock).mockReturnValue(true)
+    })
+
+    afterEach(() => {
+      global.window = originalWindow
+      vi.unstubAllEnvs()
+    })
+
+    it.each([
+      ['in the browser', () => {}],
+      [
+        'on the server',
+        () => {
+          delete (global as any).window
+        },
+      ],
+    ])('keeps an absolute base URL unchanged %s', async (_, setUp) => {
+      setUp()
+
+      const request = await runRequestInterceptor('https://api.example.com/v1')
+
+      expect(request.baseURL).toBe('https://api.example.com/v1')
+      expect(request.headers['X-Forwarded-Host']).toBeUndefined()
+      expect(incomingHeaders).not.toHaveBeenCalled()
+    })
+
+    it('uses the Expo address unchanged in a mobile app', async () => {
+      // This suite's `window` has no `location`, like React Native's; the app has no NEXT_PUBLIC_*.
+      vi.stubEnv('NEXT_PUBLIC_API_BASE_URL', undefined)
+      ;(getExpoConstant as Mock).mockReturnValueOnce('http://192.168.3.4:8000/v1')
+
+      createAxiosInstance()
+      const request = await runRequestInterceptor('http://192.168.3.4:8000/v1')
+
+      expect(_axios.create).toHaveBeenCalledWith(
+        expect.objectContaining({ baseURL: 'http://192.168.3.4:8000/v1' }),
+      )
+      expect(request.baseURL).toBe('http://192.168.3.4:8000/v1')
+      expect(request.headers['X-Forwarded-Host']).toBeUndefined()
+      expect(incomingHeaders).not.toHaveBeenCalled()
+    })
+
+    it('keeps a relative base URL in the browser', async () => {
+      const request = await runRequestInterceptor('/v1')
+
+      expect(request.baseURL).toBe('/v1')
+      expect(request.headers['X-Forwarded-Host']).toBeUndefined()
+    })
+
+    it('sends a relative base URL through the internal origin on the server, forwarding the host', async () => {
+      delete (global as any).window
+
+      const request = await runRequestInterceptor('/v1')
+
+      expect(request.baseURL).toBe('http://web:8000/v1')
+      expect(request.headers['X-Forwarded-Host']).toBe('tenant.example.com')
     })
   })
 
