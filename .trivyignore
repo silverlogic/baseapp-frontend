@@ -19,3 +19,10 @@ CVE-2025-71330
 # webpack-dev-server's selfsigned cert generator — never shipped in an app
 # bundle. Re-evaluate by 2026-12-31.
 CVE-2026-85393
+#
+# braces: no patched release exists (advisory covers <= 3.0.3, the latest).
+# Reached only through build/dev tooling — micromatch and chokidar under metro,
+# jest, fast-glob, tailwindcss and webpack-dev-server — which expand glob
+# patterns from our own config, never untrusted input, and never ship in an app
+# bundle. Re-evaluate by 2026-11-11.
+CVE-2026-93687
