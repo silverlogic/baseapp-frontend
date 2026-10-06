@@ -79,7 +79,7 @@ jobs:
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -w /workspace \
-            registry.tsl.io/baseapp-github/trivy:baseapp \
+            registry.tsl.io/baseapp-github/trivy:0.75.0 \
             fs --scanners vuln --pkg-types library \
             --severity CRITICAL,HIGH,MEDIUM --exit-code 1 \
             --ignorefile /workspace/.trivyignore.yaml \
