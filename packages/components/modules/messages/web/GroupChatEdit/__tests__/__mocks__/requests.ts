@@ -122,7 +122,7 @@ const groupDetailsResponse = ({
       isArchived: false,
       isSoleAdmin:
         participants.filter((edge) => edge.node.role === PARTICIPANT_ROLES.admin).length === 1,
-      image: image ? { url: image } : null,
+      image: image || null,
       title,
       otherParticipant: null,
       participants: connection(participants, hasNextPage),
