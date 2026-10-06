@@ -24,6 +24,12 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
   // on unrelated file lists (they share one global upload store).
   const scopeRef = useRef(`deferred-${nextLocalId()}`)
   const [isUploading, setIsUploading] = useState(false)
+  // Selector, not the whole store: this only re-renders when the answer flips.
+  const hasPendingFiles = useFileUploadStore((state) =>
+    Array.from(state.files.values()).some(
+      (file) => file.scope === scopeRef.current && file.status !== FileUploadStatus.COMPLETED,
+    ),
+  )
 
   const handleFilesSelected = useCallback(
     async (files: File[]) => {
@@ -45,6 +51,14 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
 
   const attachTo = useCallback(
     async (targetObjectId: string, onDone?: () => void) => {
+      // Snapshot this composer's files *before* awaiting: anything the user adds
+      // while the uploads settle belongs to the next comment, not this one.
+      const claimedIds = new Set(
+        Array.from(useFileUploadStore.getState().files.values())
+          .filter((file) => file.scope === scopeRef.current)
+          .map((file) => file.id),
+      )
+
       // Wait for any in-flight uploads so a fast submit still catches them.
       await Promise.allSettled(uploadsRef.current)
       uploadsRef.current = []
@@ -52,15 +66,18 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
       // Read the completed uploads for this composer straight from the store, so
       // any files the user removed before submitting are naturally excluded.
       const store = useFileUploadStore.getState()
-      const scoped = Array.from(store.files.values()).filter(
-        (file) =>
-          file.scope === scopeRef.current &&
-          file.status === FileUploadStatus.COMPLETED &&
-          !!file.fileRelayId,
+      const claimed = Array.from(store.files.values()).filter((file) => claimedIds.has(file.id))
+      const scoped = claimed.filter(
+        (file) => file.status === FileUploadStatus.COMPLETED && !!file.fileRelayId,
       )
       const fileRelayIds = scoped.map((file) => file.fileRelayId as string)
 
+      // Drop everything this submit claimed, attached or not. A paused or failed
+      // upload left in scope would otherwise ride along with the next comment.
+      const releaseClaimed = () => claimed.forEach((file) => store.removeFile(file.id))
+
       if (!fileRelayIds.length) {
+        releaseClaimed()
         onDone?.()
         return
       }
@@ -72,10 +89,11 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
           connections: [connectionID],
         },
         onCompleted: () => {
-          scoped.forEach((file) => store.removeFile(file.id))
+          releaseClaimed()
           onDone?.()
         },
         onError: () => {
+          releaseClaimed()
           onDone?.()
         },
       })
@@ -85,11 +103,16 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
 
   const reset = useCallback(() => {
     uploadsRef.current = []
-    const store = useFileUploadStore.getState()
-    Array.from(store.files.values())
-      .filter((file) => file.scope === scopeRef.current)
-      .forEach((file) => store.removeFile(file.id))
+    useFileUploadStore.getState().clearScope(scopeRef.current)
   }, [])
 
-  return { handleFilesSelected, attachTo, reset, isUploading, isAttaching, scope: scopeRef.current }
+  return {
+    handleFilesSelected,
+    attachTo,
+    reset,
+    isUploading,
+    isAttaching,
+    hasPendingFiles,
+    scope: scopeRef.current,
+  }
 }

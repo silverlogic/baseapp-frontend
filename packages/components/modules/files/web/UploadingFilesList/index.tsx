@@ -4,7 +4,7 @@ import type { FC } from 'react'
 
 import { Box, Stack } from '@mui/material'
 
-import { useFileUpload } from '../../common/context/useFileUpload'
+import { useScopedUploads } from '../../common/context/useScopedUploads'
 import UploadingFileItem from '../FileUploadList/UploadingFileItem'
 import type { UploadingFilesListProps } from './types'
 
@@ -20,9 +20,7 @@ const UploadingFilesList: FC<UploadingFilesListProps> = ({
   variant = 'chips',
   layout = 'horizontal',
 }) => {
-  const { files } = useFileUpload()
-
-  const uploadingFiles = Array.from(files.values()).filter((file) => file.scope === scope)
+  const uploadingFiles = useScopedUploads(scope)
 
   if (!uploadingFiles.length) {
     return null

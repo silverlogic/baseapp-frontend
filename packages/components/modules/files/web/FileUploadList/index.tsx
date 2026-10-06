@@ -5,7 +5,7 @@ import type { FC, ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
-import { useFileUpload } from '../../common/context/useFileUpload'
+import { useScopedUploads } from '../../common/context/useScopedUploads'
 import { FilesListFragment } from '../../common/graphql/queries/FilesList'
 import AttachedFileItem from '../AttachedFileItem'
 import UploadingFileItem from './UploadingFileItem'
@@ -22,12 +22,11 @@ const FileUploadList: FC<FileUploadListProps> = ({
   scope,
 }) => {
   const target = useFragment(FilesListFragment, targetRef)
-  const { files } = useFileUpload()
 
   // The upload store is global; show only uploads owned by this list (its
   // target by default) so another composer's uploads don't leak in here.
   const activeScope = scope ?? target.id
-  const uploadingFiles = Array.from(files.values()).filter((file) => file.scope === activeScope)
+  const uploadingFiles = useScopedUploads(activeScope)
 
   const hasUploadingFiles = uploadingFiles.length > 0
   const hasAttachedFiles = (target.files?.edges?.length ?? 0) > 0

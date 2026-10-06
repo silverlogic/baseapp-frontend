@@ -11,3 +11,8 @@ export interface UseFileUploadLogicReturn {
   isAttaching: boolean
   resetKey: number
 }
+
+export interface AttachOptions {
+  /** Clear this target's scope once the mutation lands (batch submits only). */
+  clearAfter: boolean
+}

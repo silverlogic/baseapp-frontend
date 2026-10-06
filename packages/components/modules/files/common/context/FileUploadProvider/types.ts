@@ -12,6 +12,7 @@ export interface FileUploadState {
   retryFile: (id: string) => void
   abortFile: (id: string) => void
   clearCompleted: () => void
+  clearScope: (scope: string) => void
   getCompletedFileIds: () => string[]
   getTotalProgress: () => number
 }

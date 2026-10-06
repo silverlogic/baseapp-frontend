@@ -194,6 +194,20 @@ export const useFileUploadStore = create<FileUploadState>((set, get) => ({
     })
   },
 
+  clearScope: (scope: string) => {
+    set((state) => {
+      const newFiles = new Map(state.files)
+
+      Array.from(newFiles.entries()).forEach(([id, file]) => {
+        if (file.scope === scope) {
+          newFiles.delete(id)
+        }
+      })
+
+      return { files: newFiles }
+    })
+  },
+
   getCompletedFileIds: () => {
     const state = get()
     return Array.from(state.files.values())

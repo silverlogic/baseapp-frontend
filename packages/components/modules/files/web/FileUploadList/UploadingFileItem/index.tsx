@@ -21,7 +21,7 @@ import {
 } from '@mui/material'
 
 import { FileUploadStatus } from '../../../common/constants'
-import { useFileUpload } from '../../../common/context/useFileUpload'
+import { useFileUploadStore } from '../../../common/context/FileUploadProvider'
 import { useChunkedUpload } from '../../../common/hooks/useChunkedUpload'
 import { calculateProgress, formatFileSize } from '../../../common/utils/formatters'
 import FileChip from '../../FileChip'
@@ -35,7 +35,8 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   allowRetry = true,
   variant = 'card',
 }) => {
-  const { removeFile, pauseFile } = useFileUpload()
+  const removeFile = useFileUploadStore((state) => state.removeFile)
+  const pauseFile = useFileUploadStore((state) => state.pauseFile)
   const { resumeUpload, retryUpload } = useChunkedUpload()
 
   const getProgress = (): number => {

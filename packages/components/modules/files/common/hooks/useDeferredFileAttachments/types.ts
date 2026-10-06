@@ -11,6 +11,12 @@ export interface UseDeferredFileAttachmentsReturn {
   reset: () => void
   isUploading: boolean
   isAttaching: boolean
+  /**
+   * True while any file in this composer's scope is not COMPLETED — in flight,
+   * paused or failed. Gate submit on it so a half-finished upload cannot be
+   * silently dropped from the comment.
+   */
+  hasPendingFiles: boolean
   /** Upload scope for this composer — pass to UploadingFilesList to show its progress. */
   scope: string
 }

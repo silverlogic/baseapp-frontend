@@ -4,7 +4,6 @@ import { axios } from '@baseapp-frontend/utils'
 
 import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
-import { useFileUpload } from '../../context/useFileUpload'
 import type { CompleteUploadPart, InitiateUploadResponse } from '../../types'
 import { chunkFile, uploadChunks } from '../../utils'
 import type { UseChunkedUploadOptions } from './types'
@@ -23,7 +22,11 @@ const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
   })
 
 export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
-  const { addFile, updateFileProgress, updateChunkProgress } = useFileUpload()
+  // Actions are picked individually: subscribing to the whole store here would
+  // re-render every consumer of this hook on each progress tick.
+  const addFile = useFileUploadStore((state) => state.addFile)
+  const updateFileProgress = useFileUploadStore((state) => state.updateFileProgress)
+  const updateChunkProgress = useFileUploadStore((state) => state.updateChunkProgress)
 
   /**
    * Translate a thrown upload error into store state. A pause aborts the

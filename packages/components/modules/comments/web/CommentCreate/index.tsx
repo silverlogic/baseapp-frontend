@@ -95,6 +95,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
       handleFilesSelected,
       attachTo,
       isUploading,
+      hasPendingFiles,
       scope: filesScope,
     } = useDeferredFileAttachments()
 
@@ -138,7 +139,9 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
           form={form}
           formId="comment-create"
           submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
-          isLoading={isLoading}
+          // Block submit until every attachment has finished, so a paused or
+          // failed upload is never silently left off the comment.
+          isLoading={isLoading || hasPendingFiles}
           isReply={isReply}
           replyTargetName={replyTargetName}
           onCancelReply={cancelReply}
