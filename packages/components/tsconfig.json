@@ -2,9 +2,6 @@
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
     "types": [
-      "cypress",
-      "@testing-library/cypress",
-      "cypress-plugin-steps",
       "node",
       "vitest/globals"
     ],
@@ -27,7 +24,7 @@
     "*.tsx",
     "./baseapp-frontend-imports.d.ts",
     "babel.config.js",
-    "cypress.config.ts",
+    "playwright.config.ts",
     "webpack.config.ts",
     ".storybook/**/*",
     ".storybook/**/*.json"
