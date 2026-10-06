@@ -103,7 +103,8 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         targetObjectId,
         onSuccess: ({ commentId }) => {
           if (commentId) {
-            attachTo(commentId)
+            // Fire-and-forget: attachTo reports mutation failures through its own onError.
+            attachTo(commentId).catch(() => undefined)
           }
           if (commentReply.commentItemRef?.current) {
             commentReply.commentItemRef.current.scrollIntoView({
