@@ -6,6 +6,7 @@ import { FileUploadTrigger } from '@baseapp-frontend/components/files/web'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { AttachmentIcon, MentionIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
 
 const MAX_FILES = 5
@@ -20,7 +21,7 @@ const ACCEPTED_FILE_TYPES = {
  * real file upload trigger; the mention icon stays a placeholder until wired.
  */
 const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target }) => (
-  <div className="grid grid-cols-[repeat(2,max-content)] gap-2">
+  <ActionsContainer>
     <FileUploadTrigger
       target={target}
       as="button"
@@ -33,7 +34,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target 
     <IconButton disabled aria-label="mention">
       <MentionIcon />
     </IconButton>
-  </div>
+  </ActionsContainer>
 )
 
 export default CommentFilesUpsertActions

@@ -6,6 +6,7 @@ import { useFileSelect } from '@baseapp-frontend/components/files/common'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { AttachmentIcon, MentionIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
 
 /**
@@ -29,7 +30,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
   })
 
   return (
-    <div className="grid grid-cols-[repeat(2,max-content)] gap-2">
+    <ActionsContainer>
       {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
       <input {...getInputProps()} />
       <IconButton
@@ -44,7 +45,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
       <IconButton disabled aria-label="mention">
         <MentionIcon />
       </IconButton>
-    </div>
+    </ActionsContainer>
   )
 }
 
