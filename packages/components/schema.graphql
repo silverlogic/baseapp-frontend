@@ -752,21 +752,33 @@ type File implements Node & PermissionsInterface & FileInterface & CommentsInter
   modified: DateTime!
   profile: Profile
   parent: Node
-  fileContentType: String
-  fileName: String
+
+  """MIME type of the uploaded file"""
+  fileContentType: String!
+
+  """Original name of the uploaded file"""
+  fileName: String!
 
   """File size in bytes"""
   fileSize: Int
+
+  """The stored file"""
   file: String!
-  name: String
-  description: String
+
+  """Display name for the file"""
+  name: String!
+
+  """Optional description of the file"""
+  description: String!
+
+  """The user who uploaded the file"""
   createdBy: User
 
   """Status of the file upload"""
   uploadStatus: FilesFileUploadStatusChoices!
 
   """S3 multipart upload ID for in-progress uploads"""
-  uploadId: String
+  uploadId: String!
 
   """Total number of parts for multipart upload"""
   totalParts: Int
@@ -825,7 +837,7 @@ Usage:
                 }
             }
             target {
-                ... on CommentsInterface {
+                ... on FilesInterface {
                     filesCount
                     isFilesEnabled
                 }
@@ -1131,7 +1143,7 @@ type Mutation {
                   }
               }
               target {
-                  ... on CommentsInterface {
+                  ... on FilesInterface {
                       filesCount
                       isFilesEnabled
                   }
@@ -1610,8 +1622,8 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
     """Ordering"""
     orderBy: String
   ): CommentConnection!
-  organization: Organization
   files(first: Int, last: Int, offset: Int, after: String, before: String, noParent: Boolean): FileConnection!
+  organization: Organization
   reactions(first: Int, last: Int, offset: Int, after: String, before: String, id: ID): ReactionConnection!
   contentPosts(
     first: Int
@@ -2003,6 +2015,8 @@ type Query {
     """The ID of the object"""
     id: ID!
   ): Organization
+
+  """Files created by the current user."""
   myFiles(offset: Int, before: String, after: String, first: Int, last: Int, noParent: Boolean): FileConnection
   file(
     """The ID of the object"""
