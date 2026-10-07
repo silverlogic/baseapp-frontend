@@ -2,9 +2,7 @@ const createNodeProfile = (
   index: number,
   status = 'ACTIVE',
   name: string,
-  image?: {
-    url: string
-  },
+  image?: string,
   full?: boolean,
 ) => {
   return {
@@ -81,30 +79,32 @@ export const allRolesMembersListMockData = {
       canChangeRole: true,
       id: 'UHJvZmlsZTox',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',
         profile: {
           id: 'owner-profile-id',
           name: 'Owner Profile',
-          image: {
-            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-          },
+          image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
           urlPath: null,
         },
       },
       members: {
         totalCount: 3,
         edges: [
-          createNodeProfile(1, 'PENDING', 'Pending', {
-            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/django.svg',
-          }),
-          createNodeProfile(2, 'INACTIVE', 'Inactive', {
-            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/javascript.svg',
-          }),
+          createNodeProfile(
+            1,
+            'PENDING',
+            'Pending',
+            'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/django.svg',
+          ),
+          createNodeProfile(
+            2,
+            'INACTIVE',
+            'Inactive',
+            'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/javascript.svg',
+          ),
           createNodeProfile(3, 'ACTIVE', 'Manager'),
         ],
         pageInfo: {
@@ -122,18 +122,14 @@ export const fullMembersListMockData = {
       canChangeRole: true,
       id: 'owner-id',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',
         profile: {
           id: 'owner-profile-id',
           name: 'Owner Profile',
-          image: {
-            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-          },
+          image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
           urlPath: null,
         },
       },
@@ -163,18 +159,14 @@ export const fullMembersListNextPageMockData = {
       canChangeRole: true,
       id: 'owner-id',
       name: 'Owner Profile',
-      image: {
-        url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-      },
+      image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
       urlPath: null,
       owner: {
         id: 'owner-user-id',
         profile: {
           id: 'owner-profile-id',
           name: 'Owner Profile',
-          image: {
-            url: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
-          },
+          image: 'https://cdn.jsdelivr.net/npm/simple-icons@3.0.1/icons/react.svg',
           urlPath: null,
         },
       },

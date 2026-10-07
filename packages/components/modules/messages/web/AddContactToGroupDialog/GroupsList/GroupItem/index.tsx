@@ -26,7 +26,7 @@ const GroupItem: FC<GroupItemProps> = ({ roomRef, selected, onToggle }) => {
       <AvatarWithPlaceholder
         width={48}
         height={48}
-        src={node.image?.url}
+        src={node.image ?? undefined}
         sx={{ alignSelf: 'center', justifySelf: 'center' }}
       />
       <Box sx={{ display: 'grid' }}>

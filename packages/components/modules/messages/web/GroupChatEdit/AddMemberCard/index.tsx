@@ -48,7 +48,7 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
       <AvatarWithPlaceholder
         width={48}
         height={48}
-        src={image?.url}
+        src={image ?? undefined}
         sx={{ alignSelf: 'center', justifySelf: 'center' }}
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>

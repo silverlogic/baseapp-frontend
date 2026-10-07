@@ -10,6 +10,7 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { toCommentEditTarget, useCommentUpdateForm } from '../../common'
+import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentUpdateProps } from './types'
 
 /**
@@ -118,6 +119,8 @@ const CommentUpdate: FC<CommentUpdateProps> = ({
         disabled: isLoading,
       }}
       {...mergedSocialInputProps}
+      SocialUpsertActions={CommentFilesUpsertActions}
+      SocialUpsertActionsProps={{ target: comment }}
     />
   )
 }

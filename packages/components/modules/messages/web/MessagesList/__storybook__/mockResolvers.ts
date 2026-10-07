@@ -16,9 +16,7 @@ export const mockResolvers = {
             profile: {
               id: 'profile-456',
               name: 'Alice',
-              image: {
-                url: '',
-              },
+              image: '',
             },
             isRead: false,
             messageType: 'USER_MESSAGE',
@@ -36,9 +34,7 @@ export const mockResolvers = {
             profile: {
               id: 'profile-123',
               name: 'Você',
-              image: {
-                url: '',
-              },
+              image: '',
             },
             isRead: true,
             messageType: 'USER_MESSAGE',
@@ -56,9 +52,7 @@ export const mockResolvers = {
             profile: {
               id: 'profile-456',
               name: 'Alice',
-              image: {
-                url: '',
-              },
+              image: '',
             },
             isRead: true,
             messageType: 'USER_MESSAGE',

@@ -28,7 +28,7 @@ const profileNode = (id: string, name: string, path: string) => ({
   __typename: 'Profile',
   id,
   name,
-  image: { url: PROFILE_IMAGE_URL },
+  image: PROFILE_IMAGE_URL,
   urlPath: { __typename: 'URLPath', id: `${id}-url-path`, path },
 })
 
@@ -122,7 +122,7 @@ const groupDetailsResponse = ({
       isArchived: false,
       isSoleAdmin:
         participants.filter((edge) => edge.node.role === PARTICIPANT_ROLES.admin).length === 1,
-      image: image ? { url: image } : null,
+      image: image || null,
       title,
       otherParticipant: null,
       participants: connection(participants, hasNextPage),
@@ -234,7 +234,7 @@ const updatedRoomNode = (participants: ReturnType<typeof participantEdge>[]) => 
   isSoleAdmin: true,
   isArchived: false,
   title: GROUP_TITLE,
-  image: { url: GROUP_IMAGE_URL },
+  image: GROUP_IMAGE_URL,
   otherParticipant: null,
   lastMessageTime: '2026-01-01T00:00:00.000Z',
   lastMessage: { __typename: 'Message', id: 'TWVzc2FnZTox', content: 'Welcome' },

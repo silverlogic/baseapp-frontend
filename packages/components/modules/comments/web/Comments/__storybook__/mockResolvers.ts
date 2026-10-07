@@ -23,9 +23,8 @@ export const mockResolvers = {
             user: {
               id: 'user-1',
               fullName: 'John Doe',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
             },
             reactionsCount: {
               total: 2,
@@ -48,9 +47,8 @@ export const mockResolvers = {
             user: {
               id: 'user-2',
               fullName: 'Jane Smith',
-              avatar: {
-                url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
-              },
+              avatar:
+                'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/c/9/19/resized/50/50/cb95449a94688af33f6e9bb090cf2936.png',
             },
             reactionsCount: {
               total: 3,

@@ -7,8 +7,6 @@ export const ContentPostImageFragment = graphql`
     height: { type: "Int", defaultValue: 0 }
   ) {
     id
-    image(width: $width, height: $height) {
-      url
-    }
+    image(width: $width, height: $height)
   }
 `

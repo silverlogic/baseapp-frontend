@@ -54,7 +54,7 @@ const GroupChatDetails = () => {
       <View style={styles.avatarOuterContainer}>
         {groups.image ? (
           <Image
-            source={{ uri: groups.image }}
+            source={{ uri: groups.image ?? undefined }}
             style={[styles.selectedImage, hasErrorImage ? styles.errorBorder : {}]}
           />
         ) : (
