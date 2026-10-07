@@ -36,3 +36,18 @@ vulnerabilities:
     statement: >-
       No patched version exists. Reached only through dev tooling (@expo/cli,
       webpack-dev-server), not shipped in any app bundle.
+  # No patched release exists. GHSA-vfj7-8cjw-p6xm lists braces <= 3.0.3 as
+  # vulnerable and 3.0.3 is the latest published version. braces expands glob
+  # patterns for build and dev tooling only: micromatch, fast-glob and chokidar
+  # under webpack, Tailwind, ESLint, Babel/Jest, Storybook and metro. No package
+  # here imports it at runtime, and Next.js matches paths with its own compiled
+  # picomatch. The patterns come from our own config files, so triggering the
+  # stack-exhaustion DoS means committing a hostile glob.
+  - id: CVE-2026-93687
+    purls:
+      - "pkg:npm/braces"
+    expired_at: 2026-11-11
+    statement: >-
+      No patched version exists. Reached only through build and dev tooling
+      (glob matching), with patterns from our own config; not shipped in any
+      app bundle.
