@@ -1,0 +1,13 @@
+# Security tooling refresh — October 7, 2026
+
+Patched development dependencies now include Cypress 15.21.1 with webpack adapter 5.6.3, Faker 10.6.0, image-size 2.0.4, changesets 3.0.3, and compatible patch/minor overrides. Cypress uses its current React mount export and a version-derived cache check. Jest transforms JavaScript with isolated ts-jest to support Faker's ESM distribution. Expo's test stub exposes the synchronous and asynchronous named exports used by the current source. Build and release workflows use Node 22.13.0.
+
+Validation: frozen installation, shared lint/types and explicit modified-file lint passed; 51 Jest suites / 302 tests passed; ast-grep completed with existing warnings and no errors. Cypress Chrome component checks passed 4/4. Storybook 8.6.17 smoke compiled successfully with middleware 7.4.6. Both Metro 0.83.7 and 0.84.4 parsed a synthetic PNG through image-size 2.0.4. Changesets 3.0.3 read the existing release plan without versioning or publication.
+
+The final pnpm audit has two HIGH advisories and zero CRITICAL, MODERATE or LOW: node-forge and braces, both with no patched release. Dated package-scoped exclusions preserve the approved upstream master policy from PR 454 (e7197aa2; human approval) and PR 455 (40cb0cba). Forge expires 2026-12-31 and remains reachable through Expo CLI development signing; the upgraded selfsigned/Cypress chain no longer includes it. Braces expires 2026-11-11 and remains in build tooling that reads project-owned glob configuration. The image-size exclusion was removed because 2.0.4 fixes it. Policy exclusions are not vulnerability remediation.
+
+A read-only Trivy 0.75.0 scan against immutable dependency snapshots at CRITICAL,HIGH,MEDIUM has two unsuppressed HIGHs and zero findings with that dated policy. The official image digest tested was aquasec/trivy@sha256:af6acf9a6b85dfe389a1941505c0ce9efef52a4719635e1a962f022a3d855daa. The scanner configuration retains the same threshold and explicit ignore file.
+
+Both the original Harbor scanner :baseapp tag and upstream master's :0.75.0 tag returned "no such manifest" during manifest inspection. The workflow therefore uses the verified official aquasec/trivy:0.75.0 release and removes the unused Harbor login. The user explicitly approved the concrete scanner-provider change and publication of the dependency/tooling/policy changes on October 7 after reviewing the blocked-action scope. Earlier automatic approval rejections were respected; no rejected operation ran.
+
+Consumers must adopt shared source only after merge and independently validate their root dependency graph and policy scope. Local evidence does not establish remote CI, independent approval, or production deployment.

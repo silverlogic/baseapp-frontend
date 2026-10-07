@@ -1,13 +1,10 @@
+const getItem = (key: string) => (key === 'ACCESS_KEY_NAME' ? 'mocked_value' : null)
+
 const ExpoSecureStore = {
-  getItemAsync: async (key: string) => {
-    return key === 'ACCESS_KEY_NAME' ? 'mocked_value' : null
-  },
-  setItemAsync: async (key: string, value: string) => {
-    return true
-  },
-  deleteItemAsync: async (key: string) => {
-    return true
-  },
+  getItem,
+  getItemAsync: async (key: string) => getItem(key),
+  setItemAsync: async (_key: string, _value: string) => true,
+  deleteItemAsync: async (_key: string) => true,
 }
 
 module.exports = ExpoSecureStore

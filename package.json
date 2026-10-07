@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@ast-grep/cli": "catalog:lint",
-    "@changesets/cli": "^2.27.11",
+    "@changesets/cli": "^3.0.3",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",
@@ -45,7 +45,7 @@
     ]
   },
   "engines": {
-    "node": ">=22.11.0"
+    "node": "^22.13.0 || >=24.0.0"
   },
   "packageManager": "pnpm@10.28.2",
   "resolutions": {
@@ -54,30 +54,45 @@
   },
   "pnpm": {
     "overrides": {
-      "@xmldom/xmldom": ">=0.9.10",
-      "brace-expansion@^1.0.0": ">=1.1.18 <2",
-      "brace-expansion@^2.0.0": ">=2.1.4 <3",
-      "brace-expansion@^5.0.0": ">=5.0.9",
+      "@xmldom/xmldom": ">=0.9.12",
+      "brace-expansion@^1.0.0": ">=1.1.21 <2",
+      "brace-expansion@^2.0.0": ">=2.1.7 <3",
+      "brace-expansion@^5.0.0": ">=5.0.12",
       "browserslist": ">=4.28.7",
       "decode-uri-component": ">=0.5.0",
       "esbuild": ">=0.28.1",
       "form-data": ">=4.0.6",
-      "js-yaml": ">=4.3.1 <5",
-      "read-yaml-file>js-yaml": "^3.15.1",
+      "js-yaml": ">=4.3.2 <5",
+      "read-yaml-file>js-yaml": "^3.15.2",
       "nanoid@^3.0.0": ">=3.3.17 <4",
       "postcss": ">=8.5.23",
-      "sharp@^0.34.0": ">=0.35.3",
-      "shell-quote": ">=1.9.0",
+      "qs": ">=6.16.0 <7",
+      "sharp@^0.34.0": ">=0.35.5",
+      "shell-quote": ">=1.11.0 <2",
       "uuid": ">=14.0.0",
-      "ws@^8.0.0": ">=8.21.0"
+      "ws@^8.0.0": ">=8.21.0",
+      "source-map-js": ">=1.2.2 <2",
+      "tar-fs@^2.0.0": ">=2.1.4 <3",
+      "websocket-driver": ">=0.7.5 <0.8",
+      "proxy-addr": ">=2.0.8 <3",
+      "compression": ">=1.8.2 <2",
+      "undici@^6.0.0": ">=6.28.1 <7",
+      "joi@^17.0.0": ">=17.13.8 <18",
+      "joi@^18.0.0": ">=18.2.9 <19",
+      "dompurify": ">=3.4.16 <4",
+      "fast-uri@^3.0.0": ">=3.1.7 <4",
+      "image-size": ">=2.0.3 <3",
+      "webpack-dev-middleware": ">=7.4.6 <8",
+      "micromatch@^4.0.0": ">=4.0.8 <5",
+      "yaml@^2.0.0": ">=2.8.3 <3",
+      "http-proxy-middleware@^2.0.0": ">=2.0.10 <3",
+      "body-parser@^1.0.0": ">=1.20.6 <2",
+      "postcss-selector-parser": ">=7.1.6 <8"
     },
     "peerDependencyRules": {
       "allowedVersions": {
         "isomorphic-ws>ws": "8"
       }
-    },
-    "patchedDependencies": {
-      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
     }
   }
 }
