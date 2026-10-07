@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@ast-grep/cli": "catalog:lint",
-    "@changesets/cli": "^2.27.11",
+    "@changesets/cli": "^3.0.3",
     "@types/node": "catalog:",
     "eslint": "catalog:lint",
     "husky": "catalog:lint",
@@ -45,7 +45,7 @@
     ]
   },
   "engines": {
-    "node": ">=22.11.0"
+    "node": "^22.13.0 || >=24.0.0"
   },
   "packageManager": "pnpm@10.28.2",
   "resolutions": {
@@ -80,16 +80,19 @@
       "joi@^17.0.0": ">=17.13.8 <18",
       "joi@^18.0.0": ">=18.2.9 <19",
       "dompurify": ">=3.4.16 <4",
-      "webpack-dev-middleware@^7.0.0": ">=7.4.6 <8",
-      "fast-uri@^3.0.0": ">=3.1.7 <4"
+      "fast-uri@^3.0.0": ">=3.1.7 <4",
+      "image-size": ">=2.0.3 <3",
+      "webpack-dev-middleware": ">=7.4.6 <8",
+      "micromatch@^4.0.0": ">=4.0.8 <5",
+      "yaml@^2.0.0": ">=2.8.3 <3",
+      "http-proxy-middleware@^2.0.0": ">=2.0.10 <3",
+      "body-parser@^1.0.0": ">=1.20.6 <2",
+      "postcss-selector-parser": ">=7.1.6 <8"
     },
     "peerDependencyRules": {
       "allowedVersions": {
         "isomorphic-ws>ws": "8"
       }
-    },
-    "patchedDependencies": {
-      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
     }
   }
 }

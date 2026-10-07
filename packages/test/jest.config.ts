@@ -2,13 +2,14 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   transform: {
-    '^.+\\.(ts|tsx)$': [
+    '^.+\\.(ts|tsx|js)$': [
       'ts-jest',
       {
         diagnostics: {
           exclude: ['**'],
         },
         tsconfig: './tsconfig.jest.json',
+        isolatedModules: true,
       },
     ],
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
@@ -25,7 +26,7 @@ module.exports = {
     'react-native': '<rootDir>/__mocks__/react-native.ts',
   },
   transformIgnorePatterns: [
-    '/node_modules/(?!(@testing-library|@baseapp-frontend|expo-secure-store)/)',
+    '/node_modules/(?!(@testing-library|@baseapp-frontend|expo-secure-store|@faker-js|\\.pnpm)/)',
   ],
   modulePathIgnorePatterns: ['<rootDir>/(?!.*\\.(spec|test)\\.(ts|tsx)$).*__mocks__'],
   verbose: true,

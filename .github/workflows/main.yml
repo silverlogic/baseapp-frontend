@@ -72,18 +72,12 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Login to Harbor Registry
-        env:
-          HARBOR_USER: ${{ secrets.HARBOR_TRIVY_ROBOT_USER }}
-          HARBOR_TOKEN: ${{ secrets.HARBOR_TRIVY_ROBOT_TOKEN }}
-        run: echo "${HARBOR_TOKEN}" | docker login registry.tsl.io -u "${HARBOR_USER}" --password-stdin
-
       - name: Run Trivy vulnerability scanner
         run: |
           docker run --rm \
             -v "${{ github.workspace }}:/workspace" \
             -w /workspace \
-            registry.tsl.io/baseapp-github/trivy:baseapp \
+            aquasec/trivy:0.75.0 \
             fs --scanners vuln --pkg-types library \
             --severity CRITICAL,HIGH,MEDIUM --exit-code 1 \
             --ignorefile /workspace/.trivyignore.yaml \
@@ -111,7 +105,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-13.16.1
+          key: cypress-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
@@ -131,8 +125,10 @@ jobs:
       - name: Verify Cypress binary exists
         run: |
           ls -la ~/.cache/Cypress || true
-          ls -la ~/.cache/Cypress/13.16.1/Cypress || true
-          test -x ~/.cache/Cypress/13.16.1/Cypress/Cypress
+          pnpm --filter @baseapp-frontend/components exec cypress version
+          cypress_cache_path=$(pnpm --filter @baseapp-frontend/components exec cypress cache path)
+          cypress_package_version=$(pnpm --filter @baseapp-frontend/components exec node -p "require('cypress/package.json').version")
+          test -x "$cypress_cache_path/$cypress_package_version/Cypress/Cypress"
 
       - name: Component Test
         run: pnpm test:component

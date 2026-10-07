@@ -1,18 +1,15 @@
-# Compatibility shim — .trivyignore.yaml is the source of truth for rationale,
-# package scoping (purls) and expiry. Keep the ID lists here in sync with it.
+# Compatibility shim for scanners that auto-load only the plain file.
+# Rationale, package scope and expiry are in .trivyignore.yaml.
+# Adopted from approved upstream master policy e7197aa2/40cb0cba; image-size is fixed.
 #
-# This plain file exists because trivy auto-detects `.trivyignore` by filename
-# but needs an explicit `--ignorefile` to load the YAML form. Our own workflow
-# passes the flag, but this repo is also scanned as a submodule path by the
-# baseapp-frontend-template Jenkins pipeline, whose trivy command we don't
-# control (shared library `scanDependencyVulnerabilities`). Without this file
-# that scan would lose the waivers.
+# node-forge: no patched release exists (advisory covers <= 1.4.0, the latest).
+# Reached only through dev tooling — @expo/cli (dev-server code signing) and
+# dev-server manifest signing — never shipped in an app bundle. Re-evaluate by 2026-12-31.
+CVE-2026-85393 exp:2026-12-31
 #
-# image-size: no patched release exists in any version line; reached only
-# through metro (React Native bundler) at build time, never shipped in the app
+# braces: no patched release exists (advisory covers <= 3.0.3, the latest).
+# Reached only through build/dev tooling — micromatch and chokidar under metro,
+# jest, fast-glob, tailwindcss and webpack-dev-server — which expand glob
+# patterns from our own config, never untrusted input, and never ship in an app
 # bundle. Re-evaluate by 2026-11-11.
-CVE-2025-71329
-CVE-2025-71330
-# brace-expansion: false positive on patched code (overrides pin 1.1.18 /
-# 2.1.4 / 5.0.9). Trivy's data has caught up; retained only for older scanner DBs.
-CVE-2026-14257
+CVE-2026-93687 exp:2026-11-11
