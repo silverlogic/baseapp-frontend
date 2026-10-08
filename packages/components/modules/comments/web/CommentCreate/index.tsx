@@ -131,35 +131,36 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     )
 
     return (
-      <>
-        <SocialInput
-          ref={ref}
-          placeholder="Comment..."
-          autoFocusInput={autoFocusInput}
-          form={form}
-          formId="comment-create"
-          submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
-          // Block submit until every attachment has finished, so a paused or
-          // failed upload is never silently left off the comment.
-          isLoading={isLoading || hasPendingFiles}
-          isReply={isReply}
-          replyTargetName={replyTargetName}
-          onCancelReply={cancelReply}
-          SubmitActionsProps={{
-            ariaLabel: 'create comment',
-          }}
-          {...mergedSocialInputProps}
-          SocialUpsertActions={CommentFilesUpsertActions}
-          SocialUpsertActionsProps={{
-            onFilesSelected: handleFilesSelected,
-            isUploading,
-            maxFiles: MAX_FILES,
-            maxFileSize: MAX_FILE_SIZE,
-            acceptedFileTypes: ACCEPTED_FILE_TYPES,
-          }}
-        />
-        <UploadingFilesList scope={filesScope} variant="chips" layout="horizontal" />
-      </>
+      <SocialInput
+        ref={ref}
+        placeholder="Comment..."
+        autoFocusInput={autoFocusInput}
+        form={form}
+        formId="comment-create"
+        submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
+        // Block submit until every attachment has finished, so a paused or
+        // failed upload is never silently left off the comment.
+        isLoading={isLoading || hasPendingFiles}
+        isReply={isReply}
+        replyTargetName={replyTargetName}
+        onCancelReply={cancelReply}
+        SubmitActionsProps={{
+          ariaLabel: 'create comment',
+        }}
+        {...mergedSocialInputProps}
+        SocialUpsertActions={CommentFilesUpsertActions}
+        SocialUpsertActionsProps={{
+          onFilesSelected: handleFilesSelected,
+          isUploading,
+          maxFiles: MAX_FILES,
+          maxFileSize: MAX_FILE_SIZE,
+          acceptedFileTypes: ACCEPTED_FILE_TYPES,
+        }}
+        // Inside the form, not after it: the form is sticky, so a sibling would sit
+        // below the pinned composer and stay off-screen until the list is scrolled.
+        Footer={UploadingFilesList}
+        FooterProps={{ scope: filesScope, variant: 'chips', layout: 'horizontal' }}
+      />
     )
   },
 )

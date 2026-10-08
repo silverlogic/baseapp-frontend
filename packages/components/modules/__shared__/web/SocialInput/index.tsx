@@ -70,6 +70,8 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       SocialUpsertActionsProps = {},
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
+      Footer,
+      FooterProps = {},
       Form = DefaultForm,
       onKeyDown,
       formId = 'text-field-form',
@@ -124,6 +126,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
             {...SubmitActionsProps}
           />
         </SocialTextField>
+        {Footer && <Footer {...FooterProps} />}
       </Form>
     )
   },
