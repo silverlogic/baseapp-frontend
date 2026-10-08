@@ -141,13 +141,9 @@ export const createAxiosInstance = ({
       const contentTypeHeader = String(error.response?.headers?.['content-type'] ?? '')
       const isJsonError = contentTypeHeader.includes('application/json')
 
-      if (isJsonError && error.response?.data) {
-        const newError = { response: { data: {} } }
-        newError.response.data = camelizeResponseDataKeys
-          ? humps.camelizeKeys(error.response.data)
-          : error.response.data
-
-        return Promise.reject(newError)
+      if (isJsonError && error.response?.data && camelizeResponseDataKeys) {
+        const { response } = error
+        response.data = humps.camelizeKeys(response.data)
       }
 
       return Promise.reject(error)
