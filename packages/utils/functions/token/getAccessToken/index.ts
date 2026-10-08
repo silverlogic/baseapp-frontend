@@ -1,7 +1,12 @@
 import { type JWTResponse } from '../../../types/jwt'
+import { resolveApiUrl } from '../../api/resolveApiUrl'
+import type { ResolveApiUrlOptions } from '../../api/resolveApiUrl/types'
 import { getExpoConstant } from '../../expo'
 
-export const getAccessToken = async (refreshToken?: string | null) => {
+export const getAccessToken = async (
+  refreshToken?: string | null,
+  options: ResolveApiUrlOptions = {},
+) => {
   if (!refreshToken) {
     throw new Error('No refresh token provided.')
   }
@@ -9,17 +14,20 @@ export const getAccessToken = async (refreshToken?: string | null) => {
   try {
     const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL ?? EXPO_PUBLIC_API_BASE_URL}/auth/refresh`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ refresh: refreshToken }),
-        cache: 'no-store',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
+    const { url: apiBaseUrl, headers: forwardedHeaders } = await resolveApiUrl(
+      process.env.NEXT_PUBLIC_API_BASE_URL ?? EXPO_PUBLIC_API_BASE_URL,
+      options,
     )
+
+    const response = await fetch(`${apiBaseUrl}/auth/refresh`, {
+      method: 'POST',
+      body: JSON.stringify({ refresh: refreshToken }),
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+        ...forwardedHeaders,
+      },
+    })
 
     if (response instanceof Response && !response.ok) {
       throw new Error('Failed to get access token.')
