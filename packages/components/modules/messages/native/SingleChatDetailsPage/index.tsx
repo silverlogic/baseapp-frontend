@@ -71,7 +71,7 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
       <ScrollView>
         <ProfileSummary
           name={profile?.name}
-          avatar={profile?.image?.url}
+          avatar={profile?.image ?? undefined}
           username={profile?.urlPath?.path}
         />
         <Options

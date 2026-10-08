@@ -517,9 +517,9 @@ overrides:
   postcss: '>=8.5.23'
   proxy-addr: '>=2.0.8'
   qs: '>=6.16.0'
+  source-map-js: '>=1.2.2'
   sharp@^0.34.0: '>=0.35.4'
   shell-quote: '>=1.11.0'
-  source-map-js: '>=1.2.2'
   uuid: '>=14.0.0'
   ws@^8.0.0: '>=8.21.0'
 

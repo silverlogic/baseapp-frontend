@@ -2,6 +2,9 @@
 
 import { forwardRef, useMemo } from 'react'
 
+import { useDeferredFileAttachments } from '@baseapp-frontend/components/files/common'
+import { UploadingFilesList } from '@baseapp-frontend/components/files/web'
+
 import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
@@ -9,7 +12,15 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { useCommentCreateForm, useCommentReply } from '../../common'
+import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentCreateProps } from './types'
+
+const MAX_FILES = 5
+const MAX_FILE_SIZE = 100 * 1024 * 1024 // 100MB
+const ACCEPTED_FILE_TYPES = {
+  'image/*': ['.png', '.jpg'],
+  'application/pdf': ['.pdf'],
+}
 
 /**
  * ### CommentCreate Component
@@ -80,11 +91,22 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     ref,
   ) => {
     const commentReply = useCommentReply<HTMLDivElement>()
+    const {
+      handleFilesSelected,
+      attachTo,
+      isUploading,
+      hasPendingFiles,
+      scope: filesScope,
+    } = useDeferredFileAttachments()
 
     const { form, submit, isLoading, isReply, replyTargetName, cancelReply } = useCommentCreateForm(
       {
         targetObjectId,
-        onSuccess: () => {
+        onSuccess: ({ commentId }) => {
+          if (commentId) {
+            // Fire-and-forget: attachTo reports mutation failures through its own onError.
+            attachTo(commentId).catch(() => undefined)
+          }
           if (commentReply.commentItemRef?.current) {
             commentReply.commentItemRef.current.scrollIntoView({
               block: 'nearest',
@@ -109,22 +131,35 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     )
 
     return (
-      <SocialInput
-        ref={ref}
-        placeholder="Comment..."
-        autoFocusInput={autoFocusInput}
-        form={form}
-        formId="comment-create"
-        submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
-        isLoading={isLoading}
-        isReply={isReply}
-        replyTargetName={replyTargetName}
-        onCancelReply={cancelReply}
-        SubmitActionsProps={{
-          ariaLabel: 'create comment',
-        }}
-        {...mergedSocialInputProps}
-      />
+      <>
+        <SocialInput
+          ref={ref}
+          placeholder="Comment..."
+          autoFocusInput={autoFocusInput}
+          form={form}
+          formId="comment-create"
+          submit={(data: SocialUpsertForm) => submit(data, { includeMentions: isMentionsActive })}
+          // Block submit until every attachment has finished, so a paused or
+          // failed upload is never silently left off the comment.
+          isLoading={isLoading || hasPendingFiles}
+          isReply={isReply}
+          replyTargetName={replyTargetName}
+          onCancelReply={cancelReply}
+          SubmitActionsProps={{
+            ariaLabel: 'create comment',
+          }}
+          {...mergedSocialInputProps}
+          SocialUpsertActions={CommentFilesUpsertActions}
+          SocialUpsertActionsProps={{
+            onFilesSelected: handleFilesSelected,
+            isUploading,
+            maxFiles: MAX_FILES,
+            maxFileSize: MAX_FILE_SIZE,
+            acceptedFileTypes: ACCEPTED_FILE_TYPES,
+          }}
+        />
+        <UploadingFilesList scope={filesScope} variant="chips" layout="horizontal" />
+      </>
     )
   },
 )

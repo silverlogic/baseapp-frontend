@@ -115,7 +115,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
     ),
   ].filter(Boolean)
 
-  const bannerSrc = profile?.bannerImage?.url || bannerFallback
+  const bannerSrc = profile?.bannerImage || bannerFallback
 
   return (
     <PageContainer>
@@ -136,7 +136,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
             sx={{ alignSelf: 'start', justifySelf: 'center' }}
             width={96}
             height={96}
-            src={profile?.image?.url}
+            src={profile?.image ?? undefined}
           />
           <ProfileDescriptionContainer>
             <ProfileNameContainer>

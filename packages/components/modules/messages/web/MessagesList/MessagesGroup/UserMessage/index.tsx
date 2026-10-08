@@ -77,7 +77,7 @@ const UserMessage: FC<UserMessageProps> = ({
           <AvatarWithPlaceholder
             width={32}
             height={32}
-            src={message?.profile?.image?.url}
+            src={message?.profile?.image ?? undefined}
             sx={{ alignSelf: 'start', border: 'none', justifySelf: 'center' }}
             showDeletedUser={isProfileNullOrUndefined}
           />

@@ -10,6 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 import { ActionsOverlay, Timestamp as DefaultTimestamp } from '../../../__shared__/web'
+import { FileUploadList } from '../../../files/web'
 import { useCommentItem } from '../../common'
 import DefaultCommentUpdate from '../CommentUpdate'
 import DefaultCommentPinnedBadge from './CommentPinnedBadge'
@@ -130,7 +131,7 @@ const CommentItem: FC<CommentItemProps> = ({
               width={40}
               height={40}
               alt={comment.profile?.name ?? `Comment's user avatar`}
-              src={comment.profile?.image?.url}
+              src={comment.profile?.image || ''}
               onClick={() => router.push(profileUrl)}
             />
 
@@ -141,6 +142,15 @@ const CommentItem: FC<CommentItemProps> = ({
                   <CommentPinnedBadge isPinned={comment.isPinned} />
                 </NameRow>
                 {renderCommentContent()}
+
+                <div>
+                  <FileUploadList
+                    target={comment}
+                    variant="chips"
+                    layout="horizontal"
+                    editable={isEditMode}
+                  />
+                </div>
               </TitleContainer>
               <FooterRow>
                 <ActionsRow>

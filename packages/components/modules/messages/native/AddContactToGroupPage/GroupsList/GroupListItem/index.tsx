@@ -31,7 +31,7 @@ const GroupListItem: FC<GroupListItemProps> = ({ roomRef, selected, onToggle }) 
     <Pressable onPress={handlePress} disabled={isAlreadyMember}>
       <View style={styles.cardContainer}>
         <View>
-          <AvatarWithPlaceholder imgSource={node.image?.url} />
+          <AvatarWithPlaceholder imgSource={node.image ?? undefined} />
         </View>
         <View style={styles.textContainer}>
           <Text variant="subtitle2" numberOfLines={1}>
