@@ -194,7 +194,18 @@ describe('Comments', () => {
     cy.mockNextRouter().then((router) => {
       cy.mount(
         <AppRouterContext.Provider value={router}>
-          <CommentsForTesting environment={environment} />
+          <CommentsForTesting
+            environment={environment}
+            // Known fixture geometry keeps the initial viewport before the page end.
+            CommentsListProps={{
+              CommentItemProps: {
+                CommentUpdateProps: {
+                  SocialInputProps: { mode: 'plain-text' },
+                },
+              },
+              VirtuosoProps: { fixedItemHeight: 100 },
+            }}
+          />
         </AppRouterContext.Provider>,
       )
     })
