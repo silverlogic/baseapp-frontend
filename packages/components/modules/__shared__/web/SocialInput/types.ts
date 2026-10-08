@@ -20,6 +20,14 @@ export interface SocialInputProps {
   SocialUpsertActionsProps?: Record<string, any>
   SubmitActions?: FC<SubmitActionsProps>
   SubmitActionsProps?: Partial<SubmitActionsProps>
+  /**
+   * Rendered inside the form, under the text field. The form is `position: sticky`, so
+   * anything that has to stay with the composer — pending attachments, for instance —
+   * belongs here; a sibling rendered after `SocialInput` sits below the pinned form and
+   * is off-screen until the user scrolls to the end of the list.
+   */
+  Footer?: FC<any>
+  FooterProps?: Record<string, any>
   Form?: ComponentType<ComponentPropsWithoutRef<'form'>>
   onKeyDown?: (event: KeyboardEvent<HTMLDivElement>, onSubmit: VoidFunction) => void
   formId?: string
