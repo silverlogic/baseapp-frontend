@@ -8,6 +8,7 @@ import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/componen
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 import { ConnectionHandler, useFragment } from 'react-relay'
 
 import { formatHandle } from '../../../../__shared__/common/utils'
@@ -65,7 +66,7 @@ const ChatRoomListItem: FC<ChatRoomListItemProps> = ({ profile: profileRef, onCh
         loading={isMutationInFlight}
         sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
       >
-        Message
+        <FormattedMessage id="messages.chatCreate.item.message" defaultMessage="Message" />
       </LoadingButton>
     </MainContainer>
   )

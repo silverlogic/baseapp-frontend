@@ -1,5 +1,7 @@
 import { Button, Chip, TableCell, TableRow, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
+import { INVOICE_TABLE_MESSAGES } from '../constants'
 import { InvoiceItemTableRowProps } from '../types'
 
 const InvoiceItemTableRow = ({
@@ -8,6 +10,7 @@ const InvoiceItemTableRow = ({
   cellProps,
   formattedDate,
   amountDue,
+  statusLabel,
   color,
 }: InvoiceItemTableRowProps) => (
   <TableRow key={row.id} {...rowProps}>
@@ -18,9 +21,9 @@ const InvoiceItemTableRow = ({
     </TableCell>
     <TableCell {...cellProps}>{formattedDate}</TableCell>
     <TableCell {...cellProps}>
-      <Chip label={row.status} color={color} variant="soft" size="small" />
+      <Chip label={statusLabel} color={color} variant="soft" size="small" />
     </TableCell>
-    <TableCell {...cellProps}>{amountDue ? `$${amountDue}` : '-'}</TableCell>
+    <TableCell {...cellProps}>{amountDue || '-'}</TableCell>
     <TableCell {...cellProps}>
       <Button
         variant="soft"
@@ -31,7 +34,7 @@ const InvoiceItemTableRow = ({
         }}
         disabled={!row.hostedInvoiceUrl}
       >
-        Receipt
+        <FormattedMessage {...INVOICE_TABLE_MESSAGES.receipt} />
       </Button>
     </TableCell>
   </TableRow>

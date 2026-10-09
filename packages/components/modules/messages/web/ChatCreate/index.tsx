@@ -8,11 +8,13 @@ import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/c
 
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
 import { ProfileEdge, ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import EmptyProfilesListState from '../__shared__/EmptyProfilesListState'
+import { SHARED_MESSAGES } from '../__shared__/constants'
 import DefaultBody from './Body'
 import DefaultChatRoomListItem from './ChatRoomListItem'
 import DefaultHeader from './Header'
@@ -33,6 +35,7 @@ const ChatCreate: FC<ChatCreateProps> = ({
   SearchbarProps = {},
   VirtuosoProps = {},
 }) => {
+  const intl = useIntl()
   const {
     data: { allProfiles },
     loadNext,
@@ -74,7 +77,7 @@ const ChatCreate: FC<ChatCreateProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more profiles"
+        aria-label={intl.formatMessage(SHARED_MESSAGES.loadingMoreProfiles)}
       />
     )
   }

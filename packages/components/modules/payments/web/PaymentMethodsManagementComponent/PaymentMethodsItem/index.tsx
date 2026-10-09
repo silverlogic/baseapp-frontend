@@ -2,7 +2,9 @@ import { FC } from 'react'
 
 import { MoreVert } from '@mui/icons-material'
 import { Box, Chip, Divider, IconButton, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
+import { PAYMENTS_MESSAGES } from '../../constants'
 import { getCardIcon } from '../../utils'
 import { PaymentMethodsItemProps } from '../types'
 
@@ -13,6 +15,7 @@ const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({
   setAnchorEl,
   isLast,
 }) => {
+  const intl = useIntl()
   const cardExpiryDate =
     paymentMethod?.card?.expMonth && paymentMethod?.card?.expYear
       ? new Date(paymentMethod.card.expYear, paymentMethod.card.expMonth)
@@ -25,15 +28,37 @@ const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({
         {getCardIcon(paymentMethod?.card?.brand)}
         <Box display="flex" flexDirection="column" flexGrow={1}>
           <Box display="flex" gap={2} mb={1}>
-            {paymentMethod?.isDefault && <Chip color="default" label="Default" variant="soft" />}
-            {isExpired && <Chip color="error" label="Expired" variant="soft" />}
+            {paymentMethod?.isDefault && (
+              <Chip
+                color="default"
+                label={intl.formatMessage({
+                  id: 'payments.paymentMethods.default',
+                  defaultMessage: 'Default',
+                })}
+                variant="soft"
+              />
+            )}
+            {isExpired && (
+              <Chip
+                color="error"
+                label={intl.formatMessage(PAYMENTS_MESSAGES.expired)}
+                variant="soft"
+              />
+            )}
           </Box>
           <Typography variant="body2" fontWeight={500}>
-            {paymentMethod?.card?.brand?.toUpperCase() ?? 'CARD'} •••• •••• ••••{' '}
-            {paymentMethod?.card?.last4}
+            {paymentMethod?.card?.brand?.toUpperCase() ??
+              intl.formatMessage({
+                id: 'payments.paymentMethods.cardFallback',
+                defaultMessage: 'CARD',
+              })}{' '}
+            •••• •••• •••• {paymentMethod?.card?.last4}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {`${isExpired ? 'Expired' : 'Expires'}: ${paymentMethod?.card?.expMonth}/${paymentMethod?.card?.expYear}`}
+            {intl.formatMessage(
+              isExpired ? PAYMENTS_MESSAGES.cardExpired : PAYMENTS_MESSAGES.cardExpires,
+              { month: paymentMethod?.card?.expMonth, year: paymentMethod?.card?.expYear },
+            )}
           </Typography>
         </Box>
         <IconButton

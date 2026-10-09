@@ -151,7 +151,10 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         replyTargetName={replyTargetName}
         onCancelReply={cancelReply}
         SubmitActionsProps={{
-          ariaLabel: 'create comment',
+          ariaLabel: intl.formatMessage({
+            id: 'comments.create.submit.ariaLabel',
+            defaultMessage: 'create comment',
+          }),
         }}
         {...mergedSocialInputProps}
         SocialUpsertActions={CommentFilesUpsertActions}

@@ -5,6 +5,7 @@ import React, { FC } from 'react'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Components, Virtuoso } from 'react-virtuoso'
 
 import { useContentPosts } from '../../common'
@@ -19,6 +20,7 @@ const Scroller: Components['List'] = React.forwardRef(({ style, children }, ref)
 ))
 
 const PostList: FC<ContentFeedProps> = ({ preloadedQuery }) => {
+  const intl = useIntl()
   const {
     data: { contentPosts },
     loadNext,
@@ -38,7 +40,10 @@ const PostList: FC<ContentFeedProps> = ({ preloadedQuery }) => {
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more posts"
+        aria-label={intl.formatMessage({
+          id: 'contentFeed.loading.more',
+          defaultMessage: 'loading more posts',
+        })}
       />
     )
   }

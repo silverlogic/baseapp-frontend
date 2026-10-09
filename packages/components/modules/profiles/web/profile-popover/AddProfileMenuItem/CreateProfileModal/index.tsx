@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode, useMemo } from 'react'
 
 import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { TextField } from '@baseapp-frontend/design-system/components/web/inputs'
@@ -19,26 +19,35 @@ import {
   Typography,
 } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { ConnectionHandler } from 'react-relay'
 import slugify from 'slugify'
 
 import { useOrganizationCreateMutation } from '../../../../common'
-import { schema } from './constants'
+import { CREATE_PROFILE_MESSAGES as MESSAGES, getCreateProfileSchema } from './constants'
 import { Form, TitleRow } from './styled'
 import { CreateProfileModalProps, OrganizationCreateForm } from './types'
 
 let nextClientMutationId = 0
 
+const renderTermsLink = (href: string) => (chunks: ReactNode[]) => (
+  <Link display="inline" href={href} target="_blank">
+    {chunks}
+  </Link>
+)
+
 const CreateProfileModal: FC<CreateProfileModalProps> = ({
-  addNewProfileLabel = 'New organization',
+  addNewProfileLabel,
   termsAndConditionsUrl = '',
-  addNewProfileDescription = 'Create an organization and invite multiple members to manage and collaborate.',
-  submitLabel = 'Create Organization',
+  addNewProfileDescription,
+  submitLabel,
   onClose,
   open,
   setOpen,
   userId,
 }) => {
+  const intl = useIntl()
+  const schema = useMemo(() => getCreateProfileSchema(intl), [intl])
   const form = useForm<OrganizationCreateForm>({
     mode: 'onChange',
     defaultValues: {
@@ -64,26 +73,24 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
     if (errorMessage.includes('duplicate key') && errorMessage.includes('urlpath')) {
       return {
         field: 'urlPath',
-        message: 'This URL path is already taken. Please choose a different one.',
+        message: intl.formatMessage(MESSAGES.urlPathTaken),
       }
     }
     if (errorMessage.includes('duplicate key') && errorMessage.includes('name')) {
       return {
         field: 'name',
-        message: 'An organization with this name already exists. Please choose a different name.',
+        message: intl.formatMessage(MESSAGES.nameTaken),
       }
     }
     if (errorMessage.includes('invalid') && errorMessage.includes('urlpath')) {
       return {
         field: 'urlPath',
-        message:
-          'Invalid URL path format. Please use only lowercase letters, numbers, and hyphens.',
+        message: intl.formatMessage(MESSAGES.urlPathInvalid),
       }
     }
     return {
       field: 'root',
-      message:
-        'Unable to create organization. Please try again or contact support if the problem persists.',
+      message: intl.formatMessage(MESSAGES.createFailed),
     }
   }
 
@@ -155,7 +162,9 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
     >
       <DialogTitle id="organization-modal-title">
         <TitleRow>
-          <Typography variant="h6">{addNewProfileLabel}</Typography>
+          <Typography variant="h6">
+            {addNewProfileLabel ?? intl.formatMessage(MESSAGES.title)}
+          </Typography>
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
@@ -166,7 +175,9 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
           sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}
           id="organization-modal-description"
         >
-          <Typography color="text.secondary">{addNewProfileDescription}</Typography>
+          <Typography color="text.secondary">
+            {addNewProfileDescription ?? intl.formatMessage(MESSAGES.description)}
+          </Typography>
 
           {form.formState.errors.root && (
             <Alert severity="error" onClose={() => form.clearErrors('root')}>
@@ -176,7 +187,10 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
 
           <Box display="flex" flexDirection="column" gap={2}>
             <TextField
-              label="Name"
+              label={intl.formatMessage({
+                id: 'profiles.createProfile.name',
+                defaultMessage: 'Name',
+              })}
               name="name"
               size="medium"
               control={form.control}
@@ -187,18 +201,27 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
                 }
               }}
             />
-            <TextField label="URL Path" name="urlPath" size="medium" control={form.control} />
+            <TextField
+              label={intl.formatMessage({
+                id: 'profiles.createProfile.urlPath',
+                defaultMessage: 'URL Path',
+              })}
+              name="urlPath"
+              size="medium"
+              control={form.control}
+            />
             <Typography color="text.primary">
-              Upon confirming, you agree to our{' '}
-              <Link display="inline" href={termsAndConditionsUrl} target="_blank">
-                Terms and Conditions.
-              </Link>
+              <FormattedMessage
+                id="profiles.createProfile.terms"
+                defaultMessage="Upon confirming, you agree to our <link>Terms and Conditions.</link>"
+                values={{ link: renderTermsLink(termsAndConditionsUrl) }}
+              />
             </Typography>
           </Box>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'flex-end' }}>
           <Button variant="outlined" color="inherit" onClick={handleClose} sx={{ width: 'auto' }}>
-            Cancel
+            <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
           </Button>
           <LoadingButton
             variant="contained"
@@ -212,7 +235,7 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
               !form.formState.isValid
             }
           >
-            {submitLabel}
+            {submitLabel ?? intl.formatMessage(MESSAGES.submit)}
           </LoadingButton>
         </DialogActions>
       </Form>

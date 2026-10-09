@@ -9,12 +9,13 @@ import {
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, CircularProgress, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ReportTypeListQuery as ReportTypeListQueryType } from '../../../../../../__generated__/ReportTypeListQuery.graphql'
 import { useReportCreateMutation } from '../../../../common/graphql/mutations/ReportCreate'
 import { ReportTypeListQuery } from '../../../../common/graphql/queries/ReportTypeList'
-import { STEPS } from '../constants'
+import { REPORT_MESSAGES, STEPS } from '../constants'
 import { ReportButtonWithDialogProps, ReportTypeNode, ReportTypeSubTypeNode } from '../types'
 import ConfirmationStep from './ConfirmationStep'
 import SelectReportTypeStep from './SelectReportTypeStep'
@@ -150,13 +151,17 @@ const ReportDialogContent: FC<ReportButtonWithDialogProps> = ({ targetId, handle
           ) : (
             <>
               <NegativeCheckMarkIcon sx={{ color: 'success.main', width: 35, height: 35 }} />
-              <Typography variant="subtitle1">Report</Typography>
+              <Typography variant="subtitle1">
+                <FormattedMessage {...REPORT_MESSAGES.title} />
+              </Typography>
             </>
           )}
         </Box>
       ) : (
         <Box display="flex" justifyContent={smDown ? 'center' : 'flex-start'}>
-          <Typography variant={smDown ? 'caption' : 'subtitle1'}>Report</Typography>
+          <Typography variant={smDown ? 'caption' : 'subtitle1'}>
+            <FormattedMessage {...REPORT_MESSAGES.title} />
+          </Typography>
         </Box>
       )}
       {steps?.find((step) => step.name === currentStep)?.content}

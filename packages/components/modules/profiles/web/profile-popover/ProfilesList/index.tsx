@@ -7,6 +7,7 @@ import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Box, ButtonBase, Divider, Slide } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -35,6 +36,7 @@ const ProfilesList: FC<ProfilesListProps> = ({
   })
 
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const { currentProfile, setCurrentProfile } = useCurrentProfile()
 
   const handleProfileChange = (profile: ProfileItemFragment$data) => {
@@ -54,7 +56,12 @@ const ProfilesList: FC<ProfilesListProps> = ({
         image: absoluteImagePath,
         urlPath: profile.urlPath?.path ?? null,
       })
-      sendToast(`Switched to ${profile.name}`)
+      sendToast(
+        intl.formatMessage(
+          { id: 'profiles.profilesList.switchedTo', defaultMessage: 'Switched to {name}' },
+          { name: profile.name },
+        ),
+      )
       handleCloseSubmenu()
       window.location.reload()
     }
@@ -124,7 +131,14 @@ const ProfilesList: FC<ProfilesListProps> = ({
 
   return (
     <Box>
-      <StyledList disablePadding maxHeight={listMaxHeight} aria-label="List of available profiles">
+      <StyledList
+        disablePadding
+        maxHeight={listMaxHeight}
+        aria-label={intl.formatMessage({
+          id: 'profiles.profilesList.ariaLabel',
+          defaultMessage: 'List of available profiles',
+        })}
+      >
         {renderContent()}
       </StyledList>
     </Box>
@@ -132,7 +146,8 @@ const ProfilesList: FC<ProfilesListProps> = ({
 }
 
 const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
-  const { openSubmenu, handleCloseSubmenu, cancelLabel = 'Cancel' } = props
+  const { openSubmenu, handleCloseSubmenu, cancelLabel } = props
+  const intl = useIntl()
 
   return (
     <Slide direction={openSubmenu ? 'left' : 'right'} in={openSubmenu} mountOnEnter unmountOnExit>
@@ -140,7 +155,7 @@ const ProfilesListSuspended: FC<ProfilesListProps> = (props) => {
         <Box sx={{ p: 1 }}>
           <CancelMenuItem tabIndex={0} component={ButtonBase} onClick={() => handleCloseSubmenu()}>
             <ChevronIcon position="left" color="action" />
-            {cancelLabel}
+            {cancelLabel ?? intl.formatMessage({ id: 'common.cancel', defaultMessage: 'Cancel' })}
           </CancelMenuItem>
         </Box>
         <Divider sx={{ borderStyle: 'solid' }} />

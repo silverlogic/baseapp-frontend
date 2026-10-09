@@ -3,13 +3,12 @@ import { FC } from 'react'
 import { useLogout } from '@baseapp-frontend/authentication'
 
 import { ButtonBase, MenuItem } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { LogoutItemProps } from './types'
 
-const LogoutItem: FC<LogoutItemProps> = ({
-  handlePopoverOnClose,
-  logoutButtonLabel = 'Logout',
-}) => {
+const LogoutItem: FC<LogoutItemProps> = ({ handlePopoverOnClose, logoutButtonLabel }) => {
+  const intl = useIntl()
   const { logout } = useLogout()
 
   return (
@@ -23,7 +22,11 @@ const LogoutItem: FC<LogoutItemProps> = ({
       }}
       sx={{ fontWeight: 'fontWeightBold', color: 'error.main' }}
     >
-      {logoutButtonLabel}
+      {logoutButtonLabel ??
+        intl.formatMessage({
+          id: 'navigations.accountPopover.logout',
+          defaultMessage: 'Logout',
+        })}
     </MenuItem>
   )
 }

@@ -4,6 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { UserMembersListPaginationQuery as UserMembersListPaginationQueryType } from '../../../../__generated__/UserMembersListPaginationQuery.graphql'
@@ -31,22 +32,26 @@ const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
 }
 
 const ProfileMembersSuspended: FC<ProfileMembersSuspendedProps> = ({
-  title = 'Members',
+  title,
   subtitle,
   InitialLoadingState = DefaultLoadingState,
   ...props
-}) => (
-  <>
-    <Typography component="h4" variant="h4" mb={1}>
-      {title}
-    </Typography>
-    <Typography component="p" variant="body2" color="text.secondary" mb={4}>
-      {subtitle}
-    </Typography>
-    <Suspense fallback={<InitialLoadingState CircularProgressProps={{ size: 20 }} />}>
-      <ProfileMembers {...props} />
-    </Suspense>
-  </>
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <>
+      <Typography component="h4" variant="h4" mb={1}>
+        {title ?? intl.formatMessage({ id: 'profiles.members.title', defaultMessage: 'Members' })}
+      </Typography>
+      <Typography component="p" variant="body2" color="text.secondary" mb={4}>
+        {subtitle}
+      </Typography>
+      <Suspense fallback={<InitialLoadingState CircularProgressProps={{ size: 20 }} />}>
+        <ProfileMembers {...props} />
+      </Suspense>
+    </>
+  )
+}
 
 export default ProfileMembersSuspended
