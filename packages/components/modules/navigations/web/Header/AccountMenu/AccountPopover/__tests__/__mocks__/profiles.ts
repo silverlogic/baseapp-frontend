@@ -23,9 +23,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: userProfile.id,
                 name: userProfile.name,
-                image: {
-                  url: userProfile.image,
-                },
+                image: userProfile.image,
                 urlPath: {
                   path: userProfile.urlPath,
                 },
@@ -37,9 +35,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTo0',
                 name: 'Second Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'second-profile',
                   id: 'VVJMUGF0aDoz',
@@ -52,9 +48,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZToxOA==',
                 name: 'Third Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'third-profile',
                   id: 'VVJMUGF0aDoxNg==',
@@ -67,9 +61,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZToxMQ==',
                 name: 'Fourth Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'fourth-profile',
                   id: 'VVJMUGF0aDoxMA==',
@@ -82,9 +74,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTo2',
                 name: 'Fifth Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'fifth-profile',
                   id: 'VVJMUGF0aDo1',
@@ -97,9 +87,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTo3',
                 name: 'Sixth Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'sixth-profile',
                   id: 'VVJMUGF0aDo2',
@@ -112,9 +100,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTo4',
                 name: 'Seventh Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'seventh-profile',
                   id: 'VVJMUGF0aDo3',
@@ -127,9 +113,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTo5',
                 name: 'Eighth Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'eighth-profile',
                   id: 'VVJMUGF0aDo4',
@@ -155,9 +139,7 @@ export const mockProfilesListFactory = (userProfile: MinimalProfile) => {
               node: {
                 id: 'UHJvZmlsZTox',
                 name: 'Tenth Profile',
-                image: {
-                  url: faker.image.avatar(),
-                },
+                image: faker.image.avatar(),
                 urlPath: {
                   path: 'tenth-profile',
                   id: 'VVJMUGF0aDoxMQ==',

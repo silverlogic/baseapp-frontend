@@ -1,7 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": ["node", "jest"],
+    "types": ["node", "vitest/globals"],
     "outDir": "./dist"
   },
   "include": [
@@ -12,8 +12,7 @@
     ".eslintrc.js",
     "*.ts",
     "*.tsx",
-    "index.d.ts",
-    "jest.config.ts"
+    "index.d.ts"
   ],
   "exclude": ["node_modules", "dist"]
 }

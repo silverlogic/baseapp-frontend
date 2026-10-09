@@ -6,7 +6,7 @@ describe('setFormRelayErrors', () => {
 
   beforeEach(() => {
     mockForm = {
-      getValues: jest.fn().mockImplementation(
+      getValues: vi.fn().mockImplementation(
         (fieldKey: string) =>
           ({
             name: 'John',
@@ -15,7 +15,7 @@ describe('setFormRelayErrors', () => {
             bio: '',
           })[fieldKey],
       ),
-      setError: jest.fn(),
+      setError: vi.fn(),
     }
 
     mockErrors = [
@@ -51,6 +51,28 @@ describe('setFormRelayErrors', () => {
     expect(mockForm.setError).toHaveBeenCalledWith('bio', {
       type: 'custom',
       message: 'Bio may not be blank',
+    })
+  })
+
+  it('should fall back to a generic message when the error carries no messages', () => {
+    mockErrors = [
+      { field: 'name', messages: [] },
+      { field: 'age', messages: ['   '] },
+      { field: 'bio' },
+    ]
+    setFormRelayErrors(mockForm, mockErrors)
+
+    expect(mockForm.setError).toHaveBeenCalledWith('name', {
+      type: 'custom',
+      message: 'Something went wrong.',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('age', {
+      type: 'custom',
+      message: 'Something went wrong.',
+    })
+    expect(mockForm.setError).toHaveBeenCalledWith('bio', {
+      type: 'custom',
+      message: 'Something went wrong.',
     })
   })
 

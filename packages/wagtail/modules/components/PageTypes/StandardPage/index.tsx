@@ -2,19 +2,19 @@
 
 import { FC } from 'react'
 
-import { Box, Container, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
 
 import { PageLayoutProvider } from '../../../providers/PageLayoutProvider'
 import { useWagtailPagesContext } from '../../../providers/WagtailPagesProvider/context'
 import { PageType } from '../types'
-import { ImageBox } from './styled'
+import { ImageBox, PageContainer } from './styled'
 
 const StandardPage: FC<PageType> = ({ children }) => {
   const { currentPage } = useWagtailPagesContext()
   return (
     <PageLayoutProvider>
-      <Container sx={{ mb: 4, gap: 3, display: 'flex', flexDirection: 'column' }}>
+      <PageContainer>
         {currentPage.featuredImage?.image?.imageSizes?.medium && (
           <ImageBox>
             <Image
@@ -32,7 +32,7 @@ const StandardPage: FC<PageType> = ({ children }) => {
         <Box display="flex" flexDirection="column" gap={4}>
           {children}
         </Box>
-      </Container>
+      </PageContainer>
     </PageLayoutProvider>
   )
 }

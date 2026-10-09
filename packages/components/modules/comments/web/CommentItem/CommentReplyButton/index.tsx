@@ -6,6 +6,7 @@ import { CommentReplyIcon } from '@baseapp-frontend/design-system/components/web
 import { Typography } from '@mui/material'
 import { useIntl } from 'react-intl'
 
+import { CounterContainer } from './styled'
 import { CommentReplyButtonProps } from './types'
 
 const CommentReplyButton: FC<CommentReplyButtonProps> = ({
@@ -18,7 +19,7 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
   const intl = useIntl()
 
   return (
-    <div className="grid grid-cols-[repeat(2,minmax(20px,max-content))] gap-1">
+    <CounterContainer>
       <IconButton
         disabled={isDisabled}
         onClick={onReply}
@@ -46,7 +47,7 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
       >
         {totalCommentsCount ?? 0}
       </Typography>
-    </div>
+    </CounterContainer>
   )
 }
 

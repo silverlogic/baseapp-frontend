@@ -11,6 +11,7 @@ export interface MessagesGroupProps {
   messageIndex: number
   isGroup?: boolean
   allMessagesLastIndex: number
+  hasNext?: boolean
   firstUnreadMessageId?: string | null
   SystemMessage?: FC<SystemMessageProps>
   SystemMessageProps?: Partial<SystemMessageProps>

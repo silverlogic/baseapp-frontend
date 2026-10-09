@@ -1,0 +1,24 @@
+id: ds-prefer-baseapp-wrapper
+language: Tsx
+severity: warning
+message: "A BaseApp wrapper exists for this MUI primitive — import it from `@baseapp-frontend/design-system/components/web/*` instead. The wrapper carries theme tokens, form-controller integration, and custom variants that the raw primitive loses. See .claude/skills/frontend-conventions/references/styling.md and .claude/skills/frontend-patterns/references/dialog.md"
+# Project code only. The design-system package itself builds these wrappers on top
+# of the raw MUI primitives, so it necessarily imports them.
+files:
+  - "apps/**"
+rule:
+  kind: import_statement
+  any:
+    - all:
+        - has:
+            field: source
+            regex: "^['\"]@mui/material['\"]$"
+        - has:
+            stopBy: end
+            kind: import_specifier
+            has:
+              field: name
+              regex: ^(Dialog|IconButton|Popover|SwipeableDrawer|TextField)$
+    - has:
+        field: source
+        regex: "^['\"]@mui/material/(Dialog|IconButton|Popover|SwipeableDrawer|TextField)['\"]$"

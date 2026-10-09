@@ -1,9 +1,9 @@
 import preAuthenticateJWT from '..'
 
-global.fetch = jest.fn()
+global.fetch = vi.fn()
 
 const mockFetchResponse = (body = {}, ok = true, status = 200) => {
-  const fetchMock = global.fetch as jest.Mock
+  const fetchMock = global.fetch as Mock
   fetchMock.mockResolvedValueOnce({
     ok,
     status,
@@ -17,7 +17,7 @@ const mockFetchResponse = (body = {}, ok = true, status = 200) => {
 describe('preAuthenticateJWT', () => {
   beforeEach(() => {
     process.env.NEXT_PUBLIC_API_BASE_URL = 'http://localhost:3000'
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   it('should throw an error if no token is provided', async () => {
@@ -52,7 +52,7 @@ describe('preAuthenticateJWT', () => {
 
   it('should handle network or server errors gracefully', async () => {
     const errorMessage = 'Network error'
-    const fetchMock = global.fetch as jest.Mock
+    const fetchMock = global.fetch as Mock
     fetchMock.mockRejectedValueOnce(new Error(errorMessage))
 
     await expect(preAuthenticateJWT('valid-jwt-token')).rejects.toThrow(errorMessage)

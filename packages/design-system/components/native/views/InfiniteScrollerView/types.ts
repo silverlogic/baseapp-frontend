@@ -1,4 +1,4 @@
-import { FlashListProps } from '@shopify/flash-list'
+import { FlashListProps, FlashListRef } from '@shopify/flash-list'
 
 type ListFooterComponent<TItem> = {
   ListFooterComponent: Pick<FlashListProps<TItem>, 'ListFooterComponent'>
@@ -13,3 +13,5 @@ type IsLoading = {
 export type InfiniteScrollerViewProps<TItem> = FlashListProps<TItem> &
   Omit<FlashListProps<TItem>, 'ListFooterComponent'> &
   (ListFooterComponent<TItem> | IsLoading)
+
+export type InfiniteScrollerViewRef<TItem = unknown> = FlashListRef<TItem>

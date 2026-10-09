@@ -1,0 +1,30 @@
+id: next-page-no-client-data-fetching
+snapshots:
+  ? |
+    const CheckoutPage = () => {
+      const { data } = useQuery({ queryKey: ORDER_API_KEY.default, queryFn: fetchOrder })
+      return <OrderDetails order={data} />
+    }
+  : labels:
+    - source: 'useQuery({ queryKey: ORDER_API_KEY.default, queryFn: fetchOrder })'
+      style: primary
+      start: 48
+      end: 114
+    - source: useQuery
+      style: secondary
+      start: 48
+      end: 56
+  ? |
+    const ProfilePage = () => {
+      const { me } = useLazyLoadQuery(ProfilesListQuery, { count: 10 })
+      return <Profiles me={me} />
+    }
+  : labels:
+    - source: 'useLazyLoadQuery(ProfilesListQuery, { count: 10 })'
+      style: primary
+      start: 45
+      end: 95
+    - source: useLazyLoadQuery
+      style: secondary
+      start: 45
+      end: 61

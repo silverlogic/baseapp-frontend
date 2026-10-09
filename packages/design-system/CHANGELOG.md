@@ -1,5 +1,61 @@
 # @baseapp-frontend/design-system
 
+## 2.1.2
+
+### Patch Changes
+
+- 30e9160: Fix multi-line comments (and any other `Markdown` content) rendering each line with a large blank gap. Pressing Enter in the rich-text editor starts a new paragraph, and react-markdown separates block elements with `"\n"` text nodes; because `white-space: pre-wrap` was set on the `Markdown` root, each of those newlines rendered as an extra blank line, on top of the `0.5em` margin between paragraphs. `pre-wrap` is now scoped to paragraphs, so soft line breaks (Shift+Enter) still wrap while the newlines between blocks collapse, and the margin between consecutive paragraphs is removed to match how the editor displays them.
+
+## 2.1.1
+
+### Patch Changes
+
+- be2d578: Fix the native chat rooms list not resting at the bottom, leaving its last card untappable with 20+ rooms. `InfiniteScrollerView` sized its container with `height: '100%'`, which resolves against the whole parent rather than the space left over — and on the Messages screen the list is the last child of a flex column that also holds the title, search input and tabs, so its scroll viewport ran past the bottom of the screen. iOS caps scrolling at `contentHeight - viewportHeight`, making that overhang unreachable: the list snapped back short of the end and the final cards sat below the device edge. The container now uses `flex: 1` so it takes only the remaining space, which also fixes the same overflow in the add-contact-to-group list (previously papered over with a 40px content padding); `CreateRoomList` and `NotificationsList` pin the height in their own wrappers and are unaffected. The list's own footer spacer supplies the gap below the last card.
+
+## 2.1.0
+
+### Minor Changes
+
+- Native social-input and comments primitives:
+
+  - `SocialTextInput` (native): multiline social composer input with edit/reply banners, tool row, and controller-driven inline field errors — error border while focused plus a warning icon + caption rendered from the form field's error message (via `withNativeController`'s `error`/`helperText`).
+  - `ConfirmDialog` (native): confirmation dialog mirroring the web `ConfirmDialog` API (`title`, `content`, `cancelText`, `action` slot) built on react-native-paper's `Portal` + `Dialog`, with a close (X) button in the title row and a built-in outlined Cancel button.
+  - New native icons: `EmojiIcon`, `FavoriteIcon`, `FavoriteSelectedIcon`, `PinIcon`, `ReplyIcon`.
+
+## 2.0.1
+
+### Patch Changes
+
+- 5200c84: Fix Dropzone multi-file gallery: clicking the remove (×) icon or the image preview no longer bubbles to the dropzone root and re-opens the file picker; the remove button now has an explicit type="button" so it doesn't submit enclosing forms
+- Updated dependencies [087d0b5]
+  - @baseapp-frontend/utils@4.2.1
+
+## 2.0.0
+
+### Patch Changes
+
+- c2f042d: Fix React console warnings in web components by filtering non-DOM props through shouldForwardProp, correcting invalid CSS values, adding missing list keys, and fixing FileUploadButton prop forwarding
+- Updated dependencies [007b2ae]
+  - @baseapp-frontend/utils@4.2.0
+
+## 1.4.0
+
+### Minor Changes
+
+- Add `AutocompleteField`, a design-system autocomplete/combobox input built on MUI `Autocomplete` — RHF integration via `withController`, debounced text input, an `isPending` spinner, and a default `renderInput`. The member-invite search is its first consumer.
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.1.0
+
+## 1.3.0
+
+### Minor Changes
+
+- feat: add native navigation icons
+  - Add `CommentsIcon`, `ForumIcon`, `AuthenticationIcon`, `FlatPageIcon`, `FeatureRequestsIcon`, `FeedbackIcon`, and `ActivityLogIcon` to the native icon set (ported from the web icons), so the mobile sidebar can mirror the web navigation.
+
 ## 1.2.13
 
 ### Patch Changes

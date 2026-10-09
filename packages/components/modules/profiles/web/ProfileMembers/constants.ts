@@ -7,7 +7,19 @@ export const MEMBER_STATUSES = {
   active: 'ACTIVE',
   pending: 'PENDING',
   inactive: 'INACTIVE',
+  declined: 'DECLINED',
+  expired: 'EXPIRED',
 } as const
+
+export const INVITATION_ACTIONS = {
+  resend: 'RESEND',
+  remove: 'REMOVE',
+} as const
+
+export const invitationActionOptions = [
+  { value: INVITATION_ACTIONS.resend, label: 'Resend Invitation' },
+  { value: INVITATION_ACTIONS.remove, label: 'Remove' },
+]
 
 export const MEMBER_ROLES = {
   admin: 'ADMIN',

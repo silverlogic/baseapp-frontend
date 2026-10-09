@@ -1,0 +1,31 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | designSystem/Inputs/AutocompleteField" />
+
+# Component Documentation
+
+## AutocompleteField
+
+- **Purpose**: The `AutocompleteField` component provides an autocomplete/combobox input — a text field backed by a list of selectable options — wired into `react-hook-form` and the design system's input conventions.
+- **Expected Behavior**: Renders a `freeSolo` autocomplete with a default text input that shows a loading indicator while `isPending` is true. The typed text is debounced and surfaced via `onInputChange`, while option selection is surfaced via `onChange`. Every MUI `Autocomplete` default is overridable through props.
+
+## Use Cases
+
+- **Current Usage**: Searching and selecting profiles/users when inviting members to an organization.
+- **Potential Usage**: Any "search a list and pick" interface — assignees, tags, mentions, linking records, or async typeaheads backed by a paginated query.
+
+## Props
+
+- **options** (array, required): The options to render in the listbox.
+- **isPending** (boolean, optional): If true, shows a loading indicator in the input. Defaults to false.
+- **placeholder** (string, optional): Placeholder text for the default input. Defaults to `'Search'`.
+- **onInputChange** (function, optional): Callback fired (debounced) when the typed text changes. `(event, value, reason) => void`.
+- **onChange** (function, optional): Callback fired when an option is selected. `(event, value, reason) => void`.
+- **renderInput** (function, optional): Override the default input renderer. Receives MUI's `AutocompleteRenderInputParams`.
+- **shouldDebounce** (boolean, optional): Per-instance override for the debounce behavior. Defaults to true for this field.
+- Plus any other MUI `AutocompleteProps` (e.g. `getOptionLabel`, `renderOption`, `freeSolo`, `ListboxComponent`).
+
+## Notes
+
+- **Related Components**: Built on MUI `Autocomplete` and the shared `withController` HOC, alongside the other `*Field` inputs (`TextField`, `Searchbar`, etc.).
+- **Debounce**: Like `Searchbar`, this field debounces the consumer's text callback so async option queries aren't fired on every keystroke. The `react-hook-form` value still updates synchronously.

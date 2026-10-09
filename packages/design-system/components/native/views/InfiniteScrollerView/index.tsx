@@ -1,4 +1,6 @@
-import { FlashList } from '@shopify/flash-list'
+import React, { ForwardedRef, forwardRef } from 'react'
+
+import { FlashList, FlashListRef } from '@shopify/flash-list'
 
 import { LoadingScreen } from '../../displays'
 import View from '../View'
@@ -53,22 +55,29 @@ import { InfiniteScrollerViewProps } from './types'
  * @returns {JSX.Element} A container wrapping a FlashList with infinite scrolling functionality.
  */
 
-const InfiniteScrollerView = <TItem,>({
-  isLoading,
-  ListFooterComponent,
-  ...props
-}: InfiniteScrollerViewProps<TItem>) => {
-  const renderFooterLoadingState = () => {
-    if (!isLoading) return <View style={{ paddingTop: 24 }} />
+const InfiniteScrollerView = forwardRef(
+  <TItem,>(
+    { isLoading, ListFooterComponent, ...props }: InfiniteScrollerViewProps<TItem>,
+    ref: ForwardedRef<FlashListRef<TItem>>,
+  ) => {
+    const renderFooterLoadingState = () => {
+      if (!isLoading) return <View style={{ paddingTop: 24 }} />
 
-    return <LoadingScreen size="small" />
-  }
+      return <LoadingScreen size="small" />
+    }
 
-  return (
-    <View style={styles.container}>
-      <FlashList ListFooterComponent={ListFooterComponent ?? renderFooterLoadingState} {...props} />
-    </View>
-  )
-}
+    return (
+      <View style={styles.container}>
+        <FlashList
+          ref={ref}
+          ListFooterComponent={ListFooterComponent ?? renderFooterLoadingState}
+          {...props}
+        />
+      </View>
+    )
+  },
+) as <TItem>(
+  props: InfiniteScrollerViewProps<TItem> & { ref?: React.Ref<FlashListRef<unknown>> },
+) => React.JSX.Element
 
 export default InfiniteScrollerView

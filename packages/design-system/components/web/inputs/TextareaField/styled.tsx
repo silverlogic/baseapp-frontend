@@ -5,9 +5,9 @@ import { styled } from '@mui/material/styles'
 import { PureTextField } from '../TextField'
 import { TextareaFieldProps } from './types'
 
-export const Textarea: ComponentType<TextareaFieldProps> = styled(
-  PureTextField,
-)<TextareaFieldProps>(({ theme, hideBorder, resizable }) => ({
+export const Textarea: ComponentType<TextareaFieldProps> = styled(PureTextField, {
+  shouldForwardProp: (prop) => prop !== 'hideBorder' && prop !== 'resizable',
+})<TextareaFieldProps>(({ theme, hideBorder, resizable }) => ({
   '& .MuiInputBase-root': {
     padding: '12px 0 4px 0',
   },

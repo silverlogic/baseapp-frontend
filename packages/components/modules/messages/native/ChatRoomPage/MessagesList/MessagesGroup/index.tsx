@@ -4,11 +4,13 @@ import { MESSAGE_TYPE } from '@baseapp-frontend/components/messages/common'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
+import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { SystemMessage as DefaultSystemMessage } from './SystemMessage'
 import { UserMessage as DefaultUserMessage } from './UserMessage'
 import { createStyles } from './styles'
 import { MessagesGroupProps } from './types'
+import { displayFormattedDate } from './utils'
 
 const MessagesGroup: FC<MessagesGroupProps> = ({
   allMessages,
@@ -16,6 +18,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   message,
   messageIndex,
   isGroup = false,
+  hasNext = false,
   firstUnreadMessageId,
   SystemMessage = DefaultSystemMessage,
   SystemMessageProps = {},
@@ -24,6 +27,28 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
 }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
+
+  const renderDateOnTopOfMessagesGroup = useCallback(
+    (index: number) => {
+      const previousMessage = allMessages?.[index + 1]
+      const currentMessage = allMessages?.[index]
+      const isLastMessageAvailable = index === allMessagesLastIndex && !hasNext
+
+      if (
+        isLastMessageAvailable ||
+        datesDontHaveSameDay(previousMessage?.created, currentMessage?.created)
+      ) {
+        return (
+          <Text style={styles.dateGroup} variant="caption">
+            {displayFormattedDate(currentMessage?.created)}
+          </Text>
+        )
+      }
+
+      return null
+    },
+    [allMessages, allMessagesLastIndex, hasNext, styles.dateGroup],
+  )
 
   const renderUnreadMessagesDivider = useCallback(
     (index: number) => {
@@ -58,6 +83,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   return (
     <View>
       {renderUnreadMessagesDivider(messageIndex)}
+      {renderDateOnTopOfMessagesGroup(messageIndex)}
       {message.messageType === MESSAGE_TYPE.system ? (
         <SystemMessage messageRef={message} {...SystemMessageProps} />
       ) : (

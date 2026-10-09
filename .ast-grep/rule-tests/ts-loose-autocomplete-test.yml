@@ -1,0 +1,13 @@
+id: ts-loose-autocomplete
+valid:
+  - |
+    type ModelNames = 'gpt-5' | 'claude-4.1' | (string & {})
+  - |
+    type Nullable = string | undefined
+  - |
+    type Direction = 'up' | 'down'
+invalid:
+  - |
+    type ModelNames = 'gpt-5' | 'claude-4.1' | string
+  - |
+    type Loose = 'a' | string

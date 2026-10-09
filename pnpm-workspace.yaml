@@ -35,12 +35,12 @@ catalog:
   "@types/lodash": 4.17.7
   "@types/luxon": 3.6.2
   "@types/node": 22.7.2
-  axios: 1.15.2
+  axios: 1.20.0
   jotai: 2.12.4
   js-cookie: 3.0.7
   lodash: 4.18.0
   luxon: 3.7.2
-  next: 15.5.18
+  next: 15.5.27
   react-hook-form: 7.56.4
   react-intl: 7.1.14
   react-international-phone: 4.5.0
@@ -53,6 +53,14 @@ catalog:
   zustand: 5.0.4
 
 catalogs:
+  payments:
+    # Exact, not a range. The add-card flow calls elements.update({ clientSecret }),
+    # which stripe-js implements but does not declare in StripeElementsUpdateOptions -
+    # a floating minor on the SDK is how that stops working on someone else's install,
+    # with no diff in this repo.
+    "@stripe/react-stripe-js": 3.11.0
+    "@stripe/stripe-js": 7.10.0
+
   react19:
     "@types/react": 19.2.14
     "@types/react-dom": 19.2.3
@@ -68,6 +76,7 @@ catalogs:
   react-native:
     "@expo/vector-icons": ^15.0.2
     "@gorhom/bottom-sheet": ^5.2.9
+    "@native-html/render": ^1.0.3
     "@react-navigation/drawer": ^7.9.8
     "@react-navigation/native": ^7.2.2
     "@react-native-async-storage/async-storage": 2.2.0
@@ -98,6 +107,7 @@ catalogs:
     relay-connection-handler-plus: 0.1.2
     relay-runtime: 19.0.0
     relay-test-utils: 19.0.0
+    ws: 8.21.0
 
   tailwind:
     "@tailwindcss/typography": 0.5.13
@@ -119,17 +129,16 @@ catalogs:
     "@mui/x-date-pickers": 7.6.2
 
   test:
-    "@cypress/webpack-dev-server": 3.10.1
+    vitest: ^4.1.10
+    "@vitest/coverage-v8": ^4.1.10
+    "@vitejs/plugin-react": ^6.0.4
+    jsdom: ^29.1.1
     "@faker-js/faker": ^9.0.3
-    "@testing-library/cypress": 10.0.2
     "@testing-library/jest-dom": 6.4.6
     "@testing-library/react": 16.0.0
     "@testing-library/user-event": 14.5.2
     "@types/jest": 29.5.14
     babel-jest: 29.7.0
-    cypress-plugin-steps: 1.1.1
-    cypress-wait-until: 3.0.2
-    cypress: 13.16.1
     jest-environment-jsdom: 29.7.0
     jest: 29.7.0
     ts-jest: 29.1.4
@@ -165,6 +174,7 @@ catalogs:
     webpack: 5.93.0
 
   lint:
+    "@ast-grep/cli": ^0.45.0
     "@emotion/eslint-plugin": ^11.11.0
     "@next/eslint-plugin-next": ^13.1.6
     "@trivago/prettier-plugin-sort-imports": ^4.3.0
@@ -199,9 +209,11 @@ catalogs:
     "@iconify/react": ^5.0.1
     "@shopify/flash-list": 2.2.0
     color: ^4.2.3
+    highlight.js: ^11.11.1
     react-dropzone: ^14.2.3
     react-lazy-load-image-component: ^1.6.2
     react-markdown: ^9.0.1
+    rehype-highlight: ^7.0.2
     rehype-raw: ^7.0.0
     remark-gfm: ^4.0.1
     "@types/color": "^4.2.0"

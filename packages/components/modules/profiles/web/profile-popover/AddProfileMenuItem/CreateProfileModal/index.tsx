@@ -24,7 +24,7 @@ import slugify from 'slugify'
 
 import { useOrganizationCreateMutation } from '../../../../common'
 import { schema } from './constants'
-import { Form } from './styled'
+import { Form, TitleRow } from './styled'
 import { CreateProfileModalProps, OrganizationCreateForm } from './types'
 
 let nextClientMutationId = 0
@@ -154,14 +154,12 @@ const CreateProfileModal: FC<CreateProfileModalProps> = ({
       }}
     >
       <DialogTitle id="organization-modal-title">
-        <Box
-          sx={{ display: 'flex', alignItems: 'center', gap: 2, justifyContent: 'space-between' }}
-        >
+        <TitleRow>
           <Typography variant="h6">{addNewProfileLabel}</Typography>
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
-        </Box>
+        </TitleRow>
       </DialogTitle>
       <Form onSubmit={form.handleSubmit(onSubmit)}>
         <DialogContent

@@ -67,8 +67,11 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       SocialTextField = DefaultSocialTextField,
       SocialTextFieldProps = {},
       SocialUpsertActions = DefaultSocialUpsertActions,
+      SocialUpsertActionsProps = {},
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
+      Footer,
+      FooterProps = {},
       Form = DefaultForm,
       onKeyDown,
       formId = 'text-field-form',
@@ -96,7 +99,10 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
       }
     }
 
-    const isCreateButtonDisabled = isLoading || !form.formState.isValid || !form.formState.isDirty
+    // read both flags before combining them: react-hook-form only keeps the `formState` values that
+    // were read during render up to date, and `!isValid || !isDirty` would skip reading `isDirty`
+    const { isValid, isDirty } = form.formState
+    const isCreateButtonDisabled = isLoading || !isValid || !isDirty
 
     return (
       <Form id={formId} onSubmit={form.handleSubmit(submit)}>
@@ -113,13 +119,14 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
           onCancelReply={onCancelReply}
           {...SocialTextFieldProps}
         >
-          <SocialUpsertActions />
+          <SocialUpsertActions {...SocialUpsertActionsProps} />
           <SubmitActions
             formId={formId}
             disabled={isCreateButtonDisabled}
             {...SubmitActionsProps}
           />
         </SocialTextField>
+        {Footer && <Footer {...FooterProps} />}
       </Form>
     )
   },

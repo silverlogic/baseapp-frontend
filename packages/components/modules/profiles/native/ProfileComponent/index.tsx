@@ -3,7 +3,7 @@ import React from 'react'
 import { Button } from '@baseapp-frontend/design-system/components/native/buttons'
 import { EditIcon, ShareIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
-import { PageViewWithHeader, View } from '@baseapp-frontend/design-system/components/native/views'
+import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
@@ -21,10 +21,17 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
   const router = useRouter()
 
   return (
-    <PageViewWithHeader style={styles.container}>
+    <ScrollView
+      avoidKeyboard={false}
+      style={styles.container}
+      contentContainerStyle={styles.contentContainer}
+    >
       <View style={styles.headerContainer}>
-        <Image source={{ uri: profile?.bannerImage?.url }} style={styles.bannerImage} />
-        <Image source={{ uri: profile?.image?.url }} style={styles.profileImage} />
+        <Image
+          source={{ uri: profile?.bannerImage ?? undefined }}
+          style={styles.bannerImage ?? undefined}
+        />
+        <Image source={{ uri: profile?.image ?? undefined }} style={styles.profileImage} />
       </View>
 
       <View style={styles.infoContainer}>
@@ -84,7 +91,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
           </Button>
         </View>
       </View>
-    </PageViewWithHeader>
+    </ScrollView>
   )
 }
 

@@ -50,9 +50,13 @@ export const CountrySelect: FC<CountrySelectProps> = ({
         const defaultCountry = parseCountry(c)
         return (
           <MenuItem {...optionProps} key={defaultCountry.iso2} value={defaultCountry.iso2}>
-            <FlagImage iso2={defaultCountry.iso2} />
-            <CountryTitle {...countryNameProps}>{defaultCountry.name}</CountryTitle>
-            <Typography {...countryDialCodeProps}>+{defaultCountry.dialCode}</Typography>
+            <FlagImage key="flag" iso2={defaultCountry.iso2} />
+            <CountryTitle key="name" {...countryNameProps}>
+              {defaultCountry.name}
+            </CountryTitle>
+            <Typography key="dialCode" {...countryDialCodeProps}>
+              +{defaultCountry.dialCode}
+            </Typography>
           </MenuItem>
         )
       })}

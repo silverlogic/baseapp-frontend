@@ -23,7 +23,12 @@ import DefaultMenuItems from '../AccountPopover/MenuItems'
 import { PopoverStyles as DefaultPopoverStyles } from '../AccountPopover/styled'
 import PopoverContent from '../__shared__/PopoverContent'
 import { ARROW_ICON_SIZE, AVATAR_SIZE, PROFILE_LIST_CLOSE_DELAY } from './constants'
-import { StyledFooterButtonDefault, StyledFooterButtonMini } from './styled'
+import {
+  ArrowContainer,
+  ProfileInfoContainer,
+  StyledFooterButtonDefault,
+  StyledFooterButtonMini,
+} from './styled'
 import { VerticalFooterProps } from './types'
 
 const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) => {
@@ -103,15 +108,7 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
           />
         </Box>
         {!isNavMini && (
-          <Box
-            sx={{
-              flexGrow: 1,
-              minWidth: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 0,
-            }}
-          >
+          <ProfileInfoContainer>
             {profileName && (
               <Typography
                 component="p"
@@ -138,22 +135,12 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
                 {userName}
               </Typography>
             )}
-          </Box>
+          </ProfileInfoContainer>
         )}
         {!isNavMini && (
-          <Box
-            sx={{
-              flexShrink: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: ARROW_ICON_SIZE,
-              height: ARROW_ICON_SIZE,
-              color: 'text.secondary',
-            }}
-          >
+          <ArrowContainer>
             <Iconify icon="eva:arrow-ios-forward-fill" width={ARROW_ICON_SIZE} />
-          </Box>
+          </ArrowContainer>
         )}
       </FooterButton>
       <Popover

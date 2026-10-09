@@ -21,6 +21,8 @@ import {
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
 import { MESSAGE_TYPE, useSendMessageMutation } from '../../common'
+import useMessageDraft from '../../common/useMessageDraft'
+import { LOCAL_STORAGE_MESSAGE_DRAFT_STORAGE } from './constants'
 import { SendMessageProps } from './types'
 
 let nextClientMutationId = 0
@@ -91,6 +93,13 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
       resolver: zodResolver(SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA),
     })
     const { setValue } = form
+    // the unsent message is kept per room in localStorage, so it survives switching rooms and reloads
+    const { clearDraft } = useMessageDraft({
+      form,
+      roomId,
+      profileId: currentProfile?.id,
+      storage: LOCAL_STORAGE_MESSAGE_DRAFT_STORAGE,
+    })
     const [commitMutation, isMutationInFlight] = useSendMessageMutation()
 
     const { mentions } = useFormMentions<SocialUpsertForm>({
@@ -149,7 +158,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
-          if (mutationErrors) {
+          if (mutationErrors?.length) {
             setFormRelayErrors(form, mutationErrors)
             sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
           }
@@ -160,6 +169,7 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         },
       })
       form.reset()
+      clearDraft()
     }
 
     return (

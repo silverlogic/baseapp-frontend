@@ -19,7 +19,7 @@ import { useChatRoomToggleAdminMutation } from '../../../common/graphql/mutation
 import AdminOptionsMenu from './AdminOptionsMenu'
 import MemberOptionsMenu from './MemberOptionsMenu'
 import RemoveAdminPermissionsDialog from './RemoveAdminPermissionsDialog'
-import { MainContainer } from './styled'
+import { Dot, MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
 const ProfileCard: FC<ProfileCardProps> = ({
@@ -134,7 +134,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
       <AvatarWithPlaceholder
         width={48}
         height={48}
-        src={image?.url}
+        src={image ?? undefined}
         sx={{ alignSelf: 'center', justifySelf: 'center' }}
       />
       <Box sx={{ display: 'grid', gridTemplateRows: 'repeat(2, minmax(0, 1fr))' }}>
@@ -149,18 +149,7 @@ const ProfileCard: FC<ProfileCardProps> = ({
           <Typography variant="caption" color="text.secondary">
             {showUrlPath && formatHandle(urlPath.path)}
           </Typography>
-          {isAdmin && showUrlPath && (
-            <Box
-              sx={{
-                display: 'inline-block',
-                height: '6px',
-                width: '6px',
-                borderRadius: '50%',
-                backgroundColor: 'text.disabled',
-                marginX: '8px',
-              }}
-            />
-          )}
+          {isAdmin && showUrlPath && <Dot />}
           <Typography variant="caption" color="primary.light">
             {isAdmin && ADMIN_LABEL}
           </Typography>

@@ -38,7 +38,7 @@ afterAll(() => {
 
 describe('broadcastEvent', () => {
   it('emits locally via eventEmitter', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     eventEmitter.once('test:local', listener)
 
     broadcastEvent('test:local')
@@ -47,7 +47,7 @@ describe('broadcastEvent', () => {
   })
 
   it('emits with payload when provided', () => {
-    const listener = jest.fn()
+    const listener = vi.fn()
     eventEmitter.once('test:payload', listener)
 
     broadcastEvent('test:payload', { value: 1 })
@@ -86,7 +86,7 @@ describe('broadcastEvent', () => {
     const original = (globalThis as { BroadcastChannel?: unknown }).BroadcastChannel
     delete (globalThis as { BroadcastChannel?: unknown }).BroadcastChannel
     try {
-      const unsubscribe = subscribeToBroadcastEvent('test:no-bc', jest.fn())
+      const unsubscribe = subscribeToBroadcastEvent('test:no-bc', vi.fn())
       expect(typeof unsubscribe).toBe('function')
       expect(() => unsubscribe()).not.toThrow()
     } finally {

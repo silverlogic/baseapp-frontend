@@ -1,0 +1,15 @@
+id: next-image-no-custom-loader
+valid:
+  - |
+    <Image src="https://cdn.example.com/a.jpg" alt="Image" width={800} height={600} />
+  - |
+    <Dropzone loader={customLoader} />
+invalid:
+  - |
+    <Image
+      src="https://cdn.example.com/a.jpg"
+      alt="Image"
+      width={800}
+      height={600}
+      loader={({ src, width }) => `${src}?w=${width}`}
+    />

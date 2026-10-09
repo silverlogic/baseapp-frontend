@@ -49,3 +49,12 @@ tsconfig.tsbuildinfo
 
 # parcel
 .parcel-cache
+
+# Lint caches
+.eslintcache
+
+# Claude Code — skills are shared, per-machine settings and scratch are not
+.claude/skills/*-workspace/
+**/skills/*-workspace/
+.claude/settings.local.json
+.claude/logs/

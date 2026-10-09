@@ -1,0 +1,13 @@
+id: tailwind-no-raw-text-size
+language: Tsx
+severity: warning
+message: "Raw Tailwind text-size utility — use the `prose-*` classes (`prose-body1`, `prose-body2`, `prose-caption`, …) which map to the MUI typography scale. See .claude/skills/frontend-conventions/references/styling.md"
+rule:
+  kind: jsx_attribute
+  all:
+    - has:
+        kind: property_identifier
+        regex: ^className$
+    # the size must be a standalone class token. `\b` would treat `-` as a boundary
+    # and match custom classes like `icon-text-sm` or `text-sm-foo`.
+    - regex: '[\s"''`{(:]text-(xs|sm|base|lg|xl|[2-9]xl)([\s"''`})]|$)'

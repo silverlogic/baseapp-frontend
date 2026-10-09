@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "1.6.0",
+  "version": "3.0.0",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -9,20 +9,70 @@
     "relay": "relay-compiler",
     "relay:download-schema": "dotenv -- bash -c 'get-graphql-schema \"$NEXT_PUBLIC_RELAY_ENDPOINT\" > schema.graphql'",
     "relay:update-schema": "pnpm relay:download-schema && pnpm relay",
-    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "lint": "eslint . --ext .tsx --ext .ts --cache && tsc --noEmit --incremental",
     "clean": "rm -rf .turbo && rm -rf node_modules",
     "prettier": "prettier --write .",
     "storybook": "pnpm relay && storybook dev -p 6007",
     "storybook:build": "storybook build",
-    "cypress:clean": "rm -rf ./cypress/downloads ./cypress/screenshots ./cypress/videos",
-    "cypress:open": "cypress open --browser chrome",
-    "test:component": "pnpm relay && cypress run --component --browser chrome --headed",
-    "test:unit": "jest --config ./jest.config.ts",
+    "gallery": "webpack serve --config playwright/webpack.gallery.config.cjs",
+    "test:unit": "vitest run --config ./vitest.config.mts",
+    "test:component": "pnpm relay && playwright test",
+    "test:component:ui": "pnpm relay && playwright test --ui",
     "i18n:extract": "formatjs extract 'modules/**/*.ts*' --out-file locales/en.json --format simple",
     "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
+    "./shared/*": {
+      "types": "./dist/__shared__/*/index.d.ts",
+      "import": "./dist/__shared__/*/index.mjs",
+      "require": "./dist/__shared__/*/index.js"
+    },
+    "./activity-log/*": {
+      "types": "./dist/activity-log/*/index.d.ts",
+      "import": "./dist/activity-log/*/index.mjs",
+      "require": "./dist/activity-log/*/index.js"
+    },
+    "./comments/*": {
+      "types": "./dist/comments/*/index.d.ts",
+      "import": "./dist/comments/*/index.mjs",
+      "require": "./dist/comments/*/index.js"
+    },
+    "./messages/*": {
+      "types": "./dist/messages/*/index.d.ts",
+      "import": "./dist/messages/*/index.mjs",
+      "require": "./dist/messages/*/index.js"
+    },
+    "./navigations/*": {
+      "types": "./dist/navigations/*/index.d.ts",
+      "import": "./dist/navigations/*/index.mjs",
+      "require": "./dist/navigations/*/index.js"
+    },
+    "./notifications/*": {
+      "types": "./dist/notifications/*/index.d.ts",
+      "import": "./dist/notifications/*/index.mjs",
+      "require": "./dist/notifications/*/index.js"
+    },
+    "./profiles/*": {
+      "types": "./dist/profiles/*/index.d.ts",
+      "import": "./dist/profiles/*/index.mjs",
+      "require": "./dist/profiles/*/index.js"
+    },
+    "./payments/*": {
+      "types": "./dist/payments/*/index.d.ts",
+      "import": "./dist/payments/*/index.mjs",
+      "require": "./dist/payments/*/index.js"
+    },
+    "./tests/*": {
+      "types": "./dist/tests/*/index.d.ts",
+      "import": "./dist/tests/*/index.mjs",
+      "require": "./dist/tests/*/index.js"
+    },
+    "./content-feed/*": {
+      "types": "./dist/content-feed/*/index.d.ts",
+      "import": "./dist/content-feed/*/index.mjs",
+      "require": "./dist/content-feed/*/index.js"
+    },
     "./package.json": "./package.json",
     "./locales": "./locales/index.ts",
     "./shared/common": "./modules/__shared__/common/index.ts",
@@ -46,17 +96,24 @@
     "./profiles/common": "./modules/profiles/common/index.ts",
     "./profiles/web": "./modules/profiles/web/index.ts",
     "./profiles/native": "./modules/profiles/native/index.ts",
+    "./payments/web": "./modules/payments/web/index.ts",
     "./tests/common": "./modules/tests/common/index.ts",
     "./tests/web": "./modules/tests/web/index.ts",
     "./tests/native": "./modules/tests/native/index.ts",
     "./content-feed/common": "./modules/content-feed/common/index.ts",
     "./content-feed/web": "./modules/content-feed/web/index.ts",
     "./content-feed/native": "./modules/content-feed/native/index.ts",
-    "./pages/common": "./modules/pages/common/index.ts"
+    "./pages/common": "./modules/pages/common/index.ts",
+    "./pages/web": "./modules/pages/web/index.ts",
+    "./pages/native": "./modules/pages/native/index.ts",
+    "./files/common": "./modules/files/common/index.ts",
+    "./files/web": "./modules/files/web/index.ts",
+    "./files/native": "./modules/files/native/index.ts"
   },
   "files": [
     "locales",
     "modules",
+    "dist",
     "tsconfig.json",
     "relay.config.js",
     "schema.graphql",
@@ -73,13 +130,18 @@
     "@mui/material": "catalog:material-ui",
     "@mui/system": "catalog:material-ui",
     "@mui/x-date-pickers": "catalog:material-ui",
+    "@native-html/render": "catalog:react-native",
+    "@react-native-async-storage/async-storage": "catalog:react-native",
     "@storybook/react": "catalog:storybook",
+    "@stripe/react-stripe-js": "catalog:payments",
+    "@stripe/stripe-js": "catalog:payments",
     "@tanstack/react-query": "catalog:",
     "expo-file-system": "catalog:react-native",
     "expo-image-picker": "catalog:react-native",
     "expo-router": "catalog:react-native",
     "framer-motion": "catalog:components",
     "graphql": "catalog:graphql",
+    "highlight.js": "catalog:design-system",
     "js-cookie": "catalog:",
     "luxon": "catalog:",
     "next": "catalog:",
@@ -92,6 +154,7 @@
     "react-native-safe-area-context": "catalog:react-native",
     "react-relay": "catalog:graphql",
     "react-virtuoso": "catalog:",
+    "rehype-highlight": "catalog:design-system",
     "relay-connection-handler-plus": "catalog:graphql",
     "relay-runtime": "catalog:graphql",
     "slugify": "catalog:components",
@@ -105,7 +168,8 @@
     "@baseapp-frontend/graphql": "workspace:*",
     "@baseapp-frontend/utils": "workspace:*",
     "react": "catalog:react19",
-    "react-dom": "catalog:react19"
+    "react-dom": "catalog:react19",
+    "react-native-safe-area-context": "catalog:react-native"
   },
   "devDependencies": {
     "@babel/cli": "catalog:components",
@@ -117,9 +181,9 @@
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
-    "@cypress/webpack-dev-server": "catalog:test",
     "@faker-js/faker": "catalog:test",
     "@formatjs/cli": "^6.7.4",
+    "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",
     "@storybook/addon-interactions": "catalog:storybook",
@@ -130,11 +194,9 @@
     "@storybook/react-webpack5": "catalog:storybook",
     "@storybook/test": "catalog:storybook",
     "@tailwindcss/typography": "catalog:tailwind",
-    "@testing-library/cypress": "catalog:test",
     "@testing-library/jest-dom": "catalog:test",
     "@testing-library/react": "catalog:test",
     "@testing-library/user-event": "catalog:test",
-    "@types/jest": "catalog:test",
     "@types/js-cookie": "catalog:",
     "@types/luxon": "catalog:",
     "@types/react": "catalog:react19",
@@ -143,20 +205,14 @@
     "@types/relay-runtime": "catalog:graphql",
     "@types/relay-test-utils": "catalog:graphql",
     "autoprefixer": "catalog:tailwind",
-    "babel-jest": "catalog:test",
     "babel-loader": "catalog:storybook",
     "babel-plugin-relay": "catalog:graphql",
     "css-loader": "catalog:storybook",
-    "cypress": "catalog:test",
-    "cypress-plugin-steps": "catalog:test",
-    "cypress-wait-until": "catalog:test",
     "dotenv": "catalog:components",
     "dotenv-cli": "catalog:components",
     "eslint-plugin-storybook": "catalog:lint",
     "get-graphql-schema": "catalog:graphql",
     "html-webpack-plugin": "catalog:storybook",
-    "jest": "catalog:test",
-    "jest-environment-jsdom": "catalog:test",
     "jotai": "catalog:",
     "msw": "catalog:storybook",
     "msw-storybook-addon": "catalog:storybook",
@@ -167,13 +223,16 @@
     "storybook": "catalog:storybook",
     "style-loader": "catalog:storybook",
     "tailwindcss": "catalog:tailwind",
-    "ts-jest": "catalog:test",
     "ts-node": "catalog:test",
     "tsup": "catalog:",
     "typescript": "catalog:",
     "webpack": "catalog:storybook",
     "webpack-cli": "catalog:storybook",
-    "webpack-dev-server": "catalog:storybook"
+    "webpack-dev-server": "catalog:storybook",
+    "vitest": "catalog:test",
+    "@vitest/coverage-v8": "catalog:test",
+    "@vitejs/plugin-react": "catalog:test",
+    "jsdom": "catalog:test"
   },
   "license": "MIT",
   "repository": {

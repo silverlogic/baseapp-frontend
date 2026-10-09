@@ -14,6 +14,10 @@ export const BlockToggleMutationQuery = graphql`
         isBlockedByMe
         ...BlockToggleFragment
       }
+      errors {
+        field
+        messages
+      }
     }
   }
 `

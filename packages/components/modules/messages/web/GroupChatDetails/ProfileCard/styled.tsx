@@ -15,3 +15,12 @@ export const MainContainer = styled(Box)(({ theme }) => ({
     padding: `${theme.spacing(1.5)} ${theme.spacing(1.5)}`,
   },
 }))
+
+export const Dot = styled('div')(({ theme }) => ({
+  backgroundColor: theme.palette.text.disabled,
+  borderRadius: '50%',
+  display: 'inline-block',
+  height: 6,
+  margin: theme.spacing(0, 1),
+  width: 6,
+}))

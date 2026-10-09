@@ -1,0 +1,15 @@
+id: ts-types-not-in-index
+language: Tsx
+severity: warning
+message: "Move this interface / type alias to a sibling `types.ts` — `index.tsx` holds the component and its imports only. See .claude/skills/frontend-conventions/references/file-structure.md"
+files:
+  - "**/index.tsx"
+rule:
+  any:
+    - kind: interface_declaration
+    - kind: type_alias_declaration
+  # top-level only — a type declared inside a function is local to it
+  inside:
+    any:
+      - kind: program
+      - kind: export_statement

@@ -22,6 +22,7 @@ import DefaultNotificationItem from './NotificationItem'
 import {
   HeaderContainer as DefaultHeaderContainer,
   ListContainer as DefaultListContainer,
+  HeaderSpacer,
 } from './styled'
 import { NotificationsListProps } from './types'
 
@@ -84,7 +85,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     )
   }
 
-  const renderVirtuosoHeader = () => <div className="h-2" />
+  const renderVirtuosoHeader = () => <HeaderSpacer />
 
   const renderVirtuosoLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />

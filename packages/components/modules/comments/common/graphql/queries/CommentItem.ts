@@ -7,23 +7,20 @@ export const CommentItemFragmentQuery = graphql`
     id
     body
     isPinned
+    isEdited
 
     profile {
       id
       name
-      image(width: 50, height: 50) {
-        url
-      }
+      image(width: 50, height: 50)
       urlPath {
         path
       }
     }
+    # Presence-only: web CommentItem shows a "Deleted User" state when the author
+    # account is gone. Name and avatar are read from profile, not user.
     user {
       id
-      fullName
-      avatar(width: 50, height: 50) {
-        url
-      }
     }
 
     created
@@ -36,10 +33,13 @@ export const CommentItemFragmentQuery = graphql`
     canReport: hasPerm(perm: "report")
     canPin: hasPerm(perm: "pin")
 
-    mentionedProfiles(first: 50) {
+    mentions(first: 50) {
       edges {
         node {
           id
+          profile {
+            id
+          }
         }
       }
     }
@@ -49,6 +49,8 @@ export const CommentItemFragmentQuery = graphql`
     ...ReactionButton_target
 
     ...CommentItem_target
+
+    ...FilesList_target
   }
 `
 

@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { StyledLinkProps, StyledNavItemProps } from './types'
 
 export const StyledNavItem = styled(ListItemButton, {
-  shouldForwardProp: (prop) => prop !== 'active',
+  shouldForwardProp: (prop) =>
+    prop !== 'active' && prop !== 'open' && prop !== 'depth' && prop !== 'hasTabLayout',
 })<StyledNavItemProps>(({ active, open, depth, theme, hasTabLayout }) => {
   const subItem = depth !== 1
 
@@ -121,17 +122,17 @@ export const StyledNavItem = styled(ListItemButton, {
   }
 })
 
-export const StyledLink = styled(Link)<StyledLinkProps>(
-  ({ theme, disabled, hasTabLayout, active }) => ({
-    pointerEvents: disabled ? 'none' : 'cursor',
-    color: 'inherit',
-    textDecoration: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    borderBottom: hasTabLayout && active ? `2px solid ${theme.palette.grey[800]}` : 'none',
-    '&:hover': {
-      backgroundColor: hasTabLayout ? theme.palette.action.hover : 'transparent',
-    },
-    variants: [],
-  }),
-)
+export const StyledLink = styled(Link, {
+  shouldForwardProp: (prop) => prop !== 'hasTabLayout' && prop !== 'active',
+})<StyledLinkProps>(({ theme, disabled, hasTabLayout, active }) => ({
+  pointerEvents: disabled ? 'none' : 'auto',
+  color: 'inherit',
+  textDecoration: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  borderBottom: hasTabLayout && active ? `2px solid ${theme.palette.grey[800]}` : 'none',
+  '&:hover': {
+    backgroundColor: hasTabLayout ? theme.palette.action.hover : 'transparent',
+  },
+  variants: [],
+}))

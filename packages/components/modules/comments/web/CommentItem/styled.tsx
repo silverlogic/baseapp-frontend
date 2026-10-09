@@ -3,10 +3,9 @@ import { styled } from '@mui/material/styles'
 
 import { CommentContainerWrapperProps } from './types'
 
-export const CommentContainerWrapper = styled(Box)<CommentContainerWrapperProps>(({
-  theme,
-  currentThreadDepth,
-}) => {
+export const CommentContainerWrapper = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'currentThreadDepth',
+})<CommentContainerWrapperProps>(({ theme, currentThreadDepth }) => {
   const currentThreadDepthHigherThanOne = currentThreadDepth > 1
   const marginLeft = currentThreadDepthHigherThanOne ? 3 * (currentThreadDepth - 1) - 3 : 0
 
@@ -17,6 +16,35 @@ export const CommentContainerWrapper = styled(Box)<CommentContainerWrapperProps>
     paddingTop: theme.spacing(1),
   }
 })
+
+export const ContentContainer = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(1.5),
+}))
+
+export const TitleContainer = styled('div')({
+  display: 'grid',
+  gridTemplateColumns: 'repeat(1, minmax(0, 1fr))',
+  justifyContent: 'flex-start',
+})
+
+export const NameRow = styled('div')(({ theme }) => ({
+  alignItems: 'center',
+  display: 'grid',
+  gap: theme.spacing(1),
+  gridTemplateColumns: 'repeat(2, max-content)',
+}))
+
+export const FooterRow = styled('div')({
+  display: 'flex',
+  justifyContent: 'space-between',
+})
+
+export const ActionsRow = styled('div')(({ theme }) => ({
+  display: 'grid',
+  gap: theme.spacing(2),
+  gridTemplateColumns: 'repeat(2, max-content)',
+}))
 
 export const CommentContainer = styled(Box)(({ theme }) => ({
   alignItems: 'self-start',

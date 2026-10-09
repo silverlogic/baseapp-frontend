@@ -17,18 +17,18 @@ export const ChatHeaderContainer = styled(Box)(({ theme }) => ({
   },
 }))
 
-export const ChatTitleContainer = styled(Box)<ChatTitleContainerProps>(
-  ({ theme, isClickable }) => ({
-    alignItems: 'center',
-    display: 'grid',
-    gap: theme.spacing(1.5),
-    gridTemplateColumns: 'min-content 1fr min-content',
-    height: '56px',
-    padding: 0,
-    width: '100%',
-    cursor: isClickable ? 'pointer' : 'auto',
-  }),
-)
+export const ChatTitleContainer = styled(Box, {
+  shouldForwardProp: (prop) => prop !== 'isClickable',
+})<ChatTitleContainerProps>(({ theme, isClickable }) => ({
+  alignItems: 'center',
+  display: 'grid',
+  gap: theme.spacing(1.5),
+  gridTemplateColumns: 'min-content 1fr min-content',
+  height: '56px',
+  padding: 0,
+  width: '100%',
+  cursor: isClickable ? 'pointer' : 'auto',
+}))
 
 export const BackButtonContainer = styled(Box)(({ theme }) => ({
   paddingRight: theme.spacing(2),

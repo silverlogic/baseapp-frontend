@@ -1,0 +1,22 @@
+id: state-zustand-no-global-store
+valid:
+  - |
+    const createNotificationStore = () =>
+      createStore<UseNotification>((set) => ({
+        ...INITIAL_NOTIFICATION_STATE,
+        closeToast: () => set({ open: false }),
+      }))
+  - |
+    export const CookieProvider = ({ children, initialCookies }: CookieProviderProps) => {
+      const storeRef = useRef<StoreApi<CookieState>>(undefined)
+      if (!storeRef.current) {
+        storeRef.current = create<CookieState>((set) => ({ cookies: initialCookies }))
+      }
+      return <CookieContext.Provider value={storeRef.current}>{children}</CookieContext.Provider>
+    }
+invalid:
+  - |
+    export const useBearStore = create<BearStore>((set) => ({
+      bears: 0,
+      increasePopulation: () => set((state) => ({ bears: state.bears + 1 })),
+    }))

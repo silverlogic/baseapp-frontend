@@ -24,14 +24,12 @@ export const useReportCreateMutation = (): [
   const [commitMutation, isMutationInFlight] =
     useMutation<ReportCreateMutation>(ReportCreateMutationQuery)
 
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const commit = (config: UseMutationConfig<ReportCreateMutation>) => {
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
         config?.onCompleted?.(response, errors)
       },
       onError: (error) => {

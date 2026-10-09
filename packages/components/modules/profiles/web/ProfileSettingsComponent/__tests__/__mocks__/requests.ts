@@ -31,12 +31,8 @@ export const profileSettingsTextUpdateData = {
       status: 'ACTIVE',
       name: 'Jane Smith',
       biography: 'Jane Smith is a software engineer at Microsoft.',
-      image: {
-        url: null,
-      },
-      bannerImage: {
-        url: null,
-      },
+      image: null,
+      bannerImage: null,
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,
@@ -60,12 +56,9 @@ export const profileSettingsImageUpdateData = {
       status: 'ACTIVE',
       name: 'John Doe',
       biography: 'John Doe is a software engineer at Google.',
-      image: {
-        url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-      },
-      bannerImage: {
-        url: null,
-      },
+      image:
+        'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
+      bannerImage: null,
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,
@@ -89,12 +82,8 @@ export const profileSettingsImageRemoveData = {
       status: 'ACTIVE',
       name: 'John Doe',
       biography: 'John Doe is a software engineer at Google.',
-      image: {
-        url: null,
-      },
-      bannerImage: {
-        url: null,
-      },
+      image: null,
+      bannerImage: null,
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,
@@ -118,12 +107,9 @@ export const profileSettingsBannerUpdateData = {
       status: 'ACTIVE',
       name: 'John Doe',
       biography: 'John Doe is a software engineer at Google.',
-      image: {
-        url: null,
-      },
-      bannerImage: {
-        url: 'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
-      },
+      image: null,
+      bannerImage:
+        'https://nyc3.digitaloceanspaces.com/baseapp-production-storage/media/user-avatars/5/6/4/resized/50/50/185a04dfdaa512d218cf9b7a5097e3c9.png',
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,
@@ -147,12 +133,8 @@ export const profileSettingsBannerRemoveData = {
       status: 'ACTIVE',
       name: 'John Doe',
       biography: 'John Doe is a software engineer at Google.',
-      image: {
-        url: null,
-      },
-      bannerImage: {
-        url: null,
-      },
+      image: null,
+      bannerImage: null,
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,
@@ -176,12 +158,9 @@ export const mockDataWithBanner = {
       status: 'ACTIVE',
       name: 'John Doe',
       biography: 'John Doe is a software engineer at Google.',
-      image: {
-        url: 'http://localhost:8000/media/profile_images/5dfe5729-1730-4fe6-b22a-a0f15f65a754.png.96x96_q85.png',
-      },
-      bannerImage: {
-        url: 'http://localhost:8000/media/banner_images/test-banner.png',
-      },
+      image:
+        'http://localhost:8000/media/profile_images/5dfe5729-1730-4fe6-b22a-a0f15f65a754.png.96x96_q85.png',
+      bannerImage: 'http://localhost:8000/media/banner_images/test-banner.png',
       isFollowedByMe: false,
       followersCount: 0,
       followingCount: 0,

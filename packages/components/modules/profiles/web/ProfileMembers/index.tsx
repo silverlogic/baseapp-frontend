@@ -21,6 +21,8 @@ const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
       profileId: currentProfile?.id || '',
       count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
       orderBy: 'status',
+      // Keep q defined so the connection is keyed the same way the invite dialog prepends into it.
+      q: '',
     },
   )
 

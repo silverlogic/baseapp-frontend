@@ -1,0 +1,51 @@
+id: ds-prefer-baseapp-wrapper
+snapshots:
+  ? |
+    import IconButton from '@mui/material/IconButton'
+  : labels:
+    - source: import IconButton from '@mui/material/IconButton'
+      style: primary
+      start: 0
+      end: 49
+    - source: '''@mui/material/IconButton'''
+      style: secondary
+      start: 23
+      end: 49
+  ? |
+    import { Dialog } from '@mui/material'
+  : labels:
+    - source: import { Dialog } from '@mui/material'
+      style: primary
+      start: 0
+      end: 38
+    - source: '''@mui/material'''
+      style: secondary
+      start: 23
+      end: 38
+    - source: Dialog
+      style: secondary
+      start: 9
+      end: 15
+    - source: Dialog
+      style: secondary
+      start: 9
+      end: 15
+  ? |
+    import { IconButton, Stack } from '@mui/material'
+  : labels:
+    - source: import { IconButton, Stack } from '@mui/material'
+      style: primary
+      start: 0
+      end: 49
+    - source: '''@mui/material'''
+      style: secondary
+      start: 34
+      end: 49
+    - source: IconButton
+      style: secondary
+      start: 9
+      end: 19
+    - source: IconButton
+      style: secondary
+      start: 9
+      end: 19

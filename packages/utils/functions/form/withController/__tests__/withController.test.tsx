@@ -2,11 +2,11 @@ import { render, userEvent } from '@baseapp-frontend/test'
 
 import withController from '..'
 
-const mockFieldOnChange = jest.fn()
-const mockFieldOnBlur = jest.fn()
+const mockFieldOnChange = vi.fn()
+const mockFieldOnBlur = vi.fn()
 
-jest.mock('react-hook-form', () => ({
-  ...jest.requireActual('react-hook-form'),
+vi.mock('react-hook-form', async () => ({
+  ...(await vi.importActual('react-hook-form')),
   Controller: ({ render: r }: { render: any }) =>
     r({
       field: {
@@ -47,7 +47,7 @@ describe('withController', () => {
 
   it("should trigger the passed onChange function and the built-in Controller's onChange when the component's onChange is called", async () => {
     const user = userEvent.setup()
-    const mockOnChange = jest.fn()
+    const mockOnChange = vi.fn()
     const { findByTestId } = render(
       <WrappedComponent name="test" control={{}} onChange={mockOnChange} />,
     )
@@ -61,7 +61,7 @@ describe('withController', () => {
 
   it("should trigger the passed onBlur function and the built-in Controller's onBlur when the component's onBlur is called", async () => {
     const user = userEvent.setup()
-    const mockOnBlur = jest.fn()
+    const mockOnBlur = vi.fn()
     const { findByTestId } = render(
       <WrappedComponent name="test" control={{}} onBlur={mockOnBlur} />,
     )
@@ -72,5 +72,50 @@ describe('withController', () => {
 
     expect(mockOnBlur).toHaveBeenCalledTimes(1)
     expect(mockFieldOnBlur).toHaveBeenCalledTimes(1)
+  })
+
+  it("should trigger the passed onInputChange when the component's onInputChange is called", async () => {
+    const user = userEvent.setup()
+    const mockOnInputChange = vi.fn()
+    // Stand-in for an Autocomplete: forwards the typed text through onInputChange.
+    const AutocompleteLike = (props: any) => (
+      <input
+        data-testid="autocomplete-input"
+        onChange={(event) => props.onInputChange?.(event, event.target.value, 'input')}
+      />
+    )
+    const WrappedAutocomplete = withController(AutocompleteLike)
+    const { findByTestId } = render(
+      <WrappedAutocomplete name="test" control={{}} onInputChange={mockOnInputChange} />,
+    )
+
+    const input = await findByTestId('autocomplete-input')
+    await user.type(input, 'ab')
+
+    // Consumer text callback fires per keystroke. (It does not write the field — the
+    // field tracks the selected value, surfaced through onChange below.)
+    expect(mockOnInputChange).toHaveBeenCalledTimes(2)
+  })
+
+  it("should forward the selected value (onChange's 2nd arg) to the Controller's field", async () => {
+    const user = userEvent.setup()
+    const selectedOption = { id: 'opt-1', label: 'Option 1' }
+    // Stand-in for an Autocomplete: passes the selected option as onChange's 2nd arg.
+    const SelectLike = (props: any) => (
+      <button
+        type="button"
+        data-testid="select-option"
+        onClick={(event) => props.onChange?.(event, selectedOption, 'selectOption')}
+      >
+        select
+      </button>
+    )
+    const WrappedSelect = withController(SelectLike)
+    const { findByTestId } = render(<WrappedSelect name="test" control={{}} />)
+
+    await user.click(await findByTestId('select-option'))
+
+    // The field receives the selected option, not the raw event.
+    expect(mockFieldOnChange).toHaveBeenLastCalledWith(selectedOption)
   })
 })

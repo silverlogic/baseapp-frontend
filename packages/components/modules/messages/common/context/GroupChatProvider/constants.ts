@@ -6,4 +6,5 @@ export const INITIAL_GROUP_CHAT_STATE: GroupChatCreateState = {
   image: undefined,
   title: '',
   existingParticipants: [],
+  roomId: undefined,
 }

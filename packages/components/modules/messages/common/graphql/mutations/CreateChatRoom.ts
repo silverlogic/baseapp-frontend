@@ -28,7 +28,7 @@ export const useCreateChatRoomMutation = (): [
   (config: UseMutationConfig<CreateChatRoomMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CreateChatRoomMutation>(
     CreateChatRoomMutationQuery,
   )
@@ -38,12 +38,12 @@ export const useCreateChatRoomMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
-        setChatRoom({
-          id: response?.chatRoomCreate?.room?.node?.id,
-        })
+        const errorMessage = sendMutationErrorToast(response.chatRoomCreate?.errors, errors)
+        if (!errorMessage) {
+          setChatRoom({
+            id: response?.chatRoomCreate?.room?.node?.id,
+          })
+        }
 
         config?.onCompleted?.(response, errors)
       },

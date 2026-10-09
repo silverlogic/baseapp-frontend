@@ -1,5 +1,6 @@
 import { MinimalProfile } from '@baseapp-frontend/authentication'
 import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
+import { REFRESH_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 import { getToken } from '@baseapp-frontend/utils/functions/token/getToken'
@@ -24,7 +25,11 @@ import RelayDefaultHandlerProvider, {
   HandlerProvider,
 } from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
-const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
+export const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
+
+const MAX_WS_RETRY_ATTEMPTS = 10
+const BASE_WS_RETRY_DELAY_IN_MS = 1000
+const MAX_WS_RETRY_DELAY_IN_MS = 30 * 1000
 
 type GetFetchOptions = {
   request: RequestParameters
@@ -87,11 +92,16 @@ export async function httpFetch(
   // property of the response. If any exceptions occurred when processing the request,
   // throw an error to indicate to the developer what went wrong.
   if (Array.isArray(response.errors)) {
-    throw new Error(
+    const error = new Error(
       `Error fetching GraphQL query '${request.name}' with variables '${JSON.stringify(
         variables,
       )}': ${JSON.stringify(response.errors)}`,
     )
+    // Preserve the structured GraphQL errors so consumers can surface a clean,
+    // human-friendly message (see `getGraphQLErrorMessage`) instead of this verbose
+    // wrapper, which leaks the query name, variables, and raw backend detail.
+    ;(error as Error & { graphQLErrors?: unknown }).graphQLErrors = response.errors
+    throw error
   }
 
   return response
@@ -102,15 +112,25 @@ const wsClient = createClient({
   url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
   connectionParams: () => {
     const Authorization = getToken(ACCESS_KEY_NAME)
+    if (!Authorization) return {}
+
+    const Refresh = getToken(REFRESH_KEY_NAME) || undefined
     const CurrentProfileStr = getToken(CURRENT_PROFILE_KEY_NAME) || undefined
     const CurrentProfile = parseString<MinimalProfile>(CurrentProfileStr)
-    if (!Authorization) return {}
     return {
       Authorization,
+      Refresh,
       'Current-Profile': CurrentProfile ? CurrentProfile.id : undefined,
     }
   },
-  retryAttempts: Infinity,
+  retryAttempts: MAX_WS_RETRY_ATTEMPTS,
+  retryWait: async (retries) => {
+    const backoff = Math.min(BASE_WS_RETRY_DELAY_IN_MS * 2 ** retries, MAX_WS_RETRY_DELAY_IN_MS)
+    const jitter = Math.random() * backoff // NOSONAR: Math.random() is acceptable for non-cryptographic jitter
+    await new Promise((resolve) => {
+      setTimeout(resolve, backoff + jitter)
+    })
+  },
   webSocketImpl: WebSocket,
 })
 

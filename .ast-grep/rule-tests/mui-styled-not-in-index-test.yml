@@ -1,0 +1,14 @@
+id: mui-styled-not-in-index
+valid:
+  - |
+    import { Container } from './styled'
+
+    const Component = () => <Container>hi</Container>
+invalid:
+  - |
+    const Container = styled(Box)(({ theme }) => ({
+      display: 'flex',
+      padding: theme.spacing(2),
+    }))
+
+    const Component = () => <Container>hi</Container>

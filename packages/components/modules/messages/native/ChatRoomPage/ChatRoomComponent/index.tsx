@@ -6,7 +6,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useNotification } from '@baseapp-frontend/utils'
 import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
 
-import { useRouter } from 'expo-router'
+import { type Href, useRouter } from 'expo-router'
 import { useFragment, useLazyLoadQuery, useRefetchableFragment } from 'react-relay'
 
 import { ChatRoomFragment$key } from '../../../../../__generated__/ChatRoomFragment.graphql'
@@ -14,6 +14,7 @@ import { ChatRoomFragmentRefetchQuery } from '../../../../../__generated__/ChatR
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../../__generated__/ChatRoomQuery.graphql'
 import { RoomTitleFragment$key } from '../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
+import { getProfilePath } from '../../../../__shared__/common'
 import { ChatRoomQuery, TitleFragment, useArchiveChatRoomMutation } from '../../../common'
 import { ChatRoomFragment } from '../../../common/graphql/fragments/ChatRoom'
 import { RoomTitleFragment } from '../../../common/graphql/fragments/RoomTitle'
@@ -58,7 +59,8 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
     }
   }, [data, router, sendToast])
   const roomHeader = useFragment(TitleFragment, data as TitleFragment$key)
-  const { isSoleAdmin } = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
+  const roomTitle = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
+  const isSoleAdmin = roomTitle?.isSoleAdmin
 
   if (!data) {
     return null
@@ -70,6 +72,14 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
       return
     }
     router.push(`/single-chat-details/${roomId}`)
+  }
+
+  const handleGoToProfile = () => {
+    const profilePath = getProfilePath(
+      roomTitle?.otherParticipant?.profile?.urlPath?.path,
+      roomTitle?.otherParticipant?.profile?.id,
+    )
+    if (profilePath) router.push(profilePath as Href)
   }
 
   const renderTitleComponent = () => (
@@ -118,7 +128,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
         handleArchiveChat={handleArchiveChat}
         isArchiveMutationInFlight={isMutationInFlight}
         handleChatDetails={handleChatDetails}
-        handleGoToProfile={() => console.log('Not implemented.')}
+        handleGoToProfile={handleGoToProfile}
         handleDeleteChat={handleDeleteChat}
       />
     </>

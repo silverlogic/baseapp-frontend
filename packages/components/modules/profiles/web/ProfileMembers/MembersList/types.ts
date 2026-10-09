@@ -11,5 +11,4 @@ export interface MembersListProps {
   userRef: UserMembersListFragment$key
   LoadingState?: FC<LoadingStateProps>
   LoadingStateProps?: LoadingStateProps
-  membersContainerHeight?: number
 }

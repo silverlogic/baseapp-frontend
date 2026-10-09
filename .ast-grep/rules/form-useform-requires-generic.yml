@@ -1,0 +1,13 @@
+id: form-useform-requires-generic
+language: Tsx
+severity: warning
+message: "Always type `useForm` with a generic — `useForm<MyFormType>({ ... })` — so field names, `defaultValues`, and the `onSubmit` payload are checked. See .claude/skills/frontend-patterns/references/forms.md"
+rule:
+  kind: call_expression
+  all:
+    - has:
+        field: function
+        regex: ^useForm$
+    - not:
+        has:
+          kind: type_arguments

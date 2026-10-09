@@ -13,8 +13,8 @@ export const getProfileDefaultValues = ({
   const formattedProfile = {
     ...profile,
     phoneNumber: profile?.owner?.phoneNumber ?? DEFAULT_PHONE_NUMBER_COUNTRY_CODE,
-    image: profile?.image?.url ?? '',
-    bannerImage: profile?.bannerImage?.url ?? '',
+    image: profile?.image ?? '',
+    bannerImage: profile?.bannerImage ?? '',
     urlPath: profile?.urlPath?.path ?? '',
     biography: profile?.biography ?? '',
   }

@@ -114,6 +114,7 @@ const MessagesList: FC<MessagesListProps> = ({
           messageIndex={index}
           isGroup={room?.isGroup}
           allMessagesLastIndex={allMessagesLastIndex}
+          hasNext={hasNext}
           firstUnreadMessageId={firstUnreadMessageId}
           {...MessagesGroupProps}
         />

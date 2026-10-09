@@ -1,0 +1,20 @@
+id: form-useform-requires-generic
+snapshots:
+  ? |
+    const form = useForm({
+      resolver: zodResolver(VALIDATION_SCHEMA),
+      defaultValues: DEFAULT_FORM_VALUES,
+    })
+  : labels:
+    - source: |-
+        useForm({
+          resolver: zodResolver(VALIDATION_SCHEMA),
+          defaultValues: DEFAULT_FORM_VALUES,
+        })
+      style: primary
+      start: 13
+      end: 107
+    - source: useForm
+      style: secondary
+      start: 13
+      end: 20

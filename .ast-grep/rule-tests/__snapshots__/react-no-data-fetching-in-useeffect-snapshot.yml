@@ -1,0 +1,56 @@
+id: react-no-data-fetching-in-useeffect
+snapshots:
+  ? |
+    useEffect(() => {
+      CustomerApi.getCustomer({ id }).then(setCustomer)
+    }, [id])
+  : labels:
+    - source: |-
+        useEffect(() => {
+          CustomerApi.getCustomer({ id }).then(setCustomer)
+        }, [id])
+      style: primary
+      start: 0
+      end: 78
+    - source: useEffect
+      style: secondary
+      start: 0
+      end: 9
+    - source: CustomerApi.getCustomer({ id }).then
+      style: secondary
+      start: 20
+      end: 56
+    - source: CustomerApi.getCustomer({ id }).then(setCustomer)
+      style: secondary
+      start: 20
+      end: 69
+  ? |
+    useEffect(() => {
+      setIsLoading(true)
+      fetch('/api/items')
+        .then(setData)
+        .finally(() => setIsLoading(false))
+    }, [])
+  : labels:
+    - source: |-
+        useEffect(() => {
+          setIsLoading(true)
+          fetch('/api/items')
+            .then(setData)
+            .finally(() => setIsLoading(false))
+        }, [])
+      style: primary
+      start: 0
+      end: 126
+    - source: useEffect
+      style: secondary
+      start: 0
+      end: 9
+    - source: fetch
+      style: secondary
+      start: 41
+      end: 46
+    - source: fetch('/api/items')
+      style: secondary
+      start: 41
+      end: 60

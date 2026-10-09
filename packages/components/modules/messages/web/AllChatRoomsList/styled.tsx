@@ -1,6 +1,6 @@
 import { ComponentType } from 'react'
 
-import { Box, BoxProps } from '@mui/material'
+import { Box, BoxProps, CircularProgress } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 export const MainContainer = styled(Box)(() => ({
@@ -17,3 +17,11 @@ export const Header: ComponentType<BoxProps> = styled(Box)(({ theme }) => ({
     padding: `${theme.spacing(2)} ${theme.spacing(1.5)} ${theme.spacing(2)}`,
   },
 }))
+
+export const CenteredProgress = styled(CircularProgress)({
+  left: '50%',
+  marginLeft: '-7.5px',
+  marginTop: '-7.5px',
+  position: 'absolute',
+  top: '50%',
+})

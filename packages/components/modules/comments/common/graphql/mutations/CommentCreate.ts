@@ -42,7 +42,7 @@ export const useCommentCreateMutation = (): [
   (config: UseMutationConfig<CommentCreateMutation>) => Disposable,
   boolean,
 ] => {
-  const { sendToast } = useNotification()
+  const { sendMutationErrorToast, sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<CommentCreateMutation>(
     CommentCreateMutationQuery,
   )
@@ -51,9 +51,7 @@ export const useCommentCreateMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
-        errors?.forEach((error) => {
-          sendToast(error.message, { type: 'error' })
-        })
+        sendMutationErrorToast(undefined, errors)
 
         config?.onCompleted?.(response, errors)
       },
