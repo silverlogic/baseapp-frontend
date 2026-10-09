@@ -6,6 +6,7 @@ import Button from '@mui/material/Button'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
+import { useIntl } from 'react-intl'
 
 import Dialog from '../Dialog'
 import { ConfirmDialogProps } from './types'
@@ -14,45 +15,49 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   title,
   content,
   action,
-  cancelText = 'Cancel',
+  cancelText,
   onClose,
   hideCancelButton = false,
   DialogTitleProps = {},
   DialogContentProps = {},
   DialogActionsProps = {},
   ...props
-}) => (
-  <Dialog fullWidth onClose={onClose} customMaxWidth={366} {...props}>
-    <DialogTitle variant="h6" {...DialogTitleProps}>
-      {title}
-    </DialogTitle>
-    {content && (
-      <DialogContent
-        sx={{
-          typography: 'body1',
-          color: 'text.secondary',
-        }}
-        {...DialogContentProps}
-      >
-        {content}
-      </DialogContent>
-    )}
-    <DialogActions
-      sx={{
-        '& > .MuiButtonBase-root': {
-          width: 'fit-content',
-        },
-      }}
-      {...DialogActionsProps}
-    >
-      {!hideCancelButton && (
-        <Button variant="outlined" color="inherit" onClick={onClose}>
-          {cancelText}
-        </Button>
+}) => {
+  const intl = useIntl()
+
+  return (
+    <Dialog fullWidth onClose={onClose} customMaxWidth={366} {...props}>
+      <DialogTitle variant="h6" {...DialogTitleProps}>
+        {title}
+      </DialogTitle>
+      {content && (
+        <DialogContent
+          sx={{
+            typography: 'body1',
+            color: 'text.secondary',
+          }}
+          {...DialogContentProps}
+        >
+          {content}
+        </DialogContent>
       )}
-      {action}
-    </DialogActions>
-  </Dialog>
-)
+      <DialogActions
+        sx={{
+          '& > .MuiButtonBase-root': {
+            width: 'fit-content',
+          },
+        }}
+        {...DialogActionsProps}
+      >
+        {!hideCancelButton && (
+          <Button variant="outlined" color="inherit" onClick={onClose}>
+            {cancelText ?? intl.formatMessage({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+          </Button>
+        )}
+        {action}
+      </DialogActions>
+    </Dialog>
+  )
+}
 
 export default ConfirmDialog

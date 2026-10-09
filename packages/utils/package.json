@@ -42,7 +42,7 @@
     "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@formatjs/cli": "^6.7.4",
+    "@formatjs/cli": "catalog:",
     "@testing-library/jest-dom": "catalog:test",
     "@testing-library/react": "catalog:test",
     "@testing-library/user-event": "catalog:test",

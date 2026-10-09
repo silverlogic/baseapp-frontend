@@ -5,6 +5,7 @@ import { ThreeDotsIcon, TrashCanIcon } from '@baseapp-frontend/design-system/com
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 
 import { MenuItem, MenuList, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { TooltipContainer } from './styled'
 import { ThreeDotsMenuHoverOverlayProps } from './types'
@@ -19,50 +20,67 @@ const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
   actions = [],
   handleClosePopover,
   popover,
-}) => (
-  <TooltipContainer offsetRight={offsetRight} offsetTop={offsetTop} aria-label="actions overlay">
-    <IconButton onClick={popover.onOpen} aria-label="Show menu options">
-      <ThreeDotsIcon sx={{ fontSize: '18px' }} />
-    </IconButton>
-    <Popover open={popover.open} onClose={handleClosePopover}>
-      <MenuList>
-        {actions?.map(({ label, icon, onClick, disabled, hasPermission }) => {
-          if (!hasPermission) return null
+}) => {
+  const intl = useIntl()
 
-          return (
+  return (
+    <TooltipContainer
+      offsetRight={offsetRight}
+      offsetTop={offsetTop}
+      aria-label={intl.formatMessage({
+        id: 'shared.actionsOverlay.ariaLabel',
+        defaultMessage: 'actions overlay',
+      })}
+    >
+      <IconButton
+        onClick={popover.onOpen}
+        aria-label={intl.formatMessage({
+          id: 'shared.actionsOverlay.showMenuOptions.ariaLabel',
+          defaultMessage: 'Show menu options',
+        })}
+      >
+        <ThreeDotsIcon sx={{ fontSize: '18px' }} />
+      </IconButton>
+      <Popover open={popover.open} onClose={handleClosePopover}>
+        <MenuList>
+          {actions?.map(({ label, icon, onClick, disabled, hasPermission }) => {
+            if (!hasPermission) return null
+
+            return (
+              <MenuItem
+                key={label}
+                onClick={() => {
+                  onClick?.()
+                  handleClosePopover()
+                }}
+                disabled={disabled}
+              >
+                {icon}
+                <Typography variant="body2" color="text.primary">
+                  {label}
+                </Typography>
+              </MenuItem>
+            )
+          })}
+          {showDeleteButton && (
             <MenuItem
-              key={label}
-              onClick={() => {
-                onClick?.()
-                handleClosePopover()
-              }}
-              disabled={disabled}
+              onClick={handleDeleteDialogOpen}
+              disabled={isDeletingItem || disableDeleteButton}
+              color="disabled"
             >
-              {icon}
-              <Typography variant="body2" color="text.primary">
-                {label}
+              <TrashCanIcon sx={{ color: disableDeleteButton ? 'text.disabled' : 'error.main' }} />
+              <Typography
+                variant="body2"
+                color={disableDeleteButton ? 'text.disabled' : 'error.main'}
+              >
+                {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
               </Typography>
             </MenuItem>
-          )
-        })}
-        {showDeleteButton && (
-          <MenuItem
-            onClick={handleDeleteDialogOpen}
-            disabled={isDeletingItem || disableDeleteButton}
-            color="disabled"
-          >
-            <TrashCanIcon sx={{ color: disableDeleteButton ? 'text.disabled' : 'error.main' }} />
-            <Typography
-              variant="body2"
-              color={disableDeleteButton ? 'text.disabled' : 'error.main'}
-            >
-              Delete
-            </Typography>
-          </MenuItem>
-        )}
-      </MenuList>
-    </Popover>
-  </TooltipContainer>
-)
+          )}
+        </MenuList>
+      </Popover>
+    </TooltipContainer>
+  )
+}
 
 export default ThreeDotsMenuHoverOverlay

@@ -4,6 +4,7 @@ import { FC, useCallback, useMemo } from 'react'
 
 import {
   MDXEditor,
+  type Translation,
   codeBlockPlugin,
   codeMirrorPlugin,
   diffSourcePlugin,
@@ -18,9 +19,10 @@ import {
   thematicBreakPlugin,
   toolbarPlugin,
 } from '@mdxeditor/editor'
+import { useIntl } from 'react-intl'
 
 import DefaultToolbar from '../Toolbar'
-import { CODE_BLOCK_LANGUAGES, DEFAULT_TOOLBAR_CONFIG } from '../constants'
+import { CODE_BLOCK_LANGUAGES, DEFAULT_TOOLBAR_CONFIG, MDX_EDITOR_MESSAGES } from '../constants'
 import { keyboardCommandsPlugin } from './plugins/keyboard-commands'
 import { mentionsPlugin } from './plugins/mentions'
 import { InitializedMDXEditorProps } from './types'
@@ -37,6 +39,20 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
   mentions,
   ...props
 }) => {
+  const intl = useIntl()
+
+  const translation = useCallback<Translation>(
+    (key, defaultValue, interpolations = {}) => {
+      const message = MDX_EDITOR_MESSAGES[key as keyof typeof MDX_EDITOR_MESSAGES]
+      if (message) return intl.formatMessage(message, interpolations)
+      return Object.entries(interpolations).reduce(
+        (value, [name, arg]) => value.replaceAll(`{{${name}}}`, String(arg as string | number)),
+        defaultValue,
+      )
+    },
+    [intl],
+  )
+
   const mergedConfig = useMemo(
     () => ({ ...DEFAULT_TOOLBAR_CONFIG, ...toolbarConfig }),
     [toolbarConfig],
@@ -79,7 +95,13 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
   )
 
   return (
-    <MDXEditor contentEditableClassName="container" plugins={plugins} {...props} ref={editorRef} />
+    <MDXEditor
+      contentEditableClassName="container"
+      plugins={plugins}
+      translation={translation}
+      {...props}
+      ref={editorRef}
+    />
   )
 }
 
