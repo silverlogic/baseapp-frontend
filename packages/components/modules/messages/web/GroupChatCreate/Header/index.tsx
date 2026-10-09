@@ -9,6 +9,7 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { HeaderContainer } from './styled'
 import { HeaderProps } from './types'
@@ -19,20 +20,41 @@ const Header: FC<HeaderProps> = ({
   isDisabled,
   onBackButtonClicked,
   onCreateButtonClicked,
-  title = 'New Group',
+  title,
   titleProps = {},
-}) => (
-  <HeaderContainer>
-    <IconButton onClick={onBackButtonClicked} aria-label="cancel group creation">
-      <CloseIcon sx={{ fontSize: '24px' }} />
-    </IconButton>
-    <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
-      {title}
-    </Typography>
-    <IconButton aria-label="Create group" disabled={isDisabled} onClick={onCreateButtonClicked}>
-      <CreateIcon sx={{ fontSize: '24px' }} />
-    </IconButton>
-  </HeaderContainer>
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <HeaderContainer>
+      <IconButton
+        onClick={onBackButtonClicked}
+        aria-label={intl.formatMessage({
+          id: 'messages.groupChatCreate.header.cancelAriaLabel',
+          defaultMessage: 'cancel group creation',
+        })}
+      >
+        <CloseIcon sx={{ fontSize: '24px' }} />
+      </IconButton>
+      <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
+        {title ??
+          intl.formatMessage({
+            id: 'messages.groupChatCreate.header.title',
+            defaultMessage: 'New Group',
+          })}
+      </Typography>
+      <IconButton
+        aria-label={intl.formatMessage({
+          id: 'messages.groupChatCreate.header.createAriaLabel',
+          defaultMessage: 'Create group',
+        })}
+        disabled={isDisabled}
+        onClick={onCreateButtonClicked}
+      >
+        <CreateIcon sx={{ fontSize: '24px' }} />
+      </IconButton>
+    </HeaderContainer>
+  )
+}
 
 export default Header

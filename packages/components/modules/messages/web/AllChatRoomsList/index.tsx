@@ -16,6 +16,7 @@ import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/c
 
 import { Box, Button, Tab, Tabs, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import { RoomsListFragment$key } from '../../../../__generated__/RoomsListFragment.graphql'
@@ -37,6 +38,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
   EmptyChatRoomsState = DefaultEmptyChatRoomsState,
   VirtuosoProps = {},
 }) => {
+  const intl = useIntl()
   const [tab, setTab] = useState<ChatTabValues>(CHAT_TAB_VALUES.active)
   const [renderList, setRenderList] = useState<boolean>(true)
 
@@ -140,7 +142,10 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more rooms"
+        aria-label={intl.formatMessage({
+          id: 'messages.chatRoomsList.loadingMore',
+          defaultMessage: 'loading more rooms',
+        })}
       />
     )
   }
@@ -151,7 +156,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     return (
       <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
-          {CHAT_TAB_LABEL[tabValue]}
+          {intl.formatMessage(CHAT_TAB_LABEL[tabValue])}
         </Typography>
         {isLoadingTab && <CenteredProgress size={15} aria-hidden="true" />}
       </Box>
@@ -174,7 +179,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
       <Header>
         <Box display="grid" width="100%" gridTemplateColumns="auto max-content" gap={1}>
           <Typography variant="h4" component="span">
-            Messages
+            <FormattedMessage id="messages.chatRoomsList.title" defaultMessage="Messages" />
           </Typography>
           <Button
             variant="contained"
@@ -182,7 +187,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
             startIcon={<Iconify icon="mingcute:add-line" />}
             onClick={onHeaderClick}
           >
-            New
+            <FormattedMessage id="messages.chatRoomsList.new" defaultMessage="New" />
           </Button>
         </Box>
       </Header>

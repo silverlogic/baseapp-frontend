@@ -5,6 +5,7 @@ import { DateValidationError, LocalizationProvider } from '@mui/x-date-pickers'
 import { AdapterLuxon } from '@mui/x-date-pickers/AdapterLuxon'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { DateTime } from 'luxon'
+import { useIntl } from 'react-intl'
 
 import { DateFilterComponentProps } from './types'
 
@@ -15,6 +16,7 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   onApply,
   onClearFilter,
 }) => {
+  const intl = useIntl()
   const [tempCreatedFrom, setTempCreatedFrom] = useState<DateTime | null>(createdFrom ?? null)
   const [tempCreatedTo, setTempCreatedTo] = useState<DateTime | null>(createdTo ?? null)
 
@@ -23,13 +25,19 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
   const errorMessage = React.useMemo(() => {
     switch (error) {
       case 'minDate':
-        return 'End date cannot be earlier than start date.'
+        return intl.formatMessage({
+          id: 'activityLog.dateFilter.error.minDate',
+          defaultMessage: 'End date cannot be earlier than start date.',
+        })
       case 'invalidDate':
-        return 'Your date is not valid'
+        return intl.formatMessage({
+          id: 'activityLog.dateFilter.error.invalidDate',
+          defaultMessage: 'Your date is not valid',
+        })
       default:
         return ''
     }
-  }, [error])
+  }, [error, intl])
 
   const handleApply = () => {
     if (tempCreatedTo && tempCreatedFrom && tempCreatedTo < tempCreatedFrom) {
@@ -65,7 +73,10 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
     <Box display="flex" gap={2} flexDirection="column">
       <LocalizationProvider dateAdapter={AdapterLuxon}>
         <DatePicker
-          label="Start date"
+          label={intl.formatMessage({
+            id: 'activityLog.dateFilter.startDate',
+            defaultMessage: 'Start date',
+          })}
           onChange={(newValue) => setTempCreatedFrom(newValue)}
           disableFuture
           value={tempCreatedFrom}
@@ -81,7 +92,10 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
           }}
         />
         <DatePicker
-          label="End date"
+          label={intl.formatMessage({
+            id: 'activityLog.dateFilter.endDate',
+            defaultMessage: 'End date',
+          })}
           value={tempCreatedTo}
           onChange={(newValue) => setTempCreatedTo(newValue)}
           onError={(newError) => setError(newError)}
@@ -103,10 +117,13 @@ const DateFilterComponent: FC<DateFilterComponentProps> = ({
       </LocalizationProvider>
       <Box display="flex" gap={2} flexDirection="column" mt={4} mb={2}>
         <Button onClick={handleApply} variant="contained" color="inherit">
-          Filter
+          {intl.formatMessage({ id: 'activityLog.dateFilter.apply', defaultMessage: 'Filter' })}
         </Button>
         <Button onClick={handleClear} variant="outlined" color="inherit">
-          Clear Filter
+          {intl.formatMessage({
+            id: 'activityLog.dateFilter.clear',
+            defaultMessage: 'Clear Filter',
+          })}
         </Button>
       </Box>
     </Box>

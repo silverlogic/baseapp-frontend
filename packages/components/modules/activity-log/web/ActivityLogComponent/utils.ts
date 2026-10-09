@@ -1,5 +1,13 @@
-export const getUpdateMessage = (verb: string, diff: Record<string, any>): string => {
-  const baseMessage = `Updated ${verb.split('.')[0]}`
+import type { IntlShape } from 'react-intl'
+
+import { UPDATE_MESSAGES } from './constants'
+
+export const getUpdateMessage = (
+  verb: string,
+  diff: Record<string, any>,
+  intl: IntlShape,
+): string => {
+  const baseMessage = intl.formatMessage(UPDATE_MESSAGES.updated, { name: verb.split('.')[0] })
 
   if (!diff) {
     return baseMessage
@@ -8,13 +16,13 @@ export const getUpdateMessage = (verb: string, diff: Record<string, any>): strin
   const updateMessages: string[] = Object.keys(diff).map((key) => {
     switch (key) {
       case 'image':
-        return 'Updated their profile picture'
+        return intl.formatMessage(UPDATE_MESSAGES.profilePicture)
       case 'banner_image':
-        return 'Updated their profile banner'
+        return intl.formatMessage(UPDATE_MESSAGES.profileBanner)
       case 'biography':
-        return 'Updated their bio'
+        return intl.formatMessage(UPDATE_MESSAGES.bio)
       default:
-        return `Updated ${key.replace('_', ' ')}`
+        return intl.formatMessage(UPDATE_MESSAGES.updated, { name: key.replace('_', ' ') })
     }
   })
 
