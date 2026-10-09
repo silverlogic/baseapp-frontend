@@ -11,16 +11,9 @@ import {
   useFormMentions,
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
-import { useCommentCreateForm, useCommentReply } from '../../common'
+import { COMMENT_FILE_ATTACHMENT_LIMITS, useCommentCreateForm, useCommentReply } from '../../common'
 import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentCreateProps } from './types'
-
-const MAX_FILES = 5
-const MAX_FILE_SIZE = 100 * 1024 * 1024 // 100MB
-const ACCEPTED_FILE_TYPES = {
-  'image/*': ['.png', '.jpg'],
-  'application/pdf': ['.pdf'],
-}
 
 /**
  * ### CommentCreate Component
@@ -152,9 +145,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         SocialUpsertActionsProps={{
           onFilesSelected: handleFilesSelected,
           isUploading,
-          maxFiles: MAX_FILES,
-          maxFileSize: MAX_FILE_SIZE,
-          acceptedFileTypes: ACCEPTED_FILE_TYPES,
+          ...COMMENT_FILE_ATTACHMENT_LIMITS,
         }}
         // Inside the form, not after it: the form is sticky, so a sibling would sit
         // below the pinned composer and stay off-screen until the list is scrolled.

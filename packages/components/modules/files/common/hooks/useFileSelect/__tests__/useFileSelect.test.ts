@@ -54,6 +54,20 @@ describe('useFileSelect', () => {
     expect(onFilesSelected).toHaveBeenCalledWith([ok1, ok2])
   })
 
+  it('drops files outside acceptedFileTypes, even when the OS picker let them through', () => {
+    const onFilesSelected = vi.fn()
+    const { result } = renderHook(() =>
+      useFileSelect({ onFilesSelected, acceptedFileTypes: { 'application/pdf': ['.pdf'] } }),
+    )
+
+    const pdf = makeFile('doc.PDF', 10)
+    const exe = makeFile('setup.exe', 10)
+
+    fireChange(result.current.getInputProps().onChange, [exe, pdf])
+
+    expect(onFilesSelected).toHaveBeenCalledWith([pdf])
+  })
+
   it('does not fire the callback when nothing valid was selected, and resets the input', () => {
     const onFilesSelected = vi.fn()
     const { result } = renderHook(() => useFileSelect({ onFilesSelected, maxFileSize: 100 }))

@@ -1,4 +1,4 @@
-import { FC, useCallback, useEffect, useRef, useTransition } from 'react'
+import { FC, useCallback, useEffect, useRef, useState, useTransition } from 'react'
 
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
@@ -6,7 +6,9 @@ import { TextInput as NativeTextInput, ScrollView } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { SocialInputDrawer as DefaultSocialInputDrawer } from '../../../__shared__/native'
+import { UploadingFilesList } from '../../../files/native'
 import { CommentsFragmentQuery, DEFAULT_MAX_THREAD_DEPTH, useCommentReply } from '../../common'
+import CommentFilesUpsertActions from '../CommentFilesUpsertActions'
 import DefaultCommentsList from '../CommentsList'
 import CommentActionsProvider from '../context/CommentActionsProvider'
 import { createStyles } from './styles'
@@ -35,15 +37,17 @@ const BaseComments: FC<BaseCommentsProps> = ({
   const commentCreateRef = useRef<NativeTextInput>(null)
   const commentsListRefetchRef = useRef<(() => void) | null>(null)
   const [, startTransition] = useTransition()
+  const [footerHeight, setFooterHeight] = useState(0)
   const { resetCommentReply, resetCommentEdit } = useCommentReply()
 
   const { isFocused, onFocusChange, textHeight, onTextHeightChange, keyboardHeight } =
     SocialInputDrawer.useTextInputProperties()
 
-  const { form, submit, isLoading, editVariables, replyVariables } = useCommentComposer({
-    targetObjectId: target.id,
-    onSubmitSuccess: () => commentCreateRef.current?.blur(),
-  })
+  const { form, submit, isLoading, editVariables, replyVariables, attachments } =
+    useCommentComposer({
+      targetObjectId: target.id,
+      onSubmitSuccess: () => commentCreateRef.current?.blur(),
+    })
 
   const body = form.watch('body')
   const showHandle = isFocused || body !== ''
@@ -92,6 +96,7 @@ const BaseComments: FC<BaseCommentsProps> = ({
             keyboardHeight={keyboardHeight}
             showHandle={showHandle}
             textHeight={textHeight}
+            footerHeight={footerHeight}
             {...SocialInputDrawerProps.PlaceholderProps}
           />
         </View>
@@ -107,7 +112,18 @@ const BaseComments: FC<BaseCommentsProps> = ({
           submit={submit}
           editVariables={editVariables}
           replyVariables={replyVariables}
+          Footer={attachments.isEnabled ? UploadingFilesList : undefined}
+          FooterProps={{ scope: attachments.scope, shouldUseBottomSheetSafeComponents: true }}
+          onFooterHeightChange={setFooterHeight}
           {...SocialInputDrawerProps.DrawerProps}
+          SocialInputProps={{
+            SocialUpsertActions: CommentFilesUpsertActions,
+            SocialUpsertActionsProps: {
+              onFilesSelected: attachments.onFilesSelected,
+              disabled: !attachments.isEnabled,
+            },
+            ...SocialInputDrawerProps.DrawerProps?.SocialInputProps,
+          }}
         />
       </View>
     </CommentActionsProvider>

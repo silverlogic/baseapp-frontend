@@ -1,6 +1,8 @@
 import type { ChangeEventHandler } from 'react'
 
-export type Accept = Record<string, string[]>
+import type { Accept } from '../../types'
+
+export type { Accept }
 
 export interface UseFileSelectParams {
   onFilesSelected: (files: File[]) => void

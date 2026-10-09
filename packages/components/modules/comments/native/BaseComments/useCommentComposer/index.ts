@@ -6,6 +6,7 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../../__shared__/common'
+import { useDeferredFileAttachments } from '../../../../files/common'
 import { useCommentCreateForm, useCommentReply, useCommentUpdateForm } from '../../../common'
 import { UseCommentComposerOptions, UseCommentComposerReturn } from './types'
 
@@ -24,6 +25,12 @@ const useCommentComposer = ({
   onSubmitSuccess,
 }: UseCommentComposerOptions): UseCommentComposerReturn => {
   const { editingComment, resetCommentEdit } = useCommentReply()
+  const {
+    handleFilesSelected,
+    attachTo,
+    hasPendingFiles,
+    scope: filesScope,
+  } = useDeferredFileAttachments()
 
   // The single form behind the drawer, shared by both modes.
   const form = useForm<SocialUpsertForm>({
@@ -42,7 +49,13 @@ const useCommentComposer = ({
     form,
     expandRepliesOnSuccess: true,
     resetFormOnReplyTargetChange: true,
-    onSuccess: () => onSubmitSuccess?.(),
+    onSuccess: ({ commentId }) => {
+      if (commentId) {
+        // Fire-and-forget: attachTo reports mutation failures through its own onError.
+        attachTo(commentId).catch(() => undefined)
+      }
+      onSubmitSuccess?.()
+    },
   })
 
   const {
@@ -74,11 +87,19 @@ const useCommentComposer = ({
   return {
     form,
     submit,
-    isLoading: isCreating || isUpdating,
+    // Block a new comment until every attachment has finished, so a paused or failed
+    // upload is never silently left off it. Edits do not carry attachments.
+    isLoading: isCreating || isUpdating || (!isEditMode && hasPendingFiles),
     editVariables: {
       isEditMode,
       label: 'Editing your comment',
       onEditCancel: cancelEdit,
+    },
+    attachments: {
+      // Attachments go on new comments only; while editing, the draft's files wait.
+      isEnabled: !isEditMode,
+      onFilesSelected: handleFilesSelected,
+      scope: filesScope,
     },
     replyVariables: {
       isReplyMode: isReply,
