@@ -1,5 +1,6 @@
 import { useCallback, useRef } from 'react'
 
+import { filterSelectedFiles } from '../../utils/filterSelectedFiles'
 import type { Accept, UseFileSelectParams, UseFileSelectReturn } from './types'
 
 const buildAcceptAttr = (acceptedFileTypes?: Accept): string | undefined => {
@@ -40,9 +41,11 @@ export const useFileSelect = ({
       style: { display: 'none' },
       onChange: (event) => {
         const { target } = event
-        const selected = Array.from(target.files ?? [])
-          .filter((file) => file.size <= maxFileSize)
-          .slice(0, maxFiles)
+        const { accepted: selected } = filterSelectedFiles(Array.from(target.files ?? []), {
+          maxFiles,
+          maxFileSize,
+          acceptedFileTypes,
+        })
         // Reset so selecting the same file again re-triggers onChange.
         target.value = ''
         if (selected.length) {

@@ -4,13 +4,24 @@ import { axios } from '@baseapp-frontend/utils'
 
 import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
-import type { CompleteUploadPart, InitiateUploadResponse } from '../../types'
-import { chunkFile, uploadChunks } from '../../utils'
+import type {
+  CompleteUploadPart,
+  InitiateUploadResponse,
+  UploadInput,
+  UploadSource,
+} from '../../types'
+import { getChunkCount, toUploadSource, uploadChunks } from '../../utils'
 import type { UseChunkedUploadOptions } from './types'
 
 const areUrlsExpired = (initiatedAt?: number, expiresIn?: number): boolean => {
   if (!initiatedAt || !expiresIn) return true
   return Date.now() >= initiatedAt + expiresIn * 1000 - URL_EXPIRY_SAFETY_MARGIN_MS
+}
+
+/** Read part `index` of `source` — the same byte range `chunkFile` would slice. */
+const readChunkAt = (source: UploadSource, index: number) => {
+  const start = index * CHUNK_SIZE
+  return source.readChunk(start, Math.min(start + CHUNK_SIZE, source.size))
 }
 
 const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
@@ -60,14 +71,14 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
    * presigned URLs have expired).
    */
   const startUpload = useCallback(
-    async (fileId: string, file: File) => {
+    async (fileId: string, file: UploadSource) => {
       const { recordChunkEtag } = useFileUploadStore.getState()
-      const chunks = chunkFile(file)
+      const totalChunks = getChunkCount(file.size)
       const abortController = new AbortController()
 
       updateFileProgress(fileId, {
         status: FileUploadStatus.PENDING,
-        totalChunks: chunks.length,
+        totalChunks,
         completedChunks: 0,
         uploadedBytes: 0,
         chunkProgress: new Map(),
@@ -80,7 +91,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         fileName: file.name,
         fileSize: file.size,
         fileContentType: file.type,
-        numParts: chunks.length,
+        numParts: totalChunks,
         partSize: CHUNK_SIZE,
       })
 
@@ -95,7 +106,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
       })
 
       const etags = await uploadChunks({
-        chunks,
+        readChunk: (index) => readChunkAt(file, index),
         presignedUrls: data.presignedUrls.map((p) => p.url),
         abortSignal: abortController.signal,
         onProgress: (chunkIndex, loaded, total) => {
@@ -122,7 +133,8 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   )
 
   const uploadFile = useCallback(
-    async (file: File, scope?: string) => {
+    async (input: UploadInput, scope?: string) => {
+      const file = toUploadSource(input)
       const fileId = addFile(file, scope)
 
       try {
@@ -154,12 +166,12 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
       resumeFile(fileId)
 
       try {
-        const chunks = chunkFile(fileProgress.file)
+        const totalChunks = getChunkCount(fileProgress.file.size)
         // Chunks complete out of order (parallel uploads), so resume from the
         // per-index ETag record rather than assuming a contiguous prefix.
-        const pendingIndexes = chunks
-          .map((_, index) => index)
-          .filter((index) => !fileProgress.etags[index])
+        const pendingIndexes = Array.from({ length: totalChunks }, (_, index) => index).filter(
+          (index) => !fileProgress.etags[index],
+        )
 
         // Every chunk already uploaded: only the (URL-free) complete call is
         // left, so URL expiry is irrelevant — go straight to complete instead
@@ -188,7 +200,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         if (pendingIndexes.length > 0) {
           const presignedUrls = fileProgress.presignedUrls ?? []
           const etags = await uploadChunks({
-            chunks: pendingIndexes.map((index) => chunks[index]!),
+            readChunk: (i) => readChunkAt(fileProgress.file, pendingIndexes[i]!),
             presignedUrls: pendingIndexes.map((index) => presignedUrls[index]!.url),
             abortSignal: abortController.signal,
             onProgress: (chunkIndex, loaded, total) => {

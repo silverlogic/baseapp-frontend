@@ -1,10 +1,10 @@
-import { forwardRef, useCallback, useRef } from 'react'
+import { forwardRef, useCallback, useEffect, useRef, useState } from 'react'
 
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet'
-import { TextInput as NativeTextInput } from 'react-native'
+import { LayoutChangeEvent, TextInput as NativeTextInput } from 'react-native'
 
 import DefaultSocialInput from '../../SocialInput'
 import DefaultDrawerHandle from './DrawerHandle'
@@ -17,6 +17,9 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
       DrawerHandle = DefaultDrawerHandle,
       SocialInput = DefaultSocialInput,
       SocialInputProps = {},
+      Footer,
+      FooterProps = {},
+      onFooterHeightChange,
       form,
       isLoading,
       keyboardHeight = 0,
@@ -32,6 +35,22 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
   ) => {
     const bottomSheetRef = useRef<BottomSheet>(null)
     const theme = useTheme()
+    const [footerHeight, setFooterHeight] = useState(0)
+
+    const handleFooterLayout = useCallback(
+      ({ nativeEvent }: LayoutChangeEvent) => {
+        const height = Math.ceil(nativeEvent.layout.height)
+        setFooterHeight(height)
+        onFooterHeightChange?.(height)
+      },
+      [onFooterHeightChange],
+    )
+    // A removed footer fires no layout event, so its last height must not linger.
+    const activeFooterHeight = Footer ? footerHeight : 0
+    const hasFooter = !!Footer
+    useEffect(() => {
+      if (!hasFooter) onFooterHeightChange?.(0)
+    }, [hasFooter, onFooterHeightChange])
 
     const handleSheetChange = useCallback(
       (index: number) => {
@@ -66,13 +85,21 @@ const Drawer = forwardRef<NativeTextInput, DrawerProps>(
       <BottomSheet
         ref={bottomSheetRef}
         index={1}
-        snapPoints={[80 + keyboardHeight, 200 + keyboardHeight]}
+        snapPoints={[
+          80 + keyboardHeight + activeFooterHeight,
+          200 + keyboardHeight + activeFooterHeight,
+        ]}
         onChange={handleSheetChange}
         onAnimate={handleAnimate}
         handleComponent={showHandle ? DrawerHandle : null}
         backgroundStyle={styles.background}
       >
         <BottomSheetView style={[styles.bottomSheetContainer, style]}>
+          {Footer ? (
+            <View onLayout={handleFooterLayout}>
+              <Footer {...FooterProps} />
+            </View>
+          ) : null}
           <SocialInput
             form={form}
             isLoading={isLoading}

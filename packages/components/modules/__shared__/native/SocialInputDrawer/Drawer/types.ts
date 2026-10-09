@@ -15,6 +15,11 @@ export interface DrawerProps {
   DrawerHandle?: FC
   SocialInput?: FC<SocialInputProps>
   SocialInputProps?: Partial<SocialInputProps>
+  /** Rendered above the input inside the sheet (e.g. attachment chips); the sheet grows to fit it. */
+  Footer?: FC<any>
+  FooterProps?: Record<string, any>
+  /** Reports the footer's height so a `Placeholder` can reserve the same space. */
+  onFooterHeightChange?: (height: number) => void
   form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>
   isLoading: boolean
   keyboardHeight?: number

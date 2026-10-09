@@ -1,8 +1,8 @@
 import { MAX_CONCURRENT_CHUNKS, RETRY_ATTEMPTS, RETRY_DELAY } from '../constants'
+import type { UploadChunkBody } from '../types'
 import { uploadChunk } from './uploadChunk'
 
-interface UploadChunksOptions {
-  chunks: Blob[]
+interface UploadChunksBaseOptions {
   presignedUrls: string[]
   abortSignal?: AbortSignal
   onProgress?: (chunkIndex: number, loaded: number, total: number) => void
@@ -12,26 +12,54 @@ interface UploadChunksOptions {
   retryDelay?: number
 }
 
-export async function uploadChunks({
-  chunks,
-  presignedUrls,
-  abortSignal,
-  onProgress,
-  onChunkComplete,
-  maxConcurrent = MAX_CONCURRENT_CHUNKS,
-  retryAttempts = RETRY_ATTEMPTS,
-  retryDelay = RETRY_DELAY,
-}: UploadChunksOptions): Promise<string[]> {
-  if (chunks.length !== presignedUrls.length) {
+interface EagerChunksOptions extends UploadChunksBaseOptions {
+  chunks: UploadChunkBody[]
+  readChunk?: never
+}
+
+/**
+ * Lazy mode: each chunk is read only once it has a concurrency slot, so at most
+ * `maxConcurrent` chunks are held in memory. Native needs this — its chunks are real
+ * byte copies, not the free `Blob.slice` references web gets.
+ */
+interface LazyChunksOptions extends UploadChunksBaseOptions {
+  chunks?: never
+  readChunk: (chunkIndex: number) => Promise<UploadChunkBody>
+}
+
+type UploadChunksOptions = EagerChunksOptions | LazyChunksOptions
+
+export async function uploadChunks(options: UploadChunksOptions): Promise<string[]> {
+  const {
+    presignedUrls,
+    abortSignal,
+    onProgress,
+    onChunkComplete,
+    maxConcurrent = MAX_CONCURRENT_CHUNKS,
+    retryAttempts = RETRY_ATTEMPTS,
+    retryDelay = RETRY_DELAY,
+  } = options
+
+  const { chunks } = options
+  if (chunks && chunks.length !== presignedUrls.length) {
     throw new Error('Chunks and presigned URLs count mismatch')
   }
 
-  const etags: string[] = new Array(chunks.length)
+  const getChunk = async (chunkIndex: number): Promise<UploadChunkBody> => {
+    if (chunks) {
+      const chunk = chunks[chunkIndex]
+      if (!chunk) throw new Error(`Missing chunk or URL at index ${chunkIndex}`)
+      return chunk
+    }
+    return options.readChunk!(chunkIndex)
+  }
+
+  const etags: string[] = new Array(presignedUrls.length)
   const activeUploads = new Map<Promise<void>, number>()
 
   const uploadChunkWithRetry = async (
     chunkIndex: number,
-    chunk: Blob,
+    chunk: UploadChunkBody,
     url: string,
     attempt = 0,
   ): Promise<void> => {
@@ -52,6 +80,7 @@ export async function uploadChunks({
         await new Promise((resolve) => {
           setTimeout(resolve, retryDelay * 2 ** attempt)
         })
+        // Retries reuse the bytes already read rather than reading the chunk again.
         return uploadChunkWithRetry(chunkIndex, chunk, url, attempt + 1)
       }
 
@@ -61,10 +90,9 @@ export async function uploadChunks({
     }
   }
 
-  for (let i = 0; i < chunks.length; i += 1) {
-    const chunk = chunks[i]
+  for (let i = 0; i < presignedUrls.length; i += 1) {
     const url = presignedUrls[i]
-    if (!chunk || !url) {
+    if (!url) {
       throw new Error(`Missing chunk or URL at index ${i}`)
     }
 
@@ -74,7 +102,8 @@ export async function uploadChunks({
       await Promise.race(activeUploads.keys())
     }
 
-    const uploadPromise = uploadChunkWithRetry(i, chunk, url)
+    // Read inside the slot so lazy mode never holds more than maxConcurrent chunks.
+    const uploadPromise = getChunk(i).then((chunk) => uploadChunkWithRetry(i, chunk, url))
     activeUploads.set(uploadPromise, i)
 
     // Remove from active uploads when complete

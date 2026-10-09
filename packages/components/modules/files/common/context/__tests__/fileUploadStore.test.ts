@@ -1,3 +1,5 @@
+import { vi } from 'vitest'
+
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../FileUploadProvider'
 
@@ -106,5 +108,39 @@ describe('useFileUploadStore', () => {
     updateFileProgress(id, { status: FileUploadStatus.COMPLETED, fileRelayId: 'relay-1' })
 
     expect(getCompletedFileIds()).toEqual(['relay-1'])
+  })
+
+  it('disposes a source when its upload is removed or its scope cleared', () => {
+    const { addFile, removeFile, clearScope } = useFileUploadStore.getState()
+    const source = (dispose: () => void) => ({
+      name: 'a.pdf',
+      size: 1,
+      type: 'application/pdf',
+      readChunk: async () => new Uint8Array([1]),
+      dispose,
+    })
+    const disposeRemoved = vi.fn()
+    const disposeScoped = vi.fn()
+    const disposeOther = vi.fn()
+
+    removeFile(addFile(source(disposeRemoved)))
+    addFile(source(disposeScoped), 'composer')
+    addFile(source(disposeOther), 'other')
+    clearScope('composer')
+
+    expect(disposeRemoved).toHaveBeenCalledTimes(1)
+    expect(disposeScoped).toHaveBeenCalledTimes(1)
+    expect(disposeOther).not.toHaveBeenCalled()
+  })
+
+  it('clearScope aborts uploads still in flight', () => {
+    const { addFile, updateFileProgress, clearScope } = useFileUploadStore.getState()
+    const controller = new AbortController()
+    const id = addFile(makeFile(), 'composer')
+    updateFileProgress(id, { status: FileUploadStatus.UPLOADING, abortController: controller })
+
+    clearScope('composer')
+
+    expect(controller.signal.aborted).toBe(true)
   })
 })

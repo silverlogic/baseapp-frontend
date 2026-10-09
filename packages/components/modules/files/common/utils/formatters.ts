@@ -44,3 +44,11 @@ export const calculateProgress = (uploadedBytes: number, totalBytes: number): nu
  */
 export const isImageFile = (contentType: string | null | undefined): boolean =>
   contentType?.startsWith('image/') ?? false
+
+/**
+ * Short type label for a file chip: the extension, else the content-type category.
+ */
+export const getFileTypeLabel = (fileName?: string | null, contentType?: string | null): string => {
+  const ext = fileName && fileName.includes('.') ? fileName.split('.').pop() : undefined
+  return (ext || getFileType(contentType) || 'file').toUpperCase()
+}

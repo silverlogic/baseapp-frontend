@@ -5,6 +5,7 @@ import { ConnectionHandler } from 'react-relay'
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
+import type { UploadInput } from '../../types'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { AttachOptions, UseFileUploadLogicParams, UseFileUploadLogicReturn } from './types'
 
@@ -74,7 +75,7 @@ export const useFileUploadLogic = ({
   })
 
   const handleFilesSelected = useCallback(
-    async (selectedFiles: File[]) => {
+    async (selectedFiles: UploadInput[]) => {
       if (!targetObjectId) {
         onError?.(new Error('Target object ID is required'))
         return

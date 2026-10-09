@@ -8,12 +8,18 @@ const Placeholder: FC<PlaceholderProps> = ({
   handleHeight = 38,
   keyboardHeight = 0,
   layoutOverheadHeight = 88,
+  footerHeight = 0,
   showHandle,
   textHeight = 0,
 }) => (
   <View
     style={{
-      height: textHeight + (showHandle ? handleHeight : 0) + layoutOverheadHeight + keyboardHeight,
+      height:
+        textHeight +
+        (showHandle ? handleHeight : 0) +
+        layoutOverheadHeight +
+        keyboardHeight +
+        footerHeight,
     }}
   />
 )

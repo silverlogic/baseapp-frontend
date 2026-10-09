@@ -1,10 +1,18 @@
+import type { UploadChunkBody } from '../types'
+
 export async function uploadChunk(
-  chunk: Blob,
+  chunk: UploadChunkBody,
   presignedUrl: string,
   abortSignal?: AbortSignal,
   onProgress?: (loaded: number, total: number) => void,
 ): Promise<string> {
   return new Promise((resolve, reject) => {
+    // A pause/remove during a retry backoff or a slow read must not start a new PUT.
+    if (abortSignal?.aborted) {
+      reject(new Error('Chunk upload aborted'))
+      return
+    }
+
     const xhr = new XMLHttpRequest()
 
     // Set up progress tracking

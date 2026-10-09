@@ -6,15 +6,9 @@ import { FileUploadTrigger } from '@baseapp-frontend/components/files/web'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { AttachmentIcon, MentionIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { COMMENT_FILE_ATTACHMENT_LIMITS } from '../../../common'
 import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
-
-const MAX_FILES = 5
-const MAX_FILE_SIZE = 100 * 1024 * 1024 // 100MB
-const ACCEPTED_FILE_TYPES = {
-  'image/*': ['.png', '.jpg'],
-  'application/pdf': ['.pdf'],
-}
 
 /**
  * SocialInput upsert-action bar for the comment editor: the attach icon is the
@@ -26,9 +20,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target 
       target={target}
       as="button"
       icon={<AttachmentIcon />}
-      maxFiles={MAX_FILES}
-      maxFileSize={MAX_FILE_SIZE}
-      acceptedFileTypes={ACCEPTED_FILE_TYPES}
+      {...COMMENT_FILE_ATTACHMENT_LIMITS}
       autoAttach
     />
     <IconButton disabled aria-label="mention">
