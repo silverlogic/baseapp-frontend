@@ -18,6 +18,8 @@
     "test:unit": "vitest run --config ./vitest.config.mts",
     "test:component": "pnpm relay && playwright test",
     "test:component:ui": "pnpm relay && playwright test --ui",
+    "i18n:extract": "formatjs extract 'modules/**/*.ts*' --out-file locales/en.json --format simple",
+    "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
@@ -72,6 +74,7 @@
       "require": "./dist/content-feed/*/index.js"
     },
     "./package.json": "./package.json",
+    "./locales": "./locales/index.ts",
     "./shared/common": "./modules/__shared__/common/index.ts",
     "./shared/web": "./modules/__shared__/web/index.ts",
     "./shared/native": "./modules/__shared__/native/index.ts",
@@ -108,6 +111,7 @@
     "./files/native": "./modules/files/native/index.ts"
   },
   "files": [
+    "locales",
     "modules",
     "dist",
     "tsconfig.json",
@@ -142,6 +146,7 @@
     "luxon": "catalog:",
     "next": "catalog:",
     "react-hook-form": "catalog:",
+    "react-intl": "catalog:",
     "react-multi-carousel": "catalog:",
     "react-native": "catalog:react-native",
     "react-native-gesture-handler": "catalog:react-native",
@@ -177,6 +182,7 @@
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
     "@faker-js/faker": "catalog:test",
+    "@formatjs/cli": "^6.7.4",
     "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",

@@ -1,0 +1,12 @@
+{
+  "comments.create.placeholder": "Comentar...",
+  "comments.actions.share": "Compartilhar Comentário",
+  "comments.actions.pin": "Fixar Comentário",
+  "comments.actions.unpin": "Desafixar Comentário",
+  "comments.actions.edit": "Editar Comentário",
+  "comments.loading.more": "carregando mais comentários",
+  "comments.reply.ariaLabel": "responder ao comentário {commentId}",
+  "comments.reply.count.ariaLabel": "contagem de respostas {commentId}",
+  "comments.replies.showMore": "Mostrar mais respostas ({count})",
+  "comments.pinned.badge": "Fixado"
+}

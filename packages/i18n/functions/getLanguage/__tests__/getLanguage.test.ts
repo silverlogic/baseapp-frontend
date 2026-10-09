@@ -1,10 +1,10 @@
+import { getCookie, isMobilePlatform } from '@baseapp-frontend/utils'
+
 import { getItem } from 'expo-secure-store'
 import type { Mock } from 'vitest'
 
 import { getLanguage } from '..'
-import { LANGUAGE_COOKIE_NAME } from '../../../../constants/cookie'
-import { getCookie } from '../../../cookie'
-import { isMobilePlatform } from '../../../os'
+import { LANGUAGE_COOKIE_NAME } from '../../../types'
 
 const clientCookieValue = 'client-language-value'
 const mobileLanguageValue = 'mobile-language-value'
@@ -13,11 +13,8 @@ vi.mock('expo-secure-store', async () => ({
   getItem: vi.fn(),
 }))
 
-vi.mock('../../../cookie', async () => ({
+vi.mock('@baseapp-frontend/utils', async () => ({
   getCookie: vi.fn(),
-}))
-
-vi.mock('../../../os', async () => ({
   isMobilePlatform: vi.fn(),
 }))
 
@@ -28,33 +25,33 @@ describe('getLanguage', () => {
     vi.clearAllMocks()
   })
 
-  it('should retrieve the language from SecureStore on mobile platform', () => {
+  it('should retrieve the language from SecureStore on mobile platform', async () => {
     ;(isMobilePlatform as Mock).mockReturnValue(true)
     ;(getItem as Mock).mockReturnValue(mobileLanguageValue)
 
-    const result = getLanguage(accessKeyName)
+    const result = await getLanguage(accessKeyName)
 
     expect(result).toBe(mobileLanguageValue)
     expect(getItem).toHaveBeenCalledWith(accessKeyName)
     expect(getCookie).not.toHaveBeenCalled()
   })
 
-  it('should retrieve the language using getCookie on non-mobile platform', () => {
+  it('should retrieve the language using getCookie on non-mobile platform', async () => {
     ;(isMobilePlatform as Mock).mockReturnValue(false)
     ;(getCookie as Mock).mockReturnValue(clientCookieValue)
 
-    const result = getLanguage(accessKeyName)
+    const result = await getLanguage(accessKeyName)
 
     expect(result).toBe(clientCookieValue)
     expect(getCookie).toHaveBeenCalledWith(accessKeyName)
     expect(getItem).not.toHaveBeenCalled()
   })
 
-  it('should use default LANGUAGE_COOKIE_NAME when no key is provided', () => {
+  it('should use default LANGUAGE_COOKIE_NAME when no key is provided', async () => {
     ;(isMobilePlatform as Mock).mockReturnValue(false)
     ;(getCookie as Mock).mockReturnValue(clientCookieValue)
 
-    const result = getLanguage()
+    const result = await getLanguage()
 
     expect(result).toBe(clientCookieValue)
     expect(getCookie).toHaveBeenCalledWith(LANGUAGE_COOKIE_NAME)

@@ -1,3 +1,5 @@
+import { useIntl } from 'react-intl'
+
 import { useCommentPinMutation } from '../../graphql/mutations/CommentPin'
 import { CommentAction, UseCommentActionsOptions } from './types'
 
@@ -14,6 +16,7 @@ const useCommentActions = ({
   enableShare = true,
   shareDisabled = true,
 }: UseCommentActionsOptions): CommentAction[] => {
+  const intl = useIntl()
   const [pinComment, isPinningComment] = useCommentPinMutation()
 
   const handlePinComment = () => {
@@ -26,10 +29,22 @@ const useCommentActions = ({
     })
   }
 
+  const pinMessage = intl.formatMessage({
+    id: 'comments.actions.pin',
+    defaultMessage: 'Pin Comment',
+  })
+  const unpinMessage = intl.formatMessage({
+    id: 'comments.actions.unpin',
+    defaultMessage: 'Unpin Comment',
+  })
+
   return [
     {
       id: 'share',
-      label: 'Share Comment',
+      label: intl.formatMessage({
+        id: 'comments.actions.share',
+        defaultMessage: 'Share Comment',
+      }),
       hasPermission: enableShare,
       disabled: shareDisabled,
       closeOnSelect: true,
@@ -37,7 +52,7 @@ const useCommentActions = ({
     },
     {
       id: 'pin',
-      label: `${comment?.isPinned ? 'Unpin' : 'Pin'} Comment`,
+      label: comment?.isPinned ? unpinMessage : pinMessage,
       hasPermission: comment?.canPin,
       disabled: isPinningComment,
       closeOnSelect: true,
@@ -45,7 +60,10 @@ const useCommentActions = ({
     },
     {
       id: 'edit',
-      label: 'Edit Comment',
+      label: intl.formatMessage({
+        id: 'comments.actions.edit',
+        defaultMessage: 'Edit Comment',
+      }),
       hasPermission: comment?.canChange,
       disabled: false,
       closeOnSelect: true,
