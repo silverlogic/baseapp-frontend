@@ -1,12 +1,13 @@
 {
-  "comments.create.placeholder": "Comentar...",
-  "comments.actions.share": "Compartilhar Comentário",
-  "comments.actions.pin": "Fixar Comentário",
-  "comments.actions.unpin": "Desafixar Comentário",
+  "comments.actions.delete": "Excluir comentário",
   "comments.actions.edit": "Editar Comentário",
+  "comments.actions.pin": "Fixar Comentário",
+  "comments.actions.share": "Compartilhar Comentário",
+  "comments.actions.unpin": "Desafixar Comentário",
+  "comments.create.placeholder": "Comentar...",
   "comments.loading.more": "carregando mais comentários",
-  "comments.reply.ariaLabel": "responder ao comentário {commentId}",
-  "comments.reply.count.ariaLabel": "contagem de respostas {commentId}",
+  "comments.pinned.badge": "Fixado",
   "comments.replies.showMore": "Mostrar mais respostas ({count})",
-  "comments.pinned.badge": "Fixado"
+  "comments.reply.ariaLabel": "responder ao comentário {commentId}",
+  "comments.reply.count.ariaLabel": "contagem de respostas {commentId}"
 }

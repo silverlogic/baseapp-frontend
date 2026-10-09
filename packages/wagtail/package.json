@@ -23,6 +23,7 @@
     "axios": "catalog:",
     "graphql": "catalog:graphql",
     "next": "catalog:",
+    "react-intl": "catalog:",
     "react-relay": "catalog:graphql"
   },
   "peerDependencies": {

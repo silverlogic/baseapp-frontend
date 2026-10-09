@@ -1,4 +1,5 @@
 {
+  "comments.actions.delete": "Delete Comment",
   "comments.actions.edit": "Edit Comment",
   "comments.actions.pin": "Pin Comment",
   "comments.actions.share": "Share Comment",
