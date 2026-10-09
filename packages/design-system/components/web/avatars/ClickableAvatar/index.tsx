@@ -28,8 +28,8 @@ const ClickableAvatar: FC<ClickableAvatarProps> = ({
         <AvatarDeletedUserIcon
           sx={{ fontSize: width }}
           titleAccess={intl.formatMessage({
-            id: 'designSystem.avatar.fallback',
-            defaultMessage: 'Avatar Fallback',
+            id: 'designSystem.avatar.deletedUser',
+            defaultMessage: 'Deleted User Avatar',
           })}
         />
       </AvatarWithPlaceholder>
