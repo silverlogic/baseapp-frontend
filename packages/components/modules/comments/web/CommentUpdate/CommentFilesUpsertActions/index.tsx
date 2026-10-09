@@ -35,6 +35,10 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target 
         maxFileSize={MAX_FILE_SIZE}
         acceptedFileTypes={ACCEPTED_FILE_TYPES}
         autoAttach
+        label={intl.formatMessage({
+          id: 'comments.upsertActions.attachFiles.ariaLabel',
+          defaultMessage: 'Attach files',
+        })}
       />
       <IconButton
         disabled
