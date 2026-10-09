@@ -46,7 +46,7 @@ const InitializedMDXEditor: FC<InitializedMDXEditorProps> = ({
       const message = MDX_EDITOR_MESSAGES[key as keyof typeof MDX_EDITOR_MESSAGES]
       if (message) return intl.formatMessage(message, interpolations)
       return Object.entries(interpolations).reduce(
-        (value, [name, arg]) => value.replaceAll(`{{${name}}}`, String(arg)),
+        (value, [name, arg]) => value.replaceAll(`{{${name}}}`, String(arg as string | number)),
         defaultValue,
       )
     },
