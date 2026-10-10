@@ -5,7 +5,7 @@ export type Accept = Record<string, string[]>
 export interface UseFileSelectParams {
   onFilesSelected: (files: File[]) => void
   maxFiles?: number
-  maxFileSize?: number // in bytes
+  maxFileSize?: number // in bytes; unlimited when omitted
   acceptedFileTypes?: Accept
   disabled?: boolean
 }

@@ -10,11 +10,6 @@ import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
 
 const MAX_FILES = 5
-const MAX_FILE_SIZE = 100 * 1024 * 1024 // 100MB
-const ACCEPTED_FILE_TYPES = {
-  'image/*': ['.png', '.jpg'],
-  'application/pdf': ['.pdf'],
-}
 
 /**
  * SocialInput upsert-action bar for the comment editor: the attach icon is the
@@ -27,8 +22,6 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target 
       as="button"
       icon={<AttachmentIcon />}
       maxFiles={MAX_FILES}
-      maxFileSize={MAX_FILE_SIZE}
-      acceptedFileTypes={ACCEPTED_FILE_TYPES}
       autoAttach
     />
     <IconButton disabled aria-label="mention">

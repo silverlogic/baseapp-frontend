@@ -8,11 +8,16 @@ import { useFileUploadStore } from '../../../context/FileUploadProvider'
 import { uploadChunks } from '../../../utils'
 import { useChunkedUpload } from '../index'
 
-vi.mock('@baseapp-frontend/utils', () => ({
+const sendToast = vi.fn()
+vi.mock('@baseapp-frontend/utils', async () => ({
   axios: {
     post: vi.fn(),
     delete: vi.fn(),
   },
+  getApiErrorMessage: (
+    await vi.importActual<typeof import('@baseapp-frontend/utils')>('@baseapp-frontend/utils')
+  ).getApiErrorMessage,
+  useNotification: () => ({ sendToast }),
 }))
 
 vi.mock('../../../utils', async () => ({
@@ -81,6 +86,24 @@ describe('useChunkedUpload', () => {
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
     expect(progress.status).toBe(FileUploadStatus.FAILED)
     expect(progress.error).toBe('initiate failed')
+  })
+
+  it('shows the backend reason for a rejected upload, in the file and in a toast', async () => {
+    mockAxiosPost.mockRejectedValue(
+      Object.assign(new Error('Request failed with status code 400'), {
+        response: { data: ['File is too large. The maximum size is 5.0\u00a0GB.'] },
+      }),
+    )
+
+    const { result } = renderHook(() => useChunkedUpload())
+    await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
+
+    const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
+    expect(progress.error).toBe('File is too large. The maximum size is 5.0\u00a0GB.')
+    expect(sendToast).toHaveBeenCalledWith(
+      'video.mp4: File is too large. The maximum size is 5.0\u00a0GB.',
+      { type: 'error' },
+    )
   })
 
   it('resumeUpload uploads only the chunks without recorded ETags', async () => {

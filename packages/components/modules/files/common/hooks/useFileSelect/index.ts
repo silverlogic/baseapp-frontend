@@ -16,7 +16,7 @@ const buildAcceptAttr = (acceptedFileTypes?: Accept): string | undefined => {
 export const useFileSelect = ({
   onFilesSelected,
   maxFiles = 10,
-  maxFileSize = 100 * 1024 * 1024,
+  maxFileSize,
   acceptedFileTypes,
   disabled = false,
 }: UseFileSelectParams): UseFileSelectReturn => {
@@ -41,7 +41,8 @@ export const useFileSelect = ({
       onChange: (event) => {
         const { target } = event
         const selected = Array.from(target.files ?? [])
-          .filter((file) => file.size <= maxFileSize)
+          // No limit by default: the backend enforces MAX_FILE_UPLOAD_SIZE and the error is toasted.
+          .filter((file) => maxFileSize === undefined || file.size <= maxFileSize)
           .slice(0, maxFiles)
         // Reset so selecting the same file again re-triggers onChange.
         target.value = ''

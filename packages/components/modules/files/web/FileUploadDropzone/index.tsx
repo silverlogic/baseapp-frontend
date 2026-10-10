@@ -5,12 +5,13 @@ import { useCallback } from 'react'
 
 import { Dropzone } from '@baseapp-frontend/design-system/components/web/dropzones'
 
+import { formatFileSize } from '../../common/utils/formatters'
 import type { FileUploadDropzoneProps } from './types'
 
 const FileUploadDropzone: FC<FileUploadDropzoneProps> = ({
   onFilesSelected,
   maxFiles = 10,
-  maxFileSize = 100 * 1024 * 1024, // 100MB default
+  maxFileSize,
   acceptedFileTypes,
   disabled,
 }) => {
@@ -28,10 +29,15 @@ const FileUploadDropzone: FC<FileUploadDropzoneProps> = ({
       onSelect={handleSelect}
       onRemove={() => {}}
       multiple={maxFiles > 1}
-      maxFileSize={maxFileSize / (1024 * 1024)} // Convert bytes to MB
+      // Dropzone takes MB; unlimited when omitted.
+      maxFileSize={maxFileSize ? maxFileSize / (1024 * 1024) : Infinity}
       asBase64={false} // Keep as File objects for chunked upload
       title="Upload Files"
-      subTitle={`Max ${maxFiles} files, ${Math.round(maxFileSize / (1024 * 1024))}MB each`}
+      subTitle={
+        maxFileSize
+          ? `Max ${maxFiles} files, ${formatFileSize(maxFileSize)} each`
+          : `Max ${maxFiles} files`
+      }
       includeActionButton={false}
       DropzoneOptions={{
         disabled,
