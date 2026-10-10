@@ -6,6 +6,7 @@ import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs
 
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
 import { FetchParameters, useActivityLogs } from '../../common'
@@ -19,6 +20,7 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
   LogGroups = DefaultLogGroups,
   LogGroupsProps,
 }) => {
+  const intl = useIntl()
   const [fetchParameters, setFetchParameters] = useState<FetchParameters>({
     createdFrom: null,
     createdTo: null,
@@ -60,10 +62,13 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
     <Box p={2} justifyContent="center" minWidth="100%" display="flex" alignItems="center">
       <Box justifyContent="center" maxWidth={600} width="100%" mx="auto">
         <Typography component="h4" variant="h4" mb={4}>
-          Activity Log
+          {intl.formatMessage({ id: 'activityLog.title', defaultMessage: 'Activity Log' })}
         </Typography>
         <Searchbar
-          placeholder="Search by user"
+          placeholder={intl.formatMessage({
+            id: 'activityLog.search.placeholder',
+            defaultMessage: 'Search by user',
+          })}
           name="search"
           control={control}
           onChange={handleSearchChange}
@@ -82,7 +87,12 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
         {!isPending &&
           (fetchParameters.createdFrom != null || fetchParameters.createdTo != null) &&
           emptyLogsList && (
-            <SearchNotFoundState message="No results found for the selected date range." />
+            <SearchNotFoundState
+              message={intl.formatMessage({
+                id: 'activityLog.dateFilter.notFound',
+                defaultMessage: 'No results found for the selected date range.',
+              })}
+            />
           )}
         <LogGroups
           logGroups={logGroups}

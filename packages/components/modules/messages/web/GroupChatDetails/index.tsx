@@ -6,6 +6,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { ConnectionHandler, usePaginationFragment, usePreloadedQuery } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -21,6 +22,7 @@ import {
   useTitleAndImage,
 } from '../../common'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
+import { SHARED_MESSAGES } from '../__shared__/constants'
 import DefaultBody from './Body'
 import DefaultHeader from './Header'
 import DefaultProfileCard from './ProfileCard'
@@ -39,6 +41,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
   queryRef,
   VirtuosoProps = {},
 }) => {
+  const intl = useIntl()
   const { chatRoom: group } = usePreloadedQuery<GroupDetailsQueryType>(GroupDetailsQuery, queryRef)
   const { currentProfile } = useCurrentProfile()
   const { image, title } = useTitleAndImage(group)
@@ -67,7 +70,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more profiles"
+        aria-label={intl.formatMessage(SHARED_MESSAGES.loadingMoreProfiles)}
       />
     )
   }

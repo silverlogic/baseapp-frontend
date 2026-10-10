@@ -10,6 +10,7 @@ import {
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Badge as DefaultBadge, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
@@ -24,6 +25,8 @@ import {
   useTitleAndImage,
   useUnreadChatMutation,
 } from '../../../common'
+import { SHARED_MESSAGES } from '../../__shared__/constants'
+import { CHAT_ROOM_ITEM_MESSAGES } from './constants'
 import { Dot, StyledChatCard } from './styled'
 import { ChatRoomItemProps } from './types'
 import { formatDate, getLastMessagePreview } from './utils'
@@ -36,6 +39,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   BadgeProps = {},
   isInArchivedTab = false,
 }) => {
+  const intl = useIntl()
   const lastMessageFragment = useFragment<LastMessageFragment$key>(LastMessageFragment, roomRef)
   const headerFragment = useFragment<TitleFragment$key>(TitleFragment, roomRef)
   const unreadMessagesCountFragment = useFragment<UnreadMessagesCountFragment$key>(
@@ -76,13 +80,15 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
 
   return (
     <ActionsOverlay
-      title="Chat"
+      title={intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.itemTitle)}
       offsetTop={-12}
       actions={[
         {
           disabled: isMutationInFlight,
           icon: !isInArchivedTab ? <ArchiveIcon /> : <UnarchiveIcon />,
-          label: !isInArchivedTab ? 'Archive Chat' : 'Unarchive Chat',
+          label: intl.formatMessage(
+            !isInArchivedTab ? SHARED_MESSAGES.archiveChat : SHARED_MESSAGES.unarchiveChat,
+          ),
           onClick: () => {
             if (currentProfile?.id) {
               commit({
@@ -101,7 +107,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
         {
           disabled: hasUnreadMessages,
           icon: <UnreadIcon />,
-          label: 'Mark as Unread',
+          label: intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.markAsUnread),
           onClick: unreadChat,
           hasPermission: true,
           closeOnClick: true,
@@ -110,6 +116,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
       showDeleteButton
       handleDeleteItem={() => {}}
       isDeletingItem={false}
+      DeleteDialogProps={{ title: intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.deleteDialogTitle) }}
       ref={chatCardRef}
     >
       <StyledChatCard
@@ -133,7 +140,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
               alignItems="center"
             >
               <Typography variant="caption" color="text.secondary" noWrap>
-                {formatDate(lastMessageTime)}
+                {formatDate(intl, lastMessageTime)}
               </Typography>
               <Dot />
               <TypographyWithEllipsis variant="caption" color="text.secondary">

@@ -5,10 +5,17 @@ import { FC } from 'react'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { LoadingButton } from '@mui/lab'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../../profiles/common'
-import { LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS, useLeaveGroup } from '../../../common'
+import {
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS,
+  useLeaveGroup,
+} from '../../../common'
+import { SHARED_MESSAGES } from '../constants'
+import { LEAVE_GROUP_DIALOG_COPY_MESSAGES, LEAVE_GROUP_DIALOG_MESSAGES } from './constants'
 import { LeaveGroupDialogProps } from './types'
 
 const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
@@ -21,18 +28,27 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
   roomId,
   isSoleAdmin = false,
 }) => {
+  const intl = useIntl()
   const removingParticipantData = useFragment(
     ProfileItemFragment,
     removingParticipantFragmentRef ?? null,
   )
 
-  const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
+  const { getLeaveGroupDialogTextCopyKeys, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
     profileId,
     removingParticipantId: removingParticipantData?.id ?? profileId,
     roomId,
     isSoleAdmin,
     onClose,
+    removeSuccessMessage: intl.formatMessage(LEAVE_GROUP_DIALOG_MESSAGES.removeSuccess),
   })
+
+  const getCopyMessages = () => {
+    const { action, role } = getLeaveGroupDialogTextCopyKeys()
+    return action === LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
+      ? LEAVE_GROUP_DIALOG_COPY_MESSAGES[action][role]
+      : LEAVE_GROUP_DIALOG_COPY_MESSAGES[action][LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN]
+  }
 
   const getTitle = () => {
     if (customTitle) return customTitle
@@ -40,16 +56,18 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
     // If the member being removed is NOT the current user's profile,
     // and we have access to that member's name data, display their actual name
     if (profileId !== removingParticipantData?.id && removingParticipantData?.name) {
-      return `Remove ${removingParticipantData.name}?`
+      return intl.formatMessage(LEAVE_GROUP_DIALOG_MESSAGES.removeNamedTitle, {
+        name: removingParticipantData.name,
+      })
     }
 
-    return getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE)
+    return intl.formatMessage(getCopyMessages().title)
   }
 
   const getContent = () => {
     if (customContent) return customContent
 
-    return getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)
+    return intl.formatMessage(getCopyMessages().content)
   }
 
   return (
@@ -63,7 +81,12 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           disabled={isMutationInFlight}
           loading={isMutationInFlight}
         >
-          {removingParticipantData?.id === profileId ? 'Leave group' : 'Remove'}
+          {intl.formatMessage(
+            getLeaveGroupDialogTextCopyKeys().action ===
+              LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
+              ? LEAVE_GROUP_DIALOG_MESSAGES.leaveGroupButton
+              : SHARED_MESSAGES.remove,
+          )}
         </LoadingButton>
       }
       onClose={onClose}
