@@ -28,7 +28,7 @@
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@formatjs/cli": "^6.7.4",
+    "@formatjs/cli": "catalog:",
     "@types/luxon": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",

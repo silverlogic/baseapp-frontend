@@ -10,6 +10,7 @@ import {
   CircularProgress,
   TextField,
 } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { AutocompleteFieldProps } from './types'
 
@@ -24,7 +25,7 @@ import { AutocompleteFieldProps } from './types'
  */
 const AutocompleteField: FC<AutocompleteFieldProps> = ({
   isPending = false,
-  placeholder = 'Search',
+  placeholder,
   renderInput,
   selectOnFocus = true,
   handleHomeEndKeys = true,
@@ -33,36 +34,48 @@ const AutocompleteField: FC<AutocompleteFieldProps> = ({
   error,
   helperText,
   ...props
-}) => (
-  <Autocomplete
-    selectOnFocus={selectOnFocus}
-    handleHomeEndKeys={handleHomeEndKeys}
-    disableClearable={disableClearable}
-    freeSolo={freeSolo}
-    renderInput={
-      renderInput ??
-      ((params: AutocompleteRenderInputParams) => (
-        <TextField
-          {...params}
-          placeholder={placeholder}
-          error={error}
-          helperText={helperText}
-          InputProps={{
-            ...params.InputProps,
-            // Loading indicator on the right (next to the dropdown arrow) so it never
-            // shifts the typed text the way a startAdornment would.
-            endAdornment: (
-              <>
-                {isPending ? <CircularProgress color="inherit" size={16} sx={{ mr: 0.5 }} /> : null}
-                {params.InputProps.endAdornment}
-              </>
-            ),
-          }}
-        />
-      ))
-    }
-    {...props}
-  />
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <Autocomplete
+      selectOnFocus={selectOnFocus}
+      handleHomeEndKeys={handleHomeEndKeys}
+      disableClearable={disableClearable}
+      freeSolo={freeSolo}
+      renderInput={
+        renderInput ??
+        ((params: AutocompleteRenderInputParams) => (
+          <TextField
+            {...params}
+            placeholder={
+              placeholder ??
+              intl.formatMessage({
+                id: 'designSystem.autocompleteField.placeholder',
+                defaultMessage: 'Search',
+              })
+            }
+            error={error}
+            helperText={helperText}
+            InputProps={{
+              ...params.InputProps,
+              // Loading indicator on the right (next to the dropdown arrow) so it never
+              // shifts the typed text the way a startAdornment would.
+              endAdornment: (
+                <>
+                  {isPending ? (
+                    <CircularProgress color="inherit" size={16} sx={{ mr: 0.5 }} />
+                  ) : null}
+                  {params.InputProps.endAdornment}
+                </>
+              ),
+            }}
+          />
+        ))
+      }
+      {...props}
+    />
+  )
+}
 
 export default withController(AutocompleteField, { shouldDebounce: true })

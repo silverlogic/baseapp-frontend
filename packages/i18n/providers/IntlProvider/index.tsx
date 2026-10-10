@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
@@ -14,6 +14,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   locale: initialLocale,
   defaultLocale = DEFAULT_LOCALE,
   additionalMessages,
+  additionalMessagesByLocale,
   initialCookies,
 }) => {
   // Detect locale from cookies or use provided locale
@@ -33,26 +34,29 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
-  const [messages, setMessages] = useState<Record<string, string>>(
-    getMessages(locale, additionalMessages),
+  const getLocaleMessages = useCallback(
+    (target: Locale) =>
+      getMessages(target, { ...additionalMessages, ...additionalMessagesByLocale?.[target] }),
+    [additionalMessages, additionalMessagesByLocale],
   )
+
+  const messages = useMemo(() => getLocaleMessages(locale), [getLocaleMessages, locale])
 
   useEffect(() => {
     // Load locale from storage if not provided via props or cookies
     if (!initialLocale && !initialCookies) {
-      getCurrentLocale().then((currentLocale) => {
-        setLocale(currentLocale)
-        setMessages(getMessages(currentLocale, additionalMessages))
-      })
+      getCurrentLocale()
+        .then(setLocale)
+        // Keep the default locale if the stored language can't be read.
+        .catch(() => undefined)
     }
-  }, [initialLocale, initialCookies, additionalMessages])
+  }, [initialLocale, initialCookies])
 
   useEffect(() => {
     if (initialLocale && initialLocale !== locale) {
       setLocale(initialLocale)
-      setMessages(getMessages(initialLocale, additionalMessages))
     }
-  }, [initialLocale, locale, additionalMessages])
+  }, [initialLocale, locale])
 
   return (
     <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>

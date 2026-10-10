@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 
 import { CloseRounded as CloseRoundedIcon } from '@mui/icons-material'
+import { useIntl } from 'react-intl'
 
 import { FileWrapper, RemoveFileButton } from '../styled'
 import { DropzonePreviewProps } from '../types'
@@ -11,6 +12,7 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
   handleRemoveFile,
   onFileClick,
 }) => {
+  const intl = useIntl()
   const [objectUrl, setObjectUrl] = useState<string | undefined>(undefined)
 
   useEffect(() => {
@@ -36,7 +38,14 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
       >
         <img
           src={imageUrl}
-          alt={typeof file !== 'string' ? (file as File).name : 'preview'}
+          alt={
+            typeof file !== 'string'
+              ? (file as File).name
+              : intl.formatMessage({
+                  id: 'designSystem.dropzone.preview.imageAlt',
+                  defaultMessage: 'preview',
+                })
+          }
           width={isMini ? 72 : undefined}
           height={isMini ? 72 : undefined}
           style={
@@ -49,7 +58,10 @@ const DropzonePreview: FC<DropzonePreviewProps> = ({
 
       <RemoveFileButton
         type="button"
-        aria-label="Remove file"
+        aria-label={intl.formatMessage({
+          id: 'designSystem.dropzone.preview.removeFile',
+          defaultMessage: 'Remove file',
+        })}
         onClick={(event) => {
           event.stopPropagation()
           handleRemoveFile()

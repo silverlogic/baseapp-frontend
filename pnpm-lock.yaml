@@ -25,6 +25,9 @@ catalogs:
       specifier: ^3.2.0
       version: 3.3.0
   default:
+    '@formatjs/cli':
+      specifier: 6.16.33
+      version: 6.16.33
     '@formatjs/intl':
       specifier: 2.10.10
       version: 2.10.10
@@ -824,7 +827,7 @@ importers:
         specifier: catalog:test
         version: 9.9.0
       '@formatjs/cli':
-        specifier: ^6.7.4
+        specifier: 'catalog:'
         version: 6.16.33
       '@playwright/test':
         specifier: 1.62.0
@@ -1138,6 +1141,9 @@ importers:
       react-international-phone:
         specifier: 'catalog:'
         version: 4.5.0(react@19.2.0)
+      react-intl:
+        specifier: 'catalog:'
+        version: 7.1.14(react@19.2.0)(typescript@5.9.2)
       react-lazy-load-image-component:
         specifier: catalog:design-system
         version: 1.6.3(react@19.2.0)
@@ -1427,7 +1433,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@formatjs/cli':
-        specifier: ^6.7.4
+        specifier: 'catalog:'
         version: 6.16.33
       '@types/luxon':
         specifier: 'catalog:'
@@ -1645,7 +1651,7 @@ importers:
         specifier: workspace:*
         version: link:../tsconfig
       '@formatjs/cli':
-        specifier: ^6.7.4
+        specifier: 'catalog:'
         version: 6.16.33
       '@testing-library/jest-dom':
         specifier: catalog:test
@@ -1731,6 +1737,9 @@ importers:
       react:
         specifier: catalog:react19
         version: 19.2.0
+      react-intl:
+        specifier: 'catalog:'
+        version: 7.1.14(react@19.2.0)(typescript@5.9.2)
       react-relay:
         specifier: catalog:graphql
         version: 19.0.0(react@19.2.0)

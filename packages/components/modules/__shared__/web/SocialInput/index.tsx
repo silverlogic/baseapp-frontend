@@ -4,6 +4,8 @@ import { KeyboardEvent, KeyboardEventHandler, forwardRef } from 'react'
 
 import { SocialTextField as DefaultSocialTextField } from '@baseapp-frontend/design-system/components/web/inputs'
 
+import { useIntl } from 'react-intl'
+
 import { SOCIAL_UPSERT_FORM } from '../../common'
 import DefaultSocialUpsertActions from '../SocialUpsertActions'
 import DefaultSubmitActions from './SubmitActions'
@@ -61,7 +63,7 @@ import { SocialInputProps } from './types'
 const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
   (
     {
-      placeholder = 'Message...',
+      placeholder,
       autoFocusInput,
       mode,
       SocialTextField = DefaultSocialTextField,
@@ -84,6 +86,7 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
     },
     ref,
   ) => {
+    const intl = useIntl()
     const defaultKeyDown = (event: KeyboardEvent<HTMLDivElement>, onSubmit: VoidFunction) => {
       if (event.key === 'Enter' && event.ctrlKey) {
         event.preventDefault()
@@ -111,7 +114,13 @@ const SocialInput = forwardRef<HTMLInputElement, SocialInputProps>(
           name={SOCIAL_UPSERT_FORM.body}
           control={form.control}
           onKeyDown={handleKeyDown}
-          placeholder={placeholder}
+          placeholder={
+            placeholder ??
+            intl.formatMessage({
+              id: 'shared.socialInput.placeholder',
+              defaultMessage: 'Message...',
+            })
+          }
           autoFocus={autoFocusInput}
           mode={mode}
           isReply={isReply}
