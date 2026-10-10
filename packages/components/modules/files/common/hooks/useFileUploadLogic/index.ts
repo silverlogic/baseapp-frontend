@@ -1,12 +1,22 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { ConnectionHandler } from 'react-relay'
+import { useShallow } from 'zustand/react/shallow'
 
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
+import type { FileUploadProgress } from '../../types'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { AttachOptions, UseFileUploadLogicParams, UseFileUploadLogicReturn } from './types'
+
+/** Relay ids of the finished uploads in `scope`. */
+const completedRelayIdsIn = (files: Iterable<FileUploadProgress>, scope: string) =>
+  Array.from(files).flatMap((file) =>
+    file.scope === scope && file.status === FileUploadStatus.COMPLETED && file.fileRelayId
+      ? [file.fileRelayId]
+      : [],
+  )
 
 /**
  * Hook that orchestrates the file upload and attach logic
@@ -42,14 +52,14 @@ export const useFileUploadLogic = ({
           connections: [connectionID],
         },
         onCompleted: () => {
+          // Remove exactly the files that were just attached — Relay now serves
+          // them from the target's connection. Clearing the whole scope here
+          // would also discard uploads the user started in the meantime.
+          const store = useFileUploadStore.getState()
+          Array.from(store.files.values())
+            .filter((file) => file.fileRelayId && fresh.includes(file.fileRelayId))
+            .forEach((file) => store.removeFile(file.id))
           if (clearAfter) {
-            // Remove exactly the files that were just attached — Relay now serves
-            // them from the target's connection. Clearing the whole scope here
-            // would also discard uploads the user started in the meantime.
-            const store = useFileUploadStore.getState()
-            Array.from(store.files.values())
-              .filter((file) => file.fileRelayId && fresh.includes(file.fileRelayId))
-              .forEach((file) => store.removeFile(file.id))
             setResetKey((prev) => prev + 1)
           }
           onAttachComplete?.()
@@ -64,14 +74,27 @@ export const useFileUploadLogic = ({
     [attachFiles, targetObjectId, onAttachComplete, onError],
   )
 
-  // Resume/retry finish outside the original batch; attach them when they land so
-  // the file is not silently dropped.
-  const { uploadFile } = useChunkedUpload({
-    onUploadComplete: (_fileId, fileRelayId) => {
-      if (!autoAttach || batchesRef.current > 0) return
-      attach([fileRelayId], { clearAfter: false })
-    },
-  })
+  const { uploadFile } = useChunkedUpload()
+
+  // Resume/retry finish outside the original batch, started from the list item's own
+  // useChunkedUpload, so no callback here sees them. Pick them up from the store
+  // instead; while a batch runs it attaches its own files and this waits.
+  const attachCompletedOutsideBatch = useCallback(() => {
+    if (!autoAttach || !targetObjectId || batchesRef.current > 0) return
+    attach(completedRelayIdsIn(useFileUploadStore.getState().files.values(), targetObjectId), {
+      clearAfter: false,
+    })
+  }, [autoAttach, targetObjectId, attach])
+
+  const completedRelayIds = useFileUploadStore(
+    useShallow((state) =>
+      autoAttach && targetObjectId ? completedRelayIdsIn(state.files.values(), targetObjectId) : [],
+    ),
+  )
+
+  useEffect(() => {
+    attachCompletedOutsideBatch()
+  }, [completedRelayIds, attachCompletedOutsideBatch])
 
   const handleFilesSelected = useCallback(
     async (selectedFiles: File[]) => {
@@ -113,9 +136,19 @@ export const useFileUploadLogic = ({
         onError?.(error instanceof Error ? error : new Error('Upload failed'))
       } finally {
         batchesRef.current -= 1
+        // Attach anything that completed outside this batch while it was running.
+        attachCompletedOutsideBatch()
       }
     },
-    [uploadFile, autoAttach, targetObjectId, onUploadComplete, onError, attach],
+    [
+      uploadFile,
+      autoAttach,
+      targetObjectId,
+      onUploadComplete,
+      onError,
+      attach,
+      attachCompletedOutsideBatch,
+    ],
   )
 
   return {
