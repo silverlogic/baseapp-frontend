@@ -8,11 +8,23 @@ import { TextField as MUITextField, MenuItem, Theme, useMediaQuery } from '@mui/
 
 import { PureSelectFieldProps, SelectFieldProps } from './types'
 
-const SelectField: FC<SelectFieldProps> = ({ isResponsive = true, options, ...props }) => {
+const SelectField: FC<SelectFieldProps> = ({
+  isResponsive = true,
+  options,
+  onChange,
+  ...props
+}) => {
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
 
   return (
-    <MUITextField select size={isMobile && isResponsive ? 'small' : 'medium'} fullWidth {...props}>
+    <MUITextField
+      select
+      size={isMobile && isResponsive ? 'small' : 'medium'}
+      fullWidth
+      // drop MUI's second `child` arg so withController stores event.target.value
+      onChange={(event) => onChange?.(event)}
+      {...props}
+    >
       {options.map((option) => (
         <MenuItem key={option.value} value={option.value}>
           {option.label}
