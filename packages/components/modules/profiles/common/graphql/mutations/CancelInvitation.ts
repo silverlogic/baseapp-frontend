@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { CancelInvitationMutation } from '../../../../../__generated__/CancelInvitationMutation.graphql'
@@ -21,6 +22,7 @@ export const useCancelInvitationMutation = (): [
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<CancelInvitationMutation>(
     CancelInvitationMutationQuery,
   )
@@ -29,19 +31,29 @@ export const useCancelInvitationMutation = (): [
     commitMutation({
       ...config,
       onCompleted: (response, errors) => {
+        const removeFailedMessage = intl.formatMessage({
+          id: 'profiles.members.cancelInvitation.failed',
+          defaultMessage: 'Invitation could not be removed',
+        })
         const errorMessage = sendMutationErrorToast(
           response?.profileCancelInvitation?.errors,
           errors,
           {
-            defaultMessage: 'Invitation could not be removed',
+            defaultMessage: removeFailedMessage,
           },
         )
 
         if (!errorMessage) {
           if (response?.profileCancelInvitation?.success === false) {
-            sendToast('Invitation could not be removed', { type: 'error' })
+            sendToast(removeFailedMessage, { type: 'error' })
           } else {
-            sendToast('Invitation removed', { type: 'success' })
+            sendToast(
+              intl.formatMessage({
+                id: 'profiles.members.cancelInvitation.success',
+                defaultMessage: 'Invitation removed',
+              }),
+              { type: 'success' },
+            )
           }
         }
         config?.onCompleted?.(response, errors)

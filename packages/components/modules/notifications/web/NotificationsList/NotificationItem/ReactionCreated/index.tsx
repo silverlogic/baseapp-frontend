@@ -2,6 +2,8 @@ import { FC } from 'react'
 
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
+
 import DefaultNotificationAvatar from '../Notification/NotificationAvatar'
 import DefaultNotificationHeader from '../Notification/NotificationHeader'
 import {
@@ -19,8 +21,16 @@ const ReactionCreated: FC<ReactionCreatedProps> = ({
   NotificationHeader = DefaultNotificationHeader,
   NotificationHeaderProps = {},
 }) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const message = `liked your ${notification.target?.__typename?.toLowerCase?.() ?? ''}`
+  const intl = useIntl()
+  const message = intl.formatMessage(
+    {
+      id: 'notifications.reactionCreated.message',
+      defaultMessage:
+        'liked {target, select, comment {your comment} contentpost {your contentpost} file {your file} page {your page} other {your {target}}}',
+    },
+    // eslint-disable-next-line no-underscore-dangle
+    { target: notification.target?.__typename?.toLowerCase?.() ?? '' },
+  )
 
   return (
     <NotificationRoot>

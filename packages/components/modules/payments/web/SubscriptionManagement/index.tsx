@@ -1,8 +1,8 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, ReactNode, useEffect, useMemo, useState } from 'react'
 
-import { formatDateFromApi, useNotification } from '@baseapp-frontend/utils'
+import { useNotification } from '@baseapp-frontend/utils'
 
 import { Check } from '@mui/icons-material'
 import {
@@ -23,14 +23,16 @@ import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import PaymentDropdown from '../PaymentDropDown'
-import { SUBSCRIPTIONS_URL } from '../constants'
+import { PAYMENTS_MESSAGES, SUBSCRIPTIONS_URL } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { getStripePromise } from '../utils/stripe'
 import CancelSubscriptionModal from './CancelSubscriptionModal'
 import FreePlanComponent from './FreePlanComponent'
+import { SUBSCRIPTION_STATUS_MESSAGES } from './constants'
 import {
   ColumnFlexContainer,
   PaymentMethodContainer,
@@ -39,6 +41,8 @@ import {
 } from './styled'
 import { SubscriptionManagementProps } from './types'
 import { getChipLabelAndColorByStatus } from './utils'
+
+const renderBold = (chunks: ReactNode[]) => <strong>{chunks}</strong>
 
 const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) => {
   const [lastAddedPaymentMethodIdDuringSession, setLastAddedPaymentMethodIdDuringSession] =
@@ -77,6 +81,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     invalidateAfterCancel,
   )
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const elements = useElements()
   const stripe = useStripe()
   const searchParams = useSearchParams()
@@ -90,16 +95,25 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
       queryClient.invalidateQueries({
         queryKey: [STRIPE_API_KEY.getSubscription(subscriptionId ?? '')],
       })
-      sendToast('Subscription updated successfully.', { type: 'success' })
+      sendToast(intl.formatMessage(PAYMENTS_MESSAGES.subscriptionUpdated), { type: 'success' })
     },
     onError: (error) => {
       console.error('Error updating subscription:', error)
-      sendToast(`Failed to update payment method`, { type: 'error' })
+      sendToast(
+        intl.formatMessage({
+          id: 'payments.subscription.updatePaymentMethodFailed',
+          defaultMessage: 'Failed to update payment method',
+        }),
+        { type: 'error' },
+      )
     },
   })
 
   const amountDue = (subscription?.upcomingInvoice?.amountDue ?? 0) / 100
-  const nextPaymentAttempt = formatDateFromApi(subscription?.upcomingInvoice?.nextPaymentAttempt)
+  const nextPaymentAttemptDate = subscription?.upcomingInvoice?.nextPaymentAttempt
+  const nextPaymentAttempt = nextPaymentAttemptDate
+    ? intl.formatDate(nextPaymentAttemptDate, { year: '2-digit', month: '2-digit', day: '2-digit' })
+    : ''
   const hasNextBill = subscription?.status === 'active'
   const hasSubscription = customer?.subscriptions?.length && customer.subscriptions.length > 0
   const marketingFeatures = subscription?.product?.marketingFeatures ?? []
@@ -116,6 +130,8 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
     return fallbackDefault ? fallbackDefault.id : paymentMethods[0]?.id
   }, [paymentMethods, subscription?.defaultPaymentMethod, lastAddedPaymentMethodIdDuringSession])
   const { label, color } = getChipLabelAndColorByStatus(subscription?.status ?? '')
+  const statusMessage = SUBSCRIPTION_STATUS_MESSAGES[label]
+  const statusLabel = statusMessage ? intl.formatMessage(statusMessage) : label
 
   const handleSetupSuccess = (paymentMethodId: string) => {
     if (paymentMethodId) {
@@ -158,7 +174,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Typography variant="h4" component="h2">
-        Subscription
+        <FormattedMessage {...PAYMENTS_MESSAGES.subscription} />
       </Typography>
       {isLoading && <CircularProgress sx={{ margin: 'auto' }} />}
       {!isLoading && (
@@ -168,9 +184,13 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
               <SubscriptionPlanContainer>
                 <RowFlexContainer>
                   <Typography variant="h4" component="p">
-                    {subscription?.product?.name ?? 'Subscription Plan'}
+                    {subscription?.product?.name ??
+                      intl.formatMessage({
+                        id: 'payments.subscription.planFallback',
+                        defaultMessage: 'Subscription Plan',
+                      })}
                   </Typography>
-                  {label && color && <Chip label={label} color={color} variant="soft" />}
+                  {label && color && <Chip label={statusLabel} color={color} variant="soft" />}
                 </RowFlexContainer>
                 <Typography variant="body1" component="p">
                   {subscription?.product?.description ?? ''}
@@ -201,18 +221,34 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
               </SubscriptionPlanContainer>
               <PaymentMethodContainer>
                 <ColumnFlexContainer>
-                  <Typography variant="h6">Payment</Typography>
+                  <Typography variant="h6">
+                    <FormattedMessage {...PAYMENTS_MESSAGES.payment} />
+                  </Typography>
                   {nextPaymentAttempt && hasNextBill && (
                     <Typography variant="body2">
-                      Your next bill is{' '}
                       {amountDue !== 0 ? (
-                        <>
-                          for <strong>${amountDue.toFixed(2)}</strong>
-                        </>
+                        <FormattedMessage
+                          id="payments.subscription.nextBill"
+                          defaultMessage="Your next bill is for <b>{amount}</b> on <b>{date}</b>"
+                          values={{
+                            amount: intl.formatNumber(amountDue, {
+                              style: 'currency',
+                              currency: 'USD',
+                            }),
+                            date: nextPaymentAttempt,
+                            b: renderBold,
+                          }}
+                        />
                       ) : (
-                        'free'
-                      )}{' '}
-                      on <strong>{nextPaymentAttempt}</strong>
+                        <FormattedMessage
+                          id="payments.subscription.nextBillFree"
+                          defaultMessage="Your next bill is free on <b>{date}</b>"
+                          values={{
+                            date: nextPaymentAttempt,
+                            b: renderBold,
+                          }}
+                        />
+                      )}
                     </Typography>
                   )}
                 </ColumnFlexContainer>
@@ -250,7 +286,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
                 width: 'fit-content',
               }}
             >
-              Cancel Subscription
+              <FormattedMessage {...PAYMENTS_MESSAGES.cancelSubscription} />
             </Button>
             <Button
               variant="contained"
@@ -261,7 +297,7 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
                 width: 'fit-content',
               }}
             >
-              Change Plan
+              <FormattedMessage {...PAYMENTS_MESSAGES.changePlan} />
             </Button>
           </Box>
           <CancelSubscriptionModal

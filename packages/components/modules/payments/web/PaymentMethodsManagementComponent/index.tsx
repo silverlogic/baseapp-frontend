@@ -10,8 +10,10 @@ import { Add } from '@mui/icons-material'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, Menu, MenuItem, Typography } from '@mui/material'
 import { Elements, useElements, useStripe } from '@stripe/react-stripe-js'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import AddCardModal from '../AddCardModal'
+import { PAYMENTS_MESSAGES } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { getStripePromise } from '../utils/stripe'
 import PaymentMethodsItem from './PaymentMethodsItem'
@@ -27,6 +29,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string | null>(null)
 
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const { useListPaymentMethods, useDeletePaymentMethod, useUpdatePaymentMethod, useSetupIntent } =
     useStripeHook()
   const elements = useElements()
@@ -40,20 +43,54 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
   const { mutate: deletePaymentMethod, isPending: isDeletingPaymentMethod } =
     useDeletePaymentMethod({
       onSuccess: () => {
-        sendToast('Payment method removed successfully', { type: 'success' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.paymentMethods.removeSuccess',
+            defaultMessage: 'Payment method removed successfully',
+          }),
+          { type: 'success' },
+        )
       },
       onError: (error: any) => {
-        const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
-        sendToast(`Failed to delete payment method: ${message}`, { type: 'error' })
+        const message = getApiErrorMessage(error, {
+          defaultMessage: intl.formatMessage(PAYMENTS_MESSAGES.tryAgain),
+        })
+        sendToast(
+          intl.formatMessage(
+            {
+              id: 'payments.paymentMethods.removeFailed',
+              defaultMessage: 'Failed to delete payment method: {message}',
+            },
+            { message },
+          ),
+          { type: 'error' },
+        )
       },
     })
   const { mutate: updatePaymentMethod } = useUpdatePaymentMethod({
     onSuccess: () => {
-      sendToast('Default payment method set successfully', { type: 'success' })
+      sendToast(
+        intl.formatMessage({
+          id: 'payments.paymentMethods.setDefaultSuccess',
+          defaultMessage: 'Default payment method set successfully',
+        }),
+        { type: 'success' },
+      )
     },
     onError: (error: any) => {
-      const message = getApiErrorMessage(error, { defaultMessage: 'Please try again.' })
-      sendToast(`Failed to set default payment method: ${message}`, { type: 'error' })
+      const message = getApiErrorMessage(error, {
+        defaultMessage: intl.formatMessage(PAYMENTS_MESSAGES.tryAgain),
+      })
+      sendToast(
+        intl.formatMessage(
+          {
+            id: 'payments.paymentMethods.setDefaultFailed',
+            defaultMessage: 'Failed to set default payment method: {message}',
+          },
+          { message },
+        ),
+        { type: 'error' },
+      )
     },
   })
   const {
@@ -107,10 +144,13 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
     <Box display="flex" flexDirection="column" gap={2}>
       <Box display="flex" flexDirection="column" gap={2}>
         <Typography component="h4" variant="h4">
-          Payment Methods
+          <FormattedMessage id="payments.paymentMethods.title" defaultMessage="Payment Methods" />
         </Typography>
         <Typography component="p" variant="body2" color="text.secondary">
-          Add and manage your payment methods powered by Stripe.
+          <FormattedMessage
+            id="payments.paymentMethods.description"
+            defaultMessage="Add and manage your payment methods powered by Stripe."
+          />
         </Typography>
       </Box>
       {isLoadingMethods && <LoadingState />}
@@ -139,7 +179,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           disabled={isCreatingSetupIntent}
           sx={{ width: 'auto' }}
         >
-          Add payment method
+          <FormattedMessage {...PAYMENTS_MESSAGES.addPaymentMethod} />
         </Button>
       </Box>
       <Menu
@@ -155,7 +195,12 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
             setAnchorEl(null)
           }}
         >
-          <Typography variant="body2">Set as default</Typography>
+          <Typography variant="body2">
+            <FormattedMessage
+              id="payments.paymentMethods.setAsDefault"
+              defaultMessage="Set as default"
+            />
+          </Typography>
         </MenuItem>
         <MenuItem
           onClick={() => {
@@ -165,7 +210,7 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           }}
         >
           <Typography variant="body2" color="error">
-            Remove
+            <FormattedMessage {...PAYMENTS_MESSAGES.remove} />
           </Typography>
         </MenuItem>
       </Menu>
@@ -186,11 +231,16 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           open={isConfirmationDialogOpen}
           onClose={() => setIsConfirmationDialogOpen(false)}
           aria-labelledby="delete-payment-method-confirmation-dialog"
-          title="Remove Payment Method"
+          title={intl.formatMessage({
+            id: 'payments.paymentMethods.removeDialog.title',
+            defaultMessage: 'Remove Payment Method',
+          })}
           content={
             <Typography variant="body1" id="modal-modal-description">
-              Are you sure you want to remove this payment method? If this is your only payment
-              method, your payments will be interrupted until a new method is added.
+              <FormattedMessage
+                id="payments.paymentMethods.removeDialog.content"
+                defaultMessage="Are you sure you want to remove this payment method? If this is your only payment method, your payments will be interrupted until a new method is added."
+              />
             </Typography>
           }
           action={
@@ -202,7 +252,14 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
                 handleDeletePaymentMethod()
               }}
             >
-              {isDeletingPaymentMethod ? 'Removing...' : 'Remove'}
+              {isDeletingPaymentMethod ? (
+                <FormattedMessage
+                  id="payments.paymentMethods.removing"
+                  defaultMessage="Removing..."
+                />
+              ) : (
+                <FormattedMessage {...PAYMENTS_MESSAGES.remove} />
+              )}
             </LoadingButton>
           }
         />
