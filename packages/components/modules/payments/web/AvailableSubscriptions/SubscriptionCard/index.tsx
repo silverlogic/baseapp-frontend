@@ -8,6 +8,8 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { PAYMENTS_MESSAGES } from '../../constants'
 import { SubscriptionCardWrapper } from '../styled'
 import { SubscriptionCardProps } from '../types'
+import { PRICE_SEGMENT_TYPOGRAPHY } from './constants'
+import { getPriceSegments } from './utils'
 
 const SubscriptionCard = ({
   sub,
@@ -22,14 +24,7 @@ const SubscriptionCard = ({
     style: 'currency',
     currency: 'USD',
   })
-  const joinParts = (types: string[]) =>
-    priceParts
-      .filter((part) => types.includes(part.type))
-      .map((part) => part.value)
-      .join('')
-  const currencySymbol = joinParts(['currency'])
-  const dolarPrice = joinParts(['integer', 'group'])
-  const centsPrice = joinParts(['decimal', 'fraction'])
+  const priceSegments = getPriceSegments(priceParts)
   const marketingFeatures = sub.marketingFeatures ?? []
 
   return (
@@ -49,11 +44,11 @@ const SubscriptionCard = ({
           )}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-end">
-          <Typography variant="h4" color="text.secondary">
-            {currencySymbol}
-          </Typography>
-          <Typography variant="h2">{dolarPrice}</Typography>
-          <Typography variant="body1">{centsPrice}</Typography>
+          {priceSegments.map(({ style, value }) => (
+            <Typography key={style} {...PRICE_SEGMENT_TYPOGRAPHY[style]}>
+              {value}
+            </Typography>
+          ))}
           <Typography variant="body1" color="text.secondary">
             {selectedTerm === 'yearly' ? (
               <FormattedMessage id="payments.plans.perYear" defaultMessage="USD/yearly" />

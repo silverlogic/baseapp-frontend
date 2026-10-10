@@ -226,7 +226,7 @@
   "payments.checkout.unexpectedError": "An unexpected error occurred. Please try again.",
   "payments.checkout.updateFailed": "Failed to update subscription",
   "payments.confirmation.description": "Thank you for your subscription! Access the plan details by clicking on the button below",
-  "payments.confirmation.descriptionWithEmail": "Thank you for your subscription! Access the plan details by clicking on the button below or in the email we just sent to.",
+  "payments.confirmation.descriptionWithEmail": "Thank you for your subscription! Access the plan details by clicking on the button below or in the email we just sent to <b>{email}</b>.",
   "payments.confirmation.orderNumber": "Order Number:",
   "payments.confirmation.planDetails": "Plan Details",
   "payments.confirmation.title": "Successfully Subscribed",

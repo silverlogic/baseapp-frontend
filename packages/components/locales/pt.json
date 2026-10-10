@@ -226,7 +226,7 @@
   "payments.checkout.unexpectedError": "Ocorreu um erro inesperado. Tente novamente.",
   "payments.checkout.updateFailed": "Falha ao atualizar a assinatura",
   "payments.confirmation.description": "Obrigado pela sua assinatura! Acesse os detalhes do plano clicando no botão abaixo",
-  "payments.confirmation.descriptionWithEmail": "Obrigado pela sua assinatura! Acesse os detalhes do plano clicando no botão abaixo ou no e-mail que acabamos de enviar para.",
+  "payments.confirmation.descriptionWithEmail": "Obrigado pela sua assinatura! Acesse os detalhes do plano clicando no botão abaixo ou no e-mail que acabamos de enviar para <b>{email}</b>.",
   "payments.confirmation.orderNumber": "Número do pedido:",
   "payments.confirmation.planDetails": "Detalhes do plano",
   "payments.confirmation.title": "Assinatura realizada com sucesso",

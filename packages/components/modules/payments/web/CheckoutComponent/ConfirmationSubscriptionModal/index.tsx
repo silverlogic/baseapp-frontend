@@ -11,6 +11,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 import { maskEmail } from '../utils'
 import { ConfirmationSubscriptionModalProps } from './types'
+import { renderEmphasis } from './utils'
 
 const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
   open,
@@ -37,7 +38,8 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
               {user?.email ? (
                 <FormattedMessage
                   id="payments.confirmation.descriptionWithEmail"
-                  defaultMessage="Thank you for your subscription! Access the plan details by clicking on the button below or in the email we just sent to."
+                  defaultMessage="Thank you for your subscription! Access the plan details by clicking on the button below or in the email we just sent to <b>{email}</b>."
+                  values={{ email: maskedEmail, b: renderEmphasis }}
                 />
               ) : (
                 <FormattedMessage
@@ -45,11 +47,6 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
                   defaultMessage="Thank you for your subscription! Access the plan details by clicking on the button below"
                 />
               )}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
-              {user?.email && maskedEmail}
             </Typography>
           </Box>
           {orderNumber && (

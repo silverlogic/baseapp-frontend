@@ -226,7 +226,7 @@
   "payments.checkout.unexpectedError": "Ocurrió un error inesperado. Inténtalo de nuevo.",
   "payments.checkout.updateFailed": "No se pudo actualizar la suscripción",
   "payments.confirmation.description": "¡Gracias por tu suscripción! Accede a los detalles del plan haciendo clic en el botón de abajo",
-  "payments.confirmation.descriptionWithEmail": "¡Gracias por tu suscripción! Accede a los detalles del plan haciendo clic en el botón de abajo o en el correo electrónico que acabamos de enviar a.",
+  "payments.confirmation.descriptionWithEmail": "¡Gracias por tu suscripción! Accede a los detalles del plan haciendo clic en el botón de abajo o en el correo electrónico que acabamos de enviar a <b>{email}</b>.",
   "payments.confirmation.orderNumber": "Número de pedido:",
   "payments.confirmation.planDetails": "Detalles del plan",
   "payments.confirmation.title": "Suscripción exitosa",
