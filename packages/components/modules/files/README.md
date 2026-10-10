@@ -327,8 +327,8 @@ fragment FileItem_file on File {
 |------|------|---------|-------------|
 | target | `FilesInterface$key` | required | Relay fragment reference for the target object |
 | maxFiles | `number` | - | Maximum number of files allowed |
-| maxFileSize | `number` | - | Maximum file size in bytes |
-| acceptedFileTypes | `string[]` | - | Accepted MIME types (e.g., `['image/*', 'application/pdf']`) |
+| maxFileSize | `number` | no limit | Maximum file size in bytes; when omitted the backend's `MAX_FILE_UPLOAD_SIZE` decides and its error is toasted |
+| acceptedFileTypes | `string[]` | any type | Accepted MIME types (e.g., `['image/*', 'application/pdf']`) |
 | disabled | `boolean` | false | Disable file upload |
 | autoAttach | `boolean` | true | Automatically attach files after upload |
 | onUploadComplete | `(fileRelayIds: string[]) => void` | - | Callback when upload completes |

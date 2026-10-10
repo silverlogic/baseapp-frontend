@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { axios } from '@baseapp-frontend/utils'
+import { axios, getApiErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
@@ -27,6 +27,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   const addFile = useFileUploadStore((state) => state.addFile)
   const updateFileProgress = useFileUploadStore((state) => state.updateFileProgress)
   const updateChunkProgress = useFileUploadStore((state) => state.updateChunkProgress)
+  const { sendToast } = useNotification()
 
   /**
    * Translate a thrown upload error into store state. A pause aborts the
@@ -44,14 +45,16 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         return
       }
 
-      const errorMessage = error instanceof Error ? error.message : fallbackMessage
+      // Prefer the backend's reason (e.g. file too large) over axios' "status code 400".
+      const errorMessage = getApiErrorMessage(error, { defaultMessage: fallbackMessage })
       updateFileProgress(fileId, {
         status: FileUploadStatus.FAILED,
         error: errorMessage,
       })
+      sendToast(`${current?.fileName ?? 'File'}: ${errorMessage}`, { type: 'error' })
       options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
     },
-    [updateFileProgress, options],
+    [updateFileProgress, sendToast, options],
   )
 
   /**
