@@ -44,13 +44,7 @@ const Body: FC<BodyProps> = ({
         </GroupTitleContainer>
       </GroupHeaderContainer>
       <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
-        <Box
-          role="list"
-          aria-label={intl.formatMessage({
-            id: 'messages.groupChatDetails.membersAriaLabel',
-            defaultMessage: 'group members',
-          })}
-        >
+        <Box>
           <Typography
             variant="subtitle2"
             color="text.primary"
@@ -62,7 +56,15 @@ const Body: FC<BodyProps> = ({
             {intl.formatMessage(SHARED_MESSAGES.members)}
           </Typography>
         </Box>
-        <MembersContainer>{children}</MembersContainer>
+        <MembersContainer
+          role="group"
+          aria-label={intl.formatMessage({
+            id: 'messages.groupChatDetails.membersAriaLabel',
+            defaultMessage: 'group members',
+          })}
+        >
+          {children}
+        </MembersContainer>
       </Box>
     </Box>
   )

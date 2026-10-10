@@ -82,7 +82,8 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           loading={isMutationInFlight}
         >
           {intl.formatMessage(
-            removingParticipantData?.id === profileId
+            getLeaveGroupDialogTextCopyKeys().action ===
+              LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
               ? LEAVE_GROUP_DIALOG_MESSAGES.leaveGroupButton
               : SHARED_MESSAGES.remove,
           )}
