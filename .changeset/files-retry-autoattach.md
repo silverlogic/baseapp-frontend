@@ -8,3 +8,5 @@ original batch were attached: the retry/resume buttons run their own `useChunked
 upload completed but was never attached and disappeared on reload. `useFileUploadLogic` now picks
 completed uploads in its target's scope up from the upload store, and removes them from the store
 once attached so they no longer show as a duplicate chip.
+An attach that fails is not resent automatically; it is retried with the next upload the user
+starts, so a persistent error no longer resends the mutation on every render.

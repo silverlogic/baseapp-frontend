@@ -37,6 +37,9 @@ export const useFileUploadLogic = ({
   const attachedRef = useRef<Set<string>>(new Set())
   // Batches in flight; while one is running it owns every file that completes.
   const batchesRef = useRef(0)
+  // Relay ids whose attach failed. The effect below re-runs on unrelated renders,
+  // so these wait for the user's next upload instead of being resent in a loop.
+  const failedRef = useRef<Set<string>>(new Set())
 
   const attach = useCallback(
     (fileRelayIds: string[], { clearAfter }: AttachOptions) => {
@@ -65,8 +68,10 @@ export const useFileUploadLogic = ({
           onAttachComplete?.()
         },
         onError: (error) => {
-          // Allow a retry of the same file to attach again.
-          fresh.forEach((id) => attachedRef.current.delete(id))
+          fresh.forEach((id) => {
+            attachedRef.current.delete(id)
+            failedRef.current.add(id)
+          })
           onError?.(error)
         },
       })
@@ -81,9 +86,14 @@ export const useFileUploadLogic = ({
   // instead; while a batch runs it attaches its own files and this waits.
   const attachCompletedOutsideBatch = useCallback(() => {
     if (!autoAttach || !targetObjectId || batchesRef.current > 0) return
-    attach(completedRelayIdsIn(useFileUploadStore.getState().files.values(), targetObjectId), {
-      clearAfter: false,
-    })
+    const completed = completedRelayIdsIn(
+      useFileUploadStore.getState().files.values(),
+      targetObjectId,
+    )
+    attach(
+      completed.filter((id) => !failedRef.current.has(id)),
+      { clearAfter: false },
+    )
   }, [autoAttach, targetObjectId, attach])
 
   const completedRelayIds = useFileUploadStore(
@@ -104,6 +114,8 @@ export const useFileUploadLogic = ({
       }
 
       batchesRef.current += 1
+      // A new upload is the user's retry for attaches that failed before.
+      failedRef.current.clear()
       try {
         // Upload all files in parallel, scoped to this target so its list shows
         // only its own uploads.

@@ -12,8 +12,12 @@ vi.mock('react-relay', () => ({
   ConnectionHandler: { getConnectionID: (id: string) => `connection:${id}` },
 }))
 
+// A new commit function per render, like the real hook, so effects that depend on it re-run.
 vi.mock('../../../graphql/mutations/FileAttachToTarget', () => ({
-  useFileAttachToTargetMutation: () => [mockAttachFiles, false],
+  useFileAttachToTargetMutation: () => [
+    (config: Parameters<typeof mockAttachFiles>[0]) => mockAttachFiles(config),
+    false,
+  ],
 }))
 
 vi.mock('../../useChunkedUpload', () => ({
@@ -67,6 +71,34 @@ describe('useFileUploadLogic', () => {
     completeUpload('File:1')
 
     expect(mockAttachFiles).not.toHaveBeenCalled()
+  })
+
+  it('does not resend a failed attach on later renders', () => {
+    const { rerender } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+
+    completeUpload('File:1')
+    act(() => {
+      mockAttachFiles.mock.calls[0]![0].onError(new Error('attach failed'))
+    })
+    rerender()
+    rerender()
+
+    expect(attachedIds()).toEqual([['File:1']])
+  })
+
+  it('retries a failed attach with the next upload the user starts', async () => {
+    mockUploadFile.mockResolvedValue('File:batch')
+    const { result } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+
+    completeUpload('File:1')
+    act(() => {
+      mockAttachFiles.mock.calls[0]![0].onError(new Error('attach failed'))
+    })
+    await act(async () => {
+      await result.current.handleFilesSelected([new File(['y'], 'batch.pdf')])
+    })
+
+    expect(attachedIds()).toEqual([['File:1'], ['File:batch'], ['File:1']])
   })
 
   it('waits for a running batch, then attaches what completed meanwhile', async () => {
