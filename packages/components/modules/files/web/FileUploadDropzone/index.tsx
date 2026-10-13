@@ -30,11 +30,11 @@ const FileUploadDropzone: FC<FileUploadDropzoneProps> = ({
       onRemove={() => {}}
       multiple={maxFiles > 1}
       // Dropzone takes MB; unlimited when omitted.
-      maxFileSize={maxFileSize ? maxFileSize / (1024 * 1024) : Infinity}
+      maxFileSize={maxFileSize !== undefined ? maxFileSize / (1024 * 1024) : Infinity}
       asBase64={false} // Keep as File objects for chunked upload
       title="Upload Files"
       subTitle={
-        maxFileSize
+        maxFileSize !== undefined
           ? `Max ${maxFiles} files, ${formatFileSize(maxFileSize)} each`
           : `Max ${maxFiles} files`
       }

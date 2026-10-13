@@ -106,6 +106,22 @@ describe('useChunkedUpload', () => {
     )
   })
 
+  it('shows the backend reason for a rejected part upload', async () => {
+    mockAxiosPost.mockResolvedValueOnce(initiateResponse(1) as never)
+    mockUploadChunks.mockRejectedValue(
+      Object.assign(new Error('Failed to upload chunk 0 after 3 attempts'), {
+        response: { status: 400, data: { detail: 'Upload has expired.' } },
+      }),
+    )
+
+    const { result } = renderHook(() => useChunkedUpload())
+    await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
+
+    const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
+    expect(progress.error).toBe('Upload has expired.')
+    expect(sendToast).toHaveBeenCalledWith('video.mp4: Upload has expired.', { type: 'error' })
+  })
+
   it('resumeUpload uploads only the chunks without recorded ETags', async () => {
     const file = makeFile(3)
     const { addFile, updateFileProgress } = useFileUploadStore.getState()

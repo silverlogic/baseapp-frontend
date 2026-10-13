@@ -7,4 +7,6 @@ comment edit no longer restrict uploads to PNG/JPG/PDF up to 100MB, and `useFile
 `FileUploadDropzone` no longer default to a 100MB cap; pass `maxFileSize` / `acceptedFileTypes` to
 restrict them. Limits are left to the backend (`MAX_FILE_UPLOAD_SIZE`): when it rejects an upload,
 its reason is shown on the file and in an error toast instead of axios' generic "Request failed with
-status code 400". `formatFileSize` now reports gigabytes.
+status code 400". This includes a rejected part upload: `uploadChunk` keeps the response body
+and `uploadChunks` passes it on after its retries. `FileUploadDropzone` treats only an omitted
+`maxFileSize` as unlimited, so an explicit `0` is enforced. `formatFileSize` now reports gigabytes.
