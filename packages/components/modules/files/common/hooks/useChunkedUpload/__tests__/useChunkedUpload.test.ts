@@ -66,15 +66,39 @@ describe('useChunkedUpload', () => {
       'files/uploads',
       expect.objectContaining({ numParts: 2, partSize: CHUNK_SIZE }),
     )
-    expect(mockAxiosPost).toHaveBeenNthCalledWith(2, 'files/uploads/file-public-id/complete', {
-      parts: [
-        { partNumber: 1, etag: 'etag-0' },
-        { partNumber: 2, etag: 'etag-1' },
-      ],
-    })
+    expect(mockAxiosPost).toHaveBeenNthCalledWith(
+      2,
+      'files/uploads/file-public-id/complete',
+      {
+        parts: [
+          { partNumber: 1, etag: 'etag-0' },
+          { partNumber: 2, etag: 'etag-1' },
+        ],
+      },
+      undefined,
+    )
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
     expect(progress.status).toBe(FileUploadStatus.COMPLETED)
+  })
+
+  it('sends the upload token of an anonymous upload back when completing it', async () => {
+    mockAxiosPost
+      .mockResolvedValueOnce({ ...initiateResponse(1), uploadToken: 'token-1' } as never)
+      .mockResolvedValueOnce({} as never)
+    mockUploadChunks.mockResolvedValue(['etag-0'])
+
+    const { result } = renderHook(() => useChunkedUpload())
+    await result.current.uploadFile(makeFile(1))
+
+    expect(mockAxiosPost).toHaveBeenNthCalledWith(
+      2,
+      'files/uploads/file-public-id/complete',
+      expect.anything(),
+      { headers: { 'X-File-Upload-Token': 'token-1' } },
+    )
+    const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
+    expect(progress.uploadToken).toBe('token-1')
   })
 
   it('uploadFile marks the file failed and rethrows on error', async () => {
@@ -151,13 +175,17 @@ describe('useChunkedUpload', () => {
     expect(call.chunks).toHaveLength(1)
     expect(call.presignedUrls).toEqual(['https://s3/part-1'])
 
-    expect(mockAxiosPost).toHaveBeenCalledWith('files/uploads/file-public-id/complete', {
-      parts: [
-        { partNumber: 1, etag: 'etag-0' },
-        { partNumber: 2, etag: 'etag-1' },
-        { partNumber: 3, etag: 'etag-2' },
-      ],
-    })
+    expect(mockAxiosPost).toHaveBeenCalledWith(
+      'files/uploads/file-public-id/complete',
+      {
+        parts: [
+          { partNumber: 1, etag: 'etag-0' },
+          { partNumber: 2, etag: 'etag-1' },
+          { partNumber: 3, etag: 'etag-2' },
+        ],
+      },
+      undefined,
+    )
     expect(useFileUploadStore.getState().files.get(fileId)!.status).toBe(FileUploadStatus.COMPLETED)
   })
 
@@ -187,15 +215,20 @@ describe('useChunkedUpload', () => {
     await result.current.resumeUpload(fileId)
 
     // Stale upload aborted server-side, then a fresh initiate + full upload.
-    expect(mockAxiosDelete).toHaveBeenCalledWith('files/uploads/stale-id')
+    expect(mockAxiosDelete).toHaveBeenCalledWith('files/uploads/stale-id', undefined)
     expect(mockAxiosPost).toHaveBeenNthCalledWith(1, 'files/uploads', expect.any(Object))
     expect(mockUploadChunks.mock.calls[0]![0].chunks).toHaveLength(2)
-    expect(mockAxiosPost).toHaveBeenNthCalledWith(2, 'files/uploads/file-public-id/complete', {
-      parts: [
-        { partNumber: 1, etag: 'fresh-0' },
-        { partNumber: 2, etag: 'fresh-1' },
-      ],
-    })
+    expect(mockAxiosPost).toHaveBeenNthCalledWith(
+      2,
+      'files/uploads/file-public-id/complete',
+      {
+        parts: [
+          { partNumber: 1, etag: 'fresh-0' },
+          { partNumber: 2, etag: 'fresh-1' },
+        ],
+      },
+      undefined,
+    )
   })
 
   it('resumeUpload ignores files that are not paused', async () => {
@@ -255,12 +288,16 @@ describe('useChunkedUpload', () => {
     expect(mockUploadChunks).not.toHaveBeenCalled()
     expect(mockAxiosDelete).not.toHaveBeenCalled()
     expect(mockAxiosPost).toHaveBeenCalledTimes(1)
-    expect(mockAxiosPost).toHaveBeenCalledWith('files/uploads/file-public-id/complete', {
-      parts: [
-        { partNumber: 1, etag: 'etag-0' },
-        { partNumber: 2, etag: 'etag-1' },
-      ],
-    })
+    expect(mockAxiosPost).toHaveBeenCalledWith(
+      'files/uploads/file-public-id/complete',
+      {
+        parts: [
+          { partNumber: 1, etag: 'etag-0' },
+          { partNumber: 2, etag: 'etag-1' },
+        ],
+      },
+      undefined,
+    )
     expect(useFileUploadStore.getState().files.get(fileId)!.status).toBe(FileUploadStatus.COMPLETED)
   })
 

@@ -21,6 +21,10 @@ const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
     return { partNumber: idx + 1, etag }
   })
 
+// Anonymous uploads prove they started the upload with the token from initiation.
+const uploadTokenConfig = (uploadToken?: string) =>
+  uploadToken ? { headers: { 'X-File-Upload-Token': uploadToken } } : undefined
+
 export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   // Actions are picked individually: subscribing to the whole store here would
   // re-render every consumer of this hook on each progress tick.
@@ -92,6 +96,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         uploadId: data.uploadId,
         backendId: data.id,
         fileRelayId: data.relayId,
+        uploadToken: data.uploadToken,
         presignedUrls: data.presignedUrls,
         initiatedAt: Date.now(),
         expiresIn: data.expiresIn,
@@ -109,9 +114,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         },
       })
 
-      await axios.post(`files/uploads/${data.id}/complete`, {
-        parts: buildParts(etags),
-      })
+      await axios.post(
+        `files/uploads/${data.id}/complete`,
+        { parts: buildParts(etags) },
+        uploadTokenConfig(data.uploadToken),
+      )
 
       updateFileProgress(fileId, {
         status: FileUploadStatus.COMPLETED,
@@ -174,7 +181,12 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
           // The presigned part URLs have expired; abort the stale upload and
           // start fresh, since we cannot re-sign individual parts.
           if (fileProgress.backendId) {
-            await axios.delete(`files/uploads/${fileProgress.backendId}`).catch(() => {})
+            await axios
+              .delete(
+                `files/uploads/${fileProgress.backendId}`,
+                uploadTokenConfig(fileProgress.uploadToken),
+              )
+              .catch(() => {})
           }
           const relayId = await startUpload(fileId, fileProgress.file)
           options?.onUploadComplete?.(fileId, relayId)
@@ -206,9 +218,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
           })
         }
 
-        await axios.post(`files/uploads/${fileProgress.backendId}/complete`, {
-          parts: buildParts(allEtags),
-        })
+        await axios.post(
+          `files/uploads/${fileProgress.backendId}/complete`,
+          { parts: buildParts(allEtags) },
+          uploadTokenConfig(fileProgress.uploadToken),
+        )
 
         updateFileProgress(fileId, {
           status: FileUploadStatus.COMPLETED,

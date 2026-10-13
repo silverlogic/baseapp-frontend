@@ -26,6 +26,7 @@ export interface FileUploadProgress {
   uploadId?: string // Backend upload ID
   backendId?: string // Backend file id (public_id) for upload endpoints
   fileRelayId?: string // GraphQL relay ID after completion
+  uploadToken?: string // Anonymous uploads only: proves ownership on complete, abort and attach
   etags: (string | undefined)[] // ETags from S3, sparse-indexed by chunk
   presignedUrls?: PresignedUrl[]
   initiatedAt?: number // Epoch ms when the upload was initiated
@@ -40,6 +41,8 @@ export interface InitiateUploadResponse {
   uploadStatus: string
   expiresIn: number
   presignedUrls: PresignedUrl[]
+  /** Only for anonymous uploads. */
+  uploadToken?: string
 }
 
 export interface CompleteUploadPart {
