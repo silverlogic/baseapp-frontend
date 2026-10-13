@@ -1,5 +1,10 @@
 import { MinimalProfile } from '@baseapp-frontend/authentication'
-import { ACCESS_KEY_NAME, getExpoConstant, parseString } from '@baseapp-frontend/utils'
+import {
+  ACCESS_KEY_NAME,
+  getExpoConstant,
+  getWebSocketClientUrl,
+  parseString,
+} from '@baseapp-frontend/utils'
 import { REFRESH_KEY_NAME } from '@baseapp-frontend/utils/constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
@@ -109,7 +114,9 @@ export async function httpFetch(
 
 const EXPO_PUBLIC_WS_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDPOINT')
 const wsClient = createClient({
-  url: (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
+  url: getWebSocketClientUrl(
+    (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
+  ),
   connectionParams: () => {
     const Authorization = getToken(ACCESS_KEY_NAME)
     if (!Authorization) return {}
