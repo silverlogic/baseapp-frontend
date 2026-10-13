@@ -43,6 +43,13 @@ interface ActivityLogWithProfileInterface {
   profile: Profile
 }
 
+"""
+The `BigInt` scalar type represents non-fractional whole numeric values.
+`BigInt` is not constrained to 32-bit like the `Int` type and thus is a less
+compatible type.
+"""
+scalar BigInt
+
 type Block implements Node {
   """The ID of the object"""
   id: ID!
@@ -760,7 +767,7 @@ type File implements Node & PermissionsInterface & FileInterface & CommentsInter
   fileName: String!
 
   """File size in bytes"""
-  fileSize: Int
+  fileSize: BigInt
 
   """The stored file"""
   file: String!
