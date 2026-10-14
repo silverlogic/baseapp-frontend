@@ -25,8 +25,6 @@ import RelayDefaultHandlerProvider, {
   HandlerProvider,
 } from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
-import { getGraphQLRequestHeaders } from './requestHeaders'
-
 export const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
 
 const MAX_WS_RETRY_ATTEMPTS = 10
@@ -44,7 +42,6 @@ const getFetchOptions = ({ request, variables, uploadables }: GetFetchOptions) =
     method: 'POST',
     headers: {
       Accept: 'application/json',
-      ...getGraphQLRequestHeaders(),
     },
   }
 

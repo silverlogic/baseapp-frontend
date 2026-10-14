@@ -6,7 +6,6 @@ import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../..
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import type { CompleteUploadPart, InitiateUploadResponse } from '../../types'
 import { chunkFile, uploadChunks } from '../../utils'
-import { UPLOAD_TOKEN_HEADER, rememberUploadToken } from '../../utils/uploadTokenHeader'
 import type { UseChunkedUploadOptions } from './types'
 
 const areUrlsExpired = (initiatedAt?: number, expiresIn?: number): boolean => {
@@ -46,7 +45,7 @@ const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
 
 // Anonymous uploads prove they started the upload with the token from initiation.
 const uploadTokenConfig = (uploadToken?: string) =>
-  uploadToken ? { headers: { [UPLOAD_TOKEN_HEADER]: uploadToken } } : undefined
+  uploadToken ? { headers: { 'X-File-Upload-Token': uploadToken } } : undefined
 
 export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   // Actions are picked individually: subscribing to the whole store here would
@@ -114,7 +113,6 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         partSize: CHUNK_SIZE,
       })
 
-      if (data.uploadToken) rememberUploadToken(data.uploadToken)
       updateFileProgress(fileId, {
         status: FileUploadStatus.UPLOADING,
         uploadId: data.uploadId,

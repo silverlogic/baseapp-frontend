@@ -3,8 +3,6 @@ import { create } from 'zustand'
 import { FileUploadStatus } from '../../constants'
 import type { FileUploadProgress } from '../../types'
 import { nextLocalId } from '../../utils/localId'
-// Sends remembered anonymous upload tokens on GraphQL requests wherever files are shown.
-import '../../utils/uploadTokenHeader'
 import type { FileUploadState } from './types'
 
 export const useFileUploadStore = create<FileUploadState>((set, get) => ({
