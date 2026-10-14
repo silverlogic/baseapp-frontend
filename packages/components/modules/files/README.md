@@ -457,7 +457,10 @@ File operations respect backend permissions:
 - With private files on the backend, `url` is a signed, expiring link, or `null` when the viewer
   may not see the file; the Download button is then disabled
 - Anonymous uploads (when the backend allows them) need no setup: the hooks keep the
-  `uploadToken` returned at initiation and send it back on complete, abort and attach
+  `uploadToken` returned at initiation and send it back on complete, abort and attach. They
+  also remember it for the browser session and send it as `X-File-Upload-Token` on GraphQL
+  requests (`registerGraphQLRequestHeaders` from `@baseapp-frontend/graphql`), so the uploader
+  can read the file's `url` and `thumbnail` again later
 
 ## Best Practices
 
