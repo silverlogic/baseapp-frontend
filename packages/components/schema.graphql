@@ -825,6 +825,9 @@ type File implements Node & PermissionsInterface & FileInterface & CommentsInter
 input FileAttachToTargetInput {
   fileRelayIds: [ID]!
   targetObjectId: ID!
+
+  """Upload tokens of anonymous uploads, proving the caller started them."""
+  uploadTokens: [String!]
   clientMutationId: String
 }
 

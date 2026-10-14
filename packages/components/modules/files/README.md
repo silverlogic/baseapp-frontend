@@ -454,6 +454,10 @@ File operations respect backend permissions:
 
 - Delete button only shows if user has `change_file` permission
 - Permission checked via `hasPerm` field in FileItem fragment
+- With private files on the backend, `url` is a signed, expiring link, or `null` when the viewer
+  may not see the file; the Download button is then disabled
+- Anonymous uploads (when the backend allows them) need no setup: the hooks keep the
+  `uploadToken` returned at initiation and send it back on complete, abort and attach
 
 ## Best Practices
 

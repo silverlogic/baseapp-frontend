@@ -5,6 +5,7 @@ import { ConnectionHandler } from 'react-relay'
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
+import { uploadTokensFor } from '../../utils/uploadTokens'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { AttachOptions, UseFileUploadLogicParams, UseFileUploadLogicReturn } from './types'
 
@@ -38,7 +39,7 @@ export const useFileUploadLogic = ({
 
       attachFiles({
         variables: {
-          input: { fileRelayIds: fresh, targetObjectId },
+          input: { fileRelayIds: fresh, targetObjectId, uploadTokens: uploadTokensFor(fresh) },
           connections: [connectionID],
         },
         onCompleted: () => {
