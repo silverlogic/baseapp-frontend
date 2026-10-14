@@ -146,6 +146,23 @@ describe('useChunkedUpload', () => {
     expect(sendToast).toHaveBeenCalledWith('video.mp4: Upload has expired.', { type: 'error' })
   })
 
+  it.each([
+    ['an HTML error page', '<html><body>502 Bad Gateway</body></html>', 'Upload failed'],
+    ['a nested DRF error', { parts: [{ etag: ['etag is required'] }] }, 'etag is required'],
+    ['a detail message', { detail: 'Not allowed.' }, 'Not allowed.'],
+  ])('shows a readable message for %s', async (_case, data, expected) => {
+    mockAxiosPost.mockRejectedValue(
+      Object.assign(new Error('Request failed with status code 400'), { response: { data } }),
+    )
+
+    const { result } = renderHook(() => useChunkedUpload())
+    await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
+
+    const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
+    expect(progress.error).toBe(expected)
+    expect(sendToast).toHaveBeenCalledWith(`video.mp4: ${expected}`, { type: 'error' })
+  })
+
   it('resumeUpload uploads only the chunks without recorded ETags', async () => {
     const file = makeFile(3)
     const { addFile, updateFileProgress } = useFileUploadStore.getState()

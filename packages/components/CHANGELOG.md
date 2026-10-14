@@ -12,6 +12,8 @@
   status code 400". This includes a rejected part upload: `uploadChunk` keeps the response body
   and `uploadChunks` passes it on after its retries. `FileUploadDropzone` treats only an omitted
   `maxFileSize` as unlimited, so an explicit `0` is enforced. `formatFileSize` now reports gigabytes.
+  A non-JSON error body (e.g. a proxy's HTML error page) shows the generic message instead of its
+  first character, and nested DRF errors show their first message instead of `[object Object]`.
 - 5ee95e2: `File.fileSize` is a `BigInt` in the GraphQL schema, so files over 2 GB report their size. The
   shared Relay config maps `BigInt` to `number`, keeping `fileSize` typed as a number.
   - @baseapp-frontend/authentication@6.0.1

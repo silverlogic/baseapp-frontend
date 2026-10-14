@@ -13,6 +13,28 @@ const areUrlsExpired = (initiatedAt?: number, expiresIn?: number): boolean => {
   return Date.now() >= initiatedAt + expiresIn * 1000 - URL_EXPIRY_SAFETY_MARGIN_MS
 }
 
+/** First string anywhere in a DRF error body, e.g. {"parts": [{"etag": ["..."]}]}. */
+const firstMessage = (value: unknown): string | undefined => {
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) return value.map(firstMessage).find(Boolean)
+  if (value && typeof value === 'object')
+    return Object.values(value).map(firstMessage).find(Boolean)
+  return undefined
+}
+
+/**
+ * The backend's reason for a failed request (e.g. file too large). A non-JSON body,
+ * such as a proxy's HTML error page, falls back instead of showing its first character.
+ */
+const uploadErrorMessage = (error: unknown, fallbackMessage: string): string => {
+  const data = (error as { response?: { data?: unknown } } | undefined)?.response?.data
+  if (data === undefined || data === null || data === '') {
+    return getApiErrorMessage(error, { defaultMessage: fallbackMessage })
+  }
+  if (typeof data !== 'object') return fallbackMessage
+  return firstMessage(data) ?? fallbackMessage
+}
+
 const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
   etags.map((etag, idx) => {
     if (!etag) {
@@ -50,7 +72,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
       }
 
       // Prefer the backend's reason (e.g. file too large) over axios' "status code 400".
-      const errorMessage = getApiErrorMessage(error, { defaultMessage: fallbackMessage })
+      const errorMessage = uploadErrorMessage(error, fallbackMessage)
       updateFileProgress(fileId, {
         status: FileUploadStatus.FAILED,
         error: errorMessage,
