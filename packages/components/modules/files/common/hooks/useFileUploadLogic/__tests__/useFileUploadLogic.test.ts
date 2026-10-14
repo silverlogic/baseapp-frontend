@@ -86,6 +86,23 @@ describe('useFileUploadLogic', () => {
     expect(attachedIds()).toEqual([['File:1']])
   })
 
+  it('keeps a file the server rejected listed, and does not resend it', () => {
+    const onError = vi.fn()
+    const { rerender } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET, onError }))
+
+    const id = completeUpload('File:1')
+    act(() => {
+      mockAttachFiles.mock.calls[0]![0].onCompleted({
+        fileAttachToTarget: { errors: [{ field: 'files', messages: ['Not allowed'] }] },
+      })
+    })
+    rerender()
+
+    expect(useFileUploadStore.getState().files.has(id)).toBe(true)
+    expect(attachedIds()).toEqual([['File:1']])
+    expect(onError).toHaveBeenCalledWith(new Error('Not allowed'))
+  })
+
   it('retries a failed attach with the next upload the user starts', async () => {
     mockUploadFile.mockResolvedValue('File:batch')
     const { result } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))

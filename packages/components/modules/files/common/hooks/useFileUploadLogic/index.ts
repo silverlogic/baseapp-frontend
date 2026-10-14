@@ -49,12 +49,33 @@ export const useFileUploadLogic = ({
       fresh.forEach((id) => attachedRef.current.add(id))
       const connectionID = ConnectionHandler.getConnectionID(targetObjectId, 'FilesList_files')
 
+      const markFailed = (error: Error) => {
+        fresh.forEach((id) => {
+          attachedRef.current.delete(id)
+          failedRef.current.add(id)
+        })
+        onError?.(error)
+      }
+
       attachFiles({
         variables: {
           input: { fileRelayIds: fresh, targetObjectId },
           connections: [connectionID],
         },
-        onCompleted: () => {
+        onCompleted: (response, errors) => {
+          // The mutation hook also calls onCompleted for a rejected attach (it only
+          // toasts); keep those files listed and handle it like onError.
+          const messages = [
+            ...(errors ?? []).map((error) => error.message),
+            ...(response?.fileAttachToTarget?.errors ?? []).flatMap(
+              (error) => error?.messages ?? [],
+            ),
+          ]
+          if (errors?.length || response?.fileAttachToTarget?.errors?.length) {
+            markFailed(new Error(messages.join(', ') || 'Attach failed'))
+            return
+          }
+
           // Remove exactly the files that were just attached — Relay now serves
           // them from the target's connection. Clearing the whole scope here
           // would also discard uploads the user started in the meantime.
@@ -67,13 +88,7 @@ export const useFileUploadLogic = ({
           }
           onAttachComplete?.()
         },
-        onError: (error) => {
-          fresh.forEach((id) => {
-            attachedRef.current.delete(id)
-            failedRef.current.add(id)
-          })
-          onError?.(error)
-        },
+        onError: markFailed,
       })
     },
     [attachFiles, targetObjectId, onAttachComplete, onError],

@@ -10,3 +10,5 @@ completed uploads in its target's scope up from the upload store, and removes th
 once attached so they no longer show as a duplicate chip.
 An attach that fails is not resent automatically; it is retried with the next upload the user
 starts, so a persistent error no longer resends the mutation on every render.
+An attach the server rejects (errors in the mutation payload) is handled the same way: the file
+stays listed and is retried with the next upload, instead of being dropped.
