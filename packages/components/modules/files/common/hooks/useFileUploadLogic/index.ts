@@ -7,6 +7,7 @@ import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
 import type { FileUploadProgress } from '../../types'
+import { uploadTokensFor } from '../../utils/uploadTokens'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { AttachOptions, UseFileUploadLogicParams, UseFileUploadLogicReturn } from './types'
 
@@ -59,7 +60,7 @@ export const useFileUploadLogic = ({
 
       attachFiles({
         variables: {
-          input: { fileRelayIds: fresh, targetObjectId },
+          input: { fileRelayIds: fresh, targetObjectId, uploadTokens: uploadTokensFor(fresh) },
           connections: [connectionID],
         },
         onCompleted: (response, errors) => {
@@ -145,7 +146,9 @@ export const useFileUploadLogic = ({
           .map((result) => (result as PromiseFulfilledResult<string>).value)
 
         if (fileRelayIds.length) {
-          onUploadComplete?.(fileRelayIds)
+          // Read before the store drops the files: with autoAttach off, the caller
+          // needs the tokens to attach anonymous uploads itself.
+          onUploadComplete?.(fileRelayIds, uploadTokensFor(fileRelayIds))
         }
 
         if (autoAttach) {

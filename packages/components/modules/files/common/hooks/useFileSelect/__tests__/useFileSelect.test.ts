@@ -54,6 +54,19 @@ describe('useFileSelect', () => {
     expect(onFilesSelected).toHaveBeenCalledWith([ok1, ok2])
   })
 
+  it('by default accepts any type and size, leaving limits to the backend', () => {
+    const onFilesSelected = vi.fn()
+    const { result } = renderHook(() => useFileSelect({ onFilesSelected }))
+
+    const video = makeFile('clip.mov', 2 * 1024 * 1024 * 1024)
+    const huge = makeFile('disk.iso', 50 * 1024 * 1024 * 1024)
+
+    fireChange(result.current.getInputProps().onChange, [video, huge])
+
+    expect(result.current.getInputProps().accept).toBeUndefined()
+    expect(onFilesSelected).toHaveBeenCalledWith([video, huge])
+  })
+
   it('does not fire the callback when nothing valid was selected, and resets the input', () => {
     const onFilesSelected = vi.fn()
     const { result } = renderHook(() => useFileSelect({ onFilesSelected, maxFileSize: 100 }))
