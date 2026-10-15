@@ -58,7 +58,7 @@ describe('useFileUploadLogic', () => {
 
     const id = completeUpload('File:1')
     act(() => {
-      mockAttachFiles.mock.calls[0]![0].onCompleted()
+      mockAttachFiles.mock.calls[0]![0].onCompleted({ fileAttachToTarget: { errors: null } })
     })
 
     expect(useFileUploadStore.getState().files.has(id)).toBe(false)
@@ -101,6 +101,19 @@ describe('useFileUploadLogic', () => {
     expect(useFileUploadStore.getState().files.has(id)).toBe(true)
     expect(attachedIds()).toEqual([['File:1']])
     expect(onError).toHaveBeenCalledWith(new Error('Not allowed'))
+  })
+
+  it('treats an attach without a payload as failed', () => {
+    const onError = vi.fn()
+    renderHook(() => useFileUploadLogic({ targetObjectId: TARGET, onError }))
+
+    const id = completeUpload('File:1')
+    act(() => {
+      mockAttachFiles.mock.calls[0]![0].onCompleted({ fileAttachToTarget: null })
+    })
+
+    expect(useFileUploadStore.getState().files.has(id)).toBe(true)
+    expect(onError).toHaveBeenCalledWith(new Error('Attach failed'))
   })
 
   it('retries a failed attach with the next upload the user starts', async () => {

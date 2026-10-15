@@ -64,14 +64,16 @@ export const useFileUploadLogic = ({
         },
         onCompleted: (response, errors) => {
           // The mutation hook also calls onCompleted for a rejected attach (it only
-          // toasts); keep those files listed and handle it like onError.
+          // toasts), and the payload may be null; without a payload confirming the
+          // attach, keep those files listed and handle it like onError.
           const messages = [
             ...(errors ?? []).map((error) => error.message),
             ...(response?.fileAttachToTarget?.errors ?? []).flatMap(
               (error) => error?.messages ?? [],
             ),
           ]
-          if (errors?.length || response?.fileAttachToTarget?.errors?.length) {
+          const payload = response?.fileAttachToTarget
+          if (errors?.length || !payload || payload.errors?.length) {
             markFailed(new Error(messages.join(', ') || 'Attach failed'))
             return
           }
