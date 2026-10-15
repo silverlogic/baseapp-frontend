@@ -101,28 +101,38 @@ export const useFileUploadLogic = ({
 
   // Resume/retry finish outside the original batch, started from the list item's own
   // useChunkedUpload, so no callback here sees them. Pick them up from the store
-  // instead; while a batch runs it attaches its own files and this waits.
-  const attachCompletedOutsideBatch = useCallback(() => {
-    if (!autoAttach || !targetObjectId || batchesRef.current > 0) return
-    const completed = completedRelayIdsIn(
-      useFileUploadStore.getState().files.values(),
-      targetObjectId,
-    )
-    attach(
-      completed.filter((id) => !failedRef.current.has(id)),
-      { clearAfter: false },
-    )
-  }, [autoAttach, targetObjectId, attach])
+  // instead; while a batch runs it handles its own files and this waits.
+  const handleCompletedOutsideBatch = useCallback(() => {
+    if (!targetObjectId || batchesRef.current > 0) return
+    const store = useFileUploadStore.getState()
+    const completed = completedRelayIdsIn(store.files.values(), targetObjectId)
+
+    if (autoAttach) {
+      attach(
+        completed.filter((id) => !failedRef.current.has(id)),
+        { clearAfter: false },
+      )
+      return
+    }
+
+    // The caller attaches these itself: report them with their upload tokens, then
+    // drop them like the batch path does, so each is reported once.
+    if (!completed.length) return
+    onUploadComplete?.(completed, uploadTokensFor(completed))
+    Array.from(store.files.values())
+      .filter((file) => file.fileRelayId && completed.includes(file.fileRelayId))
+      .forEach((file) => store.removeFile(file.id))
+  }, [autoAttach, targetObjectId, attach, onUploadComplete])
 
   const completedRelayIds = useFileUploadStore(
     useShallow((state) =>
-      autoAttach && targetObjectId ? completedRelayIdsIn(state.files.values(), targetObjectId) : [],
+      targetObjectId ? completedRelayIdsIn(state.files.values(), targetObjectId) : [],
     ),
   )
 
   useEffect(() => {
-    attachCompletedOutsideBatch()
-  }, [completedRelayIds, attachCompletedOutsideBatch])
+    handleCompletedOutsideBatch()
+  }, [completedRelayIds, handleCompletedOutsideBatch])
 
   const handleFilesSelected = useCallback(
     async (selectedFiles: File[]) => {
@@ -154,13 +164,12 @@ export const useFileUploadLogic = ({
         if (autoAttach) {
           attach(fileRelayIds, { clearAfter: true })
         } else {
-          // The caller owns these ids now. Drop only the finished ones — a failed
-          // upload stays listed so the user can still retry it.
+          // The caller owns these ids now. Drop only this batch's files — a failed
+          // upload stays listed so the user can still retry it, and one that
+          // finished meanwhile is reported below, not dropped unreported.
           const store = useFileUploadStore.getState()
           Array.from(store.files.values())
-            .filter(
-              (file) => file.scope === targetObjectId && file.status === FileUploadStatus.COMPLETED,
-            )
+            .filter((file) => file.fileRelayId && fileRelayIds.includes(file.fileRelayId))
             .forEach((file) => store.removeFile(file.id))
           setResetKey((prev) => prev + 1)
         }
@@ -168,8 +177,8 @@ export const useFileUploadLogic = ({
         onError?.(error instanceof Error ? error : new Error('Upload failed'))
       } finally {
         batchesRef.current -= 1
-        // Attach anything that completed outside this batch while it was running.
-        attachCompletedOutsideBatch()
+        // Handle anything that completed outside this batch while it was running.
+        handleCompletedOutsideBatch()
       }
     },
     [
@@ -179,7 +188,7 @@ export const useFileUploadLogic = ({
       onUploadComplete,
       onError,
       attach,
-      attachCompletedOutsideBatch,
+      handleCompletedOutsideBatch,
     ],
   )
 

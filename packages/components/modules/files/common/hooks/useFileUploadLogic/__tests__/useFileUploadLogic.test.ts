@@ -36,6 +36,19 @@ const completeUpload = (relayId: string, scope = TARGET) => {
   return id
 }
 
+/** An upload that paused (resume) or failed (retry) and then finished from the list item. */
+const finishLater = (relayId: string, from: FileUploadStatus, uploadToken?: string) => {
+  const { addFile, updateFileProgress } = useFileUploadStore.getState()
+  const id = addFile(new File(['x'], `${relayId}.pdf`), TARGET)
+  act(() => {
+    updateFileProgress(id, { status: from, fileRelayId: relayId, uploadToken })
+  })
+  act(() => {
+    updateFileProgress(id, { status: FileUploadStatus.COMPLETED })
+  })
+  return id
+}
+
 const attachedIds = () =>
   mockAttachFiles.mock.calls.map(([config]) => config.variables.input.fileRelayIds)
 
@@ -153,5 +166,63 @@ describe('useFileUploadLogic', () => {
     })
 
     expect(attachedIds()).toEqual([['File:batch'], ['File:retried']])
+  })
+
+  describe.each([
+    ['resumed', FileUploadStatus.PAUSED],
+    ['retried', FileUploadStatus.FAILED],
+  ])('an upload %s from the list item', (_label, from) => {
+    it('is attached when autoAttach is on', () => {
+      renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+
+      finishLater('File:1', from)
+
+      expect(attachedIds()).toEqual([['File:1']])
+    })
+
+    it('is reported with its upload token when the caller attaches files itself', () => {
+      const onUploadComplete = vi.fn()
+      const { rerender } = renderHook(() =>
+        useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
+      )
+
+      const id = finishLater('File:1', from, 'token-1')
+      rerender()
+
+      expect(onUploadComplete).toHaveBeenCalledTimes(1)
+      expect(onUploadComplete).toHaveBeenCalledWith(['File:1'], ['token-1'])
+      expect(mockAttachFiles).not.toHaveBeenCalled()
+      expect(useFileUploadStore.getState().files.has(id)).toBe(false)
+    })
+  })
+
+  it('reports an upload that finished during a batch once the batch ends (autoAttach off)', async () => {
+    let finishBatch: (relayId: string) => void = () => {}
+    mockUploadFile.mockReturnValue(
+      new Promise<string>((resolve) => {
+        finishBatch = resolve
+      }),
+    )
+    const onUploadComplete = vi.fn()
+    const { result } = renderHook(() =>
+      useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
+    )
+
+    let batch: Promise<void> = Promise.resolve()
+    act(() => {
+      batch = result.current.handleFilesSelected([new File(['y'], 'batch.pdf')])
+    })
+    finishLater('File:retried', FileUploadStatus.FAILED)
+    expect(onUploadComplete).not.toHaveBeenCalled()
+
+    await act(async () => {
+      finishBatch('File:batch')
+      await batch
+    })
+
+    expect(onUploadComplete.mock.calls.map(([ids]) => ids)).toEqual([
+      ['File:batch'],
+      ['File:retried'],
+    ])
   })
 })
