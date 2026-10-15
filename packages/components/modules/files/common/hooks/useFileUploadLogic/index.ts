@@ -94,7 +94,9 @@ export const useFileUploadLogic = ({
           .map((result) => (result as PromiseFulfilledResult<string>).value)
 
         if (fileRelayIds.length) {
-          onUploadComplete?.(fileRelayIds)
+          // Read before the store drops the files: with autoAttach off, the caller
+          // needs the tokens to attach anonymous uploads itself.
+          onUploadComplete?.(fileRelayIds, uploadTokensFor(fileRelayIds))
         }
 
         if (autoAttach) {
