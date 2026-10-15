@@ -3,6 +3,7 @@ import { copyAsync } from 'expo-file-system/legacy'
 
 import type { UploadSource } from '../../common/types'
 import { nextLocalId } from '../../common/utils/localId'
+import { withFileExtension } from './withFileExtension'
 
 export interface NativeFileDescriptor {
   uri: string
@@ -44,12 +45,13 @@ export const createNativeUploadSource = async ({
 }: NativeFileDescriptor): Promise<UploadSource> => {
   const original = new File(uri)
   const { file, isCopy } = await toReadableFile(uri)
+  const resolvedType = type || original.type || 'application/octet-stream'
 
   return {
-    name: name || original.name,
+    name: withFileExtension(name || original.name, resolvedType),
     // The bytes on disk, not the picker's metadata: chunks are cut from this file.
     size: file.size,
-    type: type || original.type || 'application/octet-stream',
+    type: resolvedType,
     readChunk: async (start, end) => {
       const handle = file.open()
       try {

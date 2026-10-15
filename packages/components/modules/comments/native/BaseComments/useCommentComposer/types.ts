@@ -1,6 +1,7 @@
 import { UseFormReturn } from 'react-hook-form'
 
 import { SocialUpsertForm } from '../../../../__shared__/common'
+import type { FilesList_target$key } from '../../../../../__generated__/FilesList_target.graphql'
 import type { UploadSource } from '../../../../files/common'
 
 export interface UseCommentComposerOptions {
@@ -23,11 +24,13 @@ export interface CommentComposerReplyVariables {
 }
 
 export interface CommentComposerAttachments {
-  /** False while editing: attachments are added to new comments only. */
-  isEnabled: boolean
   onFilesSelected: (files: UploadSource[]) => Promise<void>
-  /** Upload-store scope holding this composer's pending files. */
+  /** Upload-store scope holding the active mode's uploads. */
   scope: string
+  /** Edit mode only: the edited comment's attached files. */
+  filesTarget?: FilesList_target$key
+  /** Edit mode only: deletes an attached file. */
+  onRemoveFile?: (fileId: string) => void
 }
 
 export interface UseCommentComposerReturn {

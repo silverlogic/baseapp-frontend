@@ -6,7 +6,7 @@ import { TextInput as NativeTextInput, ScrollView } from 'react-native'
 import { useFragment } from 'react-relay'
 
 import { SocialInputDrawer as DefaultSocialInputDrawer } from '../../../__shared__/native'
-import { UploadingFilesList } from '../../../files/native'
+import { EditableFilesList, UploadingFilesList } from '../../../files/native'
 import { CommentsFragmentQuery, DEFAULT_MAX_THREAD_DEPTH, useCommentReply } from '../../common'
 import CommentFilesUpsertActions from '../CommentFilesUpsertActions'
 import DefaultCommentsList from '../CommentsList'
@@ -112,15 +112,19 @@ const BaseComments: FC<BaseCommentsProps> = ({
           submit={submit}
           editVariables={editVariables}
           replyVariables={replyVariables}
-          Footer={attachments.isEnabled ? UploadingFilesList : undefined}
-          FooterProps={{ scope: attachments.scope, shouldUseBottomSheetSafeComponents: true }}
+          Footer={editVariables.isEditMode ? EditableFilesList : UploadingFilesList}
+          FooterProps={{
+            scope: attachments.scope,
+            target: attachments.filesTarget,
+            onRemoveFile: attachments.onRemoveFile,
+            shouldUseBottomSheetSafeComponents: true,
+          }}
           onFooterHeightChange={setFooterHeight}
           {...SocialInputDrawerProps.DrawerProps}
           SocialInputProps={{
             SocialUpsertActions: CommentFilesUpsertActions,
             SocialUpsertActionsProps: {
               onFilesSelected: attachments.onFilesSelected,
-              disabled: !attachments.isEnabled,
             },
             ...SocialInputDrawerProps.DrawerProps?.SocialInputProps,
           }}

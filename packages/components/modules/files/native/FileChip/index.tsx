@@ -1,4 +1,4 @@
-import type { FC } from 'react'
+import { type FC, useEffect, useState } from 'react'
 
 import { AttachmentIcon, ImageIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { Image } from '@baseapp-frontend/design-system/components/native/images'
@@ -26,10 +26,20 @@ const FileChip: FC<FileChipProps> = ({
   const theme = useTheme()
   const styles = createStyles(theme)
   const Touchable = shouldUseBottomSheetSafeComponents ? TouchableOpacity : Pressable
+  // Signed thumbnail urls can expire while the screen is open.
+  const [hasThumbnailError, setHasThumbnailError] = useState(false)
+  useEffect(() => setHasThumbnailError(false), [thumbnailUrl])
 
   const renderThumbnail = () => {
-    if (thumbnailUrl) {
-      return <Image source={{ uri: thumbnailUrl }} width={THUMBNAIL_SIZE} height={THUMBNAIL_SIZE} />
+    if (thumbnailUrl && !hasThumbnailError) {
+      return (
+        <Image
+          source={{ uri: thumbnailUrl }}
+          width={THUMBNAIL_SIZE}
+          height={THUMBNAIL_SIZE}
+          onError={() => setHasThumbnailError(true)}
+        />
+      )
     }
     return isImageFile(contentType) ? (
       <ImageIcon width={20} height={20} color={theme.colors.object.low} />

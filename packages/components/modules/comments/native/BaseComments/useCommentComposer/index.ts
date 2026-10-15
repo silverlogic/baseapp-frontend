@@ -1,3 +1,4 @@
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
@@ -6,7 +7,13 @@ import {
   SOCIAL_UPSERT_FORM_VALIDATION_SCHEMA,
   SocialUpsertForm,
 } from '../../../../__shared__/common'
-import { useDeferredFileAttachments } from '../../../../files/common'
+import {
+  FileUploadStatus,
+  useDeferredFileAttachments,
+  useFileDeleteLogic,
+  useFileUploadLogic,
+  useFileUploadStore,
+} from '../../../../files/common'
 import { useCommentCreateForm, useCommentReply, useCommentUpdateForm } from '../../../common'
 import { UseCommentComposerOptions, UseCommentComposerReturn } from './types'
 
@@ -19,6 +26,9 @@ import { UseCommentComposerOptions, UseCommentComposerReturn } from './types'
  * ref, so a swapped-in form shows its values while `onChange` keeps writing to the old
  * form — typed characters instantly revert. Mode seeding (comment body on edit start,
  * empty on edit end) happens through the update hook's reset-on-target-change effect.
+ *
+ * While editing, files behave as on web: new uploads attach to the comment as soon as they
+ * finish and removals delete right away, independent of saving the text.
  */
 const useCommentComposer = ({
   targetObjectId,
@@ -31,6 +41,17 @@ const useCommentComposer = ({
     hasPendingFiles,
     scope: filesScope,
   } = useDeferredFileAttachments()
+  // Scoped to the edited comment (as on web), so a new comment's draft files wait meanwhile.
+  const editCommentId = editingComment?.id
+  const { handleFilesSelected: handleEditFilesSelected } = useFileUploadLogic({
+    targetObjectId: editCommentId,
+  })
+  const { handleDelete } = useFileDeleteLogic({ targetObjectId: editCommentId })
+  const hasPendingEditFiles = useFileUploadStore((state) =>
+    Array.from(state.files.values()).some(
+      (file) => file.scope === editCommentId && file.status !== FileUploadStatus.COMPLETED,
+    ),
+  )
 
   // The single form behind the drawer, shared by both modes.
   const form = useForm<SocialUpsertForm>({
@@ -61,7 +82,7 @@ const useCommentComposer = ({
   const {
     submit: submitUpdate,
     isLoading: isUpdating,
-    cancel: cancelEdit,
+    cancel: cancelUpdate,
   } = useCommentUpdateForm({
     target: editingComment,
     form,
@@ -87,20 +108,25 @@ const useCommentComposer = ({
   return {
     form,
     submit,
-    // Block a new comment until every attachment has finished, so a paused or failed
-    // upload is never silently left off it. Edits do not carry attachments.
-    isLoading: isCreating || isUpdating || (!isEditMode && hasPendingFiles),
+    // Block submit until every attachment has finished, so a paused or failed upload is
+    // never silently left off the comment.
+    isLoading: isEditMode ? isUpdating || hasPendingEditFiles : isCreating || hasPendingFiles,
     editVariables: {
       isEditMode,
       label: 'Editing your comment',
-      onEditCancel: cancelEdit,
+      onEditCancel: cancelUpdate,
     },
-    attachments: {
-      // Attachments go on new comments only; while editing, the draft's files wait.
-      isEnabled: !isEditMode,
-      onFilesSelected: handleFilesSelected,
-      scope: filesScope,
-    },
+    attachments: isEditMode
+      ? {
+          onFilesSelected: handleEditFilesSelected,
+          scope: editingComment.id,
+          filesTarget: editingComment.filesTarget,
+          onRemoveFile: handleDelete,
+        }
+      : {
+          onFilesSelected: handleFilesSelected,
+          scope: filesScope,
+        },
     replyVariables: {
       isReplyMode: isReply,
       label: 'Replying to ',
