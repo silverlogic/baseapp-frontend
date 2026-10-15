@@ -89,6 +89,20 @@ describe('uploadChunks', () => {
     expect(mockUploadChunk).toHaveBeenCalledTimes(3)
   })
 
+  it('keeps the response of the last failed attempt', async () => {
+    const response = { status: 400, data: { detail: 'Upload has expired.' } }
+    mockUploadChunk.mockRejectedValue(Object.assign(new Error('rejected'), { response }))
+
+    await expect(
+      uploadChunks({
+        chunks: makeChunks(1),
+        presignedUrls: makeUrls(1),
+        retryAttempts: 1,
+        retryDelay: 1,
+      }),
+    ).rejects.toMatchObject({ response })
+  })
+
   it('does not retry when the upload was aborted', async () => {
     const abortController = new AbortController()
     mockUploadChunk.mockImplementation(() => {

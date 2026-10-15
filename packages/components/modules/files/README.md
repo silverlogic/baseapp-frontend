@@ -130,7 +130,7 @@ const {
 **Parameters:**
 - `targetObjectId?: string` - The Relay ID of the target object to attach files to
 - `autoAttach?: boolean` - Automatically attach files after upload (default: true)
-- `onUploadComplete?: (fileRelayIds: string[]) => void` - Called after upload succeeds
+- `onUploadComplete?: (fileRelayIds: string[], uploadTokens: string[]) => void` - Called after upload succeeds. `uploadTokens` holds the tokens of anonymous uploads among them; with `autoAttach: false`, pass them as `uploadTokens` to `fileAttachToTarget` when attaching
 - `onAttachComplete?: () => void` - Called after files are attached
 - `onError?: (error: Error) => void` - Called on errors
 
@@ -333,11 +333,11 @@ fragment FileItem_file on File {
 |------|------|---------|-------------|
 | target | `FilesInterface$key` | required | Relay fragment reference for the target object |
 | maxFiles | `number` | - | Maximum number of files allowed |
-| maxFileSize | `number` | - | Maximum file size in bytes |
-| acceptedFileTypes | `string[]` | - | Accepted MIME types (e.g., `['image/*', 'application/pdf']`) |
+| maxFileSize | `number` | no limit | Maximum file size in bytes; when omitted the backend's `MAX_FILE_UPLOAD_SIZE` decides and its error is toasted |
+| acceptedFileTypes | `string[]` | any type | Accepted MIME types (e.g., `['image/*', 'application/pdf']`) |
 | disabled | `boolean` | false | Disable file upload |
 | autoAttach | `boolean` | true | Automatically attach files after upload |
-| onUploadComplete | `(fileRelayIds: string[]) => void` | - | Callback when upload completes |
+| onUploadComplete | `(fileRelayIds: string[], uploadTokens: string[]) => void` | - | Callback when upload completes; `uploadTokens` are needed to attach anonymous uploads yourself |
 | onAttachComplete | `() => void` | - | Callback when files are attached |
 | onError | `(error: Error) => void` | - | Error callback |
 
@@ -441,6 +441,10 @@ File operations respect backend permissions:
 
 - Delete button only shows if user has `change_file` permission
 - Permission checked via `hasPerm` field in FileItem fragment
+- With private files on the backend, `url` is a signed, expiring link, or `null` when the viewer
+  may not see the file; the Download button is then disabled
+- Anonymous uploads (when the backend allows them) need no setup: the hooks keep the
+  `uploadToken` returned at initiation and send it back on complete, abort and attach
 
 ## Best Practices
 

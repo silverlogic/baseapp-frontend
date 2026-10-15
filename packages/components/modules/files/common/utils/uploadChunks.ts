@@ -1,6 +1,6 @@
 import { MAX_CONCURRENT_CHUNKS, RETRY_ATTEMPTS, RETRY_DELAY } from '../constants'
 import type { UploadChunkBody } from '../types'
-import { uploadChunk } from './uploadChunk'
+import { type ChunkUploadError, uploadChunk } from './uploadChunk'
 
 interface UploadChunksBaseOptions {
   presignedUrls: string[]
@@ -84,9 +84,11 @@ export async function uploadChunks(options: UploadChunksOptions): Promise<string
         return uploadChunkWithRetry(chunkIndex, chunk, url, attempt + 1)
       }
 
-      throw new Error(
+      const failure: ChunkUploadError = new Error(
         `Failed to upload chunk ${chunkIndex} after ${retryAttempts} attempts: ${error}`,
       )
+      failure.response = (error as ChunkUploadError)?.response
+      throw failure
     }
   }
 

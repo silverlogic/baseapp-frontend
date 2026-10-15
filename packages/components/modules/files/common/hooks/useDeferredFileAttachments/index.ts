@@ -72,6 +72,7 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
         (file) => file.status === FileUploadStatus.COMPLETED && !!file.fileRelayId,
       )
       const fileRelayIds = scoped.map((file) => file.fileRelayId as string)
+      const uploadTokens = scoped.flatMap((file) => (file.uploadToken ? [file.uploadToken] : []))
 
       // Drop everything this submit claimed, attached or not. A paused or failed
       // upload left in scope would otherwise ride along with the next comment.
@@ -86,7 +87,7 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
       const connectionID = ConnectionHandler.getConnectionID(targetObjectId, 'FilesList_files')
       attachFiles({
         variables: {
-          input: { fileRelayIds, targetObjectId },
+          input: { fileRelayIds, targetObjectId, uploadTokens },
           connections: [connectionID],
         },
         onCompleted: () => {

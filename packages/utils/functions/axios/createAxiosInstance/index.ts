@@ -6,6 +6,8 @@ import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { isRelativeUrl } from '../../api/isRelativeUrl'
+import { resolveApiUrl } from '../../api/resolveApiUrl'
 import { broadcastEvent } from '../../events'
 import { getExpoConstant } from '../../expo'
 import { buildQueryString } from '../../string'
@@ -47,6 +49,14 @@ export const createAxiosInstance = ({
   }
 
   const requestInterceptorId = instance.interceptors.request.use(async (request) => {
+    if (isRelativeUrl(request.baseURL)) {
+      const { url: apiBaseUrl, headers: forwardedHeaders } = await resolveApiUrl(request.baseURL)
+      request.baseURL = apiBaseUrl
+      Object.entries(forwardedHeaders).forEach(([name, value]) => {
+        request.headers[name] = value
+      })
+    }
+
     const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(request.url || ''))
     // token refresh logic
     let accessAuthToken

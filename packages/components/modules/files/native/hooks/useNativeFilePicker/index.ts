@@ -90,7 +90,7 @@ export const useNativeFilePicker = ({
     try {
       // The system photo picker needs no library permission (only iOS 10 did).
       result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: 'images',
+        mediaTypes: ['images', 'videos'],
         allowsMultipleSelection: (maxFiles ?? 2) > 1,
         selectionLimit: maxFiles,
         quality: 1,

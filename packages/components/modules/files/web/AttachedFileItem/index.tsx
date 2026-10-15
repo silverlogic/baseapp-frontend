@@ -94,6 +94,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
             <IconButton
               size="small"
               onClick={() => handleDownload(file.url)}
+              disabled={!file.url}
               title="Download"
               aria-label="Download"
             >
@@ -146,7 +147,12 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
             </Box>
 
             <Stack direction="row" spacing={0.5}>
-              <IconButton size="small" onClick={() => handleDownload(file.url)} title="Download">
+              <IconButton
+                size="small"
+                onClick={() => handleDownload(file.url)}
+                disabled={!file.url}
+                title="Download"
+              >
                 <DownloadIcon fontSize="small" />
               </IconButton>
 

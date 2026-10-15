@@ -17,7 +17,7 @@ const buildAcceptAttr = (acceptedFileTypes?: Accept): string | undefined => {
 export const useFileSelect = ({
   onFilesSelected,
   maxFiles = 10,
-  maxFileSize = 100 * 1024 * 1024,
+  maxFileSize,
   acceptedFileTypes,
   disabled = false,
 }: UseFileSelectParams): UseFileSelectReturn => {

@@ -9,7 +9,8 @@ export interface FileUploadProps {
   acceptedFileTypes?: Accept
   disabled?: boolean
   autoAttach?: boolean
-  onUploadComplete?: (fileIds: string[]) => void
+  /** `uploadTokens`: tokens of anonymous uploads among them, needed to attach them later (`autoAttach: false`). */
+  onUploadComplete?: (fileIds: string[], uploadTokens: string[]) => void
   onAttachComplete?: () => void
   onError?: (error: Error) => void
 }

@@ -3,7 +3,8 @@ import type { UploadInput } from '../../types'
 export interface UseFileUploadLogicParams {
   targetObjectId?: string
   autoAttach?: boolean
-  onUploadComplete?: (fileRelayIds: string[]) => void
+  /** `uploadTokens`: tokens of anonymous uploads among them, needed to attach them later (`autoAttach: false`). */
+  onUploadComplete?: (fileRelayIds: string[], uploadTokens: string[]) => void
   onAttachComplete?: () => void
   onError?: (error: Error) => void
 }
