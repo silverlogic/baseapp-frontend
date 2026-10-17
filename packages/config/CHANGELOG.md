@@ -1,5 +1,12 @@
 # @baseapp-frontend/config
 
+## 2.1.16
+
+### Patch Changes
+
+- 5ee95e2: `File.fileSize` is a `BigInt` in the GraphQL schema, so files over 2 GB report their size. The
+  shared Relay config maps `BigInt` to `number`, keeping `fileSize` typed as a number.
+
 ## 2.1.15
 
 ### Patch Changes

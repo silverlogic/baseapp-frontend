@@ -13,4 +13,7 @@ module.exports = {
   ],
   language: 'typescript',
   artifactDirectory: './__generated__',
+  customScalarTypes: {
+    BigInt: 'number',
+  },
 }
