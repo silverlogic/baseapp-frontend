@@ -1,6 +1,9 @@
+import { type ReactNode, createElement } from 'react'
+
 import { axios } from '@baseapp-frontend/utils'
 
 import { renderHook } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { type MockedFunction, vi } from 'vitest'
 
 import { FileUploadStatus } from '../../../constants'
@@ -9,6 +12,9 @@ import { uploadChunks } from '../../../utils'
 import { useChunkedUpload } from '../index'
 
 const sendToast = vi.fn()
+
+const IntlWrapper = ({ children }: { children: ReactNode }) =>
+  createElement(IntlProvider, { locale: 'en' }, children)
 vi.mock('@baseapp-frontend/utils', async () => ({
   axios: {
     post: vi.fn(),
@@ -57,7 +63,7 @@ describe('useChunkedUpload', () => {
       .mockResolvedValueOnce({} as never)
     mockUploadChunks.mockResolvedValue(['etag-0', 'etag-1'])
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     const relayId = await result.current.uploadFile(makeFile(2))
 
     expect(relayId).toBe('RmlsZTox')
@@ -88,7 +94,7 @@ describe('useChunkedUpload', () => {
       .mockResolvedValueOnce({} as never)
     mockUploadChunks.mockResolvedValue(['etag-0'])
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await result.current.uploadFile(makeFile(1))
 
     expect(mockAxiosPost).toHaveBeenNthCalledWith(
@@ -104,7 +110,7 @@ describe('useChunkedUpload', () => {
   it('uploadFile marks the file failed and rethrows on error', async () => {
     mockAxiosPost.mockRejectedValue(new Error('initiate failed'))
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow('initiate failed')
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
@@ -119,7 +125,7 @@ describe('useChunkedUpload', () => {
       }),
     )
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
@@ -138,7 +144,7 @@ describe('useChunkedUpload', () => {
       }),
     )
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
@@ -155,7 +161,7 @@ describe('useChunkedUpload', () => {
       Object.assign(new Error('Request failed with status code 400'), { response: { data } }),
     )
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await expect(result.current.uploadFile(makeFile(1))).rejects.toThrow()
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
@@ -184,7 +190,7 @@ describe('useChunkedUpload', () => {
     mockUploadChunks.mockResolvedValue(['etag-1'])
     mockAxiosPost.mockResolvedValue({} as never)
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await result.current.resumeUpload(fileId)
 
     // Only the missing chunk was uploaded, against its original URL.
@@ -228,7 +234,7 @@ describe('useChunkedUpload', () => {
       .mockResolvedValueOnce({} as never)
     mockUploadChunks.mockResolvedValue(['fresh-0', 'fresh-1'])
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await result.current.resumeUpload(fileId)
 
     // Stale upload aborted server-side, then a fresh initiate + full upload.
@@ -252,7 +258,7 @@ describe('useChunkedUpload', () => {
     const { addFile } = useFileUploadStore.getState()
     const fileId = addFile(makeFile(1))
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await result.current.resumeUpload(fileId)
 
     expect(mockAxiosPost).not.toHaveBeenCalled()
@@ -270,7 +276,9 @@ describe('useChunkedUpload', () => {
     })
     const onUploadError = vi.fn()
 
-    const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
+    const { result } = renderHook(() => useChunkedUpload({ onUploadError }), {
+      wrapper: IntlWrapper,
+    })
     await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
@@ -298,7 +306,7 @@ describe('useChunkedUpload', () => {
 
     mockAxiosPost.mockResolvedValue({} as never)
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     await result.current.resumeUpload(fileId)
 
     // No re-initiate, no re-upload, no DELETE — just the complete call.
@@ -329,7 +337,7 @@ describe('useChunkedUpload', () => {
       .mockResolvedValueOnce({} as never)
     mockUploadChunks.mockResolvedValue(['etag-0'])
 
-    const { result } = renderHook(() => useChunkedUpload())
+    const { result } = renderHook(() => useChunkedUpload(), { wrapper: IntlWrapper })
     const relayId = await result.current.retryUpload(fileId)
 
     expect(relayId).toBe('RmlsZTox')
