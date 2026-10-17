@@ -101,6 +101,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
             <IconButton
               size="small"
               onClick={() => handleDownload(file.url)}
+              disabled={!file.url}
               title={intl.formatMessage({
                 id: 'files.actions.download',
                 defaultMessage: 'Download',
@@ -174,6 +175,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
               <IconButton
                 size="small"
                 onClick={() => handleDownload(file.url)}
+                disabled={!file.url}
                 title={intl.formatMessage({
                   id: 'files.actions.download',
                   defaultMessage: 'Download',
