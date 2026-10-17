@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+import { useIntl } from 'react-intl'
 import { ConnectionHandler } from 'react-relay'
 import { useShallow } from 'zustand/react/shallow'
 
@@ -9,6 +10,7 @@ import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttac
 import type { FileUploadProgress } from '../../types'
 import { uploadTokensFor } from '../../utils/uploadTokens'
 import { useChunkedUpload } from '../useChunkedUpload'
+import { ATTACH_ERROR_MESSAGES } from './constants'
 import type { AttachOptions, UseFileUploadLogicParams, UseFileUploadLogicReturn } from './types'
 
 /** Relay ids of the finished uploads in `scope`. */
@@ -30,6 +32,7 @@ export const useFileUploadLogic = ({
   onAttachComplete,
   onError,
 }: UseFileUploadLogicParams): UseFileUploadLogicReturn => {
+  const intl = useIntl()
   const [attachFiles, isAttaching] = useFileAttachToTargetMutation()
   const [resetKey, setResetKey] = useState(0)
 
@@ -75,7 +78,11 @@ export const useFileUploadLogic = ({
           ]
           const payload = response?.fileAttachToTarget
           if (errors?.length || !payload || payload.errors?.length) {
-            markFailed(new Error(messages.join(', ') || 'Attach failed'))
+            markFailed(
+              new Error(
+                messages.join(', ') || intl.formatMessage(ATTACH_ERROR_MESSAGES.attachFailed),
+              ),
+            )
             return
           }
 
@@ -94,7 +101,7 @@ export const useFileUploadLogic = ({
         onError: markFailed,
       })
     },
-    [attachFiles, targetObjectId, onAttachComplete, onError],
+    [attachFiles, targetObjectId, onAttachComplete, onError, intl],
   )
 
   const { uploadFile } = useChunkedUpload()

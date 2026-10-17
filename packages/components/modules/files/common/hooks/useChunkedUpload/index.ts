@@ -2,10 +2,13 @@ import { useCallback } from 'react'
 
 import { axios, getApiErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
+
 import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import type { CompleteUploadPart, InitiateUploadResponse } from '../../types'
 import { chunkFile, uploadChunks } from '../../utils'
+import { UPLOAD_ERROR_MESSAGES } from './constants'
 import type { UseChunkedUploadOptions } from './types'
 
 const areUrlsExpired = (initiatedAt?: number, expiresIn?: number): boolean => {
@@ -53,6 +56,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   const addFile = useFileUploadStore((state) => state.addFile)
   const updateFileProgress = useFileUploadStore((state) => state.updateFileProgress)
   const updateChunkProgress = useFileUploadStore((state) => state.updateChunkProgress)
+  const intl = useIntl()
   const { sendToast } = useNotification()
 
   /**
@@ -77,10 +81,16 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         status: FileUploadStatus.FAILED,
         error: errorMessage,
       })
-      sendToast(`${current?.fileName ?? 'File'}: ${errorMessage}`, { type: 'error' })
+      sendToast(
+        intl.formatMessage(UPLOAD_ERROR_MESSAGES.toast, {
+          fileName: current?.fileName ?? intl.formatMessage(UPLOAD_ERROR_MESSAGES.fallbackFileName),
+          error: errorMessage,
+        }),
+        { type: 'error' },
+      )
       options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
     },
-    [updateFileProgress, sendToast, options],
+    [updateFileProgress, sendToast, options, intl],
   )
 
   /**
@@ -162,11 +172,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         options?.onUploadComplete?.(fileId, relayId)
         return relayId
       } catch (error) {
-        handleUploadError(fileId, error, 'Upload failed')
+        handleUploadError(fileId, error, intl.formatMessage(UPLOAD_ERROR_MESSAGES.uploadFailed))
         throw error
       }
     },
-    [addFile, startUpload, handleUploadError, options],
+    [addFile, startUpload, handleUploadError, options, intl],
   )
 
   const pauseUpload = useCallback((fileId: string) => {
@@ -253,11 +263,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
 
         options?.onUploadComplete?.(fileId, fileProgress.fileRelayId!)
       } catch (error) {
-        handleUploadError(fileId, error, 'Resume failed')
+        handleUploadError(fileId, error, intl.formatMessage(UPLOAD_ERROR_MESSAGES.resumeFailed))
         throw error
       }
     },
-    [startUpload, updateFileProgress, updateChunkProgress, handleUploadError, options],
+    [startUpload, updateFileProgress, updateChunkProgress, handleUploadError, options, intl],
   )
 
   const retryUpload = useCallback(
@@ -274,11 +284,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         options?.onUploadComplete?.(fileId, relayId)
         return relayId
       } catch (error) {
-        handleUploadError(fileId, error, 'Retry failed')
+        handleUploadError(fileId, error, intl.formatMessage(UPLOAD_ERROR_MESSAGES.retryFailed))
         throw error
       }
     },
-    [startUpload, handleUploadError, options],
+    [startUpload, handleUploadError, options, intl],
   )
 
   return { uploadFile, pauseUpload, resumeUpload, retryUpload }
