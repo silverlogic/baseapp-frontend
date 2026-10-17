@@ -36,6 +36,7 @@ import {
   StyledMenu,
 } from './styled'
 import { ProfileComponentProps } from './types'
+import { getProfileShareUrl } from './utils'
 
 const ProfileComponent: FC<ProfileComponentProps> = ({
   profile: profileRef,
@@ -58,8 +59,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
 
   const handleShareClick = () => {
     const path = profile?.urlPath?.path ?? `/profile/${profile?.id}`
-    const url = [process.env.NEXT_PUBLIC_APP_BASE_URL, path].join('')
-    navigator.clipboard.writeText(url)
+    navigator.clipboard.writeText(getProfileShareUrl(path))
     sendToast('Profile URL copied to clipboard!', { type: 'success' })
     handleClose()
   }

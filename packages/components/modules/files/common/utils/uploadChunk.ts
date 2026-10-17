@@ -1,3 +1,14 @@
+export type ChunkUploadError = Error & { response?: { status: number; data?: unknown } }
+
+const parseJsonBody = (text: string): unknown => {
+  try {
+    const data = JSON.parse(text)
+    return data && typeof data === 'object' ? data : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export async function uploadChunk(
   chunk: Blob,
   presignedUrl: string,
@@ -26,7 +37,12 @@ export async function uploadChunk(
           resolve(etag)
         }
       } else {
-        reject(new Error(`Chunk upload failed: ${xhr.status} ${xhr.statusText}`))
+        // Keep the body so the backend's reason reaches the user (getApiErrorMessage).
+        const error: ChunkUploadError = new Error(
+          `Chunk upload failed: ${xhr.status} ${xhr.statusText}`,
+        )
+        error.response = { status: xhr.status, data: parseJsonBody(xhr.responseText) }
+        reject(error)
       }
     })
 

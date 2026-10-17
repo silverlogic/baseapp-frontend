@@ -1,5 +1,26 @@
 # @baseapp-frontend/components
 
+## 3.0.1
+
+### Patch Changes
+
+- fee7012: Comment attachments accept any file type (videos included) and any size. The comment composer and
+  comment edit no longer restrict uploads to PNG/JPG/PDF up to 100MB, and `useFileSelect` /
+  `FileUploadDropzone` no longer default to a 100MB cap; pass `maxFileSize` / `acceptedFileTypes` to
+  restrict them. Limits are left to the backend (`MAX_FILE_UPLOAD_SIZE`): when it rejects an upload,
+  its reason is shown on the file and in an error toast instead of axios' generic "Request failed with
+  status code 400". This includes a rejected part upload: `uploadChunk` keeps the response body
+  and `uploadChunks` passes it on after its retries. `FileUploadDropzone` treats only an omitted
+  `maxFileSize` as unlimited, so an explicit `0` is enforced. `formatFileSize` now reports gigabytes.
+  A non-JSON error body (e.g. a proxy's HTML error page) shows the generic message instead of its
+  first character, and nested DRF errors show their first message instead of `[object Object]`.
+- 5ee95e2: `File.fileSize` is a `BigInt` in the GraphQL schema, so files over 2 GB report their size. The
+  shared Relay config maps `BigInt` to `number`, keeping `fileSize` typed as a number.
+  - @baseapp-frontend/authentication@6.0.1
+  - @baseapp-frontend/design-system@2.1.2
+  - @baseapp-frontend/graphql@2.0.2
+  - @baseapp-frontend/utils@4.2.1
+
 ## 3.0.0
 
 ### Major Changes
