@@ -7,12 +7,13 @@ import { Dropzone } from '@baseapp-frontend/design-system/components/web/dropzon
 
 import { useIntl } from 'react-intl'
 
+import { formatFileSize } from '../../common/utils/formatters'
 import type { FileUploadDropzoneProps } from './types'
 
 const FileUploadDropzone: FC<FileUploadDropzoneProps> = ({
   onFilesSelected,
   maxFiles = 10,
-  maxFileSize = 100 * 1024 * 1024, // 100MB default
+  maxFileSize,
   acceptedFileTypes,
   disabled,
 }) => {
@@ -31,16 +32,24 @@ const FileUploadDropzone: FC<FileUploadDropzoneProps> = ({
       onSelect={handleSelect}
       onRemove={() => {}}
       multiple={maxFiles > 1}
-      maxFileSize={maxFileSize / (1024 * 1024)} // Convert bytes to MB
+      // Dropzone takes MB; unlimited when omitted.
+      maxFileSize={maxFileSize !== undefined ? maxFileSize / (1024 * 1024) : Infinity}
       asBase64={false} // Keep as File objects for chunked upload
       title={intl.formatMessage({ id: 'files.dropzone.title', defaultMessage: 'Upload Files' })}
-      subTitle={intl.formatMessage(
-        {
-          id: 'files.dropzone.subtitle',
-          defaultMessage: 'Max {maxFiles} files, {maxFileSize}MB each',
-        },
-        { maxFiles, maxFileSize: Math.round(maxFileSize / (1024 * 1024)) },
-      )}
+      subTitle={
+        maxFileSize !== undefined
+          ? intl.formatMessage(
+              {
+                id: 'files.dropzone.subtitle',
+                defaultMessage: 'Max {maxFiles} files, {maxFileSize} each',
+              },
+              { maxFiles, maxFileSize: formatFileSize(maxFileSize) },
+            )
+          : intl.formatMessage(
+              { id: 'files.dropzone.subtitleNoSizeLimit', defaultMessage: 'Max {maxFiles} files' },
+              { maxFiles },
+            )
+      }
       includeActionButton={false}
       DropzoneOptions={{
         disabled,

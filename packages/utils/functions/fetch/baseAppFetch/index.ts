@@ -6,6 +6,7 @@ import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { MinimalProfile } from '../../../types/profile'
+import { resolveApiUrl } from '../../api/resolveApiUrl'
 import { getCookie } from '../../cookie'
 import { broadcastEvent } from '../../events'
 import { getExpoConstant } from '../../expo'
@@ -92,7 +93,10 @@ export const baseAppFetch: BaseAppFetch = async (
 ) => {
   const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
 
-  const url = `${baseUrl ?? EXPO_PUBLIC_API_BASE_URL}${path}`
+  const { url: apiBaseUrl, headers: forwardedHeaders } = await resolveApiUrl(
+    baseUrl ?? EXPO_PUBLIC_API_BASE_URL,
+  )
+  const url = `${apiBaseUrl}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
   let currentProfile
@@ -111,6 +115,7 @@ export const baseAppFetch: BaseAppFetch = async (
     headers: {
       Accept: 'application/json, text/plain, */*',
       'Current-Profile': parsedCurrentProfile ? parsedCurrentProfile.id : '',
+      ...forwardedHeaders,
       ...options.headers,
     },
   }

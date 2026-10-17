@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { axios } from '@baseapp-frontend/utils'
+import { axios, getApiErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { CHUNK_SIZE, FileUploadStatus, URL_EXPIRY_SAFETY_MARGIN_MS } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
@@ -13,6 +13,28 @@ const areUrlsExpired = (initiatedAt?: number, expiresIn?: number): boolean => {
   return Date.now() >= initiatedAt + expiresIn * 1000 - URL_EXPIRY_SAFETY_MARGIN_MS
 }
 
+/** First string anywhere in a DRF error body, e.g. {"parts": [{"etag": ["..."]}]}. */
+const firstMessage = (value: unknown): string | undefined => {
+  if (typeof value === 'string') return value
+  if (Array.isArray(value)) return value.map(firstMessage).find(Boolean)
+  if (value && typeof value === 'object')
+    return Object.values(value).map(firstMessage).find(Boolean)
+  return undefined
+}
+
+/**
+ * The backend's reason for a failed request (e.g. file too large). A non-JSON body,
+ * such as a proxy's HTML error page, falls back instead of showing its first character.
+ */
+const uploadErrorMessage = (error: unknown, fallbackMessage: string): string => {
+  const data = (error as { response?: { data?: unknown } } | undefined)?.response?.data
+  if (data === undefined || data === null || data === '') {
+    return getApiErrorMessage(error, { defaultMessage: fallbackMessage })
+  }
+  if (typeof data !== 'object') return fallbackMessage
+  return firstMessage(data) ?? fallbackMessage
+}
+
 const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
   etags.map((etag, idx) => {
     if (!etag) {
@@ -21,12 +43,17 @@ const buildParts = (etags: (string | undefined)[]): CompleteUploadPart[] =>
     return { partNumber: idx + 1, etag }
   })
 
+// Anonymous uploads prove they started the upload with the token from initiation.
+const uploadTokenConfig = (uploadToken?: string) =>
+  uploadToken ? { headers: { 'X-File-Upload-Token': uploadToken } } : undefined
+
 export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
   // Actions are picked individually: subscribing to the whole store here would
   // re-render every consumer of this hook on each progress tick.
   const addFile = useFileUploadStore((state) => state.addFile)
   const updateFileProgress = useFileUploadStore((state) => state.updateFileProgress)
   const updateChunkProgress = useFileUploadStore((state) => state.updateChunkProgress)
+  const { sendToast } = useNotification()
 
   /**
    * Translate a thrown upload error into store state. A pause aborts the
@@ -44,14 +71,16 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         return
       }
 
-      const errorMessage = error instanceof Error ? error.message : fallbackMessage
+      // Prefer the backend's reason (e.g. file too large) over axios' "status code 400".
+      const errorMessage = uploadErrorMessage(error, fallbackMessage)
       updateFileProgress(fileId, {
         status: FileUploadStatus.FAILED,
         error: errorMessage,
       })
+      sendToast(`${current?.fileName ?? 'File'}: ${errorMessage}`, { type: 'error' })
       options?.onUploadError?.(fileId, error instanceof Error ? error : new Error(errorMessage))
     },
-    [updateFileProgress, options],
+    [updateFileProgress, sendToast, options],
   )
 
   /**
@@ -89,6 +118,7 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         uploadId: data.uploadId,
         backendId: data.id,
         fileRelayId: data.relayId,
+        uploadToken: data.uploadToken,
         presignedUrls: data.presignedUrls,
         initiatedAt: Date.now(),
         expiresIn: data.expiresIn,
@@ -106,9 +136,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
         },
       })
 
-      await axios.post(`files/uploads/${data.id}/complete`, {
-        parts: buildParts(etags),
-      })
+      await axios.post(
+        `files/uploads/${data.id}/complete`,
+        { parts: buildParts(etags) },
+        uploadTokenConfig(data.uploadToken),
+      )
 
       updateFileProgress(fileId, {
         status: FileUploadStatus.COMPLETED,
@@ -171,7 +203,12 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
           // The presigned part URLs have expired; abort the stale upload and
           // start fresh, since we cannot re-sign individual parts.
           if (fileProgress.backendId) {
-            await axios.delete(`files/uploads/${fileProgress.backendId}`).catch(() => {})
+            await axios
+              .delete(
+                `files/uploads/${fileProgress.backendId}`,
+                uploadTokenConfig(fileProgress.uploadToken),
+              )
+              .catch(() => {})
           }
           const relayId = await startUpload(fileId, fileProgress.file)
           options?.onUploadComplete?.(fileId, relayId)
@@ -203,9 +240,11 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
           })
         }
 
-        await axios.post(`files/uploads/${fileProgress.backendId}/complete`, {
-          parts: buildParts(allEtags),
-        })
+        await axios.post(
+          `files/uploads/${fileProgress.backendId}/complete`,
+          { parts: buildParts(allEtags) },
+          uploadTokenConfig(fileProgress.uploadToken),
+        )
 
         updateFileProgress(fileId, {
           status: FileUploadStatus.COMPLETED,
