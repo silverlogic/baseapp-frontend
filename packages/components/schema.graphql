@@ -1135,6 +1135,7 @@ type Mutation {
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+  notificationSettingsUpdate(input: NotificationSettingsUpdateInput!): NotificationSettingsUpdatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
 
   """
@@ -1308,6 +1309,13 @@ type NotificationSetting implements Node {
   pk: Int
 }
 
+input NotificationSettingChangeInput {
+  """The key of the notification setting group."""
+  group: String!
+  channel: NotificationChannelTypes!
+  isActive: Boolean!
+}
+
 type NotificationSettingConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -1327,6 +1335,25 @@ type NotificationSettingEdge {
   cursor: String!
 }
 
+"""
+A group of notification verbs the user turns on or off together, per channel. A notification belongs
+to a group when its verb is the group key or starts with the group key followed by a dot.
+"""
+type NotificationSettingGroup {
+  key: String!
+  label: String!
+  description: String
+
+  """Locked groups cannot be turned off by the user."""
+  isLocked: Boolean!
+  channels: [NotificationSettingGroupChannel!]!
+}
+
+type NotificationSettingGroupChannel {
+  channel: NotificationChannelTypes!
+  isActive: Boolean!
+}
+
 input NotificationSettingToggleInput {
   verb: String!
   channel: NotificationChannelTypes!
@@ -1341,13 +1368,35 @@ type NotificationSettingTogglePayload {
   clientMutationId: String
 }
 
+input NotificationSettingsUpdateInput {
+  """
+  The channel states to set. Setting is idempotent; a locked or unknown group fails validation.
+  """
+  settings: [NotificationSettingChangeInput!]!
+  clientMutationId: String
+}
+
+type NotificationSettingsUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  groups: [NotificationSettingGroup!]
+  clientMutationId: String
+}
+
 interface NotificationsInterface {
   """The ID of the object"""
   id: ID!
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String, group: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+
+  """
+  The notification setting groups the viewer can manage, with the state of each channel. Only groups
+  whose audience admits the viewer are listed.
+  """
+  notificationSettingGroups: [NotificationSettingGroup!]!
 }
 
 input NotificationsMarkAllAsReadInput {
@@ -2397,9 +2446,15 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   myRating(profileId: ID): Rate
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String, group: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+
+  """
+  The notification setting groups the viewer can manage, with the state of each channel. Only groups
+  whose audience admits the viewer are listed.
+  """
+  notificationSettingGroups: [NotificationSettingGroup!]!
   profile: Profile
   profiles(
     offset: Int
