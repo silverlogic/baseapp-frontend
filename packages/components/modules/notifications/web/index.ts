@@ -35,3 +35,6 @@ export type * from './NotificationsList/MarkAllAsReadButton/types'
 
 export { default as EmptyState } from './NotificationsList/EmptyState'
 export type * from './NotificationsList/EmptyState/types'
+
+export { default as NotificationSettingsGroups } from './NotificationSettingsGroups'
+export type * from './NotificationSettingsGroups/types'

@@ -1,0 +1,43 @@
+import { Meta } from '@storybook/addon-docs'
+
+<Meta title="@baseapp-frontend | components/Notifications/NotificationSettingsGroups" />
+
+# Component Documentation
+
+## NotificationSettingsGroups
+
+- **Purpose**: Lets the viewer turn notification setting groups on or off per channel. The groups, their labels and their channels come from the backend's group registry (`notificationSettingGroups`), so the screen needs no change when a project adds a group.
+- **Expected Behavior**: Renders one row per group (label, description) and one switch per channel the groups offer. A switch moves at once and goes back if the server rejects the change (`notificationSettingsUpdate`), with the error shown as a toast. Locked groups render their switches disabled with a hint. With no groups, a short empty-state text is shown.
+
+## Use Cases
+
+- **Current Usage**: Notification preferences on an account settings page.
+- **Potential Usage**: An onboarding step that asks which notifications to receive.
+
+## Props
+
+- **user** (NotificationSettingsGroups_user fragment ref, optional): The user to show. Without it the component runs `NotificationSettingsGroupsQuery` for the current user, behind a Suspense boundary.
+- **channelLabels** (object, optional): Column header per channel, e.g. `{ IN_APP: 'Portal' }`. Defaults to All, In-app, Email and Push.
+- **groupColumnLabel** (string, optional): Header of the group column. Defaults to "Notifications".
+- **lockedHint** (string, optional): Text shown under a locked group.
+- **emptyStateText** (string, optional): Text shown when there are no groups.
+- **getSwitchLabel** (function, optional): `(groupLabel, channelLabel) => string`, the accessible name of each switch.
+- **Container** (Component, optional): Wraps the table. Defaults to a horizontally scrollable box.
+- **LoadingState** / **LoadingStateProps** (optional): Shown while the query loads.
+
+## Notes
+
+- **Related Components**:
+  - `useNotificationSettingsGroups` (common) - the data hook behind this component, for a custom UI or React Native.
+  - NotificationsList - its `group` prop lists the notifications of one group.
+
+## Example Usage
+
+```javascript
+import { NotificationSettingsGroups } from '@baseapp-frontend/components/notifications/web'
+
+const NotificationPreferences = () => (
+  <NotificationSettingsGroups channelLabels={{ IN_APP: 'Portal' }} lockedHint="Always on" />
+)
+export default NotificationPreferences
+```
