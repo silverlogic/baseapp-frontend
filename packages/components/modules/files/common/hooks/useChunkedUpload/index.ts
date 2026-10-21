@@ -70,14 +70,16 @@ export const useChunkedUpload = (options?: UseChunkedUploadOptions) => {
    * Translate a thrown upload error into store state. A pause aborts the
    * in-flight request, which rejects here — but pauseFile has already set the
    * status to PAUSED (and abortFile to ABORTED), so those must not be clobbered
-   * to FAILED or resume becomes impossible.
+   * to FAILED or resume becomes impossible. A missing entry was removed (removeFile,
+   * clearScope), which aborts it on purpose, so it is not reported either.
    */
   const handleUploadError = useCallback(
     (fileId: string, error: unknown, fallbackMessage: string) => {
       const current = useFileUploadStore.getState().files.get(fileId)
       if (
-        current?.status === FileUploadStatus.PAUSED ||
-        current?.status === FileUploadStatus.ABORTED
+        !current ||
+        current.status === FileUploadStatus.PAUSED ||
+        current.status === FileUploadStatus.ABORTED
       ) {
         return
       }

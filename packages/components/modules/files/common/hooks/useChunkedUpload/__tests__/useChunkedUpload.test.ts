@@ -288,6 +288,23 @@ describe('useChunkedUpload', () => {
     expect(onUploadError).not.toHaveBeenCalled()
   })
 
+  it('does not report an upload that was removed mid-flight', async () => {
+    mockAxiosPost.mockResolvedValueOnce(initiateResponse(2) as never)
+    mockUploadChunks.mockImplementation(async () => {
+      const [id] = Array.from(useFileUploadStore.getState().files.keys())
+      useFileUploadStore.getState().removeFile(id!)
+      throw new Error('Chunk upload aborted')
+    })
+    const onUploadError = vi.fn()
+
+    const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
+    await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')
+
+    expect(useFileUploadStore.getState().files.size).toBe(0)
+    expect(sendToast).not.toHaveBeenCalled()
+    expect(onUploadError).not.toHaveBeenCalled()
+  })
+
   it('resumeUpload with every chunk already uploaded only completes, even if URLs expired', async () => {
     const file = makeFile(2)
     const { addFile, updateFileProgress } = useFileUploadStore.getState()
