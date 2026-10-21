@@ -1,4 +1,4 @@
-import { FC, Suspense, useMemo } from 'react'
+import { FC, MouseEvent, Suspense, useMemo } from 'react'
 
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
@@ -84,6 +84,12 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
     ? unreadNotificationIds.length > 0
     : !!data?.notificationsUnreadCount
 
+  // A notification's link navigates on the client, which would leave the drawer open over the new
+  // page.
+  const closeOnLinkClick = (event: MouseEvent<HTMLElement>) => {
+    if ((event.target as Element).closest?.('a[href]')) setIsDrawerOpened(false)
+  }
+
   const renderVirtuosoHeader = () => <HeaderSpacer />
 
   const renderVirtuosoLoadingState = () => {
@@ -124,7 +130,7 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
   }
 
   return (
-    <Box display="grid" gridTemplateRows="min-content 1fr" height="100%">
+    <Box display="grid" gridTemplateRows="min-content 1fr" height="100%" onClick={closeOnLinkClick}>
       <HeaderContainer>
         <Typography variant="h6">Notifications</Typography>
         <Box display="grid" gridTemplateColumns="max-content min-content">

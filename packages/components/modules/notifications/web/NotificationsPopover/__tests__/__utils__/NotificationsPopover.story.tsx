@@ -154,3 +154,22 @@ export const WithGroup = () => {
     />
   )
 }
+
+/** A group list whose items link to an in-page anchor, so following one keeps the gallery loaded. */
+export const WithGroupLinks = () => {
+  const environment = useSeededEnvironment(unreadNotificationsMockData)
+
+  return (
+    <NotificationsPopoverForTesting
+      environment={environment}
+      NotificationsListProps={{
+        group: 'COMMENTS',
+        NotificationItemProps: {
+          NotificationItemRendererProps: {
+            GenericNotificationItemProps: { getNotificationUrl: () => '#notification' },
+          },
+        },
+      }}
+    />
+  )
+}

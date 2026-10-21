@@ -307,4 +307,21 @@ test.describe('Component: NotificationsPopover', () => {
         variables: { count: 10, group: 'COMMENTS' },
       })
   })
+
+  test('GIVEN a notification with a link, WHEN it is clicked, THEN the drawer closes', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithGroupLinks`)
+    await openDrawer(component, page)
+    await resolve(page, 'resolveGroupList')
+
+    // keep the browser from following the link, so only the list's own handler can close the drawer
+    await page.evaluate(() =>
+      document.addEventListener('click', (event) => event.preventDefault(), { capture: true }),
+    )
+    await page.getByText('Your registration is confirmed.', { exact: true }).click()
+
+    await expect(drawer(page)).not.toBeAttached()
+  })
 })
