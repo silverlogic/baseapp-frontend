@@ -1135,6 +1135,14 @@ type Mutation {
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+
+  """
+  Set the viewer's notification-group preferences.
+  
+  Idempotent: each entry sets a value, it never toggles. The whole input is rejected when an
+  entry names an unknown group (or one outside the viewer's audience), a locked group, or a
+  channel the group does not offer.
+  """
   notificationSettingsUpdate(input: NotificationSettingsUpdateInput!): NotificationSettingsUpdatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
 
@@ -1329,21 +1337,23 @@ type NotificationSettingEdge {
 }
 
 """
-A group of notification verbs the user turns on or off together, per channel. A notification belongs
-to a group when its verb is the group key or starts with the group key followed by a dot.
+A registered notification group with the viewer's preference per channel.
 """
 type NotificationSettingGroup {
+  """Group key; use it as `group` in mutations and filters."""
   key: String!
   label: String!
   description: String
 
-  """Locked groups cannot be turned off by the user."""
+  """Locked groups are always delivered and cannot be changed."""
   isLocked: Boolean!
   channels: [NotificationSettingGroupChannel!]!
 }
 
 type NotificationSettingGroupChannel {
   channel: NotificationChannelTypes!
+
+  """Whether the viewer receives this group on this channel."""
   isActive: Boolean!
 }
 
@@ -1371,13 +1381,17 @@ type NotificationSettingTogglePayload {
 }
 
 input NotificationSettingsUpdateInput {
-  """
-  The channel states to set. Setting is idempotent; a locked or unknown group fails validation.
-  """
   settings: [NotificationSettingGroupChannelInput!]!
   clientMutationId: String
 }
 
+"""
+Set the viewer's notification-group preferences.
+
+Idempotent: each entry sets a value, it never toggles. The whole input is rejected when an
+entry names an unknown group (or one outside the viewer's audience), a locked group, or a
+channel the group does not offer.
+"""
 type NotificationSettingsUpdatePayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
@@ -1397,10 +1411,7 @@ interface NotificationsInterface {
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
 
-  """
-  The notification setting groups the viewer can manage, with the state of each channel. Only groups
-  whose audience admits the viewer are listed.
-  """
+  """Registered notification groups the viewer can configure."""
   notificationSettingGroups: [NotificationSettingGroup!]!
 }
 
@@ -2455,10 +2466,7 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
 
-  """
-  The notification setting groups the viewer can manage, with the state of each channel. Only groups
-  whose audience admits the viewer are listed.
-  """
+  """Registered notification groups the viewer can configure."""
   notificationSettingGroups: [NotificationSettingGroup!]!
   profile: Profile
   profiles(
