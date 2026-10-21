@@ -89,6 +89,32 @@ test.describe('Component: NotificationSettingsGroups', () => {
     await expect(page.getByText('Network request failed')).toBeVisible()
   })
 
+  test('GIVEN a group with the ALL channel, WHEN ALL is turned off, THEN every channel of the group moves at once and goes back on failure', async ({
+    mount,
+    page,
+  }) => {
+    await mount(`${STORY}/WithAllChannel`)
+
+    const newsSwitch = (channel: string) =>
+      page.getByRole('checkbox', { name: `${channel} notifications for News` })
+
+    await page.getByRole('checkbox', { name: 'All notifications for News' }).click()
+
+    await expect(newsSwitch('All')).not.toBeChecked()
+    await expect(newsSwitch('In-app')).not.toBeChecked()
+    await expect(newsSwitch('Email')).not.toBeChecked()
+
+    // only the ALL change is sent: the server expands it to every channel itself
+    expect(await controls(page, 'lastUpdateVariables')).toEqual({
+      input: { settings: [{ group: 'NEWS', channel: 'ALL', isActive: false }] },
+    })
+
+    await controls(page, 'rejectUpdate')
+    await expect(newsSwitch('All')).toBeChecked()
+    await expect(newsSwitch('In-app')).toBeChecked()
+    await expect(newsSwitch('Email')).toBeChecked()
+  })
+
   test('GIVEN custom copy, THEN every label comes from the props', async ({ mount, page }) => {
     await mount(`${STORY}/WithCustomCopy`)
 

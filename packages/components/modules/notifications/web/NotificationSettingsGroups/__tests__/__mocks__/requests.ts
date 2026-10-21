@@ -35,6 +35,25 @@ export const notificationSettingGroupsMockData = {
   },
 }
 
+/** A group that offers the ALL channel next to the channels it sets. */
+export const notificationSettingGroupsWithAllMockData = {
+  data: {
+    me: {
+      __typename: 'User',
+      id: 'VXNlcjox',
+      notificationSettingGroups: [
+        {
+          key: 'NEWS',
+          label: 'News',
+          description: null,
+          isLocked: false,
+          channels: [channel('ALL', true), channel('IN_APP', true), channel('EMAIL', true)],
+        },
+      ],
+    },
+  },
+}
+
 export const emptyNotificationSettingGroupsMockData = {
   data: {
     me: {

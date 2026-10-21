@@ -6,6 +6,7 @@ import NotificationSettingsGroupsForTesting from '../NotificationSettingsGroupsF
 import {
   emptyNotificationSettingGroupsMockData,
   notificationSettingGroupsMockData,
+  notificationSettingGroupsWithAllMockData,
   notificationSettingsUpdateMockData,
   notificationSettingsUpdateRejectedMockData,
 } from '../__mocks__/requests'
@@ -51,6 +52,13 @@ const useSeededEnvironment = (data: unknown) =>
 /** Three groups: one editable with two channels, one locked, one email-only. */
 export const WithGroups = () => {
   const environment = useSeededEnvironment(notificationSettingGroupsMockData)
+
+  return <NotificationSettingsGroupsForTesting environment={environment} />
+}
+
+/** One group that offers the ALL channel. */
+export const WithAllChannel = () => {
+  const environment = useSeededEnvironment(notificationSettingGroupsWithAllMockData)
 
   return <NotificationSettingsGroupsForTesting environment={environment} />
 }
