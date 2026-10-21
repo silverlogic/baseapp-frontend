@@ -5,19 +5,9 @@ import { LoadingStateProps } from '@baseapp-frontend/design-system/components/we
 import { BoxProps } from '@mui/material'
 
 import { NotificationSettingsGroups_user$key } from '../../../../__generated__/NotificationSettingsGroups_user.graphql'
+import { NotificationSettingsGroupsCopy } from '../../common/types'
 
-export interface NotificationSettingsGroupsCopy {
-  /** Column header per channel, keyed by channel (`ALL`, `IN_APP`, `EMAIL`, `PUSH`). */
-  channelLabels?: Partial<Record<string, string>>
-  /** Header of the column that names the groups. */
-  groupColumnLabel?: string
-  /** Shown under a locked group, whose switches are disabled. */
-  lockedHint?: string
-  /** Shown when the viewer has no groups to manage. */
-  emptyStateText?: string
-  /** Accessible name of each switch. */
-  getSwitchLabel?: (groupLabel: string, channelLabel: string) => string
-}
+export type { NotificationSettingsGroupsCopy }
 
 export interface NotificationSettingsGroupsContentProps extends NotificationSettingsGroupsCopy {
   user: NotificationSettingsGroups_user$key

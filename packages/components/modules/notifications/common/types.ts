@@ -15,3 +15,16 @@ export interface NotificationSettingChange {
   channel: NotificationSettingChannel
   isActive: boolean
 }
+
+export interface NotificationSettingsGroupsCopy {
+  /** Label per channel, keyed by channel (`ALL`, `IN_APP`, `EMAIL`, `PUSH`). */
+  channelLabels?: Partial<Record<string, string>>
+  /** Heading of the group names (the column header on web). */
+  groupColumnLabel?: string
+  /** Shown under a locked group, whose switches are disabled. */
+  lockedHint?: string
+  /** Shown when the viewer has no groups to manage. */
+  emptyStateText?: string
+  /** Accessible name of each switch. */
+  getSwitchLabel?: (groupLabel: string, channelLabel: string) => string
+}
