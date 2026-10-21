@@ -4,9 +4,12 @@ import type { LoginMfaRequest } from '../types/auth'
 import type {
   MfaActivationResponse,
   MfaActiveMethodResponse,
+  MfaBackupCodesResponse,
+  MfaChangePrimaryMethodRequest,
   MfaConfigurationResponse,
   MfaConfirmationResponse,
   MfaDeactivateRequest,
+  MfaRegenerateBackupCodesRequest,
   MfaRequest,
   MfaRequestCodeRequest,
   MfaRequestCodeResponse,
@@ -43,8 +46,15 @@ export default class MfaApi {
     return axios.post(`${baseUrl}/${method}/deactivate/`, { code })
   }
 
-  static regenerateBackupCodes({ method, code }: MfaRequest): Promise<void> {
+  static regenerateBackupCodes({
+    method,
+    code,
+  }: MfaRegenerateBackupCodesRequest): Promise<MfaBackupCodesResponse> {
     return axios.post(`${baseUrl}/${method}/codes/regenerate/`, { code })
+  }
+
+  static changePrimaryMethod({ method, code }: MfaChangePrimaryMethodRequest): Promise<void> {
+    return axios.post(`${baseUrl}/change-primary-method/`, { method, code })
   }
 
   // TODO: review this endpoint

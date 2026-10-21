@@ -44,6 +44,27 @@ describe('MfaApi', () => {
     })
   })
 
+  it('returns the regenerated backup codes', async () => {
+    // the shared axios instance camelizes `backup_codes`
+    mockAxiosPost.mockResolvedValue({ backupCodes: ['abc123', 'def456'] })
+
+    await expect(
+      MfaApi.regenerateBackupCodes({ method: 'email', code: '123456' }),
+    ).resolves.toEqual({ backupCodes: ['abc123', 'def456'] })
+    expect(mockAxiosPost).toHaveBeenCalledWith('/auth/mfa/email/codes/regenerate/', {
+      code: '123456',
+    })
+  })
+
+  it('changes the primary method with a code from the new method', async () => {
+    await MfaApi.changePrimaryMethod({ method: 'app', code: '123456' })
+
+    expect(mockAxiosPost).toHaveBeenCalledWith('/auth/mfa/change-primary-method/', {
+      method: 'app',
+      code: '123456',
+    })
+  })
+
   it('calls every endpoint under /auth/mfa/', async () => {
     await MfaApi.activate({ method: 'app' })
     await MfaApi.confirmActivation({ method: 'app', code: '123456' })

@@ -26,8 +26,23 @@ export interface MfaDeactivateRequest {
   code?: MfaRequest['code']
 }
 
-export interface MfaConfirmationResponse {
+export interface MfaRegenerateBackupCodesRequest {
+  method: MfaRequest['method']
+  // required unless the backend turns off `CONFIRM_BACKUP_CODES_REGENERATION_WITH_CODE`
+  code?: MfaRequest['code']
+}
+
+// `code` must come from the method that becomes primary
+export type MfaChangePrimaryMethodRequest = MfaRequest
+
+export interface MfaBackupCodesResponse {
   backupCodes: string[]
+}
+
+export interface MfaConfirmationResponse extends MfaBackupCodesResponse {
+  // only sent by backends that issue new JWTs once a method is activated
+  access?: string
+  refresh?: string
 }
 
 export interface MfaActivationResponse {
