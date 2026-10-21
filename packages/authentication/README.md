@@ -315,6 +315,8 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance can be used to execute the MFA activation confirmation at any time.
 
+On success it invalidates the active methods query. The mutation's `data` is `{ backupCodes }`. `MfaConfirmationResponse` also types optional `access` and `refresh` tokens for backends that issue new JWTs once a method is activated, but the hook does not store them (`baseapp_auth` does not send them); read them in `options.onSuccess` if your backend does.
+
 #### **Usage**
 
 - `useMfaActivateConfirm` usage example:
@@ -476,7 +478,7 @@ deactivateMfa.mutate({ method: 'your-method', code: 'your-code' })
 
 ### **useMfaRegenerateBackupCodes**
 
-Replaces the backup codes of an active MFA method and returns the new ones. The old codes stop working, so show the new codes to the user right away.
+Replaces the backup codes of an active MFA method and returns the new ones. The old codes stop working, so show the new codes to the user right away. Backup codes are not part of the active methods query, so it does not invalidate it.
 
 #### **Parameters**
 
@@ -505,7 +507,9 @@ return data?.backupCodes.map((backupCode) => <p key={backupCode}>{backupCode}</p
 
 ### **useMfaRequestCode**
 
-Asks the backend to send a new code for an active MFA method, for example before confirming a protected action (deactivating a method, regenerating backup codes or changing the primary method) with an email or SMS method. Without a `method` the code goes to the user's primary method. An authenticator app (`app`) has nothing to send; its code comes from the app.
+Asks the backend to send a new code for an active MFA method, for example before confirming a protected action (deactivating a method, regenerating backup codes or changing the primary method) with an email or SMS method. Without a `method` the code goes to the user's primary method. Sending a code does not change the active methods, so it does not invalidate any query.
+
+> **Do not call it for an authenticator app (`app`).** There is nothing to send, because the code comes from the app, and the backend answers with the method's provisioning URI (`otpauth://...?secret=...`) in `details`. That URI holds the shared TOTP secret, so it must never be shown (for example in a toast built from `data.details`) or logged. Pass an explicit `email` or `sms_twilio` method, and skip the call when the method, or the primary method when you pass none, is `app`.
 
 #### **Parameters**
 
@@ -529,7 +533,7 @@ const { mutate: requestCode, isPending } = useMfaRequestCode()
 // send a code to the email method
 requestCode({ method: 'email' })
 
-// or to the primary method
+// or to the primary method, when it is not `app`
 requestCode()
 ```
 
