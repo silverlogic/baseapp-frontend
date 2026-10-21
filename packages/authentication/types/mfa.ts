@@ -34,6 +34,14 @@ export interface MfaActivationResponse {
   details: string
 }
 
+export interface MfaRequestCodeRequest {
+  // defaults to the user's primary method
+  method?: MfaMethod
+}
+
+// `details` is the backend's dispatch message (the provisioning URI for an authenticator app)
+export type MfaRequestCodeResponse = MfaActivationResponse
+
 export type MfaActivationEmailRequest = {
   email: string
 }

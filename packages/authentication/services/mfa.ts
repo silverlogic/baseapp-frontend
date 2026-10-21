@@ -8,9 +8,12 @@ import type {
   MfaConfirmationResponse,
   MfaDeactivateRequest,
   MfaRequest,
+  MfaRequestCodeRequest,
+  MfaRequestCodeResponse,
 } from '../types/mfa'
 
-const baseUrl = '/auth'
+// baseapp_auth mounts the django-trench endpoints under `auth/mfa/`
+const baseUrl = '/auth/mfa'
 
 export default class MfaApi {
   static activate({ method }: Pick<MfaRequest, 'method'>): Promise<MfaActivationResponse> {
@@ -22,15 +25,18 @@ export default class MfaApi {
   }
 
   static getActiveMethods(): Promise<DjangoPaginatedResponse<MfaActiveMethodResponse>> {
-    return axios.get(`${baseUrl}/mfa/user-active-methods/`)
+    return axios.get(`${baseUrl}/user-active-methods/`)
   }
 
   static getConfiguration(): Promise<MfaConfigurationResponse> {
-    return axios.get(`${baseUrl}/mfa/config/`)
+    return axios.get(`${baseUrl}/config/`)
   }
 
-  static sendCode(): Promise<void> {
-    return axios.get(`${baseUrl}/code/request/`)
+  /**
+   * Sends a new code for `method`, or for the user's primary method when `method` is omitted.
+   */
+  static sendCode({ method }: MfaRequestCodeRequest = {}): Promise<MfaRequestCodeResponse> {
+    return axios.post(`${baseUrl}/code/request/`, method ? { method } : {})
   }
 
   static deactivate({ method, code }: MfaDeactivateRequest): Promise<void> {
