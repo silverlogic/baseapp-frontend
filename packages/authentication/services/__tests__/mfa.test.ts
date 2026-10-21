@@ -45,7 +45,7 @@ describe('MfaApi', () => {
   })
 
   it('returns the regenerated backup codes', async () => {
-    // the shared axios instance camelizes `backup_codes`
+    // axios is mocked here; mfa.wire.test.ts covers the `backup_codes` → `backupCodes` mapping
     mockAxiosPost.mockResolvedValue({ backupCodes: ['abc123', 'def456'] })
 
     await expect(
