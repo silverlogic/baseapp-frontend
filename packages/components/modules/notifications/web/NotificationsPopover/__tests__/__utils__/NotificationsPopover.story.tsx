@@ -35,6 +35,7 @@ export interface NotificationsControls {
   resolveList: () => void
   resolveNextPage: () => void
   resolveMarkAsRead: () => void
+  lastOperation: () => { name: string; variables: Record<string, unknown> }
 }
 
 declare global {
@@ -61,6 +62,10 @@ const useSeededEnvironment = (data: unknown) =>
       resolveNextPage: () =>
         resolveMostRecentOperation({ data: notificationsListNextPageMockData }),
       resolveMarkAsRead: () => resolveMostRecentOperation({ data: markNotificationAsReadMockData }),
+      lastOperation: () => {
+        const { request } = testEnvironment.environment.mock.getMostRecentOperation()
+        return { name: request.node.operation.name, variables: request.variables }
+      },
     }
 
     return testEnvironment.environment
@@ -114,6 +119,18 @@ export const CustomListAndItem = () => {
       environment={environment}
       NotificationsList={CustomNotificationListForTesting}
       NotificationsListProps={{ NotificationItem: CustomNotificationItemForTesting }}
+    />
+  )
+}
+
+/** The list is filtered by a notification setting group. */
+export const WithGroup = () => {
+  const environment = useSeededEnvironment(unreadNotificationsMockData)
+
+  return (
+    <NotificationsPopoverForTesting
+      environment={environment}
+      NotificationsListProps={{ group: 'COMMENTS' }}
     />
   )
 }

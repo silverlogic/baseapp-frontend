@@ -5,8 +5,10 @@ export * from './graphql/mutations/NotificationSettingsUpdate'
 export * from './graphql/mutations/NotificationsMarkAllAsRead'
 export * from './graphql/mutations/NotificationsMarkAsRead'
 
+export * from './graphql/fragments/GroupNotificationsList'
 export * from './graphql/fragments/NotificationSettingsGroups'
 
+export * from './graphql/queries/GroupNotificationsList'
 export * from './graphql/queries/NotificationItem'
 export * from './graphql/queries/NotificationsList'
 export * from './graphql/queries/NotificationsPopover'

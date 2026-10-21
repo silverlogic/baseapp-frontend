@@ -216,4 +216,33 @@ test.describe('Component: NotificationsPopover', () => {
       await expectCustomItems(page)
     })
   })
+
+  test('GIVEN no group, WHEN the drawer is opened, THEN the list query does not send the group argument', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithNotifications`)
+    await openDrawer(component, page)
+
+    const operation = await page.evaluate(() => window.__notificationsControls.lastOperation())
+    expect(operation.name).toBe('NotificationsListQuery')
+    expect(operation.variables).not.toHaveProperty('group')
+  })
+
+  test('GIVEN a group, WHEN the drawer is opened, THEN only that group is fetched and listed', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithGroup`)
+    await openDrawer(component, page)
+
+    const operation = await page.evaluate(() => window.__notificationsControls.lastOperation())
+    expect(operation).toEqual({
+      name: 'GroupNotificationsListQuery',
+      variables: { count: 10, cursor: null, group: 'COMMENTS' },
+    })
+
+    await resolve(page, 'resolveList')
+    await expect(page.getByText('This is the first comment reply.', { exact: true })).toBeAttached()
+  })
 })

@@ -6,4 +6,6 @@ export const NOTIFICATION_VERB = {
 
 export const USER_NOTIFICATIONS_KEY = 'user_notifications'
 
+export const GROUP_NOTIFICATIONS_LIST_CONNECTION_KEY = 'GroupNotificationsList_notifications'
+
 export const NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT = 5

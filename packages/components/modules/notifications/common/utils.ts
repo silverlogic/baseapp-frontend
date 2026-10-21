@@ -1,5 +1,7 @@
+import { ConnectionHandler } from 'react-relay'
 import { RecordSourceProxy } from 'relay-runtime'
 
+import { GROUP_NOTIFICATIONS_LIST_CONNECTION_KEY } from './constants'
 import {
   NotificationSettingChange,
   NotificationSettingChannel,
@@ -67,3 +69,7 @@ export const setNotificationSettingChannels = (
     })
   })
 }
+
+/** The id of the connection a `NotificationsList` filtered by `group` reads, e.g. for an updater. */
+export const getGroupNotificationsConnectionId = (userId: string, group: string): string =>
+  ConnectionHandler.getConnectionID(userId, GROUP_NOTIFICATIONS_LIST_CONNECTION_KEY, { group })

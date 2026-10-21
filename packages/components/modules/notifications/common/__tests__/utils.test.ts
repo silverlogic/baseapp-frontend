@@ -1,6 +1,7 @@
 import { Environment, Network, RecordSource, Store, commitLocalUpdate } from 'relay-runtime'
 
 import {
+  getGroupNotificationsConnectionId,
   getNotificationSettingChannels,
   getNotificationUrl,
   setNotificationSettingChannels,
@@ -132,5 +133,13 @@ describe('setNotificationSettingChannels', () => {
 
     expect(isActive(environment, 'events-email')).toBe(true)
     expect(isActive(environment, 'billing-email')).toBe(true)
+  })
+})
+
+describe('getGroupNotificationsConnectionId', () => {
+  it('matches the connection the group-filtered list stores', () => {
+    expect(getGroupNotificationsConnectionId('user-1', 'EVENTS')).toBe(
+      'client:user-1:__GroupNotificationsList_notifications_connection(group:"EVENTS")',
+    )
   })
 })

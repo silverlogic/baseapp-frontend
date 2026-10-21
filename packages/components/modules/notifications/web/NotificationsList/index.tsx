@@ -9,9 +9,13 @@ import { Box, Divider, Typography } from '@mui/material'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
+import { GroupNotificationsListQuery as GroupNotificationsListQueryType } from '../../../../__generated__/GroupNotificationsListQuery.graphql'
+import { GroupNotificationsList_user$key } from '../../../../__generated__/GroupNotificationsList_user.graphql'
 import { NotificationsListFragment$key } from '../../../../__generated__/NotificationsListFragment.graphql'
 import { NotificationsListQuery as NotificationsListQueryType } from '../../../../__generated__/NotificationsListQuery.graphql'
 import {
+  GroupNotificationsListFragmentQuery,
+  GroupNotificationsListQuery,
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
@@ -24,9 +28,14 @@ import {
   ListContainer as DefaultListContainer,
   HeaderSpacer,
 } from './styled'
-import { NotificationsListProps } from './types'
+import { NotificationsListContentProps, NotificationsListProps } from './types'
 
-const NotificationsList: FC<NotificationsListProps> = ({
+const NotificationsListContent: FC<NotificationsListContentProps> = ({
+  data,
+  loadNext,
+  isLoadingNext,
+  hasNext,
+  refetchNotifications,
   setIsDrawerOpened,
   EmptyState = DefaultEmptyState,
   EmptyStateProps = {},
@@ -39,24 +48,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
 }) => {
   const smDown = useResponsive('down', 'sm')
 
-  const options = { count: 10 }
-  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
-    fetchPolicy: 'store-and-network',
-  })
-
-  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
-    NotificationsListQueryType,
-    NotificationsListFragment$key
-  >(NotificationsListFragment, me)
-
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
-  }
 
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
@@ -144,12 +139,75 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 }
 
-const NotificationsListSuspended: FC<NotificationsListProps> = (props) => {
+const AllNotificationsList: FC<NotificationsListProps> = (props) => {
+  const options = { count: 10 }
+  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
+    fetchPolicy: 'store-and-network',
+  })
+
+  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
+    NotificationsListQueryType,
+    NotificationsListFragment$key
+  >(NotificationsListFragment, me)
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
+
+  return (
+    <NotificationsListContent
+      {...props}
+      data={data}
+      loadNext={loadNext}
+      isLoadingNext={isLoadingNext}
+      hasNext={hasNext}
+      refetchNotifications={refetchNotifications}
+    />
+  )
+}
+
+const GroupNotificationsList: FC<NotificationsListProps & { group: string }> = ({
+  group,
+  ...props
+}) => {
+  const options = { count: 10, group }
+  const { me } = useLazyLoadQuery<GroupNotificationsListQueryType>(
+    GroupNotificationsListQuery,
+    options,
+    { fetchPolicy: 'store-and-network' },
+  )
+
+  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
+    GroupNotificationsListQueryType,
+    GroupNotificationsList_user$key
+  >(GroupNotificationsListFragmentQuery, me)
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
+
+  return (
+    <NotificationsListContent
+      {...props}
+      data={data}
+      loadNext={loadNext}
+      isLoadingNext={isLoadingNext}
+      hasNext={hasNext}
+      refetchNotifications={refetchNotifications}
+    />
+  )
+}
+
+const NotificationsListSuspended: FC<NotificationsListProps> = ({ group, ...props }) => {
   const { LoadingState = DefaultLoadingState, LoadingStateProps = {} } = props
 
   return (
     <Suspense fallback={<LoadingState {...LoadingStateProps} />}>
-      <NotificationsList {...props} />
+      {group ? (
+        <GroupNotificationsList {...props} group={group} />
+      ) : (
+        <AllNotificationsList {...props} />
+      )}
     </Suspense>
   )
 }
