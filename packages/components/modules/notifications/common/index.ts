@@ -13,3 +13,4 @@ export * from './graphql/queries/NotificationsSettings'
 export * from './graphql/subscriptions/useNotificationsSubscription'
 
 export * from './constants'
+export * from './utils'
