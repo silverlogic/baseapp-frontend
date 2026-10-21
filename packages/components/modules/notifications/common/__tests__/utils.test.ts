@@ -25,6 +25,18 @@ describe('getNotificationUrl', () => {
     expect(getNotificationUrl({ url: '//evil.example.com' })).toBeUndefined()
     expect(getNotificationUrl({ url: 'events/12' })).toBeUndefined()
   })
+
+  it('ignores paths that browsers resolve to another host', () => {
+    const unsafeUrls = ['/\\evil.example.com', '/\t/evil.example.com', '/\n/evil.example.com']
+    unsafeUrls.forEach((url) => {
+      // the premise: each would leave the app's origin if it were followed
+      expect(new URL(url, 'https://app.example.com').host).not.toBe('app.example.com')
+      expect(getNotificationUrl({ url })).toBeUndefined()
+    })
+    expect(getNotificationUrl({ url: '/events/12?tab=details#map' })).toBe(
+      '/events/12?tab=details#map',
+    )
+  })
 })
 
 describe('getNotificationSettingChannels', () => {

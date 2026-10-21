@@ -8,7 +8,11 @@ import {
   NotificationSettingGroup,
 } from './types'
 
-const SAFE_URL_PATTERN = /^(\/(?!\/)|https?:\/\/)/i
+// An app-relative path, but not `//host` or `/\host`, which browsers read as another host.
+const SAFE_URL_PATTERN = /^(\/(?![/\\])|https?:\/\/)/i
+// URL parsers drop tabs and newlines, so `/\t/host` would also reach another host.
+// eslint-disable-next-line no-control-regex
+const CONTROL_CHARACTER_PATTERN = /[\u0000-\u001f\u007f]/
 
 /**
  * Reads the conventional `data.url` of a notification: where clicking the notification takes the
@@ -22,6 +26,7 @@ export const getNotificationUrl = (data: unknown): string | undefined => {
   if (typeof url !== 'string') return undefined
 
   const trimmedUrl = url.trim()
+  if (CONTROL_CHARACTER_PATTERN.test(trimmedUrl)) return undefined
   return SAFE_URL_PATTERN.test(trimmedUrl) ? trimmedUrl : undefined
 }
 
