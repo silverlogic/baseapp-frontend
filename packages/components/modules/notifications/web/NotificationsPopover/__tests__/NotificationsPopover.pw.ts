@@ -245,4 +245,66 @@ test.describe('Component: NotificationsPopover', () => {
     await resolve(page, 'resolveList')
     await expect(page.getByText('This is the first comment reply.', { exact: true })).toBeAttached()
   })
+
+  test('GIVEN a group with nothing unread while other groups are unread, WHEN the drawer is opened, THEN "Mark all as read" is not offered', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithGroup`)
+    await openDrawer(component, page)
+    await resolve(page, 'resolveGroupListAllRead')
+
+    await expect(page.getByText('Your registration is confirmed.', { exact: true })).toBeAttached()
+    await expect(page.getByRole('button', { name: /mark all as read/i })).not.toBeAttached()
+  })
+
+  test('GIVEN a group with an unread notification, WHEN "Mark all as read" is clicked, THEN only that group\'s unread notifications are marked', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithGroup`)
+    await openDrawer(component, page)
+    await resolve(page, 'resolveGroupList')
+
+    await test.step('WHEN "Mark all as read" is clicked', async () => {
+      await page.getByRole('button', { name: /mark all as read/i }).click()
+    })
+
+    await test.step("THEN it marks the group's unread notifications by id, not every notification", async () => {
+      const operation = await page.evaluate(() => window.__notificationsControls.lastOperation())
+      expect(operation).toEqual({
+        name: 'NotificationsMarkAsReadMutation',
+        variables: { input: { read: true, notificationIds: ['group-notification-1'] } },
+      })
+      await resolve(page, 'resolveGroupMarkAsRead')
+    })
+
+    await test.step('THEN the group list is refetched and the button goes away', async () => {
+      const operation = await page.evaluate(() => window.__notificationsControls.lastOperation())
+      expect(operation.name).toBe('GroupNotificationsListPaginationQuery')
+      expect(operation.variables).toMatchObject({ group: 'COMMENTS' })
+      await resolve(page, 'resolveGroupListAllRead')
+
+      await expect(page.getByRole('button', { name: /mark all as read/i })).not.toBeAttached()
+    })
+  })
+
+  test('GIVEN a group list, WHEN a new notification raises the unread count, THEN the group list is refetched', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/WithGroup`)
+    await openDrawer(component, page)
+    await resolve(page, 'resolveGroupList')
+    await expect(page.getByText('Your event starts tomorrow.', { exact: true })).toBeAttached()
+
+    await resolve(page, 'receiveNotification')
+
+    await expect
+      .poll(() => page.evaluate(() => window.__notificationsControls.lastOperation()))
+      .toMatchObject({
+        name: 'GroupNotificationsListPaginationQuery',
+        variables: { count: 10, group: 'COMMENTS' },
+      })
+  })
 })

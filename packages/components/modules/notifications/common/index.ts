@@ -18,6 +18,9 @@ export * from './graphql/queries/NotificationSettingsGroups'
 
 export * from './graphql/subscriptions/useNotificationsSubscription'
 
+export { default as useGroupNotificationsList } from './hooks/useGroupNotificationsList'
+export * from './hooks/useGroupNotificationsList/types'
+
 export { default as useNotificationSettingsGroups } from './hooks/useNotificationSettingsGroups'
 export * from './hooks/useNotificationSettingsGroups/types'
 

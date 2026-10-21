@@ -9,16 +9,13 @@ import { Box, Divider, Typography } from '@mui/material'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
-import { GroupNotificationsListQuery as GroupNotificationsListQueryType } from '../../../../__generated__/GroupNotificationsListQuery.graphql'
-import { GroupNotificationsList_user$key } from '../../../../__generated__/GroupNotificationsList_user.graphql'
 import { NotificationsListFragment$key } from '../../../../__generated__/NotificationsListFragment.graphql'
 import { NotificationsListQuery as NotificationsListQueryType } from '../../../../__generated__/NotificationsListQuery.graphql'
 import {
-  GroupNotificationsListFragmentQuery,
-  GroupNotificationsListQuery,
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
+  useGroupNotificationsList,
 } from '../../common'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
@@ -36,6 +33,7 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
   isLoadingNext,
   hasNext,
   refetchNotifications,
+  unreadNotificationIds,
   setIsDrawerOpened,
   EmptyState = DefaultEmptyState,
   EmptyStateProps = {},
@@ -79,6 +77,12 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
       />
     )
   }
+
+  // In a list filtered by group, "Mark all as read" covers only that group's unread notifications;
+  // the user's unread count includes every group, so it cannot decide whether to show the button.
+  const hasUnread = unreadNotificationIds
+    ? unreadNotificationIds.length > 0
+    : !!data?.notificationsUnreadCount
 
   const renderVirtuosoHeader = () => <HeaderSpacer />
 
@@ -124,8 +128,11 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
       <HeaderContainer>
         <Typography variant="h6">Notifications</Typography>
         <Box display="grid" gridTemplateColumns="max-content min-content">
-          {!!data?.notificationsUnreadCount && (
-            <MarkAllAsReadButton refetch={refetchNotifications} />
+          {hasUnread && (
+            <MarkAllAsReadButton
+              refetch={refetchNotifications}
+              notificationIds={unreadNotificationIds}
+            />
           )}
           {smDown && (
             <IconButton onClick={() => setIsDrawerOpened(false)} aria-label="close notifications">
@@ -170,32 +177,9 @@ const GroupNotificationsList: FC<NotificationsListProps & { group: string }> = (
   group,
   ...props
 }) => {
-  const options = { count: 10, group }
-  const { me } = useLazyLoadQuery<GroupNotificationsListQueryType>(
-    GroupNotificationsListQuery,
-    options,
-    { fetchPolicy: 'store-and-network' },
-  )
+  const groupList = useGroupNotificationsList(group)
 
-  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
-    GroupNotificationsListQueryType,
-    GroupNotificationsList_user$key
-  >(GroupNotificationsListFragmentQuery, me)
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
-  }
-
-  return (
-    <NotificationsListContent
-      {...props}
-      data={data}
-      loadNext={loadNext}
-      isLoadingNext={isLoadingNext}
-      hasNext={hasNext}
-      refetchNotifications={refetchNotifications}
-    />
-  )
+  return <NotificationsListContent {...props} {...groupList} />
 }
 
 const NotificationsListSuspended: FC<NotificationsListProps> = ({ group, ...props }) => {

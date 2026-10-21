@@ -2,11 +2,16 @@ import { useMemo } from 'react'
 
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
+import { commitLocalUpdate } from 'react-relay'
+
 import CustomNotificationItemForTesting from '../CustomNotificationItemForTesting'
 import CustomNotificationListForTesting from '../CustomNotificationListForTesting'
 import NotificationsPopoverForTesting from '../NotificationsPopoverForTesting'
 import {
   emptyNotificationsListMockData,
+  groupMarkAsReadMockData,
+  groupNotificationsListAllReadMockData,
+  groupNotificationsListMockData,
   markNotificationAsReadMockData,
   notificationsListMockData,
   notificationsListNextPageMockData,
@@ -35,6 +40,11 @@ export interface NotificationsControls {
   resolveList: () => void
   resolveNextPage: () => void
   resolveMarkAsRead: () => void
+  resolveGroupList: () => void
+  resolveGroupListAllRead: () => void
+  resolveGroupMarkAsRead: () => void
+  /** Raises the user's unread count in the store, as a notification from the subscription does. */
+  receiveNotification: () => void
   lastOperation: () => { name: string; variables: Record<string, unknown> }
 }
 
@@ -62,6 +72,16 @@ const useSeededEnvironment = (data: unknown) =>
       resolveNextPage: () =>
         resolveMostRecentOperation({ data: notificationsListNextPageMockData }),
       resolveMarkAsRead: () => resolveMostRecentOperation({ data: markNotificationAsReadMockData }),
+      resolveGroupList: () => resolveMostRecentOperation({ data: groupNotificationsListMockData }),
+      resolveGroupListAllRead: () =>
+        resolveMostRecentOperation({ data: groupNotificationsListAllReadMockData }),
+      resolveGroupMarkAsRead: () => resolveMostRecentOperation({ data: groupMarkAsReadMockData }),
+      receiveNotification: () =>
+        commitLocalUpdate(testEnvironment.environment, (store) => {
+          const user = store.get('user-1')
+          const count = Number(user?.getValue('notificationsUnreadCount') ?? 0)
+          user?.setValue(count + 1, 'notificationsUnreadCount')
+        }),
       lastOperation: () => {
         const { request } = testEnvironment.environment.mock.getMostRecentOperation()
         return { name: request.node.operation.name, variables: request.variables }
