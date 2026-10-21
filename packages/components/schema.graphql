@@ -1309,13 +1309,6 @@ type NotificationSetting implements Node {
   pk: Int
 }
 
-input NotificationSettingChangeInput {
-  """The key of the notification setting group."""
-  group: String!
-  channel: NotificationChannelTypes!
-  isActive: Boolean!
-}
-
 type NotificationSettingConnection {
   """Pagination data for this connection."""
   pageInfo: PageInfo!
@@ -1354,6 +1347,15 @@ type NotificationSettingGroupChannel {
   isActive: Boolean!
 }
 
+input NotificationSettingGroupChannelInput {
+  """Key of a registered notification group."""
+  group: String!
+
+  """ALL sets every channel of the group at once."""
+  channel: NotificationChannelTypes!
+  isActive: Boolean!
+}
+
 input NotificationSettingToggleInput {
   verb: String!
   channel: NotificationChannelTypes!
@@ -1372,7 +1374,7 @@ input NotificationSettingsUpdateInput {
   """
   The channel states to set. Setting is idempotent; a locked or unknown group fails validation.
   """
-  settings: [NotificationSettingChangeInput!]!
+  settings: [NotificationSettingGroupChannelInput!]!
   clientMutationId: String
 }
 
@@ -1380,7 +1382,10 @@ type NotificationSettingsUpdatePayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
+
+  """The changed groups with their resulting state."""
   groups: [NotificationSettingGroup!]
+  recipient: NotificationsInterface
   clientMutationId: String
 }
 
