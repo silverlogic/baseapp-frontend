@@ -42,6 +42,17 @@ describe('NotificationItemRenderer', () => {
     expect(screen.queryByRole('img')).toBeNull()
   })
 
+  it('renders no avatar for an actor without a name, such as a non-profile actor', () => {
+    const { container } = render(
+      <NotificationItemRenderer
+        notification={buildNotification({ actor: { id: 'user-1', __typename: 'User' } })}
+      />,
+    )
+
+    expect(screen.getByText('Your registration is confirmed.')).toBeTruthy()
+    expect(container.querySelector('.MuiAvatar-root')).toBeNull()
+  })
+
   it('ignores an unsafe url', () => {
     render(
       <NotificationItemRenderer

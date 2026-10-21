@@ -27,7 +27,9 @@ const GenericNotificationItem: FC<GenericNotificationItemProps> = ({
   NotificationHeader = DefaultNotificationHeader,
   NotificationHeaderProps = {},
 }) => {
-  const hasActor = !!notification.actor
+  // The fragment reads a name and image only from a Profile actor; any other actor has neither.
+  const actorName = notification.actor?.name
+  const hasActor = !!actorName
   const url = getNotificationUrl(notification)
 
   const content = (
@@ -35,7 +37,7 @@ const GenericNotificationItem: FC<GenericNotificationItemProps> = ({
       {hasActor && (
         <NotificationAvatar
           actorAvatar={notification.actor?.image ?? undefined}
-          actorName={notification.actor?.name}
+          actorName={actorName}
           {...NotificationAvatarProps}
         />
       )}
@@ -43,7 +45,7 @@ const GenericNotificationItem: FC<GenericNotificationItemProps> = ({
         <NotificationHeader
           message={notification.description ?? ''}
           timestamp={formatRelativeTime(notification.timestamp)}
-          actorName={notification.actor?.name}
+          actorName={actorName}
           unread={notification.unread}
           {...NotificationHeaderProps}
         />
