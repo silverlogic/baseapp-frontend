@@ -1,9 +1,13 @@
 import { RefObject } from 'react'
 
+import type { FilesList_target$key } from '../../../../../__generated__/FilesList_target.graphql'
+
 export type CommentEditTarget = {
   id: string
   body?: string | null
   mentionedProfileIds?: string[]
+  /** The comment's attached files, so the native composer can edit them. */
+  filesTarget?: FilesList_target$key
 }
 
 export type CommentReplyState<TElement = unknown> = {
