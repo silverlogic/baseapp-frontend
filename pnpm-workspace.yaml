@@ -148,24 +148,24 @@ catalogs:
     "@babel/preset-react": 7.25.9
     "@babel/preset-typescript": 7.26.0
     "@chromatic-com/storybook": 3.2.3
-    "@storybook/addon-docs": 8.6.17
-    "@storybook/addon-essentials": 8.6.17
-    "@storybook/addon-interactions": 8.6.17
-    "@storybook/addon-links": 8.6.17
+    "@storybook/addon-docs": 8.6.19
+    "@storybook/addon-essentials": 8.6.19
+    "@storybook/addon-interactions": 8.6.19
+    "@storybook/addon-links": 8.6.19
     "@storybook/addon-styling-webpack": 1.0.1
     "@storybook/addon-webpack5-compiler-babel": 3.0.3
-    "@storybook/blocks": 8.6.17
-    "@storybook/nextjs": 8.6.17
-    "@storybook/react": 8.6.17
-    "@storybook/react-webpack5": 8.6.17
-    "@storybook/test": 8.6.17
+    "@storybook/blocks": 8.6.19
+    "@storybook/nextjs": 8.6.19
+    "@storybook/react": 8.6.19
+    "@storybook/react-webpack5": 8.6.19
+    "@storybook/test": 8.6.19
     babel-loader: 9.2.1
     css-loader: 7.1.2
     html-webpack-plugin: 5.6.0
     msw-storybook-addon: 2.0.4
     msw: 2.6.6
     postcss-loader: 8.1.1
-    storybook: 8.6.17
+    storybook: 8.6.19
     style-loader: 4.0.0
     webpack-cli: 5.1.4
     webpack-dev-server: 5.0.4
