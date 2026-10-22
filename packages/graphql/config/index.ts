@@ -2,6 +2,8 @@ export { default as useEnvironment } from './useEnvironment'
 
 export * from './environment'
 
+export * from './prototype'
+
 export { default as loadSerializableQuery } from './loadSerializableQuery'
 export type * from './loadSerializableQuery'
 
