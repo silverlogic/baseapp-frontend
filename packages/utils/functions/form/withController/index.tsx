@@ -85,7 +85,9 @@ function withController<T>(
                 error={!!fieldState.error}
                 name={name}
                 onChange={handleOnChange}
-                onInputChange={onInputChange ? handleOnInputChange : undefined}
+                // Only Autocomplete-style fields take onInputChange; passing the key (even
+                // as undefined) to a TextField reaches the DOM as an unknown event handler.
+                {...(onInputChange ? { onInputChange: handleOnInputChange } : {})}
                 onBlur={handleOnBlur}
                 helperText={helperText || (!!fieldState.error && fieldState.error?.message)}
                 {...(restOfTheProps as any)}

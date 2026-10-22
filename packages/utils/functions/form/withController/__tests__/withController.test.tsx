@@ -118,4 +118,19 @@ describe('withController', () => {
     // The field receives the selected option, not the raw event.
     expect(mockFieldOnChange).toHaveBeenLastCalledWith(selectedOption)
   })
+
+  it("doesn't pass onInputChange to a component when none is given", () => {
+    const receivedProps = vi.fn()
+    const PropsSpy = (props: any) => {
+      receivedProps(props)
+      return null
+    }
+    const WrappedSpy = withController(PropsSpy)
+
+    render(<WrappedSpy name="test" control={{}} />)
+    expect(receivedProps.mock.lastCall?.[0]).not.toHaveProperty('onInputChange')
+
+    render(<WrappedSpy name="test" control={{}} onInputChange={vi.fn()} />)
+    expect(receivedProps.mock.lastCall?.[0]).toHaveProperty('onInputChange')
+  })
 })
