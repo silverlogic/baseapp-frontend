@@ -30,10 +30,9 @@ const MembersList: FC<MembersListProps> = ({
     UserMembersListFragment,
     userRef,
   )
-  const ownerProfile = useFragment<ProfileItemFragment$key>(
-    ProfileItemFragment,
-    data?.owner?.profile,
-  )
+  // An ownerless profile (run by its admins) has no owner row.
+  const ownerProfileRef = data?.owner?.profile
+  const ownerProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, ownerProfileRef)
 
   const handleSearch = (value: string) => {
     startTransition(() => {
@@ -116,12 +115,14 @@ const MembersList: FC<MembersListProps> = ({
         )}
       </CountRow>
       {members.length === 0 ? (
-        <MemberItem
-          member={data?.owner?.profile}
-          memberRole={MEMBER_ROLES.owner}
-          status={MEMBER_STATUSES.active}
-          searchQuery={watch('search')}
-        />
+        ownerProfileRef && (
+          <MemberItem
+            member={ownerProfileRef}
+            memberRole={MEMBER_ROLES.owner}
+            status={MEMBER_STATUSES.active}
+            searchQuery={watch('search')}
+          />
+        )
       ) : (
         <>
           {members.map((member, index) =>

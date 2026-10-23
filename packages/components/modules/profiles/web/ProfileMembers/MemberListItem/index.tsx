@@ -30,59 +30,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
 
   if (!memberFragment) return null
 
-  if (isFirstActiveMember) {
-    return (
-      <>
-        <Divider />
-        <MemberItemComponent
-          member={data?.owner?.profile}
-          memberRole={MEMBER_ROLES.owner}
-          status={MEMBER_STATUSES.active}
-          searchQuery={searchQuery}
-          {...MemberItemComponentProps}
-        />
-        <MemberItemComponent
-          member={memberFragment?.user?.profile}
-          memberRole={memberFragment?.role}
-          status={memberFragment?.status}
-          userId={memberFragment?.user?.id}
-          canChangeMember={data?.canChangeRole || false}
-          invitedEmail={memberFragment?.invitedEmail}
-          invitationExpiresAt={memberFragment?.invitationExpiresAt}
-          invitationId={memberFragment?.id}
-          {...MemberItemComponentProps}
-        />
-      </>
-    )
-  }
-
-  if (isLastMemberInactive) {
-    return (
-      <>
-        <MemberItemComponent
-          member={memberFragment?.user?.profile}
-          memberRole={memberFragment?.role}
-          status={memberFragment?.status}
-          userId={memberFragment?.user?.id}
-          canChangeMember={data?.canChangeRole || false}
-          invitedEmail={memberFragment?.invitedEmail}
-          invitationExpiresAt={memberFragment?.invitationExpiresAt}
-          invitationId={memberFragment?.id}
-          {...MemberItemComponentProps}
-        />
-        <Divider />
-        <MemberItemComponent
-          member={data?.owner?.profile}
-          memberRole={MEMBER_ROLES.owner}
-          status={MEMBER_STATUSES.active}
-          searchQuery={searchQuery}
-          {...MemberItemComponentProps}
-        />
-      </>
-    )
-  }
-
-  return (
+  const memberItem = (
     <MemberItemComponent
       member={memberFragment?.user?.profile}
       memberRole={memberFragment?.role}
@@ -95,6 +43,39 @@ const MemberListItem: FC<MemberListItemProps> = ({
       {...MemberItemComponentProps}
     />
   )
+
+  // An ownerless profile (run by its admins) has no owner row to place.
+  const ownerItem = data?.owner?.profile ? (
+    <MemberItemComponent
+      member={data.owner.profile}
+      memberRole={MEMBER_ROLES.owner}
+      status={MEMBER_STATUSES.active}
+      searchQuery={searchQuery}
+      {...MemberItemComponentProps}
+    />
+  ) : null
+
+  if (isFirstActiveMember) {
+    return (
+      <>
+        <Divider />
+        {ownerItem}
+        {memberItem}
+      </>
+    )
+  }
+
+  if (isLastMemberInactive && ownerItem) {
+    return (
+      <>
+        {memberItem}
+        <Divider />
+        {ownerItem}
+      </>
+    )
+  }
+
+  return memberItem
 }
 
 export default MemberListItem
