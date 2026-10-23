@@ -1057,13 +1057,8 @@ interface MentionsInterface {
 
 """An enumeration."""
 enum ImpersonationEndReason {
-  """Ended by the impersonator"""
   ENDED
-
-  """Expired"""
   EXPIRED
-
-  """Revoked"""
   REVOKED
 }
 
@@ -1073,6 +1068,10 @@ input ImpersonationEndInput {
   clientMutationId: String
 }
 
+"""
+End an impersonation session: the current request's, or — from the impersonator's own
+account — the one given by `session`.
+"""
 type ImpersonationEndPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
@@ -1091,7 +1090,9 @@ interface ImpersonationInterface {
 type ImpersonationSession implements Node {
   """The ID of the object"""
   id: ID!
-  impersonator: User!
+
+  """Empty once the impersonator's account is deleted."""
+  impersonator: User
   target: User!
   reason: String!
 
@@ -1117,6 +1118,10 @@ input ImpersonationStartInput {
   clientMutationId: String
 }
 
+"""
+Start acting as another user. Returns the session's tokens; the client swaps them in for
+its own and keeps its own to restore on `impersonationEnd`.
+"""
 type ImpersonationStartPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
@@ -1190,7 +1195,16 @@ type Metadata {
 }
 
 type Mutation {
+  """
+  Start acting as another user. Returns the session's tokens; the client swaps them in for
+  its own and keeps its own to restore on `impersonationEnd`.
+  """
   impersonationStart(input: ImpersonationStartInput!): ImpersonationStartPayload
+
+  """
+  End an impersonation session: the current request's, or — from the impersonator's own
+  account — the one given by `session`.
+  """
   impersonationEnd(input: ImpersonationEndInput!): ImpersonationEndPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
