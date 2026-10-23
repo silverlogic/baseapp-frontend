@@ -63,6 +63,8 @@ with the session to give each session its own client:
 ```tsx
 'use client'
 
+import { FC, PropsWithChildren } from 'react'
+
 import { ReactQueryProvider } from '@baseapp-frontend/provider'
 import {
   ACCESS_KEY_NAME,
@@ -76,9 +78,7 @@ const AppQueryProvider: FC<PropsWithChildren> = ({ children }) => {
   const sessionKey = getSessionIdentity(cookies?.[ACCESS_KEY_NAME], cookies?.[REFRESH_KEY_NAME])
 
   return (
-    <ReactQueryProvider config={config} sessionKey={sessionKey}>
-      {children}
-    </ReactQueryProvider>
+    <ReactQueryProvider sessionKey={sessionKey}>{children}</ReactQueryProvider>
   )
 }
 ```
@@ -87,5 +87,13 @@ When the key changes, the children are remounted with a new, empty `QueryClient`
 committed, the previous client's queries are cancelled and its cache is cleared, so a response from
 the old session that arrives late is dropped. The retirement is deferred and cancelled if the same
 client mounts again, so React StrictMode's double mount never clears the live client. Unmounting the
-provider retires its client too. `RelayProvider` from `@baseapp-frontend/graphql` takes the same
+provider retires its client too, unless a provider with the same `sessionKey` mounts before the
+retirement runs, which keeps it.
+
+In the browser, the current session's client is also kept outside React, like the client used
+without a `sessionKey`. So a render that suspends before it commits (e.g. a `useSuspenseQuery` child
+with the nearest `Suspense` boundary above the provider) gets the same client on retry instead of
+starting a new fetch each time. On the server, every render gets a new client.
+
+`RelayProvider` from `@baseapp-frontend/graphql` takes the same
 `sessionKey` for the Relay store.

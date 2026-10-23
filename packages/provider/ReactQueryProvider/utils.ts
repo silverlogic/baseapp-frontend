@@ -29,3 +29,46 @@ export const getQueryClient = (config: QueryClientConfig = {}, onError?: QueryCa
   }
   return browserQueryClient
 }
+
+// The browser's current session client, kept outside React for the same reason as
+// `browserQueryClient`: a render that suspends before it commits loses its state, and a new client
+// on every retry would refetch (and suspend) forever.
+let browserSessionQueryClient: { sessionKey: string; client: QueryClient } | undefined
+const pendingRetirements = new Map<QueryClient, ReturnType<typeof setTimeout>>()
+
+export const getSessionQueryClient = (
+  sessionKey: string,
+  config: QueryClientConfig = {},
+  onError?: QueryCacheOnError,
+) => {
+  // Server: always make a new query client, never shared between requests.
+  if (typeof window === 'undefined') {
+    return createQueryClient(config, onError)
+  }
+
+  if (browserSessionQueryClient?.sessionKey !== sessionKey) {
+    browserSessionQueryClient = { sessionKey, client: createQueryClient(config, onError) }
+  }
+  return browserSessionQueryClient.client
+}
+
+// Retirement is deferred and cancelled if the client mounts again before it runs: StrictMode's
+// double mount, or a provider remounted with the same session.
+export const cancelQueryClientRetirement = (client: QueryClient) => {
+  clearTimeout(pendingRetirements.get(client))
+  pendingRetirements.delete(client)
+}
+
+export const scheduleQueryClientRetirement = (client: QueryClient) => {
+  cancelQueryClientRetirement(client)
+  pendingRetirements.set(
+    client,
+    setTimeout(() => {
+      pendingRetirements.delete(client)
+      if (browserSessionQueryClient?.client === client) browserSessionQueryClient = undefined
+      // A response from the old session that arrives later is dropped instead of cached.
+      client.cancelQueries()
+      client.clear()
+    }, 0),
+  )
+}

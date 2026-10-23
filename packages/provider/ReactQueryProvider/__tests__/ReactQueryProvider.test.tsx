@@ -1,8 +1,8 @@
-import { PropsWithChildren, StrictMode, useState } from 'react'
+import { PropsWithChildren, StrictMode, Suspense, useState } from 'react'
 
 import { NotificationProvider } from '@baseapp-frontend/utils'
 
-import { QueryClient, useQuery, useQueryClient } from '@tanstack/react-query'
+import { QueryClient, useQuery, useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
 import { act, cleanup, render, screen, waitFor } from '@testing-library/react'
 
 import ReactQueryProvider from '..'
@@ -198,5 +198,92 @@ describe('ReactQueryProvider', () => {
     expect(clients[0]!.getQueryData(['me'])).toBeUndefined()
     expect(clients[1]!.getQueryData(['me'])).toBe('B private data')
     vi.useFakeTimers()
+  })
+
+  describe('with a Suspense boundary above the provider', () => {
+    const SuspendingView = ({ queryFn }: { queryFn: () => Promise<string> }) => {
+      const client = useQueryClient()
+      if (!clients.includes(client)) clients.push(client)
+      const { data } = useSuspenseQuery({ queryKey: ['me'], queryFn })
+      return <div>{data}</div>
+    }
+
+    const SuspendedProviders = ({
+      queryFn,
+      sessionKey,
+    }: {
+      queryFn: () => Promise<string>
+      sessionKey: string
+    }) => (
+      <NotificationProvider>
+        <Suspense fallback={<div>Loading</div>}>
+          <ReactQueryProvider sessionKey={sessionKey}>
+            <SuspendingView queryFn={queryFn} />
+          </ReactQueryProvider>
+        </Suspense>
+      </NotificationProvider>
+    )
+
+    const resolvesSoon = (value: string) =>
+      vi.fn(
+        () =>
+          new Promise<string>((resolve) => {
+            setTimeout(() => resolve(value), 5)
+          }),
+      )
+
+    beforeEach(() => {
+      vi.useRealTimers()
+    })
+
+    afterEach(() => {
+      vi.useFakeTimers()
+    })
+
+    it('keeps the client of a render that suspends before it commits', async () => {
+      const queryFn = resolvesSoon('first session data')
+
+      render(<SuspendedProviders sessionKey="suspense:login-1" queryFn={queryFn} />)
+
+      expect(await screen.findByText('first session data')).toBeTruthy()
+      expect(queryFn).toHaveBeenCalledTimes(1)
+      expect(clients).toHaveLength(1)
+    })
+
+    it('keeps the new client when a session change suspends', async () => {
+      const firstQueryFn = resolvesSoon('first session data')
+      const nextQueryFn = resolvesSoon('next session data')
+
+      const { rerender } = render(
+        <SuspendedProviders sessionKey="suspense:login-2" queryFn={firstQueryFn} />,
+      )
+      await screen.findByText('first session data')
+      rerender(<SuspendedProviders sessionKey="suspense:login-3" queryFn={nextQueryFn} />)
+
+      expect(await screen.findByText('next session data')).toBeTruthy()
+      expect(nextQueryFn).toHaveBeenCalledTimes(1)
+      expect(clients).toHaveLength(2)
+    })
+  })
+
+  it('keeps the client when the provider is remounted with the same sessionKey before retirement', async () => {
+    const { unmount } = render(
+      <Providers sessionKey="1:remount">
+        <Consumer />
+      </Providers>,
+    )
+    const [client] = clients
+    client!.setQueryData(['private'], 'session data')
+    unmount()
+
+    render(
+      <Providers sessionKey="1:remount">
+        <Consumer />
+      </Providers>,
+    )
+    await flushDeferredRetirement()
+
+    expect(clients).toHaveLength(1)
+    expect(client!.getQueryData(['private'])).toBe('session data')
   })
 })
