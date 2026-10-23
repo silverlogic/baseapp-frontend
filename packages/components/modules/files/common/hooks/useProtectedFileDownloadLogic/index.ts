@@ -6,6 +6,7 @@ import { useProtectedFileLinkMutation } from '../../graphql/mutations/ProtectedF
 import { ProtectedFileDownloadError, getProtectedFileKey } from '../../utils/protectedFiles'
 import type {
   ProtectedFileDownloadOptions,
+  ProtectedFileDownloadTarget,
   ProtectedFileRef,
   UseProtectedFileDownloadLogicOptions,
   UseProtectedFileDownloadReturn,
@@ -28,6 +29,13 @@ const toDownloadError = (
   )
 }
 
+const asDownloadError = (error: unknown) =>
+  error instanceof ProtectedFileDownloadError
+    ? error
+    : new ProtectedFileDownloadError(
+        error instanceof Error && error.message ? error.message : DEFAULT_ERROR_MESSAGE,
+      )
+
 /**
  * Platform-agnostic core of `useProtectedFileDownload`: mints a `protectedFileLink` and opens it
  * in the target `createTarget` returns. The target is created synchronously, inside the caller's
@@ -40,8 +48,8 @@ export const useProtectedFileDownloadLogic = ({
 }: UseProtectedFileDownloadLogicOptions): UseProtectedFileDownloadReturn => {
   const [commitLink] = useProtectedFileLinkMutation()
   const { sendApiErrorToast } = useNotification()
-  const [pendingKey, setPendingKey] = useState<string | null>(null)
-  // Files being minted; a second click on one of them is ignored instead of minting twice.
+  // Files being minted, latest last; a second click on one of them is ignored.
+  const [pendingKeys, setPendingKeys] = useState<string[]>([])
   const inFlightRef = useRef<Set<string>>(new Set())
 
   const download = useCallback(
@@ -49,16 +57,14 @@ export const useProtectedFileDownloadLogic = ({
       const fileKey = getProtectedFileKey(file)
       if (inFlightRef.current.has(fileKey)) return Promise.resolve(false)
       inFlightRef.current.add(fileKey)
-      setPendingKey(fileKey)
-
-      const target = createTarget(disposition)
+      setPendingKeys((keys) => [...keys, fileKey])
 
       const finish = () => {
         inFlightRef.current.delete(fileKey)
-        setPendingKey((current) => (current === fileKey ? null : current))
+        setPendingKeys((keys) => keys.filter((key) => key !== fileKey))
       }
-      const fail = (error: ProtectedFileDownloadError) => {
-        target.cancel?.()
+      const fail = (error: ProtectedFileDownloadError, target?: ProtectedFileDownloadTarget) => {
+        target?.cancel?.()
         finish()
         if (onError) {
           onError(error)
@@ -66,6 +72,13 @@ export const useProtectedFileDownloadLogic = ({
           sendApiErrorToast(error)
         }
         return false
+      }
+
+      let target: ProtectedFileDownloadTarget
+      try {
+        target = createTarget(disposition)
+      } catch (error) {
+        return Promise.resolve(fail(asDownloadError(error)))
       }
 
       return new Promise<string>((resolve, reject) => {
@@ -96,18 +109,14 @@ export const useProtectedFileDownloadLogic = ({
           finish()
           return true
         })
-        .catch((error: unknown) =>
-          fail(
-            error instanceof ProtectedFileDownloadError
-              ? error
-              : new ProtectedFileDownloadError(
-                  error instanceof Error && error.message ? error.message : DEFAULT_ERROR_MESSAGE,
-                ),
-          ),
-        )
+        .catch((error: unknown) => fail(asDownloadError(error), target))
     },
     [commitLink, createTarget, onError, sendApiErrorToast],
   )
 
-  return { download, isPending: pendingKey !== null, pendingKey }
+  return {
+    download,
+    isPending: pendingKeys.length > 0,
+    pendingKey: pendingKeys[pendingKeys.length - 1] ?? null,
+  }
 }

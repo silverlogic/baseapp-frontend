@@ -255,7 +255,7 @@ opened, `false` when it failed.
 (`not_authenticated`, `permission_denied`, `not_found`, or a project's own).
 
 **Returns:** `{ download, isPending, pendingKey }`. `pendingKey` is `getProtectedFileKey(file)` of
-the file being minted, so a list can show progress on one row. A second click on a file that is
+the file being minted (the latest, when several are), so a list can show progress on one row. A second click on a file that is
 still being minted is ignored.
 
 The platform hooks are thin wrappers over `useProtectedFileDownloadLogic({ createTarget, onError })`

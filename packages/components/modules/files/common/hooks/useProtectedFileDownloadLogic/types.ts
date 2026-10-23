@@ -34,6 +34,6 @@ export interface UseProtectedFileDownloadReturn {
   /** Mints a link and opens it; resolves `true` once opened, `false` when it failed. */
   download: (file: ProtectedFileRef, options?: ProtectedFileDownloadOptions) => Promise<boolean>
   isPending: boolean
-  /** `getProtectedFileKey(file)` of the file being minted, or null. */
+  /** `getProtectedFileKey(file)` of the file being minted (the latest, when several are), or null. */
   pendingKey: string | null
 }

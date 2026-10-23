@@ -169,3 +169,51 @@ describe('useProtectedFileDownloadLogic', () => {
     expect(createTarget).toHaveBeenCalledTimes(1)
   })
 })
+
+describe('useProtectedFileDownloadLogic pending state', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it('stays pending until every file in flight has finished', async () => {
+    const createTarget = vi.fn(() => ({ open: vi.fn() }))
+    const { result } = renderHook(() => useProtectedFileDownloadLogic({ createTarget }))
+    const other = { key: 'billing.payment.receipt_pdf', objectId: '9' }
+
+    act(() => {
+      result.current.download(FILE)
+      result.current.download(other)
+    })
+    expect(result.current.pendingKey).toBe('billing.payment.receipt_pdf:9')
+
+    await act(async () => {
+      mockCommit.mock.calls[1]![0].onCompleted({ protectedFileLink: { url: URL, errors: null } })
+    })
+    expect(result.current.pendingKey).toBe('billing.invoice.pdf:42')
+    expect(result.current.isPending).toBe(true)
+
+    await act(async () => {
+      mockCommit.mock.calls[0]![0].onCompleted({ protectedFileLink: { url: URL, errors: null } })
+    })
+    expect(result.current.isPending).toBe(false)
+    expect(result.current.pendingKey).toBeNull()
+  })
+
+  it('reports a target that cannot be created and does not mint', async () => {
+    const onError = vi.fn()
+    const createTarget = vi.fn(() => {
+      throw new Error('Blocked.')
+    })
+    const { result } = renderHook(() => useProtectedFileDownloadLogic({ createTarget, onError }))
+
+    let outcome: Promise<boolean>
+    act(() => {
+      outcome = result.current.download(FILE)
+    })
+
+    expect(await outcome!).toBe(false)
+    expect(mockCommit).not.toHaveBeenCalled()
+    expect(onError).toHaveBeenCalledWith(expect.objectContaining({ message: 'Blocked.' }))
+    expect(result.current.isPending).toBe(false)
+  })
+})
