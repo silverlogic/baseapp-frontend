@@ -1,0 +1,229 @@
+import { createClient } from 'graphql-ws'
+import { ROOT_ID, RequestParameters } from 'relay-runtime'
+
+import { createEnvironment, disposeEnvironment, getCacheByEnvironment } from '../environment'
+
+vi.mock('graphql-ws', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('graphql-ws')>()
+  return { ...actual, createClient: vi.fn(actual.createClient) }
+})
+
+// A websocket whose handshake always fails, so no test opens a real connection.
+vi.mock('isomorphic-ws', () => {
+  class FailedHandshake {
+    static CONNECTING = 0
+
+    static OPEN = 1
+
+    static CLOSING = 2
+
+    static CLOSED = 3
+
+    readyState = 0
+
+    onerror: ((error: Error) => void) | null = null
+
+    constructor() {
+      queueMicrotask(() => this.onerror?.(new Error('synthetic handshake failure')))
+    }
+
+    close() {
+      this.readyState = 3
+    }
+
+    send() {}
+  }
+  return { __esModule: true, default: FailedHandshake }
+})
+
+const createClientMock = vi.mocked(createClient)
+
+const subscription: RequestParameters = {
+  cacheID: 'synthetic-subscription',
+  id: null,
+  name: 'SyntheticSubscription',
+  operationKind: 'subscription',
+  text: 'subscription SyntheticSubscription { test }',
+  metadata: {},
+}
+
+const subscribe = (environment: ReturnType<typeof createEnvironment>) =>
+  environment
+    .getNetwork()
+    .execute(subscription, {}, {})
+    .subscribe({ error: () => undefined })
+
+const flushMicrotasks = () =>
+  new Promise<void>((resolve) => {
+    setTimeout(resolve, 0)
+  })
+
+describe('createEnvironment', () => {
+  const originalEndpoint = process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT
+
+  beforeEach(() => {
+    createClientMock.mockClear()
+    process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT = 'ws://synthetic.invalid/graphql'
+  })
+
+  afterAll(() => {
+    process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT = originalEndpoint
+  })
+
+  it('creates no websocket client until the first subscription', async () => {
+    const environment = createEnvironment()
+    expect(createClientMock).not.toHaveBeenCalled()
+
+    const first = subscribe(environment)
+    const second = subscribe(environment)
+    expect(createClientMock).toHaveBeenCalledTimes(1)
+
+    first.unsubscribe()
+    second.unsubscribe()
+    disposeEnvironment(environment)
+    await flushMicrotasks()
+  })
+
+  it('gives each environment its own websocket client', async () => {
+    const environment = createEnvironment()
+    const otherEnvironment = createEnvironment()
+
+    const first = subscribe(environment)
+    const second = subscribe(otherEnvironment)
+
+    expect(createClientMock).toHaveBeenCalledTimes(2)
+    expect(createClientMock.mock.results[0]?.value).not.toBe(
+      createClientMock.mock.results[1]?.value,
+    )
+
+    first.unsubscribe()
+    second.unsubscribe()
+    disposeEnvironment(environment)
+    disposeEnvironment(otherEnvironment)
+    await flushMicrotasks()
+  })
+
+  it('resolves a relative websocket endpoint against the page when connecting', async () => {
+    process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT = '/graphql'
+    const environment = createEnvironment()
+    const subscriber = subscribe(environment)
+
+    const { url } = createClientMock.mock.calls[0]![0]
+    expect(typeof url).toBe('function')
+    expect(await (url as () => string)()).toBe(`ws://${window.location.host}/graphql`)
+
+    subscriber.unsubscribe()
+    disposeEnvironment(environment)
+    await flushMicrotasks()
+  })
+})
+
+describe('disposeEnvironment', () => {
+  beforeEach(() => {
+    createClientMock.mockClear()
+    process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT = 'ws://synthetic.invalid/graphql'
+  })
+
+  it('purges the records, including the root, and the preloaded response cache', () => {
+    const environment = createEnvironment()
+    environment.commitUpdate((store) => {
+      const person = store.create('person:A', 'Person')
+      person.setValue('Private phone number', 'phoneNumber')
+      store.getRoot().setValue('Private session detail', 'sessionDetail')
+      store.getRoot().setLinkedRecord(person, 'me')
+    })
+    const cache = getCacheByEnvironment(environment)
+    cache?.set('private-query', {}, { data: { phoneNumber: 'Private phone number' } })
+
+    expect(() => disposeEnvironment(environment)).not.toThrow()
+
+    expect(environment.getStore().getSource().get(ROOT_ID)).toBeNull()
+    expect(environment.getStore().getSource().get('person:A')).toBeNull()
+    expect(cache?.get('private-query', {})).toBeNull()
+  })
+
+  it('does not bring records back when a pending optimistic update is rolled back', () => {
+    const environment = createEnvironment()
+    environment.commitUpdate((store) => {
+      store.create('person:A', 'Person').setValue('Private base detail', 'phoneNumber')
+      store.getRoot().setValue('Private base session', 'sessionDetail')
+    })
+    const optimistic = environment.applyUpdate({
+      storeUpdater: (store) => {
+        const person = store.create('person:optimistic', 'Person')
+        person.setValue('Private optimistic detail', 'phoneNumber')
+        store.getRoot().setLinkedRecord(person, 'me')
+      },
+    })
+
+    disposeEnvironment(environment)
+    expect(environment.getStore().getSource().get('person:optimistic')).toBeNull()
+    optimistic.dispose()
+
+    expect(environment.getStore().getSource().get(ROOT_ID)).toBeUndefined()
+    expect(environment.getStore().getSource().get('person:A')).toBeUndefined()
+    expect(environment.getStore().getSource().get('person:optimistic')).toBeUndefined()
+  })
+
+  it('disposes the websocket client, and purges even when its disposal rejects', async () => {
+    const environment = createEnvironment()
+    environment.commitUpdate((store) => {
+      store.create('person:A', 'Person').setValue('Private phone number', 'phoneNumber')
+    })
+    const subscriber = subscribe(environment)
+    const client = createClientMock.mock.results[0]!.value as ReturnType<typeof createClient>
+    const dispose = vi.spyOn(client, 'dispose').mockRejectedValue(new Error('handshake failed'))
+
+    expect(() => disposeEnvironment(environment)).not.toThrow()
+
+    expect(dispose).toHaveBeenCalledTimes(1)
+    expect(environment.getStore().getSource().get('person:A')).toBeNull()
+    await flushMicrotasks()
+    subscriber.unsubscribe()
+  })
+
+  it('purges even when disposing the websocket client throws', async () => {
+    const environment = createEnvironment()
+    environment.commitUpdate((store) => {
+      store.create('person:A', 'Person').setValue('Private phone number', 'phoneNumber')
+    })
+    const subscriber = subscribe(environment)
+    const client = createClientMock.mock.results[0]!.value as ReturnType<typeof createClient>
+    vi.spyOn(client, 'dispose').mockImplementation(() => {
+      throw new Error('transport failure')
+    })
+
+    expect(() => disposeEnvironment(environment)).not.toThrow()
+
+    expect(environment.getStore().getSource().get('person:A')).toBeNull()
+    subscriber.unsubscribe()
+    await flushMicrotasks()
+  })
+
+  it('opens a new websocket client for a subscription made after disposal', async () => {
+    const environment = createEnvironment()
+    subscribe(environment).unsubscribe()
+    disposeEnvironment(environment)
+
+    const subscriber = subscribe(environment)
+
+    expect(createClientMock).toHaveBeenCalledTimes(2)
+    subscriber.unsubscribe()
+    disposeEnvironment(environment)
+    await flushMicrotasks()
+  })
+
+  it('leaves other environments untouched', () => {
+    const environment = createEnvironment()
+    const otherEnvironment = createEnvironment()
+    otherEnvironment.commitUpdate((store) => {
+      store.create('person:B', 'Person').setValue('Other session detail', 'phoneNumber')
+    })
+    getCacheByEnvironment(otherEnvironment)?.set('other-query', {}, { data: {} })
+
+    disposeEnvironment(environment)
+
+    expect(otherEnvironment.getStore().getSource().get('person:B')).toBeTruthy()
+    expect(getCacheByEnvironment(otherEnvironment)?.get('other-query', {})).not.toBeNull()
+  })
+})
