@@ -9,6 +9,7 @@ A comprehensive file upload, management, and display system with support for chu
 - 🖼️ **Image Thumbnails** - Automatic 100x100 thumbnails for image files
 - 🗑️ **File Deletion** - Delete attached files with proper permissions
 - ⬇️ **File Download** - Platform-agnostic download handling
+- 🔒 **Protected Downloads** - Permission-checked downloads of private model files through short-lived, user-bound links
 - ⏸️ **Upload Control** - Pause, resume, and retry failed uploads
 - 🎨 **Progress Tracking** - Real-time upload progress with visual feedback
 - 📱 **Cross-Platform** - Shared logic for web and React Native
@@ -198,6 +199,92 @@ const { handleDownload } = useFileDownloadLogic({
 - `onDownloadComplete?: () => void` - Called when download completes
 - `onError?: (error: Error) => void` - Called on errors
 
+## Protected Downloads
+
+The backend's protected downloads (`baseapp.files.downloads`) serve private model file fields —
+an invoice PDF, a certificate, an import sheet — only after checking the viewer's permission on
+every request. Such a field is exposed as a `ProtectedFile` (GraphQL `ProtectedFileField`, REST
+`ProtectedFileSerializerField`), which is null when the file is empty or the viewer may not
+download it. It carries no URL: the client mints a link with the `protectedFileLink` mutation
+when the user clicks. The link is bound to the signed-in user and the profile they act as, lives
+for a short time (`BASEAPP_FILES_DOWNLOAD_TICKET_MAX_AGE` on the backend), and re-checks access when opened, so the
+browser can open it natively without an Authorization header.
+
+### useProtectedFileDownload
+
+```tsx
+import { useFragment } from 'react-relay'
+
+import {
+  ProtectedFileFragment,
+  getProtectedFileKey,
+} from '@baseapp-frontend/components/files/common'
+import { useProtectedFileDownload } from '@baseapp-frontend/components/files/web' // or files/native
+
+const InvoicePdfButton = ({ invoice }) => {
+  // invoice selects `pdf { ...ProtectedFile_file }`
+  const pdf = useFragment(ProtectedFileFragment, invoice.pdf)
+  const { download, pendingKey } = useProtectedFileDownload()
+
+  return (
+    <Button
+      disabled={!pdf || pendingKey === getProtectedFileKey(pdf)}
+      onClick={() => pdf && download(pdf)} // call it in the click handler itself
+    >
+      Download PDF
+    </Button>
+  )
+}
+```
+
+`download(file, { disposition })` takes any `{ key, objectId }` — fragment data, or a
+`ProtectedFile` from REST once its keys are camel-cased — and resolves `true` once the link is
+opened, `false` when it failed.
+
+- **`disposition: 'attachment'`** (default): web navigates to the link; the response's
+  `Content-Disposition: attachment` saves the file and the page stays where it is. No Blob is built,
+  so large files stream.
+- **`disposition: 'inline'`**: web reserves a blank tab synchronously in the click handler (so pop-up
+  blockers allow it), detaches it from the page (`opener = null`), then points it at the link. The
+  file keeps the server's headers, including a sandboxing CSP for HTML. The tab is closed when the
+  link cannot be minted; when the browser blocks the tab, the file opens in the current tab.
+- **Native** opens the link in the system browser for both dispositions.
+
+**Options:** `onError?: (error: ProtectedFileDownloadError) => void` replaces the default error toast
+(`useNotification().sendApiErrorToast`). `error.code` is the backend's code when it sent one
+(`not_authenticated`, `permission_denied`, `not_found`, or a project's own).
+
+**Returns:** `{ download, isPending, pendingKey }`. `pendingKey` is `getProtectedFileKey(file)` of
+the file being minted, so a list can show progress on one row. A second click on a file that is
+still being minted is ignored.
+
+The platform hooks are thin wrappers over `useProtectedFileDownloadLogic({ createTarget, onError })`
+in `files/common`. `createTarget(disposition)` runs synchronously before the request and returns
+`{ open(url), cancel?() }`; use it to open links some other way (an in-app browser, say).
+
+### Protected files without the hook
+
+`useProtectedFileLinkMutation()` commits `protectedFileLink` without toasting, for callers that
+need the link itself (e.g. to show `expiresAt`):
+
+```graphql
+mutation ProtectedFileLinkMutation($input: ProtectedFileLinkInput!) {
+  protectedFileLink(input: $input) {
+    url
+    expiresAt
+    file {
+      ...ProtectedFile_file
+    }
+    errors {
+      field
+      messages
+    }
+  }
+}
+```
+
+`objectId` also accepts the Relay id of the object holding the file.
+
 ## Utility Functions
 
 ### Formatters
@@ -272,6 +359,10 @@ mutation FileDelete($input: FileDeleteInput!, $connections: [ID!]!) {
 }
 ```
 
+#### ProtectedFileLink
+
+Mint a download link for a protected file; see [Protected Downloads](#protected-downloads).
+
 ### Queries
 
 #### FilesList
@@ -316,6 +407,18 @@ fragment FileItem_file on File {
     fullName
   }
   hasPerm(perm: "change_file")
+}
+```
+
+#### ProtectedFile
+
+```graphql
+fragment ProtectedFile_file on ProtectedFile {
+  key
+  objectId
+  fileName
+  contentType
+  size
 }
 ```
 
@@ -511,6 +614,7 @@ import {
   useFileUploadLogic,
   useFileDeleteLogic,
   useFileDownloadLogic,
+  useProtectedFileDownloadLogic,
   useChunkedUpload,
   useFileUpload,
 
@@ -520,6 +624,8 @@ import {
   getFileType,
   calculateProgress,
   isImageFile,
+  getProtectedFileKey,
+  ProtectedFileDownloadError,
 
   // Store
   useFileUploadStore,
@@ -529,6 +635,8 @@ import {
   FilesListFragment,
   useFileAttachToTargetMutation,
   useFileDeleteMutation,
+  ProtectedFileFragment,
+  useProtectedFileLinkMutation,
 
   // Constants
   FileUploadStatus,
@@ -538,8 +646,14 @@ import {
   UseFileUploadLogicParams,
   UseFileDeleteLogicParams,
   UseFileDownloadLogicParams,
+  ProtectedFile,
+  ProtectedFileDisposition,
+  UseProtectedFileDownloadOptions,
+  UseProtectedFileDownloadReturn,
 } from '@baseapp-frontend/components/modules/files/common'
 ```
+
+`useProtectedFileDownload` is exported from the `web` and `native` legs.
 
 ## TypeScript Support
 
