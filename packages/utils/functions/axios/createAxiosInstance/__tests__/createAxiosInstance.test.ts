@@ -158,6 +158,28 @@ describe('createAxiosInstance', () => {
     expect(request.headers.Authorization).toBeUndefined()
   })
 
+  it.each([
+    ['/register', undefined],
+    ['/auth/login', undefined],
+    ['/auth', undefined],
+    ['/events/1/register', 'Bearer someAuthToken'],
+    ['/organizations/auth/login', 'Bearer someAuthToken'],
+  ])('sends %s with Authorization %s by default', async (url, authorization) => {
+    const {
+      axios: {
+        interceptors: {
+          request: { use },
+        },
+      },
+    } = createAxiosInstance()
+
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
+    const request = { headers: { Authorization: undefined }, url }
+    await interceptorFn(request)
+
+    expect(request.headers.Authorization).toBe(authorization)
+  })
+
   it('should be able to eject an interceptor', () => {
     const {
       axios: {
