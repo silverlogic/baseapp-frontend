@@ -72,6 +72,8 @@ cache outlives the session that filled it:
 ```tsx
 'use client'
 
+import { FC, PropsWithChildren } from 'react'
+
 import { RelayProvider } from '@baseapp-frontend/graphql'
 import { ReactQueryProvider } from '@baseapp-frontend/provider'
 import {
