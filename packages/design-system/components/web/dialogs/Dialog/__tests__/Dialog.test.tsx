@@ -38,7 +38,8 @@ describe('Dialog', () => {
   it('renders no close button without onClose', () => {
     renderDialog({ onClose: undefined })
 
-    expect(screen.queryByRole('button', { name: 'Close dialog' })).not.toBeInTheDocument()
+    expect(screen.getByRole('dialog')).toBeInTheDocument()
+    expect(screen.queryAllByRole('button')).toHaveLength(0)
   })
 
   it('forwards CloseButtonProps to the close button and still closes the dialog', async () => {
