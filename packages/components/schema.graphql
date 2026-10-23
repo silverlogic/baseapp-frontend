@@ -1047,6 +1047,14 @@ so any consumer that inherits the mixin gets this for free.)
 All optimizer wiring lives on the fields below — consumers do not need
 to add anything to their own `pre_optimization_hook`.
 """
+interface MentionsInterface {
+  """The ID of the object"""
+  id: ID!
+  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
+  mentionsCount: Int
+  isMentioningProfile(profileId: ID!): Boolean
+}
+
 """An enumeration."""
 enum ImpersonationEndReason {
   """Ended by the impersonator"""
@@ -1121,14 +1129,6 @@ type ImpersonationStartPayload {
   refresh: String
   session: ImpersonationSession
   clientMutationId: String
-}
-
-interface MentionsInterface {
-  """The ID of the object"""
-  id: ID!
-  mentions(first: Int, last: Int, offset: Int, after: String, before: String): MentionConnection
-  mentionsCount: Int
-  isMentioningProfile(profileId: ID!): Boolean
 }
 
 type Message implements Node & MentionsInterface {
