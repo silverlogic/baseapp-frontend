@@ -10,8 +10,10 @@ export const UserMembersListFragment = graphql`
     q: { type: "String" }
   ) {
     id
-    canChangeRole: hasPerm(perm: "baseapp_profiles.change_profileuserrole")
-    canAddMember: hasPerm(perm: "baseapp_profiles.add_profileuserrole")
+    # No app label: the backend prefixes the profile model's own, so these also work when the
+    # project swaps the profile models into its own app.
+    canChangeRole: hasPerm(perm: "change_profileuserrole")
+    canAddMember: hasPerm(perm: "add_profileuserrole")
     ...ProfileItemFragment
     # The owner row must show the owner *user's* profile, not the org profile itself.
     owner {
