@@ -9,6 +9,7 @@ export const MEMBER_STATUSES = {
   inactive: 'INACTIVE',
   declined: 'DECLINED',
   expired: 'EXPIRED',
+  cancelled: 'CANCELLED',
 } as const
 
 export const INVITATION_ACTIONS = {
@@ -29,7 +30,9 @@ export const MEMBER_ROLES = {
 
 export const MEMBER_ACTIONS = {
   remove: 'REMOVE',
-}
+  deactivate: 'DEACTIVATE',
+  reactivate: 'REACTIVATE',
+} as const
 
 export const roleOptions = [
   {
@@ -45,3 +48,27 @@ export const roleOptions = [
     label: capitalizeFirstLetter(MEMBER_ACTIONS.remove.toLowerCase()),
   },
 ]
+
+/**
+ * Add to `roleOptions` to let admins deactivate an active member from the role menu. Not in the
+ * default options: deactivation needs a backend with `profileMemberDeactivate`.
+ */
+export const DEACTIVATE_MEMBER_OPTION = {
+  value: MEMBER_ACTIONS.deactivate,
+  label: capitalizeFirstLetter(MEMBER_ACTIONS.deactivate.toLowerCase()),
+}
+
+/** Actions offered on a deactivated (INACTIVE) member to those who can change members. */
+export const inactiveMemberActionOptions = [
+  {
+    value: MEMBER_ACTIONS.reactivate,
+    label: capitalizeFirstLetter(MEMBER_ACTIONS.reactivate.toLowerCase()),
+  },
+  {
+    value: MEMBER_ACTIONS.remove,
+    label: capitalizeFirstLetter(MEMBER_ACTIONS.remove.toLowerCase()),
+  },
+]
+
+/** Values of the role menu that are actions on the member rather than roles. */
+export const MEMBER_ACTION_VALUES: readonly string[] = Object.values(MEMBER_ACTIONS)

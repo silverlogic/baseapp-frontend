@@ -40,6 +40,7 @@ const MemberListItem: FC<MemberListItemProps> = ({
       invitedEmail={memberFragment?.invitedEmail}
       invitationExpiresAt={memberFragment?.invitationExpiresAt}
       invitationId={memberFragment?.id}
+      memberRef={member}
       {...MemberItemComponentProps}
     />
   )

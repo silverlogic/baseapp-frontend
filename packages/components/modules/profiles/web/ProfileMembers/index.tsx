@@ -12,7 +12,7 @@ import MembersList from './MembersList'
 import { NUMBER_OF_MEMBERS_ON_FIRST_LOAD } from './constants'
 import type { ProfileMembersProps, ProfileMembersSuspendedProps } from './types'
 
-const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
+const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {}, ...props }) => {
   const { currentProfile } = useCurrentProfile()
 
   const data = useLazyLoadQuery<UserMembersListPaginationQueryType>(
@@ -27,7 +27,7 @@ const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
   )
 
   if (!data.profile) return null
-  return <MembersList userRef={data?.profile} {...MembersListProps} />
+  return <MembersList userRef={data?.profile} {...props} {...MembersListProps} />
 }
 
 const ProfileMembersSuspended: FC<ProfileMembersSuspendedProps> = ({

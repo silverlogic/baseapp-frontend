@@ -5,7 +5,10 @@ import { LoadingStateProps } from '@baseapp-frontend/design-system/components/we
 import { UserMembersListFragment$key } from '../../../../../__generated__/UserMembersListFragment.graphql'
 import { MemberItemProps } from '../MemberItem/types'
 
-export interface MembersListProps {
+export interface MembersListProps extends Pick<
+  MemberItemProps,
+  'roleOptions' | 'inactiveMemberOptions' | 'roleLabels' | 'statusLabels'
+> {
   MemberItem?: FC<MemberItemProps>
   MemberItemProps?: Partial<MemberItemProps>
   userRef: UserMembersListFragment$key

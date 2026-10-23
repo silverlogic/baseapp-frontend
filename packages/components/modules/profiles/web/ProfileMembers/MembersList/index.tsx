@@ -22,6 +22,10 @@ const MembersList: FC<MembersListProps> = ({
   MemberItemProps = {},
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
+  roleOptions,
+  inactiveMemberOptions,
+  roleLabels,
+  statusLabels,
 }) => {
   const [isPending, startTransition] = useTransition()
   const [isInviteOpen, setIsInviteOpen] = useState(false)
@@ -33,6 +37,15 @@ const MembersList: FC<MembersListProps> = ({
   // An ownerless profile (run by its admins) has no owner row.
   const ownerProfileRef = data?.owner?.profile
   const ownerProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, ownerProfileRef)
+
+  // List-level options reach every row; `MemberItemProps` still wins for a single prop.
+  const memberItemProps = {
+    ...(roleOptions && { roleOptions }),
+    ...(inactiveMemberOptions && { inactiveMemberOptions }),
+    ...(roleLabels && { roleLabels }),
+    ...(statusLabels && { statusLabels }),
+    ...MemberItemProps,
+  }
 
   const handleSearch = (value: string) => {
     startTransition(() => {
@@ -121,6 +134,7 @@ const MembersList: FC<MembersListProps> = ({
             memberRole={MEMBER_ROLES.owner}
             status={MEMBER_STATUSES.active}
             searchQuery={watch('search')}
+            {...memberItemProps}
           />
         )
       ) : (
@@ -134,7 +148,7 @@ const MembersList: FC<MembersListProps> = ({
                 prevMember={members[index - 1]}
                 nextMember={members[index + 1]}
                 MemberItemComponent={MemberItem}
-                MemberItemComponentProps={MemberItemProps}
+                MemberItemComponentProps={memberItemProps}
                 searchQuery={watch('search')}
               />
             ) : null,
