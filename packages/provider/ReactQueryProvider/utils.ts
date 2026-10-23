@@ -4,7 +4,7 @@ import merge from 'lodash/merge'
 import { DEFAULT_QUERY_CLIENT_CONFIG } from './constants'
 import { QueryCacheOnError } from './types'
 
-const createQueryClient = (config: QueryClientConfig = {}, onError?: QueryCacheOnError) => {
+export const createQueryClient = (config: QueryClientConfig = {}, onError?: QueryCacheOnError) => {
   const combinedConfig = merge({}, DEFAULT_QUERY_CLIENT_CONFIG, config)
   const queryCache = new QueryCache({ onError })
   const combinedConfigWithCache = merge(combinedConfig, { queryCache })
