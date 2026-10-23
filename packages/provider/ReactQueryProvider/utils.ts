@@ -34,7 +34,6 @@ export const getQueryClient = (config: QueryClientConfig = {}, onError?: QueryCa
 // `browserQueryClient`: a render that suspends before it commits loses its state, and a new client
 // on every retry would refetch (and suspend) forever.
 let browserSessionQueryClient: { sessionKey: string; client: QueryClient } | undefined
-const pendingRetirements = new Map<QueryClient, ReturnType<typeof setTimeout>>()
 
 export const getSessionQueryClient = (
   sessionKey: string,
@@ -52,23 +51,30 @@ export const getSessionQueryClient = (
   return browserSessionQueryClient.client
 }
 
-// Retirement is deferred and cancelled if the client mounts again before it runs: StrictMode's
-// double mount, or a provider remounted with the same session.
-export const cancelQueryClientRetirement = (client: QueryClient) => {
-  clearTimeout(pendingRetirements.get(client))
-  pendingRetirements.delete(client)
+// Mounted users of each session client. The last one to unmount schedules the retirement, and a
+// mount before it runs (StrictMode's double mount, a remount with the same key, a second provider
+// for the same session) cancels it.
+const queryClientUsers = new Map<
+  QueryClient,
+  { count: number; retirement?: ReturnType<typeof setTimeout> }
+>()
+
+export const retainQueryClient = (client: QueryClient) => {
+  const users = queryClientUsers.get(client) ?? { count: 0 }
+  clearTimeout(users.retirement)
+  queryClientUsers.set(client, { count: users.count + 1 })
 }
 
-export const scheduleQueryClientRetirement = (client: QueryClient) => {
-  cancelQueryClientRetirement(client)
-  pendingRetirements.set(
-    client,
-    setTimeout(() => {
-      pendingRetirements.delete(client)
-      if (browserSessionQueryClient?.client === client) browserSessionQueryClient = undefined
-      // A response from the old session that arrives later is dropped instead of cached.
-      client.cancelQueries()
-      client.clear()
-    }, 0),
-  )
+export const releaseQueryClient = (client: QueryClient) => {
+  const users = queryClientUsers.get(client)
+  if (!users) return
+  users.count -= 1
+  if (users.count > 0) return
+  users.retirement = setTimeout(() => {
+    queryClientUsers.delete(client)
+    if (browserSessionQueryClient?.client === client) browserSessionQueryClient = undefined
+    // A response from the old session that arrives later is dropped instead of cached.
+    client.cancelQueries()
+    client.clear()
+  }, 0)
 }

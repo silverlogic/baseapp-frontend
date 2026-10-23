@@ -286,4 +286,30 @@ describe('ReactQueryProvider', () => {
     expect(clients).toHaveLength(1)
     expect(client!.getQueryData(['private'])).toBe('session data')
   })
+
+  it('clears a shared session client only when its last provider unmounts', async () => {
+    const first = render(
+      <Providers sessionKey="1:shared">
+        <Consumer />
+      </Providers>,
+    )
+    const second = render(
+      <Providers sessionKey="1:shared">
+        <Consumer />
+      </Providers>,
+    )
+    const [client] = clients
+    client!.setQueryData(['private'], 'session data')
+
+    first.unmount()
+    await flushDeferredRetirement()
+
+    expect(clients).toHaveLength(1)
+    expect(client!.getQueryData(['private'])).toBe('session data')
+
+    second.unmount()
+    await flushDeferredRetirement()
+
+    expect(client!.getQueryCache().getAll()).toHaveLength(0)
+  })
 })

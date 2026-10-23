@@ -8,10 +8,10 @@ import { QueryClientConfig, QueryClientProvider } from '@tanstack/react-query'
 
 import { QueryCacheOnError, ReactQueryProviderProps } from './types'
 import {
-  cancelQueryClientRetirement,
   getQueryClient,
   getSessionQueryClient,
-  scheduleQueryClientRetirement,
+  releaseQueryClient,
+  retainQueryClient,
 } from './utils'
 
 type SessionQueryClientProviderProps = PropsWithChildren<{
@@ -32,8 +32,8 @@ const SessionQueryClientProvider: FC<SessionQueryClientProviderProps> = ({
   const [queryClient] = useState(() => getSessionQueryClient(sessionKey, config, onError))
 
   useEffect(() => {
-    cancelQueryClientRetirement(queryClient)
-    return () => scheduleQueryClientRetirement(queryClient)
+    retainQueryClient(queryClient)
+    return () => releaseQueryClient(queryClient)
   }, [queryClient])
 
   return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
