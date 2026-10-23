@@ -1,14 +1,16 @@
-import { useContext } from 'react'
+import { FC, useContext } from 'react'
 
 import { fireEvent, render, screen } from '@testing-library/react'
 import { vi } from 'vitest'
 
+import type { ProfileComponentMessageButtonProps } from '../../../../profiles/web/ProfileComponent/types'
 import ChatRoomProvider, { ChatRoomContext } from '../../../common/context/ChatRoomProvider'
 import MessageProfileButton from '../index'
 
-const { mockCommit, mockCurrentProfile, usedStores } = vi.hoisted(() => ({
+const { mockCommit, mockCurrentProfile, mockInFlight, usedStores } = vi.hoisted(() => ({
   mockCommit: vi.fn(),
   mockCurrentProfile: { value: { id: 'me' } as { id: string } | null },
+  mockInFlight: { value: false },
   usedStores: [] as unknown[],
 }))
 
@@ -29,7 +31,7 @@ vi.mock('../../../common', async () => {
       const store = useReactContext(provider.ChatRoomContext)
       if (!store) throw new Error('Missing ChatRoomProvider')
       usedStores.push(store)
-      return [mockCommit, false]
+      return [mockCommit, mockInFlight.value]
     },
   }
 })
@@ -44,6 +46,15 @@ describe('MessageProfileButton', () => {
     mockCommit.mockClear()
     usedStores.length = 0
     mockCurrentProfile.value = { id: 'me' }
+    mockInFlight.value = false
+  })
+
+  it('fits the ProfileComponent MessageButton slot as it is', () => {
+    const Slot: FC<ProfileComponentMessageButtonProps> = MessageProfileButton
+    render(<Slot profileId="them" />)
+
+    fireEvent.click(button()!)
+    expect(mockCommit.mock.calls[0][0].variables.input.participants).toEqual(['them'])
   })
 
   it('opens a chat as the current profile and reports the room', () => {
@@ -84,6 +95,28 @@ describe('MessageProfileButton', () => {
     })
 
     expect(onRoomReady).not.toHaveBeenCalled()
+  })
+
+  it('does not report a room when the request fails', () => {
+    const onRoomReady = vi.fn()
+    render(<MessageProfileButton profileId="them" onRoomReady={onRoomReady} />)
+
+    fireEvent.click(button()!)
+    mockCommit.mock.calls[0][0].onError?.(new Error('Network request failed'))
+
+    expect(onRoomReady).not.toHaveBeenCalled()
+  })
+
+  it('shows a loading state and ignores clicks while the mutation runs', () => {
+    mockInFlight.value = true
+    render(<MessageProfileButton profileId="them" />)
+
+    const loadingButton = screen.getByRole('button')
+    expect((loadingButton as HTMLButtonElement).disabled).toBe(true)
+    expect(screen.getByRole('progressbar')).toBeTruthy()
+
+    fireEvent.click(loadingButton)
+    expect(mockCommit).not.toHaveBeenCalled()
   })
 
   it('renders nothing for an anonymous user', () => {
