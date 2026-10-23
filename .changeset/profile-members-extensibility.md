@@ -1,5 +1,5 @@
 ---
-'@baseapp-frontend/components': major
+"@baseapp-frontend/components": major
 ---
 
 **Breaking:** the profiles module's Relay documents now need a baseapp-backend with the profile
@@ -12,7 +12,7 @@ This needs the matching backend: the baseapp-backend release that adds `profileM
 template projects, fail `relay-compiler` against an older schema (unknown field or type). Upgrade
 the backend first, run `pnpm relay:download-schema`, then upgrade this package and run `pnpm relay`.
 At runtime the default members list and invite dialog query no new fields, and only send the new
-mutations when a project opts in or a member is already `INACTIVE`.
+mutations when a project opts in.
 
 - Fix: `ProfileMembers` asks `hasPerm` for `change_profileuserrole` / `add_profileuserrole` without
   the `baseapp_profiles.` app label, so members can be managed in projects that swap the profile
@@ -21,10 +21,15 @@ mutations when a project opts in or a member is already `INACTIVE`.
 - Fix: a profile without an owner shows no owner row.
 - `ProfileMembers` and `MembersList` take `roleOptions`, `inactiveMemberOptions`, `roleLabels`,
   `statusLabels`, `MemberItem`, `MemberItemProps`, `InviteMemberDialog` and
-  `InviteMemberDialogProps`. A custom `MemberItem` also receives the row's `memberRef`.
+  `InviteMemberDialogProps`. A custom `MemberItem` also receives the row's `memberRef`. Project role
+  labels also name the roles in the active member's menu.
+- `ProfileMembers` takes `membersQuery`, `membersQueryVariables` and `membersListFragment` (also on
+  `MembersList`), so a project can page through members with more arguments (`status`) and spread
+  its own `ProfileUserRole` fragment for a custom `MemberItem`. The list now prepends invitations
+  into the connection it shows (`__id`).
 - Members can be deactivated (opt-in `DEACTIVATE_MEMBER_OPTION` in `roleOptions`, with a
-  confirmation) and an `INACTIVE` member offers Reactivate and Remove. `MEMBER_STATUSES` gains
-  `CANCELLED`.
+  confirmation) and reactivated (opt-in `inactiveMemberOptions={inactiveMemberActionOptions}`);
+  without it an `INACTIVE` member stays read-only, as before. `MEMBER_STATUSES` gains `CANCELLED`.
 - `InviteMemberDialog` takes `defaultRole`, a `roleOptions` picker, `collectInviteeNames`,
   `showMessageField`, `renderExtraFields` (values merged into the `profileSendInvitation` and
   `profileUserRoleCreate` inputs) with `extraFieldsDefaultValues` and `validateExtraFields`, and

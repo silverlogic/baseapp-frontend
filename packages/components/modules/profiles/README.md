@@ -23,10 +23,12 @@ Everything below is optional; with no props it behaves as before.
 ### Backend compatibility
 
 The component reads `hasPerm(perm: "change_profileuserrole")` / `"add_profileuserrole"` without an
-app label, so the backend adds the profile model's own. That needs a baseapp-backend whose
+app label, so the backend adds the `Profile` model's own. That needs a baseapp-backend whose
 `hasPerm` normalizes permissions (March 2026 or later); in exchange it works in projects that swap
 the profile models into their own app, where the old `baseapp_profiles.` label always answered
-false.
+false. The label is the `Profile` model's, so it is right whenever `Profile` and `ProfileUserRole`
+share an app (stock BaseApp, or both swapped into one app). A project that swaps only one of them
+passes its own `membersListFragment` (below) asking for the labelled permissions.
 
 Deactivation, reactivation, invitee names, the invitation message, the invitation preview and
 accept-with-signup need the baseapp-backend release with the profile invitation lifecycle
@@ -34,8 +36,8 @@ accept-with-signup need the baseapp-backend release with the profile invitation 
 `profileInvitationPreview`, `invitees` and `message` on `profileSendInvitation`). A project that
 compiles this package's sources against its own `schema.graphql` (the template projects do) must
 download the schema from that backend before it runs `pnpm relay`. At runtime the default list and
-dialog query no new fields and only send the new mutations when a project opts in (or a member is
-already `INACTIVE`), so the default screens keep working against an older backend.
+dialog query no new fields and only send the new mutations when a project opts in, so the default
+screens keep working against an older backend.
 
 ### Customizing the list
 
@@ -44,6 +46,7 @@ import {
   DEACTIVATE_MEMBER_OPTION,
   MEMBER_ACTIONS,
   ProfileMembers,
+  inactiveMemberActionOptions,
 } from '@baseapp-frontend/components/profiles/web'
 
 const TeamPage = () => (
@@ -56,21 +59,25 @@ const TeamPage = () => (
       DEACTIVATE_MEMBER_OPTION,
       { value: MEMBER_ACTIONS.remove, label: 'Remove' },
     ]}
-    // Labels for roles and statuses shown read-only (owner row, other members, invitations).
+    // Reactivate and Remove on a deactivated member (needs profileMemberReactivate).
+    inactiveMemberOptions={inactiveMemberActionOptions}
+    // Role labels, used in every row and in the menu; status labels, shown in place of a role.
     roleLabels={{ OWNER: 'Owner', MANAGER: 'Member' }}
     statusLabels={{ PENDING: 'Invited' }}
   />
 )
 ```
 
-| Prop (`ProfileMembers` and `MembersList`)        | Default                | What it does                                                                                                                                                                 |
-| ------------------------------------------------ | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `roleOptions`                                    | Admin, Manager, Remove | Menu of an active member. Values are `ProfileRoles` values (a project's own roles too) or `MEMBER_ACTIONS` (`REMOVE`, `DEACTIVATE`). Choosing `ADMIN` asks for confirmation. |
-| `inactiveMemberOptions`                          | Reactivate, Remove     | Menu of a deactivated (`INACTIVE`) member, for those who can change members.                                                                                                 |
-| `roleLabels` / `statusLabels`                    | capitalized value      | Display labels by role (`OWNER` included) or status (`PENDING`, `EXPIRED`, `INACTIVE`, `CANCELLED`, ...).                                                                    |
-| `MemberItem` / `MemberItemProps`                 | `MemberItem`           | The row component and props for every row. A custom row also receives `memberRef`, the row's `MemberItemFragment` ref (not on the owner row).                                |
-| `InviteMemberDialog` / `InviteMemberDialogProps` | `InviteMemberDialog`   | The dialog behind "Add Member". It always receives `open`, `onClose` and the list's `connections`; `InviteMemberDialogProps.connections` are added to them.                  |
-| `MembersListProps` (`ProfileMembers` only)       |                        | Any other `MembersList` prop; wins over the same prop given directly.                                                                                                        |
+| Prop (`ProfileMembers` and `MembersList`)                        | Default                          | What it does                                                                                                                                                                 |
+| ---------------------------------------------------------------- | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `roleOptions`                                                    | Admin, Manager, Remove           | Menu of an active member. Values are `ProfileRoles` values (a project's own roles too) or `MEMBER_ACTIONS` (`REMOVE`, `DEACTIVATE`). Choosing `ADMIN` asks for confirmation. |
+| `inactiveMemberOptions`                                          | none (read-only)                 | Menu of a deactivated (`INACTIVE`) member, for those who can change members. Pass `inactiveMemberActionOptions` for Reactivate and Remove.                                   |
+| `roleLabels` / `statusLabels`                                    | capitalized value                | Display labels by role (`OWNER` included; they also win over the `roleOptions` labels in the menu) or status (`PENDING`, `EXPIRED`, `INACTIVE`, `CANCELLED`, ...).           |
+| `MemberItem` / `MemberItemProps`                                 | `MemberItem`                     | The row component and props for every row. A custom row also receives `memberRef`, the row's `MemberItemFragment` ref (not on the owner row).                                |
+| `InviteMemberDialog` / `InviteMemberDialogProps`                 | `InviteMemberDialog`             | The dialog behind "Add Member". It always receives `open`, `onClose` and the list's `connections`; `InviteMemberDialogProps.connections` are added to them.                  |
+| `membersListFragment`                                            | `UserMembersListFragment`        | A project's members pagination fragment; see "Project fields on each row" below.                                                                                             |
+| `membersQuery` / `membersQueryVariables` (`ProfileMembers` only) | `UserMembersListPaginationQuery` | The query that loads the profile through `membersListFragment`, and its extra variables (`{ status: 'ACTIVE' }`, say).                                                       |
+| `MembersListProps` (`ProfileMembers` only)                       |                                  | Any other `MembersList` prop; wins over the same prop given directly.                                                                                                        |
 
 `MEMBER_STATUSES` includes `CANCELLED` (a withdrawn invitation kept as history by the backend), which
 renders read-only. A profile without an owner (one its admins run) shows no owner row.
@@ -79,6 +86,93 @@ renders read-only. A profile without an owner (one its admins run) shows no owne
 `MEMBER_STATUSES`, `DEACTIVATE_MEMBER_OPTION`, `inactiveMemberActionOptions` and
 `memberRoleOptions` (the default menu) are exported from `@baseapp-frontend/components/profiles/web`
 for projects that wrap or extend them.
+
+### Project fields on each row
+
+A custom `MemberItem` receives `memberRef`, the row's `ProfileUserRole` ref. To read the project's
+own fields through it (a job title, say), or to page through `members` with more arguments (such
+as `status`), the project copies `UserMembersListFragment` into its own `@refetchable` fragment,
+spreads its row fragment next to `...MemberItemFragment`, and loads it with its own query. The
+fragment must keep every field and argument of `UserMembersListFragment` under the same names, and
+select `__id` on the connection so "Add Member" prepends into the list shown.
+
+```tsx
+const TeamMembersListFragment = graphql`
+  fragment TeamMembersListFragment on Profile
+  @refetchable(queryName: "TeamMembersListPaginationQuery")
+  @argumentDefinitions(
+    count: { type: "Int", defaultValue: 10 }
+    cursor: { type: "String" }
+    orderBy: { type: "String" }
+    q: { type: "String" }
+    status: { type: "ProfileRoleStatus" }
+  ) {
+    id
+    canChangeRole: hasPerm(perm: "change_profileuserrole")
+    canAddMember: hasPerm(perm: "add_profileuserrole")
+    ...ProfileItemFragment
+    owner {
+      id
+      profile {
+        ...ProfileItemFragment
+      }
+    }
+    members(first: $count, after: $cursor, orderBy: $orderBy, q: $q, status: $status)
+      @connection(key: "TeamMembersListFragment_members", filters: ["orderBy", "q", "status"]) {
+      __id
+      totalCount
+      edges {
+        cursor
+        node {
+          ...MemberItemFragment
+          ...TeamMemberRowFragment
+        }
+      }
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+    }
+  }
+`
+
+const TeamMembersQuery = graphql`
+  query TeamMembersQuery(
+    $count: Int = 10
+    $cursor: String
+    $orderBy: String
+    $profileId: ID!
+    $q: String
+    $status: ProfileRoleStatus
+  ) {
+    profile(id: $profileId) {
+      id
+      ...TeamMembersListFragment
+        @arguments(count: $count, cursor: $cursor, orderBy: $orderBy, q: $q, status: $status)
+    }
+  }
+`
+
+const TeamMemberItem = ({ memberRef, ...props }: MemberItemProps) => {
+  const row = useFragment(TeamMemberRowFragment, memberRef as TeamMemberRowFragment$key)
+  return (
+    <>
+      <MemberItem {...props} />
+      <Typography variant="caption">{row?.title}</Typography>
+    </>
+  )
+}
+
+;<ProfileMembers
+  membersQuery={TeamMembersQuery}
+  membersQueryVariables={{ status: 'ACTIVE' }}
+  membersListFragment={TeamMembersListFragment}
+  MemberItem={TeamMemberItem}
+/>
+```
+
+`memberRef` is typed as the `MemberItemFragment` ref, so the row reads its own fragment with a cast
+as above.
 
 ### Customizing the invite dialog
 
@@ -110,7 +204,7 @@ for projects that wrap or extend them.
 
 | Prop (`InviteMemberDialog`) | Default       | What it does                                                                                                                                                                                                                  |
 | --------------------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `defaultRole`               | `MANAGER`     | Role of added members and invitations.                                                                                                                                                                                        |
+| `defaultRole`               | `MANAGER`     | Role of added members and invitations, until one is picked in the dialog.                                                                                                                                                     |
 | `roleOptions`               | none          | When given, shows a role picker with these roles.                                                                                                                                                                             |
 | `collectInviteeNames`       | `false`       | Asks for each invited email's first and last name, sent as `invitees`.                                                                                                                                                        |
 | `showMessageField`          | `false`       | A personal note sent with the invitation emails (`message`).                                                                                                                                                                  |
