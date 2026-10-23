@@ -1,4 +1,4 @@
-import _axios from 'axios'
+import _axios, { AxiosHeaders } from 'axios'
 import humps from 'humps'
 import { headers as incomingHeaders } from 'next/headers'
 import type { Mock } from 'vitest'
@@ -509,7 +509,7 @@ describe('createAxiosInstance', () => {
 
     const runRequestInterceptor = async (
       options: Parameters<typeof createAxiosInstance>[0],
-      headers: Record<string, string | undefined> = {},
+      headers: Record<string, string | undefined> | AxiosHeaders = {},
     ) => {
       const {
         axios: {
@@ -586,6 +586,21 @@ describe('createAxiosInstance', () => {
       )
 
       expect(request.headers['Current-Profile']).toBe('profile-456')
+    })
+
+    it.each([
+      ['a plain headers object', () => ({ 'current-profile': 'profile-456' })],
+      ['AxiosHeaders', () => new AxiosHeaders({ 'current-profile': 'profile-456' })],
+    ])('keeps a caller-set header in any letter case (%s)', async (_, makeHeaders) => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true }, makeHeaders())
+
+      const sent =
+        request.headers instanceof AxiosHeaders ? request.headers.toJSON() : request.headers
+      expect(
+        Object.entries(sent).filter(([name]) => name.toLowerCase() === 'current-profile'),
+      ).toEqual([['current-profile', 'profile-456']])
     })
   })
 

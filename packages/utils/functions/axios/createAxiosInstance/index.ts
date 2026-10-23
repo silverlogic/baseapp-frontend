@@ -17,6 +17,15 @@ import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
 
+// Header names are case-insensitive. AxiosHeaders looks them up that way; a plain headers object
+// (a custom adapter, a test) is searched by hand.
+const hasHeader = (headers: Record<string, unknown>, name: string) =>
+  typeof headers.has === 'function'
+    ? Boolean(headers.has(name))
+    : Object.entries(headers).some(
+        ([key, value]) => key.toLowerCase() === name.toLowerCase() && value !== undefined,
+      )
+
 export const createAxiosInstance = ({
   returnData = true,
   file = false,
@@ -85,7 +94,7 @@ export const createAxiosInstance = ({
     // Act as the profile the user switched to, like baseAppFetch and the GraphQL environment do.
     // A header the caller set on the request wins.
     const currentProfileId = parseString<MinimalProfile>(currentProfile ?? undefined)?.id
-    if (request.headers && currentProfileId && !request.headers['Current-Profile']) {
+    if (request.headers && currentProfileId && !hasHeader(request.headers, 'Current-Profile')) {
       request.headers['Current-Profile'] = currentProfileId
     }
 

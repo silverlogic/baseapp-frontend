@@ -124,5 +124,5 @@ export const { axios } = createAxiosInstance({ withCurrentProfile: true })
 
 It is read on every request, in the browser and during server rendering, so it follows profile
 switches without recreating the instance. No header is sent when there is no current profile, and
-a `Current-Profile` header the caller sets on a request is kept. The default stays `false`, and the
+a `Current-Profile` header the caller sets on a request, in any letter case, is kept. The default stays `false`, and the
 exported `axios` / `axiosForFiles` instances don't send it.
