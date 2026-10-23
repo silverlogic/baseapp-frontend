@@ -2,9 +2,10 @@ import type { ImpersonationTokenKeyNames } from '@baseapp-frontend/authenticatio
 
 export interface ImpersonationEndedResult {
   /**
-   * True when the impersonator's own tokens were put back. False when none were kept aside (for
-   * example the session was started in another browser): the session's tokens were removed and the
-   * user is logged out.
+   * True when the impersonator's own tokens are in place: put back now, or already put back by
+   * another tab that ended the session first (then no request is made). False when none were kept
+   * aside (for example the session was started in another browser): the session's tokens were
+   * removed and the user is logged out.
    */
   restored: boolean
 }

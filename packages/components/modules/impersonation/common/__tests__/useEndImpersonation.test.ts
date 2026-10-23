@@ -19,6 +19,8 @@ vi.mock('../graphql/mutations/ImpersonationEnd', () => ({
 
 vi.mock('@baseapp-frontend/authentication', () => ({
   restoreImpersonatorTokens: mockRestore,
+  isImpersonationSessionToken: (token?: string) =>
+    Boolean(token && JSON.parse(Buffer.from(token.split('.')[1]!, 'base64url').toString()).imp_sid),
 }))
 
 vi.mock('@baseapp-frontend/utils', async () => ({
@@ -33,19 +35,35 @@ vi.mock('../utils', async () => ({
   reloadAt: mockReloadAt,
 }))
 
-const jwtExpiringIn = (seconds: number) =>
+const jwt = (claims: Record<string, unknown>, expiresInSeconds = 600) =>
   [
     Buffer.from('{"alg":"HS256"}').toString('base64url'),
-    Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + seconds })).toString(
-      'base64url',
-    ),
+    Buffer.from(
+      JSON.stringify({ exp: Math.floor(Date.now() / 1000) + expiresInSeconds, ...claims }),
+    ).toString('base64url'),
     'signature',
   ].join('.')
+const sessionToken = (expiresInSeconds = 600) => jwt({ imp: 1, imp_sid: 9 }, expiresInSeconds)
+const ADMIN_ACCESS = jwt({ user_id: 1, token_type: 'access' })
+const ADMIN_REFRESH = jwt({ user_id: 1, token_type: 'refresh' })
+
+// what restoreImpersonatorTokens does to the cookies every tab shares
+const restoreFromSharedCookies = async () => {
+  const access = tokens.get('ImpersonatorAuthorization')
+  const refresh = tokens.get('ImpersonatorRefresh')
+  tokens.delete('ImpersonatorAuthorization')
+  tokens.delete('ImpersonatorRefresh')
+  if (!access || !refresh) return false
+  tokens.set('Authorization', access)
+  tokens.set('Refresh', refresh)
+  return true
+}
 
 describe('useEndImpersonation', () => {
   beforeEach(() => {
     tokens.clear()
-    tokens.set('Refresh', jwtExpiringIn(600))
+    tokens.set('Authorization', sessionToken())
+    tokens.set('Refresh', sessionToken())
   })
 
   afterEach(() => {
@@ -81,7 +99,7 @@ describe('useEndImpersonation', () => {
   })
 
   test('skips the request once the session has expired', async () => {
-    tokens.set('Refresh', jwtExpiringIn(-1))
+    tokens.set('Refresh', sessionToken(-1))
     const { result } = renderHook(() => useEndImpersonation())
 
     await act(async () => {
@@ -109,6 +127,58 @@ describe('useEndImpersonation', () => {
     expect(onLogout).toHaveBeenCalled()
     expect(mockBroadcast).toHaveBeenCalledWith('logout')
     expect(onEnded).toHaveBeenCalledWith({ restored: false })
+  })
+
+  test('only reloads when another tab already ended the session', async () => {
+    mockRestore.mockImplementation(restoreFromSharedCookies)
+    mockCommit.mockImplementation(({ onCompleted }) => onCompleted({}, null))
+    tokens.set('ImpersonatorAuthorization', ADMIN_ACCESS)
+    tokens.set('ImpersonatorRefresh', ADMIN_REFRESH)
+    const firstTab = renderHook(() => useEndImpersonation())
+    const onLogout = vi.fn()
+    const onEnded = vi.fn()
+    const secondTab = renderHook(() => useEndImpersonation({ onLogout, onEnded }))
+
+    await act(async () => {
+      firstTab.result.current.endImpersonation()
+    })
+    expect(tokens.get('Authorization')).toBe(ADMIN_ACCESS)
+    expect(tokens.has('ImpersonatorAuthorization')).toBe(false)
+
+    // the second tab's End button, or its countdown reaching zero
+    await act(async () => {
+      secondTab.result.current.endImpersonation()
+    })
+
+    expect(mockCommit).toHaveBeenCalledTimes(1)
+    expect(mockRestore).toHaveBeenCalledTimes(1)
+    expect(mockRemoveToken).not.toHaveBeenCalled()
+    expect(onLogout).not.toHaveBeenCalled()
+    expect(mockBroadcast).not.toHaveBeenCalled()
+    expect(onEnded).toHaveBeenCalledWith({ restored: true })
+    expect(tokens.get('Authorization')).toBe(ADMIN_ACCESS)
+    expect(tokens.get('Refresh')).toBe(ADMIN_REFRESH)
+    mockRestore.mockReset()
+    mockCommit.mockReset()
+  })
+
+  test('puts the kept-aside tokens back without a request once the session tokens are gone', async () => {
+    // a failed refresh removes the session's tokens but leaves the impersonator's aside
+    tokens.clear()
+    tokens.set('ImpersonatorAuthorization', ADMIN_ACCESS)
+    tokens.set('ImpersonatorRefresh', ADMIN_REFRESH)
+    mockRestore.mockImplementationOnce(restoreFromSharedCookies)
+    const { result } = renderHook(() => useEndImpersonation())
+
+    await act(async () => {
+      result.current.endImpersonation()
+    })
+
+    expect(mockCommit).not.toHaveBeenCalled()
+    expect(mockBroadcast).not.toHaveBeenCalled()
+    expect(tokens.get('Authorization')).toBe(ADMIN_ACCESS)
+    expect(tokens.get('Refresh')).toBe(ADMIN_REFRESH)
+    expect(mockReloadAt).toHaveBeenCalledWith('/')
   })
 
   test('ends a session once when called twice', async () => {
