@@ -9,7 +9,7 @@ import { ConnectionHandler, useFragment, usePaginationFragment } from 'react-rel
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { ProfileItemFragment, UserMembersListFragment } from '../../../common'
-import InviteMemberDialog from '../InviteMemberDialog'
+import DefaultInviteMemberDialog from '../InviteMemberDialog'
 import DefaultMemberItem from '../MemberItem'
 import MemberListItem from '../MemberListItem'
 import { MEMBER_ROLES, MEMBER_STATUSES, NUMBER_OF_MEMBERS_TO_LOAD_NEXT } from '../constants'
@@ -22,6 +22,8 @@ const MembersList: FC<MembersListProps> = ({
   MemberItemProps = {},
   LoadingState = DefaultLoadingState,
   LoadingStateProps = {},
+  InviteMemberDialog = DefaultInviteMemberDialog,
+  InviteMemberDialogProps = {},
   roleOptions,
   inactiveMemberOptions,
   roleLabels,
@@ -98,9 +100,13 @@ const MembersList: FC<MembersListProps> = ({
   return (
     <>
       <InviteMemberDialog
+        {...InviteMemberDialogProps}
         open={isInviteOpen}
-        onClose={() => setIsInviteOpen(false)}
-        connections={[membersConnectionId]}
+        onClose={() => {
+          setIsInviteOpen(false)
+          InviteMemberDialogProps.onClose?.()
+        }}
+        connections={[membersConnectionId, ...(InviteMemberDialogProps.connections ?? [])]}
       />
       <Searchbar
         variant="outlined"

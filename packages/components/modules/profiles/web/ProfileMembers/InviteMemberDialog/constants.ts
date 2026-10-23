@@ -4,6 +4,12 @@ export const INVITE_MEMBER_DIALOG_COPY = {
   searchPlaceholder: 'Invite members by name or email',
   cancel: 'Cancel',
   submit: 'Invite',
+  roleLabel: 'Role',
+  inviteeNamesTitle: 'Invitee names',
+  firstNameLabel: 'First name',
+  lastNameLabel: 'Last name',
+  messageLabel: 'Message (optional)',
+  messagePlaceholder: 'Add a personal note to the invitation email',
 } as const
 
 /**

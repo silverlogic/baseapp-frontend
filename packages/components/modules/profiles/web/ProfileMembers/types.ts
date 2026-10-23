@@ -6,6 +6,8 @@ export interface ProfileMembersSuspendedProps extends Pick<
   MembersListProps,
   | 'MemberItem'
   | 'MemberItemProps'
+  | 'InviteMemberDialog'
+  | 'InviteMemberDialogProps'
   | 'roleOptions'
   | 'inactiveMemberOptions'
   | 'roleLabels'

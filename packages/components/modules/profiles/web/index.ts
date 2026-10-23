@@ -17,6 +17,8 @@ export { default as MembersList } from './ProfileMembers/MembersList'
 export type * from './ProfileMembers/MembersList/types'
 export { default as MemberItem } from './ProfileMembers/MemberItem'
 export type * from './ProfileMembers/MemberItem/types'
+export { default as InviteMemberDialog } from './ProfileMembers/InviteMemberDialog'
+export type * from './ProfileMembers/InviteMemberDialog/types'
 export {
   DEACTIVATE_MEMBER_OPTION,
   MEMBER_ACTIONS,
