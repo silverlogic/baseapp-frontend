@@ -65,6 +65,13 @@ It uses `useEnvironment` from `config/environment` for dynamic Relay environment
 #### **Props**
 
 - `children` (required): The child components that will receive access to the Relay environment.
+- `sessionKey` (optional): Names the session the environment belongs to, usually
+  `getSessionIdentity(access, refresh)` from `@baseapp-frontend/utils`. When it changes, the
+  children are remounted with a new, empty environment and the previous one is disposed (see
+  [Logout and account switch](#logout-and-account-switch)). Without it, one environment is kept for
+  the provider's lifetime, as before.
+- `environment` (optional): An environment you create and own. The provider uses it as is, ignores
+  `sessionKey` and never disposes it.
 
 #### **Usage**
 
@@ -87,6 +94,66 @@ To utilize `RelayProvider`, wrap your application or specific components where R
 
   export default RootLayout
   ```
+
+### **Logout and account switch**
+
+A Relay environment caches everything its user fetched: the store, the preloaded-query responses
+and an authenticated websocket for subscriptions. When the user logs out or another user logs in,
+none of that may reach the next user. Give `RelayProvider` a `sessionKey` that changes with the
+session:
+
+```tsx
+'use client'
+
+import { RelayProvider } from '@baseapp-frontend/graphql'
+import {
+  ACCESS_KEY_NAME,
+  REFRESH_KEY_NAME,
+  getSessionIdentity,
+  useCookie,
+} from '@baseapp-frontend/utils'
+
+const SessionRelayProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { cookies } = useCookie()
+  const sessionKey = getSessionIdentity(cookies?.[ACCESS_KEY_NAME], cookies?.[REFRESH_KEY_NAME])
+
+  return <RelayProvider sessionKey={sessionKey}>{children}</RelayProvider>
+}
+```
+
+When the key changes:
+
+- the children are remounted under a new environment, so no component state or query from the old
+  session survives;
+- after the change is committed, the old environment is disposed with `disposeEnvironment`. The
+  disposal is deferred and cancelled if the same environment mounts again, so React StrictMode's
+  double mount never disposes the live environment. Unmounting the provider disposes it too.
+
+`getSessionIdentity` keeps the same key when the access token is refreshed, so a refresh does not
+reset the page. `ReactQueryProvider` from `@baseapp-frontend/provider` takes the same `sessionKey`
+for the React Query cache.
+
+#### **disposeEnvironment**
+
+`disposeEnvironment(environment)` retires an environment yourself, e.g. in a React Native app that
+keeps its environment outside React. It:
+
+- clears the preloaded-query response cache;
+- empties the store, including records written by a pending optimistic update, and notifies mounted
+  queries;
+- closes the environment's websocket. Transport errors are swallowed, so logging out never fails
+  because of the socket.
+
+Each environment created with `createEnvironment()` has its own websocket client, opened on the
+first subscription, so disposing one environment never closes another's subscriptions. Prefer a new
+environment for the next session; an environment used again after disposal starts empty and opens
+a new websocket with the credentials of that moment.
+
+#### **useEnvironment**
+
+`useEnvironment(sessionKey?)` is the hook behind `RelayProvider`: it returns the environment for the
+current `sessionKey` and disposes retired ones as described above. Without a key it keeps one
+environment for the component's lifetime and never disposes it.
 
 ### **withRelay**
 

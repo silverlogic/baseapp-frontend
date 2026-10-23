@@ -112,51 +112,87 @@ export async function httpFetch(
   return response
 }
 
-const EXPO_PUBLIC_WS_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDPOINT')
-const wsClient = createClient({
-  url: getWebSocketClientUrl(
-    (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ?? EXPO_PUBLIC_WS_RELAY_ENDPOINT) as string,
-  ),
-  connectionParams: () => {
-    const Authorization = getToken(ACCESS_KEY_NAME)
-    if (!Authorization) return {}
+type WebSocketClient = ReturnType<typeof createClient>
 
-    const Refresh = getToken(REFRESH_KEY_NAME) || undefined
-    const CurrentProfileStr = getToken(CURRENT_PROFILE_KEY_NAME) || undefined
-    const CurrentProfile = parseString<MinimalProfile>(CurrentProfileStr)
-    return {
-      Authorization,
-      Refresh,
-      'Current-Profile': CurrentProfile ? CurrentProfile.id : undefined,
-    }
-  },
-  retryAttempts: MAX_WS_RETRY_ATTEMPTS,
-  retryWait: async (retries) => {
-    const backoff = Math.min(BASE_WS_RETRY_DELAY_IN_MS * 2 ** retries, MAX_WS_RETRY_DELAY_IN_MS)
-    const jitter = Math.random() * backoff // NOSONAR: Math.random() is acceptable for non-cryptographic jitter
-    await new Promise((resolve) => {
-      setTimeout(resolve, backoff + jitter)
-    })
-  },
-  webSocketImpl: WebSocket,
-})
+const createWebSocketClient = (): WebSocketClient =>
+  createClient({
+    url: getWebSocketClientUrl(
+      (process.env.NEXT_PUBLIC_WS_RELAY_ENDPOINT ??
+        getExpoConstant('EXPO_PUBLIC_WS_RELAY_ENDPOINT')) as string,
+    ),
+    connectionParams: () => {
+      const Authorization = getToken(ACCESS_KEY_NAME)
+      if (!Authorization) return {}
 
-const websocketFetch = (request: RequestParameters, variables: Variables): Observable<any> =>
-  Observable.create((sink) => {
-    if (!request.text) {
-      return sink.error(new Error('Operation text cannot be empty'))
-    }
-    return wsClient.subscribe(
-      {
-        operationName: request.name,
-        query: request.text,
-        variables,
-      },
-      sink,
-    )
+      const Refresh = getToken(REFRESH_KEY_NAME) || undefined
+      const CurrentProfileStr = getToken(CURRENT_PROFILE_KEY_NAME) || undefined
+      const CurrentProfile = parseString<MinimalProfile>(CurrentProfileStr)
+      return {
+        Authorization,
+        Refresh,
+        'Current-Profile': CurrentProfile ? CurrentProfile.id : undefined,
+      }
+    },
+    retryAttempts: MAX_WS_RETRY_ATTEMPTS,
+    retryWait: async (retries) => {
+      const backoff = Math.min(BASE_WS_RETRY_DELAY_IN_MS * 2 ** retries, MAX_WS_RETRY_DELAY_IN_MS)
+      const jitter = Math.random() * backoff // NOSONAR: Math.random() is acceptable for non-cryptographic jitter
+      await new Promise((resolve) => {
+        setTimeout(resolve, backoff + jitter)
+      })
+    },
+    webSocketImpl: WebSocket,
   })
 
-function createNetwork(responseCache: QueryResponseCache) {
+// Each environment owns its websocket client, so retiring one session's environment closes that
+// session's authenticated socket without touching another's. The client is created on the first
+// subscription: environments that never subscribe (e.g. on the server) never build one, and a
+// subscription after `dispose()` builds a new one.
+type LazyWebSocketClient = {
+  get: () => WebSocketClient
+  dispose: () => void
+}
+
+const createLazyWebSocketClient = (): LazyWebSocketClient => {
+  let client: WebSocketClient | undefined
+
+  return {
+    get: () => {
+      client ??= createWebSocketClient()
+      return client
+    },
+    dispose: () => {
+      const retired = client
+      client = undefined
+      try {
+        // A socket that never finished its handshake may reject dispose(); retiring a session
+        // (e.g. on logout) must never fail because of it.
+        Promise.resolve(retired?.dispose()).catch(() => undefined)
+      } catch {
+        // Same for a synchronous transport error.
+      }
+    },
+  }
+}
+
+const createWebsocketFetch =
+  (webSocketClient: LazyWebSocketClient) =>
+  (request: RequestParameters, variables: Variables): Observable<any> =>
+    Observable.create((sink) => {
+      if (!request.text) {
+        return sink.error(new Error('Operation text cannot be empty'))
+      }
+      return webSocketClient.get().subscribe(
+        {
+          operationName: request.name,
+          query: request.text,
+          variables,
+        },
+        sink,
+      )
+    })
+
+function createNetwork(responseCache: QueryResponseCache, webSocketClient: LazyWebSocketClient) {
   async function fetchResponse(
     request: RequestParameters,
     variables: Variables,
@@ -176,7 +212,7 @@ function createNetwork(responseCache: QueryResponseCache) {
     return httpFetch(request, variables, cacheConfig, uploadables)
   }
 
-  const network = Network.create(fetchResponse, websocketFetch)
+  const network = Network.create(fetchResponse, createWebsocketFetch(webSocketClient))
   return network
 }
 
@@ -188,6 +224,8 @@ function createQueryCache() {
 }
 
 const responseCacheByEnvironment = new WeakMap<Environment, QueryResponseCache>()
+const recordSourceByEnvironment = new WeakMap<Environment, ReturnType<typeof RecordSource.create>>()
+const webSocketClientByEnvironment = new WeakMap<Environment, LazyWebSocketClient>()
 
 function handlerProvider(handle: string) {
   switch (handle) {
@@ -200,8 +238,10 @@ function handlerProvider(handle: string) {
 
 export function createEnvironment() {
   const cache = createQueryCache()
-  const network = createNetwork(cache)
-  const store = new Store(RecordSource.create())
+  const webSocketClient = createLazyWebSocketClient()
+  const network = createNetwork(cache, webSocketClient)
+  const source = RecordSource.create()
+  const store = new Store(source)
 
   const environment = new Environment({
     handlerProvider,
@@ -211,10 +251,43 @@ export function createEnvironment() {
   })
 
   responseCacheByEnvironment.set(environment, cache)
+  recordSourceByEnvironment.set(environment, source)
+  webSocketClientByEnvironment.set(environment, webSocketClient)
 
   return environment
 }
 
 export function getCacheByEnvironment(environment: Environment) {
   return responseCacheByEnvironment.get(environment)
+}
+
+/**
+ * Retires an environment when the session that filled it ends (logout, or a switch to another
+ * account): it empties the preloaded-response cache and the store, including records written by
+ * optimistic updates, so nothing from the old session can be read from it, and closes the
+ * environment's authenticated websocket. Transport errors are swallowed: disposing never throws.
+ *
+ * Prefer a new environment for the next session (`RelayProvider` does all of this for you when
+ * given a `sessionKey`). An environment that is used again starts from an empty store, and its next
+ * subscription opens a new websocket with the credentials of that moment.
+ *
+ * @description
+ * This is a **BaseApp** feature.
+ *
+ * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
+ */
+export function disposeEnvironment(environment: Environment) {
+  const store = environment.getStore()
+  // `getSource()` includes records that only exist in a pending optimistic update.
+  const recordIds = store.getSource().getRecordIDs()
+
+  responseCacheByEnvironment.get(environment)?.clear()
+  // Empty the base source too, so rolling back a pending optimistic update can't bring old
+  // records back. Publishing a tombstone for every record then clears what is on screen, including
+  // the root's fields, without deleting the root through a record proxy (which Relay forbids).
+  recordSourceByEnvironment.get(environment)?.clear()
+  store.publish(RecordSource.create(Object.fromEntries(recordIds.map((id) => [id, null]))))
+  store.notify()
+
+  webSocketClientByEnvironment.get(environment)?.dispose()
 }
