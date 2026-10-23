@@ -2,10 +2,15 @@ import { useMemo } from 'react'
 
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
+import { DEACTIVATE_MEMBER_OPTION, MEMBER_ACTIONS, roleOptions } from '../../constants'
 import {
+  addableMembersListMockData,
   allRolesMembersListMockData,
+  deactivateMemberMockData,
   fullMembersListMockData,
   fullMembersListNextPageMockData,
+  ownerlessMembersListMockData,
+  reactivateMemberMockData,
   simpleMembersListMockData,
   updateMemberRoleMockData,
 } from '../__mocks__/requests'
@@ -27,6 +32,8 @@ import MembersForTesting from './MembersForTesting'
 export interface MembersControls {
   resolveUpdateMemberRole: () => void
   resolveNextPage: () => void
+  resolveDeactivateMember: () => void
+  resolveReactivateMember: () => void
 }
 
 declare global {
@@ -62,6 +69,10 @@ const useSeededEnvironment = (data: unknown) =>
         testEnvironment.resolveMostRecentOperation({ data: updateMemberRoleMockData }),
       resolveNextPage: () =>
         testEnvironment.resolveMostRecentOperation({ data: fullMembersListNextPageMockData }),
+      resolveDeactivateMember: () =>
+        testEnvironment.resolveMostRecentOperation({ data: deactivateMemberMockData }),
+      resolveReactivateMember: () =>
+        testEnvironment.resolveMostRecentOperation({ data: reactivateMemberMockData }),
     }
 
     return testEnvironment.environment
@@ -94,4 +105,45 @@ export const Searchable = () => {
   const environment = useSeededEnvironment(simpleMembersListMockData)
 
   return <MembersForTesting environment={environment} />
+}
+
+/** A profile without an owner: no owner row, only its admin. */
+export const Ownerless = () => {
+  const environment = useSeededEnvironment(ownerlessMembersListMockData)
+
+  return <MembersForTesting environment={environment} context={ownerContext} />
+}
+
+/** Project labels and the opt-in Deactivate entry in the member menu. */
+export const DeactivationWithLabels = () => {
+  const environment = useSeededEnvironment(simpleMembersListMockData)
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      roleOptions={[
+        ...roleOptions.filter(({ value }) => value !== MEMBER_ACTIONS.remove),
+        DEACTIVATE_MEMBER_OPTION,
+      ]}
+      roleLabels={{ OWNER: 'Proprietor' }}
+      statusLabels={{ INACTIVE: 'Deactivated' }}
+    />
+  )
+}
+
+const StubInviteMemberDialog = ({ open, connections }: { open: boolean; connections: string[] }) =>
+  open ? <div role="dialog">Project invite dialog for {connections.length} list</div> : null
+
+/** "Add Member" opens the dialog the project injects. */
+export const CustomInviteDialog = () => {
+  const environment = useSeededEnvironment(addableMembersListMockData)
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      InviteMemberDialog={StubInviteMemberDialog}
+    />
+  )
 }

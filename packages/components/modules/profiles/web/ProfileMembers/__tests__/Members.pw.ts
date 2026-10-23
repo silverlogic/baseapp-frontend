@@ -173,6 +173,63 @@ test.describe('Component: ProfileMembers', () => {
     })
   })
 
+  test('GIVEN an ownerless profile, THEN it lists its members without an owner row', async ({
+    mount,
+  }) => {
+    const component = await mount(`${STORY}/Ownerless`)
+
+    await expect(component.getByText('Admin Profile', { exact: true })).toBeAttached()
+    await expect(component.getByText('1 member', { exact: true })).toBeAttached()
+    await expect(component.getByText('Owner', { exact: true })).not.toBeAttached()
+  })
+
+  test('GIVEN project labels and the Deactivate entry, WHEN a member is deactivated and reactivated, THEN the row follows', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN project labels', async () => {
+      const mounted = await mount(`${STORY}/DeactivationWithLabels`)
+
+      await expect(mounted.getByText('Proprietor', { exact: true })).toBeAttached()
+      await expect(mounted.getByText('Owner', { exact: true })).not.toBeAttached()
+
+      return mounted
+    })
+
+    await test.step('WHEN Deactivate is chosen, THEN it is applied only after confirmation', async () => {
+      await component.getByText('Manager', { exact: true }).click()
+      await expect(page.getByRole('option', { name: 'Remove' })).not.toBeAttached()
+      await page.getByRole('option', { name: 'Deactivate' }).click()
+
+      await expect(page.getByText('Deactivate member', { exact: true })).toBeAttached()
+      await page.getByRole('button', { name: 'Deactivate', exact: true }).click()
+      await resolve(page, 'resolveDeactivateMember')
+
+      await expect(component.getByText('Deactivated', { exact: true })).toBeAttached()
+    })
+
+    await test.step('WHEN the deactivated member is reactivated, THEN their role is shown again', async () => {
+      await component.getByText('Deactivated', { exact: true }).click()
+      await expect(page.getByRole('option', { name: 'Remove' })).toBeAttached()
+      await page.getByRole('option', { name: 'Reactivate' }).click()
+      await resolve(page, 'resolveReactivateMember')
+
+      await expect(component.getByText('Manager', { exact: true })).toBeAttached()
+      await expect(component.getByText('Deactivated', { exact: true })).not.toBeAttached()
+    })
+  })
+
+  test('GIVEN an injected InviteMemberDialog, WHEN Add Member is clicked, THEN the project dialog opens with the list connection', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/CustomInviteDialog`)
+
+    await component.getByRole('button', { name: 'Add Member' }).click()
+
+    await expect(page.getByText('Project invite dialog for 1 list')).toBeAttached()
+  })
+
   test('GIVEN a searchable members list, WHEN a name is searched, THEN only that member remains, and WHEN the search is cleared, THEN all return', async ({
     mount,
   }) => {

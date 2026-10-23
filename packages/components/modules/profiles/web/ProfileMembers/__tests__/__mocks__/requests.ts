@@ -197,3 +197,70 @@ export const updateMemberRoleMockData = {
     },
   },
 }
+
+/** A profile without an owner, run by its admin. */
+export const ownerlessMembersListMockData = {
+  data: {
+    profile: {
+      canChangeRole: true,
+      id: 'UHJvZmlsZTox',
+      name: 'Ownerless Organization',
+      image: null,
+      urlPath: null,
+      owner: null,
+      members: {
+        totalCount: 1,
+        edges: [
+          {
+            node: {
+              id: 'role-id-admin',
+              user: {
+                profile: { id: 'id-admin', name: 'Admin Profile', image: null, urlPath: null },
+                id: 'user-id-admin',
+              },
+              role: 'ADMIN',
+              status: 'ACTIVE',
+              invitedEmail: null,
+              invitationExpiresAt: null,
+              __typename: 'ProfileUserRole',
+            },
+            cursor: 'cursor-admin',
+          },
+        ],
+        pageInfo: { endCursor: 'cursor-admin', hasNextPage: false },
+      },
+    },
+  },
+}
+
+/** The members list of `simpleMembersListMockData`, where the signed-in profile may add members. */
+export const addableMembersListMockData = {
+  data: {
+    profile: { ...simpleMembersListMockData.data.profile, canAddMember: true },
+  },
+}
+
+const managerMemberRole = (status: 'ACTIVE' | 'INACTIVE') => ({
+  id: 'UHJvZmlsZVVzZXJSb2xlOjEx',
+  user: {
+    profile: { id: 'UHJvZmlsZTo0', name: 'Manager Profile', image: null, urlPath: null },
+    id: 'VXNlcjo0',
+  },
+  role: 'MANAGER',
+  status,
+  invitedEmail: null,
+  invitationExpiresAt: null,
+  deactivatedAt: status === 'INACTIVE' ? '2026-10-22T12:00:00+00:00' : null,
+})
+
+export const deactivateMemberMockData = {
+  data: {
+    profileMemberDeactivate: { profileUserRole: managerMemberRole('INACTIVE'), errors: null },
+  },
+}
+
+export const reactivateMemberMockData = {
+  data: {
+    profileMemberReactivate: { profileUserRole: managerMemberRole('ACTIVE'), errors: null },
+  },
+}
