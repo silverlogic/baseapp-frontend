@@ -5,7 +5,10 @@ import type { ProtectedFileDownloadError } from '../../utils/protectedFiles'
 export type ProtectedFileRef = Pick<ProtectedFile, 'key' | 'objectId'>
 
 export interface ProtectedFileDownloadOptions {
-  /** Default `attachment`. */
+  /**
+   * How the client opens the link; default `attachment`. The backend never sees it: pass the
+   * disposition the field is registered with, which sets the response's `Content-Disposition`.
+   */
   disposition?: ProtectedFileDisposition
 }
 

@@ -241,9 +241,10 @@ const InvoicePdfButton = ({ invoice }) => {
 `ProtectedFile` from REST once its keys are camel-cased — and resolves `true` once the link is
 opened, `false` when it failed.
 
-- **`disposition: 'attachment'`** (default): web navigates to the link; the response's
-  `Content-Disposition: attachment` saves the file and the page stays where it is. No Blob is built,
-  so large files stream.
+- **`disposition: 'attachment'`** (default): web navigates the current tab to the link; the
+  response's `Content-Disposition: attachment` saves the file and the page stays where it is. No Blob
+  is built, so large files stream. See [What the client cannot see](#what-the-client-cannot-see) for
+  when the page does not stay.
 - **`disposition: 'inline'`**: web reserves a blank tab synchronously in the click handler (so pop-up
   blockers allow it), detaches it from the page (`opener = null`), then points it at the link. The
   file keeps the server's headers, including a sandboxing CSP for HTML. The tab is closed when the
@@ -261,6 +262,51 @@ still being minted is ignored.
 The platform hooks are thin wrappers over `useProtectedFileDownloadLogic({ createTarget, onError })`
 in `files/common`. `createTarget(disposition)` runs synchronously before the request and returns
 `{ open(url), cancel?() }`; use it to open links some other way (an in-app browser, say).
+
+#### What the client cannot see
+
+The mutation checks access and mints the link; the browser then fetches the file itself, so the
+hook never sees that response. Two consequences on web:
+
+- **Pass the disposition the field is registered with.** `disposition` only picks how the browser
+  opens the link; the backend never receives it. The response's `Content-Disposition` comes from the
+  field's registration (`protected_files.register(..., disposition=...)`), and `ProtectedFile` does
+  not expose it, so keep the two in step for each field. Calling `download(file)` (attachment) for a
+  field registered `inline` replaces the app with the file; calling it with `'inline'` for an
+  attachment field leaves a blank tab behind after the save. The backend also serves an `inline`
+  field as an attachment when its type is not safe to display and no `csp` is registered.
+- **Errors raised when the link is opened replace the page.** Access is checked when the link is
+  minted, and those errors reach `onError` or the toast. A few can only happen when the link is
+  opened: the link expired or the file was replaced in between, access was revoked in between, the
+  backend's `protected_download` throttle answered 429, or reading the stored file (or the field's
+  `ensure`) failed. For an attachment, the current tab then shows the backend's error response; for
+  an inline file, the new tab does. The link is minted right before it is opened, so most of these
+  are rare.
+
+An app that would rather keep its page in every case can pass its own target to
+`useProtectedFileDownloadLogic`, e.g. a hidden iframe for attachments. The trade-off is that an
+error loaded in the iframe is never shown, since a cross-origin response cannot be read:
+
+```tsx
+import { useProtectedFileDownloadLogic } from '@baseapp-frontend/components/files/common'
+import { createBrowserDownloadTarget } from '@baseapp-frontend/components/files/web'
+
+const openInHiddenFrame = {
+  open: (url: string) => {
+    const frame = document.createElement('iframe')
+    frame.hidden = true
+    frame.src = url
+    document.body.appendChild(frame)
+    setTimeout(() => frame.remove(), 60_000)
+  },
+}
+
+const useQuietDownload = () =>
+  useProtectedFileDownloadLogic({
+    createTarget: (disposition) =>
+      disposition === 'inline' ? createBrowserDownloadTarget(disposition) : openInHiddenFrame,
+  })
+```
 
 ### Protected files without the hook
 
@@ -653,7 +699,8 @@ import {
 } from '@baseapp-frontend/components/modules/files/common'
 ```
 
-`useProtectedFileDownload` is exported from the `web` and `native` legs.
+`useProtectedFileDownload` is exported from the `web` and `native` legs; `web` also exports
+`createBrowserDownloadTarget`, the target its hook uses.
 
 ## TypeScript Support
 
