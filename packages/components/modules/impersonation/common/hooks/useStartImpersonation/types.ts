@@ -27,15 +27,15 @@ export interface UseStartImpersonationOptions extends ImpersonationTokenKeyNames
 
 export interface StartImpersonationCallbacks {
   /**
-   * Called with the server's answer, before the tokens are swapped. Map
-   * `response.impersonationStart.errors` onto a form here; when there are any, or no tokens came
-   * back, nothing is swapped.
+   * Called with the server's answer, before the tokens are swapped. A refused session (no
+   * permission, unknown user, missing reason, already impersonating) comes back as GraphQL
+   * `errors`, already toasted; when there are any, or no tokens came back, nothing is swapped.
    */
   onCompleted?: (
     response: ImpersonationStartMutation$data,
     errors: PayloadError[] | null | undefined,
   ) => void
-  /** Called when the request fails. The error was already toasted. */
+  /** Called when the request itself fails (network). The error was already toasted. */
   onError?: (error: Error) => void
 }
 

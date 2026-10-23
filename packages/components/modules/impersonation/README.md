@@ -28,7 +28,9 @@ time, against the backend's `baseapp_auth.impersonation` app:
 3. `useEndImpersonation` calls `impersonationEnd`, puts the impersonator's tokens back, forgets
    the current profile and reloads the app. The tokens are put back whatever the server answers,
    so the impersonator is never left signed in as someone else. When the session expires the
-   banner ends it on its own.
+   banner ends it on its own. The tokens are cookies every tab shares: once one tab has ended the
+   session, ending it in another (its button or its countdown) only reloads that tab, with no
+   request and no logout.
 
 Whether the session may write (*act as*) or only read is decided by the backend
 (`BASEAPP_AUTH_IMPERSONATION_READ_ONLY`). Nothing here assumes either: the banner reads
@@ -37,7 +39,10 @@ refuses comes back as an ordinary error with code `impersonation_read_only`.
 
 The token helpers themselves (`swapInImpersonationTokens`, `restoreImpersonatorTokens`,
 `hasImpersonatorTokens`, `clearImpersonatorTokens`) live in `@baseapp-frontend/authentication`,
-and `useLogout` removes the kept-aside tokens too.
+`useLogin` drops kept-aside tokens left by an earlier session, and `useLogout` removes them too.
+`useLogout` does not end the session on the server, though: it stays active (and is not recorded
+as ended) until it expires. To log out during a session, call `endImpersonation` with an `onEnded`
+that logs out.
 
 ## Exports
 
@@ -60,14 +65,16 @@ and `useLogout` removes the kept-aside tokens too.
 | Option | Default | |
 |---|---|---|
 | `redirectTo` | `'/'` | Where the app is reloaded once the tokens are swapped. |
-| `onStarted(session)` / `onEnded({ restored })` | — | Called instead of the reload. The Relay store and any React Query cache still hold the previous user's data: recreate them. Required on native, where there is nothing to reload. |
+| `onStarted(session)` / `onEnded({ restored })` | — | Called instead of the reload. The Relay store and any React Query cache still hold the previous user's data: recreate them. Required on native, where there is nothing to reload: without them the tokens are swapped and nothing else happens (a warning is logged in development). `restored` is also `true` when another tab had already ended the session. |
 | `onLogout()` | — | `useEndImpersonation` only: called when no tokens were kept aside (the session was started elsewhere), after the session's tokens were removed. `LOGOUT_EVENT` is broadcast as well. |
 | `accessKeyName`, `refreshKeyName`, `impersonatorAccessKeyName`, `impersonatorRefreshKeyName` | the `@baseapp-frontend/utils` names | Custom token names. |
 
 `startImpersonation({ targetUser, reason }, { onCompleted, onError })`: `targetUser` is the
-user's relay id. `onCompleted` receives the response before anything is swapped, so a form can map
-`impersonationStart.errors`; request failures (for example `permission_required`) are toasted and
-passed to `onError`.
+user's relay id. `onCompleted(response, errors)` receives the server's answer before anything is
+swapped. The backend refuses a session (`permission_required`, `not_found`, `impersonation_active`, or
+`invalid_input` for a missing reason) with a GraphQL error, so it arrives in `errors`
+(with `impersonationStart` null) and is toasted; nothing is swapped then. `onError` only sees
+network failures, also toasted.
 
 ### Banner options
 

@@ -1,4 +1,4 @@
-import { formatRemainingTime, getRemainingTime, isSessionTokenUnusable } from '../utils'
+import { formatRemainingTime, getRemainingTime, isSessionTokenUnusable, reloadAt } from '../utils'
 
 const tokenExpiringAt = (exp: number) =>
   [
@@ -50,5 +50,21 @@ describe('isSessionTokenUnusable', () => {
     expect(isSessionTokenUnusable(tokenExpiringAt(nowInSeconds - 1))).toBe(true)
     expect(isSessionTokenUnusable('not-a-jwt')).toBe(true)
     expect(isSessionTokenUnusable(undefined)).toBe(true)
+  })
+})
+
+describe('reloadAt', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+    vi.restoreAllMocks()
+  })
+
+  test('warns where there is no page to reload (native)', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    vi.stubGlobal('window', {})
+
+    reloadAt('/')
+
+    expect(warn).toHaveBeenCalledWith(expect.stringContaining('onStarted / onEnded'))
   })
 })

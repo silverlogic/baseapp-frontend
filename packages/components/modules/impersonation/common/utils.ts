@@ -29,9 +29,18 @@ export const isSessionTokenUnusable = (refreshToken: string | null | undefined) 
 
 /**
  * Loads `path` from scratch on web, so no state of the previous user survives. Does nothing on
- * native, where the caller's `onStarted` / `onEnded` takes over.
+ * native, where the caller's `onStarted` / `onEnded` takes over; there it warns in development,
+ * since the app keeps showing the previous user.
  */
 export const reloadAt = (path: string) => {
-  if (typeof window === 'undefined' || typeof window.location?.assign !== 'function') return
+  if (typeof window === 'undefined' || typeof window.location?.assign !== 'function') {
+    if (process.env.NODE_ENV !== 'production') {
+      // eslint-disable-next-line no-console
+      console.warn(
+        'impersonation: the tokens were swapped but nothing can be reloaded here; pass onStarted / onEnded to recreate the app state.',
+      )
+    }
+    return
+  }
   window.location.assign(path)
 }
