@@ -30,8 +30,9 @@ const PhoneNumberField: FC<PhoneNumberFieldProps> = ({
   selectProps,
   countryNameProps,
   countryDialCodeProps,
-  // withController forwards onInputChange (an Autocomplete callback) to the wrapped field; a
-  // phone input has no use for it, and spreading it onto the TextField leaks it to the DOM.
+  // withController always passes an onInputChange key (an Autocomplete callback, often undefined)
+  // to the wrapped field; a phone input has no use for it, and spreading it onto the TextField
+  // leaks it to the DOM.
   onInputChange: _onInputChange,
   ...props
 }) => {

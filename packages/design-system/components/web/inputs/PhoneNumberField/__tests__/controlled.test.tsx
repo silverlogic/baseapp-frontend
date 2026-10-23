@@ -43,7 +43,9 @@ describe('PhoneNumberField (controlled)', () => {
     vi.clearAllMocks()
   })
 
-  // React warns about an unknown prop only once per name, so this case runs first.
+  // withController always passes an onInputChange key to the field it wraps, so every controlled
+  // PhoneNumberField used to warn. React warns about an unknown prop only once per name per module,
+  // so this is the only case that can catch the warning; it must stay first.
   it('does not warn about onInputChange when none is passed', () => {
     renderHarness({ onSubmit: vi.fn() })
 
@@ -65,6 +67,5 @@ describe('PhoneNumberField (controlled)', () => {
 
     expect(onSubmit).toHaveBeenCalledWith({ phone: '+12025550123' }, expect.anything())
     expect(onInputChange).not.toHaveBeenCalled()
-    expect(consoleErrors()).not.toContain('onInputChange')
   })
 })
