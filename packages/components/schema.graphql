@@ -1055,6 +1055,82 @@ interface MentionsInterface {
   isMentioningProfile(profileId: ID!): Boolean
 }
 
+"""An enumeration."""
+enum ImpersonationEndReason {
+  """Ended by the impersonator"""
+  ENDED
+
+  """Expired"""
+  EXPIRED
+
+  """Revoked"""
+  REVOKED
+}
+
+input ImpersonationEndInput {
+  """The session to end. Defaults to the current request's session."""
+  session: ID
+  clientMutationId: String
+}
+
+type ImpersonationEndPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  session: ImpersonationSession
+  clientMutationId: String
+}
+
+interface ImpersonationInterface {
+  """
+  The impersonation session of the current request, when this user is its target. Null otherwise, and on every other user.
+  """
+  impersonation: ImpersonationSession
+}
+
+type ImpersonationSession implements Node {
+  """The ID of the object"""
+  id: ID!
+  impersonator: User!
+  target: User!
+  reason: String!
+
+  """Whether writes were refused during this session."""
+  readOnly: Boolean!
+  startedAt: DateTime!
+  expiresAt: DateTime!
+  endedAt: DateTime
+
+  """Why the session ended. Null while it runs."""
+  endReason: ImpersonationEndReason
+
+  """Whether the session is still running."""
+  isActive: Boolean!
+}
+
+input ImpersonationStartInput {
+  """The user to act as."""
+  targetUser: ID!
+
+  """Why the session is needed."""
+  reason: String!
+  clientMutationId: String
+}
+
+type ImpersonationStartPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+
+  """Access token of the session."""
+  access: String
+
+  """Refresh token of the session."""
+  refresh: String
+  session: ImpersonationSession
+  clientMutationId: String
+}
+
 type Message implements Node & MentionsInterface {
   """The ID of the object"""
   id: ID!
@@ -1114,6 +1190,8 @@ type Metadata {
 }
 
 type Mutation {
+  impersonationStart(input: ImpersonationStartInput!): ImpersonationStartPayload
+  impersonationEnd(input: ImpersonationEndInput!): ImpersonationEndPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
   rateCreate(input: RateCreateInput!): RateCreatePayload
@@ -2612,7 +2690,7 @@ type URLPath implements Node {
   pk: Int
 }
 
-type User implements Node & PermissionsInterface & RatingsInterface & UserActivityLogInterface & NotificationsInterface & ProfileInterface & ProfilesInterface & PageInterface {
+type User implements Node & PermissionsInterface & RatingsInterface & UserActivityLogInterface & NotificationsInterface & ProfileInterface & ProfilesInterface & PageInterface & ImpersonationInterface {
   lastLogin: DateTime
   isSuperuser: Boolean
   email: String
@@ -2684,6 +2762,11 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   fullName: String
   avatar(width: Int!, height: Int!): String
   pk: Int
+
+  """
+  The impersonation session of the current request, when this user is its target. Null otherwise, and on every other user.
+  """
+  impersonation: ImpersonationSession
 }
 
 interface UserActivityLogInterface {
