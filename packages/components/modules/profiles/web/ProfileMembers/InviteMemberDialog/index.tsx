@@ -51,7 +51,9 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
   const [selected, setSelected] = useState<SelectedMember[]>([])
-  const [role, setRole] = useState(defaultRole)
+  // Follows `defaultRole` until a role is picked in the dialog.
+  const [pickedRole, setRole] = useState<string | null>(null)
+  const role = pickedRole ?? defaultRole
   const [message, setMessage] = useState('')
   const [extraValues, setExtraValues] = useState<InviteMemberExtraValues>(
     () => extraFieldsDefaultValues ?? {},
@@ -80,7 +82,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
 
   const resetState = () => {
     setSelected([])
-    setRole(defaultRole)
+    setRole(null)
     setMessage('')
     setExtraValues(extraFieldsDefaultValues ?? {})
     setIsSubmitting(false)
