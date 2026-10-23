@@ -19,7 +19,7 @@
     "test:component": "pnpm relay && playwright test",
     "test:component:ui": "pnpm relay && playwright test --ui",
     "i18n:extract": "formatjs extract 'modules/**/*.ts*' --out-file locales/en.json --format simple",
-    "i18n:compile": "formatjs compile locales/en.json --out-file locales/en.compiled.json --ast",
+    "i18n:compile": "formatjs compile locales/en.json --format simple --out-file locales/en.compiled.json --ast",
     "prepublishOnly": "pnpm run build"
   },
   "exports": {
