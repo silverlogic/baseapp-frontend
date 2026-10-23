@@ -548,6 +548,18 @@ describe('createAxiosInstance', () => {
       expect(request.baseURL).toBe('http://web:8000/v1')
       expect(request.headers['X-Forwarded-Host']).toBe('tenant.example.com')
     })
+
+    it("forwards the visitor's trimmed X-Forwarded-For on the server when configured", async () => {
+      delete (global as any).window
+      vi.stubEnv('INTERNAL_API_FORWARDED_FOR_TRIM', '1')
+      ;(incomingHeaders as Mock).mockResolvedValue(
+        new Headers({ host: 'tenant.example.com', 'x-forwarded-for': '203.0.113.7, 172.18.0.5' }),
+      )
+
+      const request = await runRequestInterceptor('/v1')
+
+      expect(request.headers['X-Forwarded-For']).toBe('203.0.113.7')
+    })
   })
 
   // TODO: add tests for response interceptor
