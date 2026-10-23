@@ -31,7 +31,7 @@ pnpm install @baseapp-frontend/utils
 | `NEXT_PUBLIC_RELAY_ENDPOINT` | `https://api.example.com/graphql` or `/graphql` | GraphQL over HTTP |
 | `NEXT_PUBLIC_WS_RELAY_ENDPOINT` | `wss://api.example.com/graphql` or `/graphql` | GraphQL subscriptions |
 | `INTERNAL_API_ORIGIN` | `http://web:8000` | Server-side calls to a relative address (server only, read at runtime) |
-| `INTERNAL_API_FORWARDED_FOR_TRIM` | `1` | Optional. Forwards the visitor's address on those server-side calls (server only, read at runtime) |
+| `INTERNAL_API_FORWARDED_FOR_TRIM` | `0` (see below) | Optional. Forwards the visitor's address on those server-side calls (server only, read at runtime) |
 
 **Absolute addresses** are called as they are, from the browser and from the server.
 
@@ -57,17 +57,41 @@ browser. Point it at an address only the web server can reach, and make sure the
 Server-side calls come from the web server, so by default the API sees the web server's address
 for every SSR request: per-IP throttles, login rate limits and security logs all share one address.
 Set `INTERNAL_API_FORWARDED_FOR_TRIM=<n>` to forward the incoming `X-Forwarded-For` on those calls
-with its last `n` entries removed. The proxy in front of the API then appends the web server where
-those entries were, so the visitor stays at the hop position the API trusts.
+with its last `n` entries removed. Unset, no `X-Forwarded-For` is sent, as before. It applies only
+to calls that go through `INTERNAL_API_ORIGIN`.
 
-For example, with a browser request reaching the web server as
-`X-Forwarded-For: 203.0.113.7, 172.18.0.5` (the visitor, then the proxy that forwarded it),
-`INTERNAL_API_FORWARDED_FOR_TRIM=1` sends `X-Forwarded-For: 203.0.113.7`, and the API's proxy turns
-it into `203.0.113.7, <web server>`, the same shape as a request straight from the browser. Set `n`
-to the number of entries your proxies add between the visitor and the web server that they don't
-also add between the web server and the API; `0` forwards the chain unchanged. Unset, no
-`X-Forwarded-For` is sent, as before. It applies only to calls that go through
-`INTERNAL_API_ORIGIN`.
+The API (for example DRF's `NUM_PROXIES`) trusts the entry a fixed number of places from the end
+of the chain, set for requests from the browser. Pick `n` so a server-side call puts the visitor at
+that same place:
+
+```
+n = (entries added from the visitor to the web server)
+  + (entries added from the web server to the API)
+  - (entries added from the visitor to the API)
+```
+
+Each proxy on a path adds one entry. Count the proxies on each path, including any load balancer.
+
+- **`INTERNAL_API_ORIGIN` reaches the API directly** (for example `http://web:8000`, no proxy
+  between the web server and the API) **and the browser reaches the web server and the API through
+  the same proxies**: `n` is `0`. The chain is forwarded unchanged, and the API reads the visitor
+  where it reads it for a browser request.
+- **`INTERNAL_API_ORIGIN` goes through the API's own proxy**, which appends the web server: with a
+  browser request reaching the web server as `X-Forwarded-For: 203.0.113.7, 172.18.0.5` (the
+  visitor, then the proxy that forwarded it: two entries) and an API that sits behind two proxies
+  for browser requests, `n` is `2 + 1 - 2 = 1`. The web server sends
+  `X-Forwarded-For: 203.0.113.7`, and the API's proxy turns it into `203.0.113.7, <web server>`,
+  the same shape as a request straight from the browser.
+
+If the result is below `0`, leave the variable unset.
+
+> **Warning:** never trim an entry that nothing adds back on the way to the API. Every entry
+> removed beyond the formula moves the entry the API trusts one step towards the start of the
+> chain, which the visitor controls: they can send any `X-Forwarded-For` they like, and per-IP
+> throttles and login rate limits then key on whatever they sent. With a direct
+> `INTERNAL_API_ORIGIN`, any value other than `0` does this. A value that is too small is safe but
+> keys every server-side call on one of your proxies. After deploying, check the address the API
+> logs for an SSR request, and for one that sends a made-up `X-Forwarded-For`.
 
 Middleware can't read the request through `next/headers`, so pass its headers instead. They are
 used for the forwarded host, scheme and address:

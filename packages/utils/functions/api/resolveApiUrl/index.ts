@@ -17,7 +17,7 @@ const getForwardedForTrim = () => {
   }
   if (!/^\d+$/.test(value)) {
     throw new Error(
-      `INTERNAL_API_FORWARDED_FOR_TRIM must be a whole number of X-Forwarded-For entries (e.g. 1), got '${value}'.`,
+      `INTERNAL_API_FORWARDED_FOR_TRIM must be a whole number of X-Forwarded-For entries (e.g. 0), got '${value}'.`,
     )
   }
   return Number(value)
@@ -83,10 +83,11 @@ const getForwardedHeaders = async (options: ResolveApiUrlOptions) => {
  *   is sent as `X-Forwarded-Host`, along with the incoming `X-Forwarded-Proto` /
  *   `X-Forwarded-Protocol` when present.
  * - With `INTERNAL_API_FORWARDED_FOR_TRIM=<n>` set, that server-side call also forwards the
- *   incoming `X-Forwarded-For` without its last `n` entries. The proxy in front of the API appends
- *   this server in their place, so the visitor stays at the hop position the API trusts (per-IP
- *   throttles, rate limits, security logs) instead of every server-side call coming from this
- *   server's address. Unset, `X-Forwarded-For` isn't sent, as before.
+ *   incoming `X-Forwarded-For` without its last `n` entries, so the visitor stays at the hop
+ *   position the API trusts (per-IP throttles, rate limits, security logs) instead of every
+ *   server-side call coming from this server's address. `n` is `0` when `INTERNAL_API_ORIGIN`
+ *   reaches the API directly; trimming an entry nothing re-adds exposes a client-supplied address
+ *   (see the README). Unset, `X-Forwarded-For` isn't sent, as before.
  *
  * @description
  * This is a **BaseApp** feature.

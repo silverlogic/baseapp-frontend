@@ -263,6 +263,47 @@ describe('resolveApiUrl', () => {
         })
         expect(headers).not.toHaveBeenCalled()
       })
+
+      // The README's topologies. The API trusts the entry `trusted` places from the end of the
+      // chain (DRF's NUM_PROXIES), set for browser requests; each proxy appends its peer.
+      describe('in the README topologies', () => {
+        const visitor = '203.0.113.7'
+        const spoof = '198.51.100.66'
+        const clientAddress = (chain: string, trusted: number) => {
+          const entries = chain.split(',').map((entry) => entry.trim())
+          return entries[entries.length - Math.min(trusted, entries.length)]
+        }
+        const serverSideCall = async (trim: string, incoming: string, appended: string[]) => {
+          vi.stubEnv('INTERNAL_API_FORWARDED_FOR_TRIM', trim)
+          mockIncomingHeaders({ host: 'tenant.example.com', 'x-forwarded-for': incoming })
+          const { headers: forwarded } = await resolveApiUrl('/v1')
+          return [forwarded['X-Forwarded-For'], ...appended].filter(Boolean).join(', ')
+        }
+
+        // Browser -> proxy A -> proxy B -> web server, and web server -> API directly (an
+        // INTERNAL_API_ORIGIN such as http://web:8000). The API trusts 2 entries for browser
+        // requests that reach it through A and B.
+        const directIncoming = `${spoof}, ${visitor}, 172.18.0.5`
+
+        it('keeps the visitor with 0 when INTERNAL_API_ORIGIN reaches the API directly', async () => {
+          expect(clientAddress(await serverSideCall('0', directIncoming, []), 2)).toBe(visitor)
+        })
+
+        it.each(['1', '2'])(
+          'hands the API a client-supplied address with %s on a direct INTERNAL_API_ORIGIN',
+          async (trim) => {
+            expect(clientAddress(await serverSideCall(trim, directIncoming, []), 2)).toBe(spoof)
+          },
+        )
+
+        it("keeps the visitor with 1 when the API's own proxy appends the web server", async () => {
+          // Browser -> two proxies -> web server; web server -> API's proxy -> API.
+          const chain = await serverSideCall('1', `${spoof}, ${visitor}, 172.18.0.5`, ['10.0.0.9'])
+
+          expect(chain).toBe(`${spoof}, ${visitor}, 10.0.0.9`)
+          expect(clientAddress(chain, 2)).toBe(visitor)
+        })
+      })
     })
 
     it("lets next/headers' own error through outside a request", async () => {
