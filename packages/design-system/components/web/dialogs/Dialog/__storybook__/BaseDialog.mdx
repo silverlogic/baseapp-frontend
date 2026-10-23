@@ -22,7 +22,12 @@ import { Meta } from '@storybook/addon-docs'
 
 - **children** (ReactNode): The content to be displayed inside the dialog.
 - **open** (boolean): Controls whether the dialog is visible.
-- **onClose** ((event: {}, reason: "backdropClick" | "escapeKeyDown") => void): Callback fired when the dialog requests to be closed.
+- **onClose** ((event: {}, reason: "backdropClick" | "escapeKeyDown") => void): Callback fired when the dialog requests to be closed. When set, an icon-only close button is rendered in the top-right corner.
+- **closeButtonLabel** (string, optional): Accessible name of the close button, rendered as its `aria-label`. Defaults to `'Close dialog'`; pass a translated string in localized apps.
+- **CloseButtonProps** (Partial&lt;IconButtonProps&gt;, optional): Extra props for the close button (e.g. `data-testid`, `sx`). Its `onClick` runs before `onClose`, and an `aria-label` here overrides `closeButtonLabel`.
+- **customMaxWidth** (string | number, optional): Overrides the dialog paper's max width.
+
+Neither `closeButtonLabel`, `CloseButtonProps` nor `customMaxWidth` is forwarded to MUI's `Dialog` or the DOM.
 
 ## Notes
 
@@ -40,7 +45,7 @@ const MyComponent = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <Dialog open={open} onClose={() => setOpen(false)}>
+    <Dialog open={open} onClose={() => setOpen(false)} closeButtonLabel="Close preferences">
       <div>Dialog content</div>
     </Dialog>
   )

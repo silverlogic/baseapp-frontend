@@ -9,10 +9,16 @@ import CloseIcon from '../../icons/CloseIcon'
 import { StyledDialog } from './styled'
 import { DialogProps } from './types'
 
-const Dialog: FC<DialogProps> = ({ children, ...props }) => {
+const Dialog: FC<DialogProps> = ({
+  children,
+  closeButtonLabel = 'Close dialog',
+  CloseButtonProps,
+  ...props
+}) => {
   const { onClose } = props
 
   const handleClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    CloseButtonProps?.onClick?.(e)
     onClose?.(e, 'backdropClick')
   }
 
@@ -20,7 +26,7 @@ const Dialog: FC<DialogProps> = ({ children, ...props }) => {
     <StyledDialog {...props}>
       {!!onClose && (
         <Box position="absolute" top={16} right={16} zIndex={1}>
-          <IconButton onClick={handleClose}>
+          <IconButton aria-label={closeButtonLabel} {...CloseButtonProps} onClick={handleClose}>
             <CloseIcon />
           </IconButton>
         </Box>
