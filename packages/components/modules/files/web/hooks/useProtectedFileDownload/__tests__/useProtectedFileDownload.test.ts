@@ -1,7 +1,8 @@
 import { act, renderHook } from '@testing-library/react'
 import { vi } from 'vitest'
 
-import useProtectedFileDownload from '../index'
+import { useProtectedFileDownloadLogic } from '../../../../common/hooks/useProtectedFileDownloadLogic'
+import useProtectedFileDownload, { createBrowserDownloadTarget } from '../index'
 
 const mockCommit = vi.fn()
 
@@ -91,5 +92,52 @@ describe('useProtectedFileDownload (web)', () => {
     await mint({ protectedFileLink: { url: URL, errors: null } })
 
     expect(assign).toHaveBeenCalledWith(URL)
+  })
+})
+
+describe('createBrowserDownloadTarget composed with a custom attachment target', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    vi.stubGlobal('location', { ...window.location, assign })
+    vi.stubGlobal('open', open)
+  })
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  // The README's escape hatch: keep the page on attachments, keep the reserved tab for inline.
+  const quiet = { open: vi.fn() }
+  const useQuietDownload = () =>
+    useProtectedFileDownloadLogic({
+      createTarget: (disposition) =>
+        disposition === 'inline' ? createBrowserDownloadTarget(disposition) : quiet,
+    })
+
+  it('opens attachments through the custom target and never navigates the page', async () => {
+    const { result } = renderHook(() => useQuietDownload())
+
+    act(() => {
+      result.current.download(FILE)
+    })
+    await mint({ protectedFileLink: { url: URL, errors: null } })
+
+    expect(quiet.open).toHaveBeenCalledWith(URL)
+    expect(assign).not.toHaveBeenCalled()
+    expect(open).not.toHaveBeenCalled()
+  })
+
+  it('still reserves a tab for inline files', async () => {
+    const tab = { opener: window, location: { replace: vi.fn() }, close: vi.fn() }
+    open.mockReturnValue(tab)
+    const { result } = renderHook(() => useQuietDownload())
+
+    act(() => {
+      result.current.download(FILE, { disposition: 'inline' })
+    })
+    await mint({ protectedFileLink: { url: URL, errors: null } })
+
+    expect(tab.location.replace).toHaveBeenCalledWith(URL)
+    expect(quiet.open).not.toHaveBeenCalled()
   })
 })
