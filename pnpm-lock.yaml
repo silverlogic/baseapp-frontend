@@ -1351,6 +1351,9 @@ importers:
       '@baseapp-frontend/eslint-plugin':
         specifier: workspace:*
         version: link:../eslint-plugin
+      '@baseapp-frontend/test':
+        specifier: workspace:*
+        version: link:../test
       '@baseapp-frontend/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -1372,12 +1375,18 @@ importers:
       '@types/relay-test-utils':
         specifier: catalog:graphql
         version: 19.0.0
+      jsdom:
+        specifier: catalog:test
+        version: 29.1.1
       relay-compiler:
         specifier: catalog:graphql
         version: 19.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
+      vitest:
+        specifier: catalog:test
+        version: 4.1.11(@types/node@25.9.3)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1)(msw@2.6.6(@types/node@25.9.3)(typescript@5.9.2))(vite@8.3.2(@types/node@25.9.3)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.0))
 
   packages/provider:
     dependencies:
@@ -17815,7 +17824,7 @@ snapshots:
       obug: 2.2.1
       std-env: 4.3.0
       tinyrainbow: 3.2.0
-      vitest: 4.1.11(@types/node@22.7.2)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1)(msw@2.6.6(@types/node@22.7.2)(typescript@5.9.2))(vite@8.3.2(@types/node@22.7.2)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.0))
+      vitest: 4.1.11(@types/node@25.9.3)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1)(msw@2.6.6(@types/node@25.9.3)(typescript@5.9.2))(vite@8.3.2(@types/node@25.9.3)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.0))
 
   '@vitest/expect@2.0.5':
     dependencies:
