@@ -1123,8 +1123,23 @@ type Mutation {
   profileUserRoleCreate(input: ProfileUserRoleCreateInput!): ProfileUserRoleCreatePayload
   profileUserRoleUpdate(input: ProfileUserRoleUpdateInput!): ProfileUserRoleUpdatePayload
   profileUserRoleDelete(input: ProfileUserRoleDeleteInput!): ProfileUserRoleDeletePayload
+
+  """
+  Deactivate a member: they keep their row but lose access until reactivated.
+  """
+  profileMemberDeactivate(input: ProfileMemberDeactivateInput!): ProfileMemberDeactivatePayload
+
+  """Give a deactivated member their access back."""
+  profileMemberReactivate(input: ProfileMemberReactivateInput!): ProfileMemberReactivatePayload
   profileSendInvitation(input: ProfileSendInvitationInput!): ProfileSendInvitationPayload
   profileAcceptInvitation(input: ProfileAcceptInvitationInput!): ProfileAcceptInvitationPayload
+
+  """
+  Accept an invitation without an account: creates (or activates) the account for the
+  invited email with the given password. Sign in with `email` and that password next.
+  Only available when the project sets `BASEAPP_PROFILES_INVITATION_SIGNUP_ENABLED`.
+  """
+  profileAcceptInvitationWithSignup(input: ProfileAcceptInvitationWithSignupInput!): ProfileAcceptInvitationWithSignupPayload
   profileDeclineInvitation(input: ProfileDeclineInvitationInput!): ProfileDeclineInvitationPayload
   profileCancelInvitation(input: ProfileCancelInvitationInput!): ProfileCancelInvitationPayload
   profileResendInvitation(input: ProfileResendInvitationInput!): ProfileResendInvitationPayload
@@ -1649,7 +1664,7 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
   bannerImage(width: Int!, height: Int!): String
   biography: String
   status: ProfilesProfileStatusChoices!
-  owner: User!
+  owner: User
   targetObjectId: Int
   members(
     offset: Int
@@ -1658,6 +1673,7 @@ type Profile implements Node & PermissionsInterface & ProfileActivityLogInterfac
     first: Int
     last: Int
     role: ProfileRoles
+    status: ProfileRoleStatus
 
     """Ordering"""
     orderBy: String
@@ -1769,6 +1785,30 @@ type ProfileAcceptInvitationPayload {
   clientMutationId: String
 }
 
+input ProfileAcceptInvitationWithSignupInput {
+  token: String!
+  password: String!
+  firstName: String
+  lastName: String
+  clientMutationId: String
+}
+
+"""
+Accept an invitation without an account: creates (or activates) the account for the
+invited email with the given password. Sign in with `email` and that password next.
+Only available when the project sets `BASEAPP_PROFILES_INVITATION_SIGNUP_ENABLED`.
+"""
+type ProfileAcceptInvitationWithSignupPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  success: Boolean
+
+  """The email of the account to sign in with."""
+  email: String
+  clientMutationId: String
+}
+
 interface ProfileActivityLogInterface {
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
 }
@@ -1783,6 +1823,11 @@ type ProfileCancelInvitationPayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   success: Boolean
+
+  """
+  The cancelled invitation, or null when invitation history is off and the row was deleted.
+  """
+  profileUserRole: ProfileUserRole
   clientMutationId: String
 }
 
@@ -1852,10 +1897,82 @@ type ProfileEdge {
   cursor: String!
 }
 
+input ProfileInviteeInput {
+  email: String!
+  firstName: String
+  lastName: String
+}
+
+"""What anyone holding an invitation token may see: enough to greet the invitee."""
+type ProfileInvitationPreview {
+  profileName: String!
+  invitedEmail: String!
+  role: ProfileRoles!
+  status: ProfileRoleStatus!
+  expiresAt: DateTime
+
+  """The invitee's first name, if given."""
+  invitedFirstName: String
+
+  """The invitee's last name, if given."""
+  invitedLastName: String
+
+  """Who sent the invitation (full name or email); null when nobody did."""
+  inviterName: String
+
+  """The inviter's personal note."""
+  message: String
+
+  """The profile's image."""
+  profileImage(width: Int!, height: Int!): String
+
+  """
+  An active account with a password exists for the invited email: the invitee signs in to accept instead of signing up.
+  """
+  requiresSignIn: Boolean!
+}
+
 interface ProfileInterface {
   """The ID of the object"""
   id: ID!
   profile: Profile
+}
+
+input ProfileMemberDeactivateInput {
+  profileId: ID!
+  userId: ID!
+
+  """
+  Why the member is deactivated. Passed to the `member_deactivated` signal; not stored by BaseApp.
+  """
+  reason: String
+  clientMutationId: String
+}
+
+"""
+Deactivate a member: they keep their row but lose access until reactivated.
+"""
+type ProfileMemberDeactivatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
+}
+
+input ProfileMemberReactivateInput {
+  profileId: ID!
+  userId: ID!
+  clientMutationId: String
+}
+
+"""Give a deactivated member their access back."""
+type ProfileMemberReactivatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  profileUserRole: ProfileUserRole
+  clientMutationId: String
 }
 
 input ProfileResendInvitationInput {
@@ -1897,12 +2014,21 @@ enum ProfileRoleStatus {
 
   """expired"""
   EXPIRED
+
+  """cancelled"""
+  CANCELLED
 }
 
 input ProfileSendInvitationInput {
   profileId: ID!
-  emails: [String!]!
+  emails: [String!]
+
+  """Like `emails`, with the invitee's name to personalise the email."""
+  invitees: [ProfileInviteeInput!]
   role: ProfileRoles!
+
+  """A personal note included in the email."""
+  message: String
   clientMutationId: String
 }
 
@@ -1912,6 +2038,9 @@ type ProfileSendInvitationPayload {
   _debug: DjangoDebug
   profileUserRoles: [ProfileUserRole]
   emailsSent: Int
+
+  """Invitations the project's pre-send hook held back for review."""
+  emailsHeld: Int
   clientMutationId: String
 }
 
@@ -1972,6 +2101,14 @@ type ProfileUserRole implements Node {
   respondedAt: DateTime
   isExpired: Boolean
   profile: Profile
+  invitedFirstName: String
+  invitedLastName: String
+  message: String
+  sentCount: Int
+  lastSentAt: DateTime
+  deactivatedAt: DateTime
+  invitedBy: User
+  deactivatedBy: User
   pk: Int
 }
 
@@ -2080,6 +2217,11 @@ type Query {
   `profile` is hidden once the invitation has expired.
   """
   profileInvitation(token: String!): ProfileUserRole
+
+  """
+  Public summary of an invitation for its acceptance page: profile name and image, invited email and name, inviter, message, role, status (an overdue pending invitation reads EXPIRED), expiry and whether the invitee must sign in rather than sign up. Needs no sign-in — the token is the authorization. Null for an unknown token.
+  """
+  profileInvitationPreview(token: String!): ProfileInvitationPreview
   urlPath(path: String!): URLPath
   allPages(offset: Int, before: String, after: String, first: Int, last: Int, status: PageStatus): PageConnection
   page(

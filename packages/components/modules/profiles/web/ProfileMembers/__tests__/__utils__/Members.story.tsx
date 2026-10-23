@@ -3,13 +3,29 @@ import { useMemo } from 'react'
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
 import {
+  DEACTIVATE_MEMBER_OPTION,
+  MEMBER_ACTIONS,
+  inactiveMemberActionOptions,
+  roleOptions,
+} from '../../constants'
+import {
+  addableMembersListMockData,
   allRolesMembersListMockData,
+  deactivateMemberMockData,
   fullMembersListMockData,
   fullMembersListNextPageMockData,
+  ownerlessMembersListMockData,
+  projectFragmentMembersListMockData,
+  reactivateMemberMockData,
   simpleMembersListMockData,
   updateMemberRoleMockData,
 } from '../__mocks__/requests'
 import MembersForTesting from './MembersForTesting'
+import {
+  MembersWithProjectFragmentListFragment,
+  MembersWithProjectFragmentQuery,
+  ProjectMemberItem,
+} from './MembersWithProjectFragment'
 
 /**
  * Stories for the Playwright component-testing gallery.
@@ -27,11 +43,15 @@ import MembersForTesting from './MembersForTesting'
 export interface MembersControls {
   resolveUpdateMemberRole: () => void
   resolveNextPage: () => void
+  resolveDeactivateMember: () => void
+  resolveReactivateMember: () => void
 }
 
 declare global {
   interface Window {
     __membersControls: MembersControls
+    /** The variables the members query was sent with (`ProjectFragment` story). */
+    __membersQueryVariables?: Record<string, unknown>
   }
 }
 
@@ -62,6 +82,10 @@ const useSeededEnvironment = (data: unknown) =>
         testEnvironment.resolveMostRecentOperation({ data: updateMemberRoleMockData }),
       resolveNextPage: () =>
         testEnvironment.resolveMostRecentOperation({ data: fullMembersListNextPageMockData }),
+      resolveDeactivateMember: () =>
+        testEnvironment.resolveMostRecentOperation({ data: deactivateMemberMockData }),
+      resolveReactivateMember: () =>
+        testEnvironment.resolveMostRecentOperation({ data: reactivateMemberMockData }),
     }
 
     return testEnvironment.environment
@@ -94,4 +118,79 @@ export const Searchable = () => {
   const environment = useSeededEnvironment(simpleMembersListMockData)
 
   return <MembersForTesting environment={environment} />
+}
+
+/** A profile without an owner: no owner row, only its admin. */
+export const Ownerless = () => {
+  const environment = useSeededEnvironment(ownerlessMembersListMockData)
+
+  return <MembersForTesting environment={environment} context={ownerContext} />
+}
+
+/** Project labels, the opt-in Deactivate entry and the opt-in menu of an INACTIVE member. */
+export const DeactivationWithLabels = () => {
+  const environment = useSeededEnvironment(simpleMembersListMockData)
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      roleOptions={[
+        ...roleOptions.filter(({ value }) => value !== MEMBER_ACTIONS.remove),
+        DEACTIVATE_MEMBER_OPTION,
+      ]}
+      inactiveMemberOptions={inactiveMemberActionOptions}
+      roleLabels={{ OWNER: 'Proprietor', MANAGER: 'Member' }}
+      statusLabels={{ INACTIVE: 'Deactivated' }}
+    />
+  )
+}
+
+const StubInviteMemberDialog = ({ open, connections }: { open: boolean; connections: string[] }) =>
+  open ? (
+    <div role="dialog" data-connections={connections.join(' ')}>
+      Project invite dialog for {connections.length} list
+    </div>
+  ) : null
+
+/** "Add Member" opens the dialog the project injects. */
+export const CustomInviteDialog = () => {
+  const environment = useSeededEnvironment(addableMembersListMockData)
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      InviteMemberDialog={StubInviteMemberDialog}
+    />
+  )
+}
+
+/**
+ * A project members query and fragment (with a `status` argument and the project's own row
+ * fragment) and a custom `MemberItem` that reads the row fragment from `memberRef`.
+ */
+export const ProjectFragment = () => {
+  const environment = useMemo(() => {
+    const testEnvironment = createTestEnvironment()
+
+    testEnvironment.environment.mock.queueOperationResolver((operation) => {
+      window.__membersQueryVariables = operation.request.variables
+      return projectFragmentMembersListMockData
+    })
+
+    return testEnvironment.environment
+  }, [])
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      membersQuery={MembersWithProjectFragmentQuery}
+      membersQueryVariables={{ status: 'ACTIVE' }}
+      membersListFragment={MembersWithProjectFragmentListFragment}
+      MemberItem={ProjectMemberItem}
+      InviteMemberDialog={StubInviteMemberDialog}
+    />
+  )
 }
