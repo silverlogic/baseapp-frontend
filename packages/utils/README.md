@@ -84,3 +84,21 @@ forwarded.
 Mobile apps keep absolute `EXPO_PUBLIC_*` addresses. To use the same rules elsewhere, call
 `resolveApiUrl(address)`, which returns `{ url, headers }`, and `resolveWebSocketUrl(address)`
 (or `getWebSocketClientUrl(address)` for a `graphql-ws` client's `url` option).
+
+## **Acting as the current profile**
+
+When a user switches profile (for example to an organization they manage), the API acts as that
+profile for requests that carry its id in the `Current-Profile` header. `baseAppFetch` and the
+GraphQL environment always send it, from the `CurrentProfile` cookie (secure store on mobile).
+Axios instances send it when created with `withCurrentProfile: true`:
+
+```ts
+import { createAxiosInstance } from '@baseapp-frontend/utils'
+
+export const { axios } = createAxiosInstance({ withCurrentProfile: true })
+```
+
+It is read on every request, in the browser and during server rendering, so it follows profile
+switches without recreating the instance. No header is sent when there is no current profile, and
+a `Current-Profile` header the caller sets on a request is kept. The default stays `false`, and the
+exported `axios` / `axiosForFiles` instances don't send it.

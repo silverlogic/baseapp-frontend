@@ -6,6 +6,7 @@ import type { Mock } from 'vitest'
 import { createAxiosInstance } from '..'
 import { broadcastEvent } from '../../../events'
 import { getExpoConstant } from '../../../expo'
+import { getToken } from '../../../token/getToken'
 import { getTokenSSR } from '../../../token/getTokenSSR'
 import { isUserTokenValid } from '../../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../../token/refreshAccessToken'
@@ -467,6 +468,102 @@ describe('createAxiosInstance', () => {
 
       expect(refreshAccessTokenMock).not.toHaveBeenCalled()
       expect(request.headers.Authorization).toBe('Bearer invalid-access-token')
+    })
+  })
+
+  describe('withCurrentProfile', () => {
+    const profileCookie = JSON.stringify({
+      id: 'profile-123',
+      name: 'Acme',
+      image: null,
+      urlPath: null,
+    })
+    let originalWindow: any
+
+    const tokensByKey =
+      (profile: string | null | undefined) =>
+      (key: string): string | null | undefined =>
+        key === 'CurrentProfile' ? profile : 'someAuthToken'
+
+    const runRequestInterceptor = async (
+      options: Parameters<typeof createAxiosInstance>[0],
+      headers: Record<string, string | undefined> = {},
+    ) => {
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance(options)
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
+      const request = { headers, url: '/users' }
+      await interceptorFn(request)
+      return request
+    }
+
+    beforeEach(() => {
+      originalWindow = global.window
+      ;(isUserTokenValid as Mock).mockReturnValue(true)
+    })
+
+    afterEach(() => {
+      global.window = originalWindow
+      ;(getToken as Mock).mockReturnValue('someAuthToken')
+      ;(getTokenSSR as Mock).mockResolvedValue('someAuthToken')
+    })
+
+    it('does not send Current-Profile by default', async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({})
+
+      expect(request.headers['Current-Profile']).toBeUndefined()
+      expect(getToken).not.toHaveBeenCalledWith('CurrentProfile')
+    })
+
+    it("sends the current profile's id from the cookie in the browser", async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(request.headers['Current-Profile']).toBe('profile-123')
+      expect(request.headers.Authorization).toBe('Bearer someAuthToken')
+    })
+
+    it("sends the current profile's id from the request cookies on the server", async () => {
+      delete (global as any).window
+      ;(getTokenSSR as Mock).mockImplementation(async (key: string) =>
+        tokensByKey(profileCookie)(key),
+      )
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(getTokenSSR).toHaveBeenCalledWith('CurrentProfile')
+      expect(request.headers['Current-Profile']).toBe('profile-123')
+    })
+
+    it.each([
+      ['no current profile', undefined],
+      ['an empty secure store entry', null],
+      ['a cookie without an id', JSON.stringify({ name: 'Acme' })],
+    ])('sends no Current-Profile with %s', async (_, profile) => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profile))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(request.headers['Current-Profile']).toBeUndefined()
+    })
+
+    it('keeps a Current-Profile the caller set on the request', async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor(
+        { withCurrentProfile: true },
+        { 'Current-Profile': 'profile-456' },
+      )
+
+      expect(request.headers['Current-Profile']).toBe('profile-456')
     })
   })
 
