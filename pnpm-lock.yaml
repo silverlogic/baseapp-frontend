@@ -1460,9 +1460,6 @@ importers:
       react:
         specifier: catalog:react19
         version: 19.2.0
-      react-intl:
-        specifier: 'catalog:'
-        version: 7.1.14(react@19.2.0)(typescript@5.9.2)
     devDependencies:
       '@baseapp-frontend/config':
         specifier: workspace:*
@@ -16684,9 +16681,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.83.6': {}
 
