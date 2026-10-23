@@ -192,7 +192,49 @@ const createWebsocketFetch =
       )
     })
 
-function createNetwork(responseCache: QueryResponseCache, webSocketClient: LazyWebSocketClient) {
+// Requests still in flight when an environment is disposed belong to the retired session. They are
+// failed with `EnvironmentDisposedError` right away, and whatever they return later (data or error)
+// is ignored, so it never reaches the store of an environment that is used again. Failing them
+// synchronously also ends Relay's de-duplication of identical requests, so a request made after
+// the disposal starts a new fetch instead of joining the old one.
+type InFlightRequests = {
+  track: (retire: () => void) => () => void
+  retireAll: () => void
+}
+
+const createInFlightRequests = (): InFlightRequests => {
+  const pending = new Set<() => void>()
+  return {
+    track: (retire) => {
+      pending.add(retire)
+      return () => pending.delete(retire)
+    },
+    retireAll: () => {
+      const retiring = Array.from(pending)
+      pending.clear()
+      retiring.forEach((retire) => {
+        try {
+          retire()
+        } catch {
+          // An observer that throws on the error must not make disposing fail.
+        }
+      })
+    },
+  }
+}
+
+export class EnvironmentDisposedError extends Error {
+  constructor(operationName: string) {
+    super(`The Relay environment was disposed before '${operationName}' returned`)
+    this.name = 'EnvironmentDisposedError'
+  }
+}
+
+function createNetwork(
+  responseCache: QueryResponseCache,
+  webSocketClient: LazyWebSocketClient,
+  inFlightRequests: InFlightRequests,
+) {
   async function fetchResponse(
     request: RequestParameters,
     variables: Variables,
@@ -212,7 +254,41 @@ function createNetwork(responseCache: QueryResponseCache, webSocketClient: LazyW
     return httpFetch(request, variables, cacheConfig, uploadables)
   }
 
-  const network = Network.create(fetchResponse, createWebsocketFetch(webSocketClient))
+  const fetchFn = (
+    request: RequestParameters,
+    variables: Variables,
+    cacheConfig: CacheConfig,
+    uploadables?: UploadableMap | null,
+  ) =>
+    Observable.create<GraphQLResponse>((sink) => {
+      let settled = false
+      const untrack = inFlightRequests.track(() => {
+        settled = true
+        sink.error(new EnvironmentDisposedError(request.name))
+      })
+      const settle = (deliver: () => void) => {
+        if (settled) return
+        settled = true
+        untrack()
+        deliver()
+      }
+
+      fetchResponse(request, variables, cacheConfig, uploadables).then(
+        (response) =>
+          settle(() => {
+            sink.next(response)
+            sink.complete()
+          }),
+        (error) => settle(() => sink.error(error)),
+      )
+
+      return () => {
+        settled = true
+        untrack()
+      }
+    })
+
+  const network = Network.create(fetchFn, createWebsocketFetch(webSocketClient))
   return network
 }
 
@@ -226,6 +302,7 @@ function createQueryCache() {
 const responseCacheByEnvironment = new WeakMap<Environment, QueryResponseCache>()
 const recordSourceByEnvironment = new WeakMap<Environment, ReturnType<typeof RecordSource.create>>()
 const webSocketClientByEnvironment = new WeakMap<Environment, LazyWebSocketClient>()
+const inFlightRequestsByEnvironment = new WeakMap<Environment, InFlightRequests>()
 
 function handlerProvider(handle: string) {
   switch (handle) {
@@ -239,7 +316,8 @@ function handlerProvider(handle: string) {
 export function createEnvironment() {
   const cache = createQueryCache()
   const webSocketClient = createLazyWebSocketClient()
-  const network = createNetwork(cache, webSocketClient)
+  const inFlightRequests = createInFlightRequests()
+  const network = createNetwork(cache, webSocketClient, inFlightRequests)
   const source = RecordSource.create()
   const store = new Store(source)
 
@@ -253,6 +331,7 @@ export function createEnvironment() {
   responseCacheByEnvironment.set(environment, cache)
   recordSourceByEnvironment.set(environment, source)
   webSocketClientByEnvironment.set(environment, webSocketClient)
+  inFlightRequestsByEnvironment.set(environment, inFlightRequests)
 
   return environment
 }
@@ -265,11 +344,14 @@ export function getCacheByEnvironment(environment: Environment) {
  * Retires an environment when the session that filled it ends (logout, or a switch to another
  * account): it empties the preloaded-response cache and the store, including records written by
  * optimistic updates, so nothing from the old session can be read from it, and closes the
- * environment's authenticated websocket. Transport errors are swallowed: disposing never throws.
+ * environment's authenticated websocket. HTTP requests still in flight fail at once with an
+ * `EnvironmentDisposedError`, and what they return later is never written to the store.
+ * Transport errors are swallowed: disposing never throws.
  *
  * Prefer a new environment for the next session (`RelayProvider` does all of this for you when
- * given a `sessionKey`). An environment that is used again starts from an empty store, and its next
- * subscription opens a new websocket with the credentials of that moment.
+ * given a `sessionKey`). An environment that is used again starts from an empty store, only
+ * requests started after the disposal can fill it, and its next subscription opens a new websocket
+ * with the credentials of that moment.
  *
  * @description
  * This is a **BaseApp** feature.
@@ -277,6 +359,9 @@ export function getCacheByEnvironment(environment: Environment) {
  * If you believe your changes should be in the BaseApp, please read the **CONTRIBUTING.md** guide.
  */
 export function disposeEnvironment(environment: Environment) {
+  // First, so no response from the old session lands after the store is emptied.
+  inFlightRequestsByEnvironment.get(environment)?.retireAll()
+
   const store = environment.getStore()
   // `getSource()` includes records that only exist in a pending optimistic update.
   const recordIds = store.getSource().getRecordIDs()

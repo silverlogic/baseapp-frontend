@@ -141,13 +141,19 @@ keeps its environment outside React. It:
 - clears the preloaded-query response cache;
 - empties the store, including records written by a pending optimistic update, and notifies mounted
   queries;
+- fails every HTTP request still in flight with an `EnvironmentDisposedError` (exported), right
+  away. What such a request returns later, data or error, is ignored, so a response for the old
+  session never lands in the emptied store. A request made after the disposal, even for the same
+  query, starts a new fetch;
 - closes the environment's websocket. Transport errors are swallowed, so logging out never fails
   because of the socket.
 
 Each environment created with `createEnvironment()` has its own websocket client, opened on the
 first subscription, so disposing one environment never closes another's subscriptions. Prefer a new
-environment for the next session; an environment used again after disposal starts empty and opens
-a new websocket with the credentials of that moment.
+environment for the next session. An environment used again after disposal starts empty, is filled
+only by requests made after the disposal, and opens a new websocket with the credentials of that
+moment. Components still mounted that were waiting for a request in flight receive the
+`EnvironmentDisposedError`; check `error.name` to tell it apart from a network failure.
 
 #### **useEnvironment**
 
