@@ -41,5 +41,9 @@ import { MessageProfileButton } from '@baseapp-frontend/components/messages/web'
 - `label` (default `'Message'`) and `ButtonProps` (passed to MUI's `LoadingButton`) customise the
   button.
 
-Whether the actor may message the profile is decided by the backend (`baseapp_chats.add_chatroom`);
-apps that restrict messaging should also hide the button where the backend would refuse.
+Whether the actor may message the profile is decided by the backend (`baseapp_chats.add_chatroom`,
+which also refuses when either profile has blocked the other). The button does no eligibility check
+of its own: a refusal shows the backend's error as a toast. Apps that restrict messaging should hide
+the button where the backend would refuse, by not rendering it or by rendering it through a wrapper
+that returns `null`. Define such a wrapper once, at module level, rather than as an inline arrow in
+JSX, so the button keeps its loading state across the parent's re-renders.
