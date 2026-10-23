@@ -264,3 +264,22 @@ export const reactivateMemberMockData = {
     profileMemberReactivate: { profileUserRole: managerMemberRole('ACTIVE'), errors: null },
   },
 }
+
+/**
+ * `addableMembersListMockData` as a project's `MembersWithProjectFragmentQuery` returns it: the
+ * member also carries the project row fragment's fields.
+ */
+export const projectFragmentMembersListMockData = {
+  data: {
+    profile: {
+      ...addableMembersListMockData.data.profile,
+      members: {
+        ...simpleMembersListMockData.data.profile.members,
+        edges: simpleMembersListMockData.data.profile.members.edges.map((edge) => ({
+          ...edge,
+          node: { ...edge.node, invitedFirstName: 'Ada', invitedLastName: 'Lovelace' },
+        })),
+      },
+    },
+  },
+}

@@ -2,7 +2,12 @@ import { useMemo } from 'react'
 
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
-import { DEACTIVATE_MEMBER_OPTION, MEMBER_ACTIONS, roleOptions } from '../../constants'
+import {
+  DEACTIVATE_MEMBER_OPTION,
+  MEMBER_ACTIONS,
+  inactiveMemberActionOptions,
+  roleOptions,
+} from '../../constants'
 import {
   addableMembersListMockData,
   allRolesMembersListMockData,
@@ -10,11 +15,17 @@ import {
   fullMembersListMockData,
   fullMembersListNextPageMockData,
   ownerlessMembersListMockData,
+  projectFragmentMembersListMockData,
   reactivateMemberMockData,
   simpleMembersListMockData,
   updateMemberRoleMockData,
 } from '../__mocks__/requests'
 import MembersForTesting from './MembersForTesting'
+import {
+  MembersWithProjectFragmentListFragment,
+  MembersWithProjectFragmentQuery,
+  ProjectMemberItem,
+} from './MembersWithProjectFragment'
 
 /**
  * Stories for the Playwright component-testing gallery.
@@ -39,6 +50,8 @@ export interface MembersControls {
 declare global {
   interface Window {
     __membersControls: MembersControls
+    /** The variables the members query was sent with (`ProjectFragment` story). */
+    __membersQueryVariables?: Record<string, unknown>
   }
 }
 
@@ -114,7 +127,7 @@ export const Ownerless = () => {
   return <MembersForTesting environment={environment} context={ownerContext} />
 }
 
-/** Project labels and the opt-in Deactivate entry in the member menu. */
+/** Project labels, the opt-in Deactivate entry and the opt-in menu of an INACTIVE member. */
 export const DeactivationWithLabels = () => {
   const environment = useSeededEnvironment(simpleMembersListMockData)
 
@@ -126,14 +139,19 @@ export const DeactivationWithLabels = () => {
         ...roleOptions.filter(({ value }) => value !== MEMBER_ACTIONS.remove),
         DEACTIVATE_MEMBER_OPTION,
       ]}
-      roleLabels={{ OWNER: 'Proprietor' }}
+      inactiveMemberOptions={inactiveMemberActionOptions}
+      roleLabels={{ OWNER: 'Proprietor', MANAGER: 'Member' }}
       statusLabels={{ INACTIVE: 'Deactivated' }}
     />
   )
 }
 
 const StubInviteMemberDialog = ({ open, connections }: { open: boolean; connections: string[] }) =>
-  open ? <div role="dialog">Project invite dialog for {connections.length} list</div> : null
+  open ? (
+    <div role="dialog" data-connections={connections.join(' ')}>
+      Project invite dialog for {connections.length} list
+    </div>
+  ) : null
 
 /** "Add Member" opens the dialog the project injects. */
 export const CustomInviteDialog = () => {
@@ -143,6 +161,35 @@ export const CustomInviteDialog = () => {
     <MembersForTesting
       environment={environment}
       context={ownerContext}
+      InviteMemberDialog={StubInviteMemberDialog}
+    />
+  )
+}
+
+/**
+ * A project members query and fragment (with a `status` argument and the project's own row
+ * fragment) and a custom `MemberItem` that reads the row fragment from `memberRef`.
+ */
+export const ProjectFragment = () => {
+  const environment = useMemo(() => {
+    const testEnvironment = createTestEnvironment()
+
+    testEnvironment.environment.mock.queueOperationResolver((operation) => {
+      window.__membersQueryVariables = operation.request.variables
+      return projectFragmentMembersListMockData
+    })
+
+    return testEnvironment.environment
+  }, [])
+
+  return (
+    <MembersForTesting
+      environment={environment}
+      context={ownerContext}
+      membersQuery={MembersWithProjectFragmentQuery}
+      membersQueryVariables={{ status: 'ACTIVE' }}
+      membersListFragment={MembersWithProjectFragmentListFragment}
+      MemberItem={ProjectMemberItem}
       InviteMemberDialog={StubInviteMemberDialog}
     />
   )
