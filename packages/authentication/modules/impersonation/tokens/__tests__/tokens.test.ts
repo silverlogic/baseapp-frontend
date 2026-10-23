@@ -9,6 +9,7 @@ import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/prof
 import {
   clearImpersonatorTokens,
   hasImpersonatorTokens,
+  isImpersonationSessionToken,
   restoreImpersonatorTokens,
   swapInImpersonationTokens,
 } from '..'
@@ -25,6 +26,15 @@ vi.mock('@baseapp-frontend/utils', async () => ({
     store.delete(key)
   }),
 }))
+
+const jwt = (claims: Record<string, unknown>) =>
+  [
+    Buffer.from('{"alg":"HS256"}').toString('base64url'),
+    Buffer.from(JSON.stringify({ exp: Math.floor(Date.now() / 1000) + 600, ...claims })).toString(
+      'base64url',
+    ),
+    'signature',
+  ].join('.')
 
 const signIn = () => {
   store.set(ACCESS_KEY_NAME, 'admin-access')
@@ -50,15 +60,50 @@ describe('impersonation tokens', () => {
     expect(hasImpersonatorTokens()).toBe(true)
   })
 
-  test('swapInImpersonationTokens never overwrites a pair already kept aside', async () => {
+  test('swapInImpersonationTokens replaces a pair left aside by an earlier session', async () => {
+    // another user's tokens, left behind by a session that lapsed without being ended here
+    store.set(IMPERSONATOR_ACCESS_KEY_NAME, 'other-admin-access')
+    store.set(IMPERSONATOR_REFRESH_KEY_NAME, 'other-admin-refresh')
     signIn()
-    await swapInImpersonationTokens({ access: 'first-access', refresh: 'first-refresh' })
+
+    await swapInImpersonationTokens({ access: 'session-access', refresh: 'session-refresh' })
+
+    expect(store.get(IMPERSONATOR_ACCESS_KEY_NAME)).toBe('admin-access')
+    expect(store.get(IMPERSONATOR_REFRESH_KEY_NAME)).toBe('admin-refresh')
+
+    await expect(restoreImpersonatorTokens()).resolves.toBe(true)
+    expect(store.get(ACCESS_KEY_NAME)).toBe('admin-access')
+    expect(store.get(REFRESH_KEY_NAME)).toBe('admin-refresh')
+  })
+
+  test('swapInImpersonationTokens drops half of an old pair instead of mixing it in', async () => {
+    store.set(IMPERSONATOR_REFRESH_KEY_NAME, 'other-admin-refresh')
+    store.set(ACCESS_KEY_NAME, 'admin-access')
+
+    await swapInImpersonationTokens({ access: 'session-access', refresh: 'session-refresh' })
+
+    expect(store.get(IMPERSONATOR_ACCESS_KEY_NAME)).toBe('admin-access')
+    expect(store.has(IMPERSONATOR_REFRESH_KEY_NAME)).toBe(false)
+  })
+
+  test("swapInImpersonationTokens never keeps a session's tokens aside", async () => {
+    signIn()
+    const firstSession = { access: jwt({ imp_sid: 1 }), refresh: jwt({ imp_sid: 1 }) }
+    await swapInImpersonationTokens(firstSession)
 
     await swapInImpersonationTokens({ access: 'second-access', refresh: 'second-refresh' })
 
     expect(store.get(ACCESS_KEY_NAME)).toBe('second-access')
     expect(store.get(IMPERSONATOR_ACCESS_KEY_NAME)).toBe('admin-access')
     expect(store.get(IMPERSONATOR_REFRESH_KEY_NAME)).toBe('admin-refresh')
+  })
+
+  test('isImpersonationSessionToken looks for the session claim', () => {
+    expect(isImpersonationSessionToken(jwt({ imp: 7, imp_sid: 3 }))).toBe(true)
+    expect(isImpersonationSessionToken(jwt({ imp_sid: 'a1b2' }))).toBe(true)
+    expect(isImpersonationSessionToken(jwt({ user_id: 7 }))).toBe(false)
+    expect(isImpersonationSessionToken('not-a-jwt')).toBe(false)
+    expect(isImpersonationSessionToken(undefined)).toBe(false)
   })
 
   test('restoreImpersonatorTokens puts the kept-aside pair back', async () => {

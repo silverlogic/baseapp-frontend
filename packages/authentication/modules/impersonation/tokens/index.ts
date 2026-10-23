@@ -3,13 +3,18 @@ import {
   IMPERSONATOR_ACCESS_KEY_NAME,
   IMPERSONATOR_REFRESH_KEY_NAME,
   REFRESH_KEY_NAME,
+  decodeJWT,
   getToken,
   removeTokenAsync,
   setTokenAsync,
 } from '@baseapp-frontend/utils'
 import { CURRENT_PROFILE_KEY_NAME } from '@baseapp-frontend/utils/constants/profile'
 
-import type { ImpersonationTokenKeyNames, SwapInImpersonationTokensParams } from './types'
+import type {
+  ImpersonationTokenClaims,
+  ImpersonationTokenKeyNames,
+  SwapInImpersonationTokensParams,
+} from './types'
 
 const resolveKeyNames = ({
   accessKeyName = ACCESS_KEY_NAME,
@@ -25,6 +30,16 @@ const resolveKeyNames = ({
 
 // same attributes `useLogin` gives the regular pair
 const getTokenConfig = () => ({ secure: process.env.NODE_ENV === 'production' })
+
+/**
+ * Whether `token` was issued for an impersonation session, i.e. carries the backend's `imp_sid`
+ * claim. Only decodes the token: it says nothing about whether the session is still running.
+ */
+export const isImpersonationSessionToken = (token: string | null | undefined) => {
+  if (!token) return false
+  const claims = decodeJWT<ImpersonationTokenClaims>(token)
+  return claims?.impSid !== undefined && claims?.impSid !== null
+}
 
 /** Whether the impersonator's tokens are kept aside, i.e. this client is in a session. */
 export const hasImpersonatorTokens = (keyNames?: ImpersonationTokenKeyNames) => {
@@ -44,8 +59,10 @@ export const clearImpersonatorTokens = async (keyNames?: ImpersonationTokenKeyNa
  * session's pair under the regular names and forgets the current profile, which belongs to the
  * impersonator.
  *
- * When a pair is already kept aside it is left as it is, so the impersonator's own tokens are never
- * overwritten by another session's.
+ * The backend refuses to start a session from inside another one, so the current pair is the
+ * impersonator's own and replaces any pair kept aside before (left over from a session that was
+ * never ended here, possibly by another user). Only if the current pair is itself a session's is
+ * the kept-aside pair left as it is, so the impersonator's own tokens are never lost.
  */
 export const swapInImpersonationTokens = async ({
   access,
@@ -55,9 +72,13 @@ export const swapInImpersonationTokens = async ({
   const keys = resolveKeyNames(keyNames)
   const config = getTokenConfig()
 
-  if (!hasImpersonatorTokens(keys)) {
-    const currentAccess = getToken(keys.accessKeyName)
-    const currentRefresh = getToken(keys.refreshKeyName)
+  const currentAccess = getToken(keys.accessKeyName)
+  const currentRefresh = getToken(keys.refreshKeyName)
+  const isCurrentPairASession =
+    isImpersonationSessionToken(currentAccess) || isImpersonationSessionToken(currentRefresh)
+
+  if (!isCurrentPairASession) {
+    await clearImpersonatorTokens(keys)
     if (currentAccess) await setTokenAsync(keys.impersonatorAccessKeyName, currentAccess, config)
     if (currentRefresh) await setTokenAsync(keys.impersonatorRefreshKeyName, currentRefresh, config)
   }
