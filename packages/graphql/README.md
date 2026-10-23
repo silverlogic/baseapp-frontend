@@ -105,6 +105,8 @@ session:
 ```tsx
 'use client'
 
+import { FC, PropsWithChildren } from 'react'
+
 import { RelayProvider } from '@baseapp-frontend/graphql'
 import {
   ACCESS_KEY_NAME,
@@ -123,11 +125,25 @@ const SessionRelayProvider: FC<PropsWithChildren> = ({ children }) => {
 
 When the key changes:
 
-- the children are remounted under a new environment, so no component state or query from the old
-  session survives;
+- the children are remounted under a new environment, so no component state or client-side query
+  from the old session survives (but see server preloads below);
 - after the change is committed, the old environment is disposed with `disposeEnvironment`. The
-  disposal is deferred and cancelled if the same environment mounts again, so React StrictMode's
-  double mount never disposes the live environment. Unmounting the provider disposes it too.
+  disposal is deferred and cancelled if the environment mounts again, so React StrictMode's double
+  mount never disposes the live environment. Unmounting the provider disposes it too, unless another
+  provider with the same `sessionKey` is still mounted or mounts before the disposal runs.
+
+In the browser, the current session's environment is also kept outside React. So a render that
+suspends before it commits (e.g. a `useLazyLoadQuery` child with the nearest `Suspense` boundary
+above the provider) gets the same environment on retry instead of starting a new fetch each time.
+On the server, every render gets a new environment.
+
+**Server preloads.** Data preloaded on the server (`loadSerializableQuery` with
+`useSerializablePreloadedQuery` or `withRelay`) was rendered with the cookies of the moment. When
+the session changes on the client, the remounted children write the preload they still hold into
+the new environment's response cache, and if it is younger than `CACHE_TTL` (5 seconds) it is shown
+until the network refetch replaces it. If you preload on the server, refresh the server data on a
+session change (e.g. `router.refresh()` in Next.js) and don't render the preloaded children until
+the refreshed payload arrives.
 
 `getSessionIdentity` keeps the same key when the access token is refreshed, so a refresh does not
 reset the page. `ReactQueryProvider` from `@baseapp-frontend/provider` takes the same `sessionKey`

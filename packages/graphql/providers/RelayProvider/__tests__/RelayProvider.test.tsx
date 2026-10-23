@@ -1,8 +1,15 @@
-import { StrictMode, useState } from 'react'
+import { StrictMode, Suspense, useState } from 'react'
+
+import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFetch'
 
 import { act, cleanup, render, screen } from '@testing-library/react'
-import { useRelayEnvironment } from 'react-relay'
-import type { Environment } from 'relay-runtime'
+import { useLazyLoadQuery, useRelayEnvironment } from 'react-relay'
+import type {
+  ConcreteRequest,
+  Environment,
+  NormalizationSelectableNode,
+  ReaderFragment,
+} from 'relay-runtime'
 
 import RelayProvider from '..'
 import { createEnvironment, disposeEnvironment } from '../../../config/environment'
@@ -16,7 +23,42 @@ vi.mock('../../../config/environment', async (importOriginal) => {
   }
 })
 
+vi.mock('@baseapp-frontend/utils/functions/fetch/baseAppFetch', () => ({
+  baseAppFetch: vi.fn(),
+}))
+
 const createEnvironmentMock = vi.mocked(createEnvironment)
+const baseAppFetchMock = vi.mocked(baseAppFetch)
+
+const viewerSelections = [
+  { kind: 'ScalarField', name: 'viewerName', alias: null, args: null, storageKey: null },
+]
+
+const ViewerQuery = {
+  kind: 'Request',
+  fragment: {
+    kind: 'Fragment',
+    name: 'ViewerQuery',
+    type: 'Query',
+    metadata: null,
+    argumentDefinitions: [],
+    selections: viewerSelections,
+  } as unknown as ReaderFragment,
+  operation: {
+    kind: 'Operation',
+    name: 'ViewerQuery',
+    argumentDefinitions: [],
+    selections: viewerSelections,
+  } as unknown as NormalizationSelectableNode,
+  params: {
+    cacheID: 'synthetic-viewer-query',
+    id: null,
+    metadata: {},
+    name: 'ViewerQuery',
+    operationKind: 'query',
+    text: 'query ViewerQuery { viewerName }',
+  },
+} as unknown as ConcreteRequest
 const disposeEnvironmentMock = vi.mocked(disposeEnvironment)
 
 const seen: Environment[] = []
@@ -173,5 +215,108 @@ describe('RelayProvider', () => {
     expect(seen).toEqual([environment])
     expect(createEnvironmentMock).not.toHaveBeenCalled()
     expect(disposeEnvironmentMock).not.toHaveBeenCalled()
+  })
+
+  it('keeps the environment when the provider is remounted with the same sessionKey before disposal', async () => {
+    const { unmount } = render(
+      <RelayProvider sessionKey="1:remount">
+        <Consumer />
+      </RelayProvider>,
+    )
+    unmount()
+    render(
+      <RelayProvider sessionKey="1:remount">
+        <Consumer />
+      </RelayProvider>,
+    )
+    await flushDeferredDisposal()
+
+    expect(seen).toHaveLength(1)
+    expect(disposeEnvironmentMock).not.toHaveBeenCalled()
+  })
+
+  it('disposes a shared session environment only when its last provider unmounts', async () => {
+    const first = render(
+      <RelayProvider sessionKey="1:shared">
+        <Consumer />
+      </RelayProvider>,
+    )
+    const second = render(
+      <RelayProvider sessionKey="1:shared">
+        <Consumer />
+      </RelayProvider>,
+    )
+    const [environment] = seen
+
+    first.unmount()
+    await flushDeferredDisposal()
+
+    expect(seen).toHaveLength(1)
+    expect(disposeEnvironmentMock).not.toHaveBeenCalled()
+
+    second.unmount()
+    await flushDeferredDisposal()
+
+    expect(disposeEnvironmentMock).toHaveBeenCalledWith(environment)
+  })
+
+  describe('with a Suspense boundary above the provider', () => {
+    const Viewer = () => {
+      const environment = useRelayEnvironment()
+      if (!seen.includes(environment)) seen.push(environment)
+      const { viewerName } = useLazyLoadQuery<{
+        variables: Record<string, never>
+        response: { viewerName: string }
+      }>(ViewerQuery, {})
+      return <div>{viewerName}</div>
+    }
+
+    const SuspendedProvider = ({ sessionKey }: { sessionKey: string }) => (
+      <Suspense fallback={<div>Loading</div>}>
+        <RelayProvider sessionKey={sessionKey}>
+          <Viewer />
+        </RelayProvider>
+      </Suspense>
+    )
+
+    beforeEach(() => {
+      vi.useRealTimers()
+      baseAppFetchMock.mockReset()
+    })
+
+    afterEach(() => {
+      vi.useFakeTimers()
+    })
+
+    const respondSoon = (viewerName: string) =>
+      baseAppFetchMock.mockImplementationOnce(
+        () =>
+          new Promise((resolve) => {
+            setTimeout(() => resolve({ data: { viewerName } }), 5)
+          }) as never,
+      )
+
+    it('keeps the environment of a render that suspends before it commits', async () => {
+      respondSoon('First viewer')
+
+      render(<SuspendedProvider sessionKey="suspense:login-1" />)
+
+      expect(await screen.findByText('First viewer')).toBeTruthy()
+      expect(baseAppFetchMock).toHaveBeenCalledTimes(1)
+      expect(seen).toHaveLength(1)
+    })
+
+    it('keeps the new environment when a session change suspends', async () => {
+      respondSoon('First viewer')
+      respondSoon('Next viewer')
+
+      const { rerender } = render(<SuspendedProvider sessionKey="suspense:login-2" />)
+      await screen.findByText('First viewer')
+      rerender(<SuspendedProvider sessionKey="suspense:login-3" />)
+
+      expect(await screen.findByText('Next viewer')).toBeTruthy()
+      expect(baseAppFetchMock).toHaveBeenCalledTimes(2)
+      expect(seen).toHaveLength(2)
+    })
   })
 })
