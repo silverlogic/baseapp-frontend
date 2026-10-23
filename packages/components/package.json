@@ -111,7 +111,9 @@
     "./files/common": "./modules/files/common/index.ts",
     "./files/web": "./modules/files/web/index.ts",
     "./files/native": "./modules/files/native/index.ts",
-    "./impersonation/common": "./modules/impersonation/common/index.ts"
+    "./impersonation/common": "./modules/impersonation/common/index.ts",
+    "./impersonation/web": "./modules/impersonation/web/index.ts",
+    "./impersonation/native": "./modules/impersonation/native/index.ts"
   },
   "files": [
     "modules",

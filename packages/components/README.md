@@ -18,7 +18,7 @@ pnpm install @baseapp-frontend/components
 
 ## **What is in here?**
 
-This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, run the following command:
+This package contains essential BaseApp modules such as `comments`, `notifications`, `messages` and `navigations`. The `impersonation` module (start and end an impersonation session, and a banner shown while one runs) is documented in [`modules/impersonation/README.md`](modules/impersonation/README.md). It also includes Storybook, a tool for component documentation and visualization. To run the Storybook locally, run the following command:
 
 ```bash
 # at root level
