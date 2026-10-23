@@ -57,9 +57,12 @@ const MemberListItem: FC<MemberListItemProps> = ({
   ) : null
 
   if (isFirstActiveMember) {
+    // The divider opens the owner and active block. On an ownerless profile it only separates
+    // the active members from the pending and inactive rows above them, so it needs some.
+    const shouldRenderDivider = Boolean(ownerItem) || !isPreviousMemberUndefined
     return (
       <>
-        <Divider />
+        {shouldRenderDivider && <Divider />}
         {ownerItem}
         {memberItem}
       </>
