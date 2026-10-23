@@ -58,7 +58,11 @@ export const DEACTIVATE_MEMBER_OPTION = {
   label: capitalizeFirstLetter(MEMBER_ACTIONS.deactivate.toLowerCase()),
 }
 
-/** Actions offered on a deactivated (INACTIVE) member to those who can change members. */
+/**
+ * Pass as `inactiveMemberOptions` to offer Reactivate and Remove on a deactivated (INACTIVE) member
+ * to those who can change members. Not the default: reactivation needs a backend with
+ * `profileMemberReactivate`, and without it an INACTIVE row shows its status read-only.
+ */
 export const inactiveMemberActionOptions = [
   {
     value: MEMBER_ACTIONS.reactivate,
@@ -69,6 +73,3 @@ export const inactiveMemberActionOptions = [
     label: capitalizeFirstLetter(MEMBER_ACTIONS.remove.toLowerCase()),
   },
 ]
-
-/** Values of the role menu that are actions on the member rather than roles. */
-export const MEMBER_ACTION_VALUES: readonly string[] = Object.values(MEMBER_ACTIONS)

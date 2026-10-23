@@ -50,9 +50,15 @@ export interface MemberItemProps {
    * and Remove.
    */
   roleOptions?: MemberRoleOption[]
-  /** The menu of a deactivated (INACTIVE) member. Defaults to Reactivate and Remove. */
+  /**
+   * The menu of a deactivated (INACTIVE) member, e.g. `inactiveMemberActionOptions` (Reactivate,
+   * Remove). Defaults to none: the row shows its status read-only, as before.
+   */
   inactiveMemberOptions?: MemberRoleOption[]
-  /** Labels for roles shown read-only, e.g. `{ OWNER: 'Owner', MANAGER: 'Member' }`. */
+  /**
+   * Labels by role, e.g. `{ OWNER: 'Owner', MANAGER: 'Member' }`. They win over the `roleOptions`
+   * labels, both read-only and in the active member's menu.
+   */
   roleLabels?: MemberLabels
   /** Labels for statuses shown in place of a role, e.g. `{ PENDING: 'Invited' }`. */
   statusLabels?: MemberLabels

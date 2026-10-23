@@ -24,7 +24,6 @@ import {
   MEMBER_ROLES,
   MEMBER_STATUSES,
   roleOptions as defaultRoleOptions,
-  inactiveMemberActionOptions,
   invitationActionOptions,
 } from '../constants'
 import { getMemberLabel } from '../utils'
@@ -45,7 +44,7 @@ const MemberItem: FC<MemberItemProps> = ({
   invitationExpiresAt,
   invitationId,
   roleOptions = defaultRoleOptions,
-  inactiveMemberOptions = inactiveMemberActionOptions,
+  inactiveMemberOptions = [],
   roleLabels,
   statusLabels,
 }) => {
@@ -282,7 +281,8 @@ const MemberItem: FC<MemberItemProps> = ({
                   color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                 }}
               >
-                {label}
+                {/* A project role label wins here too, so a role reads the same in every row. */}
+                {roleLabels?.[value] ?? label}
               </MenuItem>
             ))}
           </Select>
