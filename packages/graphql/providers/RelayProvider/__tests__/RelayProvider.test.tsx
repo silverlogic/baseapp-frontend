@@ -4,12 +4,7 @@ import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFet
 
 import { act, cleanup, render, screen } from '@testing-library/react'
 import { useLazyLoadQuery, useRelayEnvironment } from 'react-relay'
-import type {
-  ConcreteRequest,
-  Environment,
-  NormalizationSelectableNode,
-  ReaderFragment,
-} from 'relay-runtime'
+import type { ConcreteRequest, Environment } from 'relay-runtime'
 
 import RelayProvider from '..'
 import { createEnvironment, disposeEnvironment } from '../../../config/environment'
@@ -43,13 +38,13 @@ const ViewerQuery = {
     metadata: null,
     argumentDefinitions: [],
     selections: viewerSelections,
-  } as unknown as ReaderFragment,
+  },
   operation: {
     kind: 'Operation',
     name: 'ViewerQuery',
     argumentDefinitions: [],
     selections: viewerSelections,
-  } as unknown as NormalizationSelectableNode,
+  },
   params: {
     cacheID: 'synthetic-viewer-query',
     id: null,

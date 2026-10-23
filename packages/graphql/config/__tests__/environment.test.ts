@@ -3,9 +3,7 @@ import { baseAppFetch } from '@baseapp-frontend/utils/functions/fetch/baseAppFet
 import { createClient } from 'graphql-ws'
 import {
   ConcreteRequest,
-  NormalizationSelectableNode,
   ROOT_ID,
-  ReaderFragment,
   RequestParameters,
   createOperationDescriptor,
   fetchQuery,
@@ -78,13 +76,13 @@ const MeQuery = {
     metadata: null,
     argumentDefinitions: [],
     selections: meSelections,
-  } as unknown as ReaderFragment,
+  },
   operation: {
     kind: 'Operation',
     name: 'MeQuery',
     argumentDefinitions: [],
     selections: meSelections,
-  } as unknown as NormalizationSelectableNode,
+  },
   params: {
     cacheID: 'synthetic-me-query',
     id: null,
