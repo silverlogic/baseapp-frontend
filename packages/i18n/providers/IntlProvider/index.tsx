@@ -33,12 +33,12 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   useEffect(() => {
     // Load locale from storage if not provided via props or a supported cookie
     if (!initialLocale && !cookieLocale) {
-      getCurrentLocale()
+      getCurrentLocale(defaultLocale)
         .then(setLocale)
         // Keep the default locale if the stored language can't be read.
         .catch(() => undefined)
     }
-  }, [initialLocale, cookieLocale])
+  }, [initialLocale, cookieLocale, defaultLocale])
 
   useEffect(() => {
     if (initialLocale && initialLocale !== locale) {
