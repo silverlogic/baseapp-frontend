@@ -18,7 +18,7 @@ export const CREATE_PROFILE_MESSAGES = defineMessages({
   },
   nameMin: {
     id: 'profiles.createProfile.validation.nameMin',
-    defaultMessage: 'Must have at least three character',
+    defaultMessage: 'Must have at least three characters',
   },
   nameMax: {
     id: 'profiles.createProfile.validation.nameMax',

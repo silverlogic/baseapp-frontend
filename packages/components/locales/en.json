@@ -327,7 +327,7 @@
   "profiles.createProfile.title": "New organization",
   "profiles.createProfile.urlPath": "URL Path",
   "profiles.createProfile.validation.nameMax": "Must have at most 255 characters",
-  "profiles.createProfile.validation.nameMin": "Must have at least three character",
+  "profiles.createProfile.validation.nameMin": "Must have at least three characters",
   "profiles.createProfile.validation.urlPathFormat": "Must contain only lowercase letters, numbers, and hyphens",
   "profiles.createProfile.validation.urlPathMax": "Must have at most 500 characters",
   "profiles.currentProfile.avatarAlt": "Current profile avatar",
