@@ -10,6 +10,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { useAllProfilesList } from '../../../../profiles/common'
 import { useUpdateChatRoomMutation } from '../../../common'
@@ -19,11 +20,12 @@ import {
 } from '../../../common/constants'
 import { CreateOrEditGroup } from '../../../common/types'
 import DefaultGroupChatMembersList from '../../__shared__/GroupChatMembersList'
+import { SHARED_MESSAGES } from '../../__shared__/constants'
 import { ProfileNode } from '../../__shared__/types'
 import AddMemberCard from '../AddMemberCard'
 import AddedMemberCard from '../AddedMemberCard'
 import { Container as HeaderContainer } from '../Header/styled'
-import { DEFAULT_FORM_VALIDATION } from './constants'
+import { getFormValidation } from './constants'
 import { SearchbarContainer } from './styled'
 import { AddMembersMobileProps } from './types'
 
@@ -37,6 +39,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
   GroupChatMembersListProps = {},
   existingMembers = [],
 }) => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
 
   const {
@@ -47,10 +50,11 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
     refetch: refetchProfiles,
   } = useAllProfilesList(allProfilesRef)
 
+  const formValidation = useMemo(() => getFormValidation(intl), [intl])
   const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: DEFAULT_FORM_VALUES,
     // @ts-ignore TODO: check typing issue with zodResolver
-    resolver: zodResolver(DEFAULT_FORM_VALIDATION),
+    resolver: zodResolver(formValidation),
     mode: 'onBlur',
   })
 
@@ -84,7 +88,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
       onCompleted: (response) => {
         const errors = response?.chatRoomUpdate?.errors
         if (errors) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(intl.formatMessage(SHARED_MESSAGES.somethingWentWrong), { type: 'error' })
           // @ts-ignore TODO: fix typing issues
           setFormRelayErrors(formReturn, errors)
         } else {
@@ -132,14 +136,20 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
   return (
     <Box>
       <HeaderContainer>
-        <IconButton onClick={onClose} aria-label="cancel adding member">
+        <IconButton
+          onClick={onClose}
+          aria-label={intl.formatMessage({
+            id: 'messages.groupChatEdit.addMembersMobile.cancelAriaLabel',
+            defaultMessage: 'cancel adding member',
+          })}
+        >
           <Iconify icon="eva:arrow-ios-back-fill" width={24} />
         </IconButton>
         <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-          Add Member
+          {intl.formatMessage(SHARED_MESSAGES.addMember)}
         </Typography>
         <IconButton
-          aria-label="Add Member"
+          aria-label={intl.formatMessage(SHARED_MESSAGES.addMember)}
           disabled={isEditButtonDisabled}
           isLoading={isMutationInFlight}
           onClick={() => {

@@ -19,6 +19,7 @@ import {
   Stack,
   Typography,
 } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { FileUploadStatus } from '../../../common/constants'
 import { useFileUploadStore } from '../../../common/context/FileUploadProvider'
@@ -35,6 +36,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   allowRetry = true,
   variant = 'card',
 }) => {
+  const intl = useIntl()
   const removeFile = useFileUploadStore((state) => state.removeFile)
   const pauseFile = useFileUploadStore((state) => state.pauseFile)
   const { resumeUpload, retryUpload } = useChunkedUpload()
@@ -89,22 +91,39 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   const actions = (
     <Stack direction="row" spacing={0.5}>
       {canPause && (
-        <IconButton size="small" onClick={handlePause} title="Pause">
+        <IconButton
+          size="small"
+          onClick={handlePause}
+          title={intl.formatMessage({ id: 'files.actions.pause', defaultMessage: 'Pause' })}
+        >
           <PauseIcon fontSize="small" />
         </IconButton>
       )}
       {canResume && (
-        <IconButton size="small" onClick={handleResume} title="Resume">
+        <IconButton
+          size="small"
+          onClick={handleResume}
+          title={intl.formatMessage({ id: 'files.actions.resume', defaultMessage: 'Resume' })}
+        >
           <PlayArrowIcon fontSize="small" />
         </IconButton>
       )}
       {canRetry && (
-        <IconButton size="small" onClick={handleRetry} color="error" title="Retry">
+        <IconButton
+          size="small"
+          onClick={handleRetry}
+          color="error"
+          title={intl.formatMessage({ id: 'files.actions.retry', defaultMessage: 'Retry' })}
+        >
           <ReplayIcon fontSize="small" />
         </IconButton>
       )}
       {canRemove && (
-        <IconButton size="small" onClick={handleRemove} title="Remove">
+        <IconButton
+          size="small"
+          onClick={handleRemove}
+          title={intl.formatMessage({ id: 'files.actions.remove', defaultMessage: 'Remove' })}
+        >
           <CloseIcon fontSize="small" />
         </IconButton>
       )}

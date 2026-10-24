@@ -6,11 +6,13 @@ import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { Box, Chip, Divider, Menu, Theme, Typography, useMediaQuery } from '@mui/material'
 import { DateTime } from 'luxon'
+import { useIntl } from 'react-intl'
 
 import DateFilterComponent from '../DateFilterComponent'
 import { DateFilterChipProps } from './types'
 
 const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefetch }) => {
+  const intl = useIntl()
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('sm'))
@@ -33,9 +35,17 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
     const toDate = formatLabelDate(createdTo)
     if (createdFrom && createdTo) return `${fromDate} - ${toDate}`
 
-    if (createdFrom) return `From ${fromDate}`
-    if (createdTo) return `Until ${toDate}`
-    return 'Period'
+    if (createdFrom)
+      return intl.formatMessage(
+        { id: 'activityLog.dateFilter.from', defaultMessage: 'From {date}' },
+        { date: fromDate },
+      )
+    if (createdTo)
+      return intl.formatMessage(
+        { id: 'activityLog.dateFilter.until', defaultMessage: 'Until {date}' },
+        { date: toDate },
+      )
+    return intl.formatMessage({ id: 'activityLog.dateFilter.period', defaultMessage: 'Period' })
   }
 
   const handleOnClickOnChip = (event: React.MouseEvent<HTMLElement>) => {
@@ -49,7 +59,7 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
   const renderDateFilterComponent = (onClose: () => void) => (
     <>
       <Typography variant="subtitle1" m={4} align="center">
-        Period
+        {intl.formatMessage({ id: 'activityLog.dateFilter.period', defaultMessage: 'Period' })}
       </Typography>
       <Divider sx={{ marginBottom: 2 }} />
       <DateFilterComponent

@@ -17,26 +17,33 @@ const UseLeaveGroup = ({
   roomId,
   isSoleAdmin = false,
   onClose,
+  removeSuccessMessage = 'Member was successfully removed',
 }: UseLeaveGroupProps) => {
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
   const { sendMutationErrorToast, sendToast } = useNotification()
 
+  const getLeaveGroupDialogTextCopyKeys = () => {
+    if (profileId === removingParticipantId) {
+      return {
+        action: LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING,
+        role: isSoleAdmin
+          ? LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
+          : LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.MEMBER,
+      } as const
+    }
+    return {
+      action: LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_REMOVING,
+      role: LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN,
+    } as const
+  }
+
   const getLeaveGroupDialogTextCopy = (
     type: ValueOf<typeof LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS>,
   ) => {
-    if (profileId === removingParticipantId) {
-      if (isSoleAdmin) {
-        return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
-          LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
-        ][type]
-      }
-      return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING][
-        LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.MEMBER
-      ][type]
-    }
-    return LEAVE_GROUP_DIALOG_TEXT_COPY[LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_REMOVING][
-      LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
-    ][type]
+    const { action, role } = getLeaveGroupDialogTextCopyKeys()
+    return action === LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
+      ? LEAVE_GROUP_DIALOG_TEXT_COPY[action][role][type]
+      : LEAVE_GROUP_DIALOG_TEXT_COPY[action][LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN][type]
   }
 
   const onRemoveConfirmed = () => {
@@ -55,7 +62,7 @@ const UseLeaveGroup = ({
         // flow isn't form-backed, so surface the payload errors here.
         const errorMessage = sendMutationErrorToast(response?.chatRoomUpdate?.errors, undefined)
         if (!errorMessage && removingParticipantId && removingParticipantId !== profileId) {
-          sendToast('Member was successfully removed')
+          sendToast(removeSuccessMessage)
         }
         onClose()
       },
@@ -67,6 +74,7 @@ const UseLeaveGroup = ({
 
   return {
     getLeaveGroupDialogTextCopy,
+    getLeaveGroupDialogTextCopyKeys,
     onRemoveConfirmed,
     isMutationInFlight,
   }

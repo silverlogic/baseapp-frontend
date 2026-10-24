@@ -6,8 +6,10 @@ import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/av
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Typography, useTheme } from '@mui/material'
+import { useIntl } from 'react-intl'
 
-import { getParticipantCountString } from '../../../common'
+import { SHARED_MESSAGES } from '../../__shared__/constants'
+import { getParticipantCountLabel } from '../../__shared__/utils'
 import { GroupHeaderContainer, GroupTitleContainer, MembersContainer } from './styled'
 import { BodyProps } from './types'
 
@@ -21,6 +23,7 @@ const Body: FC<BodyProps> = ({
   titleProps = {},
 }) => {
   const theme = useTheme()
+  const intl = useIntl()
 
   return (
     <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
@@ -36,12 +39,12 @@ const Body: FC<BodyProps> = ({
             {title}
           </TypographyWithEllipsis>
           <Typography variant="body2" color="text.secondary" {...participantsCountStyle}>
-            {getParticipantCountString(participantsCount)}
+            {getParticipantCountLabel(intl, participantsCount)}
           </Typography>
         </GroupTitleContainer>
       </GroupHeaderContainer>
       <Box sx={{ display: 'grid', gridTemplateRows: 'auto 1fr' }}>
-        <Box role="list" aria-label="group members">
+        <Box>
           <Typography
             variant="subtitle2"
             color="text.primary"
@@ -50,10 +53,18 @@ const Body: FC<BodyProps> = ({
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
-            Members
+            {intl.formatMessage(SHARED_MESSAGES.members)}
           </Typography>
         </Box>
-        <MembersContainer>{children}</MembersContainer>
+        <MembersContainer
+          role="group"
+          aria-label={intl.formatMessage({
+            id: 'messages.groupChatDetails.membersAriaLabel',
+            defaultMessage: 'group members',
+          })}
+        >
+          {children}
+        </MembersContainer>
       </Box>
     </Box>
   )

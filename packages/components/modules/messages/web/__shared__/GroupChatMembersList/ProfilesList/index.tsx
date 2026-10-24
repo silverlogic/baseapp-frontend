@@ -6,10 +6,12 @@ import { AvatarButton } from '@baseapp-frontend/design-system/components/web/but
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Box, Typography, useTheme } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import { SearchNotFoundState as DefaultSearchNotFoundState } from '../../../../../__shared__/web'
 import DefaultEmptyProfilesListState from '../../EmptyProfilesListState'
+import { SHARED_MESSAGES } from '../../constants'
 import { ProfileNode } from '../../types'
 import { ProfilesListProps } from './types'
 
@@ -23,8 +25,8 @@ const ProfilesList: FC<ProfilesListProps> = ({
   renderItem,
   VirtuosoProps = {},
   NormalListProps = {},
-  label = 'Available connections',
-  title = 'Connections',
+  label,
+  title,
   EmptyProfilesListState = DefaultEmptyProfilesListState,
   SearchNotFoundState = DefaultSearchNotFoundState,
   allowAddMember = false,
@@ -32,6 +34,19 @@ const ProfilesList: FC<ProfilesListProps> = ({
   removeTitle = false,
 }) => {
   const theme = useTheme()
+  const intl = useIntl()
+  const menuLabel =
+    label ??
+    intl.formatMessage({
+      id: 'messages.groupMembersList.profilesList.label',
+      defaultMessage: 'Available connections',
+    })
+  const menuTitle =
+    title ??
+    intl.formatMessage({
+      id: 'messages.groupMembersList.profilesList.title',
+      defaultMessage: 'Connections',
+    })
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
 
@@ -39,7 +54,7 @@ const ProfilesList: FC<ProfilesListProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more profiles"
+        aria-label={intl.formatMessage(SHARED_MESSAGES.loadingMoreProfiles)}
       />
     )
   }
@@ -52,21 +67,26 @@ const ProfilesList: FC<ProfilesListProps> = ({
 
   return (
     <>
-      <menu aria-label={label}>
+      <menu aria-label={menuLabel}>
         {!removeTitle && (
           <Typography
             variant="subtitle2"
             color="text.primary"
             sx={{
-              padding: title === '' ? 0 : theme.spacing(2),
+              padding: menuTitle === '' ? 0 : theme.spacing(2),
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
-            {title}
+            {menuTitle}
           </Typography>
         )}
       </menu>
-      {allowAddMember && <AvatarButton onClick={onAddMemberClick} caption="Add Member" />}
+      {allowAddMember && (
+        <AvatarButton
+          onClick={onAddMemberClick}
+          caption={intl.formatMessage(SHARED_MESSAGES.addMember)}
+        />
+      )}
       {isPaginated ? (
         <Virtuoso
           data={profiles}

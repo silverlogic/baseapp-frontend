@@ -4,6 +4,7 @@ import { FC, Suspense } from 'react'
 
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
+import { FormattedMessage } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
@@ -37,7 +38,11 @@ const ChatRoom: FC<ChatRoomProps> = ({
 
   // TODO: handle error for chatRoom
   if (!chatRoom) {
-    return <div>Chat room not found</div>
+    return (
+      <div>
+        <FormattedMessage id="messages.chatRoom.notFound" defaultMessage="Chat room not found" />
+      </div>
+    )
   }
 
   return (

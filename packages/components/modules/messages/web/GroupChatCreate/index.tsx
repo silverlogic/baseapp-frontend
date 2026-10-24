@@ -8,18 +8,19 @@ import { filterDirtyValues, setFormRelayErrors } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { ConnectionHandler } from 'relay-runtime'
 
 import { ProfileNode, useAllProfilesList } from '../../../profiles/common'
 import { useChatRoom, useCreateChatRoomMutation } from '../../common'
 import {
-  DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION as DEFAULT_FORM_VALIDATION,
   DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALUE as DEFAULT_FORM_VALUES,
   CREATE_OR_EDIT_GROUP_FORM_VALUE as FORM_VALUE,
 } from '../../common/constants'
 import { CreateOrEditGroup } from '../../common/types'
 import DefaultEditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
+import { getCreateOrEditGroupFormValidation } from '../__shared__/constants'
 import DefaultHeader from './Header'
 import { ProfilesContainer } from './styled'
 import { GroupChatCreateProps } from './types'
@@ -43,10 +44,12 @@ const GroupChatCreate: FC<GroupChatCreateProps> = ({
     refetch,
   } = useAllProfilesList(allProfilesRef)
 
+  const intl = useIntl()
+  const formValidation = useMemo(() => getCreateOrEditGroupFormValidation(intl), [intl])
   const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: DEFAULT_FORM_VALUES,
     // @ts-ignore TODO: check typing issue with zodResolver
-    resolver: zodResolver(DEFAULT_FORM_VALIDATION),
+    resolver: zodResolver(formValidation),
     mode: 'onBlur',
   })
 

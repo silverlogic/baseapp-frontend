@@ -5,6 +5,7 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Checkbox, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
@@ -19,6 +20,7 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
   isBeingAdded = false,
   isExistingMember = false,
 }) => {
+  const intl = useIntl()
   const { id, image, name, urlPath } = useFragment(
     ProfileItemFragment,
     profile as ProfileItemFragment$key,
@@ -35,7 +37,10 @@ const AddMemberCard: FC<AddMemberCardProps> = ({
 
   const getCaptionText = () => {
     if (isExistingMember) {
-      return 'Already added to the group'
+      return intl.formatMessage({
+        id: 'messages.groupChatEdit.addMemberCard.alreadyAdded',
+        defaultMessage: 'Already added to the group',
+      })
     }
     if (urlPath?.path) {
       return `@${urlPath.path}`

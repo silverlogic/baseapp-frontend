@@ -3,10 +3,12 @@ import { FC, useCallback } from 'react'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { MESSAGE_TYPE } from '../../../common'
 import DefaultSystemMessage from './SystemMessage'
 import DefaultUserMessage from './UserMessage'
+import { MESSAGES_GROUP_MESSAGES } from './constants'
 import { DateGroupTypography } from './styled'
 import { MessagesGroupProps } from './types'
 import { displayFormattedDate } from './utils'
@@ -25,6 +27,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   UserMessageProps = {},
 }) => {
   const theme = useTheme()
+  const intl = useIntl()
 
   const renderDateOnTopOfMessagesGroup = useCallback(
     (index: number) => {
@@ -38,14 +41,14 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       ) {
         return (
           <DateGroupTypography color="grey.600" variant="caption">
-            {displayFormattedDate(currentMessage?.created)}
+            {displayFormattedDate(intl, currentMessage?.created)}
           </DateGroupTypography>
         )
       }
 
       return null
     },
-    [allMessages, allMessagesLastIndex, hasNext],
+    [allMessages, allMessagesLastIndex, hasNext, intl],
   )
 
   const renderUnreadMessagesDivider = useCallback(
@@ -63,7 +66,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
             }}
           >
             <Typography variant="caption" color="error" sx={{ textAlign: 'center' }}>
-              New Messages
+              {intl.formatMessage(MESSAGES_GROUP_MESSAGES.newMessages)}
             </Typography>
           </Divider>
         )
@@ -71,7 +74,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
 
       return null
     },
-    [allMessages, firstUnreadMessageId, theme.palette.error.light],
+    [allMessages, firstUnreadMessageId, theme.palette.error.light, intl],
   )
 
   if (!message) return null

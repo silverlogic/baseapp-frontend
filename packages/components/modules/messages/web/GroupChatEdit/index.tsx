@@ -9,6 +9,7 @@ import { filterDirtyValues, setFormRelayErrors, useNotification } from '@baseapp
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { usePaginationFragment, usePreloadedQuery } from 'react-relay'
 
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
@@ -29,10 +30,11 @@ import { CreateOrEditGroup } from '../../common/types'
 import EditGroupTitleAndImage from '../__shared__/EditGroupTitleAndImage'
 import DefaultGroupChatMembersList from '../__shared__/GroupChatMembersList'
 import LeaveGroupDialog from '../__shared__/LeaveGroupDialog'
+import { SHARED_MESSAGES } from '../__shared__/constants'
 import AddMembersDialog from './AddMembersDialog'
 import AddMembersMobile from './AddMembersMobile'
 import DefaultHeader from './Header'
-import { DEFAULT_FORM_VALIDATION, getDefaultFormValues } from './constants'
+import { getDefaultFormValues, getFormValidation } from './constants'
 import { GroupChatEditProps } from './types'
 
 const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
@@ -48,6 +50,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
   queryRef,
   roomId,
 }) => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const [open, setOpen] = useState(false)
   const [memberToRemove, setMemberToRemove] = useState<ProfileItemFragment$key | null>(null)
@@ -76,9 +79,10 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
     [membersList],
   )
   const { isSoleAdmin } = useCheckIsAdmin(membersList?.participants)
+  const formValidation = useMemo(() => getFormValidation(intl), [intl])
   const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: getDefaultFormValues(title || '', chatImage),
-    resolver: zodResolver(DEFAULT_FORM_VALIDATION),
+    resolver: zodResolver(formValidation),
     mode: 'onBlur',
   })
 
@@ -120,7 +124,7 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
       onCompleted: (response) => {
         const errors = response?.chatRoomUpdate?.errors
         if (errors) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(intl.formatMessage(SHARED_MESSAGES.somethingWentWrong), { type: 'error' })
           setFormRelayErrors(formReturn, errors)
         } else {
           onValidSubmission()

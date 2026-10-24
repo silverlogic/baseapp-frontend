@@ -35,6 +35,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
     return {
       roomId: id,
       isGroup,
+      isDeletedUser: true,
       title: 'Deleted User',
       image: undefined,
     }
@@ -43,6 +44,7 @@ export const useSingleChatDetails = (chatRef: SingleChatDetailsFragment$key) => 
     return {
       roomId: id,
       isGroup,
+      isDeletedUser: true,
       title: 'Deleted User',
       image: undefined,
       username: undefined,

@@ -5,13 +5,16 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Checkbox, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
-import { AddContactToGroupItemFragment, getParticipantCountString } from '../../../../common'
+import { AddContactToGroupItemFragment } from '../../../../common'
+import { getParticipantCountLabel } from '../../../__shared__/utils'
 import { MainContainer } from './styled'
 import { GroupItemProps } from './types'
 
 const GroupItem: FC<GroupItemProps> = ({ roomRef, selected, onToggle }) => {
+  const intl = useIntl()
   const node = useFragment(AddContactToGroupItemFragment, roomRef)
 
   const isAlreadyMember = !!node.isParticipant
@@ -34,10 +37,13 @@ const GroupItem: FC<GroupItemProps> = ({ roomRef, selected, onToggle }) => {
           {node.title}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {getParticipantCountString(node.participantsCount)}
+          {getParticipantCountLabel(intl, node.participantsCount)}
           {isAlreadyMember && (
             <Typography component="span" variant="caption" color="text.disabled">
-              {' • Already added'}
+              {intl.formatMessage({
+                id: 'messages.addContactToGroup.groupItem.alreadyAdded',
+                defaultMessage: ' • Already added',
+              })}
             </Typography>
           )}
         </Typography>
@@ -47,7 +53,15 @@ const GroupItem: FC<GroupItemProps> = ({ roomRef, selected, onToggle }) => {
         disabled={isAlreadyMember}
         onChange={handleToggle}
         onClick={(event) => event.stopPropagation()}
-        inputProps={{ 'aria-label': `select group ${node.title}` }}
+        inputProps={{
+          'aria-label': intl.formatMessage(
+            {
+              id: 'messages.addContactToGroup.groupItem.selectAriaLabel',
+              defaultMessage: 'select group {title}',
+            },
+            { title: node.title },
+          ),
+        }}
       />
     </MainContainer>
   )
