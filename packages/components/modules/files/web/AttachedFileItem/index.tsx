@@ -20,6 +20,7 @@ import { useFileDownloadLogic } from '../../common/hooks/useFileDownloadLogic'
 import { formatDate, formatFileSize, getFileType, isImageFile } from '../../common/utils/formatters'
 import FileChip from '../FileChip'
 import FileThumbnail from '../FileThumbnail'
+import { UPLOAD_STATUS_LABELS } from './constants'
 import type { AttachedFileItemProps } from './types'
 
 const getTypeLabel = (fileName?: string | null, contentType?: string | null): string => {
@@ -62,6 +63,13 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
   }
 
   const isImage = isImageFile(file.fileContentType)
+
+  const uploadStatusMessage = file.uploadStatus
+    ? UPLOAD_STATUS_LABELS[file.uploadStatus]
+    : undefined
+  const uploadStatusLabel = uploadStatusMessage
+    ? intl.formatMessage(uploadStatusMessage)
+    : file.uploadStatus
 
   if (variant === 'chip') {
     return (
@@ -203,7 +211,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
             <Chip
               label={intl.formatMessage(
                 { id: 'files.attachedFileItem.status', defaultMessage: 'Status: {status}' },
-                { status: file.uploadStatus },
+                { status: uploadStatusLabel },
               )}
               size="small"
               color="warning"
