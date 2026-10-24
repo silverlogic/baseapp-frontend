@@ -1,174 +1,54 @@
 # @baseapp-frontend/i18n
 
-Internationalization utilities, scripts, and documentation for BaseApp projects.
+Internationalization for BaseApp: locale types, the `IntlProvider` wrapper, language persistence, date helpers, the shared `common.*` catalog and the translation coverage script. Built on [FormatJS / react-intl](https://formatjs.io/docs/react-intl/).
 
-## What's Included
+Supported locales: `en` (source), `es`, `pt`.
 
-### 📁 Base Translations
+## Exports
 
-Common translations shared across all BaseApp projects:
+| Export | Purpose |
+|---|---|
+| `SUPPORTED_LOCALES`, `DEFAULT_LOCALE`, `LOCALE_LABELS`, `Locale` | Locale list, fallback and display names |
+| `LANGUAGE_COOKIE_NAME` | Cookie (web) / SecureStore key (mobile) holding the user's language. Owned by `@baseapp-frontend/utils`, re-exported here |
+| `IntlProvider` | Wraps react-intl's provider; merges this package's catalog with `additionalMessages` |
+| `useLocale()` | Current locale plus `setLocale`, which persists the choice and reloads the page |
+| `getLanguage()` / `setLanguage()` | Read / write the stored language (cookie, server request cookie or SecureStore) |
+| `getCurrentLocale()` | Stored language, else the browser language, else `DEFAULT_LOCALE` |
+| `getMessages(locale, extra?)` | This package's catalog for a locale |
+| `formatDateI18n`, `formatTimeI18n`, `formatRelativeTimeI18n`, `formatDateWithDiffNowI18n`, `useDateFormatter` | Locale-aware date formatting |
 
-- `locales/en.json` - English (source)
-- `locales/es.json` - Spanish
-- `locales/pt.json` - Portuguese
+**Server Components:** the package root re-exports the client provider, and react-intl creates a React context at import time, so importing either from a Server Component crashes. On the server import the deep paths (`@baseapp-frontend/i18n/types`, `@baseapp-frontend/i18n/utils`) and build an `IntlShape` with `createIntl` from `@formatjs/intl`.
 
-### 🛠️ Scripts
+## Where catalogs live
 
-- `scripts/check-translations.js` - Check translation coverage and find missing translations
+Each package that renders text owns a `locales/{en,es,pt}.json` (plus a `locales/index.ts` exporting them by locale), and its message ids start with a namespace for that package or module (`common.*`, `utils.*`, `comments.*`, `messages.*`, …). The consuming app imports the catalogs it needs, merges them with its own, and passes the result to `IntlProvider` through `additionalMessages`. Later catalogs override earlier ones, so an app can reword any package message by reusing its id.
 
-### 📚 Documentation
+## Writing translatable code
 
-- `docs/INDEX.md` - Documentation index and navigation
-- `docs/QUICK_START.md` - Quick reference guide
-- `docs/README.md` - Complete i18n documentation
-- `docs/TRANSLATION_WORKFLOW.md` - Detailed workflow guide
+```tsx
+import { useIntl } from 'react-intl'
 
-### 🔧 Utilities
+const intl = useIntl()
 
-- `getMessages()` - Get translations for a locale
-- Type definitions for locales
-- Constants for supported languages
+intl.formatMessage({ id: 'comments.replies.showMore', defaultMessage: 'Show more replies ({count})' }, { count })
+```
 
-## Installation
+- Always pass a static `id` and `defaultMessage`; `formatjs extract` cannot read computed ones. Pick between two complete messages instead of building an id.
+- Labels referenced from data (tabs, statuses, roles) go in a `defineMessages` map in `constants.ts` and are translated at render.
+- One sentence is one message. Use ICU `{count, plural, one {…} other {…}}` for counts and rich-text tags (`<b>…</b>`, `<link>…</link>`) for inline formatting, never concatenated fragments.
+- Format numbers, currency and dates with `intl.formatNumber` / `intl.formatDate` or the helpers above, not hand-built strings.
+- Zod schemas with user-facing messages are built by a factory that takes `intl` (`getXValidationSchema(intl)`).
+- Code under a `common/` folder that native also runs must not call `useIntl` (native has no `IntlProvider` yet); translate in the web component instead.
 
-This package is part of the BaseApp monorepo and is automatically available as a workspace dependency.
+## Updating catalogs
 
 ```bash
-# In your app's package.json
-{
-  "dependencies": {
-    "@baseapp-frontend/i18n": "workspace:*"
-  }
-}
+pnpm i18n:extract          # in the package: regenerates locales/en.json from the code
+node ../i18n/scripts/check-translations.js locales en,es,pt   # reports keys missing from es/pt
 ```
 
-## Usage
+1. Write or change the message in code, then run `pnpm i18n:extract`.
+2. Add the same ids to `es.json` and `pt.json`, keeping ICU arguments and tags identical to English.
+3. Run the coverage check; it exits non-zero when a locale is missing keys.
 
-### Getting Translations
-
-```typescript
-import { getMessages, Locale } from '@baseapp-frontend/i18n'
-
-const locale: Locale = 'es'
-const messages = getMessages(locale)
-```
-
-### Checking Translation Coverage
-
-```bash
-# From this package
-pnpm check-translations
-
-# From your app (with custom path)
-node ../../packages/i18n/scripts/check-translations.js ./i18n/locales en,es,pt
-```
-
-### Reading Documentation
-
-All documentation is available in the `docs/` directory:
-
-- Start with `docs/INDEX.md` to find the right guide
-- Use `docs/QUICK_START.md` for quick reference
-- Read `docs/README.md` for complete documentation
-- Follow `docs/TRANSLATION_WORKFLOW.md` for workflows
-
-## Package Structure
-
-```
-@baseapp-frontend/i18n/
-├── locales/                    # Base translations
-│   ├── en.json
-│   ├── es.json
-│   └── pt.json
-├── scripts/                    # Utility scripts
-│   └── check-translations.js
-├── docs/                       # Documentation
-│   ├── INDEX.md
-│   ├── QUICK_START.md
-│   ├── README.md
-│   └── TRANSLATION_WORKFLOW.md
-├── index.ts                    # Main exports
-├── types.ts                    # TypeScript types
-├── utils.ts                    # Utility functions
-└── package.json
-```
-
-## Development
-
-```bash
-# Build the package
-pnpm build
-
-# Run linting
-pnpm lint
-
-# Check translations
-pnpm check-translations
-
-# Clean build artifacts
-pnpm clean
-```
-
-## App Integration
-
-### Web App
-
-```typescript
-// apps/web/i18n/index.ts
-import { getMessages, Locale } from '@baseapp-frontend/i18n'
-import webEnMessages from './locales/en.json'
-import webEsMessages from './locales/es.json'
-import webPtMessages from './locales/pt.json'
-
-export const getWebMessages = (locale: Locale): Record<string, string> => {
-  const webMessages: Record<Locale, Record<string, string>> = {
-    en: webEnMessages,
-    es: webEsMessages,
-    pt: webPtMessages,
-  }
-
-  return webMessages[locale] || webMessages.en
-}
-```
-
-### Mobile App
-
-```typescript
-// apps/mobile/i18n/index.ts
-import { getMessages, Locale } from '@baseapp-frontend/i18n'
-import mobileEnMessages from './locales/en.json'
-import mobileEsMessages from './locales/es.json'
-import mobilePtMessages from './locales/pt.json'
-
-export const getMobileMessages = (locale: Locale): Record<string, string> => {
-  const mobileMessages: Record<Locale, Record<string, string>> = {
-    en: mobileEnMessages,
-    es: mobileEsMessages,
-    pt: mobilePtMessages,
-  }
-
-  return mobileMessages[locale] || mobileMessages.en
-}
-```
-
-## TypeScript
-
-This package is fully typed. All types are exported from the main entry point:
-
-```typescript
-import type { Locale } from '@baseapp-frontend/i18n'
-import { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_LABELS } from '@baseapp-frontend/i18n'
-```
-
-## Contributing
-
-When adding new common translations:
-
-1. Add to `locales/en.json`
-2. Translate to `locales/es.json` and `locales/pt.json`
-3. Run `pnpm check-translations` to verify
-4. Build and test
-
-## License
-
-MIT
+`pnpm check-translations` in this package checks the `common.*` catalog the same way.

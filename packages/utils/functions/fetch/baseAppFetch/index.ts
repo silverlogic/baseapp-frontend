@@ -7,10 +7,8 @@ import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
 import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
 import { MinimalProfile } from '../../../types/profile'
 import { resolveApiUrl } from '../../api/resolveApiUrl'
-import { getCookie } from '../../cookie'
 import { broadcastEvent } from '../../events'
 import { getExpoConstant } from '../../expo'
-import { isMobilePlatform } from '../../os'
 import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
@@ -165,18 +163,8 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // set language header
-  // TODO: maybe find a better way to deal with RSC
-  let language
-  if (typeof window === typeof undefined) {
-    const { cookies } = await import('next/headers')
-    const cookieStore = await cookies()
-    language = cookieStore.get(languageCookieName)?.value
-  } else if (isMobilePlatform()) {
-    const { getItem } = await import('expo-secure-store')
-    language = getItem(languageCookieName)
-  } else {
-    language = getCookie<string>(languageCookieName)
-  }
+  const { getLanguage } = await import('../../language/getLanguage')
+  const language = await getLanguage(languageCookieName)
   if (language) {
     fetchOptions.headers!['Accept-Language'] = language
   }
