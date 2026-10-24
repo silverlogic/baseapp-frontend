@@ -9,11 +9,12 @@ import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/util
 
 import { LoadingButton } from '@mui/lab'
 import { Box, TextField, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
 import MemberSearch from './MemberSearch'
-import { INVITE_MEMBER_DIALOG_COPY as COPY, DEFAULT_INVITE_ROLE } from './constants'
+import { DEFAULT_INVITE_ROLE, INVITE_MEMBER_DIALOG_MESSAGES as MESSAGES } from './constants'
 import { InviteMemberDialogProps, SelectedEmail, SelectedMember, SelectedProfile } from './types'
 import {
   BatchError,
@@ -27,6 +28,7 @@ import {
 const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connections }) => {
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const [selected, setSelected] = useState<SelectedMember[]>([])
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [createMembers] = useProfileUserRoleCreateMutation()
@@ -62,13 +64,18 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
         variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE }, connections },
         onCompleted: (response, errors) => {
           const message = getMutationErrorMessage(response?.profileUserRoleCreate?.errors, errors, {
-            defaultMessage: 'Failed to add members',
+            defaultMessage: intl.formatMessage(MESSAGES.addMembersFailed),
           })
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },
         onError: (error) =>
-          reject(new BatchError(getGraphQLErrorMessage(error, 'Failed to add members'), members)),
+          reject(
+            new BatchError(
+              getGraphQLErrorMessage(error, intl.formatMessage(MESSAGES.addMembersFailed)),
+              members,
+            ),
+          ),
       })
     })
 
@@ -87,14 +94,17 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
         },
         onCompleted: (response, errors) => {
           const message = getMutationErrorMessage(response?.profileSendInvitation?.errors, errors, {
-            defaultMessage: 'Failed to send invitations',
+            defaultMessage: intl.formatMessage(MESSAGES.sendInvitationsFailed),
           })
           if (message) reject(new BatchError(message, members))
           else resolve(members)
         },
         onError: (error) =>
           reject(
-            new BatchError(getGraphQLErrorMessage(error, 'Failed to send invitations'), members),
+            new BatchError(
+              getGraphQLErrorMessage(error, intl.formatMessage(MESSAGES.sendInvitationsFailed)),
+              members,
+            ),
           ),
       })
     })
@@ -122,7 +132,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
     failed.forEach((error) => sendToast(error.message, { type: 'error' }))
 
     if (succeeded.length > 0) {
-      sendToast(succeeded.length === 1 ? 'Member added' : `${succeeded.length} members added`, {
+      sendToast(intl.formatMessage(MESSAGES.membersAdded, { count: succeeded.length }), {
         type: 'success',
       })
     }
@@ -141,20 +151,25 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
 
   return (
     <ConfirmDialog
-      title={COPY.title}
+      title={intl.formatMessage(MESSAGES.title)}
       open={open}
       onClose={handleClose}
-      cancelText={COPY.cancel}
+      cancelText={intl.formatMessage(MESSAGES.cancel)}
       customMaxWidth={400}
       content={
         <Box sx={{ display: 'grid', gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            {COPY.description}
+            {intl.formatMessage(MESSAGES.description)}
           </Typography>
           {open && (
             <Suspense
               fallback={
-                <TextField fullWidth size="small" disabled placeholder={COPY.searchPlaceholder} />
+                <TextField
+                  fullWidth
+                  size="small"
+                  disabled
+                  placeholder={intl.formatMessage(MESSAGES.searchPlaceholder)}
+                />
               }
             >
               <MemberSearch selected={selected} onAdd={handleAdd} onRemove={handleRemove} />
@@ -170,7 +185,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
           loading={isSubmitting}
           disabled={isSubmitting || selected.length === 0}
         >
-          {COPY.submit}
+          {intl.formatMessage(MESSAGES.submit)}
         </LoadingButton>
       }
     />

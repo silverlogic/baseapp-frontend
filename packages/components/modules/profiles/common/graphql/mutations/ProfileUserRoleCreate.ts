@@ -1,6 +1,7 @@
 import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { ProfileUserRoleCreateMutation } from '../../../../../__generated__/ProfileUserRoleCreateMutation.graphql'
@@ -31,6 +32,7 @@ export const useProfileUserRoleCreateMutation = (): [
   boolean,
 ] => {
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<ProfileUserRoleCreateMutation>(
     ProfileUserRoleCreateMutationQuery,
   )
@@ -45,7 +47,16 @@ export const useProfileUserRoleCreateMutation = (): [
           config.onError(error)
           return
         }
-        sendToast(getGraphQLErrorMessage(error, 'Failed to add members'), { type: 'error' })
+        sendToast(
+          getGraphQLErrorMessage(
+            error,
+            intl.formatMessage({
+              id: 'profiles.inviteMemberDialog.addMembersFailed',
+              defaultMessage: 'Failed to add members',
+            }),
+          ),
+          { type: 'error' },
+        )
       },
     })
 

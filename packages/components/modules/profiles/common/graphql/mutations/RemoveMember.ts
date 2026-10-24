@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { RemoveMemberMutation } from '../../../../../__generated__/RemoveMemberMutation.graphql'
@@ -17,6 +18,7 @@ export const useRemoveMemberMutation = (): [
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<RemoveMemberMutation>(
     ProfileRemoveMemberMutationQuery,
   )
@@ -27,7 +29,13 @@ export const useRemoveMemberMutation = (): [
       onCompleted: (response, errors) => {
         const errorMessage = sendMutationErrorToast(undefined, errors)
         if (!errorMessage) {
-          sendToast('Member removed successfully', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'profiles.members.removeMember.success',
+              defaultMessage: 'Member removed successfully',
+            }),
+            { type: 'success' },
+          )
         }
         config?.onCompleted?.(response, errors)
       },

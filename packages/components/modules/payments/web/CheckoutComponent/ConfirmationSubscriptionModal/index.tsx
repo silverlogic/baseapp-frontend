@@ -7,9 +7,11 @@ import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/di
 
 import { Box, Button, Typography } from '@mui/material'
 import Link from 'next/link'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { maskEmail } from '../utils'
 import { ConfirmationSubscriptionModalProps } from './types'
+import { renderEmphasis } from './utils'
 
 const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
   open,
@@ -17,6 +19,7 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
   orderNumber,
   planDetailsHref,
 }) => {
+  const intl = useIntl()
   const user = getUser()
   const maskedEmail = user?.email ? maskEmail(user.email) : ''
 
@@ -24,19 +27,26 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
     <ConfirmDialog
       hideCancelButton
       customMaxWidth={400}
-      title="Successfully Subscribed"
+      title={intl.formatMessage({
+        id: 'payments.confirmation.title',
+        defaultMessage: 'Successfully Subscribed',
+      })}
       content={
         <>
           <Box>
             <Typography variant="body2">
-              Thank you for your subscription! Access the plan details by clicking on the button
-              below
-              {user?.email && ` or in the email we just sent to.`}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="subtitle2" fontWeight={700} color="text.secondary">
-              {user?.email && maskedEmail}
+              {user?.email ? (
+                <FormattedMessage
+                  id="payments.confirmation.descriptionWithEmail"
+                  defaultMessage="Thank you for your subscription! Access the plan details by clicking on the button below or in the email we just sent to <b>{email}</b>."
+                  values={{ email: maskedEmail, b: renderEmphasis }}
+                />
+              ) : (
+                <FormattedMessage
+                  id="payments.confirmation.description"
+                  defaultMessage="Thank you for your subscription! Access the plan details by clicking on the button below"
+                />
+              )}
             </Typography>
           </Box>
           {orderNumber && (
@@ -48,7 +58,10 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
               alignItems="center"
             >
               <Typography variant="body2" fontWeight={700} color="text.secondary">
-                Order Number:
+                <FormattedMessage
+                  id="payments.confirmation.orderNumber"
+                  defaultMessage="Order Number:"
+                />
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {orderNumber}
@@ -72,7 +85,7 @@ const ConfirmationSubscriptionModal: FC<ConfirmationSubscriptionModalProps> = ({
             width: 'auto',
           }}
         >
-          Plan Details
+          <FormattedMessage id="payments.confirmation.planDetails" defaultMessage="Plan Details" />
         </Button>
       }
       onClose={onClose}

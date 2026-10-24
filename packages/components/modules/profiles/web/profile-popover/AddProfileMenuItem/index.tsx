@@ -5,6 +5,7 @@ import { FC, Suspense, useState } from 'react'
 import { AddIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { ButtonBase, MenuItem, Stack } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { AddProfilePopoverUserQuery as AddProfilePopoverUserQueryType } from '../../../../../__generated__/AddProfilePopoverUserQuery.graphql'
@@ -13,9 +14,10 @@ import DefaultCreateProfileModal from './CreateProfileModal'
 import { AddProfileMenuItemProps } from './types'
 
 const AddProfileMenuItem: FC<AddProfileMenuItemProps> = ({
-  addNewProfileLabel = 'New organization',
+  addNewProfileLabel,
   CreateProfileModal = DefaultCreateProfileModal,
 }) => {
+  const intl = useIntl()
   const [open, setOpen] = useState(false)
   const { me } = useLazyLoadQuery<AddProfilePopoverUserQueryType>(AddProfilePopoverUserQuery, {})
 
@@ -30,7 +32,11 @@ const AddProfileMenuItem: FC<AddProfileMenuItemProps> = ({
           sx={{ justifyContent: 'space-between' }}
           onClick={() => setOpen(true)}
         >
-          {addNewProfileLabel}
+          {addNewProfileLabel ??
+            intl.formatMessage({
+              id: 'profiles.createProfile.title',
+              defaultMessage: 'New organization',
+            })}
           <AddIcon color="action" />
         </MenuItem>
       </Stack>

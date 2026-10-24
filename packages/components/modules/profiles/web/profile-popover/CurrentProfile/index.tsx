@@ -4,11 +4,13 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { Container } from './styled'
 
 const CurrentProfile: FC = () => {
   const { currentProfile: profile } = useCurrentProfile()
+  const intl = useIntl()
 
   if (!profile) return null
 
@@ -18,7 +20,10 @@ const CurrentProfile: FC = () => {
         width={40}
         height={40}
         src={profile?.image ?? ''}
-        alt="Current profile avatar"
+        alt={intl.formatMessage({
+          id: 'profiles.currentProfile.avatarAlt',
+          defaultMessage: 'Current profile avatar',
+        })}
         color="secondary"
       />
       <Box display="flex" flexDirection="column" flexGrow={1} overflow="hidden">

@@ -1,6 +1,7 @@
 import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { SendInvitationMutation } from '../../../../../__generated__/SendInvitationMutation.graphql'
@@ -31,6 +32,7 @@ export const useSendInvitationMutation = (): [
   boolean,
 ] => {
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<SendInvitationMutation>(
     SendInvitationMutationQuery,
   )
@@ -45,7 +47,16 @@ export const useSendInvitationMutation = (): [
           config.onError(error)
           return
         }
-        sendToast(getGraphQLErrorMessage(error, 'Failed to send invitations'), { type: 'error' })
+        sendToast(
+          getGraphQLErrorMessage(
+            error,
+            intl.formatMessage({
+              id: 'profiles.inviteMemberDialog.sendInvitationsFailed',
+              defaultMessage: 'Failed to send invitations',
+            }),
+          ),
+          { type: 'error' },
+        )
       },
     })
 

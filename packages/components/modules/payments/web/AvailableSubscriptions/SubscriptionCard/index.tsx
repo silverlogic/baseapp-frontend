@@ -3,9 +3,13 @@ import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/ic
 import { Box, Button, CardContent, Chip, Typography } from '@mui/material'
 import Image from 'next/image'
 import Link from 'next/link'
+import { FormattedMessage, useIntl } from 'react-intl'
 
+import { PAYMENTS_MESSAGES } from '../../constants'
 import { SubscriptionCardWrapper } from '../styled'
 import { SubscriptionCardProps } from '../types'
+import { PRICE_SEGMENT_TYPOGRAPHY } from './constants'
+import { getPriceSegments } from './utils'
 
 const SubscriptionCard = ({
   sub,
@@ -15,8 +19,12 @@ const SubscriptionCard = ({
   manageHref,
   subscribeHref,
 }: SubscriptionCardProps) => {
-  const dolarPrice = Math.floor((sub.defaultPrice?.unitAmount ?? 0) / 100)
-  const centsPrice = ((sub.defaultPrice?.unitAmount ?? 0) % 100).toString().padStart(2, '0')
+  const intl = useIntl()
+  const priceParts = intl.formatNumberToParts((sub.defaultPrice?.unitAmount ?? 0) / 100, {
+    style: 'currency',
+    currency: 'USD',
+  })
+  const priceSegments = getPriceSegments(priceParts)
   const marketingFeatures = sub.marketingFeatures ?? []
 
   return (
@@ -27,26 +35,39 @@ const SubscriptionCard = ({
         )}
         <Box display="flex" gap={1} alignItems="flex-end">
           <Typography variant="h4">{sub.name}</Typography>
-          {isActive && <Chip label="Active" color="success" variant="soft" />}
+          {isActive && (
+            <Chip
+              label={intl.formatMessage(PAYMENTS_MESSAGES.active)}
+              color="success"
+              variant="soft"
+            />
+          )}
         </Box>
         <Box display="flex" gap={1} alignItems="flex-end">
-          <Typography variant="h4" color="text.secondary">
-            $
-          </Typography>
-          <Typography variant="h2">{dolarPrice}</Typography>
-          <Typography variant="body1">.{centsPrice}</Typography>
+          {priceSegments.map(({ style, value }) => (
+            <Typography key={style} {...PRICE_SEGMENT_TYPOGRAPHY[style]}>
+              {value}
+            </Typography>
+          ))}
           <Typography variant="body1" color="text.secondary">
-            USD/{selectedTerm}
+            {selectedTerm === 'yearly' ? (
+              <FormattedMessage id="payments.plans.perYear" defaultMessage="USD/yearly" />
+            ) : (
+              <FormattedMessage id="payments.plans.perMonth" defaultMessage="USD/monthly" />
+            )}
           </Typography>
         </Box>
         <Typography variant="body2">{sub.description}</Typography>
         {isActive ? (
           <Button variant="soft" color="inherit" component={Link} href={manageHref}>
-            Manage Subscription
+            <FormattedMessage
+              id="payments.plans.manageSubscription"
+              defaultMessage="Manage Subscription"
+            />
           </Button>
         ) : (
           <Button variant="contained" color="inherit" component={Link} href={subscribeHref}>
-            Subscribe
+            <FormattedMessage id="payments.plans.subscribe" defaultMessage="Subscribe" />
           </Button>
         )}
         <Box display="flex" flexDirection="column" gap={2}>

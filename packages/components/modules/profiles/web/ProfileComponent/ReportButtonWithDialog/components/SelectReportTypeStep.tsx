@@ -4,8 +4,9 @@ import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Divider, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
-import { STEPS } from '../constants'
+import { REPORT_MESSAGES, STEPS } from '../constants'
 import { TypeButton } from '../styled'
 import { ReportTypeNode, ReportTypeSubTypeNode, SelectReportTypeStepProps } from '../types'
 
@@ -54,13 +55,12 @@ const SelectReportTypeStep: FC<SelectReportTypeStepProps> = ({
         <>
           <Box>
             <Typography variant="h5" textAlign={smDown ? 'center' : 'left'}>
-              Why are you reporting this?
+              <FormattedMessage {...REPORT_MESSAGES.whyReporting} />
             </Typography>
           </Box>
           <Box>
             <Typography variant="body2" textAlign={smDown ? 'center' : 'left'}>
-              Your report is anonymous. If someone is in immediate danger, call the local emergency
-              services - don&apos;t wait.
+              <FormattedMessage {...REPORT_MESSAGES.anonymousNotice} />
             </Typography>
           </Box>
         </>

@@ -3,12 +3,13 @@ import { FC } from 'react'
 import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, ButtonBase, MenuItem, Stack } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
 import { SwitchProfileMenuProps } from './types'
 
 const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
   openProfilesList,
-  switchProfileLabel = 'Switch Profile',
+  switchProfileLabel,
 }) => (
   <Box sx={{ m: 1.5, mt: 0.5 }}>
     <Stack>
@@ -18,7 +19,9 @@ const SwitchProfileMenu: FC<SwitchProfileMenuProps> = ({
         sx={{ justifyContent: 'space-between' }}
         onClick={openProfilesList}
       >
-        {switchProfileLabel}
+        {switchProfileLabel ?? (
+          <FormattedMessage id="profiles.switchProfileMenu.label" defaultMessage="Switch Profile" />
+        )}
         <ChevronIcon position="right" color="action" />
       </MenuItem>
     </Stack>

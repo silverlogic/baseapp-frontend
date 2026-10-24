@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 
 import { Button } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
 import { useFollowToggle } from '../../../common'
 import { FollowToggleButtonProps } from './types'
@@ -21,7 +22,11 @@ const FollowToggleButton: FC<FollowToggleButtonProps> = ({ targetId, isFollowedB
       disabled={isMutationInFlight}
       size="medium"
     >
-      {isFollowedByMe ? 'Following' : 'Follow'}
+      {isFollowedByMe ? (
+        <FormattedMessage id="profiles.profile.following" defaultMessage="Following" />
+      ) : (
+        <FormattedMessage id="profiles.followToggle.follow" defaultMessage="Follow" />
+      )}
     </Button>
   )
 }
