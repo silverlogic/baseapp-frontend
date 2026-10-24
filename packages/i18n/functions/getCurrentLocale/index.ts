@@ -1,10 +1,10 @@
-import { getLanguage } from '../getLanguage'
 import { DEFAULT_LOCALE, Locale, SUPPORTED_LOCALES } from '../../types'
+import { getLanguage } from '../getLanguage'
 
 /**
- * Get the current locale from storage or default
+ * Get the current locale from storage, then the browser, then `fallback`
  */
-export const getCurrentLocale = async (): Promise<Locale> => {
+export const getCurrentLocale = async (fallback: Locale = DEFAULT_LOCALE): Promise<Locale> => {
   const storedLanguage = await getLanguage()
 
   if (storedLanguage && SUPPORTED_LOCALES.includes(storedLanguage as Locale)) {
@@ -19,5 +19,5 @@ export const getCurrentLocale = async (): Promise<Locale> => {
     }
   }
 
-  return DEFAULT_LOCALE
+  return fallback
 }
