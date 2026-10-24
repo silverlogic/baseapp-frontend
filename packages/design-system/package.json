@@ -15,6 +15,7 @@
   },
   "exports": {
     "./package.json": "./package.json",
+    "./locales": "./locales/index.ts",
     "./components/native/appbars": "./components/native/appbars/index.ts",
     "./components/native/avatars": "./components/native/avatars/index.ts",
     "./components/native/badges": "./components/native/badges/index.ts",
@@ -81,6 +82,7 @@
     "components",
     "hooks",
     "layouts",
+    "locales",
     "providers",
     "styles",
     "tests",
@@ -120,6 +122,7 @@
     "next": "catalog:",
     "react-dropzone": "catalog:design-system",
     "react-hook-form": "catalog:",
+    "react-intl": "catalog:",
     "react-markdown": "catalog:design-system",
     "rehype-raw": "catalog:design-system",
     "remark-gfm": "catalog:design-system",

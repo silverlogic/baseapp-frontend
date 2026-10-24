@@ -5,6 +5,7 @@ import { FC } from 'react'
 import { withController } from '@baseapp-frontend/utils'
 
 import { CircularProgress, InputAdornment } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import IconButton from '../../buttons/IconButton'
 import Iconify from '../../images/Iconify'
@@ -20,56 +21,63 @@ const Searchbar: FC<SearchbarProps> = ({
   InputProps,
   variant = 'filled',
   ...props
-}) => (
-  <PureTextField
-    variant={variant}
-    placeholder="Search"
-    onChange={onChange}
-    sx={{
-      '& .MuiFormControl-root': {
-        maxHeight: '45px',
-      },
-      ...sx,
-    }}
-    InputProps={{
-      startAdornment: (
-        <InputAdornment position="start">
-          {isPending ? (
-            <SpinnerContainer>
-              <CircularProgress size={16} />
-            </SpinnerContainer>
-          ) : (
-            <Iconify icon="eva:search-fill" />
-          )}
-        </InputAdornment>
-      ),
-      endAdornment: (
-        <InputAdornment position="end">
-          {onClear && props.value ? (
-            <IconButton onClick={onClear}>
-              <Iconify icon="mingcute:close-line" />
-            </IconButton>
-          ) : (
-            <div />
-          )}
-        </InputAdornment>
-      ),
-      sx: {
-        '& .MuiFilledInput-input': {
-          height: '17px',
-          paddingTop: '14px',
-          paddingBottom: '14px',
-          paddingRight: '14px',
-          maxHeight: '17px',
+}) => {
+  const intl = useIntl()
+
+  return (
+    <PureTextField
+      variant={variant}
+      placeholder={intl.formatMessage({
+        id: 'designSystem.searchbar.placeholder',
+        defaultMessage: 'Search',
+      })}
+      onChange={onChange}
+      sx={{
+        '& .MuiFormControl-root': {
+          maxHeight: '45px',
         },
-        '& .MuiInputAdornment-positionStart': {
-          marginTop: '0 !important',
+        ...sx,
+      }}
+      InputProps={{
+        startAdornment: (
+          <InputAdornment position="start">
+            {isPending ? (
+              <SpinnerContainer>
+                <CircularProgress size={16} />
+              </SpinnerContainer>
+            ) : (
+              <Iconify icon="eva:search-fill" />
+            )}
+          </InputAdornment>
+        ),
+        endAdornment: (
+          <InputAdornment position="end">
+            {onClear && props.value ? (
+              <IconButton onClick={onClear}>
+                <Iconify icon="mingcute:close-line" />
+              </IconButton>
+            ) : (
+              <div />
+            )}
+          </InputAdornment>
+        ),
+        sx: {
+          '& .MuiFilledInput-input': {
+            height: '17px',
+            paddingTop: '14px',
+            paddingBottom: '14px',
+            paddingRight: '14px',
+            maxHeight: '17px',
+          },
+          '& .MuiInputAdornment-positionStart': {
+            marginTop: '0 !important',
+          },
         },
-      },
-      ...InputProps,
-    }}
-    {...props}
-  />
-)
+        ...InputProps,
+      }}
+      {...props}
+    />
+  )
+}
 
 export default withController(Searchbar, { shouldDebounce: true })

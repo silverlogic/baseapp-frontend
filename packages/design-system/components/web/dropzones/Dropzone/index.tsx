@@ -10,6 +10,7 @@ import {
 } from '@mui/icons-material'
 import { Button, Card, Typography } from '@mui/material'
 import { useDropzone } from 'react-dropzone'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import DefaultDropzonePreview from './DropzonePreview'
 import {
@@ -20,10 +21,10 @@ import {
   ContentContainer,
   DropzoneContainer,
   DropzoneGrid,
-  DropzoneText,
   InputContainer,
 } from './styled'
 import { DropzoneProps } from './types'
+import { renderBrowseText } from './utils'
 
 const Dropzone: FC<DropzoneProps> = ({
   accept,
@@ -31,10 +32,10 @@ const Dropzone: FC<DropzoneProps> = ({
   onSelect,
   onRemove,
   includeActionButton = false,
-  actionText = 'Upload Image',
+  actionText,
   maxFileSize = 15,
   title,
-  subTitle = `Max. File Size: ${maxFileSize}MB`,
+  subTitle: subTitleProp,
   DropzoneOptions,
   InputProps,
   InputContainerStyle,
@@ -48,15 +49,34 @@ const Dropzone: FC<DropzoneProps> = ({
   DropZoneCancelIcon = CancelIcon,
   DropZoneCancelIconProps = {},
 }) => {
+  const intl = useIntl()
   const [files, setFiles] = useState<DropzoneProps['storedImg']>(storedImg)
   const { sendToast } = useNotification()
+  const subTitle =
+    subTitleProp ??
+    intl.formatMessage(
+      {
+        id: 'designSystem.dropzone.maxFileSize',
+        defaultMessage: 'Max. File Size: {maxFileSize}MB',
+      },
+      { maxFileSize },
+    )
 
   const { open, getRootProps, getInputProps, isFocused, isDragAccept, isDragReject } = useDropzone({
     accept,
     onDrop: async (acceptedFiles) => {
       if (acceptedFiles.length === 0 || !acceptedFiles[0]) return
       if ((acceptedFiles[0]?.size || 0) > maxFileSize * 1024 * 1024) {
-        sendToast(`This file is too large (max ${maxFileSize} MB).`, { type: 'error' })
+        sendToast(
+          intl.formatMessage(
+            {
+              id: 'designSystem.dropzone.fileTooLarge',
+              defaultMessage: 'This file is too large (max {maxFileSize} MB).',
+            },
+            { maxFileSize },
+          ),
+          { type: 'error' },
+        )
         return
       }
 
@@ -92,7 +112,10 @@ const Dropzone: FC<DropzoneProps> = ({
   const hasFiles = Boolean((!multiple && files) || (multiple && (files as [])?.length))
 
   const renderContent = () => {
-    const ariaLabel = 'Drag and drop files to upload'
+    const ariaLabel = intl.formatMessage({
+      id: 'designSystem.dropzone.inputAriaLabel',
+      defaultMessage: 'Drag and drop files to upload',
+    })
 
     return (
       <ContentContainer>
@@ -106,7 +129,10 @@ const Dropzone: FC<DropzoneProps> = ({
               <>
                 <DropZoneCancelIcon {...DropZoneCancelIconProps} />
                 <Typography variant="body2" color="error.main">
-                  File not accepted, please choose the correct type
+                  <FormattedMessage
+                    id="designSystem.dropzone.fileNotAccepted"
+                    defaultMessage="File not accepted, please choose the correct type"
+                  />
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
                   {subTitle}
@@ -125,9 +151,11 @@ const Dropzone: FC<DropzoneProps> = ({
                 />
                 <Typography textAlign="center" variant="body2" color="text.primary">
                   {title || (
-                    <>
-                      <DropzoneText>Click to browse</DropzoneText> or drag and drop.
-                    </>
+                    <FormattedMessage
+                      id="designSystem.dropzone.title"
+                      defaultMessage="<browse>Click to browse</browse> or drag and drop."
+                      values={{ browse: renderBrowseText }}
+                    />
                   )}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -183,11 +211,15 @@ const Dropzone: FC<DropzoneProps> = ({
       {includeActionButton && (
         <ButtonContainer>
           <Button variant="outlined" color="inherit" onClick={open} disableRipple type="button">
-            {actionText}
+            {actionText ??
+              intl.formatMessage({
+                id: 'designSystem.dropzone.actionText',
+                defaultMessage: 'Upload Image',
+              })}
           </Button>
           {files && (
             <Button variant="text" color="error" onClick={() => handleRemove()}>
-              Remove
+              <FormattedMessage id="designSystem.dropzone.remove" defaultMessage="Remove" />
             </Button>
           )}
         </ButtonContainer>

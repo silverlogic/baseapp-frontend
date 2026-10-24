@@ -8,6 +8,7 @@ import { Markdown } from '@baseapp-frontend/design-system/components/web/markdow
 import { Typography } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useIntl } from 'react-intl'
 
 import { ActionsOverlay, Timestamp as DefaultTimestamp } from '../../../__shared__/web'
 import { FileUploadList } from '../../../files/web'
@@ -66,6 +67,7 @@ const CommentItem: FC<CommentItemProps> = ({
     profileUrl,
   } = useCommentItem<HTMLDivElement>({ comment: commentRef, useProfileId, profilePath })
   const router = useRouter()
+  const intl = useIntl()
 
   const [isEditMode, setIsEditMode] = useState(false)
 
@@ -86,7 +88,12 @@ const CommentItem: FC<CommentItemProps> = ({
   }
 
   const renderProfileName = () => {
-    if (!hasUser) return <Typography variant="subtitle2">Deleted User</Typography>
+    if (!hasUser)
+      return (
+        <Typography variant="subtitle2">
+          {intl.formatMessage({ id: 'comments.item.deletedUser', defaultMessage: 'Deleted User' })}
+        </Typography>
+      )
 
     return (
       <Link href={profileUrl}>
@@ -121,7 +128,10 @@ const CommentItem: FC<CommentItemProps> = ({
           showDeleteButton={enableDelete && comment.canDelete}
           handleDeleteItem={deleteComment}
           isDeletingItem={isDeletingComment}
-          title="Comment"
+          title={intl.formatMessage({
+            id: 'comments.item.actionsOverlay.title',
+            defaultMessage: 'Comment',
+          })}
           {...restOfActionOverlayProps}
           ref={commentItemRef}
         >
@@ -130,7 +140,13 @@ const CommentItem: FC<CommentItemProps> = ({
               deletedUser={!hasUser}
               width={40}
               height={40}
-              alt={comment.profile?.name ?? `Comment's user avatar`}
+              alt={
+                comment.profile?.name ??
+                intl.formatMessage({
+                  id: 'comments.item.avatar.alt',
+                  defaultMessage: "Comment's user avatar",
+                })
+              }
               src={comment.profile?.image || ''}
               onClick={() => router.push(profileUrl)}
             />

@@ -182,7 +182,7 @@
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
     "@faker-js/faker": "catalog:test",
-    "@formatjs/cli": "^6.7.4",
+    "@formatjs/cli": "catalog:",
     "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",

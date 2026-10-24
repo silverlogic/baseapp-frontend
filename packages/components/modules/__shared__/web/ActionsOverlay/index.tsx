@@ -8,6 +8,7 @@ import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Divider, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
 import DefaultHoverOverlay from './DefaultHoverOverlay'
@@ -21,7 +22,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
     {
       actions = [],
       children,
-      title = 'Item',
+      title,
       showDeleteButton = false,
       isDeletingItem = false,
       disableDeleteButton = false,
@@ -36,6 +37,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
     },
     ref,
   ) => {
+    const intl = useIntl()
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const [isHoveringItem, setIsHoveringItem] = useState(false)
     const [longPressHandler, setLongPressHandler] = useState<LongPressHandler>({
@@ -109,8 +111,21 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
 
     const renderDeleteDialog = () => (
       <ConfirmDialog
-        title={`Delete ${title}?`}
-        content="Are you sure you want to delete? This action cannot be undone."
+        title={intl.formatMessage(
+          { id: 'shared.actionsOverlay.deleteDialog.title', defaultMessage: 'Delete {title}?' },
+          {
+            title:
+              title ??
+              intl.formatMessage({
+                id: 'shared.actionsOverlay.defaultTitle',
+                defaultMessage: 'Item',
+              }),
+          },
+        )}
+        content={intl.formatMessage({
+          id: 'shared.actionsOverlay.deleteDialog.content',
+          defaultMessage: 'Are you sure you want to delete? This action cannot be undone.',
+        })}
         action={
           <LoadingButton
             color="error"
@@ -118,7 +133,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
             disabled={isDeletingItem}
             loading={isDeletingItem}
           >
-            Delete
+            {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
           </LoadingButton>
         }
         onClose={handleDeleteDialogClose}
@@ -139,7 +154,10 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
           <SwipeableDrawer
             open={longPressHandler.shouldOpenItemOptions && longPressHandler.isLongPressingItem}
             onClose={handleDrawerClose}
-            aria-label="actions overlay"
+            aria-label={intl.formatMessage({
+              id: 'shared.actionsOverlay.ariaLabel',
+              defaultMessage: 'actions overlay',
+            })}
             {...SwipeableDrawerProps}
           >
             <Box display="grid" gridTemplateColumns="1fr" justifySelf="start" gap={1} width="100%">
@@ -179,7 +197,10 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
                     onClick={handleDeleteDialogOpen}
                     disabled={isDeletingItem || disableDeleteButton}
                     sx={{ width: 'fit-content' }}
-                    aria-label="delete item"
+                    aria-label={intl.formatMessage({
+                      id: 'shared.actionsOverlay.deleteItem.ariaLabel',
+                      defaultMessage: 'delete item',
+                    })}
                   >
                     <IconButtonContentContainer>
                       <Box display="grid" justifySelf="center" height="min-content">
@@ -191,7 +212,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
                         variant="body2"
                         color={disableDeleteButton ? 'text.disabled' : 'error.main'}
                       >
-                        Delete
+                        {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
                       </Typography>
                     </IconButtonContentContainer>
                   </IconButton>

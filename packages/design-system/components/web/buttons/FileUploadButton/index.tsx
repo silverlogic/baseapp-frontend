@@ -6,10 +6,12 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, Input } from '@mui/material'
 import { Controller } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { FileUploadButtonProps } from './types'
 
 const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
+  const intl = useIntl()
   const fileRef = useRef<HTMLInputElement | undefined>(undefined)
   const { sendToast } = useNotification()
   const { accept, maxSize, control, label, name, setFile, ...buttonProps } = props
@@ -23,7 +25,11 @@ const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
         disableRipple
         {...buttonProps}
       >
-        {label ?? 'Upload File'}
+        {label ??
+          intl.formatMessage({
+            id: 'designSystem.fileUploadButton.label',
+            defaultMessage: 'Upload File',
+          })}
       </Button>
       <Controller
         name={name}
@@ -34,9 +40,16 @@ const FileUploadButton: FC<FileUploadButtonProps> = (props) => {
           ) => {
             const { files } = event.target as HTMLInputElement
             if (files![0] && maxSize && files![0].size > maxSize) {
-              sendToast(`This file is too large (max ${maxSize / 1024 / 1024}MB).`, {
-                type: 'error',
-              })
+              sendToast(
+                intl.formatMessage(
+                  {
+                    id: 'designSystem.fileUploadButton.fileTooLarge',
+                    defaultMessage: 'This file is too large (max {maxSize}MB).',
+                  },
+                  { maxSize: maxSize / 1024 / 1024 },
+                ),
+                { type: 'error' },
+              )
             } else {
               field.onChange(files![0])
               setFile(name, files![0], {

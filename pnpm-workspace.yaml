@@ -23,6 +23,7 @@ settings:
   trustPolicy: no-downgrade
 
 catalog:
+  "@formatjs/cli": 6.16.33
   "@formatjs/intl": 2.10.10
   "@mdxeditor/editor": 3.54.0
   "@mdxeditor/gurx": 1.2.4

@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { Typography } from '@mui/material'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import IconButton from '../../buttons/IconButton'
 import CloseIcon from '../../icons/CloseIcon'
@@ -18,6 +18,7 @@ import {
   ReplyBar,
 } from './styled'
 import { SocialTextFieldProps } from './types'
+import { renderReplyingToLabel } from './utils'
 
 /**
  * This is a TextField component made for comments creation.
@@ -44,6 +45,8 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
   TextareaField = DefaultTextareaField,
   ...props
 }) => {
+  const intl = useIntl()
+
   const renderField = () => {
     if (mode === 'rich-text') {
       return (
@@ -65,14 +68,26 @@ const SocialTextField: FC<SocialTextFieldProps> = ({
           <ReplyBar>
             <ReplyContainer>
               <CommentReplyIcon />
-              <Typography variant="body2" color="text.secondary">
-                Replying to
-              </Typography>
-              <TypographyWithEllipsis maxWidth={170} variant="body2" color="primary.light">
-                {replyTargetName}
-              </TypographyWithEllipsis>
+              <FormattedMessage
+                id="designSystem.socialTextField.replyingTo"
+                defaultMessage="<label>Replying to</label> {name}"
+                values={{
+                  label: renderReplyingToLabel,
+                  name: (
+                    <TypographyWithEllipsis maxWidth={170} variant="body2" color="primary.light">
+                      {replyTargetName}
+                    </TypographyWithEllipsis>
+                  ),
+                }}
+              />
             </ReplyContainer>
-            <IconButton onClick={onCancelReply} aria-label="cancel reply">
+            <IconButton
+              onClick={onCancelReply}
+              aria-label={intl.formatMessage({
+                id: 'designSystem.socialTextField.cancelReply',
+                defaultMessage: 'cancel reply',
+              })}
+            >
               <CloseIcon />
             </IconButton>
           </ReplyBar>
