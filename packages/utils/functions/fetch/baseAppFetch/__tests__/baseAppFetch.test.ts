@@ -6,7 +6,6 @@ import { baseAppFetch } from '..'
 import { LOGOUT_EVENT } from '../../../../constants/events'
 import { broadcastEvent } from '../../../events'
 import { getExpoConstant } from '../../../expo'
-import * as getLanguageNS from '../../../language/getLanguage'
 import { getToken, isUserTokenValid, refreshAccessToken } from '../../../token'
 import * as decodeJWTNS from '../../../token/decodeJWT'
 import * as getTokenNS from '../../../token/getToken'
@@ -49,9 +48,6 @@ vi.mock('../../../token/decodeJWT', async () => ({
 vi.mock('../../../token/getToken', async () => ({
   getToken: vi.fn(),
 }))
-vi.mock('../../../language/getLanguage', async () => ({
-  getLanguage: vi.fn(),
-}))
 vi.mock('../../../token/getTokenSSR', async () => ({
   getTokenSSR: vi.fn(),
 }))
@@ -90,7 +86,6 @@ describe('baseAppFetch', () => {
     stringifySpy = vi.spyOn(JSON, 'stringify')
 
     const dynamicGetToken = getTokenNS.getToken as Mock
-    const dynamicGetLanguage = getLanguageNS.getLanguage as Mock
     const specificRefreshAccessToken = refreshAccessTokenNS.refreshAccessToken as Mock
     const specificIsUserTokenValid = isUserTokenValidNS.isUserTokenValid as Mock
     const specificDecodeJWT = decodeJWTNS.decodeJWT as Mock
@@ -107,7 +102,6 @@ describe('baseAppFetch', () => {
       staticIsUserTokenValidMock(...args),
     )
     specificDecodeJWT.mockReturnValue({ exp: Date.now() / 1000 + 5000 })
-    dynamicGetLanguage.mockReturnValue(undefined)
 
     mockFetch()
 

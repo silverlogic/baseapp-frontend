@@ -163,16 +163,8 @@ export const baseAppFetch: BaseAppFetch = async (
   }
 
   // set language header
-  // TODO: maybe find a better way to deal with RSC
-  let language
-  if (typeof window === typeof undefined) {
-    const { cookies } = await import('next/headers')
-    const cookieStore = await cookies()
-    language = cookieStore.get(languageCookieName)?.value
-  } else {
-    const { getLanguage } = await import('../../language/getLanguage')
-    language = getLanguage(languageCookieName)
-  }
+  const { getLanguage } = await import('../../language/getLanguage')
+  const language = await getLanguage(languageCookieName)
   if (language) {
     fetchOptions.headers!['Accept-Language'] = language
   }

@@ -1,7 +1,9 @@
 import { FC } from 'react'
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { IntlProvider } from 'react-intl'
 
+import enMessages from '../../../../../locales/en.json'
 import { WithComponentTestProvidersProps } from './types'
 
 const defaultQueryClient = new QueryClient({
@@ -18,9 +20,11 @@ const withComponentTestProviders =
     const { queryClient, ...restProps } = props
 
     return (
-      <QueryClientProvider client={queryClient ?? defaultQueryClient}>
-        <Component {...(restProps as Props)} />
-      </QueryClientProvider>
+      <IntlProvider locale="en" messages={enMessages}>
+        <QueryClientProvider client={queryClient ?? defaultQueryClient}>
+          <Component {...(restProps as Props)} />
+        </QueryClientProvider>
+      </IntlProvider>
     )
   }
 

@@ -1,0 +1,49 @@
+{
+  "name": "@baseapp-frontend/i18n",
+  "description": "Internationalization utilities, scripts, and documentation for BaseApp",
+  "version": "1.0.0",
+  "main": "./index.ts",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "scripts": {
+    "build": "rm -rf dist && tsc --build tsconfig.build.json",
+    "dev": "rm -rf dist && tsc --watch",
+    "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "check-translations": "node scripts/check-translations.js"
+  },
+  "dependencies": {
+    "@formatjs/intl": "catalog:",
+    "expo-secure-store": "catalog:react-native",
+    "js-cookie": "catalog:",
+    "luxon": "catalog:",
+    "next": "catalog:",
+    "react-intl": "catalog:"
+  },
+  "peerDependencies": {
+    "@baseapp-frontend/utils": "workspace:*",
+    "react": "catalog:react19"
+  },
+  "devDependencies": {
+    "@baseapp-frontend/config": "workspace:*",
+    "@baseapp-frontend/eslint-plugin": "workspace:*",
+    "@baseapp-frontend/tsconfig": "workspace:*",
+    "@formatjs/cli": "^6.7.4",
+    "@types/luxon": "catalog:",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:react19",
+    "typescript": "catalog:"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/silverlogic/baseapp-frontend.git",
+    "directory": "packages/i18n"
+  },
+  "bugs": {
+    "url": "https://github.com/silverlogic/baseapp-frontend/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
