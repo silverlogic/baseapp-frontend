@@ -1,7 +1,13 @@
 import { DateTime } from 'luxon'
 import { IntlShape } from 'react-intl'
 
-import { formatRelativeTimeWithIntl } from '../utilsMessages'
+import { DATE_MESSAGES, formatRelativeTimeWithIntl } from '../utilsMessages'
+
+const ABSOLUTE_DATE_FORMAT: Intl.DateTimeFormatOptions = {
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric',
+}
 
 /**
  * Format date using Intl.DateTimeFormat
@@ -46,6 +52,10 @@ export const formatRelativeTimeI18n = (
 
   const dateFromApi = DateTime.fromISO(date)
 
+  if (dateFromApi > reference) {
+    return intl.formatDate(dateFromApi.toJSDate(), ABSOLUTE_DATE_FORMAT)
+  }
+
   const diff = reference.diff(dateFromApi, ['months', 'weeks', 'days', 'hours', 'minutes'])
 
   const minutesDiff = Math.floor(diff.minutes)
@@ -67,30 +77,31 @@ export const formatDateWithDiffNowI18n = (intl: IntlShape, date?: string | null)
   const dateTime = DateTime.fromISO(date)
   const now = DateTime.now()
 
-  const daysDiff = Math.floor(now.diff(dateTime, 'days').days)
+  if (dateTime > now) {
+    return intl.formatDate(dateTime.toJSDate(), ABSOLUTE_DATE_FORMAT)
+  }
+
+  // calendar days, so 23:50 yesterday is "Yesterday" at 00:10 today
+  const daysDiff = Math.round(now.startOf('day').diff(dateTime.startOf('day'), 'days').days)
 
   if (daysDiff === 0) {
-    return intl.formatMessage({ id: 'date.today' })
+    return intl.formatMessage(DATE_MESSAGES.today)
   }
 
   if (daysDiff === 1) {
-    return intl.formatMessage({ id: 'date.yesterday' })
+    return intl.formatMessage(DATE_MESSAGES.yesterday)
   }
 
   const monthsDiff = Math.floor(now.diff(dateTime, 'months').months)
   const weeksDiff = Math.floor(now.diff(dateTime, 'weeks').weeks)
 
   if (monthsDiff > 0) {
-    return intl.formatMessage({ id: 'time.monthsAgo' }, { count: monthsDiff })
+    return intl.formatMessage(DATE_MESSAGES.monthsAgo, { count: monthsDiff })
   }
 
   if (weeksDiff > 0) {
-    return intl.formatMessage({ id: 'time.weeksAgo' }, { count: weeksDiff })
+    return intl.formatMessage(DATE_MESSAGES.weeksAgo, { count: weeksDiff })
   }
 
-  if (daysDiff > 0) {
-    return intl.formatMessage({ id: 'time.daysAgo' }, { count: daysDiff })
-  }
-
-  return intl.formatDate(dateTime.toJSDate(), { month: 'short', day: 'numeric', year: 'numeric' })
+  return intl.formatMessage(DATE_MESSAGES.daysAgo, { count: daysDiff })
 }

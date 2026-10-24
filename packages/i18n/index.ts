@@ -5,15 +5,6 @@ export * from './types'
 export * from './utils'
 export * from './utilsMessages'
 
-// Locale loading
-export {
-  loadLocales,
-  loadAllLocales,
-  loadDefaultLocales,
-  loadLocaleFromPackage,
-  DEFAULT_LOCALE_PACKAGES,
-} from './localeLoader'
-
 // Functions
 export { getCurrentLocale } from './functions/getCurrentLocale'
 export { getLanguage } from './functions/getLanguage'
