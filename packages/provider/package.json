@@ -15,8 +15,7 @@
   "dependencies": {
     "@baseapp-frontend/i18n": "workspace:*",
     "@tanstack/react-query": "catalog:",
-    "lodash": "catalog:",
-    "react-intl": "catalog:"
+    "lodash": "catalog:"
   },
   "peerDependencies": {
     "@baseapp-frontend/utils": "workspace:*",

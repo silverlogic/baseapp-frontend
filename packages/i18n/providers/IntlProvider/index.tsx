@@ -17,20 +17,12 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   additionalMessagesByLocale,
   initialCookies,
 }) => {
-  // Detect locale from cookies or use provided locale
-  const detectedLocale = useMemo(() => {
-    if (initialLocale) return initialLocale
+  const cookieLocale = useMemo(() => {
+    const value = initialCookies?.[LANGUAGE_COOKIE_NAME] as Locale | undefined
+    return value && SUPPORTED_LOCALES.includes(value) ? value : undefined
+  }, [initialCookies])
 
-    // Try to get from cookies (server-side)
-    if (initialCookies) {
-      const cookieLocale = initialCookies[LANGUAGE_COOKIE_NAME] as Locale | undefined
-      if (cookieLocale && SUPPORTED_LOCALES.includes(cookieLocale)) {
-        return cookieLocale
-      }
-    }
-
-    return defaultLocale
-  }, [initialLocale, initialCookies, defaultLocale])
+  const detectedLocale = initialLocale ?? cookieLocale ?? defaultLocale
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
@@ -43,14 +35,14 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   const messages = useMemo(() => getLocaleMessages(locale), [getLocaleMessages, locale])
 
   useEffect(() => {
-    // Load locale from storage if not provided via props or cookies
-    if (!initialLocale && !initialCookies) {
+    // Load locale from storage if not provided via props or a supported cookie
+    if (!initialLocale && !cookieLocale) {
       getCurrentLocale()
         .then(setLocale)
         // Keep the default locale if the stored language can't be read.
         .catch(() => undefined)
     }
-  }, [initialLocale, initialCookies])
+  }, [initialLocale, cookieLocale])
 
   useEffect(() => {
     if (initialLocale && initialLocale !== locale) {

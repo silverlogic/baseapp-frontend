@@ -11,6 +11,7 @@ export const setLanguage = async (language: string, languageKey = LANGUAGE_COOKI
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error('Failed to set language:', error)
+      throw error
     }
   } else {
     setCookie(languageKey, language, { path: '/' })
