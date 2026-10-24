@@ -25,26 +25,26 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
-  const [messages, setMessages] = useState<Record<string, string>>(
-    getMessages(locale, additionalMessages),
+  const messages = useMemo(
+    () => getMessages(locale, additionalMessages),
+    [locale, additionalMessages],
   )
 
   useEffect(() => {
     // Load locale from storage if not provided via props or a supported cookie
     if (!initialLocale && !cookieLocale) {
-      getCurrentLocale().then((currentLocale) => {
-        setLocale(currentLocale)
-        setMessages(getMessages(currentLocale, additionalMessages))
-      })
+      getCurrentLocale()
+        .then(setLocale)
+        // Keep the default locale if the stored language can't be read.
+        .catch(() => undefined)
     }
-  }, [initialLocale, cookieLocale, additionalMessages])
+  }, [initialLocale, cookieLocale])
 
   useEffect(() => {
     if (initialLocale && initialLocale !== locale) {
       setLocale(initialLocale)
-      setMessages(getMessages(initialLocale, additionalMessages))
     }
-  }, [initialLocale, locale, additionalMessages])
+  }, [initialLocale, locale])
 
   return (
     <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
