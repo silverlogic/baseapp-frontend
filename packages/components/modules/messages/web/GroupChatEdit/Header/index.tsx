@@ -11,6 +11,7 @@ import {
 import { Typography } from '@mui/material'
 import { useIntl } from 'react-intl'
 
+import { HEADER_MESSAGES } from './constants'
 import { Container } from './styled'
 import { HeaderProps } from './types'
 
@@ -30,25 +31,15 @@ const Header: FC<HeaderProps> = ({
     <Container>
       <IconButton
         onClick={onCancellation}
-        aria-label={intl.formatMessage({
-          id: 'messages.groupChatEdit.header.cancelAriaLabel',
-          defaultMessage: 'cancel editing group',
-        })}
+        aria-label={intl.formatMessage(HEADER_MESSAGES.cancelAriaLabel)}
       >
         <CloseIcon sx={{ fontSize: '24px' }} />
       </IconButton>
       <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
-        {title ??
-          intl.formatMessage({
-            id: 'messages.groupChatEdit.header.title',
-            defaultMessage: 'Edit Group',
-          })}
+        {title ?? intl.formatMessage(HEADER_MESSAGES.title)}
       </Typography>
       <IconButton
-        aria-label={intl.formatMessage({
-          id: 'messages.groupChatEdit.header.submitAriaLabel',
-          defaultMessage: 'Edit group',
-        })}
+        aria-label={intl.formatMessage(HEADER_MESSAGES.submitAriaLabel)}
         disabled={isEditButtonDisabled}
         isLoading={isMutationInFlight}
         onClick={() => {

@@ -11,6 +11,7 @@ import {
 import { Typography } from '@mui/material'
 import { useIntl } from 'react-intl'
 
+import { HEADER_MESSAGES } from './constants'
 import { HeaderContainer } from './styled'
 import { HeaderProps } from './types'
 
@@ -29,25 +30,15 @@ const Header: FC<HeaderProps> = ({
     <HeaderContainer>
       <IconButton
         onClick={onBackButtonClicked}
-        aria-label={intl.formatMessage({
-          id: 'messages.groupChatCreate.header.cancelAriaLabel',
-          defaultMessage: 'cancel group creation',
-        })}
+        aria-label={intl.formatMessage(HEADER_MESSAGES.cancelAriaLabel)}
       >
         <CloseIcon sx={{ fontSize: '24px' }} />
       </IconButton>
       <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
-        {title ??
-          intl.formatMessage({
-            id: 'messages.groupChatCreate.header.title',
-            defaultMessage: 'New Group',
-          })}
+        {title ?? intl.formatMessage(HEADER_MESSAGES.title)}
       </Typography>
       <IconButton
-        aria-label={intl.formatMessage({
-          id: 'messages.groupChatCreate.header.createAriaLabel',
-          defaultMessage: 'Create group',
-        })}
+        aria-label={intl.formatMessage(HEADER_MESSAGES.createAriaLabel)}
         disabled={isDisabled}
         onClick={onCreateButtonClicked}
       >
