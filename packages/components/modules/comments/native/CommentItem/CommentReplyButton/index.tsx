@@ -6,6 +6,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { useIntl } from 'react-intl'
 
 import { createStyles } from './styles'
 import { CommentReplyButtonProps } from './types'
@@ -15,6 +16,7 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
   commentId,
   shouldUseBottomSheetSafeComponents,
 }) => {
+  const intl = useIntl()
   const styles = createStyles()
 
   const replyButton = shouldUseBottomSheetSafeComponents ? (
@@ -30,8 +32,15 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
   return (
     <View style={styles.replyContainer}>
       {replyButton}
-      <Text variant="caption" color="low" aria-label={`replies count ${commentId}`}>
-        Reply
+      <Text
+        variant="caption"
+        color="low"
+        aria-label={intl.formatMessage(
+          { id: 'comments.reply.count.ariaLabel', defaultMessage: 'replies count {commentId}' },
+          { commentId },
+        )}
+      >
+        {intl.formatMessage({ id: 'comments.reply.label', defaultMessage: 'Reply' })}
       </Text>
     </View>
   )

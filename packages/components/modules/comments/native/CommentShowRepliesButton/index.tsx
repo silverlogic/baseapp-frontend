@@ -4,6 +4,7 @@ import { Button } from '@baseapp-frontend/design-system/components/native/button
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useIntl } from 'react-intl'
 import { ActivityIndicator } from 'react-native'
 
 import { styles } from './styles'
@@ -12,11 +13,27 @@ import { CommentShowRepliesButtonProps } from './types'
 const CommentShowRepliesButton: FC<CommentShowRepliesButtonProps> = ({
   onShowReplies,
   totalRepliesCount,
-  body = 'Show replies',
+  body,
   showTotalRepliesCount = true,
   isLoading = false,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
+
+  const getLabel = () => {
+    if (body !== undefined) {
+      return showTotalRepliesCount ? `${body} (${totalRepliesCount})` : body
+    }
+    return showTotalRepliesCount
+      ? intl.formatMessage(
+          { id: 'comments.replies.show', defaultMessage: 'Show replies ({count})' },
+          { count: totalRepliesCount },
+        )
+      : intl.formatMessage({
+          id: 'comments.replies.showWithoutCount',
+          defaultMessage: 'Show replies',
+        })
+  }
 
   return (
     <View style={styles.showRepliesButtonContainer}>
@@ -28,7 +45,7 @@ const CommentShowRepliesButton: FC<CommentShowRepliesButtonProps> = ({
         disabled={isLoading}
         onPress={onShowReplies}
       >
-        {body} {showTotalRepliesCount && `(${totalRepliesCount})`}
+        {getLabel()}
       </Button>
       {/* Always-mounted fixed-size slot so the row width doesn't change when the spinner toggles. */}
       <View style={styles.spinnerSlot}>

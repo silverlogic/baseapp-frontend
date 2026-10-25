@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { type Href, useRouter } from 'expo-router'
+import { useIntl } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
@@ -43,6 +44,7 @@ const CommentItem: FC<CommentItemProps> = ({
     canReply,
   } = useCommentItem({ comment: commentRef, threadDepth, maxThreadDepth })
   const { openCommentActions } = useCommentActionsContext()
+  const intl = useIntl()
   const router = useRouter()
 
   const styles = createStyles()
@@ -110,7 +112,7 @@ const CommentItem: FC<CommentItemProps> = ({
               {comment.isEdited ? (
                 <Text variant="body2" color="disabled" style={{ fontSize: 12 }}>
                   {' '}
-                  (edited)
+                  {intl.formatMessage({ id: 'comments.item.edited', defaultMessage: '(edited)' })}
                 </Text>
               ) : (
                 ''

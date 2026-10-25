@@ -3,10 +3,20 @@
   "comments.actions.pin": "Pin Comment",
   "comments.actions.share": "Share Comment",
   "comments.actions.unpin": "Unpin Comment",
+  "comments.composer.editing": "Editing your comment",
+  "comments.composer.replyingTo": "Replying to",
   "comments.create.placeholder": "Comment...",
+  "comments.deleteDialog.confirm": "Delete",
+  "comments.deleteDialog.content": "Are you sure you want to delete this comment? This action cannot be undone.",
+  "comments.deleteDialog.title": "Delete Comment?",
+  "comments.item.edited": "(edited)",
   "comments.loading.more": "loading more comments",
   "comments.pinned.badge": "Pinned",
+  "comments.replies.hide": "Hide replies",
+  "comments.replies.show": "Show replies ({count})",
   "comments.replies.showMore": "Show more replies ({count})",
+  "comments.replies.showWithoutCount": "Show replies",
   "comments.reply.ariaLabel": "reply to comment {commentId}",
-  "comments.reply.count.ariaLabel": "replies count {commentId}"
+  "comments.reply.count.ariaLabel": "replies count {commentId}",
+  "comments.reply.label": "Reply"
 }
