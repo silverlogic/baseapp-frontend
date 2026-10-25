@@ -1,12 +1,13 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import { getCurrentLocale } from '../../functions/getCurrentLocale'
 import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, SUPPORTED_LOCALES } from '../../types'
 import { getMessages } from '../../utils'
+import { LocaleUpdateContext } from './context'
 import { IntlProviderWrapperProps } from './types'
 
 const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
@@ -14,6 +15,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   locale: initialLocale,
   defaultLocale = DEFAULT_LOCALE,
   additionalMessages,
+  additionalMessagesByLocale,
   initialCookies,
 }) => {
   const cookieLocale = useMemo(() => {
@@ -25,10 +27,13 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
-  const messages = useMemo(
-    () => getMessages(locale, additionalMessages),
-    [locale, additionalMessages],
+  const getLocaleMessages = useCallback(
+    (target: Locale) =>
+      getMessages(target, { ...additionalMessages, ...additionalMessagesByLocale?.[target] }),
+    [additionalMessages, additionalMessagesByLocale],
   )
+
+  const messages = useMemo(() => getLocaleMessages(locale), [getLocaleMessages, locale])
 
   useEffect(() => {
     // Load locale from storage if not provided via props or a supported cookie
@@ -47,9 +52,11 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   }, [initialLocale, locale])
 
   return (
-    <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
-      {children}
-    </ReactIntlProvider>
+    <LocaleUpdateContext.Provider value={setLocale}>
+      <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
+        {children}
+      </ReactIntlProvider>
+    </LocaleUpdateContext.Provider>
   )
 }
 

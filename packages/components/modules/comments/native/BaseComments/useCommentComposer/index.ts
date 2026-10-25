@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import {
   DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -23,6 +24,7 @@ const useCommentComposer = ({
   targetObjectId,
   onSubmitSuccess,
 }: UseCommentComposerOptions): UseCommentComposerReturn => {
+  const intl = useIntl()
   const { editingComment, resetCommentEdit } = useCommentReply()
 
   // The single form behind the drawer, shared by both modes.
@@ -77,12 +79,16 @@ const useCommentComposer = ({
     isLoading: isCreating || isUpdating,
     editVariables: {
       isEditMode,
-      label: 'Editing your comment',
+      label: intl.formatMessage({
+        id: 'comments.composer.editing',
+        defaultMessage: 'Editing your comment',
+      }),
       onEditCancel: cancelEdit,
     },
     replyVariables: {
       isReplyMode: isReply,
-      label: 'Replying to ',
+      // SocialTextInput renders the target name right after this label.
+      label: `${intl.formatMessage({ id: 'comments.composer.replyingTo', defaultMessage: 'Replying to' })} `,
       onReplyCancel: cancelReply,
       targetName: replyTargetName ?? '',
     },

@@ -3,6 +3,8 @@ import { FC, useCallback, useEffect, useRef } from 'react'
 import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useIntl } from 'react-intl'
+
 import {
   CommentsSubscription,
   DEFAULT_MAX_THREAD_DEPTH,
@@ -31,6 +33,7 @@ const CommentsList: FC<CommentsListProps> = ({
   onRefetchReady,
 }) => {
   const CommentItemComponent = CommentItem ?? getDefaultCommentItem()
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
   const {
@@ -112,7 +115,11 @@ const CommentsList: FC<CommentsListProps> = ({
           <CommentShowRepliesButton
             onShowReplies={showMoreReplies}
             totalRepliesCount={remainingRepliesCount}
-            body="Show more replies"
+            body={intl.formatMessage(
+              { id: 'comments.replies.showMore', defaultMessage: 'Show more replies ({count})' },
+              { count: remainingRepliesCount },
+            )}
+            showTotalRepliesCount={false}
             isLoading={isLoadingNext}
           />
         )}
