@@ -1,8 +1,8 @@
-import type { FileUploadProgress } from '../../types'
+import type { FileUploadProgress, UploadInput } from '../../types'
 
 export interface FileUploadState {
   files: Map<string, FileUploadProgress>
-  addFile: (file: File, scope?: string) => string
+  addFile: (input: UploadInput, scope?: string) => string
   updateFileProgress: (id: string, progress: Partial<FileUploadProgress>) => void
   updateChunkProgress: (fileId: string, chunkIndex: number, loaded: number, total: number) => void
   recordChunkEtag: (fileId: string, chunkIndex: number, etag: string) => void
