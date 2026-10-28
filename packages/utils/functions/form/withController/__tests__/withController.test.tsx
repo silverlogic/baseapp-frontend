@@ -21,6 +21,19 @@ describe('withController', () => {
   const TestComponent = (props: any) => <input data-testid="test-input" {...props} />
   const WrappedComponent = withController(TestComponent)
 
+  // First in the file: React warns about an unknown event handler once per process.
+  it('should not pass onInputChange to a component that was not given one', () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {})
+    const { queryByTestId } = render(<WrappedComponent name="test" control={{}} />)
+
+    expect(queryByTestId('test-input')).toBeInTheDocument()
+    expect(consoleError).not.toHaveBeenCalledWith(
+      expect.stringContaining('Unknown event handler property'),
+      'onInputChange',
+    )
+    consoleError.mockRestore()
+  })
+
   it('should render the Controller component if control prop is provided', () => {
     const { queryByTestId } = render(<WrappedComponent name="test" control={{}} />)
     expect(queryByTestId('test-input')).toBeInTheDocument()

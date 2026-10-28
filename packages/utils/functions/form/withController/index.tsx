@@ -85,7 +85,9 @@ function withController<T>(
                 error={!!fieldState.error}
                 name={name}
                 onChange={handleOnChange}
-                onInputChange={onInputChange ? handleOnInputChange : undefined}
+                // Only Autocomplete-style fields take onInputChange; a plain input would
+                // hand an unknown event handler to the DOM, which React warns about.
+                {...(onInputChange && { onInputChange: handleOnInputChange })}
                 onBlur={handleOnBlur}
                 helperText={helperText || (!!fieldState.error && fieldState.error?.message)}
                 {...(restOfTheProps as any)}

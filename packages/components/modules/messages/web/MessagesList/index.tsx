@@ -17,6 +17,8 @@ import {
   useReadMessageMutation,
 } from '../../common'
 import DefaultMessagesGroup from './MessagesGroup'
+import MessagesListRow from './MessagesListRow'
+import { MessagesListRowContext } from './MessagesListRow/context'
 import { MESSAGES_TO_LOAD_NEXT } from './constants'
 import { HeaderSpacer } from './styled'
 import { MessagesListProps } from './types'
@@ -131,29 +133,34 @@ const MessagesList: FC<MessagesListProps> = ({
     ],
   )
 
+  const rowContext = useMemo(() => ({ renderMessagesGroup }), [renderMessagesGroup])
+  const renderRow = useCallback((index: number) => <MessagesListRow index={index} />, [])
+
   return (
-    <Virtuoso
-      ref={virtuosoRef}
-      firstItemIndex={firstItemIndex}
-      style={{ overflowX: 'hidden' }}
-      initialTopMostItemIndex={allMessagesLastIndex}
-      data={allMessages}
-      itemContent={renderMessagesGroup}
-      startReached={() => {
-        if (hasNext) {
-          loadNext(MESSAGES_TO_LOAD_NEXT)
-        }
-      }}
-      components={{
-        Header: renderLoadingState,
-        Footer: renderHeader,
-      }}
-      // TODO: using overscan can cause Maximum call stack size exceeded error
-      // overscan={MESSAGES_TO_LOAD_NEXT}
-      increaseViewportBy={{ top: 100, bottom: 0 }}
-      followOutput="smooth"
-      {...VirtuosoProps}
-    />
+    <MessagesListRowContext.Provider value={rowContext}>
+      <Virtuoso
+        ref={virtuosoRef}
+        firstItemIndex={firstItemIndex}
+        style={{ overflowX: 'hidden' }}
+        initialTopMostItemIndex={allMessagesLastIndex}
+        data={allMessages}
+        itemContent={renderRow}
+        startReached={() => {
+          if (hasNext) {
+            loadNext(MESSAGES_TO_LOAD_NEXT)
+          }
+        }}
+        components={{
+          Header: renderLoadingState,
+          Footer: renderHeader,
+        }}
+        // TODO: using overscan can cause Maximum call stack size exceeded error
+        // overscan={MESSAGES_TO_LOAD_NEXT}
+        increaseViewportBy={{ top: 100, bottom: 0 }}
+        followOutput="smooth"
+        {...VirtuosoProps}
+      />
+    </MessagesListRowContext.Provider>
   )
 }
 
