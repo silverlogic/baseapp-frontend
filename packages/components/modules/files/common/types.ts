@@ -10,9 +10,33 @@ export interface PresignedUrl {
   url: string
 }
 
+/** A chunk body XHR can send on both platforms (RN base64-bridges typed arrays). */
+export type UploadChunkBody = Blob | Uint8Array
+
+/**
+ * What the uploader needs from a file, independent of platform. A web `File` is
+ * wrapped automatically; a native leg builds one over its own file API. `readChunk`
+ * is called lazily, one chunk at a time, so a large file is never held in memory.
+ */
+export interface UploadSource {
+  name: string
+  size: number
+  type: string
+  /** Read bytes `[start, end)`. */
+  readChunk: (start: number, end: number) => Promise<UploadChunkBody>
+  /** Frees anything the source created (e.g. a temp copy); called when the upload leaves the store. */
+  dispose?: () => void
+}
+
+/** Anything the uploader accepts: a web `File`, or a platform-built source. */
+export type UploadInput = File | UploadSource
+
+/** Accepted types, keyed by MIME pattern (`image/*`) with extensions (`.png`) as values. */
+export type Accept = Record<string, string[]>
+
 export interface FileUploadProgress {
   id: string // Local ID for tracking
-  file: File // Original File object
+  file: UploadSource
   fileName: string
   fileSize: number
   /** Owner of this upload (e.g. a target id, or a composer instance) — lets each list show only its own uploads. */
