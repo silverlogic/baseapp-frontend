@@ -19,7 +19,7 @@ export type RequestEmailChangeRequest = {
 }
 
 export interface UseRequestEmailChange {
-  validationSchema?: z.ZodType<RequestEmailChangeRequest>
+  validationSchema?: z.ZodType<RequestEmailChangeRequest, RequestEmailChangeRequest>
   defaultValues?: RequestEmailChangeRequest
   requestEmailChangeOptions?: UseMutationOptions<void, unknown, RequestEmailChangeRequest, unknown>
   resendRequestEmailChangeOptions?: UseMutationOptions<void, unknown, void, unknown>
