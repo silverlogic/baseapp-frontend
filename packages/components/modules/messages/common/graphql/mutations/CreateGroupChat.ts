@@ -32,8 +32,16 @@ export const CreateGroupChatMutationQuery = graphql`
   }
 `
 
+// the hook builds the variables from GroupChatProvider and the current profile, so callers pass
+// only callbacks; `variables` stays accepted for existing callers and is ignored
+export type CreateGroupChatCommitConfig = Omit<
+  UseMutationConfig<CreateGroupChatMutation>,
+  'variables'
+> &
+  Partial<Pick<UseMutationConfig<CreateGroupChatMutation>, 'variables'>>
+
 export const useCreateGroupChatMutation = (): [
-  (config: UseMutationConfig<CreateGroupChatMutation>) => void,
+  (config?: CreateGroupChatCommitConfig) => void,
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
@@ -100,7 +108,7 @@ export const useCreateGroupChatMutation = (): [
     }
   }
 
-  const commit = (config: UseMutationConfig<CreateGroupChatMutation>) => {
+  const commit = (config?: CreateGroupChatCommitConfig) => {
     if (currentProfile?.id && (participants ?? []).length > 0) {
       const onCompleted: (
         response: CreateGroupChatMutation$data,
