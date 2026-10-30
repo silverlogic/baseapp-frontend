@@ -31,7 +31,14 @@ const mockUploadChunks = uploadChunks as MockedFunction<typeof uploadChunks>
 
 const CHUNK_SIZE = 5 * 1024 * 1024
 const makeFile = (chunks: number) =>
-  new File([new Uint8Array(chunks * CHUNK_SIZE)], 'video.mp4', { type: 'video/mp4' })
+  new File(
+    Array.from({ length: chunks }, (_, index) => new Uint8Array(CHUNK_SIZE).fill(index)),
+    'video.mp4',
+    { type: 'video/mp4' },
+  )
+
+const readByteAt = async (blob: Blob, offset: number) =>
+  new Uint8Array(await blob.slice(offset, offset + 1).arrayBuffer())[0]
 
 const initiateResponse = (numParts: number, expiresIn = 3600) => ({
   id: 'file-public-id',
@@ -187,10 +194,13 @@ describe('useChunkedUpload', () => {
     const { result } = renderHook(() => useChunkedUpload())
     await result.current.resumeUpload(fileId)
 
-    // Only the missing chunk was uploaded, against its original URL.
+    // Only the missing chunk was uploaded, against its original URL — and the lazy
+    // reader for that single slot reads original chunk 1's byte range, not chunk 0's.
     const call = mockUploadChunks.mock.calls[0]![0]
-    expect(call.chunks).toHaveLength(1)
     expect(call.presignedUrls).toEqual(['https://s3/part-1'])
+    const chunk = (await call.readChunk!(0)) as Blob
+    expect(chunk.size).toBe(CHUNK_SIZE)
+    expect(await readByteAt(chunk, 0)).toBe(1)
 
     expect(mockAxiosPost).toHaveBeenCalledWith(
       'files/uploads/file-public-id/complete',
@@ -234,7 +244,7 @@ describe('useChunkedUpload', () => {
     // Stale upload aborted server-side, then a fresh initiate + full upload.
     expect(mockAxiosDelete).toHaveBeenCalledWith('files/uploads/stale-id', undefined)
     expect(mockAxiosPost).toHaveBeenNthCalledWith(1, 'files/uploads', expect.any(Object))
-    expect(mockUploadChunks.mock.calls[0]![0].chunks).toHaveLength(2)
+    expect(mockUploadChunks.mock.calls[0]![0].presignedUrls).toHaveLength(2)
     expect(mockAxiosPost).toHaveBeenNthCalledWith(
       2,
       'files/uploads/file-public-id/complete',
@@ -275,6 +285,23 @@ describe('useChunkedUpload', () => {
 
     const progress = Array.from(useFileUploadStore.getState().files.values())[0]!
     expect(progress.status).toBe(FileUploadStatus.PAUSED)
+    expect(onUploadError).not.toHaveBeenCalled()
+  })
+
+  it('does not report an upload that was removed mid-flight', async () => {
+    mockAxiosPost.mockResolvedValueOnce(initiateResponse(2) as never)
+    mockUploadChunks.mockImplementation(async () => {
+      const [id] = Array.from(useFileUploadStore.getState().files.keys())
+      useFileUploadStore.getState().removeFile(id!)
+      throw new Error('Chunk upload aborted')
+    })
+    const onUploadError = vi.fn()
+
+    const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
+    await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')
+
+    expect(useFileUploadStore.getState().files.size).toBe(0)
+    expect(sendToast).not.toHaveBeenCalled()
     expect(onUploadError).not.toHaveBeenCalled()
   })
 
