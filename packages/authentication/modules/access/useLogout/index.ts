@@ -1,5 +1,7 @@
 import {
   ACCESS_KEY_NAME,
+  IMPERSONATOR_ACCESS_KEY_NAME,
+  IMPERSONATOR_REFRESH_KEY_NAME,
   LOGOUT_EVENT,
   REFRESH_KEY_NAME,
   broadcastEvent,
@@ -25,6 +27,9 @@ const useLogout = ({
     await removeTokenAsync(accessKeyName)
     await removeTokenAsync(refreshKeyName)
     await removeTokenAsync(CURRENT_PROFILE_KEY_NAME)
+    // an impersonator's own tokens, kept aside during an impersonation session
+    await removeTokenAsync(IMPERSONATOR_ACCESS_KEY_NAME)
+    await removeTokenAsync(IMPERSONATOR_REFRESH_KEY_NAME)
     queryClient.resetQueries({ queryKey: USER_API_KEY.getUser() })
     queryClient.resetQueries({ queryKey: MFA_API_KEY.default })
     onLogout?.()
