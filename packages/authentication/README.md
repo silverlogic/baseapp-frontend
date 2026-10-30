@@ -315,6 +315,8 @@ Handles MFA activation confirmation by validating and submitting the form. It ex
 - `mutation` ([react-query's mutation instance](https://react-query.tanstack.com/reference/useMutation))
   - This instance can be used to execute the MFA activation confirmation at any time.
 
+On success it invalidates the active methods query. The mutation's `data` is `{ backupCodes }`. `MfaConfirmationResponse` also types optional `access` and `refresh` tokens for backends that issue new JWTs once a method is activated, but the hook does not store them (`baseapp_auth` does not send them); read them in `options.onSuccess` if your backend does.
+
 #### **Usage**
 
 - `useMfaActivateConfirm` usage example:
@@ -376,6 +378,34 @@ return (
     ))}
   </div>
 )
+```
+
+### **useMfaChangePrimaryMethod**
+
+Makes another of the user's active MFA methods the primary one (the method used at login). The backend checks `code` against the method that becomes primary, so request a code for it first (see `useMfaRequestCode`). On success it invalidates the active methods query, so `useMfaActiveMethods` refetches the new `isPrimary` flags.
+
+#### **Parameters**
+
+- `options` (optional)
+  - This object is used to provide additional configuration to the useMutation hook from react-query that changes the primary method. By default, it's an empty object {}.
+- `ApiClass` (optional)
+  - An object with a `changePrimaryMethod({ method, code })` function, to call a different endpoint. Defaults to `MfaApi`.
+
+#### **Returns**
+
+- `mutation`
+  - This object contains methods and data related to the mutation. Check [React Query's useMutation documentation](https://react-query.tanstack.com/reference/useMutation) for all available properties.
+
+#### **Usage**
+
+- `useMfaChangePrimaryMethod` usage example:
+
+```jsx
+const { mutate: changePrimaryMethod } = useMfaChangePrimaryMethod({
+  options: { onSuccess: () => sendToast('Primary method updated') },
+})
+
+changePrimaryMethod({ method: 'app', code: 'code-from-the-app' })
 ```
 
 ### **useMfaConfiguration**
@@ -445,3 +475,79 @@ const { mutate: deactivateMfa } = useMfaDeactivate()
 // to deactivate a method
 deactivateMfa.mutate({ method: 'your-method', code: 'your-code' })
 ```
+
+### **useMfaRegenerateBackupCodes**
+
+Replaces the backup codes of an active MFA method and returns the new ones. The old codes stop working, so show the new codes to the user right away. Backup codes are not part of the active methods query, so it does not invalidate it.
+
+#### **Parameters**
+
+- `options` (optional)
+  - This object is used to provide additional configuration to the useMutation hook from react-query that regenerates the backup codes. By default, it's an empty object {}.
+- `ApiClass` (optional)
+  - An object with a `regenerateBackupCodes({ method, code })` function, to call a different endpoint. Defaults to `MfaApi`.
+
+#### **Returns**
+
+- `mutation`
+  - This object contains methods and data related to the mutation; `data` is `{ backupCodes: string[] }` once it succeeds. Check [React Query's useMutation documentation](https://react-query.tanstack.com/reference/useMutation) for all available properties.
+
+#### **Usage**
+
+- `useMfaRegenerateBackupCodes` usage example:
+
+```jsx
+const { mutate: regenerateBackupCodes, data } = useMfaRegenerateBackupCodes()
+
+// `code` can be left out when the backend's `configuration.confirmRegenerationWithCode` is false
+regenerateBackupCodes({ method: 'email', code: 'your-code' })
+
+return data?.backupCodes.map((backupCode) => <p key={backupCode}>{backupCode}</p>)
+```
+
+### **useMfaRequestCode**
+
+Asks the backend to send a new code for an active MFA method, for example before confirming a protected action (deactivating a method, regenerating backup codes or changing the primary method) with an email or SMS method. Without a `method` the code goes to the user's primary method. Sending a code does not change the active methods, so it does not invalidate any query.
+
+> **Do not call it for an authenticator app (`app`).** There is nothing to send, because the code comes from the app, and the backend answers with the method's provisioning URI (`otpauth://...?secret=...`) in `details`. That URI holds the shared TOTP secret, so it must never be shown (for example in a toast built from `data.details`) or logged. Pass an explicit `email` or `sms_twilio` method, and skip the call when the method, or the primary method when you pass none, is `app`.
+
+#### **Parameters**
+
+- `options` (optional)
+  - This object is used to provide additional configuration to the useMutation hook from react-query that requests the code. By default, it's an empty object {}.
+- `ApiClass` (optional)
+  - An object with a `sendCode({ method })` function, to call a different endpoint. Defaults to `MfaApi`.
+
+#### **Returns**
+
+- `mutation`
+  - This object contains methods and data related to the mutation; `data` is the backend's `{ details }` message. Check [React Query's useMutation documentation](https://react-query.tanstack.com/reference/useMutation) for all available properties.
+
+#### **Usage**
+
+- `useMfaRequestCode` usage example:
+
+```jsx
+const { mutate: requestCode, isPending } = useMfaRequestCode()
+
+// send a code to the email method
+requestCode({ method: 'email' })
+
+// or to the primary method, when it is not `app`
+requestCode()
+```
+
+### **MfaApi**
+
+The MFA hooks call `MfaApi` by default. Its endpoints are the ones `baseapp_auth` mounts under `/auth/mfa/` (django-trench); pass your own `ApiClass` to a hook when your backend serves them elsewhere.
+
+| Method | Request |
+| --- | --- |
+| `activate({ method })` | `POST /auth/mfa/<method>/activate/` |
+| `confirmActivation({ method, code })` | `POST /auth/mfa/<method>/activate/confirm/` |
+| `deactivate({ method, code? })` | `POST /auth/mfa/<method>/deactivate/` |
+| `regenerateBackupCodes({ method, code? })` | `POST /auth/mfa/<method>/codes/regenerate/` |
+| `changePrimaryMethod({ method, code })` | `POST /auth/mfa/change-primary-method/` |
+| `sendCode({ method? })` | `POST /auth/mfa/code/request/` |
+| `getActiveMethods()` | `GET /auth/mfa/user-active-methods/` |
+| `getConfiguration()` | `GET /auth/mfa/config/` |
