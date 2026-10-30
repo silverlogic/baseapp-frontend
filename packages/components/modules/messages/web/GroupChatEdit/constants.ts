@@ -18,5 +18,5 @@ export const getDefaultFormValues = (
 
 export const DEFAULT_FORM_VALIDATION = z.object({
   ...DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION.shape,
-  [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any(),
+  [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any().optional(),
 }) as any // TODO: fix typing issue with zodResolver
