@@ -1,12 +1,27 @@
 import type { AvatarProps, BoxProps } from '@mui/material'
 
-import type { MemberItemFragment$data } from '../../../../../__generated__/MemberItemFragment.graphql'
+import type {
+  MemberItemFragment$data,
+  MemberItemFragment$key,
+} from '../../../../../__generated__/MemberItemFragment.graphql'
 import type { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
 import { MEMBER_ROLES } from '../constants'
 
 export interface MemberPersonalInformationProps extends BoxProps {
   isActive: boolean
 }
+
+/**
+ * An entry of a member's menu: a role (`value` is a `ProfileRoles` value, including roles a
+ * project declares) or an action (`value` is one of `MEMBER_ACTIONS`).
+ */
+export interface MemberRoleOption {
+  value: string
+  label: string
+}
+
+/** Display labels keyed by role (`ADMIN`, `OWNER`, ...) or status (`PENDING`, ...) value. */
+export type MemberLabels = Partial<Record<string, string>>
 
 export interface MemberItemProps {
   member: ProfileItemFragment$key | null | undefined
@@ -24,4 +39,27 @@ export interface MemberItemProps {
   invitationExpiresAt?: string | null
   /** Relay id of the ProfileUserRole (invitation), used for resend/cancel mutations. */
   invitationId?: string
+  /**
+   * The row's ProfileUserRole, for a custom `MemberItem` that reads more of it with
+   * `MemberItemFragment`. Not set on the owner row.
+   */
+  memberRef?: MemberItemFragment$key | null
+  /**
+   * The menu of an active member: the roles they can be given plus actions (`MEMBER_ACTIONS.remove`,
+   * and `MEMBER_ACTIONS.deactivate` via `DEACTIVATE_MEMBER_OPTION`). Defaults to Admin, Manager
+   * and Remove.
+   */
+  roleOptions?: MemberRoleOption[]
+  /**
+   * The menu of a deactivated (INACTIVE) member, e.g. `inactiveMemberActionOptions` (Reactivate,
+   * Remove). Defaults to none: the row shows its status read-only, as before.
+   */
+  inactiveMemberOptions?: MemberRoleOption[]
+  /**
+   * Labels by role, e.g. `{ OWNER: 'Owner', MANAGER: 'Member' }`. They win over the `roleOptions`
+   * labels, both read-only and in the active member's menu.
+   */
+  roleLabels?: MemberLabels
+  /** Labels for statuses shown in place of a role, e.g. `{ PENDING: 'Invited' }`. */
+  statusLabels?: MemberLabels
 }
