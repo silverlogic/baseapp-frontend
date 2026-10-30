@@ -1,6 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
+    "types": ["node", "vitest/globals"],
     "outDir": "./dist"
   },
   "include": [

@@ -47,9 +47,10 @@ export default function useSerializablePreloadedQuery<
   preloadQuery: SerializablePreloadedQuery<TRequest, TQuery>,
   fetchPolicy: PreloadFetchPolicy = 'store-and-network',
 ): PreloadedQuery<TQuery> {
+  // Written again for a new environment (e.g. after a session change), whose cache starts empty.
   useMemo(() => {
     writePreloadedQueryToCache(preloadQuery, environment)
-  }, [preloadQuery])
+  }, [environment, preloadQuery])
 
   return {
     environment,
