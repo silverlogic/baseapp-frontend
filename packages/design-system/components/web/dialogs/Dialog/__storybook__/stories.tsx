@@ -9,6 +9,17 @@ import { DialogProps } from '../types'
 const meta: Meta<DialogProps> = {
   title: '@baseapp-frontend | designSystem/Dialogs/BaseDialog',
   component: Dialog,
+  argTypes: {
+    closeButtonLabel: {
+      control: 'text',
+      description: 'Accessible name (aria-label) of the close button.',
+      table: { defaultValue: { summary: "'Close dialog'" } },
+    },
+    CloseButtonProps: {
+      control: 'object',
+      description: 'Extra props for the close IconButton.',
+    },
+  },
 }
 
 export default meta
@@ -53,5 +64,14 @@ export const Default: Story = {
   render: (args) => <DialogTemplate {...args} />,
   args: {
     open: false,
+    closeButtonLabel: 'Close dialog',
+  },
+}
+
+export const LocalizedCloseButton: Story = {
+  render: (args) => <DialogTemplate {...args} />,
+  args: {
+    open: false,
+    closeButtonLabel: 'Fermer la fenêtre',
   },
 }
