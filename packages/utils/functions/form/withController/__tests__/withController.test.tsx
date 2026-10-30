@@ -118,4 +118,31 @@ describe('withController', () => {
     // The field receives the selected option, not the raw event.
     expect(mockFieldOnChange).toHaveBeenLastCalledWith(selectedOption)
   })
+  it("should read a MUI Select's value from the event, not the MenuItem element it passes second", async () => {
+    const user = userEvent.setup()
+    const mockOnChange = vi.fn()
+    const changeEvent = { target: { name: 'test', value: 'banana' } }
+    const menuItem = <li data-value="banana">Banana</li>
+    // Stand-in for MUI Select: onChange(event, child), where child is the chosen MenuItem.
+    const SelectLike = (props: any) => (
+      <button
+        type="button"
+        data-testid="select-option"
+        onClick={() => props.onChange?.(changeEvent, menuItem)}
+      >
+        select
+      </button>
+    )
+    const WrappedSelect = withController(SelectLike, { shouldDebounce: true })
+    const { findByTestId } = render(
+      <WrappedSelect name="test" control={{}} onChange={mockOnChange} />,
+    )
+
+    await user.click(await findByTestId('select-option'))
+
+    // react-hook-form reads event.target.value, so the field gets 'banana', not the element.
+    expect(mockFieldOnChange).toHaveBeenLastCalledWith(changeEvent)
+    // A selection is never debounced, and the consumer still gets both arguments.
+    expect(mockOnChange).toHaveBeenCalledWith(changeEvent, menuItem)
+  })
 })

@@ -31,6 +31,7 @@ pnpm install @baseapp-frontend/utils
 | `NEXT_PUBLIC_RELAY_ENDPOINT` | `https://api.example.com/graphql` or `/graphql` | GraphQL over HTTP |
 | `NEXT_PUBLIC_WS_RELAY_ENDPOINT` | `wss://api.example.com/graphql` or `/graphql` | GraphQL subscriptions |
 | `INTERNAL_API_ORIGIN` | `http://web:8000` | Server-side calls to a relative address (server only, read at runtime) |
+| `INTERNAL_API_FORWARDED_FOR_TRIM` | `0` (see below) | Optional. Forwards the visitor's address on those server-side calls (server only, read at runtime) |
 
 **Absolute addresses** are called as they are, from the browser and from the server.
 
@@ -51,6 +52,77 @@ API.
 browser. Point it at an address only the web server can reach, and make sure the API trusts
 `X-Forwarded-Host` only from there.
 
+### Forwarding the visitor's address
+
+Server-side calls come from the web server, so by default the API sees the web server's address
+for every SSR request: per-IP throttles, login rate limits and security logs all share one address.
+Set `INTERNAL_API_FORWARDED_FOR_TRIM=<n>` to forward the incoming `X-Forwarded-For` on those calls
+with its last `n` entries removed. Unset, no `X-Forwarded-For` is sent, as before. It applies only
+to calls that go through `INTERNAL_API_ORIGIN`.
+
+The API (for example DRF's `NUM_PROXIES`) trusts the entry a fixed number of places from the end
+of the chain, set for requests from the browser. Pick `n` so a server-side call puts the visitor at
+that same place:
+
+```
+n = (entries added from the visitor to the web server)
+  + (entries added from the web server to the API)
+  - (entries added from the visitor to the API)
+```
+
+Each proxy on a path adds one entry. Count the proxies on each path, including any load balancer.
+
+- **`INTERNAL_API_ORIGIN` reaches the API directly** (for example `http://web:8000`, no proxy
+  between the web server and the API) **and the browser reaches the web server and the API through
+  the same proxies**: `n` is `0`. The chain is forwarded unchanged, and the API reads the visitor
+  where it reads it for a browser request.
+- **`INTERNAL_API_ORIGIN` goes through the API's own proxy**, which appends the web server: with a
+  browser request reaching the web server as `X-Forwarded-For: 203.0.113.7, 172.18.0.5` (the
+  visitor, then the proxy that forwarded it: two entries) and an API that sits behind two proxies
+  for browser requests, `n` is `2 + 1 - 2 = 1`. The web server sends
+  `X-Forwarded-For: 203.0.113.7`, and the API's proxy turns it into `203.0.113.7, <web server>`,
+  the same shape as a request straight from the browser.
+
+If the result is below `0`, leave the variable unset.
+
+> **Warning:** never trim an entry that nothing adds back on the way to the API. Every entry
+> removed beyond the formula moves the entry the API trusts one step towards the start of the
+> chain, which the visitor controls: they can send any `X-Forwarded-For` they like, and per-IP
+> throttles and login rate limits then key on whatever they sent. With a direct
+> `INTERNAL_API_ORIGIN`, any value other than `0` does this. A value that is too small is safe but
+> keys every server-side call on one of your proxies. After deploying, check the address the API
+> logs for an SSR request, and for one that sends a made-up `X-Forwarded-For`.
+
+Middleware can't read the request through `next/headers`, so pass its headers instead. They are
+used for the forwarded host, scheme and address:
+
+```ts
+// middleware.ts
+const accessToken = await getAccessToken(refreshToken, { incomingHeaders: request.headers })
+const tokens = await preAuthenticateJWT(token, { incomingHeaders: request.headers })
+```
+
+A `host` given on its own still skips reading the request, so nothing beyond `X-Forwarded-Host` is
+forwarded.
+
 Mobile apps keep absolute `EXPO_PUBLIC_*` addresses. To use the same rules elsewhere, call
 `resolveApiUrl(address)`, which returns `{ url, headers }`, and `resolveWebSocketUrl(address)`
 (or `getWebSocketClientUrl(address)` for a `graphql-ws` client's `url` option).
+
+## **Acting as the current profile**
+
+When a user switches profile (for example to an organization they manage), the API acts as that
+profile for requests that carry its id in the `Current-Profile` header. `baseAppFetch` and the
+GraphQL environment always send it, from the `CurrentProfile` cookie (secure store on mobile).
+Axios instances send it when created with `withCurrentProfile: true`:
+
+```ts
+import { createAxiosInstance } from '@baseapp-frontend/utils'
+
+export const { axios } = createAxiosInstance({ withCurrentProfile: true })
+```
+
+It is read on every request, in the browser and during server rendering, so it follows profile
+switches without recreating the instance. No header is sent when there is no current profile, and
+a `Current-Profile` header the caller sets on a request, in any letter case, is kept. The default stays `false`, and the
+exported `axios` / `axiosForFiles` instances don't send it.
