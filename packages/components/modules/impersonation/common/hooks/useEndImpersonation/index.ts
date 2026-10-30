@@ -88,17 +88,17 @@ const useEndImpersonation = ({
     // log the user out before the impersonator's tokens are back. Without any tokens there is no
     // session to send either.
     if (!isInSession || isSessionTokenUnusable(refresh)) {
-      finish()
+      finish().catch(() => undefined)
       return
     }
 
     commit({
       variables: { input: {} },
       onCompleted: () => {
-        finish()
+        finish().catch(() => undefined)
       },
       onError: () => {
-        finish()
+        finish().catch(() => undefined)
       },
     })
   }

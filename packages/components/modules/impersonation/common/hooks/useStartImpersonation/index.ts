@@ -52,7 +52,7 @@ const useStartImpersonation = ({
         if (errors?.length || payload?.errors?.length) return
         if (!payload?.access || !payload.refresh || !payload.session) return
 
-        swapIn(payload.session, payload.access, payload.refresh)
+        swapIn(payload.session, payload.access, payload.refresh).catch(() => undefined)
       },
       onError: (error) => {
         callbacks?.onError?.(error)
