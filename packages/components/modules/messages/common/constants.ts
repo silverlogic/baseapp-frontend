@@ -32,7 +32,7 @@ export const DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION = z.object({
     .array(z.any())
     .min(1, { message: 'Please select at least one member' }),
   [CREATE_OR_EDIT_GROUP_FORM_VALUE.removeParticipants]: z.array(z.any()),
-  [CREATE_OR_EDIT_GROUP_FORM_VALUE.image]: z.any(),
+  [CREATE_OR_EDIT_GROUP_FORM_VALUE.image]: z.any().optional(),
 })
 
 export const getDefaultFormValues = (
@@ -47,7 +47,7 @@ export const getDefaultFormValues = (
 
 export const DEFAULT_FORM_VALIDATION = z.object({
   ...DEFAULT_CREATE_OR_EDIT_GROUP_FORM_VALIDATION.shape,
-  [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any(),
+  [CREATE_OR_EDIT_GROUP_FORM_VALUE.participants]: z.any().optional(),
 }) as any // TODO: fix typing issue with zodResolver
 
 export const MAXIMUM_DIFF_TO_GROUP_MESSAGES_CREATED_TIME = 3 // in minutes

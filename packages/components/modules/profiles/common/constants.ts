@@ -24,10 +24,10 @@ export const DEFAULT_PROFILE_FORM_VALUES: ProfileUpdateForm = {
 }
 
 export const DEFAULT_PROFILE_FORM_VALIDATION = z.object({
-  [PROFILE_FORM_VALUE.id]: z.any(),
-  [PROFILE_FORM_VALUE.bannerImage]: z.any(),
+  [PROFILE_FORM_VALUE.id]: z.any().optional(),
+  [PROFILE_FORM_VALUE.bannerImage]: z.any().optional(),
   [PROFILE_FORM_VALUE.biography]: z.string(),
-  [PROFILE_FORM_VALUE.image]: z.any(),
+  [PROFILE_FORM_VALUE.image]: z.any().optional(),
   [PROFILE_FORM_VALUE.name]: z.string().min(1, { message: PROFILE_FORM_VALIDATION.name.empty }),
   [PROFILE_FORM_VALUE.phoneNumber]: z.string(),
   [PROFILE_FORM_VALUE.urlPath]: z
