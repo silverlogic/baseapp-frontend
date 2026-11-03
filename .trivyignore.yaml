@@ -51,33 +51,25 @@ vulnerabilities:
       No patched version exists. Reached only through build/dev tooling
       (micromatch, chokidar), which expands patterns from our own config and is
       not shipped in any app bundle.
-  # The fix is glob 14.0.2, a new major that changes the walker API (arrays in
-  # place of sets, renamed Pattern methods) and moves to minimatch 11. glob 13
-  # reaches us only through Expo's build tooling: @expo/cli, @expo/config,
-  # @expo/config-plugins, @expo/fingerprint and @expo/metro-config, which walk
-  # our own project files. The bypass needs a caller that aborts a walk through
-  # an AbortSignal on attacker-controlled input; none of that runs in a shipped
-  # bundle. Overriding to 14 under Expo would risk breaking the native build, so
-  # this waits for Expo to move to glob 14.
-  - id: CVE-2026-118773
-    purls:
-      - "pkg:npm/glob"
-    expired_at: 2026-12-31
-    statement: >-
-      Fixed only in glob 14 (breaking API). Reached only through Expo build
-      tooling walking our own files, not shipped in any app bundle.
-  # The fix is minimatch 11.0.1, a new major that removes makeRe(), the AST class
-  # and other APIs. The amplification needs optimizationLevel >= 2 and an
-  # attacker-supplied pattern. minimatch 3.x (eslint 8, its plugins, glob 7,
-  # test-exclude, fork-ts-checker-webpack-plugin) has no optimizationLevel
-  # option at all; minimatch 10.x reaches us through glob 13 and
-  # @expo/fingerprint. Every caller is lint, test or build tooling matching
-  # patterns from our own config, and none of it runs in a shipped bundle.
+  # Only the 3.x line is still held. 10.x moved to 11.0.4 with the
+  # `minimatch@^10.0.0` override, so this is scoped to the exact version that
+  # cannot move rather than to the package.
+  #
+  # eslint 8.57.1 and its plugins need minimatch 3's callable CommonJS default.
+  # minimatch 11 is ESM-first and drops it, so raising the eslint>minimatch pins
+  # fails every lint task with
+  #   TypeError: (0 , _minimatch2.default) is not a function
+  # Measured, not assumed: the pins were raised, lint broke, they were restored.
+  # The amplification needs optimizationLevel >= 2 with an attacker-supplied
+  # pattern, and minimatch 3.x has no optimizationLevel option at all. Every
+  # caller is the eslint 8 toolchain matching patterns from our own config, and
+  # none of it runs in a shipped bundle. Migrating to eslint 9 retires the whole
+  # chain and this entry with it.
   - id: CVE-2026-118764
     purls:
-      - "pkg:npm/minimatch"
+      - "pkg:npm/minimatch@3.1.5"
     expired_at: 2026-12-31
     statement: >-
-      Fixed only in minimatch 11 (breaking API). Needs optimizationLevel >= 2
-      and an attacker-supplied pattern; reached only through lint, test and
-      build tooling, not shipped in any app bundle.
+      minimatch 3.1.5 only, held by eslint 8 which needs its CommonJS default;
+      minimatch 11 removes it. Needs optimizationLevel >= 2, which 3.x does not
+      have, and is reached only through lint tooling, not any shipped bundle.
