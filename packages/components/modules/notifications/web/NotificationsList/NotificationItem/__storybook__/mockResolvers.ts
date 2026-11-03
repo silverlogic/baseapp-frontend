@@ -25,3 +25,24 @@ export const mockResolvers = {
     __typename: 'Notification',
   }),
 }
+
+export const genericNotificationMockResolvers = {
+  Node: () => ({
+    id: 'Tm90aWZpY2F0aW9uOjIyNg==',
+    unread: true,
+    timestamp: '2024-10-25T19:46:09.288290+00:00',
+    level: 'INFO',
+    verb: 'EVENTS.REGISTRATION_CONFIRMED',
+    description: 'confirmed your registration for the annual meeting.',
+    data: {
+      url: '/events/12',
+    },
+    actor: {
+      __typename: 'Profile',
+      id: 'UHJvZmlsZToxNTM=',
+    },
+    target: null,
+    actionObject: null,
+    __typename: 'Notification',
+  }),
+}

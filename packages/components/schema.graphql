@@ -1135,6 +1135,15 @@ type Mutation {
   notificationsMarkAsRead(input: NotificationsMarkAsReadInput!): NotificationsMarkAsReadPayload
   notificationsMarkAllAsRead(input: NotificationsMarkAllAsReadInput!): NotificationsMarkAllAsReadPayload
   notificationSettingToggle(input: NotificationSettingToggleInput!): NotificationSettingTogglePayload
+
+  """
+  Set the viewer's notification-group preferences.
+  
+  Idempotent: each entry sets a value, it never toggles. The whole input is rejected when an
+  entry names an unknown group (or one outside the viewer's audience), a locked group, or a
+  channel the group does not offer.
+  """
+  notificationSettingsUpdate(input: NotificationSettingsUpdateInput!): NotificationSettingsUpdatePayload
   followToggle(input: FollowToggleInput!): FollowTogglePayload
 
   """
@@ -1327,6 +1336,36 @@ type NotificationSettingEdge {
   cursor: String!
 }
 
+"""
+A registered notification group with the viewer's preference per channel.
+"""
+type NotificationSettingGroup {
+  """Group key; use it as `group` in mutations and filters."""
+  key: String!
+  label: String!
+  description: String
+
+  """Locked groups are always delivered and cannot be changed."""
+  isLocked: Boolean!
+  channels: [NotificationSettingGroupChannel!]!
+}
+
+type NotificationSettingGroupChannel {
+  channel: NotificationChannelTypes!
+
+  """Whether the viewer receives this group on this channel."""
+  isActive: Boolean!
+}
+
+input NotificationSettingGroupChannelInput {
+  """Key of a registered notification group."""
+  group: String!
+
+  """ALL sets every channel of the group at once."""
+  channel: NotificationChannelTypes!
+  isActive: Boolean!
+}
+
 input NotificationSettingToggleInput {
   verb: String!
   channel: NotificationChannelTypes!
@@ -1341,13 +1380,39 @@ type NotificationSettingTogglePayload {
   clientMutationId: String
 }
 
+input NotificationSettingsUpdateInput {
+  settings: [NotificationSettingGroupChannelInput!]!
+  clientMutationId: String
+}
+
+"""
+Set the viewer's notification-group preferences.
+
+Idempotent: each entry sets a value, it never toggles. The whole input is rejected when an
+entry names an unknown group (or one outside the viewer's audience), a locked group, or a
+channel the group does not offer.
+"""
+type NotificationSettingsUpdatePayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+
+  """The changed groups with their resulting state."""
+  groups: [NotificationSettingGroup!]
+  recipient: NotificationsInterface
+  clientMutationId: String
+}
+
 interface NotificationsInterface {
   """The ID of the object"""
   id: ID!
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String, group: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+
+  """Registered notification groups the viewer can configure."""
+  notificationSettingGroups: [NotificationSettingGroup!]!
 }
 
 input NotificationsMarkAllAsReadInput {
@@ -2397,9 +2462,12 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   myRating(profileId: ID): Rate
   activityLogs(visibility: VisibilityTypes, first: Int = 10, offset: Int, before: String, after: String, last: Int, createdFrom: Date, createdTo: Date, userPk: Decimal, profilePk: Decimal, userName: String): ActivityLogConnection
   notificationsUnreadCount: Int
-  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String): NotificationConnection
+  notifications(offset: Int, before: String, after: String, first: Int, last: Int, level: NotificationsNotificationLevelChoices, unread: Boolean, verbs: String, group: String): NotificationConnection
   notificationSettings(offset: Int, before: String, after: String, first: Int, last: Int): NotificationSettingConnection
   isNotificationSettingActive(verb: String!, channel: NotificationChannelTypes!): Boolean
+
+  """Registered notification groups the viewer can configure."""
+  notificationSettingGroups: [NotificationSettingGroup!]!
   profile: Profile
   profiles(
     offset: Int

@@ -18,6 +18,7 @@ import { Meta } from '@storybook/addon-docs'
 
 - **notification** (NotificationItemFragment): The notification data reference to be rendered. Contains notification content and metadata.
 - **NotificationItemRenderer** (FC, optional): Custom renderer component for notification content. Defaults to DefaultNotificationItemRenderer.
+- **NotificationItemRendererProps** (object, optional): Props for the renderer. Verbs other than comment created, comment reply and reaction created render with `GenericNotificationItem`: the actor avatar when the actor is a profile, the notification `description`, the relative time and the unread dot, linking to `data.url` when the backend sets it. Pass `GenericNotificationItem` to replace it, or `GenericNotificationItem: null` to render nothing for unknown verbs.
 
 ## Notes
 
