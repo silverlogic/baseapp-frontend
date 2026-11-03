@@ -54,3 +54,45 @@ browser. Point it at an address only the web server can reach, and make sure the
 Mobile apps keep absolute `EXPO_PUBLIC_*` addresses. To use the same rules elsewhere, call
 `resolveApiUrl(address)`, which returns `{ url, headers }`, and `resolveWebSocketUrl(address)`
 (or `getWebSocketClientUrl(address)` for a `graphql-ws` client's `url` option).
+
+## **Session identity**
+
+`getSessionIdentity(access?, refresh?)` names the current login session without exposing a token:
+
+- `'<principal>:<refresh jti>'` when signed in, where the principal is the access token's `id`,
+  else `user_id`, else `sub` claim;
+- `'<principal>:access-only'` when there is no decodable refresh token;
+- `'anonymous'` without an access token, or when the access token names no principal.
+
+It changes on logout, on login as another user and on a new login as the same user, and stays the
+same when the access token is refreshed. Pass it as the `sessionKey` of `RelayProvider`
+(`@baseapp-frontend/graphql`) and `ReactQueryProvider` (`@baseapp-frontend/provider`) so neither
+cache outlives the session that filled it:
+
+```tsx
+'use client'
+
+import { FC, PropsWithChildren } from 'react'
+
+import { RelayProvider } from '@baseapp-frontend/graphql'
+import { ReactQueryProvider } from '@baseapp-frontend/provider'
+import {
+  ACCESS_KEY_NAME,
+  REFRESH_KEY_NAME,
+  getSessionIdentity,
+  useCookie,
+} from '@baseapp-frontend/utils'
+
+const SessionProviders: FC<PropsWithChildren> = ({ children }) => {
+  const { cookies } = useCookie()
+  const sessionKey = getSessionIdentity(cookies?.[ACCESS_KEY_NAME], cookies?.[REFRESH_KEY_NAME])
+
+  return (
+    <ReactQueryProvider sessionKey={sessionKey}>
+      <RelayProvider sessionKey={sessionKey}>{children}</RelayProvider>
+    </ReactQueryProvider>
+  )
+}
+```
+
+On the server, read the same cookies with `getTokenSSR`.
