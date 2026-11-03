@@ -17,3 +17,5 @@ export type * from './hooks/useNativeFilePicker/types'
 
 export { createNativeUploadSource } from './utils/createNativeUploadSource'
 export type { NativeFileDescriptor } from './utils/createNativeUploadSource'
+
+export { default as useProtectedFileDownload } from './hooks/useProtectedFileDownload'
