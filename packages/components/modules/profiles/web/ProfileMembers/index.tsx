@@ -12,22 +12,25 @@ import MembersList from './MembersList'
 import { NUMBER_OF_MEMBERS_ON_FIRST_LOAD } from './constants'
 import type { ProfileMembersProps, ProfileMembersSuspendedProps } from './types'
 
-const ProfileMembers: FC<ProfileMembersProps> = ({ MembersListProps = {} }) => {
+const ProfileMembers: FC<ProfileMembersProps> = ({
+  MembersListProps = {},
+  membersQuery = UserMembersListPaginationQuery,
+  membersQueryVariables,
+  ...props
+}) => {
   const { currentProfile } = useCurrentProfile()
 
-  const data = useLazyLoadQuery<UserMembersListPaginationQueryType>(
-    UserMembersListPaginationQuery,
-    {
-      profileId: currentProfile?.id || '',
-      count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
-      orderBy: 'status',
-      // Keep q defined so the connection is keyed the same way the invite dialog prepends into it.
-      q: '',
-    },
-  )
+  const data = useLazyLoadQuery<UserMembersListPaginationQueryType>(membersQuery, {
+    profileId: currentProfile?.id || '',
+    count: NUMBER_OF_MEMBERS_ON_FIRST_LOAD,
+    orderBy: 'status',
+    // Keep q defined so the connection is keyed the same way the invite dialog prepends into it.
+    q: '',
+    ...membersQueryVariables,
+  })
 
   if (!data.profile) return null
-  return <MembersList userRef={data?.profile} {...MembersListProps} />
+  return <MembersList userRef={data?.profile} {...props} {...MembersListProps} />
 }
 
 const ProfileMembersSuspended: FC<ProfileMembersSuspendedProps> = ({
