@@ -51,3 +51,25 @@ vulnerabilities:
       No patched version exists. Reached only through build/dev tooling
       (micromatch, chokidar), which expands patterns from our own config and is
       not shipped in any app bundle.
+  # Only the 3.x line is still held. 10.x moved to 11.0.4 with the
+  # `minimatch@^10.0.0` override, so this is scoped to the exact version that
+  # cannot move rather than to the package.
+  #
+  # eslint 8.57.1 and its plugins need minimatch 3's callable CommonJS default.
+  # minimatch 11 is ESM-first and drops it, so raising the eslint>minimatch pins
+  # fails every lint task with
+  #   TypeError: (0 , _minimatch2.default) is not a function
+  # Measured, not assumed: the pins were raised, lint broke, they were restored.
+  # The amplification needs optimizationLevel >= 2 with an attacker-supplied
+  # pattern, and minimatch 3.x has no optimizationLevel option at all. Every
+  # caller is the eslint 8 toolchain matching patterns from our own config, and
+  # none of it runs in a shipped bundle. Migrating to eslint 9 retires the whole
+  # chain and this entry with it.
+  - id: CVE-2026-118764
+    purls:
+      - "pkg:npm/minimatch@3.1.5"
+    expired_at: 2026-12-31
+    statement: >-
+      minimatch 3.1.5 only, held by eslint 8 which needs its CommonJS default;
+      minimatch 11 removes it. Needs optimizationLevel >= 2, which 3.x does not
+      have, and is reached only through lint tooling, not any shipped bundle.
