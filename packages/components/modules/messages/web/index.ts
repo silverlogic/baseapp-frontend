@@ -21,6 +21,9 @@ export type * from './GroupChatDetails/types'
 export { default as GroupChatEdit } from './GroupChatEdit'
 export type * from './GroupChatEdit/types'
 
+export { default as MessageProfileButton } from './MessageProfileButton'
+export type * from './MessageProfileButton/types'
+
 export { default as MessagesList } from './MessagesList'
 export type * from './MessagesList/types'
 
