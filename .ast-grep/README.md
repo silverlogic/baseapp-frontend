@@ -84,6 +84,7 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 | `next-no-img-element` | **error** | `apps/web/**` only — `next/image`, never a raw `<img>` (image-optimization.md) |
 | `next-image-no-custom-loader` | warning | No custom `loader` on `<Image>` — it disables all optimization (image-optimization.md) |
 | `next-image-explicit-dimensions` | warning | `<Image>` needs `width` + `height`, or `fill` (image-optimization.md) |
+| `next-image-static-public-src` | warning | `<Image>` / `ProjectLogo` with a string `public/` path: statically import it for a hashed, cacheable URL (image-optimization.md) |
 | `next-page-no-use-client` | warning | `page.tsx` stays a Server Component (server-components.md) |
 | `next-page-no-client-data-fetching` | warning | `page.tsx` prefetches server-side, no client fetch hooks (rest-data-fetching.md) |
 | `next-prefer-link-over-router-push` | warning | Web only — static destination → `next/link`, not `router.push` (internal-routing.md) |
