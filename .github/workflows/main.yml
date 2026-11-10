@@ -106,9 +106,10 @@ jobs:
 
       # Derived from the installed package rather than hardcoded, so the cache
       # key can never drift from the version in the lockfile. The key also
-      # carries the runner image (ImageOS, e.g. ubuntu26): a browser build is
-      # linked against that image's system libraries, so a cache from the
-      # previous ubuntu-latest must not be restored after the image moves.
+      # carries the runner image (ImageOS, e.g. ubuntu26; a shell variable on
+      # hosted runners, not an expression context): a browser build is linked
+      # against that image's system libraries, so a cache from the previous
+      # ubuntu-latest must not be restored after the image moves.
       #
       # Playwright is invoked through its local binary rather than `pnpm exec`
       # throughout this job. Routing it through the package manager reads to
@@ -120,15 +121,17 @@ jobs:
         working-directory: packages/components
         run: |
           version=$(./node_modules/.bin/playwright --version | awk '{print $2}')
+          image=${ImageOS:-$(. /etc/os-release && echo "$ID$VERSION_ID")}
           echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Playwright $version"
+          echo "image=$image" >> "$GITHUB_OUTPUT"
+          echo "Playwright $version on $image"
 
       - name: Cache Playwright browsers
         id: playwright-cache
         uses: actions/cache@v4
         with:
           path: ~/.cache/ms-playwright
-          key: playwright-${{ runner.os }}-${{ env.ImageOS }}-${{ steps.playwright.outputs.version }}
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.image }}-${{ steps.playwright.outputs.version }}
 
       # Browsers are cached but their OS libraries are not, so on a cache hit
       # only the system deps are installed. WebKit needs a lot of them.
