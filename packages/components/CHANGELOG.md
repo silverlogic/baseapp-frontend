@@ -1,5 +1,73 @@
 # @baseapp-frontend/components
 
+## 4.0.0
+
+### Major Changes
+
+- ea37437: Comments on mobile can carry file attachments, like on web: attach photos and videos from the
+  library or any file from the document picker, watch them upload above the composer, and see (and
+  open) a comment's files under it. Editing a comment lists its files with a remove button and accepts
+  new ones; as on web, removals delete and uploads attach right away.
+
+  **Breaking:** `FileUploadProgress.file` is now typed `UploadSource` instead of `File`, because a
+  native upload has no `File`. A web `File` passed in is wrapped automatically and its `name`, `size`
+  and `type` read the same; code that read `File`-only members off `fileProgress.file` (`slice`,
+  `lastModified`, passing it to `URL.createObjectURL`) has to keep its own reference to the original
+  file instead.
+
+  The upload pipeline is now shared across platforms instead of being web-only:
+
+  - **`UploadSource`**: every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`)
+    accepts a web `File` or an `UploadSource` (`name`, `size`, `type`, `readChunk(start, end)`,
+    optional `dispose()`). Chunks are read lazily inside the concurrency slot, so a native upload holds
+    at most `MAX_CONCURRENT_CHUNKS` chunks in memory, and a retried chunk reuses the bytes it already
+    read. `dispose` runs when an upload leaves the store.
+  - A chunk whose upload was paused or removed during a retry backoff no longer starts a new request,
+    and `clearScope` now aborts the uploads it removes.
+  - **`filterSelectedFiles`** / **`describeRejectedFiles`**: the count/size/type rules both pickers
+    apply. Size and type are only checked when given (the backend enforces its own limits and the
+    error is toasted). The web file input now also drops files whose type is outside a given
+    `acceptedFileTypes` (the `accept` attribute alone can be bypassed from the OS picker).
+  - **`COMMENT_FILE_ATTACHMENT_LIMITS`** (`comments/common`): `{ maxFiles: 5 }`, shared by web and
+    mobile.
+  - **`files/native`**: `useNativeFilePicker`, `createNativeUploadSource`, `UploadingFilesList`,
+    `AttachedFilesList`, `EditableFilesList`, `FileChip`. A picked file's name gets the extension its
+    type implies when it has none, and a HEIC photo the picker converted to JPEG is renamed `.jpg`,
+    since the backend types files by extension.
+  - Native `SocialInput` takes `SocialUpsertActionsProps`, and `SocialInputDrawer` takes a `Footer`
+    that the sheet grows to fit (`Placeholder` gets the matching `footerHeight`).
+  - `@baseapp-frontend/design-system`: native `AttachmentIcon`.
+
+### Patch Changes
+
+- 42adc28: Support the backend's anonymous uploads and private files. The upload hooks keep the
+  `uploadToken` an anonymous upload gets at initiation and send it back on complete and abort
+  (`X-File-Upload-Token`) and on `fileAttachToTarget` (`uploadTokens`); logged-in uploads are
+  unchanged. `AttachedFileItem` disables Download when the file has no `url`, which private files
+  return for viewers without access.
+  With `autoAttach: false`, `onUploadComplete` also receives the upload tokens of the files
+  (`(fileRelayIds, uploadTokens)`), since the files leave the upload store before the caller attaches them.
+- 2dfb84d: Files that finish uploading after a retry or resume are now attached to their target when
+  `autoAttach` is on (e.g. editing a comment on web). Before, only files that finished in the
+  original batch were attached: the retry/resume buttons run their own `useChunkedUpload`, so the
+  upload completed but was never attached and disappeared on reload. `useFileUploadLogic` now picks
+  completed uploads in its target's scope up from the upload store, and removes them from the store
+  once attached so they no longer show as a duplicate chip.
+  An attach that fails is not resent automatically; it is retried with the next upload the user
+  starts, so a persistent error no longer resends the mutation on every render.
+  An attach the server rejects (errors in the mutation payload) is handled the same way: the file
+  stays listed and is retried with the next upload, instead of being dropped.
+  With `autoAttach: false`, uploads that finish through retry or resume are now reported to the caller
+  too, through `onUploadComplete([fileRelayId], uploadTokens)`, and an upload finishing during a batch
+  is no longer dropped unreported when the batch clears its own files.
+- 5a244bc: Support relative API addresses, so one web deployment can serve several hosts that each call the API on their own host (for example one subdomain per customer). Setting `NEXT_PUBLIC_API_BASE_URL=/v1`, `NEXT_PUBLIC_RELAY_ENDPOINT=/graphql` and `NEXT_PUBLIC_WS_RELAY_ENDPOINT=/graphql` makes the browser call the host the page is on, including the GraphQL websocket (`ws(s)://<page host>/graphql`, resolved at each connection attempt). Server-side calls (SSR, route handlers, middleware token refresh), which have no page address, go to the new server-only `INTERNAL_API_ORIGIN` (e.g. `http://web:8000`) and send the incoming request's host as `X-Forwarded-Host`, plus its `X-Forwarded-Proto` / `X-Forwarded-Protocol` when present, so the API knows which host the user is on; they throw a clear error when `INTERNAL_API_ORIGIN` is missing. This covers `baseAppFetch` (and with it Relay's `httpFetch` and `loadSerializableQuery`), the axios instances, `getAccessToken` and `preAuthenticateJWT` (both now take an optional `{ host }` to override the forwarded host). New helpers: `resolveApiUrl`, `resolveWebSocketUrl`, `getWebSocketClientUrl` and `isRelativeUrl`. Absolute addresses behave exactly as before, with no added headers, so existing projects need no change. The profile share link follows the same rule: a relative `NEXT_PUBLIC_APP_BASE_URL` (e.g. `/`) makes it use the host the user is on; absolute and unset values copy what they did before.
+- Updated dependencies [5a244bc]
+- Updated dependencies [ea37437]
+  - @baseapp-frontend/utils@4.3.0
+  - @baseapp-frontend/graphql@3.0.0
+  - @baseapp-frontend/authentication@7.0.0
+  - @baseapp-frontend/design-system@3.0.0
+
 ## 3.0.1
 
 ### Patch Changes

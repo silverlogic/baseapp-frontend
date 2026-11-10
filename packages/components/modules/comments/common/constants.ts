@@ -7,3 +7,8 @@ export const COMMENTS_LIST_CONNECTION_KEY = 'CommentsList_comments'
 export const DEFAULT_COMMENTS_ORDER_BY = '-is_pinned,-created'
 
 export const DEFAULT_MAX_THREAD_DEPTH = 5
+
+// Shared by both platforms; size and type are left to the backend.
+export const COMMENT_FILE_ATTACHMENT_LIMITS = {
+  maxFiles: 5,
+}

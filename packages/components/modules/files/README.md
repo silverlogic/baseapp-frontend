@@ -45,7 +45,13 @@ Web-specific UI components built with React and Material-UI:
 
 ### Native
 
-React Native UI components (use the same common hooks and utilities).
+React Native UI components over the same common hooks and upload pipeline.
+
+- `useNativeFilePicker` - Photo library / document picker with the shared selection rules
+- `createNativeUploadSource` - Wraps a picked file as an `UploadSource` (chunks read on demand)
+- `UploadingFilesList` - In-progress uploads for one store scope
+- `AttachedFilesList` - Files attached to a target; tapping one opens it
+- `FileChip` - Compact tile both lists use
 
 ## Quick Start
 
@@ -351,62 +357,43 @@ fragment FileItem_file on File {
 | file | `FileItem_file$key` | required | Relay fragment reference for the file |
 | targetObjectId | `string` | - | Target object ID for deletion (enables delete button) |
 
-## Implementing React Native Components
+## Platform Seam: `UploadSource`
 
-To create React Native file components, use the common hooks with native UI:
+The uploader only needs a file's `name`, `size`, `type` and a way to read bytes `[start, end)`:
 
 ```typescript
-// native/AttachedFileItem/index.tsx
-import React from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import { useFragment } from 'react-relay'
-import * as FileSystem from 'expo-file-system'
-
-import {
-  FileItemFragment,
-  useFileDeleteLogic,
-  useFileDownloadLogic,
-  formatFileSize,
-  formatDate,
-  isImageFile,
-} from '../../common'
-
-export const AttachedFileItem = ({ file: fileRef, targetObjectId }) => {
-  const file = useFragment(FileItemFragment, fileRef)
-
-  const { handleDelete, isDeletingFile } = useFileDeleteLogic({ targetObjectId })
-
-  const { handleDownload } = useFileDownloadLogic({
-    downloadHandler: async (url, fileName) => {
-      const downloadPath = FileSystem.documentDirectory + fileName
-      await FileSystem.downloadAsync(url, downloadPath)
-    },
-  })
-
-  const isImage = isImageFile(file.fileContentType)
-
-  return (
-    <View>
-      {isImage && file.thumbnail && (
-        <Image source={{ uri: file.thumbnail }} style={{ width: 100, height: 100 }} />
-      )}
-      <Text>{file.fileName}</Text>
-      <Text>{formatFileSize(file.fileSize)}</Text>
-      <Text>{formatDate(file.created)}</Text>
-
-      <TouchableOpacity onPress={() => handleDownload(file.file, file.fileName)}>
-        <Text>Download</Text>
-      </TouchableOpacity>
-
-      {file.hasPerm && (
-        <TouchableOpacity onPress={() => handleDelete(file.id)} disabled={isDeletingFile}>
-          <Text>Delete</Text>
-        </TouchableOpacity>
-      )}
-    </View>
-  )
+interface UploadSource {
+  name: string
+  size: number
+  type: string
+  readChunk: (start: number, end: number) => Promise<Blob | Uint8Array>
+  dispose?: () => void
 }
 ```
+
+Every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`) accepts a web `File` or an
+`UploadSource`. A `File` is wrapped automatically (`Blob.slice`); native builds one with
+`createNativeUploadSource`, which reads each chunk through a short-lived expo-file-system
+`FileHandle`. Chunks are read lazily inside the upload concurrency slot, so at most
+`MAX_CONCURRENT_CHUNKS` chunks are in memory at once, and a retry reuses the bytes it already read.
+`dispose` runs when the upload leaves the store (removed, attached, or its scope cleared), which is
+how native deletes the cache copy it makes of an Android `content://` file.
+
+```typescript
+import { useDeferredFileAttachments } from '@baseapp-frontend/components/files/common'
+import { UploadingFilesList, useNativeFilePicker } from '@baseapp-frontend/components/files/native'
+
+const { handleFilesSelected, attachTo, scope } = useDeferredFileAttachments()
+const { pickImages, pickDocuments } = useNativeFilePicker({
+  onFilesSelected: handleFilesSelected,
+  maxFiles: 5,
+  maxFileSize: 100 * 1024 * 1024,
+  acceptedFileTypes: { 'image/*': ['.png', '.jpg'], 'application/pdf': ['.pdf'] },
+})
+// ...render <UploadingFilesList scope={scope} />, then attachTo(newTargetId) once it exists.
+```
+
+Selection rules (`filterSelectedFiles`) are shared, so web and native accept and refuse the same files.
 
 ## Features in Detail
 
