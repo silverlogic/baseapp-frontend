@@ -1415,7 +1415,7 @@ importers:
         version: 3.7.2
       next:
         specifier: 'catalog:'
-        version: 15.5.27(@babel/core@7.29.7)(@playwright/test@1.62.0)(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 15.5.28(@babel/core@7.29.7)(@playwright/test@1.62.0)(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       react:
         specifier: catalog:react19
         version: 19.2.0
