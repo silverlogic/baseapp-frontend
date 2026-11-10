@@ -65,8 +65,8 @@ catalogs:
       specifier: 0.35.0
       version: 0.35.0
     lodash:
-      specifier: 4.18.0
-      version: 4.18.0
+      specifier: 4.18.1
+      version: 4.18.1
     luxon:
       specifier: 3.7.2
       version: 3.7.2
@@ -1113,7 +1113,7 @@ importers:
         version: 0.35.0
       lodash:
         specifier: 'catalog:'
-        version: 4.18.0
+        version: 4.18.1
       next:
         specifier: 'catalog:'
         version: 15.5.28(@babel/core@7.29.7)(@playwright/test@1.62.0)(@types/node@25.9.3)(babel-plugin-macros@3.1.0)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1394,7 +1394,7 @@ importers:
         version: 5.76.1(react@19.2.0)
       lodash:
         specifier: 'catalog:'
-        version: 4.18.0
+        version: 4.18.1
       react:
         specifier: catalog:react19
         version: 19.2.0
@@ -1536,7 +1536,7 @@ importers:
         version: 4.0.0
       lodash:
         specifier: 'catalog:'
-        version: 4.18.0
+        version: 4.18.1
       luxon:
         specifier: 'catalog:'
         version: 3.7.2
@@ -9257,10 +9257,6 @@ packages:
   lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
 
-  lodash@4.18.0:
-    resolution: {integrity: sha512-l1mfj2atMqndAHI3ls7XqPxEjV2J9ZkcNyHpoZA3r2T1LLwDB69jgkMWh71YKwhBbK0G2f4WSn05ahmQXVxupA==}
-    deprecated: Bad release. Please use lodash@4.17.21 instead.
-
   lodash@4.18.1:
     resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
 
@@ -16471,9 +16467,7 @@ snapshots:
       metro-runtime: 0.84.4
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.83.6': {}
 
@@ -22071,8 +22065,6 @@ snapshots:
   lodash.startcase@4.4.0: {}
 
   lodash.throttle@4.1.1: {}
-
-  lodash@4.18.0: {}
 
   lodash@4.18.1: {}
 
