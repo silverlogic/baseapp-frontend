@@ -1,5 +1,13 @@
 # @baseapp-frontend/utils
 
+## 4.3.1
+
+### Patch Changes
+
+- f9c934f: Bump `lodash` from 4.18.0 to 4.18.1 (CVE-2026-2950), so published installs pick up the patched version.
+- 7fef43d: Bump `next` from 15.5.27 to 15.5.28 (GHSA-2464-fhr4-w9xw, CRITICAL) and, in `@baseapp-frontend/utils`,
+  `qs` from `^6.15.2` to `^6.16.1` (CVE-2026-110816), so published installs pick up the patched versions.
+
 ## 4.3.0
 
 ### Minor Changes
