@@ -15,6 +15,7 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputProps>(
       SocialTextInput = DefaultSocialTextInput,
       SocialTextInputProps = {},
       SocialUpsertActions = DefaultSocialUpsertActions,
+      SocialUpsertActionsProps = {},
       SubmitActions = DefaultSubmitActions,
       SubmitActionsProps = {},
       form,
@@ -41,7 +42,10 @@ const SocialInput = forwardRef<NativeTextInput, SocialInputProps>(
         replyVariables={replyVariables}
         {...SocialTextInputProps}
       >
-        <SocialUpsertActions />
+        <SocialUpsertActions
+          shouldUseBottomSheetSafeComponents={shouldUseBottomSheetSafeComponents}
+          {...SocialUpsertActionsProps}
+        />
         <SubmitActions
           disabled={submissionDisabled}
           handleSubmit={submit}
