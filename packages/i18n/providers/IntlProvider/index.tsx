@@ -26,7 +26,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
   const messages = useMemo(
-    () => getMessages(locale, additionalMessages),
+    () => getMessages(locale, additionalMessages?.[locale]),
     [locale, additionalMessages],
   )
 
