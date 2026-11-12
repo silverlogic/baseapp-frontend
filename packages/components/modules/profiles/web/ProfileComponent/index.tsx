@@ -42,6 +42,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
   profile: profileRef,
   currentProfileId,
   bannerFallback = '/png/profile-banner-fallback.png',
+  MessageButton = null,
 }) => {
   const profile = useFragment(ProfileComponentFragment, profileRef)
   const smDown = useResponsive('down', 'sm')
@@ -83,6 +84,9 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
       <ActionButtonsContainer>
         {!profile?.isBlockedByMe && (
           <FollowToggleButton targetId={profile?.id} isFollowedByMe={profile?.isFollowedByMe} />
+        )}
+        {!profile?.isBlockedByMe && MessageButton && profile?.id && (
+          <MessageButton profileId={profile.id} />
         )}
         {profile?.isBlockedByMe && (
           <BlockButtonWithDialog
