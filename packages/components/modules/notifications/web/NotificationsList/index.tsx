@@ -1,4 +1,4 @@
-import { FC, Suspense, useMemo } from 'react'
+import { FC, MouseEvent, Suspense, useMemo } from 'react'
 
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
@@ -15,6 +15,7 @@ import {
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
+  useGroupNotificationsList,
 } from '../../common'
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
@@ -24,9 +25,15 @@ import {
   ListContainer as DefaultListContainer,
   HeaderSpacer,
 } from './styled'
-import { NotificationsListProps } from './types'
+import { NotificationsListContentProps, NotificationsListProps } from './types'
 
-const NotificationsList: FC<NotificationsListProps> = ({
+const NotificationsListContent: FC<NotificationsListContentProps> = ({
+  data,
+  loadNext,
+  isLoadingNext,
+  hasNext,
+  refetchNotifications,
+  unreadNotificationIds,
   setIsDrawerOpened,
   EmptyState = DefaultEmptyState,
   EmptyStateProps = {},
@@ -39,24 +46,10 @@ const NotificationsList: FC<NotificationsListProps> = ({
 }) => {
   const smDown = useResponsive('down', 'sm')
 
-  const options = { count: 10 }
-  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
-    fetchPolicy: 'store-and-network',
-  })
-
-  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
-    NotificationsListQueryType,
-    NotificationsListFragment$key
-  >(NotificationsListFragment, me)
-
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
-
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'network-only' })
-  }
 
   const renderNotificationItem = (notification: any, index: number) => {
     if (!notification) return null
@@ -83,6 +76,18 @@ const NotificationsList: FC<NotificationsListProps> = ({
         {...NotificationItemProps}
       />
     )
+  }
+
+  // In a list filtered by group, "Mark all as read" covers only that group's unread notifications;
+  // the user's unread count includes every group, so it cannot decide whether to show the button.
+  const hasUnread = unreadNotificationIds
+    ? unreadNotificationIds.length > 0
+    : !!data?.notificationsUnreadCount
+
+  // A notification's link navigates on the client, which would leave the drawer open over the new
+  // page.
+  const closeOnLinkClick = (event: MouseEvent<HTMLElement>) => {
+    if ((event.target as Element).closest?.('a[href]')) setIsDrawerOpened(false)
   }
 
   const renderVirtuosoHeader = () => <HeaderSpacer />
@@ -125,12 +130,15 @@ const NotificationsList: FC<NotificationsListProps> = ({
   }
 
   return (
-    <Box display="grid" gridTemplateRows="min-content 1fr" height="100%">
+    <Box display="grid" gridTemplateRows="min-content 1fr" height="100%" onClick={closeOnLinkClick}>
       <HeaderContainer>
         <Typography variant="h6">Notifications</Typography>
         <Box display="grid" gridTemplateColumns="max-content min-content">
-          {!!data?.notificationsUnreadCount && (
-            <MarkAllAsReadButton refetch={refetchNotifications} />
+          {hasUnread && (
+            <MarkAllAsReadButton
+              refetch={refetchNotifications}
+              notificationIds={unreadNotificationIds}
+            />
           )}
           {smDown && (
             <IconButton onClick={() => setIsDrawerOpened(false)} aria-label="close notifications">
@@ -144,12 +152,52 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 }
 
-const NotificationsListSuspended: FC<NotificationsListProps> = (props) => {
+const AllNotificationsList: FC<NotificationsListProps> = (props) => {
+  const options = { count: 10 }
+  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
+    fetchPolicy: 'store-and-network',
+  })
+
+  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
+    NotificationsListQueryType,
+    NotificationsListFragment$key
+  >(NotificationsListFragment, me)
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'network-only' })
+  }
+
+  return (
+    <NotificationsListContent
+      {...props}
+      data={data}
+      loadNext={loadNext}
+      isLoadingNext={isLoadingNext}
+      hasNext={hasNext}
+      refetchNotifications={refetchNotifications}
+    />
+  )
+}
+
+const GroupNotificationsList: FC<NotificationsListProps & { group: string }> = ({
+  group,
+  ...props
+}) => {
+  const groupList = useGroupNotificationsList(group)
+
+  return <NotificationsListContent {...props} {...groupList} />
+}
+
+const NotificationsListSuspended: FC<NotificationsListProps> = ({ group, ...props }) => {
   const { LoadingState = DefaultLoadingState, LoadingStateProps = {} } = props
 
   return (
     <Suspense fallback={<LoadingState {...LoadingStateProps} />}>
-      <NotificationsList {...props} />
+      {group ? (
+        <GroupNotificationsList {...props} group={group} />
+      ) : (
+        <AllNotificationsList {...props} />
+      )}
     </Suspense>
   )
 }

@@ -26,7 +26,8 @@ import { Meta } from '@storybook/addon-docs'
 
 ## Props
 
-- **setIsDrawerOpened** (function): Callback to control the drawer's open state
+- **setIsDrawerOpened** (function): Callback to control the drawer's open state. The list also calls it with `false` when a link inside an item is followed
+- **group** (string, optional): Lists only one notification setting group's notifications. "Mark all as read" then marks only that group's loaded unread notifications, and the list refetches when the user's unread count rises. Needs a backend with notification setting groups
 - **EmptyState** (component): Custom component to show when there are no notifications. Defaults to DefaultEmptyState
 - **LoadingState** (component): Custom loading component. Defaults to DefaultLoadingState
 - **LoadingStateProps** (object): Props to pass to the LoadingState component. Defaults to {}

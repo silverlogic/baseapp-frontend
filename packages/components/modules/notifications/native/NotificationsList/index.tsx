@@ -13,6 +13,7 @@ import {
   NUMBER_OF_NOTIFICATIONS_TO_LOAD_NEXT,
   NotificationsListFragment,
   NotificationsListQuery,
+  useGroupNotificationsList,
   useNotificationsSubscription,
 } from '../../common'
 import { NotificationsNode } from '../../common/types'
@@ -21,9 +22,15 @@ import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
 import { createStyles } from './styles'
-import { NotificationsListProps } from './types'
+import { NotificationsListContentProps, NotificationsListProps } from './types'
 
-const NotificationsList: FC<NotificationsListProps> = ({
+const NotificationsListContent: FC<NotificationsListContentProps> = ({
+  data,
+  loadNext,
+  isLoadingNext,
+  hasNext,
+  refetchNotifications,
+  unreadNotificationIds,
   EmptyState = DefaultEmptyState,
   NotificationItem = DefaultNotificationItem,
   NotificationItemProps = {},
@@ -31,26 +38,16 @@ const NotificationsList: FC<NotificationsListProps> = ({
   const theme = useTheme()
   const styles = createStyles(theme)
 
-  const options = { count: 10 }
-  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
-    fetchPolicy: 'store-and-network',
-  })
-
-  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
-    NotificationsListQueryType,
-    NotificationsListFragment$key
-  >(NotificationsListFragment, me)
-
-  useNotificationsSubscription(me?.id)
-
   const notifications = useMemo(
     () => data?.notifications?.edges.filter((edge) => edge?.node).map((edge) => edge?.node) || [],
     [data?.notifications?.edges],
   )
 
-  const refetchNotifications = () => {
-    refetch(options, { fetchPolicy: 'store-and-network' })
-  }
+  // In a list filtered by group, "Mark all as read" covers only that group's unread notifications;
+  // the user's unread count includes every group, so it cannot decide whether to enable the button.
+  const hasUnread = unreadNotificationIds
+    ? unreadNotificationIds.length > 0
+    : !!data?.notificationsUnreadCount
 
   const renderNotificationItem = (notification: NotificationsNode, index: number) => {
     if (!notification) return null
@@ -97,7 +94,8 @@ const NotificationsList: FC<NotificationsListProps> = ({
         <Text variant="h6">Notifications</Text>
         <MarkAllAsReadButton
           refetch={refetchNotifications}
-          disabled={!data?.notificationsUnreadCount}
+          disabled={!hasUnread}
+          notificationIds={unreadNotificationIds}
         />
       </View>
       {renderContent()}
@@ -105,7 +103,48 @@ const NotificationsList: FC<NotificationsListProps> = ({
   )
 }
 
-const SuspendedNotificationsList = (props: NotificationsListProps) => {
+const AllNotificationsList: FC<NotificationsListProps> = (props) => {
+  const options = { count: 10 }
+  const { me } = useLazyLoadQuery<NotificationsListQueryType>(NotificationsListQuery, options, {
+    fetchPolicy: 'store-and-network',
+  })
+
+  const { data, loadNext, isLoadingNext, hasNext, refetch } = usePaginationFragment<
+    NotificationsListQueryType,
+    NotificationsListFragment$key
+  >(NotificationsListFragment, me)
+
+  useNotificationsSubscription(me?.id)
+
+  const refetchNotifications = () => {
+    refetch(options, { fetchPolicy: 'store-and-network' })
+  }
+
+  return (
+    <NotificationsListContent
+      {...props}
+      data={data}
+      loadNext={loadNext}
+      isLoadingNext={isLoadingNext}
+      hasNext={hasNext}
+      refetchNotifications={refetchNotifications}
+    />
+  )
+}
+
+const GroupNotificationsList: FC<NotificationsListProps & { group: string }> = ({
+  group,
+  ...props
+}) => {
+  const groupList = useGroupNotificationsList(group)
+
+  // keeps the user's unread count live, which refetches this group when a notification arrives
+  useNotificationsSubscription(groupList.data?.id)
+
+  return <NotificationsListContent {...props} {...groupList} />
+}
+
+const SuspendedNotificationsList = ({ group, ...props }: NotificationsListProps) => {
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -120,7 +159,11 @@ const SuspendedNotificationsList = (props: NotificationsListProps) => {
         </View>
       }
     >
-      <NotificationsList {...props} />
+      {group ? (
+        <GroupNotificationsList {...props} group={group} />
+      ) : (
+        <AllNotificationsList {...props} />
+      )}
     </Suspense>
   )
 }

@@ -10,7 +10,9 @@ import { NotificationItemProps } from './types'
 const NotificationItem: FC<NotificationItemProps> = ({
   notification: notificationRef,
   NotificationItemRenderer = DefaultNotificationItemRenderer,
+  NotificationItemRendererProps = {},
   refetch,
+  onPress,
 }) => {
   const notification = useFragment(NotificationItemFragment, notificationRef)
 
@@ -32,9 +34,14 @@ const NotificationItem: FC<NotificationItemProps> = ({
     }
   }
 
+  const handlePress = () => {
+    markAsRead()
+    onPress?.(notification)
+  }
+
   return (
-    <Pressable onPress={markAsRead}>
-      <NotificationItemRenderer notification={notification} />
+    <Pressable onPress={handlePress}>
+      <NotificationItemRenderer notification={notification} {...NotificationItemRendererProps} />
     </Pressable>
   )
 }
