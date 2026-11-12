@@ -52,11 +52,7 @@ export const isAcceptedFileType = (file: SelectableFile, acceptedFileTypes?: Acc
  */
 export const filterSelectedFiles = <T extends SelectableFile>(
   files: T[],
-  {
-    maxFiles = DEFAULT_MAX_FILES,
-    maxFileSize,
-    acceptedFileTypes,
-  }: FileSelectionLimits = {},
+  { maxFiles = DEFAULT_MAX_FILES, maxFileSize, acceptedFileTypes }: FileSelectionLimits = {},
 ): FileSelectionResult<T> =>
   files.reduce<FileSelectionResult<T>>(
     (result, file) => {

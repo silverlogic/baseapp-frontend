@@ -1,10 +1,7 @@
 {
   "extends": "@baseapp-frontend/tsconfig/lib.json",
   "compilerOptions": {
-    "types": [
-      "node",
-      "vitest/globals"
-    ],
+    "types": ["node", "vitest/globals"],
     "outDir": "./dist",
     "paths": {
       "@mui/system": ["./node_modules/@mui/system"]
@@ -27,7 +24,8 @@
     "playwright.config.ts",
     "webpack.config.ts",
     ".storybook/**/*",
-    ".storybook/**/*.json"
+    ".storybook/**/*.json",
+    "locales/**/*.json"
   ],
   "exclude": ["node_modules", "dist", "jest", "**/*.test.ts", "**/*.test.tsx"]
 }
