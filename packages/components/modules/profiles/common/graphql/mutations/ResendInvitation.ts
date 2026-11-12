@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { ResendInvitationMutation } from '../../../../../__generated__/ResendInvitationMutation.graphql'
@@ -26,6 +27,7 @@ export const useResendInvitationMutation = (): [
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<ResendInvitationMutation>(
     ResendInvitationMutationQuery,
   )
@@ -41,9 +43,21 @@ export const useResendInvitationMutation = (): [
 
         if (!errorMessage) {
           if (response?.profileResendInvitation?.emailSent === false) {
-            sendToast('Invitation updated, but the email could not be sent', { type: 'warning' })
+            sendToast(
+              intl.formatMessage({
+                id: 'profiles.members.resendInvitation.emailNotSent',
+                defaultMessage: 'Invitation updated, but the email could not be sent',
+              }),
+              { type: 'warning' },
+            )
           } else {
-            sendToast('Invitation resent successfully', { type: 'success' })
+            sendToast(
+              intl.formatMessage({
+                id: 'profiles.members.resendInvitation.success',
+                defaultMessage: 'Invitation resent successfully',
+              }),
+              { type: 'success' },
+            )
           }
         }
         config?.onCompleted?.(response, errors)

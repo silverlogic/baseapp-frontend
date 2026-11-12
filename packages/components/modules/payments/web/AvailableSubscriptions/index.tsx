@@ -6,6 +6,7 @@ import { LoadingState } from '@baseapp-frontend/design-system/components/web/dis
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, ToggleButton, ToggleButtonGroup } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
 import { CHECKOUT_URL } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
@@ -47,10 +48,14 @@ const AvailableSubscriptions: FC<AvailableSubscriptionsProps> = ({
           }}
         >
           {monthlySubs?.length && monthlySubs?.length > 0 && (
-            <ToggleButton value="monthly">Monthly</ToggleButton>
+            <ToggleButton value="monthly">
+              <FormattedMessage id="payments.plans.monthly" defaultMessage="Monthly" />
+            </ToggleButton>
           )}
           {yearlySubs?.length && yearlySubs?.length > 0 && (
-            <ToggleButton value="yearly">Yearly</ToggleButton>
+            <ToggleButton value="yearly">
+              <FormattedMessage id="payments.plans.yearly" defaultMessage="Yearly" />
+            </ToggleButton>
           )}
         </ToggleButtonGroup>
       </Box>

@@ -7,6 +7,7 @@ import { FlagIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { MenuItem, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
 import ReportDialogContent from './components/ReportDialogContent'
 import { StyledSwipeableDrawer } from './styled'
@@ -21,7 +22,7 @@ const ReportButtonWithDialog: FC<ReportButtonWithDialogProps> = ({ targetId, han
       <MenuItem onClick={() => setIsReportModalOpen(true)} disableRipple>
         <Typography variant="body2" color="error.main" noWrap>
           <FlagIcon sx={{ color: 'error.main', marginRight: '5px' }} />
-          Report profile
+          <FormattedMessage id="profiles.report.menuItem" defaultMessage="Report profile" />
         </Typography>
       </MenuItem>
       {smDown ? (

@@ -6,6 +6,7 @@ import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Divider, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -19,6 +20,7 @@ import {
 import DefaultEmptyState from './EmptyState'
 import MarkAllAsReadButton from './MarkAllAsReadButton'
 import DefaultNotificationItem from './NotificationItem'
+import { NOTIFICATIONS_LIST_MESSAGES } from './constants'
 import {
   HeaderContainer as DefaultHeaderContainer,
   ListContainer as DefaultListContainer,
@@ -37,6 +39,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
   HeaderContainer = DefaultHeaderContainer,
   ListContainer = DefaultListContainer,
 }) => {
+  const intl = useIntl()
   const smDown = useResponsive('down', 'sm')
 
   const options = { count: 10 }
@@ -64,7 +67,9 @@ const NotificationsList: FC<NotificationsListProps> = ({
       return (
         <>
           <Divider>
-            <Typography variant="body2">Older</Typography>
+            <Typography variant="body2">
+              {intl.formatMessage({ id: 'notifications.list.older', defaultMessage: 'Older' })}
+            </Typography>
           </Divider>
           <NotificationItem
             key={`notification-${notification.id}`}
@@ -127,13 +132,21 @@ const NotificationsList: FC<NotificationsListProps> = ({
   return (
     <Box display="grid" gridTemplateRows="min-content 1fr" height="100%">
       <HeaderContainer>
-        <Typography variant="h6">Notifications</Typography>
+        <Typography variant="h6">
+          {intl.formatMessage(NOTIFICATIONS_LIST_MESSAGES.title)}
+        </Typography>
         <Box display="grid" gridTemplateColumns="max-content min-content">
           {!!data?.notificationsUnreadCount && (
             <MarkAllAsReadButton refetch={refetchNotifications} />
           )}
           {smDown && (
-            <IconButton onClick={() => setIsDrawerOpened(false)} aria-label="close notifications">
+            <IconButton
+              onClick={() => setIsDrawerOpened(false)}
+              aria-label={intl.formatMessage({
+                id: 'notifications.list.closeAriaLabel',
+                defaultMessage: 'close notifications',
+              })}
+            >
               <CloseIcon />
             </IconButton>
           )}

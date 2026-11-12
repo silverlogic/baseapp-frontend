@@ -9,13 +9,14 @@ import { AutocompleteField } from '@baseapp-frontend/design-system/components/we
 import { useDebouncedValue } from '@baseapp-frontend/utils'
 
 import { Box, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { InviteMembersSearchQuery as InviteMembersSearchQueryType } from '../../../../../../__generated__/InviteMembersSearchQuery.graphql'
 import { InviteMembersSearchQuery, useInviteMembersSearch } from '../../../../common'
 import {
-  INVITE_MEMBER_DIALOG_COPY as COPY,
   EMAIL_REGEX,
+  INVITE_MEMBER_DIALOG_MESSAGES as MESSAGES,
   SEARCH_DEBOUNCE_MS,
   SEARCH_RESULTS_COUNT,
 } from '../constants'
@@ -24,6 +25,7 @@ import { getMemberKey } from '../utils'
 import { ChipsList, MemberChip, OptionInfo } from './styled'
 
 const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
+  const intl = useIntl()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebouncedValue(query, { debounceTime: SEARCH_DEBOUNCE_MS })
   const [isPending, startTransition] = useTransition()
@@ -106,7 +108,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
         value={null}
         inputValue={query}
         isPending={isPending}
-        placeholder={COPY.searchPlaceholder}
+        placeholder={intl.formatMessage(MESSAGES.searchPlaceholder)}
         freeSolo={false}
         autoComplete
         // Results are filtered server-side via refetch; keep MUI from re-filtering them.
@@ -190,7 +192,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
                   )}
                 </Box>
                 <IconButton
-                  aria-label="Remove member"
+                  aria-label={intl.formatMessage(MESSAGES.removeMember)}
                   size="small"
                   onClick={() => onRemove(getMemberKey(member))}
                 >

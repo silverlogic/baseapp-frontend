@@ -10,14 +10,16 @@ import { Box, Theme, useMediaQuery } from '@mui/system'
 import { AddressElement, Elements, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 import Image from 'next/image'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import PaymentDropdown from '../PaymentDropDown'
+import { PAYMENTS_MESSAGES } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
-import { PRODUCT_THUMBNAIL_SIZE } from './constants'
+import { CHECKOUT_MESSAGES, PRODUCT_THUMBNAIL_SIZE } from './constants'
 import { ProductContainer, StyledLoadingButton } from './styled'
 import { CheckoutComponentProps, CheckoutComponentWithElementProps } from './types'
 import { buildAddressOptions, extractErrorMessage } from './utils'
@@ -39,6 +41,9 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
   const [selectedPaymentMethodId, setSelectedPaymentMethodId] = useState<string>('')
 
   const { sendToast } = useNotification()
+  const intl = useIntl()
+  const getErrorMessage = (error: unknown) =>
+    extractErrorMessage(error, intl.formatMessage(CHECKOUT_MESSAGES.unexpectedError))
   const isMobile = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
   const elements = useElements()
   const stripe = useStripe()
@@ -69,13 +74,13 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
     useUpdateSubscription(customer?.subscriptions?.[0]?.id ?? '', {
       onSuccess: () => {
         setIsRetry(false)
-        sendToast('Subscription updated successfully.', { type: 'success' })
+        sendToast(intl.formatMessage(PAYMENTS_MESSAGES.subscriptionUpdated), { type: 'success' })
         setConfirmationModalOpen(true)
         onSuccess?.()
       },
       onError: (error: any) => {
         console.error('Failed to update subscription', error)
-        sendToast('Failed to update subscription', { type: 'error' })
+        sendToast(intl.formatMessage(CHECKOUT_MESSAGES.updateFailed), { type: 'error' })
         setIsRetry(true)
       },
     })
@@ -142,8 +147,11 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                   paymentMethodId: selectedPaymentMethodId,
                 })
               } catch (error) {
-                const message = extractErrorMessage(error)
-                sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
+                const message = getErrorMessage(error)
+                sendToast(
+                  intl.formatMessage(CHECKOUT_MESSAGES.paymentConfirmationFailed, { message }),
+                  { type: 'error' },
+                )
                 setPendingClientSecret(clientSecret)
                 setIsRetry(true)
                 return
@@ -167,15 +175,20 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
           },
           onError: (error: any) => {
             console.error('Failed to create subscription', error)
-            const message = extractErrorMessage(error)
+            const message = getErrorMessage(error)
             sendToast(message, { type: 'error' })
             setIsRetry(true)
           },
         },
       )
     } catch (error: any) {
-      const message = error?.response?.data?.error || error?.message || 'Please try again.'
-      sendToast(`Failed to create subscription: ${message}`, { type: 'error' })
+      const message =
+        error?.response?.data?.error ||
+        error?.message ||
+        intl.formatMessage(PAYMENTS_MESSAGES.tryAgain)
+      sendToast(intl.formatMessage(CHECKOUT_MESSAGES.createFailed, { message }), {
+        type: 'error',
+      })
       setIsRetry(true)
     }
   }
@@ -197,8 +210,10 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
       setConfirmationModalOpen(true)
       onSuccess?.()
     } catch (error) {
-      const message = extractErrorMessage(error)
-      sendToast(`Payment confirmation failed: ${message}`, { type: 'error' })
+      const message = getErrorMessage(error)
+      sendToast(intl.formatMessage(CHECKOUT_MESSAGES.paymentConfirmationFailed, { message }), {
+        type: 'error',
+      })
     }
   }
 
@@ -258,24 +273,26 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                     <Typography variant="body2" fontWeight={700}>
                       {formatPrice(
                         product?.defaultPrice?.unitAmount,
-                        // Price carries no locale, so this fell back to en-US anyway.
-                        // Sourcing a real one from the user is a separate change.
-                        undefined,
+                        intl.locale,
                         product?.defaultPrice?.currency,
                       )}
                     </Typography>
                   </Box>
                 )}
                 <Typography variant="body2" color="text.secondary">
-                  + taxes /month
+                  <FormattedMessage
+                    id="payments.checkout.taxesPerMonth"
+                    defaultMessage="+ taxes /month"
+                  />
                 </Typography>
               </Box>
             </ProductContainer>
             <Box>
               <Typography variant="caption" color="text.primary">
-                By completing your purchase, you consent to BaseApp storing your payment method for
-                future charges. You can change your payment method at any time in your account
-                settings.
+                <FormattedMessage
+                  id="payments.checkout.consent"
+                  defaultMessage="By completing your purchase, you consent to BaseApp storing your payment method for future charges. You can change your payment method at any time in your account settings."
+                />
               </Typography>
             </Box>
             <Box>
@@ -295,7 +312,14 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                   paymentMethods?.length === 0
                 }
               >
-                {isRetry ? 'Retry' : 'Place Order'}
+                {isRetry ? (
+                  <FormattedMessage id="payments.checkout.retry" defaultMessage="Retry" />
+                ) : (
+                  <FormattedMessage
+                    id="payments.checkout.placeOrder"
+                    defaultMessage="Place Order"
+                  />
+                )}
               </StyledLoadingButton>
             </Box>
           </Box>
@@ -303,7 +327,9 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
         <Grid item xs={12} sm={6}>
           <Box minWidth={{ md: 400 }}>
             <Box display="flex" flexDirection="column" gap={2}>
-              <Typography variant="subtitle2">Payment</Typography>
+              <Typography variant="subtitle2">
+                <FormattedMessage {...PAYMENTS_MESSAGES.payment} />
+              </Typography>
               <Divider variant="fullWidth" sx={{ backgroundColor: 'divider' }} />
               {elements && stripe && (
                 <PaymentDropdown
@@ -321,9 +347,14 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               {shouldRenderAddressElement ? (
                 <>
                   <Box display="flex" flexDirection="column" gap="none">
-                    <Typography variant="subtitle2">Address</Typography>
+                    <Typography variant="subtitle2">
+                      <FormattedMessage id="payments.checkout.address" defaultMessage="Address" />
+                    </Typography>
                     <Typography variant="caption" color="text.primary">
-                      Used to calculate taxes.
+                      <FormattedMessage
+                        id="payments.checkout.addressHelper"
+                        defaultMessage="Used to calculate taxes."
+                      />
                     </Typography>
                   </Box>
                   <Divider

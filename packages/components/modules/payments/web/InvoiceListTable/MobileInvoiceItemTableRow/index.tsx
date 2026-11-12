@@ -10,6 +10,7 @@ const MobileInvoiceItemTableRow = ({
   cellProps,
   formattedDate,
   amountDue,
+  statusLabel,
   color,
 }: InvoiceItemTableRowProps) => (
   <TableRow key={row.id} {...rowProps}>
@@ -32,8 +33,8 @@ const MobileInvoiceItemTableRow = ({
           alignItems: 'flex-end',
         }}
       >
-        <Chip label={row.status} color={color} variant="soft" size="small" />
-        <Typography variant="body2">{amountDue ? `$${amountDue}` : '-'}</Typography>
+        <Chip label={statusLabel} color={color} variant="soft" size="small" />
+        <Typography variant="body2">{amountDue || '-'}</Typography>
       </Box>
     </TableCell>
     <TableCell {...cellProps}>

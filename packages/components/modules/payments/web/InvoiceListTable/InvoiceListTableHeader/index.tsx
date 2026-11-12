@@ -1,5 +1,7 @@
 import { TableCell, TableHead, TableRow } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
+import { INVOICE_TABLE_MESSAGES } from '../constants'
 import { InvoiceListTableHeaderProps } from '../types'
 
 const InvoiceListTableHeader = ({ smDown, headerProps }: InvoiceListTableHeaderProps) => {
@@ -7,8 +9,12 @@ const InvoiceListTableHeader = ({ smDown, headerProps }: InvoiceListTableHeaderP
     return (
       <TableHead {...headerProps}>
         <TableRow>
-          <TableCell>Description</TableCell>
-          <TableCell>Info</TableCell>
+          <TableCell>
+            <FormattedMessage {...INVOICE_TABLE_MESSAGES.description} />
+          </TableCell>
+          <TableCell>
+            <FormattedMessage id="payments.invoices.header.info" defaultMessage="Info" />
+          </TableCell>
           <TableCell />
         </TableRow>
       </TableHead>
@@ -18,11 +24,21 @@ const InvoiceListTableHeader = ({ smDown, headerProps }: InvoiceListTableHeaderP
   return (
     <TableHead {...headerProps}>
       <TableRow>
-        <TableCell>Description</TableCell>
-        <TableCell>Date</TableCell>
-        <TableCell>Status</TableCell>
-        <TableCell>Amount</TableCell>
-        <TableCell>Details</TableCell>
+        <TableCell>
+          <FormattedMessage {...INVOICE_TABLE_MESSAGES.description} />
+        </TableCell>
+        <TableCell>
+          <FormattedMessage id="payments.invoices.header.date" defaultMessage="Date" />
+        </TableCell>
+        <TableCell>
+          <FormattedMessage id="payments.invoices.header.status" defaultMessage="Status" />
+        </TableCell>
+        <TableCell>
+          <FormattedMessage id="payments.invoices.header.amount" defaultMessage="Amount" />
+        </TableCell>
+        <TableCell>
+          <FormattedMessage id="payments.invoices.header.details" defaultMessage="Details" />
+        </TableCell>
       </TableRow>
     </TableHead>
   )

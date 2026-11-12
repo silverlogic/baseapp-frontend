@@ -2,6 +2,8 @@ import { FC } from 'react'
 
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
+
 import DefaultNotificationAvatar from '../Notification/NotificationAvatar'
 import DefaultNotificationBody from '../Notification/NotificationBody'
 import DefaultNotificationHeader from '../Notification/NotificationHeader'
@@ -22,8 +24,11 @@ const CommentReply: FC<CommentReplyProps> = ({
   NotificationBody = DefaultNotificationBody,
   NotificationBodyProps = {},
 }) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const message = `replied to your comment`
+  const intl = useIntl()
+  const message = intl.formatMessage({
+    id: 'notifications.commentReply.message',
+    defaultMessage: 'replied to your comment',
+  })
 
   return (
     <NotificationRoot>

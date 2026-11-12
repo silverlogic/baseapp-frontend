@@ -11,6 +11,7 @@ import { useUISettings } from '@baseapp-frontend/design-system/hooks/web'
 import { joinWithSeparator } from '@baseapp-frontend/utils'
 
 import { Box, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import {
   AddProfileMenuItem as DefaultAddProfileMenuItem,
@@ -32,6 +33,7 @@ import {
 import { VerticalFooterProps } from './types'
 
 const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) => {
+  const intl = useIntl()
   const { currentProfile: profile } = useCurrentProfile()
   const { user } = useJWTUser()
   const popover = usePopover()
@@ -99,7 +101,10 @@ const VerticalFooter: FC<VerticalFooterProps> = ({ AccountPopoverProps = {} }) =
             width={AVATAR_SIZE}
             height={AVATAR_SIZE}
             src={profile?.image ?? ''}
-            alt="Profile avatar"
+            alt={intl.formatMessage({
+              id: 'navigations.verticalFooter.avatarAlt',
+              defaultMessage: 'Profile avatar',
+            })}
             color="secondary"
             sx={{
               border: (theme) => `2px solid ${theme.palette.divider}`,

@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { ReportCreateMutation } from '../../../../../__generated__/ReportCreateMutation.graphql'
@@ -25,6 +26,7 @@ export const useReportCreateMutation = (): [
     useMutation<ReportCreateMutation>(ReportCreateMutationQuery)
 
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const commit = (config: UseMutationConfig<ReportCreateMutation>) => {
     commitMutation({
       ...config,
@@ -34,7 +36,13 @@ export const useReportCreateMutation = (): [
       },
       onError: (error) => {
         if (error.message.includes('duplicate key value violates unique constraint')) {
-          sendToast('You have already reported this profile.', { type: 'error' })
+          sendToast(
+            intl.formatMessage({
+              id: 'profiles.report.alreadyReported',
+              defaultMessage: 'You have already reported this profile.',
+            }),
+            { type: 'error' },
+          )
         } else {
           sendToast(error.message, { type: 'error' })
         }

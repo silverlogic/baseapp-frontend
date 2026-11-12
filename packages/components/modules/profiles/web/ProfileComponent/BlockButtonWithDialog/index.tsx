@@ -5,11 +5,12 @@ import { BlockIcon, UnblockIcon } from '@baseapp-frontend/design-system/componen
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, CircularProgress, MenuItem, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment, useMutation } from 'react-relay'
 
 import { BlockToggleMutation } from '../../../../../__generated__/BlockToggleMutation.graphql'
 import { BlockToggleFragment, BlockToggleMutationQuery } from '../../../common'
-import { BLOCK_UNBLOCK_DIALOG_TEXTS } from './constants'
+import { BLOCK_UNBLOCK_DIALOG_MESSAGES as MESSAGES } from './constants'
 import { ActionButton, DialogTitleContainer } from './styled'
 import { BlockButtonWithDialogProps } from './types'
 
@@ -25,6 +26,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
     useMutation<BlockToggleMutation>(BlockToggleMutationQuery)
   const { sendMutationErrorToast, sendToast } = useNotification()
   const [open, setOpen] = useState(false)
+  const intl = useIntl()
 
   const isBlockedByMe = target?.isBlockedByMe
 
@@ -59,7 +61,12 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
         }
         handleSuccess()
         sendToast(
-          `${target.name ?? ''} is ${response?.blockToggle?.target?.isBlockedByMe ? 'blocked' : 'unblocked'}`,
+          intl.formatMessage(
+            response?.blockToggle?.target?.isBlockedByMe
+              ? MESSAGES.blockedToast
+              : MESSAGES.unblockedToast,
+            { name: target.name ?? '' },
+          ),
           { type: 'info' },
         )
       },
@@ -77,12 +84,12 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
             {isBlockedByMe ? (
               <>
                 <UnblockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
-                Unblock profile
+                {intl.formatMessage(MESSAGES.unblockProfile)}
               </>
             ) : (
               <>
                 <BlockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
-                Block profile
+                {intl.formatMessage(MESSAGES.blockProfile)}
               </>
             )}
           </Typography>
@@ -98,12 +105,12 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
             {isBlockedByMe ? (
               <>
                 <UnblockIcon sx={{ color: 'inherit', marginRight: '5px' }} />
-                Unblock
+                {intl.formatMessage(MESSAGES.unblockAction)}
               </>
             ) : (
               <>
                 <BlockIcon sx={{ color: 'error.main', marginRight: '5px' }} />
-                Block profile
+                {intl.formatMessage(MESSAGES.blockProfile)}
               </>
             )}
           </Typography>
@@ -114,14 +121,14 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
         title={
           <DialogTitleContainer>
             {isBlockedByMe ? <UnblockIcon /> : <BlockIcon />}
-            {`${isBlockedByMe ? BLOCK_UNBLOCK_DIALOG_TEXTS.unblock.title : BLOCK_UNBLOCK_DIALOG_TEXTS.block.title} ${target.name}?`}
+            {intl.formatMessage(isBlockedByMe ? MESSAGES.unblockTitle : MESSAGES.blockTitle, {
+              name: target.name,
+            })}
           </DialogTitleContainer>
         }
-        content={
-          isBlockedByMe
-            ? BLOCK_UNBLOCK_DIALOG_TEXTS.unblock.content
-            : BLOCK_UNBLOCK_DIALOG_TEXTS.block.content
-        }
+        content={intl.formatMessage(
+          isBlockedByMe ? MESSAGES.unblockContent : MESSAGES.blockContent,
+        )}
         onClose={handleClose}
         action={
           <ActionButton
@@ -129,9 +136,7 @@ const BlockButtonWithDialog: FC<BlockButtonWithDialogProps> = ({
             isBlocked={isBlockedByMe}
             disabled={isMutationInFlight}
           >
-            {isBlockedByMe
-              ? BLOCK_UNBLOCK_DIALOG_TEXTS.unblock.action
-              : BLOCK_UNBLOCK_DIALOG_TEXTS.block.action}
+            {intl.formatMessage(isBlockedByMe ? MESSAGES.unblockAction : MESSAGES.blockAction)}
             {isMutationInFlight && <CircularProgress size={16} sx={{ marginLeft: '5px' }} />}
           </ActionButton>
         }

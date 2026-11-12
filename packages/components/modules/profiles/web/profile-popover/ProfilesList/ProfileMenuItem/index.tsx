@@ -5,6 +5,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../../common'
@@ -19,6 +20,7 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
   height = 36,
 }) => {
   const { currentProfile } = useCurrentProfile()
+  const intl = useIntl()
   const profile = useFragment(ProfileItemFragment, profileRef)
 
   if (!profile) {
@@ -34,13 +36,26 @@ const ProfileMenuItem: FC<ProfileMenuItemProps> = ({
       tabIndex={0}
       active={isActiveProfile}
       onClick={() => onProfileChange(profile)}
-      aria-label={`Switch to ${profile.name ?? 'this profile'}`}
+      aria-label={
+        profile.name
+          ? intl.formatMessage(
+              { id: 'profiles.profilesList.switchTo', defaultMessage: 'Switch to {name}' },
+              { name: profile.name },
+            )
+          : intl.formatMessage({
+              id: 'profiles.profilesList.switchToThisProfile',
+              defaultMessage: 'Switch to this profile',
+            })
+      }
     >
       <AvatarWithPlaceholder
         width={width}
         height={height}
         src={profile.image ?? ''}
-        alt="Profile avatar"
+        alt={intl.formatMessage({
+          id: 'profiles.members.avatarAlt',
+          defaultMessage: 'Profile avatar',
+        })}
         color="secondary"
         {...avatarProps}
       />

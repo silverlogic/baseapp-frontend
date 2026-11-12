@@ -1,31 +1,34 @@
 import { Check } from '@mui/icons-material'
 import { Box, Button, List, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
 import Link from 'next/link'
+import { FormattedMessage, useIntl } from 'react-intl'
 
+import { PAYMENTS_MESSAGES } from '../../constants'
+import { FREE_PLAN_FEATURE_MESSAGES } from '../constants'
 import { RowFlexContainer, SubscriptionPlanContainer } from '../styled'
 import { FreePlanComponentProps } from './types'
 
 const FreePlanComponent = ({ planChangeUrl }: FreePlanComponentProps) => {
-  const freeFeatures = [
-    'Access to core features',
-    'Limited storage space',
-    'Standard support',
-    'No commitment required',
-  ]
+  const intl = useIntl()
+  const freeFeatures = Object.values(FREE_PLAN_FEATURE_MESSAGES).map((message) =>
+    intl.formatMessage(message),
+  )
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
       <Typography variant="h4" component="h2">
-        Subscription
+        <FormattedMessage {...PAYMENTS_MESSAGES.subscription} />
       </Typography>
       <SubscriptionPlanContainer>
         <RowFlexContainer>
           <Typography variant="h4" component="p">
-            Free
+            <FormattedMessage id="payments.freePlan.title" defaultMessage="Free" />
           </Typography>
         </RowFlexContainer>
         <Typography variant="body1" component="p">
-          Enjoy essential access to the platform at no cost. Perfect for exploring basic features
-          and getting started.
+          <FormattedMessage
+            id="payments.freePlan.description"
+            defaultMessage="Enjoy essential access to the platform at no cost. Perfect for exploring basic features and getting started."
+          />
         </Typography>
         <Box>
           <RowFlexContainer>
@@ -52,7 +55,7 @@ const FreePlanComponent = ({ planChangeUrl }: FreePlanComponentProps) => {
           width: 'fit-content',
         }}
       >
-        Change Plan
+        <FormattedMessage {...PAYMENTS_MESSAGES.changePlan} />
       </Button>
     </Box>
   )

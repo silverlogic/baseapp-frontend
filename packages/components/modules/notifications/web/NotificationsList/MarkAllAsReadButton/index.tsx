@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import LoadingButton from '@mui/lab/LoadingButton'
+import { FormattedMessage } from 'react-intl'
 
 import { useNotificationsMarkAllAsRead } from '../../../common'
 import { MarkAllAsReadButtonProps } from './types'
@@ -20,7 +21,7 @@ const MarkAllAsReadButton: FC<MarkAllAsReadButtonProps> = ({ refetch }) => {
 
   return (
     <LoadingButton color="primary" onClick={markAsRead} loading={isLoading}>
-      Mark all as read
+      <FormattedMessage id="notifications.list.markAllAsRead" defaultMessage="Mark all as read" />
     </LoadingButton>
   )
 }

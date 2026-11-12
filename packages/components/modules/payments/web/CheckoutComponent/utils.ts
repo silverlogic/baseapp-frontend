@@ -57,9 +57,12 @@ export const buildAddressOptions = (selectedMethod?: PaymentMethod) => ({
  * `nonFieldErrors` on the way in) and some viewsets as `{"error": "..."}`; packages that
  * have not been migrated yet still answer a bare list, hence the positional fallback.
  */
-export const extractErrorMessage = (error: any): string =>
+export const extractErrorMessage = (
+  error: any,
+  fallbackMessage: string = 'An unexpected error occurred. Please try again.',
+): string =>
   error?.response?.data?.nonFieldErrors?.[0] ||
   error?.response?.data?.error ||
   (Array.isArray(error?.response?.data) && error?.response?.data[0]) ||
   error?.message ||
-  'An unexpected error occurred. Please try again.'
+  fallbackMessage
