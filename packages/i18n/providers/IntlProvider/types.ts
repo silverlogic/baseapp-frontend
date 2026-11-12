@@ -6,7 +6,6 @@ export interface IntlProviderWrapperProps {
   children: ReactNode
   locale?: Locale
   defaultLocale?: Locale
-  additionalMessages?: Record<string, string>
-  additionalMessagesByLocale?: Partial<Record<Locale, Record<string, string>>>
+  additionalMessages?: Partial<Record<Locale, Record<string, string>>>
   initialCookies?: Record<string, string>
 }

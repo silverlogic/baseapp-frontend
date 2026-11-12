@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
 
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
@@ -14,7 +14,6 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   locale: initialLocale,
   defaultLocale = DEFAULT_LOCALE,
   additionalMessages,
-  additionalMessagesByLocale,
   initialCookies,
 }) => {
   const cookieLocale = useMemo(() => {
@@ -26,13 +25,10 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
 
-  const getLocaleMessages = useCallback(
-    (target: Locale) =>
-      getMessages(target, { ...additionalMessages, ...additionalMessagesByLocale?.[target] }),
-    [additionalMessages, additionalMessagesByLocale],
+  const messages = useMemo(
+    () => getMessages(locale, additionalMessages?.[locale]),
+    [locale, additionalMessages],
   )
-
-  const messages = useMemo(() => getLocaleMessages(locale), [getLocaleMessages, locale])
 
   useEffect(() => {
     // Load locale from storage if not provided via props or a supported cookie

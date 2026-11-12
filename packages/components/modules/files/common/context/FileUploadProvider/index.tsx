@@ -1,14 +1,16 @@
 import { create } from 'zustand'
 
 import { FileUploadStatus } from '../../constants'
-import type { FileUploadProgress } from '../../types'
+import type { FileUploadProgress, UploadInput } from '../../types'
 import { nextLocalId } from '../../utils/localId'
+import { toUploadSource } from '../../utils/uploadSource'
 import type { FileUploadState } from './types'
 
 export const useFileUploadStore = create<FileUploadState>((set, get) => ({
   files: new Map(),
 
-  addFile: (file: File, scope?: string) => {
+  addFile: (input: UploadInput, scope?: string) => {
+    const file = toUploadSource(input)
     const id = `${nextLocalId()}-${file.name}`
     const fileProgress: FileUploadProgress = {
       id,
@@ -99,6 +101,7 @@ export const useFileUploadStore = create<FileUploadState>((set, get) => ({
       if (file?.abortController) {
         file.abortController.abort()
       }
+      file?.file.dispose?.()
 
       newFiles.delete(id)
       return { files: newFiles }
@@ -200,6 +203,8 @@ export const useFileUploadStore = create<FileUploadState>((set, get) => ({
 
       Array.from(newFiles.entries()).forEach(([id, file]) => {
         if (file.scope === scope) {
+          file.abortController?.abort()
+          file.file.dispose?.()
           newFiles.delete(id)
         }
       })

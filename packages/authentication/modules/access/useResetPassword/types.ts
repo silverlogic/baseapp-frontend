@@ -12,7 +12,7 @@ export type ResetPasswordForm = {
 
 export interface UseResetPasswordOptions {
   token: string
-  validationSchema?: z.ZodType<ResetPasswordForm>
+  validationSchema?: z.ZodType<ResetPasswordForm, ResetPasswordForm>
   defaultValues?: ResetPasswordForm
   options?: UseMutationOptions<void, unknown, ResetPasswordForm, any>
   ApiClass?: ApiClass
