@@ -1,6 +1,8 @@
 import { ComponentWithProviders, renderHook } from '@baseapp-frontend/test'
 import {
   ACCESS_KEY_NAME,
+  IMPERSONATOR_ACCESS_KEY_NAME,
+  IMPERSONATOR_REFRESH_KEY_NAME,
   LOGOUT_EVENT,
   REFRESH_KEY_NAME,
   eventEmitter,
@@ -36,6 +38,8 @@ describe('useLogout hook', () => {
 
     expect(removeTokenAsync).toHaveBeenCalledWith(ACCESS_KEY_NAME)
     expect(removeTokenAsync).toHaveBeenCalledWith(REFRESH_KEY_NAME)
+    expect(removeTokenAsync).toHaveBeenCalledWith(IMPERSONATOR_ACCESS_KEY_NAME)
+    expect(removeTokenAsync).toHaveBeenCalledWith(IMPERSONATOR_REFRESH_KEY_NAME)
     expect(mockResetQueries).toHaveBeenCalledWith({ queryKey: USER_API_KEY.getUser() })
     expect(mockResetQueries).toHaveBeenCalledWith({ queryKey: MFA_API_KEY.default })
   })

@@ -54,3 +54,18 @@ browser. Point it at an address only the web server can reach, and make sure the
 Mobile apps keep absolute `EXPO_PUBLIC_*` addresses. To use the same rules elsewhere, call
 `resolveApiUrl(address)`, which returns `{ url, headers }`, and `resolveWebSocketUrl(address)`
 (or `getWebSocketClientUrl(address)` for a `graphql-ws` client's `url` option).
+
+## **Token cookie names**
+
+The JWT pair is stored under these names (cookies on web, secure storage on mobile). They are
+exported from `@baseapp-frontend/utils` and `@baseapp-frontend/utils/constants/jwt`.
+
+| Constant | Value | Holds |
+|---|---|---|
+| `ACCESS_KEY_NAME` | `Authorization` | The access token every request is made with |
+| `REFRESH_KEY_NAME` | `Refresh` | The refresh token |
+| `IMPERSONATOR_ACCESS_KEY_NAME` | `ImpersonatorAuthorization` | The impersonator's own access token, kept aside while an impersonation session runs |
+| `IMPERSONATOR_REFRESH_KEY_NAME` | `ImpersonatorRefresh` | The impersonator's own refresh token, kept aside the same way |
+
+The impersonator pair exists only between the start and the end of a session (see
+`@baseapp-frontend/authentication`'s impersonation helpers); `useLogout` removes it.

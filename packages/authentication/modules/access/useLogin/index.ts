@@ -27,6 +27,7 @@ import {
   isLoginChangeExpiredPasswordRedirectResponse,
   isLoginMfaResponse,
 } from '../../../utils/login'
+import { clearImpersonatorTokens } from '../../impersonation/tokens'
 import { CODE_VALIDATION_INITIAL_VALUES, CODE_VALIDATION_SCHEMA } from '../../mfa/constants'
 import { useCurrentProfile } from '../../profile'
 import { setProfileExpoStorage } from '../../profile/utils'
@@ -85,6 +86,9 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
     await setTokenAsync(refreshKeyName, response.refresh, {
       secure: process.env.NODE_ENV === 'production',
     })
+    // an impersonator's tokens kept aside by a session that was never ended here belong to
+    // whoever was signed in before; ending a later session must not bring them back
+    await clearImpersonatorTokens()
   }
 
   const form = useForm<LoginParams<TApiClass>>({

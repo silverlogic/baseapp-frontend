@@ -71,6 +71,11 @@
       "import": "./dist/content-feed/*/index.mjs",
       "require": "./dist/content-feed/*/index.js"
     },
+    "./impersonation/*": {
+      "types": "./dist/impersonation/*/index.d.ts",
+      "import": "./dist/impersonation/*/index.mjs",
+      "require": "./dist/impersonation/*/index.js"
+    },
     "./package.json": "./package.json",
     "./shared/common": "./modules/__shared__/common/index.ts",
     "./shared/web": "./modules/__shared__/web/index.ts",
@@ -105,7 +110,10 @@
     "./pages/native": "./modules/pages/native/index.ts",
     "./files/common": "./modules/files/common/index.ts",
     "./files/web": "./modules/files/web/index.ts",
-    "./files/native": "./modules/files/native/index.ts"
+    "./files/native": "./modules/files/native/index.ts",
+    "./impersonation/common": "./modules/impersonation/common/index.ts",
+    "./impersonation/web": "./modules/impersonation/web/index.ts",
+    "./impersonation/native": "./modules/impersonation/native/index.ts"
   },
   "files": [
     "modules",
