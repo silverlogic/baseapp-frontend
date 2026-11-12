@@ -17,7 +17,5 @@ Translate every web string to English, Spanish and Portuguese through react-intl
 - `authentication`: intl factories next to every validation schema
   (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
   new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
-- `i18n`: `IntlProviderWrapper` accepts `additionalMessagesByLocale`; the app-specific
-  `settings.*` messages moved out of the package catalog.
 - Web components that render text now require an `IntlProvider` ancestor (the package test
   providers include one).

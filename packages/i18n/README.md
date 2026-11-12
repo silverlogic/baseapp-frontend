@@ -10,7 +10,7 @@ Supported locales: `en` (source), `es`, `pt`.
 |---|---|
 | `SUPPORTED_LOCALES`, `DEFAULT_LOCALE`, `LOCALE_LABELS`, `Locale` | Locale list, fallback and display names |
 | `LANGUAGE_COOKIE_NAME` | Cookie (web) / SecureStore key (mobile) holding the user's language. Owned by `@baseapp-frontend/utils`, re-exported here |
-| `IntlProvider` | Wraps react-intl's provider; merges this package's catalog with `additionalMessages` |
+| `IntlProvider` | Wraps react-intl's provider; merges this package's catalog with the current locale's entry of `additionalMessages` (`{ en, es, pt }`) |
 | `useLocale()` | Current locale plus `setLocale`, which persists the choice and reloads the page |
 | `getLanguage()` / `setLanguage()` | Read / write the stored language (cookie, server request cookie or SecureStore) |
 | `getCurrentLocale()` | Stored language, else the browser language, else `DEFAULT_LOCALE` |
@@ -21,7 +21,7 @@ Supported locales: `en` (source), `es`, `pt`.
 
 ## Where catalogs live
 
-Each package that renders text owns a `locales/{en,es,pt}.json` (plus a `locales/index.ts` exporting them by locale), and its message ids start with a namespace for that package or module (`common.*`, `utils.*`, `comments.*`, `messages.*`, …). The consuming app imports the catalogs it needs, merges them with its own, and passes the result to `IntlProvider` through `additionalMessages`. Later catalogs override earlier ones, so an app can reword any package message by reusing its id.
+Each package that renders text owns a `locales/{en,es,pt}.json` (plus a `locales/index.ts` exporting them by locale), and its message ids start with a namespace for that package or module (`common.*`, `utils.*`, `comments.*`, `messages.*`, …). The consuming app imports the catalogs it needs, merges them with its own per locale, and passes the `{ en, es, pt }` map to `IntlProvider` through `additionalMessages`; the provider picks the entry for the active locale, so a locale switched on the client still gets the app's strings. Later catalogs override earlier ones, so an app can reword any package message by reusing its id.
 
 ## Writing translatable code
 
