@@ -305,7 +305,9 @@ describe('useChunkedUpload', () => {
     })
     const onUploadError = vi.fn()
 
-    const { result } = renderHook(() => useChunkedUpload({ onUploadError }))
+    const { result } = renderHook(() => useChunkedUpload({ onUploadError }), {
+      wrapper: IntlWrapper,
+    })
     await expect(result.current.uploadFile(makeFile(2))).rejects.toThrow('Chunk upload aborted')
 
     expect(useFileUploadStore.getState().files.size).toBe(0)
