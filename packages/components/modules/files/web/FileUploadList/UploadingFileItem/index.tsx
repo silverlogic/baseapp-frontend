@@ -24,7 +24,8 @@ import { useIntl } from 'react-intl'
 import { FileUploadStatus } from '../../../common/constants'
 import { useFileUploadStore } from '../../../common/context/FileUploadProvider'
 import { useChunkedUpload } from '../../../common/hooks/useChunkedUpload'
-import { calculateProgress, formatFileSize } from '../../../common/utils/formatters'
+import { formatFileSize } from '../../../common/utils/formatters'
+import { getUploadItemActions, getUploadPercent } from '../../../common/utils/uploadItemState'
 import FileChip from '../../FileChip'
 import FileThumbnail from '../../FileThumbnail'
 import FileProgress from './FileProgress'
@@ -41,10 +42,7 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
   const pauseFile = useFileUploadStore((state) => state.pauseFile)
   const { resumeUpload, retryUpload } = useChunkedUpload()
 
-  const getProgress = (): number => {
-    if (fileProgress.status === FileUploadStatus.COMPLETED) return 100
-    return calculateProgress(fileProgress.uploadedBytes, fileProgress.fileSize)
-  }
+  const getProgress = (): number => getUploadPercent(fileProgress)
 
   const handleRemove = () => {
     removeFile(fileProgress.id)
@@ -67,22 +65,10 @@ const UploadingFileItem: FC<UploadingFileItemProps> = ({
 
   const isCompleted = fileProgress.status === FileUploadStatus.COMPLETED
 
-  const canRemove =
-    allowRemove &&
-    [
-      FileUploadStatus.PENDING,
-      FileUploadStatus.FAILED,
-      FileUploadStatus.PAUSED,
-      FileUploadStatus.ABORTED,
-      // Uploaded but not yet attached (e.g. a new comment) — let the user undo it.
-      FileUploadStatus.COMPLETED,
-    ].includes(fileProgress.status)
-
-  const canRetry = allowRetry && fileProgress.status === FileUploadStatus.FAILED
-
-  const canPause = fileProgress.status === FileUploadStatus.UPLOADING
-
-  const canResume = fileProgress.status === FileUploadStatus.PAUSED
+  const { canPause, canResume, canRetry, canRemove } = getUploadItemActions(fileProgress.status, {
+    allowRemove,
+    allowRetry,
+  })
 
   // While uploading we show a generic type icon rather than decoding the source
   // file into a preview (a full-res image would decode into a large bitmap just

@@ -7,7 +7,7 @@ import { useShallow } from 'zustand/react/shallow'
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
-import type { FileUploadProgress } from '../../types'
+import type { FileUploadProgress, UploadInput } from '../../types'
 import { uploadTokensFor } from '../../utils/uploadTokens'
 import { useChunkedUpload } from '../useChunkedUpload'
 import { ATTACH_ERROR_MESSAGES } from './constants'
@@ -142,7 +142,7 @@ export const useFileUploadLogic = ({
   }, [completedRelayIds, handleCompletedOutsideBatch])
 
   const handleFilesSelected = useCallback(
-    async (selectedFiles: File[]) => {
+    async (selectedFiles: UploadInput[]) => {
       if (!targetObjectId) {
         onError?.(new Error('Target object ID is required'))
         return

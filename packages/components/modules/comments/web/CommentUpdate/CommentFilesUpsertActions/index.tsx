@@ -8,10 +8,9 @@ import { AttachmentIcon, MentionIcon } from '@baseapp-frontend/design-system/com
 
 import { useIntl } from 'react-intl'
 
+import { COMMENT_FILE_ATTACHMENT_LIMITS } from '../../../common'
 import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
-
-const MAX_FILES = 5
 
 /**
  * SocialInput upsert-action bar for the comment editor: the attach icon is the
@@ -26,7 +25,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({ target 
         target={target}
         as="button"
         icon={<AttachmentIcon />}
-        maxFiles={MAX_FILES}
+        {...COMMENT_FILE_ATTACHMENT_LIMITS}
         autoAttach
         label={intl.formatMessage({
           id: 'comments.upsertActions.attachFiles.ariaLabel',
