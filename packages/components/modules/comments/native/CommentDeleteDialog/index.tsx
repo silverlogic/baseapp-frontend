@@ -2,6 +2,8 @@ import { Button } from '@baseapp-frontend/design-system/components/native/button
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/native/dialogs'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 
+import { useIntl } from 'react-intl'
+
 import { useCommentDeleteMutation } from '../../common'
 import { ICommentDeleteDialogProps } from './types'
 
@@ -11,6 +13,7 @@ const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
   onDeleted,
   commentId,
 }) => {
+  const intl = useIntl()
   const [deleteComment, isDeletingComment] = useCommentDeleteMutation()
 
   const handleDeleteComment = () => {
@@ -30,8 +33,15 @@ const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
     <ConfirmDialog
       visible={visible}
       onClose={onClose}
-      title="Delete Comment?"
-      content="Are you sure you want to delete this comment? This action cannot be undone."
+      title={intl.formatMessage({
+        id: 'comments.deleteDialog.title',
+        defaultMessage: 'Delete Comment?',
+      })}
+      content={intl.formatMessage({
+        id: 'comments.deleteDialog.content',
+        defaultMessage:
+          'Are you sure you want to delete this comment? This action cannot be undone.',
+      })}
       action={
         <Button
           color="error"
@@ -42,7 +52,7 @@ const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
           size="medium"
         >
           <Text variant="buttonMedium" color="contrast">
-            Delete
+            {intl.formatMessage({ id: 'comments.deleteDialog.confirm', defaultMessage: 'Delete' })}
           </Text>
         </Button>
       }

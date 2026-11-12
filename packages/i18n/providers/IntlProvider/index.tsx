@@ -7,6 +7,7 @@ import { IntlProvider as ReactIntlProvider } from 'react-intl'
 import { getCurrentLocale } from '../../functions/getCurrentLocale'
 import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, SUPPORTED_LOCALES } from '../../types'
 import { getMessages } from '../../utils'
+import { LocaleUpdateContext } from './context'
 import { IntlProviderWrapperProps } from './types'
 
 const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
@@ -47,9 +48,11 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   }, [initialLocale, locale])
 
   return (
-    <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
-      {children}
-    </ReactIntlProvider>
+    <LocaleUpdateContext.Provider value={setLocale}>
+      <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
+        {children}
+      </ReactIntlProvider>
+    </LocaleUpdateContext.Provider>
   )
 }
 

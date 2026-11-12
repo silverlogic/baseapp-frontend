@@ -8,5 +8,15 @@
   "comments.reply.ariaLabel": "responder al comentario {commentId}",
   "comments.reply.count.ariaLabel": "cantidad de respuestas {commentId}",
   "comments.replies.showMore": "Mostrar más respuestas ({count})",
-  "comments.pinned.badge": "Fijado"
+  "comments.pinned.badge": "Fijado",
+  "comments.composer.editing": "Editando tu comentario",
+  "comments.composer.replyingTo": "Respondiendo a",
+  "comments.deleteDialog.confirm": "Eliminar",
+  "comments.deleteDialog.content": "¿Seguro que quieres eliminar este comentario? Esta acción no se puede deshacer.",
+  "comments.deleteDialog.title": "¿Eliminar comentario?",
+  "comments.item.edited": "(editado)",
+  "comments.replies.hide": "Ocultar respuestas",
+  "comments.replies.show": "Mostrar respuestas ({count})",
+  "comments.replies.showWithoutCount": "Mostrar respuestas",
+  "comments.reply.label": "Responder"
 }
