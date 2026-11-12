@@ -2,6 +2,12 @@
 
 ## 5.0.0
 
+### Minor Changes
+
+- db2d24d: Ship `locales/{en,es,pt}.json` catalogs (exported from `locales/index.ts`) and depend on
+  `react-intl`, so the package follows the same i18n layout as `components` and `design-system`.
+  The catalogs are empty until Wagtail UI strings are translated.
+
 ### Patch Changes
 
 - Updated dependencies [db2d24d]
