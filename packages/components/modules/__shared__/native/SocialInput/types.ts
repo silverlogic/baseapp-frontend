@@ -14,7 +14,8 @@ import { SubmitActionsProps } from './SubmitActions/types'
 export interface SocialInputProps {
   SocialTextInput?: FC<SocialTextInputProps>
   SocialTextInputProps?: Partial<SocialTextInputProps>
-  SocialUpsertActions?: FC
+  SocialUpsertActions?: FC<any>
+  SocialUpsertActionsProps?: Record<string, any>
   SubmitActions?: FC<SubmitActionsProps>
   SubmitActionsProps?: Partial<SubmitActionsProps>
   form: UseFormReturn<SocialUpsertForm, any, SocialUpsertForm>

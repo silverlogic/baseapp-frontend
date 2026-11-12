@@ -1,6 +1,7 @@
 export { default as ActivityLogIcon } from './ActivityLogIcon'
 export { default as AlertTriangleIcon } from './AlertTriangleIcon'
 export { default as ArchiveIcon } from './ArchiveIcon'
+export { default as AttachmentIcon } from './AttachmentIcon'
 export { default as AuthenticationIcon } from './AuthenticationIcon'
 export { default as BellIcon } from './BellIcon'
 export { default as BiometricsIcon } from './BiometricsIcon'

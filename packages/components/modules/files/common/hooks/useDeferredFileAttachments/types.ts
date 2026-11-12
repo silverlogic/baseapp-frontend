@@ -1,6 +1,8 @@
+import type { UploadInput } from '../../types'
+
 export interface UseDeferredFileAttachmentsReturn {
   /** Upload the selected files immediately; their ids are held for a later attachTo. */
-  handleFilesSelected: (files: File[]) => Promise<void>
+  handleFilesSelected: (files: UploadInput[]) => Promise<void>
   /**
    * Attach every successfully uploaded file to a target that now exists (e.g. a
    * freshly created comment). Waits for any in-flight uploads first, so a fast

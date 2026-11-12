@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
+import { AttachedFilesList } from '../../../files/native'
 import { DEFAULT_MAX_THREAD_DEPTH, useCommentItem } from '../../common'
 import CommentShowRepliesButton from '../CommentShowRepliesButton'
 import { useCommentActionsContext } from '../context/CommentActionsProvider'
@@ -118,6 +119,7 @@ const CommentItem: FC<CommentItemProps> = ({
                 ''
               )}
             </Text>
+            <AttachedFilesList target={comment} shouldUseBottomSheetSafeComponents />
             <View style={styles.footerContainer}>
               <View style={styles.buttonContainer}>
                 <CommentReactionButton target={comment} shouldUseBottomSheetSafeComponents />
