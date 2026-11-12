@@ -227,6 +227,32 @@ describe('baseAppFetch', () => {
     )
   })
 
+  it.each(['/register', '/auth/login', '/forgot-password/reset', '/auth/pre-auth/jwt'] as const)(
+    'sends %s without the token by default',
+    async (path) => {
+      ;(getToken as Mock).mockReturnValue('any-token')
+      ;(isUserTokenValid as Mock).mockReturnValue(true)
+
+      await baseAppFetch(path)
+
+      const [, options] = (fetch as Mock).mock.calls.at(-1)!
+      expect(options.headers.Authorization).toBeUndefined()
+    },
+  )
+
+  it.each(['/events/1/register', '/organizations/auth/login', '/users/forgot-password'] as const)(
+    'sends %s, which only ends like an anonymous path, with the token',
+    async (path) => {
+      ;(getToken as Mock).mockReturnValue('any-token')
+      ;(isUserTokenValid as Mock).mockReturnValue(true)
+
+      await baseAppFetch(path)
+
+      const [, options] = (fetch as Mock).mock.calls.at(-1)!
+      expect(options.headers.Authorization).toBe('Bearer any-token')
+    },
+  )
+
   it('should handle refreshAccessToken failure by emitting logout event', async () => {
     const getTokenMock = getToken as Mock
     getTokenMock.mockReturnValue('old-token')

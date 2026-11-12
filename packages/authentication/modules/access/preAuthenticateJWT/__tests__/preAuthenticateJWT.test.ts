@@ -106,4 +106,27 @@ describe('preAuthenticateJWT', () => {
       headers: { 'Content-Type': 'application/json', 'X-Forwarded-Host': 'tenant.example.com' },
     })
   })
+
+  it("passes the middleware request's headers on to resolveApiUrl", async () => {
+    ;(resolveApiUrl as Mock).mockResolvedValueOnce({
+      url: 'http://web:8000/v1',
+      headers: { 'X-Forwarded-Host': 'tenant.example.com', 'X-Forwarded-For': '203.0.113.7' },
+    })
+    mockFetchResponse({ success: true })
+    const incomingHeaders = new Headers({ host: 'tenant.example.com' })
+
+    await preAuthenticateJWT('test-jwt-token', { incomingHeaders })
+
+    expect(resolveApiUrl).toHaveBeenCalledWith('http://localhost:3000', { incomingHeaders })
+    expect(fetch).toHaveBeenCalledWith('http://web:8000/v1/auth/pre-auth/jwt', {
+      method: 'POST',
+      body: JSON.stringify({ token: 'test-jwt-token' }),
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Forwarded-Host': 'tenant.example.com',
+        'X-Forwarded-For': '203.0.113.7',
+      },
+    })
+  })
 })

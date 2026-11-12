@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, FocusEventHandler, SyntheticEvent, useRef } from 'react'
+import { FC, FocusEventHandler, SyntheticEvent, isValidElement, useRef } from 'react'
 
 import { Controller } from 'react-hook-form'
 
@@ -50,12 +50,15 @@ function withController<T>(
           render={({ field, fieldState }) => {
             // Autocomplete-style components pass the selected value as the second
             // argument; plain inputs pass only the change event (react-hook-form
-            // reads the value from event.target). Debounce applies only to the
-            // free-text path, never to a discrete selection.
+            // reads the value from event.target). MUI Select passes the chosen
+            // MenuItem element second, not a value, so its value is read from the
+            // event too. Debounce applies only to the free-text path, never to a
+            // discrete selection.
             const handleOnChange = (event: unknown, ...rest: unknown[]) => {
-              const hasSelectedValue = rest.length > 0
+              const isSelection = rest.length > 0
+              const hasSelectedValue = isSelection && !isValidElement(rest[0])
               field.onChange(hasSelectedValue ? rest[0] : event)
-              if (onChange && shouldDebounce && !hasSelectedValue) {
+              if (onChange && shouldDebounce && !isSelection) {
                 debouncedOnChange(event)
               } else {
                 onChange?.(event, ...rest)
