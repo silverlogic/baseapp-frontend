@@ -1,5 +1,22 @@
 # @baseapp-frontend/utils
 
+## 4.4.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Native code and shared `common/` code used by native are unchanged.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one).
+
 ## 4.3.1
 
 ### Patch Changes
@@ -25,7 +42,6 @@
 ### Minor Changes
 
 - 007b2ae: Add shared Relay mutation error handling:
-
   - `getMutationErrorMessage(payloadErrors, transportErrors, { defaultMessage })` (source in `functions/relay/getMutationErrorMessage`) resolves the first user-facing error from a mutation's `onCompleted` args: the first message in the payload's `errors[].messages`, else the first top-level transport error message, else `defaultMessage`; `undefined` when the mutation succeeded. The parameter types (`MutationPayloadErrors`, `MutationTransportErrors`) are structural, so generated Relay payload errors and `PayloadError[]` pass straight through without this package depending on `relay-runtime`.
   - `sendMutationErrorToast(payloadErrors, transportErrors, options?)` on the `useNotification` store composes `getMutationErrorMessage` with an error toast (mirroring the existing `sendApiErrorToast`) and returns the toasted message (or `undefined`), so callers can branch on it for success toasts / early returns.
   - `DEFAULT_ERROR_MESSAGE` constant (`'Something went wrong.'`) exported from `constants/errors` and used as the default by both `getApiErrorMessage` and `getMutationErrorMessage`.

@@ -1,5 +1,30 @@
 # @baseapp-frontend/components
 
+## 6.0.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Native code and shared `common/` code used by native are unchanged.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one).
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/design-system@4.0.0
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/authentication@9.0.0
+  - @baseapp-frontend/graphql@5.0.0
+
 ## 5.0.0
 
 ### Major Changes
@@ -41,7 +66,6 @@
   file instead.
 
   The upload pipeline is now shared across platforms instead of being web-only:
-
   - **`UploadSource`**: every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`)
     accepts a web `File` or an `UploadSource` (`name`, `size`, `type`, `readChunk(start, end)`,
     optional `dispose()`). Chunks are read lazily inside the concurrency slot, so a native upload holds
@@ -122,7 +146,6 @@
   they render links rather than buttons that push. Links prefetch on hover and give a
   client-side transition; every one of these destinations is known at render, so none of
   them needed a handler.
-
   - `SubscriptionCard`: `onManageClick` / `onSubscribeClick` → `manageHref` /
     `subscribeHref`
   - `ConfirmationSubscriptionModal`: `planDetails` → `planDetailsHref`. A project passing
@@ -260,7 +283,6 @@ field 'image' of type 'Profile'`), so `pnpm relay` locates every remaining site.
 ### Patch Changes
 
 - 007b2ae: Replace the per-module one-off Relay error handling in mutation hooks (messages, profiles, notifications, comments) and in `InviteMemberDialog`/`BlockButtonWithDialog` with the shared helpers from `@baseapp-frontend/utils` (`sendMutationErrorToast` / `getMutationErrorMessage`). Behavior notes:
-
   - Error toasts show the first error message instead of one toast per message.
   - Hooks whose GraphQL documents select `errors { field messages }` but previously ignored them now surface those payload errors: chat create (1:1 and group), chat delete/unread/archive message flows, `profileUserRoleUpdate`, and the leave-group flow. Hooks whose payload errors are already form-handled by their components (send/edit message, chat room update, organization create, comment create/update) stay transport-only to avoid double display.
   - `ReadMessages` stays transport-only on purpose: it fires passively from `useEffect`s, so payload validation errors would surface as unattributable toasts during navigation.
