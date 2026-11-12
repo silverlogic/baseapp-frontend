@@ -15,7 +15,10 @@
     (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
     new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
   - Web components that render text now require an `IntlProvider` ancestor (the package test
-    providers include one).
+    providers include one). The provider ships only the `common.*` catalog: merge the
+    `locales` exports of `utils`, `design-system`, `components` (and `wagtail`) per locale with
+    the app's own and pass the `{ en, es, pt }` map through `additionalMessages`, otherwise
+    those strings fall back to English. Setup is documented in `packages/i18n/README.md`.
 
 ## 4.3.1
 
