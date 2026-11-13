@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { type Disposable, type UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import type { FileDeleteMutation } from '../../../../../__generated__/FileDeleteMutation.graphql'
@@ -24,6 +25,7 @@ export const useFileDeleteMutation = (): [
   (config: UseMutationConfig<FileDeleteMutation>) => Disposable,
   boolean,
 ] => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] =
     useMutation<FileDeleteMutation>(FileDeleteMutationQuery)
@@ -46,7 +48,15 @@ export const useFileDeleteMutation = (): [
             }
           })
         } else {
-          sendToast('File deleted successfully', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'files.toast.deleted',
+              defaultMessage: 'File deleted successfully',
+            }),
+            {
+              type: 'success',
+            },
+          )
         }
 
         config?.onCompleted?.(response, errors)

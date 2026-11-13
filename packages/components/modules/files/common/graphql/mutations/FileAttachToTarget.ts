@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { type Disposable, type UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import type { FileAttachToTargetMutation } from '../../../../../__generated__/FileAttachToTargetMutation.graphql'
@@ -28,6 +29,7 @@ export const useFileAttachToTargetMutation = (): [
   (config: UseMutationConfig<FileAttachToTargetMutation>) => Disposable,
   boolean,
 ] => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useMutation<FileAttachToTargetMutation>(
     FileAttachToTargetMutationQuery,
@@ -51,7 +53,15 @@ export const useFileAttachToTargetMutation = (): [
             }
           })
         } else {
-          sendToast('Files attached successfully', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'files.toast.attached',
+              defaultMessage: 'Files attached successfully',
+            }),
+            {
+              type: 'success',
+            },
+          )
         }
 
         config?.onCompleted?.(response, errors)

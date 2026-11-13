@@ -11,6 +11,7 @@ import {
   InsertDriveFile as FileIcon,
 } from '@mui/icons-material'
 import { Box, Card, CardContent, Chip, Stack, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
@@ -25,6 +26,7 @@ import {
 } from '../../common/utils/formatters'
 import FileChip from '../FileChip'
 import FileThumbnail from '../FileThumbnail'
+import { UPLOAD_STATUS_LABELS } from './constants'
 import type { AttachedFileItemProps } from './types'
 
 const AttachedFileItem: FC<AttachedFileItemProps> = ({
@@ -33,6 +35,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
   variant = 'card',
   editable = false,
 }) => {
+  const intl = useIntl()
   const file = useFragment(FileItemFragment, fileRef)
 
   const { handleDelete, isDeletingFile } = useFileDeleteLogic({ targetObjectId })
@@ -62,6 +65,13 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
 
   const isImage = isImageFile(file.fileContentType)
 
+  const uploadStatusMessage = file.uploadStatus
+    ? UPLOAD_STATUS_LABELS[file.uploadStatus]
+    : undefined
+  const uploadStatusLabel = uploadStatusMessage
+    ? intl.formatMessage(uploadStatusMessage)
+    : file.uploadStatus
+
   if (variant === 'chip') {
     return (
       <FileChip
@@ -69,7 +79,10 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
           <FileThumbnail
             src={file.thumbnail || file.url}
             contentType={file.fileContentType}
-            alt={file.fileName || 'File preview'}
+            alt={
+              file.fileName ||
+              intl.formatMessage({ id: 'files.preview.alt', defaultMessage: 'File preview' })
+            }
           />
         }
         name={file.fileName}
@@ -85,8 +98,11 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
               onClick={() => handleDelete(file.id)}
               disabled={isDeletingFile}
               isLoading={isDeletingFile}
-              title="Remove"
-              aria-label="Remove"
+              title={intl.formatMessage({ id: 'files.actions.remove', defaultMessage: 'Remove' })}
+              aria-label={intl.formatMessage({
+                id: 'files.actions.remove',
+                defaultMessage: 'Remove',
+              })}
             >
               <CloseIcon fontSize="small" />
             </IconButton>
@@ -95,8 +111,14 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
               size="small"
               onClick={() => handleDownload(file.url)}
               disabled={!file.url}
-              title="Download"
-              aria-label="Download"
+              title={intl.formatMessage({
+                id: 'files.actions.download',
+                defaultMessage: 'Download',
+              })}
+              aria-label={intl.formatMessage({
+                id: 'files.actions.download',
+                defaultMessage: 'Download',
+              })}
             >
               <DownloadIcon fontSize="small" />
             </IconButton>
@@ -117,7 +139,13 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                   <Box
                     component="img"
                     src={file.thumbnail || file.url || undefined}
-                    alt={file.fileName || 'File preview'}
+                    alt={
+                      file.fileName ||
+                      intl.formatMessage({
+                        id: 'files.preview.alt',
+                        defaultMessage: 'File preview',
+                      })
+                    }
                     sx={{
                       width: 100,
                       height: 100,
@@ -140,7 +168,13 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                 </Typography>
                 {file.createdBy && file.createdBy.fullName && (
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                    Uploaded by {file.createdBy.fullName}
+                    {intl.formatMessage(
+                      {
+                        id: 'files.attachedFileItem.uploadedBy',
+                        defaultMessage: 'Uploaded by {name}',
+                      },
+                      { name: file.createdBy.fullName },
+                    )}
                   </Typography>
                 )}
               </Box>
@@ -151,7 +185,10 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                 size="small"
                 onClick={() => handleDownload(file.url)}
                 disabled={!file.url}
-                title="Download"
+                title={intl.formatMessage({
+                  id: 'files.actions.download',
+                  defaultMessage: 'Download',
+                })}
               >
                 <DownloadIcon fontSize="small" />
               </IconButton>
@@ -161,7 +198,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                   size="small"
                   onClick={() => handleDelete(file.id)}
                   color="error"
-                  title="Delete"
+                  title={intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
                   disabled={isDeletingFile}
                   isLoading={isDeletingFile}
                 >
@@ -172,7 +209,14 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
           </Box>
 
           {file.uploadStatus && file.uploadStatus !== 'COMPLETED' && (
-            <Chip label={`Status: ${file.uploadStatus}`} size="small" color="warning" />
+            <Chip
+              label={intl.formatMessage(
+                { id: 'files.attachedFileItem.status', defaultMessage: 'Status: {status}' },
+                { status: uploadStatusLabel },
+              )}
+              size="small"
+              color="warning"
+            />
           )}
 
           {file.description && (

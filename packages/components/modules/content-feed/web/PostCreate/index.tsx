@@ -7,6 +7,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { useContentPostCreateMutation } from '../../common'
 import PostForm from '../PostForm'
@@ -18,6 +19,7 @@ import { ContentPostCreateForm, UploadableContentPostFiles } from '../PostForm/t
 
 const PostCreate: FC = () => {
   const router = useRouter()
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const [commitMutation, isMutationInFlight] = useContentPostCreateMutation()
 
@@ -47,11 +49,23 @@ const PostCreate: FC = () => {
       onCompleted(response) {
         const errors = response.contentPostCreate?.errors
         if (errors) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(
+            intl.formatMessage({
+              id: 'contentFeed.postCreate.error',
+              defaultMessage: 'Something went wrong',
+            }),
+            { type: 'error' },
+          )
           setFormRelayErrors(form, errors)
         } else {
           form.reset({ content: '', isReactionsEnabled: true })
-          sendToast('Post Created Successfully', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'contentFeed.postCreate.success',
+              defaultMessage: 'Post Created Successfully',
+            }),
+            { type: 'success' },
+          )
           router.push(`/posts/${response.contentPostCreate?.contentPost?.node?.id}`)
         }
       },

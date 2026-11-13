@@ -5,7 +5,9 @@ import { FileUploadButton } from '@baseapp-frontend/design-system/components/web
 import { TextField } from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { Box, Button, Typography, useTheme } from '@mui/material'
+import { useIntl } from 'react-intl'
 
+import { SHARED_MESSAGES } from '../constants'
 import { DEFAULT_IMAGE_FORMATS, DEFAULT_IMAGE_MAX_SIZE } from './constants'
 import { ErrorContainer, UploadImageContainer } from './styled'
 import { EditGroupTitleAndImageProps } from './types'
@@ -16,6 +18,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
   FORM_VALUE,
   isMutationInFlight,
 }) => {
+  const intl = useIntl()
   const { control, setValue, watch, getFieldState, clearErrors, trigger } = form
 
   const handleRemoveImage = () => {
@@ -56,7 +59,17 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
           setFile={setValue}
           accept={DEFAULT_IMAGE_FORMATS}
           maxSize={DEFAULT_IMAGE_MAX_SIZE}
-          label={watchImage ? 'Change Avatar' : 'Upload Avatar'}
+          label={
+            watchImage
+              ? intl.formatMessage({
+                  id: 'messages.editGroupTitleAndImage.changeAvatar',
+                  defaultMessage: 'Change Avatar',
+                })
+              : intl.formatMessage({
+                  id: 'messages.editGroupTitleAndImage.uploadAvatar',
+                  defaultMessage: 'Upload Avatar',
+                })
+          }
         />
         {watchImage && (
           <Button
@@ -65,12 +78,15 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
             disabled={isMutationInFlight}
             onClick={handleRemoveImage}
           >
-            Remove
+            {intl.formatMessage(SHARED_MESSAGES.remove)}
           </Button>
         )}
       </UploadImageContainer>
       <TextField
-        label="Group Name"
+        label={intl.formatMessage({
+          id: 'messages.editGroupTitleAndImage.groupName',
+          defaultMessage: 'Group Name',
+        })}
         inputProps={{ maxLength: 20 }}
         control={control}
         disabled={isMutationInFlight}

@@ -8,6 +8,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { ConnectionHandler } from 'react-relay'
 
 import {
@@ -85,8 +86,17 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
     { roomId, SocialInput = DefaultSocialInput, SocialInputProps = {}, disableMentions = true },
     ref,
   ) => {
+    const intl = useIntl()
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
+    const sendErrorToast = () =>
+      sendToast(
+        intl.formatMessage({
+          id: 'messages.sendMessage.errorToast',
+          defaultMessage: 'Your last message could not be sent. Please try again.',
+        }),
+        { type: 'error' },
+      )
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -155,18 +165,16 @@ const SendMessage = forwardRef<HTMLInputElement, SendMessageProps>(
         onCompleted: (response, errors) => {
           if (errors) {
             // TODO: handle errors
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
+            sendErrorToast()
           }
           const mutationErrors = response?.chatRoomSendMessage?.errors
           if (mutationErrors?.length) {
             setFormRelayErrors(form, mutationErrors)
-            sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
+            sendErrorToast()
           }
         },
         // TODO: handle errors
-        onError: () => {
-          sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
-        },
+        onError: sendErrorToast,
       })
       form.reset()
       clearDraft()

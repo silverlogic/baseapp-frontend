@@ -11,14 +11,12 @@ import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
-import {
-  getParticipantCountString,
-  useArchiveChatRoomMutation,
-  useChatRoom,
-  useSingleChatDetails,
-} from '../../../common'
+import { useArchiveChatRoomMutation, useChatRoom, useSingleChatDetails } from '../../../common'
 import LeaveGroupDialog from '../../__shared__/LeaveGroupDialog'
+import { SHARED_MESSAGES } from '../../__shared__/constants'
+import { getParticipantCountLabel } from '../../__shared__/utils'
 import ChatRoomOptions from './ChatRoomOptions'
 import { BackButtonContainer, ChatHeaderContainer, ChatTitleContainer } from './styled'
 import { ChatRoomHeaderProps } from './types'
@@ -31,14 +29,15 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   onDisplayProfileSummaryClicked,
   roomId,
 }) => {
+  const intl = useIntl()
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
 
   const isUpToMd = useResponsive('up', 'md')
   const { resetChatRoom } = useChatRoom()
 
-  const { isGroup, isSoleAdmin, title, image } = useSingleChatDetails(roomTitleRef)
-  const members = getParticipantCountString(participantsCount)
+  const { isGroup, isSoleAdmin, title, image, isDeletedUser } = useSingleChatDetails(roomTitleRef)
+  const members = getParticipantCountLabel(intl, participantsCount)
   const popover = usePopover()
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
 
@@ -77,7 +76,10 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         ) : (
           <BackButtonContainer>
             <IconButton
-              aria-label="return to chat room list"
+              aria-label={intl.formatMessage({
+                id: 'messages.chatRoom.header.backAriaLabel',
+                defaultMessage: 'return to chat room list',
+              })}
               onClick={resetChatRoom}
               sx={{ maxWidth: 'fit-content' }}
             >
@@ -105,7 +107,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
                 clear: 'left',
               }}
             >
-              {title}
+              {isDeletedUser ? intl.formatMessage(SHARED_MESSAGES.deletedUser) : title}
             </TypographyWithEllipsis>
             {isGroup && (
               <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
@@ -114,7 +116,13 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             )}
           </Box>
           <Box>
-            <IconButton onClick={onChatRoomOptionsClicked} aria-label="Show chatroom options">
+            <IconButton
+              onClick={onChatRoomOptionsClicked}
+              aria-label={intl.formatMessage({
+                id: 'messages.chatRoom.header.optionsAriaLabel',
+                defaultMessage: 'Show chatroom options',
+              })}
+            >
               <ThreeDotsIcon sx={{ fontSize: '24px' }} />
             </IconButton>
             <Popover

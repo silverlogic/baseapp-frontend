@@ -8,6 +8,7 @@ import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs
 
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -21,6 +22,7 @@ import { SearchbarContainer } from './styled'
 import { GroupsListProps } from './types'
 
 const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onToggle }) => {
+  const intl = useIntl()
   const { currentProfile } = useCurrentProfile()
   const profileId = currentProfile?.id ?? ''
   const [isPending, startTransition] = useTransition()
@@ -74,7 +76,10 @@ const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onTogg
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more groups"
+        aria-label={intl.formatMessage({
+          id: 'messages.addContactToGroup.groupsList.loadingMore',
+          defaultMessage: 'loading more groups',
+        })}
       />
     )
   }
@@ -87,10 +92,16 @@ const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onTogg
       return (
         <Box sx={{ display: 'grid', gap: 1, justifyItems: 'center', padding: 3 }}>
           <Typography variant="subtitle2" color="text.primary">
-            No groups yet
+            <FormattedMessage
+              id="messages.addContactToGroup.groupsList.empty.title"
+              defaultMessage="No groups yet"
+            />
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            You can only add contacts to groups you manage.
+            <FormattedMessage
+              id="messages.addContactToGroup.groupsList.empty.description"
+              defaultMessage="You can only add contacts to groups you manage."
+            />
           </Typography>
         </Box>
       )
@@ -127,18 +138,25 @@ const GroupsList: FC<GroupsListProps> = ({ contactProfileId, selectedIds, onTogg
   )
 }
 
-const SuspendedGroupsList: FC<GroupsListProps> = (props) => (
-  <Suspense
-    fallback={
-      <LoadingState
-        sx={{ paddingTop: 3, paddingBottom: 3 }}
-        CircularProgressProps={{ size: 15 }}
-        aria-label="loading groups"
-      />
-    }
-  >
-    <GroupsList {...props} />
-  </Suspense>
-)
+const SuspendedGroupsList: FC<GroupsListProps> = (props) => {
+  const intl = useIntl()
+
+  return (
+    <Suspense
+      fallback={
+        <LoadingState
+          sx={{ paddingTop: 3, paddingBottom: 3 }}
+          CircularProgressProps={{ size: 15 }}
+          aria-label={intl.formatMessage({
+            id: 'messages.addContactToGroup.groupsList.loading',
+            defaultMessage: 'loading groups',
+          })}
+        />
+      }
+    >
+      <GroupsList {...props} />
+    </Suspense>
+  )
+}
 
 export default SuspendedGroupsList

@@ -1,9 +1,17 @@
+import { type ReactNode, createElement } from 'react'
+
 import { act, renderHook } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import { FileUploadStatus } from '../../../constants'
 import { useFileUploadStore } from '../../../context/FileUploadProvider'
 import { useFileUploadLogic } from '../index'
+
+const IntlWrapper = ({ children }: { children: ReactNode }) =>
+  createElement(IntlProvider, { locale: 'en' }, children)
+const renderWithIntl = <Result>(callback: () => Result) =>
+  renderHook(callback, { wrapper: IntlWrapper })
 
 const mockUploadFile = vi.fn()
 
@@ -42,7 +50,7 @@ describe('useFileUploadLogic upload tokens', () => {
   it('hands the caller the upload tokens when it attaches files itself', async () => {
     mockUploadFile.mockImplementation(finishUpload('File:1', 'token-1'))
     const onUploadComplete = vi.fn()
-    const { result } = renderHook(() =>
+    const { result } = renderWithIntl(() =>
       useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
     )
 
@@ -58,7 +66,7 @@ describe('useFileUploadLogic upload tokens', () => {
   it('passes no tokens for logged-in uploads', async () => {
     mockUploadFile.mockImplementation(finishUpload('File:1'))
     const onUploadComplete = vi.fn()
-    const { result } = renderHook(() =>
+    const { result } = renderWithIntl(() =>
       useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
     )
 

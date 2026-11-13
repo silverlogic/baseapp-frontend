@@ -7,8 +7,10 @@ import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/di
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { toggleGroupSelection, useAddParticipantToChatRoomsMutation } from '../../common'
+import { SHARED_MESSAGES } from '../__shared__/constants'
 import GroupsList from './GroupsList'
 import { AddContactToGroupDialogProps } from './types'
 
@@ -17,6 +19,7 @@ const AddContactToGroupDialog: FC<AddContactToGroupDialogProps> = ({
   open,
   onClose,
 }) => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const { currentProfile } = useCurrentProfile()
   const profileId = currentProfile?.id ?? ''
@@ -50,7 +53,7 @@ const AddContactToGroupDialog: FC<AddContactToGroupDialogProps> = ({
       onCompleted: (response) => {
         const errors = response?.chatRoomsAddParticipant?.errors
         if (errors?.length) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(intl.formatMessage(SHARED_MESSAGES.somethingWentWrong), { type: 'error' })
         } else {
           handleClose()
         }
@@ -60,7 +63,10 @@ const AddContactToGroupDialog: FC<AddContactToGroupDialogProps> = ({
 
   return (
     <ConfirmDialog
-      title="Add contact to a group"
+      title={intl.formatMessage({
+        id: 'messages.addContactToGroup.title',
+        defaultMessage: 'Add contact to a group',
+      })}
       customMaxWidth={480}
       DialogContentProps={{
         sx: {
@@ -82,7 +88,7 @@ const AddContactToGroupDialog: FC<AddContactToGroupDialogProps> = ({
           disabled={confirmDisabled}
           loading={isMutationInFlight}
         >
-          Add to Group
+          <FormattedMessage id="messages.addContactToGroup.submit" defaultMessage="Add to Group" />
         </LoadingButton>
       }
       onClose={handleClose}

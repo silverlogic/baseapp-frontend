@@ -4,4 +4,5 @@ export interface UseLeaveGroupProps {
   profileId: string
   removingParticipantId?: string | null
   roomId?: string
+  removeSuccessMessage?: string
 }

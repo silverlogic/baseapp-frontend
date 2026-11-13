@@ -7,12 +7,14 @@ import { TextField } from '@baseapp-frontend/design-system/components/web/inputs
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, FormControlLabel, Switch, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import PostImageDropzone from '../PostImageDropzone'
 import { ButtonContainer, HeaderContainer, RootContainer } from '../styled'
 import { PostFormProps } from './types'
 
 const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => {
+  const intl = useIntl()
   const isReactionsEnabled = form.watch('isReactionsEnabled')
   const {
     formState: { isDirty, isValid },
@@ -23,11 +25,11 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
       <form onSubmit={onSubmit}>
         <HeaderContainer>
           <Typography component="h4" variant="h4">
-            New Post
+            {intl.formatMessage({ id: 'contentFeed.postForm.title', defaultMessage: 'New Post' })}
           </Typography>
           <ButtonContainer>
             <Button variant="outlined" color="inherit" onClick={onCancel} disableRipple>
-              Cancel
+              {intl.formatMessage({ id: 'common.cancel', defaultMessage: 'Cancel' })}
             </Button>
             <LoadingButton
               color="inherit"
@@ -36,7 +38,10 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
               disabled={!isDirty || !isValid || isSaving}
               sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
             >
-              Publish
+              {intl.formatMessage({
+                id: 'contentFeed.postForm.publish',
+                defaultMessage: 'Publish',
+              })}
             </LoadingButton>
           </ButtonContainer>
         </HeaderContainer>
@@ -45,7 +50,10 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
           <TextField
             name="content"
             type="text"
-            placeholder="What is on your mind?"
+            placeholder={intl.formatMessage({
+              id: 'contentFeed.postForm.content.placeholder',
+              defaultMessage: 'What is on your mind?',
+            })}
             multiline
             rows={4}
             control={form.control}
@@ -65,7 +73,10 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
                   }
                 />
               }
-              label="Disable Reactions to this post"
+              label={intl.formatMessage({
+                id: 'contentFeed.postForm.disableReactions',
+                defaultMessage: 'Disable Reactions to this post',
+              })}
             />
           )}
         />

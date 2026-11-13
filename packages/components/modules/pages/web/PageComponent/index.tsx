@@ -6,6 +6,7 @@ import { Markdown } from '@baseapp-frontend/design-system/components/web/markdow
 
 import { Box, Container, Link, Typography } from '@mui/material'
 import 'highlight.js/styles/base16/tomorrow-night.css'
+import { FormattedMessage } from 'react-intl'
 import { useFragment } from 'react-relay'
 import rehypeHighlight from 'rehype-highlight'
 
@@ -28,7 +29,7 @@ export const PageComponent = ({ page: pageRef }: PageComponentProps) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Edit
+              <FormattedMessage id="common.edit" defaultMessage="Edit" />
             </Link>
           )}
           {page.canDelete && (
@@ -38,7 +39,7 @@ export const PageComponent = ({ page: pageRef }: PageComponentProps) => {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Delete
+              <FormattedMessage id="common.delete" defaultMessage="Delete" />
             </Link>
           )}
         </Box>

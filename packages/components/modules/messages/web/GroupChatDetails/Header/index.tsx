@@ -5,7 +5,9 @@ import { PenEditIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 
 import { Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
+import { SHARED_MESSAGES } from '../../__shared__/constants'
 import { GroupDetailsHeaderContainer } from './styled'
 import { HeaderProps } from './types'
 
@@ -16,28 +18,38 @@ const Header: FC<HeaderProps> = ({
   onBackButtonClicked,
   onEditButtonClicked,
   shouldDisplayEditButton,
-}) => (
-  <GroupDetailsHeaderContainer>
-    <IconButton
-      aria-label="return to existing chat rooms"
-      onClick={onBackButtonClicked}
-      sx={{ maxWidth: 'fit-content' }}
-    >
-      <Iconify icon={backIcon} width={24} {...backIconProps} />
-    </IconButton>
-    <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-      Group View
-    </Typography>
-    {shouldDisplayEditButton && (
+}) => {
+  const intl = useIntl()
+
+  return (
+    <GroupDetailsHeaderContainer>
       <IconButton
-        aria-label="edit group chat"
-        onClick={onEditButtonClicked}
+        aria-label={intl.formatMessage(SHARED_MESSAGES.returnToChatRooms)}
+        onClick={onBackButtonClicked}
         sx={{ maxWidth: 'fit-content' }}
       >
-        <EditIcon sx={{ fontSize: '24px' }} />
+        <Iconify icon={backIcon} width={24} {...backIconProps} />
       </IconButton>
-    )}
-  </GroupDetailsHeaderContainer>
-)
+      <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
+        {intl.formatMessage({
+          id: 'messages.groupChatDetails.header.title',
+          defaultMessage: 'Group View',
+        })}
+      </Typography>
+      {shouldDisplayEditButton && (
+        <IconButton
+          aria-label={intl.formatMessage({
+            id: 'messages.groupChatDetails.header.editAriaLabel',
+            defaultMessage: 'edit group chat',
+          })}
+          onClick={onEditButtonClicked}
+          sx={{ maxWidth: 'fit-content' }}
+        >
+          <EditIcon sx={{ fontSize: '24px' }} />
+        </IconButton>
+      )}
+    </GroupDetailsHeaderContainer>
+  )
+}
 
 export default Header
