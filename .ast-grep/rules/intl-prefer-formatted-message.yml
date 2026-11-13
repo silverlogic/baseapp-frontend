@@ -1,0 +1,27 @@
+id: intl-prefer-formatted-message
+language: Tsx
+severity: error
+message: "Text rendered as a JSX child goes through `<FormattedMessage id defaultMessage />`; keep `intl.formatMessage` for strings (props, toasts, validation messages, metadata). See .claude/skills/frontend-patterns/references/i18n.md"
+# Only where react-intl is importable: Server Components format through
+# `getServerIntl()` (@formatjs/intl) and cannot render `<FormattedMessage>`.
+rule:
+  kind: jsx_expression
+  all:
+    - inside:
+        kind: jsx_element
+    - has:
+        kind: call_expression
+        has:
+          field: function
+          kind: member_expression
+          has:
+            field: property
+            regex: ^formatMessage$
+    - inside:
+        stopBy: end
+        kind: program
+        has:
+          kind: import_statement
+          has:
+            field: source
+            regex: "^['\"]react-intl['\"]$"

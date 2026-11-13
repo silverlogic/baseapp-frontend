@@ -8,7 +8,7 @@ import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 
 import { LoadingButton } from '@mui/lab'
 import { Box, Divider, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { LongPressCallbackReason, useLongPress } from 'use-long-press'
 
 import DefaultHoverOverlay from './DefaultHoverOverlay'
@@ -133,7 +133,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
             disabled={isDeletingItem}
             loading={isDeletingItem}
           >
-            {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
+            <FormattedMessage id="common.delete" defaultMessage="Delete" />
           </LoadingButton>
         }
         onClose={handleDeleteDialogClose}
@@ -212,7 +212,7 @@ const ActionsOverlay = forwardRef<HTMLDivElement | undefined, ActionOverlayProps
                         variant="body2"
                         color={disableDeleteButton ? 'text.disabled' : 'error.main'}
                       >
-                        {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
+                        <FormattedMessage id="common.delete" defaultMessage="Delete" />
                       </Typography>
                     </IconButtonContentContainer>
                   </IconButton>

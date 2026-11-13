@@ -8,7 +8,7 @@ import { Markdown } from '@baseapp-frontend/design-system/components/web/markdow
 import { Typography } from '@mui/material'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { ActionsOverlay, Timestamp as DefaultTimestamp } from '../../../__shared__/web'
 import { FileUploadList } from '../../../files/web'
@@ -91,7 +91,7 @@ const CommentItem: FC<CommentItemProps> = ({
     if (!hasUser)
       return (
         <Typography variant="subtitle2">
-          {intl.formatMessage({ id: 'comments.item.deletedUser', defaultMessage: 'Deleted User' })}
+          <FormattedMessage id="comments.item.deletedUser" defaultMessage="Deleted User" />
         </Typography>
       )
 

@@ -1,0 +1,40 @@
+id: intl-prefer-formatted-message
+valid:
+  - |
+    import { FormattedMessage } from 'react-intl'
+    const Title = () => (
+      <Typography>
+        <FormattedMessage id="settings.preferences.title" defaultMessage="Preferences" />
+      </Typography>
+    )
+  - |
+    import { getServerIntl } from 'i18n/getServerIntl'
+    const Page = async () => {
+      const intl = await getServerIntl()
+      return <Title>{intl.formatMessage({ id: 'home.title', defaultMessage: 'Home' })}</Title>
+    }
+  - |
+    <TextField label={intl.formatMessage({ id: 'auth.login.email', defaultMessage: 'Email' })} />
+  - |
+    sendToast(intl.formatMessage({ id: 'settings.saved', defaultMessage: 'Saved' }), { type: 'success' })
+  - |
+    const title = intl.formatMessage({ id: 'feed.title', defaultMessage: 'Feed' })
+invalid:
+  - |
+    import { useIntl } from 'react-intl'
+    const Title = () => {
+      const intl = useIntl()
+      return (
+        <Typography>
+          {intl.formatMessage({ id: 'settings.preferences.title', defaultMessage: 'Preferences' })}
+        </Typography>
+      )
+    }
+  - |
+    import { useIntl } from 'react-intl'
+    const Label = () => <>{useIntl().formatMessage(TAB_LABELS[tab.value])}</>
+  - |
+    import { useIntl } from 'react-intl'
+    const Save = ({ intl }: { intl: IntlShape }) => (
+      <Button>{intl.formatMessage({ id: 'ui.actions.save', defaultMessage: 'Save' }, { count })}</Button>
+    )

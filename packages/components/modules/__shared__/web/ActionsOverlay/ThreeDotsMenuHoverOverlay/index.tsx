@@ -5,7 +5,7 @@ import { ThreeDotsIcon, TrashCanIcon } from '@baseapp-frontend/design-system/com
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 
 import { MenuItem, MenuList, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { TooltipContainer } from './styled'
 import { ThreeDotsMenuHoverOverlayProps } from './types'
@@ -73,7 +73,7 @@ const ThreeDotsMenuHoverOverlay: FC<ThreeDotsMenuHoverOverlayProps> = ({
                 variant="body2"
                 color={disableDeleteButton ? 'text.disabled' : 'error.main'}
               >
-                {intl.formatMessage({ id: 'common.delete', defaultMessage: 'Delete' })}
+                <FormattedMessage id="common.delete" defaultMessage="Delete" />
               </Typography>
             </MenuItem>
           )}

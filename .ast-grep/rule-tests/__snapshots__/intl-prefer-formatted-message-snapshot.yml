@@ -1,0 +1,137 @@
+id: intl-prefer-formatted-message
+snapshots:
+  ? |
+    import { useIntl } from 'react-intl'
+    const Label = () => <>{useIntl().formatMessage(TAB_LABELS[tab.value])}</>
+  : labels:
+    - source: '{useIntl().formatMessage(TAB_LABELS[tab.value])}'
+      style: primary
+      start: 59
+      end: 107
+    - source: <>{useIntl().formatMessage(TAB_LABELS[tab.value])}</>
+      style: secondary
+      start: 57
+      end: 110
+    - source: formatMessage
+      style: secondary
+      start: 70
+      end: 83
+    - source: useIntl().formatMessage
+      style: secondary
+      start: 60
+      end: 83
+    - source: useIntl().formatMessage(TAB_LABELS[tab.value])
+      style: secondary
+      start: 60
+      end: 106
+    - source: '''react-intl'''
+      style: secondary
+      start: 24
+      end: 36
+    - source: import { useIntl } from 'react-intl'
+      style: secondary
+      start: 0
+      end: 36
+    - source: |
+        import { useIntl } from 'react-intl'
+        const Label = () => <>{useIntl().formatMessage(TAB_LABELS[tab.value])}</>
+      style: secondary
+      start: 0
+      end: 111
+  ? |
+    import { useIntl } from 'react-intl'
+    const Save = ({ intl }: { intl: IntlShape }) => (
+      <Button>{intl.formatMessage({ id: 'ui.actions.save', defaultMessage: 'Save' }, { count })}</Button>
+    )
+  : labels:
+    - source: '{intl.formatMessage({ id: ''ui.actions.save'', defaultMessage: ''Save'' }, { count })}'
+      style: primary
+      start: 97
+      end: 179
+    - source: '<Button>{intl.formatMessage({ id: ''ui.actions.save'', defaultMessage: ''Save'' }, { count })}</Button>'
+      style: secondary
+      start: 89
+      end: 188
+    - source: formatMessage
+      style: secondary
+      start: 103
+      end: 116
+    - source: intl.formatMessage
+      style: secondary
+      start: 98
+      end: 116
+    - source: 'intl.formatMessage({ id: ''ui.actions.save'', defaultMessage: ''Save'' }, { count })'
+      style: secondary
+      start: 98
+      end: 178
+    - source: '''react-intl'''
+      style: secondary
+      start: 24
+      end: 36
+    - source: import { useIntl } from 'react-intl'
+      style: secondary
+      start: 0
+      end: 36
+    - source: |
+        import { useIntl } from 'react-intl'
+        const Save = ({ intl }: { intl: IntlShape }) => (
+          <Button>{intl.formatMessage({ id: 'ui.actions.save', defaultMessage: 'Save' }, { count })}</Button>
+        )
+      style: secondary
+      start: 0
+      end: 191
+  ? |
+    import { useIntl } from 'react-intl'
+    const Title = () => {
+      const intl = useIntl()
+      return (
+        <Typography>
+          {intl.formatMessage({ id: 'settings.preferences.title', defaultMessage: 'Preferences' })}
+        </Typography>
+      )
+    }
+  : labels:
+    - source: '{intl.formatMessage({ id: ''settings.preferences.title'', defaultMessage: ''Preferences'' })}'
+      style: primary
+      start: 118
+      end: 207
+    - source: |-
+        <Typography>
+              {intl.formatMessage({ id: 'settings.preferences.title', defaultMessage: 'Preferences' })}
+            </Typography>
+      style: secondary
+      start: 99
+      end: 225
+    - source: formatMessage
+      style: secondary
+      start: 124
+      end: 137
+    - source: intl.formatMessage
+      style: secondary
+      start: 119
+      end: 137
+    - source: 'intl.formatMessage({ id: ''settings.preferences.title'', defaultMessage: ''Preferences'' })'
+      style: secondary
+      start: 119
+      end: 206
+    - source: '''react-intl'''
+      style: secondary
+      start: 24
+      end: 36
+    - source: import { useIntl } from 'react-intl'
+      style: secondary
+      start: 0
+      end: 36
+    - source: |
+        import { useIntl } from 'react-intl'
+        const Title = () => {
+          const intl = useIntl()
+          return (
+            <Typography>
+              {intl.formatMessage({ id: 'settings.preferences.title', defaultMessage: 'Preferences' })}
+            </Typography>
+          )
+        }
+      style: secondary
+      start: 0
+      end: 232
