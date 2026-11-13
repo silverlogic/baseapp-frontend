@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/components",
   "description": "BaseApp components modules such as comments, notifications, messages, and more.",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && pnpm relay && tsc --build tsconfig.build.json",
@@ -182,7 +182,7 @@
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@chromatic-com/storybook": "catalog:storybook",
     "@faker-js/faker": "catalog:test",
-    "@formatjs/cli": "^6.7.4",
+    "@formatjs/cli": "catalog:",
     "@playwright/test": "1.62.0",
     "@storybook/addon-docs": "catalog:storybook",
     "@storybook/addon-essentials": "catalog:storybook",

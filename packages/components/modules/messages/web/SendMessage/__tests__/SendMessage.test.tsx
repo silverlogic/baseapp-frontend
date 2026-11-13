@@ -1,7 +1,8 @@
-import { Suspense } from 'react'
+import { PropsWithChildren, ReactElement, Suspense } from 'react'
 
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import { act, fireEvent, render as rtlRender, screen, waitFor } from '@testing-library/react'
 import { useController, useFormState } from 'react-hook-form'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import SendMessage from '../index'
@@ -86,6 +87,11 @@ const renderSuspendingRoom = (roomId: string) => (
     />
   </Suspense>
 )
+
+const IntlWrapper = ({ children }: PropsWithChildren) => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+)
+const render = (ui: ReactElement) => rtlRender(ui, { wrapper: IntlWrapper })
 
 const messageInput = () => screen.getByLabelText('message') as HTMLInputElement
 const sendButton = () => screen.getByText('send') as HTMLButtonElement

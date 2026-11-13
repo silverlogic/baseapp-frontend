@@ -8,6 +8,7 @@
     "**/*.ts",
     "**/*.tsx",
     "**/*.d.ts",
+    "locales/*.json",
     ".eslintrc.js",
     "*.ts",
     "*.tsx",

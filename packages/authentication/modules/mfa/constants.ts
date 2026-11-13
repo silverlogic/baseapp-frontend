@@ -1,10 +1,21 @@
-import { ZOD_MESSAGE } from '@baseapp-frontend/utils'
+import {
+  type IntlFormatter,
+  ZOD_MESSAGE,
+  type ZodMessages,
+  getZodMessages,
+} from '@baseapp-frontend/utils'
 
 import { z } from 'zod'
 
-export const CODE_VALIDATION_SCHEMA = z.object({
-  code: z.string().min(1, ZOD_MESSAGE.required),
-})
+const createCodeValidationSchema = (messages: ZodMessages) =>
+  z.object({
+    code: z.string().min(1, messages.required),
+  })
+
+export const CODE_VALIDATION_SCHEMA = createCodeValidationSchema(ZOD_MESSAGE)
+
+export const getCodeValidationSchema = (intl: IntlFormatter) =>
+  createCodeValidationSchema(getZodMessages(intl))
 
 export const CODE_VALIDATION_INITIAL_VALUES = {
   code: '',

@@ -3,6 +3,7 @@
 import { FC } from 'react'
 
 import { m } from 'framer-motion'
+import { useIntl } from 'react-intl'
 
 import { varHover } from '../../animate/variants'
 import { AvatarDeletedUserIcon } from '../../icons'
@@ -19,10 +20,18 @@ const ClickableAvatar: FC<ClickableAvatarProps> = ({
   children,
   ...props
 }) => {
+  const intl = useIntl()
+
   if (deletedUser) {
     return (
       <AvatarWithPlaceholder width={width} height={height} {...props}>
-        <AvatarDeletedUserIcon sx={{ fontSize: width }} titleAccess="Avatar Fallback" />
+        <AvatarDeletedUserIcon
+          sx={{ fontSize: width }}
+          titleAccess={intl.formatMessage({
+            id: 'designSystem.avatar.deletedUser',
+            defaultMessage: 'Deleted User Avatar',
+          })}
+        />
       </AvatarWithPlaceholder>
     )
   }

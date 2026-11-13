@@ -4,6 +4,7 @@ import { removeLeadingSlash } from '@baseapp-frontend/utils'
 
 import { useCellValue, usePublisher, useRealm } from '@mdxeditor/gurx'
 import { ClickAwayListener } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso'
 
 import {
@@ -23,6 +24,7 @@ import { MENTION_ROW_HEIGHT, MENTION_VISIBLE_ROWS } from './constants'
 import { StyledPaper, StyledPopper } from './styled'
 
 const MentionsMenuPortal: FC = () => {
+  const intl = useIntl()
   const realm = useRealm()
   const menuState = useCellValue(mentionMenuState$)
   const config = useCellValue(mentionsConfig$)
@@ -146,7 +148,13 @@ const MentionsMenuPortal: FC = () => {
           { name: 'preventOverflow', options: { padding: 8 } },
         ]}
       >
-        <StyledPaper role="listbox" aria-label="Mention suggestions">
+        <StyledPaper
+          role="listbox"
+          aria-label={intl.formatMessage({
+            id: 'designSystem.markdownEditor.mentions.suggestions',
+            defaultMessage: 'Mention suggestions',
+          })}
+        >
           {renderContent()}
         </StyledPaper>
       </StyledPopper>

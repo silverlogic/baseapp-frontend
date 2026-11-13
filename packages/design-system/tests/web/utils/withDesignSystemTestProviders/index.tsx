@@ -4,8 +4,10 @@ import { NotificationProvider } from '@baseapp-frontend/utils'
 
 import createCache from '@emotion/cache'
 import { CacheProvider } from '@emotion/react'
+import { IntlProvider } from 'react-intl'
 
 import { UISettingsProvider } from '../../../../hooks/web'
+import enMessages from '../../../../locales/en.json'
 import { SnackbarProvider } from '../../../../providers/web'
 import { createPalette } from '../../../../styles/web/palette'
 import ReactSuspenseWithLoading from '../ReactSuspenseWithLoading'
@@ -24,22 +26,24 @@ const withDesignSystemProvider =
     const emotionCache = createCache({ key: 'test-key' })
 
     return (
-      <ThemeTestProvider {...ThemeTestProviderProps}>
-        <NotificationProvider>
-          <SnackbarProvider>
-            <CacheProvider value={emotionCache}>
-              <ReactSuspenseWithLoading {...ReactSuspenseWithLoadingProps}>
-                <UISettingsProvider
-                  {...UISettingsProviderProps}
-                  palette={UISettingsProviderProps?.palette || createPalette('light')}
-                >
-                  <Component {...(restProps as Props)} />
-                </UISettingsProvider>
-              </ReactSuspenseWithLoading>
-            </CacheProvider>
-          </SnackbarProvider>
-        </NotificationProvider>
-      </ThemeTestProvider>
+      <IntlProvider locale="en" messages={enMessages}>
+        <ThemeTestProvider {...ThemeTestProviderProps}>
+          <NotificationProvider>
+            <SnackbarProvider>
+              <CacheProvider value={emotionCache}>
+                <ReactSuspenseWithLoading {...ReactSuspenseWithLoadingProps}>
+                  <UISettingsProvider
+                    {...UISettingsProviderProps}
+                    palette={UISettingsProviderProps?.palette || createPalette('light')}
+                  >
+                    <Component {...(restProps as Props)} />
+                  </UISettingsProvider>
+                </ReactSuspenseWithLoading>
+              </CacheProvider>
+            </SnackbarProvider>
+          </NotificationProvider>
+        </ThemeTestProvider>
+      </IntlProvider>
     )
   }
 
