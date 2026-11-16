@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/wagtail",
   "description": "BaseApp Wagtail",
-  "version": "4.0.0",
+  "version": "5.0.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -23,6 +23,7 @@
     "axios": "catalog:",
     "graphql": "catalog:graphql",
     "next": "catalog:",
+    "react-intl": "catalog:",
     "react-relay": "catalog:graphql"
   },
   "peerDependencies": {
