@@ -5,6 +5,7 @@ import { ConnectionHandler } from 'react-relay'
 import { FileUploadStatus } from '../../constants'
 import { useFileUploadStore } from '../../context/FileUploadProvider'
 import { useFileAttachToTargetMutation } from '../../graphql/mutations/FileAttachToTarget'
+import type { UploadInput } from '../../types'
 import { nextLocalId } from '../../utils/localId'
 import { useChunkedUpload } from '../useChunkedUpload'
 import type { UseDeferredFileAttachmentsReturn } from './types'
@@ -32,7 +33,7 @@ export const useDeferredFileAttachments = (): UseDeferredFileAttachmentsReturn =
   )
 
   const handleFilesSelected = useCallback(
-    async (files: File[]) => {
+    async (files: UploadInput[]) => {
       if (!files.length) return
 
       const promises = files.map((file) => uploadFile(file, scopeRef.current))

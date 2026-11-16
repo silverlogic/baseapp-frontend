@@ -16,15 +16,16 @@ import { useFragment } from 'react-relay'
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
 import { useFileDeleteLogic } from '../../common/hooks/useFileDeleteLogic'
 import { useFileDownloadLogic } from '../../common/hooks/useFileDownloadLogic'
-import { formatDate, formatFileSize, getFileType, isImageFile } from '../../common/utils/formatters'
+import {
+  formatDate,
+  formatFileSize,
+  getFileType,
+  getFileTypeLabel,
+  isImageFile,
+} from '../../common/utils/formatters'
 import FileChip from '../FileChip'
 import FileThumbnail from '../FileThumbnail'
 import type { AttachedFileItemProps } from './types'
-
-const getTypeLabel = (fileName?: string | null, contentType?: string | null): string => {
-  const ext = fileName && fileName.includes('.') ? fileName.split('.').pop() : undefined
-  return (ext || getFileType(contentType) || 'file').toUpperCase()
-}
 
 const AttachedFileItem: FC<AttachedFileItemProps> = ({
   file: fileRef,
@@ -74,7 +75,7 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
         name={file.fileName}
         subtitle={
           <Typography variant="caption" color="text.secondary">
-            {getTypeLabel(file.fileName, file.fileContentType)}
+            {getFileTypeLabel(file.fileName, file.fileContentType)}
           </Typography>
         }
         action={
