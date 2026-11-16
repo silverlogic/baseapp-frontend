@@ -277,11 +277,11 @@ catalogs:
       version: 7.6.2
   payments:
     '@stripe/react-stripe-js':
-      specifier: 3.11.0
-      version: 3.11.0
+      specifier: 7.1.0
+      version: 7.1.0
     '@stripe/stripe-js':
-      specifier: 7.10.0
-      version: 7.10.0
+      specifier: 10.3.0
+      version: 10.3.0
   react-native:
     '@expo/vector-icons':
       specifier: ^15.0.2
@@ -715,10 +715,10 @@ importers:
         version: 8.6.19(@storybook/test@8.6.19(storybook@8.6.19(prettier@3.8.4)))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.19(prettier@3.8.4))(typescript@5.9.2)
       '@stripe/react-stripe-js':
         specifier: catalog:payments
-        version: 3.11.0(@stripe/stripe-js@7.10.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+        version: 7.1.0(@stripe/stripe-js@10.3.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       '@stripe/stripe-js':
         specifier: catalog:payments
-        version: 7.10.0
+        version: 10.3.0
       '@tanstack/react-query':
         specifier: 'catalog:'
         version: 5.76.1(react@19.2.0)
@@ -5586,15 +5586,15 @@ packages:
     peerDependencies:
       storybook: ^8.2.0 || ^8.3.0-0 || ^8.4.0-0 || ^8.5.0-0 || ^8.6.0-0
 
-  '@stripe/react-stripe-js@3.11.0':
-    resolution: {integrity: sha512-5L2Qsg68ELyDGdiQb6mnT4fgyl6V6GN4nJzGdKmVJ3CfbQFv1H157/LJTjJVyQGLN2bZ20cFYFMn2YwZ2TJElw==}
+  '@stripe/react-stripe-js@7.1.0':
+    resolution: {integrity: sha512-ehXa04HVJ8j/tPy1hQW9gdgLGY4o1msb7C5Rasd0LpLMiqY9VJIyuLAI6eUUXkeFvgbv6+5kulyNgHoR4FrRfg==}
     peerDependencies:
-      '@stripe/stripe-js': '>=1.44.1 <8.0.0'
+      '@stripe/stripe-js': '>=10.3.0 <11.0.0'
       react: '>=16.8.0 <20.0.0'
       react-dom: '>=16.8.0 <20.0.0'
 
-  '@stripe/stripe-js@7.10.0':
-    resolution: {integrity: sha512-LKrDpCop593iWnPxOHgjYmZGngOdgzPYLjyVzUdQ7f7bSnAEKkBMEwsOmWRrq40TR8KG96woms5xPUmffZkJ0Q==}
+  '@stripe/stripe-js@10.3.0':
+    resolution: {integrity: sha512-/C+qwO7bkDIYbIHypxppg8qGnWXdqQEOM855lJ8wTkd2VPoRAYLTGDOFTpJ8B7kso3o9cjMy2r1KPw8WQregNA==}
     engines: {node: '>=12.16'}
 
   '@swc/helpers@0.5.15':
@@ -17617,14 +17617,14 @@ snapshots:
     dependencies:
       storybook: 8.6.19(prettier@3.8.4)
 
-  '@stripe/react-stripe-js@3.11.0(@stripe/stripe-js@7.10.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
+  '@stripe/react-stripe-js@7.1.0(@stripe/stripe-js@10.3.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
     dependencies:
-      '@stripe/stripe-js': 7.10.0
+      '@stripe/stripe-js': 10.3.0
       prop-types: 15.8.1
       react: 19.2.0
       react-dom: 19.2.0(react@19.2.0)
 
-  '@stripe/stripe-js@7.10.0': {}
+  '@stripe/stripe-js@10.3.0': {}
 
   '@swc/helpers@0.5.15':
     dependencies:

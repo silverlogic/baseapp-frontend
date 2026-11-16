@@ -1,6 +1,6 @@
 'use client'
 
-import { FC } from 'react'
+import { FC, useState } from 'react'
 
 import { CheckMarkIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
@@ -21,17 +21,16 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
   selectedPaymentMethodId,
   setSelectedPaymentMethodId,
   stripe,
-  elements,
   setIsAddCardModalOpen,
   isAddCardModalOpen,
   entityId,
   handleSetupSuccess,
 }) => {
+  const [setupClientSecret, setSetupClientSecret] = useState<string>()
   const { useSetupIntent } = useStripeHook()
   const { mutate: createSetupIntent } = useSetupIntent(entityId, {
     onSuccess: (setupIntent: SetupIntent) => {
-      // @ts-ignore
-      elements?.update({ clientSecret: setupIntent.clientSecret })
+      setSetupClientSecret(setupIntent.clientSecret)
       setIsAddCardModalOpen(true)
     },
     onError: (error) => {
@@ -67,7 +66,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
         <AddCardModal
           entityId={entityId}
           stripe={stripe}
-          elements={elements}
+          clientSecret={setupClientSecret}
           open={isAddCardModalOpen}
           onClose={handleCloseModal}
           handleSetupSuccess={handleSetupSuccess}
@@ -109,7 +108,7 @@ const PaymentDropdown: FC<PaymentDropdownProps> = ({
       <AddCardModal
         entityId={entityId}
         stripe={stripe}
-        elements={elements}
+        clientSecret={setupClientSecret}
         open={isAddCardModalOpen}
         onClose={handleCloseModal}
         handleSetupSuccess={handleSetupSuccess}

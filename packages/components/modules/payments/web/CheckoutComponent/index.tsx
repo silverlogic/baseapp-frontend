@@ -311,7 +311,6 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
                   paymentMethods={paymentMethods ?? []}
                   selectedPaymentMethodId={selectedPaymentMethodId}
                   setSelectedPaymentMethodId={setSelectedPaymentMethodId}
-                  elements={elements}
                   stripe={stripe}
                   isAddCardModalOpen={isAddCardModalOpen}
                   setIsAddCardModalOpen={setIsAddCardModalOpen}

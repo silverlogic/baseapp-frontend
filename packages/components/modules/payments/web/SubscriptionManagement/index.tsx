@@ -223,7 +223,6 @@ const SubscriptionManagement: FC<SubscriptionManagementProps> = ({ entityId }) =
                     paymentMethods={paymentMethods ?? []}
                     selectedPaymentMethodId={selectedPaymentMethodId ?? ''}
                     setSelectedPaymentMethodId={setLastAddedPaymentMethodIdDuringSession}
-                    elements={elements}
                     stripe={stripe}
                     isAddCardModalOpen={isAddCardModalOpen}
                     setIsAddCardModalOpen={setIsAddCardModalOpen}
