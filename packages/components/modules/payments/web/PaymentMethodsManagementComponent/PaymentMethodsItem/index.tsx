@@ -2,7 +2,7 @@ import { FC } from 'react'
 
 import { MoreVert } from '@mui/icons-material'
 import { Box, Chip, Divider, IconButton, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { PAYMENTS_MESSAGES } from '../../constants'
 import { getCardIcon } from '../../utils'
@@ -55,10 +55,10 @@ const PaymentMethodsItem: FC<PaymentMethodsItemProps> = ({
             •••• •••• •••• {paymentMethod?.card?.last4}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            {intl.formatMessage(
-              isExpired ? PAYMENTS_MESSAGES.cardExpired : PAYMENTS_MESSAGES.cardExpires,
-              { month: paymentMethod?.card?.expMonth, year: paymentMethod?.card?.expYear },
-            )}
+            <FormattedMessage
+              {...(isExpired ? PAYMENTS_MESSAGES.cardExpired : PAYMENTS_MESSAGES.cardExpires)}
+              values={{ month: paymentMethod?.card?.expMonth, year: paymentMethod?.card?.expYear }}
+            />
           </Typography>
         </Box>
         <IconButton

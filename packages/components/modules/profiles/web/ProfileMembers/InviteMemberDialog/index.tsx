@@ -9,7 +9,7 @@ import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/util
 
 import { LoadingButton } from '@mui/lab'
 import { Box, TextField, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
@@ -159,7 +159,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
       content={
         <Box sx={{ display: 'grid', gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            {intl.formatMessage(MESSAGES.description)}
+            <FormattedMessage {...MESSAGES.description} />
           </Typography>
           {open && (
             <Suspense
@@ -185,7 +185,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
           loading={isSubmitting}
           disabled={isSubmitting || selected.length === 0}
         >
-          {intl.formatMessage(MESSAGES.submit)}
+          <FormattedMessage {...MESSAGES.submit} />
         </LoadingButton>
       }
     />

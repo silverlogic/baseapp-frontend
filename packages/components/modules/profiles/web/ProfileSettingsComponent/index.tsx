@@ -218,7 +218,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                         defaultMessage: 'Remove avatar button',
                       })}
                     >
-                      {intl.formatMessage(PROFILE_SETTINGS_MESSAGES.remove)}
+                      <FormattedMessage {...PROFILE_SETTINGS_MESSAGES.remove} />
                     </LoadingButton>
                   )}
                 </AvatarUploadContainer>
@@ -319,7 +319,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                         defaultMessage: 'Remove banner button',
                       })}
                     >
-                      {intl.formatMessage(PROFILE_SETTINGS_MESSAGES.remove)}
+                      <FormattedMessage {...PROFILE_SETTINGS_MESSAGES.remove} />
                     </LoadingButton>
                   )}
                 </BannerButtonsContainer>

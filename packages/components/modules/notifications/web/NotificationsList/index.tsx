@@ -6,7 +6,7 @@ import { CloseIcon } from '@baseapp-frontend/design-system/components/web/icons'
 import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 
 import { Box, Divider, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 import { Virtuoso } from 'react-virtuoso'
 
@@ -68,7 +68,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
         <>
           <Divider>
             <Typography variant="body2">
-              {intl.formatMessage({ id: 'notifications.list.older', defaultMessage: 'Older' })}
+              <FormattedMessage id="notifications.list.older" defaultMessage="Older" />
             </Typography>
           </Divider>
           <NotificationItem
@@ -133,7 +133,7 @@ const NotificationsList: FC<NotificationsListProps> = ({
     <Box display="grid" gridTemplateRows="min-content 1fr" height="100%">
       <HeaderContainer>
         <Typography variant="h6">
-          {intl.formatMessage(NOTIFICATIONS_LIST_MESSAGES.title)}
+          <FormattedMessage {...NOTIFICATIONS_LIST_MESSAGES.title} />
         </Typography>
         <Box display="grid" gridTemplateColumns="max-content min-content">
           {!!data?.notificationsUnreadCount && (

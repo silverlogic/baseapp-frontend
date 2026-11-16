@@ -198,7 +198,7 @@ const MemberItem: FC<MemberItemProps> = ({
                       value === INVITATION_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                   }}
                 >
-                  {intl.formatMessage(label)}
+                  <FormattedMessage {...label} />
                 </MenuItem>
               ))}
             </Select>
@@ -211,7 +211,7 @@ const MemberItem: FC<MemberItemProps> = ({
               tree as an actionable control (vs. pointerEvents:none, which only blocks
               the mouse). Greyed-out also reads correctly for an expired invitation. */}
           <Button variant="outlined" color="inherit" disabled>
-            {intl.formatMessage(MEMBER_MESSAGES.expired)}
+            <FormattedMessage {...MEMBER_MESSAGES.expired} />
           </Button>
         </Box>
       )
@@ -242,7 +242,7 @@ const MemberItem: FC<MemberItemProps> = ({
                   color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                 }}
               >
-                {intl.formatMessage(label)}
+                <FormattedMessage {...label} />
               </MenuItem>
             ))}
           </Select>
@@ -311,7 +311,7 @@ const MemberItem: FC<MemberItemProps> = ({
         cancelText={backText}
         action={
           <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
-            {intl.formatMessage(MEMBER_MESSAGES.remove)}
+            <FormattedMessage {...MEMBER_MESSAGES.remove} />
           </Button>
         }
       />
@@ -333,7 +333,7 @@ const MemberItem: FC<MemberItemProps> = ({
         cancelText={backText}
         action={
           <Button variant="contained" color="error" onClick={confirmCancelInvitation}>
-            {intl.formatMessage(MEMBER_MESSAGES.remove)}
+            <FormattedMessage {...MEMBER_MESSAGES.remove} />
           </Button>
         }
       />
