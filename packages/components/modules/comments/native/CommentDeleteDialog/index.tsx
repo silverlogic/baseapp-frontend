@@ -2,7 +2,7 @@ import { Button } from '@baseapp-frontend/design-system/components/native/button
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/native/dialogs'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useCommentDeleteMutation } from '../../common'
 import { ICommentDeleteDialogProps } from './types'
@@ -52,7 +52,7 @@ const CommentDeleteDialog: React.FC<ICommentDeleteDialogProps> = ({
           size="medium"
         >
           <Text variant="buttonMedium" color="contrast">
-            {intl.formatMessage({ id: 'comments.deleteDialog.confirm', defaultMessage: 'Delete' })}
+            <FormattedMessage id="comments.deleteDialog.confirm" defaultMessage="Delete" />
           </Text>
         </Button>
       }

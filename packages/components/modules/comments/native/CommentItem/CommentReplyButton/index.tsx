@@ -6,7 +6,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { createStyles } from './styles'
 import { CommentReplyButtonProps } from './types'
@@ -40,7 +40,7 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
           { commentId },
         )}
       >
-        {intl.formatMessage({ id: 'comments.reply.label', defaultMessage: 'Reply' })}
+        <FormattedMessage id="comments.reply.label" defaultMessage="Reply" />
       </Text>
     </View>
   )
