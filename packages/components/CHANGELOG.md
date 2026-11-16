@@ -7,7 +7,8 @@
 - db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
   - `components` and `design-system` web UI render all text via `formatMessage` with ids
     namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
-    Native code and shared `common/` code used by native are unchanged.
+    Shared `common/` hooks keep their translated strings (comment action labels), so native
+    screens that use them need an `IntlProvider` ancestor too.
   - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
     passing the prop still overrides them.
   - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
