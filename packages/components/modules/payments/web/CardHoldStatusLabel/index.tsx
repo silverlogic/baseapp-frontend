@@ -16,7 +16,11 @@ const CardHoldStatusLabel: FC<CardHoldStatusLabelProps> = ({
   ...props
 }) => {
   const cardHold = useFragment(CardHoldStatusLabelFragmentQuery, cardHoldRef)
-  const { label, color } = getLabel(cardHold.status, { kept: cardHold.kept, view })
+  const { label, color } = getLabel(cardHold.status, {
+    kept: cardHold.kept,
+    view,
+    paymentStatus: cardHold.paymentStatus,
+  })
   return <Chip label={label} color={color} size={size} {...props} />
 }
 

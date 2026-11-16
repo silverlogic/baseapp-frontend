@@ -6,5 +6,8 @@ export const CardHoldStaffActionsFragmentQuery = graphql`
     status
     kept
     failureReason
+    retriesLeft
+    paymentStatus
+    canDecide
   }
 `

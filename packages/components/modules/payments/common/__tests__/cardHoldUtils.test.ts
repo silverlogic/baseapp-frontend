@@ -87,6 +87,72 @@ describe('getCardHoldStatusLabel', () => {
     })
   })
 
+  it.each(['customer', 'staff'] as const)(
+    'labels a partially paid hold "Partially paid" in the %s view',
+    (view) => {
+      expect(getCardHoldStatusLabel('captured', { view, paymentStatus: 'partially_paid' })).toEqual(
+        { label: 'Partially paid', color: 'warning' },
+      )
+    },
+  )
+
+  it.each([
+    ['released', 'customer'],
+    ['released', 'staff'],
+    ['captured', 'customer'],
+    ['captured', 'staff'],
+    ['scheduled', 'customer'],
+    ['scheduled', 'staff'],
+    ['saved', 'customer'],
+    ['saved', 'staff'],
+  ] as const)('labels a paid %s hold "Paid" in the %s view', (status, view) => {
+    expect(getCardHoldStatusLabel(status, { view, paymentStatus: 'paid' })).toEqual({
+      label: 'Paid',
+      color: 'success',
+    })
+  })
+
+  it.each([
+    ['customer', false],
+    ['customer', true],
+    ['staff', false],
+    ['staff', true],
+  ] as const)(
+    'labels a failed hold that was then charged "Paid" in the %s view (kept: %s)',
+    (view, kept) => {
+      expect(getCardHoldStatusLabel('failed', { view, kept, paymentStatus: 'paid' })).toEqual({
+        label: 'Paid',
+        color: 'success',
+      })
+    },
+  )
+
+  it.each(['customer', 'staff'] as const)(
+    'labels a partially paid failed hold "Partially paid" in the %s view',
+    (view) => {
+      expect(
+        getCardHoldStatusLabel('failed', { view, kept: true, paymentStatus: 'partially_paid' }),
+      ).toEqual({ label: 'Partially paid', color: 'warning' })
+    },
+  )
+
+  it.each([
+    ['pending', 'paid', 'Processing'],
+    ['authorized', 'paid', 'Card held'],
+    ['scheduled', 'unpaid', 'Hold scheduled'],
+    ['released', 'unpaid', 'Released'],
+    ['captured', 'unpaid', 'Charged'],
+    ['authorized', 'unpaid', 'Card held'],
+  ])('keeps the status label for a %s hold whose payment is %s', (status, paymentStatus, label) => {
+    expect(getCardHoldStatusLabel(status, { paymentStatus }).label).toBe(label)
+  })
+
+  it('still never shows a failed hold as failed to a customer, whatever the payment', () => {
+    expect(getCardHoldStatusLabel('failed', { paymentStatus: 'unpaid' }).label).toBe(
+      'Hold scheduled',
+    )
+  })
+
   it('falls back to the raw status', () => {
     expect(getCardHoldStatusLabel('something_new')).toEqual({
       label: 'something_new',

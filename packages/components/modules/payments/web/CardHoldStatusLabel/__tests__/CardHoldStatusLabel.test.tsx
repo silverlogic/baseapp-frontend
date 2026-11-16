@@ -20,7 +20,8 @@ vi.mock('react-relay', async () => ({
   useFragment: (_fragment: unknown, ref: unknown) => ref,
 }))
 
-const hold = (status: string, kept = false) => ({ status, kept }) as any
+const hold = (status: string, kept = false, paymentStatus = 'unpaid') =>
+  ({ status, kept, paymentStatus }) as any
 
 describe('CardHoldStatusLabel', () => {
   it('labels an authorized hold', () => {
@@ -42,6 +43,66 @@ describe('CardHoldStatusLabel', () => {
   it('shows a kept failed hold to staff', () => {
     render(<CardHoldStatusLabel cardHold={hold('failed', true)} view="staff" />)
     expect(screen.getByText('Hold failed · kept')).toBeInTheDocument()
+  })
+
+  it.each(['customer', 'staff'] as const)(
+    'shows a partially paid hold as "Partially paid" in the warning color (%s)',
+    (view) => {
+      render(
+        <CardHoldStatusLabel cardHold={hold('captured', false, 'partially_paid')} view={view} />,
+      )
+      expect(screen.getByText('Partially paid')).toBeInTheDocument()
+      expect(screen.getByText('Partially paid').closest('.MuiChip-root')).toHaveClass(
+        'MuiChip-colorWarning',
+      )
+      expect(screen.queryByText('Charged')).not.toBeInTheDocument()
+    },
+  )
+
+  it.each(['released', 'captured'])(
+    'shows a paid %s hold as "Paid" in the success color',
+    (status) => {
+      render(<CardHoldStatusLabel cardHold={hold(status, false, 'paid')} />)
+      expect(screen.getByText('Paid').closest('.MuiChip-root')).toHaveClass('MuiChip-colorSuccess')
+    },
+  )
+
+  it.each([
+    ['failed', true, 'customer'],
+    ['failed', true, 'staff'],
+    ['scheduled', false, 'customer'],
+    ['scheduled', false, 'staff'],
+  ] as const)(
+    'shows a paid %s hold (kept: %s) as "Paid" in the success color (%s)',
+    (status, kept, view) => {
+      render(<CardHoldStatusLabel cardHold={hold(status, kept, 'paid')} view={view} />)
+      expect(screen.getByText('Paid').closest('.MuiChip-root')).toHaveClass('MuiChip-colorSuccess')
+      expect(screen.queryByText(/fail|scheduled/i)).not.toBeInTheDocument()
+    },
+  )
+
+  it.each([
+    ['captured', 'unpaid', 'Charged'],
+    ['released', 'unpaid', 'Released'],
+    ['authorized', 'paid', 'Card held'],
+  ])('keeps the status label for a %s hold whose payment is %s', (status, paymentStatus, label) => {
+    render(<CardHoldStatusLabel cardHold={hold(status, false, paymentStatus)} />)
+    expect(screen.getByText(label)).toBeInTheDocument()
+  })
+
+  it('passes paymentStatus to a custom label', () => {
+    const getLabel = vi.fn(() => ({ label: 'custom', color: 'default' as const }))
+    render(
+      <CardHoldStatusLabel
+        cardHold={hold('captured', false, 'partially_paid')}
+        getLabel={getLabel}
+      />,
+    )
+    expect(getLabel).toHaveBeenCalledWith('captured', {
+      kept: false,
+      view: 'customer',
+      paymentStatus: 'partially_paid',
+    })
   })
 
   it('takes a custom label', () => {

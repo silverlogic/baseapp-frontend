@@ -16,6 +16,17 @@ const SHARED_LABELS = [
 
 const VIEWS = ['customer', 'staff'] as const
 
+/** `paymentStatus` wins over `status`: a short payment, or one paid in full. */
+const PAYMENT_LABELS = [
+  { status: 'captured', paymentStatus: 'partially_paid', label: 'Partially paid', color: 'Warning' },
+  { status: 'captured', paymentStatus: 'paid', label: 'Paid', color: 'Success' },
+  { status: 'released', paymentStatus: 'paid', label: 'Paid', color: 'Success' },
+  /** A failed hold staff kept, then charged: the backend leaves it `failed`. */
+  { status: 'failed', paymentStatus: 'paid', label: 'Paid', color: 'Success' },
+  /** The same hold as customers receive it. */
+  { status: 'scheduled', paymentStatus: 'paid', label: 'Paid', color: 'Success' },
+] as const
+
 test.describe('Component: CardHoldStatusLabel', () => {
   for (const view of VIEWS) {
     for (const { status, label } of SHARED_LABELS) {
@@ -45,6 +56,41 @@ test.describe('Component: CardHoldStatusLabel', () => {
       await component
         .locator('.MuiChip-root')
         .screenshot({ path: testInfo.outputPath(`card-hold-label-customer-failed-kept-${kept}.png`) })
+    })
+  }
+
+  for (const view of VIEWS) {
+    for (const { status, paymentStatus, label, color } of PAYMENT_LABELS) {
+      test(`GIVEN a ${status} hold whose payment is ${paymentStatus} in the ${view} view, THEN it reads "${label}" in the ${color.toLowerCase()} color`, async ({
+        mount,
+      }, testInfo) => {
+        const component = await mount<typeof Default>(`${STORY}/Default`, {
+          status,
+          paymentStatus,
+          view,
+        })
+
+        const chip = component.locator('.MuiChip-root')
+        await expect(chip).toHaveText(label)
+        await expect(chip).toHaveClass(new RegExp(`MuiChip-color${color}`))
+
+        await chip.screenshot({
+          path: testInfo.outputPath(`card-hold-label-${view}-${status}-${paymentStatus}.png`),
+        })
+      })
+    }
+  }
+
+  for (const { status, label } of SHARED_LABELS.filter(({ status: s }) =>
+    ['released', 'captured'].includes(s),
+  )) {
+    test(`GIVEN an unpaid ${status} hold, THEN it still reads "${label}"`, async ({ mount }) => {
+      const component = await mount<typeof Default>(`${STORY}/Default`, {
+        status,
+        paymentStatus: 'unpaid',
+      })
+
+      await expect(component.locator('.MuiChip-root')).toHaveText(label)
     })
   }
 
@@ -84,7 +130,8 @@ test.describe('Component: CardHoldStatusLabel', () => {
   }, testInfo) => {
     const component = await mount(`${STORY}/AllStates`)
 
-    const row = (status: string, kept = false) => component.getByTestId(`row-${status}-${kept}`)
+    const row = (status: string, kept = false, paymentStatus = 'unpaid') =>
+      component.getByTestId(`row-${status}-${kept}-${paymentStatus}`)
 
     for (const { status, label } of SHARED_LABELS) {
       await expect(row(status).getByTestId('customer')).toHaveText(label)
@@ -94,6 +141,17 @@ test.describe('Component: CardHoldStatusLabel', () => {
     await expect(row('failed', true).getByTestId('customer')).toHaveText('Hold scheduled')
     await expect(row('failed').getByTestId('staff')).toHaveText('Hold failed')
     await expect(row('failed', true).getByTestId('staff')).toHaveText('Hold failed · kept')
+    for (const { status, paymentStatus, label } of PAYMENT_LABELS) {
+      for (const view of VIEWS) {
+        await expect(row(status, false, paymentStatus).getByTestId(view)).toHaveText(label)
+      }
+    }
+    for (const view of VIEWS) {
+      await expect(row('failed', true, 'paid').getByTestId(view)).toHaveText('Paid')
+      await expect(
+        row('failed', true, 'paid').getByTestId(view).locator('.MuiChip-root'),
+      ).toHaveClass(/MuiChip-colorSuccess/)
+    }
 
     await component
       .locator('table')

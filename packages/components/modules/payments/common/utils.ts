@@ -4,6 +4,7 @@ import {
   CARD_HOLD_DEFAULT_RETRY,
   CARD_HOLD_INTENT_TYPE,
   CARD_HOLD_MAX_AUTHENTICATIONS,
+  CARD_HOLD_PAYMENT_STATUS,
   CARD_HOLD_PLACEMENT_STATUS,
   CARD_HOLD_STATUS,
 } from './constants'
@@ -20,7 +21,7 @@ import type {
   CardHoldPlacementPayload,
   CardHoldPlacementStatus,
   CardHoldStatusLabelDescriptor,
-  CardHoldStatusLabelView,
+  CardHoldStatusLabelOptions,
 } from './types'
 
 const PLACEMENT_STATUSES = new Set<string>(Object.values(CARD_HOLD_PLACEMENT_STATUS))
@@ -115,17 +116,33 @@ const CUSTOMER_LABELS: Record<string, CardHoldStatusLabelDescriptor> = {
 }
 
 /**
- * Label and chip color for `CardHold.status`. The customer view never says "failed": the
- * backend already reads a failed hold as `scheduled` for customers, and this maps it the same
- * way should a staff-only value ever reach a customer view.
+ * Statuses that still describe a hold in flight, whatever `paymentStatus` says. Every other
+ * status reads "Paid" once paid in full: a hold captured, released and charged afresh, or failed,
+ * kept and then charged (the backend leaves that one `failed`, and customers see it `scheduled`).
+ */
+const UNSETTLED_STATUSES: ReadonlySet<string> = new Set([
+  CARD_HOLD_STATUS.pending,
+  CARD_HOLD_STATUS.authorized,
+])
+
+/**
+ * Label and chip color for `CardHold.status`, read together with `paymentStatus`: a captured
+ * hold whose difference was declined reads "Partially paid", not "Charged", and any hold paid in
+ * full reads "Paid" in both views unless it is still `pending` or `authorized`. The customer
+ * view never says
+ * "failed": the backend already reads a failed hold as `scheduled` for customers, and this maps
+ * it the same way should a staff-only value ever reach a customer view.
  */
 export const getCardHoldStatusLabel = (
   status: string,
-  {
-    kept = false,
-    view = 'customer',
-  }: { kept?: boolean | null; view?: CardHoldStatusLabelView } = {},
+  { kept = false, view = 'customer', paymentStatus }: CardHoldStatusLabelOptions = {},
 ): CardHoldStatusLabelDescriptor => {
+  if (paymentStatus === CARD_HOLD_PAYMENT_STATUS.partiallyPaid) {
+    return { label: 'Partially paid', color: 'warning' }
+  }
+  if (paymentStatus === CARD_HOLD_PAYMENT_STATUS.paid && !UNSETTLED_STATUSES.has(status)) {
+    return { label: 'Paid', color: 'success' }
+  }
   if (status === CARD_HOLD_STATUS.failed) {
     if (view === 'customer') return CUSTOMER_LABELS[CARD_HOLD_STATUS.scheduled]!
     return kept

@@ -9,8 +9,15 @@ import {
   cardHoldCancelSuccessMockData,
   cardHoldKeepGraphqlErrorMockData,
   cardHoldKeepSuccessMockData,
+  cardHoldMarkPaidGraphqlErrorMockData,
+  cardHoldMarkPaidSuccessMockData,
   cardHoldQueryMockData,
+  cardHoldRetryAuthorizedMockData,
+  cardHoldRetryFailedAgainMockData,
+  cardHoldRetryScheduledMockData,
+  cardHoldRetryGraphqlErrorMockData,
   failedHoldMock,
+  partiallyPaidHoldMock,
 } from '../__mocks__/requests'
 import type { CardHoldStaffDecision } from '../../types'
 import CardHoldStaffActionsForTesting from './CardHoldStaffActionsForTesting'
@@ -31,6 +38,15 @@ export interface CardHoldStaffActionsControls {
   resolveCancel: () => void
   resolveKeepWithGraphqlError: () => void
   resolveCancelWithGraphqlError: () => void
+  /** The retry was placed: `authorized`. */
+  resolveRetry: () => void
+  /** The hold date moved into the future: the retry scheduled the hold, `scheduled`. */
+  resolveRetryScheduled: () => void
+  /** The retry ran and was declined again: still `failed`, one retry fewer. */
+  resolveRetryFailedAgain: () => void
+  resolveRetryWithGraphqlError: () => void
+  resolveMarkPaid: () => void
+  resolveMarkPaidWithGraphqlError: () => void
   rejectWithTransportError: () => void
 }
 
@@ -65,6 +81,16 @@ const makeControls = ({
     resolveMostRecentOperation({ data: cardHoldKeepGraphqlErrorMockData }),
   resolveCancelWithGraphqlError: () =>
     resolveMostRecentOperation({ data: cardHoldCancelGraphqlErrorMockData }),
+  resolveRetry: () => resolveMostRecentOperation({ data: cardHoldRetryAuthorizedMockData }),
+  resolveRetryScheduled: () =>
+    resolveMostRecentOperation({ data: cardHoldRetryScheduledMockData }),
+  resolveRetryFailedAgain: () =>
+    resolveMostRecentOperation({ data: cardHoldRetryFailedAgainMockData }),
+  resolveRetryWithGraphqlError: () =>
+    resolveMostRecentOperation({ data: cardHoldRetryGraphqlErrorMockData }),
+  resolveMarkPaid: () => resolveMostRecentOperation({ data: cardHoldMarkPaidSuccessMockData }),
+  resolveMarkPaidWithGraphqlError: () =>
+    resolveMostRecentOperation({ data: cardHoldMarkPaidGraphqlErrorMockData }),
   rejectWithTransportError: () => rejectMostRecentOperation(TRANSPORT_ERROR_MESSAGE),
 })
 
@@ -83,9 +109,8 @@ const useSeededEnvironment = (hold: CardHoldMock) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-/** A hold seeded from props (a failed, undecided one by default). */
-export const Default = (props: Partial<CardHoldMock>) => {
-  const environment = useSeededEnvironment({ ...failedHoldMock, ...props })
+const StaffActions = (hold: CardHoldMock) => {
+  const environment = useSeededEnvironment(hold)
   const [decidedCount, setDecidedCount] = useState(0)
   const [lastDecision, setLastDecision] = useState('')
 
@@ -105,3 +130,16 @@ export const Default = (props: Partial<CardHoldMock>) => {
     </div>
   )
 }
+
+/**
+ * A hold seeded from props (a failed, undecided one with retries left, seen by a viewer who can
+ * decide, by default). Pass `canDecide: false` for a viewer without `change_cardhold`.
+ */
+export const Default = (props: Partial<CardHoldMock>) => (
+  <StaffActions {...failedHoldMock} {...props} />
+)
+
+/** A captured hold whose difference above it was declined: Mark paid. */
+export const PartiallyPaid = (props: Partial<CardHoldMock>) => (
+  <StaffActions {...partiallyPaidHoldMock} {...props} />
+)

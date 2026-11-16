@@ -1,4 +1,4 @@
-import type { PropsWithChildren, ReactElement } from 'react'
+import { type PropsWithChildren, type ReactElement, useState } from 'react'
 
 import { render as baseRender, screen, userEvent, waitFor, within } from '@baseapp-frontend/test'
 
@@ -23,7 +23,14 @@ vi.mock('react-relay', async () => ({
   graphql: vi.fn((strings: TemplateStringsArray) => strings.join('')),
   useFragment: (_fragment: unknown, ref: unknown) => ref,
   useMutation: (document: string) => [
-    (config: any) => commitMock(document.includes('cardHoldKeep') ? 'keep' : 'cancel', config),
+    (config: any) =>
+      commitMock(
+        (['cardHoldKeep', 'cardHoldCancel', 'cardHoldRetry', 'cardHoldMarkPaid'] as const)
+          .find((field) => document.includes(`${field}(`))!
+          .replace('cardHold', '')
+          .replace(/^./, (first) => first.toLowerCase()),
+        config,
+      ),
     false,
   ],
 }))
@@ -39,6 +46,9 @@ const failedHold = (overrides: Record<string, unknown> = {}) =>
     status: 'failed',
     kept: false,
     failureReason: 'card_declined',
+    retriesLeft: 3,
+    paymentStatus: 'unpaid',
+    canDecide: true,
     ...overrides,
   }) as any
 
@@ -52,6 +62,38 @@ describe('CardHoldStaffActions', () => {
     render(<CardHoldStaffActions cardHold={failedHold({ status: 'scheduled' })} />)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
     expect(screen.queryByText(/failed/i)).not.toBeInTheDocument()
+  })
+
+  describe('canDecide', () => {
+    it.each([
+      ['failed', {}],
+      ['kept failed', { kept: true }],
+      ['partially paid', { status: 'captured', paymentStatus: 'partially_paid' }],
+    ])('renders nothing for a %s hold when the viewer cannot decide', (_name, overrides) => {
+      render(<CardHoldStaffActions cardHold={failedHold({ ...overrides, canDecide: false })} />)
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(screen.queryByText(/failed|partially paid|kept/i)).not.toBeInTheDocument()
+      expect(screen.queryByText('card_declined')).not.toBeInTheDocument()
+    })
+
+    it('shows the failed panel when the viewer can decide', () => {
+      render(<CardHoldStaffActions cardHold={failedHold({ canDecide: true })} />)
+      expect(screen.getByText('The card hold failed')).toBeInTheDocument()
+      expect(screen.getAllByRole('button')).toHaveLength(3)
+    })
+
+    it('shows the partially paid panel when the viewer can decide', () => {
+      render(
+        <CardHoldStaffActions
+          cardHold={failedHold({
+            status: 'captured',
+            paymentStatus: 'partially_paid',
+            canDecide: true,
+          })}
+        />,
+      )
+      expect(screen.getByRole('button', { name: 'Mark paid' })).toBeInTheDocument()
+    })
   })
 
   it('shows the failure reason and both actions', () => {
@@ -143,9 +185,254 @@ describe('CardHoldStaffActions', () => {
     await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
   })
 
+  it('renders nothing for a kept failed hold that was then charged', () => {
+    render(
+      <CardHoldStaffActions
+        cardHold={failedHold({ kept: true, paymentStatus: 'paid', canDecide: true })}
+      />,
+    )
+    expect(screen.queryByRole('button')).not.toBeInTheDocument()
+    expect(screen.queryByText(/failed|kept/i)).not.toBeInTheDocument()
+    expect(screen.queryByText('card_declined')).not.toBeInTheDocument()
+  })
+
   it('shows a kept hold without actions', () => {
     render(<CardHoldStaffActions cardHold={failedHold({ kept: true })} />)
     expect(screen.getByText(/kept: the card will be charged afresh/i)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Keep' })).not.toBeInTheDocument()
+  })
+
+  describe('retry', () => {
+    /** Holds the hold in state, as the Relay store would after the mutation's payload lands. */
+    const Harness = ({
+      initial,
+      onDecided,
+      setHoldRef,
+    }: {
+      initial: Record<string, unknown>
+      onDecided?: (decision: string) => void
+      setHoldRef: { current?: (hold: any) => void }
+    }) => {
+      const [hold, setHold] = useState(failedHold(initial))
+      // eslint-disable-next-line no-param-reassign
+      setHoldRef.current = setHold
+      return <CardHoldStaffActions cardHold={hold} onDecided={onDecided} />
+    }
+
+    /** Resolves the retry the way the backend would: the store updates, then onCompleted. */
+    const answerRetryWith = (
+      setHoldRef: { current?: (hold: any) => void },
+      next: Record<string, unknown>,
+    ) =>
+      commitMock.mockImplementation((_kind, config) => {
+        setHoldRef.current?.(failedHold(next))
+        config.onCompleted({ cardHoldRetry: { errors: null, cardHold: { id: 'x' } } })
+      })
+
+    it('offers a retry on a failed hold with retries left, and says how many', () => {
+      render(<CardHoldStaffActions cardHold={failedHold({ retriesLeft: 2 })} />)
+      expect(screen.getByRole('button', { name: 'Retry hold' })).toBeInTheDocument()
+      expect(screen.getByText('2 retries left')).toBeInTheDocument()
+    })
+
+    it('says "1 retry left" in the singular', () => {
+      render(<CardHoldStaffActions cardHold={failedHold({ retriesLeft: 1 })} />)
+      expect(screen.getByText('1 retry left')).toBeInTheDocument()
+    })
+
+    it('hides the retry and explains what remains when no retries are left', () => {
+      render(<CardHoldStaffActions cardHold={failedHold({ retriesLeft: 0 })} />)
+      expect(screen.queryByRole('button', { name: 'Retry hold' })).not.toBeInTheDocument()
+      expect(screen.getByText('No retries left: only Keep or Cancel remain.')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Keep' })).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    })
+
+    it('hides the retry on a kept hold', () => {
+      render(<CardHoldStaffActions cardHold={failedHold({ kept: true, retriesLeft: 2 })} />)
+      expect(screen.queryByRole('button', { name: 'Retry hold' })).not.toBeInTheDocument()
+      expect(screen.queryByText(/retr(y|ies) left/)).not.toBeInTheDocument()
+    })
+
+    it.each(['authorized', 'pending', 'scheduled', 'captured'])(
+      'renders nothing for a %s hold, whatever retriesLeft says',
+      (status) => {
+        render(<CardHoldStaffActions cardHold={failedHold({ status, retriesLeft: 2 })} />)
+        expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      },
+    )
+
+    it('asks before retrying, saying the same card is tried again now, off-session', async () => {
+      render(<CardHoldStaffActions cardHold={failedHold()} />)
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+
+      expect(commitMock).not.toHaveBeenCalled()
+      const dialog = screen.getByRole('dialog')
+      expect(within(dialog).getByText('Retry the hold now?')).toBeInTheDocument()
+      expect(
+        within(dialog).getByText(/same saved card will be tried again now, off-session/),
+      ).toBeInTheDocument()
+
+      await userEvent.click(within(dialog).getByRole('button', { name: 'Back' }))
+      expect(commitMock).not.toHaveBeenCalled()
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    })
+
+    it('reports the retry and drops the actions once the hold is authorized', async () => {
+      const onDecided = vi.fn()
+      const setHoldRef: { current?: (hold: any) => void } = {}
+      answerRetryWith(setHoldRef, { status: 'authorized', retriesLeft: null })
+      render(<Harness initial={{ retriesLeft: 3 }} onDecided={onDecided} setHoldRef={setHoldRef} />)
+
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+      await userEvent.click(screen.getByRole('button', { name: 'Retry now' }))
+
+      expect(commitMock).toHaveBeenCalledWith(
+        'retry',
+        expect.objectContaining({ variables: { input: { id: 'Q2FyZEhvbGQ6MQ==' } } }),
+      )
+      expect(onDecided).toHaveBeenCalledWith('retry')
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(screen.queryByText('The card hold failed')).not.toBeInTheDocument()
+    })
+
+    it('reports the retry and drops the actions once the hold is scheduled for later', async () => {
+      const onDecided = vi.fn()
+      const setHoldRef: { current?: (hold: any) => void } = {}
+      answerRetryWith(setHoldRef, {
+        status: 'scheduled',
+        failureReason: null,
+        retriesLeft: null,
+      })
+      render(<Harness initial={{ retriesLeft: 3 }} onDecided={onDecided} setHoldRef={setHoldRef} />)
+
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+      await userEvent.click(screen.getByRole('button', { name: 'Retry now' }))
+
+      expect(commitMock).toHaveBeenCalledWith('retry', expect.anything())
+      expect(onDecided).toHaveBeenCalledTimes(1)
+      expect(onDecided).toHaveBeenCalledWith('retry')
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+      expect(screen.queryByText('The card hold failed')).not.toBeInTheDocument()
+    })
+
+    it('shows the failed state with one retry fewer when the retry fails again', async () => {
+      const onDecided = vi.fn()
+      const setHoldRef: { current?: (hold: any) => void } = {}
+      answerRetryWith(setHoldRef, { retriesLeft: 1, failureReason: 'insufficient_funds' })
+      render(<Harness initial={{ retriesLeft: 2 }} onDecided={onDecided} setHoldRef={setHoldRef} />)
+      expect(screen.getByText('2 retries left')).toBeInTheDocument()
+
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+      await userEvent.click(screen.getByRole('button', { name: 'Retry now' }))
+
+      expect(onDecided).toHaveBeenCalledWith('retry')
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+      expect(screen.getByText('The card hold failed')).toBeInTheDocument()
+      expect(screen.getByText('insufficient_funds')).toBeInTheDocument()
+      expect(screen.getByText('1 retry left')).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Retry hold' })).toBeEnabled()
+    })
+
+    it('does not report a retry the backend rejected with a GraphQL error, and toasts', async () => {
+      const onDecided = vi.fn()
+      commitMock.mockImplementation((_kind, config) =>
+        config.onCompleted({ cardHoldRetry: null }, [{ message: 'No retries left.' }]),
+      )
+      render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+      await userEvent.click(screen.getByRole('button', { name: 'Retry now' }))
+
+      expect(commitMock).toHaveBeenCalledWith('retry', expect.anything())
+      expect(onDecided).not.toHaveBeenCalled()
+      expect(toastMock).toHaveBeenCalled()
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument())
+    })
+
+    it('does not report a retry rejected in the payload errors', async () => {
+      const onDecided = vi.fn()
+      commitMock.mockImplementation((_kind, config) =>
+        config.onCompleted({
+          cardHoldRetry: { errors: [{ field: 'id', messages: ['No'] }], cardHold: null },
+        }),
+      )
+      render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+      await userEvent.click(screen.getByRole('button', { name: 'Retry hold' }))
+      await userEvent.click(screen.getByRole('button', { name: 'Retry now' }))
+
+      expect(onDecided).not.toHaveBeenCalled()
+      expect(toastMock).toHaveBeenCalled()
+    })
+
+    it('takes custom copy', () => {
+      render(
+        <CardHoldStaffActions
+          cardHold={failedHold({ retriesLeft: 2 })}
+          messages={{ retryButton: 'Réessayer', retriesLeft: (n) => `${n} essais restants` }}
+        />,
+      )
+      expect(screen.getByRole('button', { name: 'Réessayer' })).toBeInTheDocument()
+      expect(screen.getByText('2 essais restants')).toBeInTheDocument()
+    })
+  })
+
+  describe('mark paid', () => {
+    const partiallyPaidHold = (overrides: Record<string, unknown> = {}) =>
+      failedHold({
+        status: 'captured',
+        failureReason: null,
+        retriesLeft: null,
+        paymentStatus: 'partially_paid',
+        ...overrides,
+      })
+
+    it('offers Mark paid on a partially paid hold, and nothing else', () => {
+      render(<CardHoldStaffActions cardHold={partiallyPaidHold()} />)
+      expect(screen.getByText('Partially paid')).toBeInTheDocument()
+      expect(screen.getAllByRole('button')).toHaveLength(1)
+      expect(screen.getByRole('button', { name: 'Mark paid' })).toBeInTheDocument()
+    })
+
+    it('renders nothing once the hold is paid', () => {
+      render(<CardHoldStaffActions cardHold={partiallyPaidHold({ paymentStatus: 'paid' })} />)
+      expect(screen.queryByRole('button')).not.toBeInTheDocument()
+    })
+
+    it('marks it paid after confirming', async () => {
+      const onDecided = vi.fn()
+      commitMock.mockImplementation((_kind, config) =>
+        config.onCompleted({ cardHoldMarkPaid: { errors: null, cardHold: { id: 'x' } } }),
+      )
+      render(<CardHoldStaffActions cardHold={partiallyPaidHold()} onDecided={onDecided} />)
+
+      await userEvent.click(screen.getByRole('button', { name: 'Mark paid' }))
+      expect(commitMock).not.toHaveBeenCalled()
+      const dialog = screen.getByRole('dialog')
+      expect(within(dialog).getByText('Mark it paid?')).toBeInTheDocument()
+      await userEvent.click(within(dialog).getByRole('button', { name: 'Mark paid' }))
+
+      expect(commitMock).toHaveBeenCalledWith(
+        'markPaid',
+        expect.objectContaining({ variables: { input: { id: 'Q2FyZEhvbGQ6MQ==' } } }),
+      )
+      expect(onDecided).toHaveBeenCalledWith('markPaid')
+    })
+
+    it('does not report a mark paid the backend rejected', async () => {
+      const onDecided = vi.fn()
+      commitMock.mockImplementation((_kind, config) =>
+        config.onCompleted({ cardHoldMarkPaid: null }, [{ message: 'Not partially paid.' }]),
+      )
+      render(<CardHoldStaffActions cardHold={partiallyPaidHold()} onDecided={onDecided} />)
+      await userEvent.click(screen.getByRole('button', { name: 'Mark paid' }))
+      await userEvent.click(
+        within(screen.getByRole('dialog')).getByRole('button', { name: 'Mark paid' }),
+      )
+
+      expect(onDecided).not.toHaveBeenCalled()
+      expect(toastMock).toHaveBeenCalled()
+    })
   })
 })
