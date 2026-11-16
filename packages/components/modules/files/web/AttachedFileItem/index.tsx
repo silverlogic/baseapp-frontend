@@ -11,7 +11,7 @@ import {
   InsertDriveFile as FileIcon,
 } from '@mui/icons-material'
 import { Box, Card, CardContent, Chip, Stack, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { FileItemFragment } from '../../common/graphql/fragments/FileItem'
@@ -168,13 +168,11 @@ const AttachedFileItem: FC<AttachedFileItemProps> = ({
                 </Typography>
                 {file.createdBy && file.createdBy.fullName && (
                   <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                    {intl.formatMessage(
-                      {
-                        id: 'files.attachedFileItem.uploadedBy',
-                        defaultMessage: 'Uploaded by {name}',
-                      },
-                      { name: file.createdBy.fullName },
-                    )}
+                    <FormattedMessage
+                      id="files.attachedFileItem.uploadedBy"
+                      defaultMessage="Uploaded by {name}"
+                      values={{ name: file.createdBy.fullName }}
+                    />
                   </Typography>
                 )}
               </Box>

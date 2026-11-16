@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Checkbox, Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { AddContactToGroupItemFragment } from '../../../../common'
@@ -40,10 +40,11 @@ const GroupItem: FC<GroupItemProps> = ({ roomRef, selected, onToggle }) => {
           {getParticipantCountLabel(intl, node.participantsCount)}
           {isAlreadyMember && (
             <Typography component="span" variant="caption" color="text.disabled">
-              {intl.formatMessage({
-                id: 'messages.addContactToGroup.groupItem.alreadyAdded',
-                defaultMessage: ' • Already added',
-              })}
+              {' '}
+              <FormattedMessage
+                id="messages.addContactToGroup.groupItem.alreadyAdded"
+                defaultMessage="• Already added"
+              />
             </Typography>
           )}
         </Typography>

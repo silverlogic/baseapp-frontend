@@ -5,7 +5,7 @@ import { FC } from 'react'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { LoadingButton } from '@mui/lab'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment } from '../../../../profiles/common'
@@ -81,12 +81,12 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
           disabled={isMutationInFlight}
           loading={isMutationInFlight}
         >
-          {intl.formatMessage(
-            getLeaveGroupDialogTextCopyKeys().action ===
-              LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
+          <FormattedMessage
+            {...(getLeaveGroupDialogTextCopyKeys().action ===
+            LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
               ? LEAVE_GROUP_DIALOG_MESSAGES.leaveGroupButton
-              : SHARED_MESSAGES.remove,
-          )}
+              : SHARED_MESSAGES.remove)}
+          />
         </LoadingButton>
       }
       onClose={onClose}

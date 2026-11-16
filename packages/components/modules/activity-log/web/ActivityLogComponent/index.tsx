@@ -6,7 +6,7 @@ import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs
 
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SearchNotFoundState } from '../../../__shared__/web'
 import { FetchParameters, useActivityLogs } from '../../common'
@@ -62,7 +62,7 @@ const ActivityLogComponent: FC<ActivityLogComponentProps> = ({
     <Box p={2} justifyContent="center" minWidth="100%" display="flex" alignItems="center">
       <Box justifyContent="center" maxWidth={600} width="100%" mx="auto">
         <Typography component="h4" variant="h4" mb={4}>
-          {intl.formatMessage({ id: 'activityLog.title', defaultMessage: 'Activity Log' })}
+          <FormattedMessage id="activityLog.title" defaultMessage="Activity Log" />
         </Typography>
         <Searchbar
           placeholder={intl.formatMessage({

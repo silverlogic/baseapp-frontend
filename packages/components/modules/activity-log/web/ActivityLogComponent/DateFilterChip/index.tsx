@@ -6,7 +6,7 @@ import { DATE_FORMAT, formatDate } from '@baseapp-frontend/utils'
 import { KeyboardArrowDown } from '@mui/icons-material'
 import { Box, Chip, Divider, Menu, Theme, Typography, useMediaQuery } from '@mui/material'
 import { DateTime } from 'luxon'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import DateFilterComponent from '../DateFilterComponent'
 import { DateFilterChipProps } from './types'
@@ -59,7 +59,7 @@ const DateFilterChip: FC<DateFilterChipProps> = ({ fetchParameters, executeRefet
   const renderDateFilterComponent = (onClose: () => void) => (
     <>
       <Typography variant="subtitle1" m={4} align="center">
-        {intl.formatMessage({ id: 'activityLog.dateFilter.period', defaultMessage: 'Period' })}
+        <FormattedMessage id="activityLog.dateFilter.period" defaultMessage="Period" />
       </Typography>
       <Divider sx={{ marginBottom: 2 }} />
       <DateFilterComponent

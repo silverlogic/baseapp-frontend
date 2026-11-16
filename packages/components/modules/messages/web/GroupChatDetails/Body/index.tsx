@@ -6,7 +6,7 @@ import { CircledAvatar } from '@baseapp-frontend/design-system/components/web/av
 import { TypographyWithEllipsis } from '@baseapp-frontend/design-system/components/web/typographies'
 
 import { Box, Typography, useTheme } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SHARED_MESSAGES } from '../../__shared__/constants'
 import { getParticipantCountLabel } from '../../__shared__/utils'
@@ -53,7 +53,7 @@ const Body: FC<BodyProps> = ({
               borderBottom: `1px solid ${theme.palette.divider}`,
             }}
           >
-            {intl.formatMessage(SHARED_MESSAGES.members)}
+            <FormattedMessage {...SHARED_MESSAGES.members} />
           </Typography>
         </Box>
         <MembersContainer

@@ -8,7 +8,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { LoadingButton } from '@mui/lab'
 import { useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useAllProfilesList } from '../../../../profiles/common'
 import { useUpdateChatRoomMutation } from '../../../common'
@@ -243,7 +243,7 @@ const AddMembersDialog: FC<AddMembersDialogProps> = ({
           disabled={isMutationInFlight || isEditButtonDisabled}
           loading={isMutationInFlight}
         >
-          {intl.formatMessage({ id: 'common.confirm', defaultMessage: 'Confirm' })}
+          <FormattedMessage id="common.confirm" defaultMessage="Confirm" />
         </LoadingButton>
       }
       onClose={handleClose}

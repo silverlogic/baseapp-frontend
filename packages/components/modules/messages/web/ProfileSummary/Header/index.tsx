@@ -4,7 +4,7 @@ import { IconButton } from '@baseapp-frontend/design-system/components/web/butto
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 
 import { Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SHARED_MESSAGES } from '../../__shared__/constants'
 import { ProfileSummaryHeaderContainer } from './styled'
@@ -27,7 +27,7 @@ const Header: FC<HeaderProps> = ({
         <Iconify icon={backIcon} width={24} {...backIconProps} />
       </IconButton>
       <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-        {intl.formatMessage(SHARED_MESSAGES.contactDetails)}
+        <FormattedMessage {...SHARED_MESSAGES.contactDetails} />
       </Typography>
     </ProfileSummaryHeaderContainer>
   )

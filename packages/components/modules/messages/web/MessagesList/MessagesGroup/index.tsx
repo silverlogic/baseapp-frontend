@@ -3,7 +3,7 @@ import { FC, useCallback } from 'react'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
 import { Box, Divider, Typography, useTheme } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { MESSAGE_TYPE } from '../../../common'
 import DefaultSystemMessage from './SystemMessage'
@@ -66,7 +66,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
             }}
           >
             <Typography variant="caption" color="error" sx={{ textAlign: 'center' }}>
-              {intl.formatMessage(MESSAGES_GROUP_MESSAGES.newMessages)}
+              <FormattedMessage {...MESSAGES_GROUP_MESSAGES.newMessages} />
             </Typography>
           </Divider>
         )
@@ -74,7 +74,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
 
       return null
     },
-    [allMessages, firstUnreadMessageId, theme.palette.error.light, intl],
+    [allMessages, firstUnreadMessageId, theme.palette.error.light],
   )
 
   if (!message) return null

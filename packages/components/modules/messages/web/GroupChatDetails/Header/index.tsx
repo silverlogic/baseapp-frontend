@@ -5,7 +5,7 @@ import { PenEditIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { Iconify } from '@baseapp-frontend/design-system/components/web/images'
 
 import { Typography } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SHARED_MESSAGES } from '../../__shared__/constants'
 import { GroupDetailsHeaderContainer } from './styled'
@@ -31,10 +31,7 @@ const Header: FC<HeaderProps> = ({
         <Iconify icon={backIcon} width={24} {...backIconProps} />
       </IconButton>
       <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-        {intl.formatMessage({
-          id: 'messages.groupChatDetails.header.title',
-          defaultMessage: 'Group View',
-        })}
+        <FormattedMessage id="messages.groupChatDetails.header.title" defaultMessage="Group View" />
       </Typography>
       {shouldDisplayEditButton && (
         <IconButton

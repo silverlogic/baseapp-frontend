@@ -7,7 +7,7 @@ import { TextField } from '@baseapp-frontend/design-system/components/web/inputs
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, FormControlLabel, Switch, Typography } from '@mui/material'
 import { Controller } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import PostImageDropzone from '../PostImageDropzone'
 import { ButtonContainer, HeaderContainer, RootContainer } from '../styled'
@@ -25,11 +25,11 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
       <form onSubmit={onSubmit}>
         <HeaderContainer>
           <Typography component="h4" variant="h4">
-            {intl.formatMessage({ id: 'contentFeed.postForm.title', defaultMessage: 'New Post' })}
+            <FormattedMessage id="contentFeed.postForm.title" defaultMessage="New Post" />
           </Typography>
           <ButtonContainer>
             <Button variant="outlined" color="inherit" onClick={onCancel} disableRipple>
-              {intl.formatMessage({ id: 'common.cancel', defaultMessage: 'Cancel' })}
+              <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
             </Button>
             <LoadingButton
               color="inherit"
@@ -38,10 +38,7 @@ const PostForm: FC<PostFormProps> = ({ form, onSubmit, onCancel, isSaving }) => 
               disabled={!isDirty || !isValid || isSaving}
               sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
             >
-              {intl.formatMessage({
-                id: 'contentFeed.postForm.publish',
-                defaultMessage: 'Publish',
-              })}
+              <FormattedMessage id="contentFeed.postForm.publish" defaultMessage="Publish" />
             </LoadingButton>
           </ButtonContainer>
         </HeaderContainer>

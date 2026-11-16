@@ -10,7 +10,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { useAllProfilesList } from '../../../../profiles/common'
 import { useUpdateChatRoomMutation } from '../../../common'
@@ -146,7 +146,7 @@ const AddMembersMobile: FC<AddMembersMobileProps> = ({
           <Iconify icon="eva:arrow-ios-back-fill" width={24} />
         </IconButton>
         <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }}>
-          {intl.formatMessage(SHARED_MESSAGES.addMember)}
+          <FormattedMessage {...SHARED_MESSAGES.addMember} />
         </Typography>
         <IconButton
           aria-label={intl.formatMessage(SHARED_MESSAGES.addMember)}
