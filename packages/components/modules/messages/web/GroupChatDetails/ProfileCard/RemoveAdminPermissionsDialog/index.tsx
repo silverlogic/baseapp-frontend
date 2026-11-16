@@ -3,7 +3,7 @@ import { FC } from 'react'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { LoadingButton } from '@mui/lab'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { RemoveAdminPermissionsDialogProps } from './types'
 
@@ -33,10 +33,10 @@ const RemoveAdminPermissionsDialog: FC<RemoveAdminPermissionsDialogProps> = ({
           disabled={isMutationInFlight}
           loading={isMutationInFlight}
         >
-          {intl.formatMessage({
-            id: 'messages.groupChatDetails.removeAdminDialog.confirm',
-            defaultMessage: 'Remove permissions',
-          })}
+          <FormattedMessage
+            id="messages.groupChatDetails.removeAdminDialog.confirm"
+            defaultMessage="Remove permissions"
+          />
         </LoadingButton>
       }
       onClose={onClose}

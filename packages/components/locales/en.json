@@ -95,7 +95,7 @@
   "files.uploadList.attached": "Attached Files ({count})",
   "files.uploadList.uploading": "Uploading ({count})",
   "files.uploadTrigger.label": "Attach files",
-  "messages.addContactToGroup.groupItem.alreadyAdded": " • Already added",
+  "messages.addContactToGroup.groupItem.alreadyAdded": "• Already added",
   "messages.addContactToGroup.groupItem.selectAriaLabel": "select group {title}",
   "messages.addContactToGroup.groupsList.empty.description": "You can only add contacts to groups you manage.",
   "messages.addContactToGroup.groupsList.empty.title": "No groups yet",

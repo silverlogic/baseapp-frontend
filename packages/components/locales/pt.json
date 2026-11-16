@@ -95,7 +95,7 @@
   "files.uploadList.attached": "Arquivos anexados ({count})",
   "files.uploadList.uploading": "Enviando ({count})",
   "files.uploadTrigger.label": "Anexar arquivos",
-  "messages.addContactToGroup.groupItem.alreadyAdded": " • Já adicionado",
+  "messages.addContactToGroup.groupItem.alreadyAdded": "• Já adicionado",
   "messages.addContactToGroup.groupItem.selectAriaLabel": "selecionar grupo {title}",
   "messages.addContactToGroup.groupsList.empty.description": "Você só pode adicionar contatos a grupos que você administra.",
   "messages.addContactToGroup.groupsList.empty.title": "Nenhum grupo ainda",

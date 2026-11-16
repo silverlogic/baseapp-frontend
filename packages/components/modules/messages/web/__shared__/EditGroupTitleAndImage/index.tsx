@@ -5,7 +5,7 @@ import { FileUploadButton } from '@baseapp-frontend/design-system/components/web
 import { TextField } from '@baseapp-frontend/design-system/components/web/inputs'
 
 import { Box, Button, Typography, useTheme } from '@mui/material'
-import { useIntl } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SHARED_MESSAGES } from '../constants'
 import { DEFAULT_IMAGE_FORMATS, DEFAULT_IMAGE_MAX_SIZE } from './constants'
@@ -78,7 +78,7 @@ const EditGroupTitleAndImage: FC<EditGroupTitleAndImageProps> = ({
             disabled={isMutationInFlight}
             onClick={handleRemoveImage}
           >
-            {intl.formatMessage(SHARED_MESSAGES.remove)}
+            <FormattedMessage {...SHARED_MESSAGES.remove} />
           </Button>
         )}
       </UploadImageContainer>

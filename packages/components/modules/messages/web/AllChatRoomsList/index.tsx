@@ -156,7 +156,7 @@ const AllChatRoomsList: FC<AllChatRoomsListProps> = ({
     return (
       <Box sx={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
         <Typography variant="subtitle2" color="text.primary" sx={{ opacity: isLoadingTab ? 0 : 1 }}>
-          {intl.formatMessage(CHAT_TAB_LABEL[tabValue])}
+          <FormattedMessage {...CHAT_TAB_LABEL[tabValue]} />
         </Typography>
         {isLoadingTab && <CenteredProgress size={15} aria-hidden="true" />}
       </Box>
