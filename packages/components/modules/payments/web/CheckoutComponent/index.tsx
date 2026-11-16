@@ -20,7 +20,7 @@ import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModa
 import { PRODUCT_THUMBNAIL_SIZE } from './constants'
 import { ProductContainer, StyledLoadingButton } from './styled'
 import { CheckoutComponentProps, CheckoutComponentWithElementProps } from './types'
-import { buildAddressOptions, extractErrorMessage } from './utils'
+import { buildAddressOptions, extractErrorMessage, getCheckoutElementsOptions } from './utils'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
   entityId,
@@ -150,9 +150,8 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
               }
               setOrderNumber(paymentIntent?.id ?? null)
               setPendingClientSecret(null)
-              if (paymentMethods?.length && paymentMethods.length > 0) {
-                setSelectedPaymentMethodId(paymentMethods[0]?.id ?? '')
-              }
+              // The selection stays on the card that was just charged: it is the customer's
+              // own choice. Resetting it to paymentMethods[0] jumped to the newest card.
               // One filter per key: a single queryKey holding two key arrays matches no query at all.
               queryClient.invalidateQueries({
                 queryKey: [STRIPE_API_KEY.listPaymentMethods(entityId)],
@@ -218,10 +217,14 @@ const CheckoutComponent: FC<CheckoutComponentProps> = ({
 
   useEffect(() => {
     if (!paymentMethods || paymentMethods.length === 0) return
-    // A newly added card comes back with isDefault false, so fall back to the first available
-    // method - matching SubscriptionManagement - instead of leaving the selection empty.
-    const defaultPaymentMethod = paymentMethods.find((pm) => pm.isDefault) ?? paymentMethods[0]
-    setSelectedPaymentMethodId(defaultPaymentMethod?.id ?? 'empty')
+    // Keep what the customer selected (a card they picked, added or just paid with) while it is
+    // still in the list; only an empty or stale selection falls back to the default card, or the
+    // first one, since a newly added card comes back with isDefault false.
+    setSelectedPaymentMethodId((current) => {
+      if (paymentMethods.some((pm) => pm.id === current)) return current
+      const defaultPaymentMethod = paymentMethods.find((pm) => pm.isDefault) ?? paymentMethods[0]
+      return defaultPaymentMethod?.id ?? 'empty'
+    })
   }, [paymentMethods])
 
   if (isNotReady) return <LoadingState />
@@ -360,17 +363,49 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
   ConfirmationSubscriptionModalProps,
   onSuccess,
   planDetailsUrl,
-}) => (
-  <Elements stripe={getStripePromise(stripePublishableKey)}>
-    <CheckoutComponent
-      entityId={entityId}
-      productId={productId}
-      ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
-      ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
-      onSuccess={onSuccess}
-      planDetailsUrl={planDetailsUrl}
-    />
-  </Elements>
-)
+}) => {
+  // Same query CheckoutComponent runs, so React Query serves both from one request.
+  const { useGetProduct } = useStripeHook()
+  const {
+    data: product,
+    isLoading: isLoadingProduct,
+    isError: isErrorProduct,
+  } = useGetProduct(productId || '')
+  const currency = product?.defaultPrice?.currency
+  const elementsOptions = useMemo(() => getCheckoutElementsOptions(currency), [currency])
+
+  // Elements reads its mode once, at mount, so wait for the currency instead of mounting
+  // without it and remounting.
+  if (isLoadingProduct) return <LoadingState />
+  // Not mounted on a failed product: the child's own useGetProduct would refetch on mount, and
+  // with no data that resets the shared query to pending - so the wrapper would unmount it
+  // again, in a request loop that never reaches an error state. Only when there is no product:
+  // a failed background refetch keeps the cached product, and unmounting the checkout then would
+  // drop its pending payment retry.
+  if (isErrorProduct && !product) {
+    return (
+      <Typography variant="body1" color="error">
+        We could not load this plan. Please try again later.
+      </Typography>
+    )
+  }
+
+  return (
+    <Elements
+      key={currency ?? 'no-currency'}
+      stripe={getStripePromise(stripePublishableKey)}
+      options={elementsOptions}
+    >
+      <CheckoutComponent
+        entityId={entityId}
+        productId={productId}
+        ConfirmationSubscriptionModal={ConfirmationSubscriptionModal}
+        ConfirmationSubscriptionModalProps={ConfirmationSubscriptionModalProps}
+        onSuccess={onSuccess}
+        planDetailsUrl={planDetailsUrl}
+      />
+    </Elements>
+  )
+}
 
 export default CheckoutComponentWithElements
