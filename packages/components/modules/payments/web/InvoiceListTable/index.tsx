@@ -48,7 +48,7 @@ const InvoiceListTable = ({
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h4" {...titleProps}>
-        {title ?? 'Subscription Receipts'}
+        {title ?? 'Billing History'}
       </Typography>
       {isLoading ? (
         <CircularProgress sx={{ margin: 'auto' }} />
