@@ -1,3 +1,5 @@
+import type { StripeElementsOptions } from '@stripe/stripe-js'
+
 import { PaymentMethod } from '../types'
 
 export const maskEmail = (
@@ -63,3 +65,17 @@ export const extractErrorMessage = (error: any): string =>
   (Array.isArray(error?.response?.data) && error?.response?.data[0]) ||
   error?.message ||
   'An unexpected error occurred. Please try again.'
+
+/**
+ * Options for the checkout's Elements group, or undefined while the price's currency is unknown.
+ *
+ * The checkout has no intent when it mounts - the subscription and its payment are created on
+ * "Place Order" and confirmed with the invoice's secret - so Elements runs in deferred-intent
+ * "setup" mode. Without a mode, Stripe.js (endive) logs "Unable to select session" from the
+ * AddressElement; and setup mode needs the currency when the account uses dynamic payment
+ * methods, or Elements never initializes.
+ */
+export const getCheckoutElementsOptions = (
+  currency: string | undefined,
+): StripeElementsOptions | undefined =>
+  currency ? { mode: 'setup', currency: currency.toLowerCase() } : undefined

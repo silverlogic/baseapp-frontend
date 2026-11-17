@@ -23,6 +23,7 @@ settings:
   trustPolicy: no-downgrade
 
 catalog:
+  "@formatjs/intl": 2.10.10
   "@mdxeditor/editor": 3.54.0
   "@mdxeditor/gurx": 1.2.4
   "@types/mdast": 4.0.4
@@ -40,24 +41,24 @@ catalog:
   lodash: 4.18.1
   luxon: 3.7.2
   next: 15.5.28
-  react-international-phone: 4.5.0
   react-hook-form: 7.56.4
+  react-intl: 7.1.14
+  react-international-phone: 4.5.0
+  react-multi-carousel: 2.8.6
   react-virtuoso: 4.12.7
   simplebar-react: 3.2.5
   tsup: 8.3.6
   typescript: 5.9.2
   zod: 4.6.7
   zustand: 5.0.4
-  react-multi-carousel: 2.8.6
 
 catalogs:
   payments:
-    # Exact, not a range. The add-card flow calls elements.update({ clientSecret }),
-    # which stripe-js implements but does not declare in StripeElementsUpdateOptions -
-    # a floating minor on the SDK is how that stops working on someone else's install,
-    # with no diff in this repo.
-    "@stripe/react-stripe-js": 3.11.0
-    "@stripe/stripe-js": 7.10.0
+    # Exact, not a range. Each @stripe/stripe-js major is tied to one Stripe API release
+    # (v10 = endive), which has to be the release of the API version baseapp_payments pins
+    # on the backend (STRIPE_API_VERSION, 2026-10-28.endive). Bump both together.
+    "@stripe/react-stripe-js": 7.1.0
+    "@stripe/stripe-js": 10.3.0
 
   react19:
     "@types/react": 19.2.14

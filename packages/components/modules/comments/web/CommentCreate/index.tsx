@@ -5,6 +5,8 @@ import { forwardRef, useMemo } from 'react'
 import { useDeferredFileAttachments } from '@baseapp-frontend/components/files/common'
 import { UploadingFilesList } from '@baseapp-frontend/components/files/web'
 
+import { useIntl } from 'react-intl'
+
 import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
@@ -83,6 +85,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     },
     ref,
   ) => {
+    const intl = useIntl()
     const commentReply = useCommentReply<HTMLDivElement>()
     const {
       handleFilesSelected,
@@ -126,7 +129,10 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     return (
       <SocialInput
         ref={ref}
-        placeholder="Comment..."
+        placeholder={intl.formatMessage({
+          id: 'comments.create.placeholder',
+          defaultMessage: 'Comment...',
+        })}
         autoFocusInput={autoFocusInput}
         form={form}
         formId="comment-create"
