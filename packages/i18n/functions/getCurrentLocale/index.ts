@@ -11,10 +11,13 @@ export const getCurrentLocale = async (fallback: Locale = DEFAULT_LOCALE): Promi
     return storedLanguage as Locale
   }
 
-  // Try the browser language, then the device locale (React Native has no navigator.language)
-  const deviceLanguage =
-    (typeof navigator !== 'undefined' && navigator.language) ||
-    Intl.DateTimeFormat().resolvedOptions().locale
+  // Only a browser or device knows the user's language; a server render keeps `fallback`.
+  if (typeof window === 'undefined') {
+    return fallback
+  }
+
+  // React Native has no navigator.language, so fall back to the device locale
+  const deviceLanguage = navigator.language || Intl.DateTimeFormat().resolvedOptions().locale
   const deviceLocale = deviceLanguage?.split('-')[0] as Locale
   if (SUPPORTED_LOCALES.includes(deviceLocale)) {
     return deviceLocale

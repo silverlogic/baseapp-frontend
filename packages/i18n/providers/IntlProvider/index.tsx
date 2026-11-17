@@ -41,11 +41,12 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
     }
   }, [initialLocale, cookieLocale, defaultLocale])
 
+  // Follow the prop when it changes, without undoing an in-place switch from `useLocale`.
   useEffect(() => {
-    if (initialLocale && initialLocale !== locale) {
+    if (initialLocale) {
       setLocale(initialLocale)
     }
-  }, [initialLocale, locale])
+  }, [initialLocale])
 
   return (
     <LocaleUpdateContext.Provider value={setLocale}>
