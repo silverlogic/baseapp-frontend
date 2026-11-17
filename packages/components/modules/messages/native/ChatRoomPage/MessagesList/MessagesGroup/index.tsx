@@ -6,13 +6,13 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
+import { formatDayLabel } from '../../../../../__shared__/common'
 import { SystemMessage as DefaultSystemMessage } from './SystemMessage'
 import { UserMessage as DefaultUserMessage } from './UserMessage'
 import { createStyles } from './styles'
 import { MessagesGroupProps } from './types'
-import { displayFormattedDate } from './utils'
 
 const MessagesGroup: FC<MessagesGroupProps> = ({
   allMessages,
@@ -27,6 +27,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   UserMessage = DefaultUserMessage,
   UserMessageProps = {},
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -42,14 +43,14 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       ) {
         return (
           <Text style={styles.dateGroup} variant="caption">
-            {displayFormattedDate(currentMessage?.created)}
+            {formatDayLabel(intl, currentMessage?.created)}
           </Text>
         )
       }
 
       return null
     },
-    [allMessages, allMessagesLastIndex, hasNext, styles.dateGroup],
+    [allMessages, allMessagesLastIndex, hasNext, intl, styles.dateGroup],
   )
 
   const renderUnreadMessagesDivider = useCallback(

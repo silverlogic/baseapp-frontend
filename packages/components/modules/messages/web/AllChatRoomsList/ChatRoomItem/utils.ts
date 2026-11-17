@@ -1,16 +1,6 @@
-import {
-  DATE_FORMAT,
-  TIME_FORMAT,
-  formatDateFromApi,
-  isToday,
-  isYesterday,
-} from '@baseapp-frontend/utils'
-
-import { DateTime } from 'luxon'
 import { IntlShape } from 'react-intl'
 
-import { SHARED_MESSAGES } from '../../__shared__/constants'
-import { CHAT_ROOM_ITEM_MESSAGES } from './constants'
+import { formatChatRoomDate } from '../../../../__shared__/common/dates'
 
 // Bound every regex pass so adversarial input cannot cause super-linear runtime:
 // the input length is capped and every lazy-quantifier match is constrained to a
@@ -54,31 +44,4 @@ export const getLastMessagePreview = (content?: string | null) => {
   )
 }
 
-export const formatDate = (intl: IntlShape, date?: string | null) => {
-  if (!date) return ''
-  const dateTime = DateTime.fromISO(date)
-  if (!dateTime.isValid) return ''
-
-  if (isToday(date)) return formatDateFromApi(date, { toFormat: TIME_FORMAT[2] })
-
-  if (isYesterday(date)) return intl.formatMessage(SHARED_MESSAGES.yesterday)
-
-  const diff = dateTime.diffNow(['years', 'months', 'weeks', 'days']).toObject()
-
-  if (diff.months && Math.abs(diff.months) > 0) {
-    const count = Math.abs(diff.months) > 1 ? Math.round(Math.abs(diff.months)) : 1
-    return intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.monthsAgo, { count })
-  }
-
-  if (diff.weeks && Math.abs(diff.weeks) > 0) {
-    const count = Math.abs(diff.weeks) > 1 ? Math.round(Math.abs(diff.weeks)) : 1
-    return intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.weeksAgo, { count })
-  }
-
-  if (diff.days && Math.abs(diff.days) > 0)
-    return intl.formatMessage(CHAT_ROOM_ITEM_MESSAGES.daysAgo, {
-      count: Math.round(Math.abs(diff.days)),
-    })
-
-  return formatDateFromApi(date, { toFormat: DATE_FORMAT[2] })
-}
+export const formatDate = (intl: IntlShape, date?: string | null) => formatChatRoomDate(intl, date)

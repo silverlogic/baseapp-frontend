@@ -1,9 +1,8 @@
 import { FC } from 'react'
 
-import { formatRelativeTime } from '@baseapp-frontend/utils'
-
 import { useIntl } from 'react-intl'
 
+import { formatRelativeTime } from '../../../../../__shared__/common'
 import DefaultNotificationAvatar from '../Notification/NotificationAvatar'
 import DefaultNotificationBody from '../Notification/NotificationBody'
 import DefaultNotificationHeader from '../Notification/NotificationHeader'
@@ -40,7 +39,7 @@ const CommentReply: FC<CommentReplyProps> = ({
       <NotificationContent>
         <NotificationHeader
           message={message}
-          timestamp={formatRelativeTime(notification.timestamp)}
+          timestamp={formatRelativeTime(intl, notification.timestamp)}
           actorName={notification.actor?.name}
           unread={notification.unread}
           {...NotificationHeaderProps}
