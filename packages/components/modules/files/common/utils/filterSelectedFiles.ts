@@ -1,4 +1,4 @@
-import type { IntlShape } from 'react-intl'
+import { IntlShape, createIntl } from 'react-intl'
 
 import type { Accept } from '../types'
 import { formatFileSize } from './formatters'
@@ -72,12 +72,28 @@ export const filterSelectedFiles = <T extends SelectableFile>(
     { accepted: [], rejected: [] },
   )
 
+type RejectedFiles = FileSelectionResult<SelectableFile>['rejected']
+
+const isIntl = (value: unknown): value is IntlShape =>
+  typeof (value as IntlShape)?.formatMessage === 'function'
+
 /** One user-facing line for everything a selection dropped, or null if nothing was. */
-export const describeRejectedFiles = (
+export function describeRejectedFiles(
   intl: IntlShape,
-  rejected: FileSelectionResult<SelectableFile>['rejected'],
-  { maxFiles = DEFAULT_MAX_FILES, maxFileSize }: FileSelectionLimits = {},
-): string | null => {
+  rejected: RejectedFiles,
+  limits?: FileSelectionLimits,
+): string | null
+/** @deprecated Pass the `intl` object first so the message follows the active locale. */
+export function describeRejectedFiles(
+  rejected: RejectedFiles,
+  limits?: FileSelectionLimits,
+): string | null
+export function describeRejectedFiles(
+  ...args: [IntlShape, RejectedFiles, FileSelectionLimits?] | [RejectedFiles, FileSelectionLimits?]
+): string | null {
+  const [intl, rejected, { maxFiles = DEFAULT_MAX_FILES, maxFileSize } = {}] = isIntl(args[0])
+    ? (args as [IntlShape, RejectedFiles, FileSelectionLimits?])
+    : [createIntl({ locale: 'en' }), ...(args as [RejectedFiles, FileSelectionLimits?])]
   if (!rejected.length) return null
   const reasons = new Set(rejected.map(({ reason }) => reason))
   const details = [

@@ -68,6 +68,13 @@ describe('describeRejectedFiles', () => {
     expect(describeRejectedFiles(intl, [])).toBeNull()
   })
 
+  it('keeps the English two-argument form for existing callers', () => {
+    expect(describeRejectedFiles([])).toBeNull()
+    expect(
+      describeRejectedFiles([{ file: file('a.pdf'), reason: 'too-many' }], { maxFiles: 5 }),
+    ).toBe('1 file was not added (more than 5 at once).')
+  })
+
   it('summarises every distinct reason once', () => {
     const rejected = [
       { file: file('a.png'), reason: 'too-large' as const },
