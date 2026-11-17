@@ -13,6 +13,7 @@ import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
+import { getPrototypeFetch } from '../prototypeFetch'
 import { BaseAppFetch, RequestOptions } from './types'
 
 /**
@@ -91,9 +92,11 @@ export const baseAppFetch: BaseAppFetch = async (
 ) => {
   const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
 
-  const { url: apiBaseUrl, headers: forwardedHeaders } = await resolveApiUrl(
-    baseUrl ?? EXPO_PUBLIC_API_BASE_URL,
-  )
+  // A registered prototype handler answers locally, so there is no API address to resolve.
+  const prototypeFetch = getPrototypeFetch()
+  const { url: apiBaseUrl, headers: forwardedHeaders } = prototypeFetch
+    ? { url: '', headers: {} }
+    : await resolveApiUrl(baseUrl ?? EXPO_PUBLIC_API_BASE_URL)
   const url = `${apiBaseUrl}${path}`
   const isAuthTokenRequired = !servicesWithoutToken.some((regex) => regex.test(path || ''))
 
@@ -187,7 +190,11 @@ export const baseAppFetch: BaseAppFetch = async (
 
   try {
     // had to override the fetchOptions type because of the GraphQLBody type
-    const response = await fetch(fetchUrl, fetchOptions as RequestInit)
+    const response = prototypeFetch
+      ? await prototypeFetch(fetchUrl, fetchOptions as RequestInit, {
+          baseUrl: baseUrl ?? EXPO_PUBLIC_API_BASE_URL,
+        })
+      : await fetch(fetchUrl, fetchOptions as RequestInit)
 
     const isJsonResponse = response.headers.get('content-type')?.includes('application/json')
 
