@@ -1,5 +1,13 @@
 # @baseapp-frontend/provider
 
+## 5.0.0
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/i18n@2.0.0
+
 ## 4.0.1
 
 ### Patch Changes

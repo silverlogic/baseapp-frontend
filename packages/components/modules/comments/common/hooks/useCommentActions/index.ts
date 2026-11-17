@@ -73,7 +73,10 @@ const useCommentActions = ({
       ? [
           {
             id: 'delete' as const,
-            label: 'Delete Comment',
+            label: intl.formatMessage({
+              id: 'comments.actions.delete',
+              defaultMessage: 'Delete Comment',
+            }),
             hasPermission: comment?.canDelete,
             disabled: false,
             isDestructive: true,
