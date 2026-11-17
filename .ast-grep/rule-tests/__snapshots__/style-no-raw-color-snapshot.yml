@@ -1,0 +1,39 @@
+id: style-no-raw-color
+snapshots:
+  ? |
+    <Box sx={{ color: '#fff' }}>content</Box>
+  : labels:
+    - source: '''#fff'''
+      style: primary
+      start: 18
+      end: 24
+  ? |
+    <path d="M12 11" fill="#637381" />
+  : labels:
+    - source: '"#637381"'
+      style: primary
+      start: 22
+      end: 31
+  ? |
+    const accent = 'hsl(210, 40%, 50%)'
+  : labels:
+    - source: '''hsl(210, 40%, 50%)'''
+      style: primary
+      start: 15
+      end: 35
+  ? |
+    const border = `1px solid #E0E0E0`
+  : labels:
+    - source: '`1px solid #E0E0E0`'
+      style: primary
+      start: 15
+      end: 34
+  ? |
+    export const Card = styled('div')(() => ({
+      boxShadow: '0 1px 2px rgba(0, 0, 0, 0.2)',
+    }))
+  : labels:
+    - source: '''0 1px 2px rgba(0, 0, 0, 0.2)'''
+      style: primary
+      start: 56
+      end: 86

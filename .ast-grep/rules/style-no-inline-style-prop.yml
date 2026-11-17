@@ -1,0 +1,29 @@
+id: style-no-inline-style-prop
+language: Tsx
+severity: error
+message: "Inline `style={...}` bypasses the theme — use `styled()` (in `styled.tsx`) or a small `sx` prop with theme tokens. See .claude/skills/frontend-conventions/references/styling.md"
+# Gating in apps/prototype only (Rock 1, story E2): AI-built prototype screens must
+# stay on the BaseApp/MUI kit. Widening to apps/web needs that app's violations
+# fixed or baselined first.
+files:
+  - "apps/prototype/**"
+ignores:
+  # Baseline — pre-existing violation copied from apps/web. Kept here instead of an
+  # `ast-grep-ignore` comment so the copy stays byte-identical to apps/web.
+  # Remove the entry once the file is fixed (in both apps).
+  - "apps/prototype/components/design-system/inputs/PhoneNumberField/CountrySelect/index.tsx"
+rule:
+  any:
+    # <div style={{ ... }} />
+    - kind: jsx_attribute
+      has:
+        kind: property_identifier
+        regex: ^style$
+    # MenuProps={{ style: { ... } }} — a style object handed down through a prop
+    - kind: pair
+      has:
+        field: key
+        regex: ^['"]?style['"]?$
+      inside:
+        stopBy: end
+        kind: jsx_attribute
