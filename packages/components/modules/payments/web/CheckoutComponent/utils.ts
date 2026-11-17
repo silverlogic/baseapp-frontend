@@ -1,5 +1,3 @@
-import type { StripeElementsOptions } from '@stripe/stripe-js'
-
 import { PaymentMethod } from '../types'
 
 export const maskEmail = (
@@ -51,31 +49,3 @@ export const buildAddressOptions = (selectedMethod?: PaymentMethod) => ({
     },
   },
 })
-
-/**
- * The first human-readable message out of an API error.
- *
- * DRF answers general errors as `{"non_field_errors": ["..."]}` (camelized to
- * `nonFieldErrors` on the way in) and some viewsets as `{"error": "..."}`; packages that
- * have not been migrated yet still answer a bare list, hence the positional fallback.
- */
-export const extractErrorMessage = (error: any): string =>
-  error?.response?.data?.nonFieldErrors?.[0] ||
-  error?.response?.data?.error ||
-  (Array.isArray(error?.response?.data) && error?.response?.data[0]) ||
-  error?.message ||
-  'An unexpected error occurred. Please try again.'
-
-/**
- * Options for the checkout's Elements group, or undefined while the price's currency is unknown.
- *
- * The checkout has no intent when it mounts - the subscription and its payment are created on
- * "Place Order" and confirmed with the invoice's secret - so Elements runs in deferred-intent
- * "setup" mode. Without a mode, Stripe.js (endive) logs "Unable to select session" from the
- * AddressElement; and setup mode needs the currency when the account uses dynamic payment
- * methods, or Elements never initializes.
- */
-export const getCheckoutElementsOptions = (
-  currency: string | undefined,
-): StripeElementsOptions | undefined =>
-  currency ? { mode: 'setup', currency: currency.toLowerCase() } : undefined

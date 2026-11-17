@@ -69,4 +69,6 @@ export const STATUS_COLORS = {
   paid: 'success' as const,
   failed: 'error' as const,
   pending: 'warning' as const,
+  // Shown as "canceled": an invoice Stripe voided, e.g. a declined one-time purchase.
+  void: 'error' as const,
 }
