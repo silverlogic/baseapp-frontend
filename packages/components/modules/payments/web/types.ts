@@ -97,6 +97,9 @@ export type UpdatePaymentMethodRequestBody = Partial<PaymentMethod> & {
 export interface InvoiceLines {
   description: string
   amount: number
+  quantity?: number
+  /** `subscription` for a plan's line, `invoiceitem` for an item added to the invoice. */
+  type?: 'subscription' | 'invoiceitem' | string
 }
 
 export interface Invoice {
@@ -106,4 +109,50 @@ export interface Invoice {
   webhooksDeliveredAt: string
   hostedInvoiceUrl: string
   lines: InvoiceLines[]
+}
+
+export type PurchaseStatus = 'pending' | 'paid' | 'failed'
+
+export interface PurchaseLine {
+  productId: string
+  priceId: string
+  description: string
+  /** Minor units of the purchase's currency, as every amount below. */
+  unitAmount: number
+  quantity: number
+  amount: number
+}
+
+export interface Purchase {
+  id: number
+  /** Turns `paid` or `failed` only once Stripe's webhook arrives, so it can lag the payment. */
+  status: PurchaseStatus
+  currency: string
+  subtotal: number
+  tax: number
+  total: number
+  invoiceId: string | null
+  created: string
+  paidAt: string | null
+  failedAt: string | null
+  lines: PurchaseLine[]
+}
+
+export interface CreatedPurchase extends Purchase {
+  /** Confirms the invoice's payment in the browser; only returned on creation. */
+  clientSecret: string
+}
+
+export interface PurchaseItem {
+  productId: string
+  quantity: number
+  /** The price the buyer saw. The server rejects the purchase if it no longer matches. */
+  unitAmount?: number
+}
+
+export interface CreatePurchaseOptions {
+  entityId: string
+  items: PurchaseItem[]
+  /** A saved card of the customer, confirmed in the browser with the returned client secret. */
+  paymentMethodId?: string
 }

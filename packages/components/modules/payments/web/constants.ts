@@ -7,3 +7,6 @@ export const SUBSCRIPTIONS_URL = '/subscriptions'
 
 /** Checkout screen. Takes `?productId=`; also known at render. */
 export const CHECKOUT_URL = '/subscriptions/checkout'
+
+/** How often a pending one-time purchase is re-read while waiting for Stripe's webhook, in ms. */
+export const PURCHASE_POLL_INTERVAL_MS = 2000

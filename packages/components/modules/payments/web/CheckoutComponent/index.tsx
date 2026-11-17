@@ -15,12 +15,13 @@ import PaymentDropdown from '../PaymentDropDown'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
+import { extractErrorMessage, getCheckoutElementsOptions } from '../utils/checkout'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
 import { PRODUCT_THUMBNAIL_SIZE } from './constants'
 import { ProductContainer, StyledLoadingButton } from './styled'
 import { CheckoutComponentProps, CheckoutComponentWithElementProps } from './types'
-import { buildAddressOptions, extractErrorMessage, getCheckoutElementsOptions } from './utils'
+import { buildAddressOptions } from './utils'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
   entityId,
