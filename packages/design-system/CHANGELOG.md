@@ -1,5 +1,11 @@
 # @baseapp-frontend/design-system
 
+## 4.0.2
+
+### Patch Changes
+
+- f8a2ed0: Add a `scrollable` prop to the native `BottomDrawer` so long content scrolls inside the sheet.
+
 ## 4.0.1
 
 ### Patch Changes
