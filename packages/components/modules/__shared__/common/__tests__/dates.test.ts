@@ -1,4 +1,4 @@
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import { createIntl } from 'react-intl'
 
 import esMessages from '../../../../locales/es.json'
@@ -8,6 +8,15 @@ const now = DateTime.fromISO('2026-11-17T15:30:00', { zone: 'utc' })
 const ago = (duration: Parameters<DateTime['minus']>[0]) => now.minus(duration).toISO() as string
 const intl = createIntl({ locale: 'en', timeZone: 'utc' })
 const es = createIntl({ locale: 'es', timeZone: 'utc', messages: esMessages })
+
+// The helpers parse in the system zone, so pin it or the calendar-day cases drift east of UTC.
+const previousZone = Settings.defaultZone
+beforeAll(() => {
+  Settings.defaultZone = 'utc'
+})
+afterAll(() => {
+  Settings.defaultZone = previousZone
+})
 
 describe('formatTimestamp', () => {
   it('names the last two calendar days, counts a week in days, then shows the date', () => {
