@@ -1,0 +1,19 @@
+id: style-no-inline-style-prop
+valid:
+  - |
+    <Box sx={{ mt: 2, color: 'text.secondary' }}>content</Box>
+  - |
+    <Container>content</Container>
+  - |
+    const style = { mt: 2 }
+  - |
+    <Select MenuProps={{ transformOrigin: { vertical: 'top', horizontal: 'left' } }} />
+invalid:
+  - |
+    <div style={{ marginTop: 16, color: '#637381' }}>content</div>
+  - |
+    <Image src={src} alt="" style={{ objectFit: 'cover' }} />
+  - |
+    <Box style={styles}>content</Box>
+  - |
+    <Select MenuProps={{ style: { height: 300 } }} />

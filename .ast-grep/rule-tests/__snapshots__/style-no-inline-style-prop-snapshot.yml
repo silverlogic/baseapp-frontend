@@ -1,0 +1,50 @@
+id: style-no-inline-style-prop
+snapshots:
+  ? |
+    <Box style={styles}>content</Box>
+  : labels:
+    - source: style={styles}
+      style: primary
+      start: 5
+      end: 19
+    - source: style
+      style: secondary
+      start: 5
+      end: 10
+  ? |
+    <Image src={src} alt="" style={{ objectFit: 'cover' }} />
+  : labels:
+    - source: 'style={{ objectFit: ''cover'' }}'
+      style: primary
+      start: 24
+      end: 54
+    - source: style
+      style: secondary
+      start: 24
+      end: 29
+  ? |
+    <Select MenuProps={{ style: { height: 300 } }} />
+  : labels:
+    - source: 'style: { height: 300 }'
+      style: primary
+      start: 21
+      end: 43
+    - source: 'MenuProps={{ style: { height: 300 } }}'
+      style: secondary
+      start: 8
+      end: 46
+    - source: style
+      style: secondary
+      start: 21
+      end: 26
+  ? |
+    <div style={{ marginTop: 16, color: '#637381' }}>content</div>
+  : labels:
+    - source: 'style={{ marginTop: 16, color: ''#637381'' }}'
+      style: primary
+      start: 5
+      end: 48
+    - source: style
+      style: secondary
+      start: 5
+      end: 10

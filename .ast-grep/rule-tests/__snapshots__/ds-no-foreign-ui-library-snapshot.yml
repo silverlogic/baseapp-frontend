@@ -1,0 +1,79 @@
+id: ds-no-foreign-ui-library
+snapshots:
+  ? |
+    export { Button } from 'antd'
+  : labels:
+    - source: export { Button } from 'antd'
+      style: primary
+      start: 0
+      end: 29
+    - source: '''antd'''
+      style: secondary
+      start: 23
+      end: 29
+  ? |
+    import * as Dialog from '@radix-ui/react-dialog'
+  : labels:
+    - source: import * as Dialog from '@radix-ui/react-dialog'
+      style: primary
+      start: 0
+      end: 48
+    - source: '''@radix-ui/react-dialog'''
+      style: secondary
+      start: 24
+      end: 48
+  ? |
+    import styled from 'styled-components'
+  : labels:
+    - source: import styled from 'styled-components'
+      style: primary
+      start: 0
+      end: 38
+    - source: '''styled-components'''
+      style: secondary
+      start: 19
+      end: 38
+  ? |
+    import { Button } from '@/components/ui/button'
+  : labels:
+    - source: import { Button } from '@/components/ui/button'
+      style: primary
+      start: 0
+      end: 47
+    - source: '''@/components/ui/button'''
+      style: secondary
+      start: 23
+      end: 47
+  ? |
+    import { Button } from '@chakra-ui/react'
+  : labels:
+    - source: import { Button } from '@chakra-ui/react'
+      style: primary
+      start: 0
+      end: 41
+    - source: '''@chakra-ui/react'''
+      style: secondary
+      start: 23
+      end: 41
+  ? |
+    import { Card } from 'components/ui/card'
+  : labels:
+    - source: import { Card } from 'components/ui/card'
+      style: primary
+      start: 0
+      end: 41
+    - source: '''components/ui/card'''
+      style: secondary
+      start: 21
+      end: 41
+  ? |
+    import { Trash } from 'lucide-react'
+  : labels:
+    - source: import { Trash } from 'lucide-react'
+      style: primary
+      start: 0
+      end: 36
+    - source: '''lucide-react'''
+      style: secondary
+      start: 22
+      end: 36
