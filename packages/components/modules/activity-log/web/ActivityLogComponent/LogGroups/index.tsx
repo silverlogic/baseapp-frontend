@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { AvatarDeletedUserIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Box, CircularProgress, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import { Timestamp } from '../../../../__shared__/web'
@@ -20,6 +21,7 @@ const LogGroups: FC<LogGroupsProps> = ({
   hasNext,
   isLoadingNext,
 }) => {
+  const intl = useIntl()
   const renderLogItem = (log: ActivityLogNode, isLast: boolean) => {
     if (!log) return null
 
@@ -33,13 +35,20 @@ const LogGroups: FC<LogGroupsProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more activity logs"
+        aria-label={intl.formatMessage({
+          id: 'activityLog.loading.more',
+          defaultMessage: 'loading more activity logs',
+        })}
         {...LoadingStateProps}
       />
     )
   }
   const renderUserName = (group: LogGroup) => {
-    if (group.logs[0]?.user == null) return 'Deleted User'
+    if (group.logs[0]?.user == null)
+      return intl.formatMessage({
+        id: 'activityLog.logGroups.deletedUser',
+        defaultMessage: 'Deleted User',
+      })
     return group.logs[0]?.user?.fullName
   }
   const renderAvatar = (group: LogGroup) => {
