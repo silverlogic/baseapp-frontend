@@ -1,3 +1,5 @@
+import type { IntlShape } from 'react-intl'
+
 import type { Accept } from '../types'
 import { formatFileSize } from './formatters'
 
@@ -72,16 +74,33 @@ export const filterSelectedFiles = <T extends SelectableFile>(
 
 /** One user-facing line for everything a selection dropped, or null if nothing was. */
 export const describeRejectedFiles = (
+  intl: IntlShape,
   rejected: FileSelectionResult<SelectableFile>['rejected'],
   { maxFiles = DEFAULT_MAX_FILES, maxFileSize }: FileSelectionLimits = {},
 ): string | null => {
   if (!rejected.length) return null
   const reasons = new Set(rejected.map(({ reason }) => reason))
   const details = [
-    reasons.has('too-large') && maxFileSize !== undefined && `over ${formatFileSize(maxFileSize)}`,
-    reasons.has('invalid-type') && 'unsupported type',
-    reasons.has('too-many') && `more than ${maxFiles} at once`,
+    reasons.has('too-large') &&
+      maxFileSize !== undefined &&
+      intl.formatMessage(
+        { id: 'files.selection.tooLarge', defaultMessage: 'over {maxFileSize}' },
+        { maxFileSize: formatFileSize(maxFileSize) },
+      ),
+    reasons.has('invalid-type') &&
+      intl.formatMessage({ id: 'files.selection.invalidType', defaultMessage: 'unsupported type' }),
+    reasons.has('too-many') &&
+      intl.formatMessage(
+        { id: 'files.selection.tooMany', defaultMessage: 'more than {maxFiles} at once' },
+        { maxFiles },
+      ),
   ].filter(Boolean)
-  const subject = rejected.length === 1 ? '1 file was' : `${rejected.length} files were`
-  return `${subject} not added (${details.join(', ')}).`
+  return intl.formatMessage(
+    {
+      id: 'files.selection.rejected',
+      defaultMessage:
+        '{count, plural, one {# file was} other {# files were}} not added ({details}).',
+    },
+    { count: rejected.length, details: details.join(', ') },
+  )
 }

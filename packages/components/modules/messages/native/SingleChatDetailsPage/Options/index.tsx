@@ -10,6 +10,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
+
 import { createStyles } from './styles'
 import { OptionsProps } from './type'
 
@@ -27,7 +29,7 @@ const Options: FC<OptionsProps> = ({
     <View style={styles.OptionsContainer}>
       <View style={styles.OptionsTextContainer}>
         <Text variant="subtitle2" color="high">
-          Options
+          <FormattedMessage id="messages.chatDetails.optionsTitle" defaultMessage="Options" />
         </Text>
       </View>
       <View style={styles.buttonsContainer}>
@@ -35,7 +37,7 @@ const Options: FC<OptionsProps> = ({
           <View style={styles.buttons}>
             <ProfileIcon width={20} height={20} />
             <Text variant="buttonMedium" color="high">
-              See profile
+              <FormattedMessage id="messages.chatDetails.seeProfile" defaultMessage="See profile" />
             </Text>
           </View>
         </Button>
@@ -43,7 +45,10 @@ const Options: FC<OptionsProps> = ({
           <View style={styles.buttons}>
             <NewGroupIcon />
             <Text variant="buttonMedium" color="high">
-              Add contact to a group
+              <FormattedMessage
+                id="messages.addContactToGroup.title"
+                defaultMessage="Add contact to a group"
+              />
             </Text>
           </View>
         </Button>
@@ -56,7 +61,11 @@ const Options: FC<OptionsProps> = ({
           <View style={styles.buttons}>
             <ArchiveIcon />
             <Text variant="buttonMedium" color="high">
-              {isArchived ? 'Unarchive' : 'Archive'}
+              {isArchived ? (
+                <FormattedMessage id="messages.chatDetails.unarchive" defaultMessage="Unarchive" />
+              ) : (
+                <FormattedMessage id="messages.chatDetails.archive" defaultMessage="Archive" />
+              )}
             </Text>
           </View>
         </Button>

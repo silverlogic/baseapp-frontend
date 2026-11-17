@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 import { Checkbox } from 'react-native-paper'
 import { useFragment } from 'react-relay'
@@ -43,7 +44,11 @@ const GroupListItem: FC<GroupListItemProps> = ({ roomRef, selected, onToggle }) 
             </Text>
             {isAlreadyMember && (
               <Text variant="caption" color="disabled">
-                {' • Already added'}
+                {' '}
+                <FormattedMessage
+                  id="messages.addContactToGroup.groupItem.alreadyAdded"
+                  defaultMessage="• Already added"
+                />
               </Text>
             )}
           </View>

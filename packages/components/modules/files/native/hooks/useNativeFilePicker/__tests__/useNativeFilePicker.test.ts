@@ -1,4 +1,7 @@
+import { ReactNode, createElement } from 'react'
+
 import { act, renderHook } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import { useNativeFilePicker } from '../index'
@@ -24,6 +27,9 @@ vi.mock('../../../utils/createNativeUploadSource', () => ({
   createNativeUploadSource: (descriptor: unknown) => createNativeUploadSource(descriptor),
 }))
 
+const IntlWrapper = ({ children }: { children: ReactNode }) =>
+  createElement(IntlProvider, { locale: 'en' }, children)
+
 const LIMITS = {
   maxFiles: 5,
   maxFileSize: 1000,
@@ -47,7 +53,9 @@ const asset = (fileName: string, fileSize = 10, mimeType = 'image/jpeg') => ({
 
 const setup = () => {
   const onFilesSelected = vi.fn()
-  const { result } = renderHook(() => useNativeFilePicker({ onFilesSelected, ...LIMITS }))
+  const { result } = renderHook(() => useNativeFilePicker({ onFilesSelected, ...LIMITS }), {
+    wrapper: IntlWrapper,
+  })
   return { onFilesSelected, result }
 }
 

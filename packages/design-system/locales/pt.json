@@ -12,6 +12,7 @@
   "designSystem.dropzone.preview.removeFile": "Remover arquivo",
   "designSystem.dropzone.remove": "Remover",
   "designSystem.dropzone.title": "<browse>Clique para procurar</browse> ou arraste e solte.",
+  "designSystem.feedbackScreen.noPermission": "Você não tem permissões suficientes para acessar esta página.",
   "designSystem.fileUploadButton.fileTooLarge": "Este arquivo é muito grande (máx. {maxSize}MB).",
   "designSystem.fileUploadButton.label": "Enviar arquivo",
   "designSystem.markdownEditor.codeBlock.delete": "Excluir bloco de código",
@@ -81,7 +82,12 @@
   "designSystem.markdownEditor.uploadImage.title": "Título:",
   "designSystem.markdownEditor.uploadImage.uploadInstructions": "Envie uma imagem do seu dispositivo:",
   "designSystem.markdownEditor.uploadImage.width": "Largura:",
+  "designSystem.passwordInput.label": "Senha",
+  "designSystem.photoLibrary.cameraPermission": "É necessária permissão para acessar a câmera.",
+  "designSystem.photoLibrary.libraryPermission": "É necessária permissão para acessar a galeria de fotos.",
+  "designSystem.photoLibrary.readError": "Erro ao ler a imagem",
   "designSystem.searchbar.placeholder": "Pesquisar",
   "designSystem.socialTextField.cancelReply": "cancelar resposta",
-  "designSystem.socialTextField.replyingTo": "<label>Respondendo a</label> {name}"
+  "designSystem.socialTextField.replyingTo": "<label>Respondendo a</label> {name}",
+  "designSystem.socialTextInput.placeholder": "Comentar..."
 }

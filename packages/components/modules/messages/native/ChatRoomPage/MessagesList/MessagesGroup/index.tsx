@@ -6,6 +6,8 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
 
+import { FormattedMessage } from 'react-intl'
+
 import { SystemMessage as DefaultSystemMessage } from './SystemMessage'
 import { UserMessage as DefaultUserMessage } from './UserMessage'
 import { createStyles } from './styles'
@@ -60,7 +62,10 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
             <View style={styles.unreadRedLine} />
             <View>
               <Text style={styles.newMessagesText} variant="caption">
-                New Messages
+                <FormattedMessage
+                  id="messages.messagesGroup.newMessages"
+                  defaultMessage="New Messages"
+                />
               </Text>
             </View>
             <View style={styles.unreadRedLine} />

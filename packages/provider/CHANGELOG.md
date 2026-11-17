@@ -1,5 +1,12 @@
 # @baseapp-frontend/provider
 
+## 5.0.1
+
+### Patch Changes
+
+- Updated dependencies [9ae8537]
+  - @baseapp-frontend/i18n@2.1.0
+
 ## 5.0.0
 
 ### Patch Changes

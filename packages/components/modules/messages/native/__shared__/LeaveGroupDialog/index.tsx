@@ -7,6 +7,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
+import { FormattedMessage } from 'react-intl'
 import { TouchableOpacity } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
@@ -63,7 +64,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
             <View style={styles.actionButtons}>
               <Button mode="text" size="medium" onPress={onClose}>
                 <Text variant="buttonMedium" color="high">
-                  Cancel
+                  <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
                 </Text>
               </Button>
               <Button
@@ -75,7 +76,17 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
                 size="medium"
               >
                 <Text variant="buttonMedium" color="contrast">
-                  {profileId === removingParticipantId ? 'Leave Group' : 'Remove Member'}
+                  {profileId === removingParticipantId ? (
+                    <FormattedMessage
+                      id="messages.shared.leaveGroup"
+                      defaultMessage="Leave Group"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="messages.leaveGroupDialog.removeMember"
+                      defaultMessage="Remove Member"
+                    />
+                  )}
                 </Text>
               </Button>
             </View>

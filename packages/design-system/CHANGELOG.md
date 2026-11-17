@@ -1,5 +1,15 @@
 # @baseapp-frontend/design-system
 
+## 4.0.1
+
+### Patch Changes
+
+- 9ae8537: Support React Native in `@baseapp-frontend/i18n`. `IntlProvider` takes a per-locale `additionalMessages` map, and on
+  native `useLocale().setLocale` switches the provider's locale in place instead of reloading. `getCurrentLocale`
+  falls back to the device locale when there is no `navigator.language`. Every native component in `components`
+  (comments, messages, files, notifications, profiles) and `design-system` (feedback screen, password and social
+  inputs, photo library hook) now renders its text through react-intl, with en, es and pt catalogs.
+
 ## 4.0.0
 
 ### Minor Changes

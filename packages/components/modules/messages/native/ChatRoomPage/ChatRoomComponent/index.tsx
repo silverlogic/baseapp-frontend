@@ -7,6 +7,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
 
 import { type Href, useRouter } from 'expo-router'
+import { useIntl } from 'react-intl'
 import { useFragment, useLazyLoadQuery, useRefetchableFragment } from 'react-relay'
 
 import { ChatRoomFragment$key } from '../../../../../__generated__/ChatRoomFragment.graphql'
@@ -31,6 +32,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
   const [commit, isMutationInFlight] = useArchiveChatRoomMutation()
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
+  const intl = useIntl()
 
   const chatRoomRef = useLazyLoadQuery<ChatRoomQueryType>(
     ChatRoomQuery,
@@ -53,11 +55,15 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
   useEffect(() => {
     if (!data) {
       router.back()
-      sendToast('Error loading chat room', {
-        type: 'error',
-      })
+      sendToast(
+        intl.formatMessage({
+          id: 'messages.chatRoom.loadError',
+          defaultMessage: 'Error loading chat room',
+        }),
+        { type: 'error' },
+      )
     }
-  }, [data, router, sendToast])
+  }, [data, router, sendToast, intl])
   const roomHeader = useFragment(TitleFragment, data as TitleFragment$key)
   const roomTitle = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
   const isSoleAdmin = roomTitle?.isSoleAdmin
