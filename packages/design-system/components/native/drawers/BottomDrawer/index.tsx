@@ -4,6 +4,7 @@ import {
   BottomSheetBackdrop,
   BottomSheetBackdropProps,
   BottomSheetModal,
+  BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
 
@@ -15,6 +16,7 @@ const BottomDrawer = ({
   bottomDrawerRef,
   handleSheetChanges,
   snapPoints = ['30%'],
+  scrollable = false,
   children,
 }: BottomDrawerProps) => {
   const theme = useTheme()
@@ -38,7 +40,11 @@ const BottomDrawer = ({
       handleStyle={styles.handleStyle}
       backdropComponent={renderBackdrop}
     >
-      <BottomSheetView style={styles.contentContainer}>{children}</BottomSheetView>
+      {scrollable ? (
+        <BottomSheetScrollView style={styles.contentContainer}>{children}</BottomSheetScrollView>
+      ) : (
+        <BottomSheetView style={styles.contentContainer}>{children}</BottomSheetView>
+      )}
     </BottomSheetModal>
   )
 }
