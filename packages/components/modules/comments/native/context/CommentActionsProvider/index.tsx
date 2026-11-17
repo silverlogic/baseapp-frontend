@@ -58,7 +58,7 @@ const CommentActionsProvider: FC<CommentActionsProviderProps> = ({ children, onP
     comment: selectedComment,
     onEdit: () => {
       if (selectedComment) {
-        setCommentEdit(toCommentEditTarget(selectedComment))
+        setCommentEdit({ ...toCommentEditTarget(selectedComment), filesTarget: selectedComment })
       }
     },
     onDelete: () => setIsDeleting(true),

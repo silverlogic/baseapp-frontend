@@ -1,5 +1,37 @@
 # @baseapp-frontend/authentication
 
+## 8.0.0
+
+### Major Changes
+
+- 7fef43d: Upgrade zod from 3.25.7 to 4.6.7 and `@hookform/resolvers` from 5.0.1 to 5.9.2. zod 3 is affected
+  by CVE-2023-54404 (HIGH), which is only fixed in zod 4.6.6.
+
+  **Breaking:** the exported validation schemas are now zod 4 schemas, and the `validationSchema`
+  option of `useChangePassword`, `useResetPassword`, `useRecoverPassword`, `useRequestEmailChange` and
+  `useMfaActivateConfirm` expects a zod 4 schema. Consumers that build custom schemas or extend ours
+  (including a `zodResolver` passed through `formOptions`) must install zod 4. The `ZodType`-typed options are now typed
+  `z.ZodType<Form, Form>`, because zod 4 defaults a schema's input type to `unknown`. See the
+  [zod 4 migration guide](https://zod.dev/v4/changelog); the APIs this package uses (`min`, `max`,
+  `regex`, `email`, `nonempty`, `refine`, `{ message }`) work unchanged.
+
+### Patch Changes
+
+- Updated dependencies [f9c934f]
+- Updated dependencies [7fef43d]
+  - @baseapp-frontend/utils@4.3.1
+
+## 7.0.0
+
+### Minor Changes
+
+- 5a244bc: Support relative API addresses, so one web deployment can serve several hosts that each call the API on their own host (for example one subdomain per customer). Setting `NEXT_PUBLIC_API_BASE_URL=/v1`, `NEXT_PUBLIC_RELAY_ENDPOINT=/graphql` and `NEXT_PUBLIC_WS_RELAY_ENDPOINT=/graphql` makes the browser call the host the page is on, including the GraphQL websocket (`ws(s)://<page host>/graphql`, resolved at each connection attempt). Server-side calls (SSR, route handlers, middleware token refresh), which have no page address, go to the new server-only `INTERNAL_API_ORIGIN` (e.g. `http://web:8000`) and send the incoming request's host as `X-Forwarded-Host`, plus its `X-Forwarded-Proto` / `X-Forwarded-Protocol` when present, so the API knows which host the user is on; they throw a clear error when `INTERNAL_API_ORIGIN` is missing. This covers `baseAppFetch` (and with it Relay's `httpFetch` and `loadSerializableQuery`), the axios instances, `getAccessToken` and `preAuthenticateJWT` (both now take an optional `{ host }` to override the forwarded host). New helpers: `resolveApiUrl`, `resolveWebSocketUrl`, `getWebSocketClientUrl` and `isRelativeUrl`. Absolute addresses behave exactly as before, with no added headers, so existing projects need no change. The profile share link follows the same rule: a relative `NEXT_PUBLIC_APP_BASE_URL` (e.g. `/`) makes it use the host the user is on; absolute and unset values copy what they did before.
+
+### Patch Changes
+
+- Updated dependencies [5a244bc]
+  - @baseapp-frontend/utils@4.3.0
+
 ## 6.0.1
 
 ### Patch Changes

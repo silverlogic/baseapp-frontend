@@ -5,17 +5,17 @@ import { forwardRef, useMemo } from 'react'
 import { useDeferredFileAttachments } from '@baseapp-frontend/components/files/common'
 import { UploadingFilesList } from '@baseapp-frontend/components/files/web'
 
+import { useIntl } from 'react-intl'
+
 import { SocialUpsertForm } from '../../../__shared__/common'
 import {
   SocialInput as DefaultSocialInput,
   useFormMentions,
   withMentionsInSocialInputProps,
 } from '../../../__shared__/web'
-import { useCommentCreateForm, useCommentReply } from '../../common'
+import { COMMENT_FILE_ATTACHMENT_LIMITS, useCommentCreateForm, useCommentReply } from '../../common'
 import CommentFilesUpsertActions from './CommentFilesUpsertActions'
 import { CommentCreateProps } from './types'
-
-const MAX_FILES = 5
 
 /**
  * ### CommentCreate Component
@@ -85,6 +85,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     },
     ref,
   ) => {
+    const intl = useIntl()
     const commentReply = useCommentReply<HTMLDivElement>()
     const {
       handleFilesSelected,
@@ -128,7 +129,10 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
     return (
       <SocialInput
         ref={ref}
-        placeholder="Comment..."
+        placeholder={intl.formatMessage({
+          id: 'comments.create.placeholder',
+          defaultMessage: 'Comment...',
+        })}
         autoFocusInput={autoFocusInput}
         form={form}
         formId="comment-create"
@@ -147,7 +151,7 @@ const CommentCreate = forwardRef<HTMLInputElement, CommentCreateProps>(
         SocialUpsertActionsProps={{
           onFilesSelected: handleFilesSelected,
           isUploading,
-          maxFiles: MAX_FILES,
+          ...COMMENT_FILE_ATTACHMENT_LIMITS,
         }}
         // Inside the form, not after it: the form is sticky, so a sibling would sit
         // below the pinned composer and stay off-screen until the list is scrolled.

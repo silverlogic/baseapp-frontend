@@ -1,3 +1,5 @@
+import type { UploadInput } from '../../types'
+
 export interface UseFileUploadLogicParams {
   targetObjectId?: string
   autoAttach?: boolean
@@ -8,7 +10,7 @@ export interface UseFileUploadLogicParams {
 }
 
 export interface UseFileUploadLogicReturn {
-  handleFilesSelected: (selectedFiles: File[]) => Promise<void>
+  handleFilesSelected: (selectedFiles: UploadInput[]) => Promise<void>
   isAttaching: boolean
   resetKey: number
 }

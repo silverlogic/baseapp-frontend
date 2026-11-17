@@ -4,7 +4,10 @@ import { IconButton } from '@baseapp-frontend/design-system/components/native/bu
 import { EmojiIcon } from '@baseapp-frontend/design-system/components/native/icons'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
-const SocialUpsertActions: FC = () => {
+import { SocialUpsertActionsProps } from './types'
+
+// The placeholder emoji button ignores shouldUseBottomSheetSafeComponents; it has no action yet.
+const SocialUpsertActions: FC<SocialUpsertActionsProps> = () => {
   const theme = useTheme()
 
   return (

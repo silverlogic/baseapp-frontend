@@ -4,6 +4,7 @@ import { IconButton } from '@baseapp-frontend/design-system/components/web/butto
 import { CommentReplyIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { CounterContainer } from './styled'
 import { CommentReplyButtonProps } from './types'
@@ -14,20 +15,40 @@ const CommentReplyButton: FC<CommentReplyButtonProps> = ({
   totalCommentsCount,
   commentId,
   isDisabled = false,
-}) => (
-  <CounterContainer>
-    <IconButton
-      disabled={isDisabled}
-      onClick={onReply}
-      isLoading={isLoadingReplies}
-      aria-label={`reply to comment ${commentId}`}
-    >
-      <CommentReplyIcon />
-    </IconButton>
-    <Typography variant="caption" color="text.secondary" aria-label={`replies count ${commentId}`}>
-      {totalCommentsCount ?? 0}
-    </Typography>
-  </CounterContainer>
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <CounterContainer>
+      <IconButton
+        disabled={isDisabled}
+        onClick={onReply}
+        isLoading={isLoadingReplies}
+        aria-label={intl.formatMessage(
+          {
+            id: 'comments.reply.ariaLabel',
+            defaultMessage: 'reply to comment {commentId}',
+          },
+          { commentId },
+        )}
+      >
+        <CommentReplyIcon />
+      </IconButton>
+      <Typography
+        variant="caption"
+        color="text.secondary"
+        aria-label={intl.formatMessage(
+          {
+            id: 'comments.reply.count.ariaLabel',
+            defaultMessage: 'replies count {commentId}',
+          },
+          { commentId },
+        )}
+      >
+        {totalCommentsCount ?? 0}
+      </Typography>
+    </CounterContainer>
+  )
+}
 
 export default CommentReplyButton
