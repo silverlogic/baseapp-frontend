@@ -17,6 +17,9 @@ const BottomDrawer = ({
   handleSheetChanges,
   snapPoints = ['30%'],
   scrollable = false,
+  enableDynamicSizing,
+  keyboardBehavior,
+  keyboardBlurBehavior,
   children,
 }: BottomDrawerProps) => {
   const theme = useTheme()
@@ -39,6 +42,9 @@ const BottomDrawer = ({
       handleIndicatorStyle={styles.handleIndicatorStyle}
       handleStyle={styles.handleStyle}
       backdropComponent={renderBackdrop}
+      enableDynamicSizing={enableDynamicSizing}
+      keyboardBehavior={keyboardBehavior}
+      keyboardBlurBehavior={keyboardBlurBehavior}
     >
       {scrollable ? (
         <BottomSheetScrollView style={styles.contentContainer}>{children}</BottomSheetScrollView>
