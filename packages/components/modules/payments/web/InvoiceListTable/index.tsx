@@ -14,6 +14,7 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import useStripeHook from '../hooks/useStripeHook'
 import { Invoice } from '../types'
@@ -34,6 +35,7 @@ const InvoiceListTable = ({
   entityId,
 }: InvoiceListTableProps) => {
   const [page, setPage] = useState(1)
+  const intl = useIntl()
 
   const smDown = useResponsive('down', 'sm')
   const { useListInvoices } = useStripeHook()
@@ -48,7 +50,11 @@ const InvoiceListTable = ({
   return (
     <Box display="flex" flexDirection="column" gap={2}>
       <Typography variant="h4" {...titleProps}>
-        {title ?? 'Subscription Receipts'}
+        {title ??
+          intl.formatMessage({
+            id: 'payments.invoices.title',
+            defaultMessage: 'Subscription Receipts',
+          })}
       </Typography>
       {isLoading ? (
         <CircularProgress sx={{ margin: 'auto' }} />
@@ -68,7 +74,10 @@ const InvoiceListTable = ({
                 <TableRow {...rowProps}>
                   <TableCell colSpan={smDown ? 3 : 5} sx={{ p: 4 }}>
                     <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
-                      No receipts found
+                      <FormattedMessage
+                        id="payments.invoices.empty"
+                        defaultMessage="No receipts found"
+                      />
                     </Typography>
                   </TableCell>
                 </TableRow>
