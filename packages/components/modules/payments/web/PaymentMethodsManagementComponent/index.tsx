@@ -97,8 +97,6 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
   useEffect(() => {
     if (isCreatingSetupIntent || isErrorCreatingSetupIntent) return
     if (setupIntent) {
-      // @ts-ignore
-      elements?.update({ clientSecret: setupIntent.clientSecret })
       setIsAddCardModalOpen(true)
     }
   }, [setupIntent, isCreatingSetupIntent, isErrorCreatingSetupIntent])
@@ -169,11 +167,11 @@ const PaymentMethodsManagementComponent: FC<PaymentMethodsManagementComponentPro
           </Typography>
         </MenuItem>
       </Menu>
-      {elements && stripe && setupIntent && (
+      {stripe && setupIntent && (
         <AddCardModal
           entityId={entityId}
           stripe={stripe}
-          elements={elements}
+          clientSecret={setupIntent.clientSecret}
           open={isAddCardModalOpen}
           onClose={handleCloseModal}
           handleSetupSuccess={() => {
