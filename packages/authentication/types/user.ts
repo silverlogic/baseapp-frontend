@@ -12,6 +12,7 @@ export interface User {
   profile: MinimalProfile
   phoneNumber: string
   preferredLanguage: string
+  timezone: string
 }
 
 export interface UserUpdateParams<TUser extends Partial<User>> {
