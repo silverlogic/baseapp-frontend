@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
@@ -25,6 +25,13 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   const detectedLocale = initialLocale ?? cookieLocale ?? defaultLocale
 
   const [locale, setLocale] = useState<Locale>(detectedLocale)
+  const cancelDetection = useRef<(() => void) | undefined>(undefined)
+
+  // An in-place switch must not be undone by a detection that was still pending.
+  const updateLocale = useCallback((next: Locale) => {
+    cancelDetection.current?.()
+    setLocale(next)
+  }, [])
 
   const messages = useMemo(
     () => getMessages(locale, additionalMessages?.[locale]),
@@ -36,6 +43,10 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
     if (initialLocale || cookieLocale) return undefined
 
     let isStale = false
+    const cancel = () => {
+      isStale = true
+    }
+    cancelDetection.current = cancel
     getCurrentLocale(defaultLocale)
       .then((stored) => {
         if (!isStale) setLocale(stored)
@@ -45,7 +56,8 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
 
     // A detection still pending when the props change must not override the newer locale.
     return () => {
-      isStale = true
+      cancel()
+      if (cancelDetection.current === cancel) cancelDetection.current = undefined
     }
   }, [initialLocale, cookieLocale, defaultLocale])
 
@@ -57,7 +69,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   }, [initialLocale])
 
   return (
-    <LocaleUpdateContext.Provider value={setLocale}>
+    <LocaleUpdateContext.Provider value={updateLocale}>
       <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
         {children}
       </ReactIntlProvider>
