@@ -1,7 +1,14 @@
 import { DateTime, Settings } from 'luxon'
 import { createIntl } from 'react-intl'
 
-import { formatDateWithDiffNow, formatDayLabel, formatRelativeTime, formatTimestamp } from '..'
+import {
+  formatDateWithDiffNow,
+  formatDayLabel,
+  formatRelativeTime,
+  formatTimestamp,
+  isToday,
+  isYesterday,
+} from '..'
 import esMessages from '../../../locales/es.json'
 
 const now = DateTime.fromISO('2026-11-17T15:30:00', { zone: 'utc' })
@@ -87,5 +94,26 @@ describe('formatRelativeTime with intl', () => {
 
   it('returns a dash for a missing date', () => {
     expect(formatRelativeTime(undefined, { intl, reference: now })).toBe('-')
+  })
+})
+
+describe('calendar days in the display zone', () => {
+  const losAngeles = createIntl({ locale: 'en', timeZone: 'America/Los_Angeles' })
+  const reference = DateTime.fromISO('2026-11-18T00:30:00', { zone: 'utc' })
+
+  it('treats a UTC midnight crossing as the same day in the intl zone', () => {
+    const date = '2026-11-17T23:45:00Z'
+    expect(formatTimestamp(date, { intl: losAngeles, reference })).toBe('Today')
+    expect(formatDayLabel(date, { intl: losAngeles, reference })).toBe('Today')
+    expect(isToday(date, { intl: losAngeles, reference })).toBe(true)
+    expect(isToday(date, { intl, reference })).toBe(false)
+    expect(isYesterday(date, { intl, reference })).toBe(true)
+  })
+
+  it('counts calendar dates, not rounded elapsed days', () => {
+    const date = '2026-11-16T23:59:00Z'
+    expect(formatDateWithDiffNow(date, { intl, reference: reference.set({ minute: 0 }) })).toBe(
+      '2 days ago',
+    )
   })
 })

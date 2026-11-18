@@ -1,4 +1,9 @@
-import { formatDateWithDiffNow, formatRelativeTime } from '@baseapp-frontend/utils'
+import {
+  DATE_MESSAGES,
+  formatDateWithDiffNow,
+  formatRelativeTime,
+  isToday,
+} from '@baseapp-frontend/utils'
 
 import { DateTime } from 'luxon'
 import { IntlShape } from 'react-intl'
@@ -41,6 +46,8 @@ export const formatRelativeTimeI18n = (
   reference: DateTime = DateTime.now(),
 ): string => formatRelativeTime(date, { intl, reference })
 
-/** The time today, Yesterday, then days, weeks or months ago, in the active locale. */
+/** Today, Yesterday, then days, weeks or months ago, in the active locale. */
 export const formatDateWithDiffNowI18n = (intl: IntlShape, date?: string | null): string =>
-  formatDateWithDiffNow(date, { intl })
+  date && isToday(date, { intl })
+    ? intl.formatMessage(DATE_MESSAGES.today)
+    : formatDateWithDiffNow(date, { intl })

@@ -5,8 +5,9 @@
 ### Minor Changes
 
 - The date helpers in `@baseapp-frontend/utils` take an optional `intl` (and `reference`) so they can
-  follow the active locale: `formatRelativeTime` and `formatDateWithDiffNow` keep their English output
-  when called without one, and the new `formatTimestamp` and `formatDayLabel` cover comment timestamps
+  follow the active locale: `formatRelativeTime` and `formatDateWithDiffNow` stay English when called
+  without one (a future timestamp now shows the date instead of "N days ago", and calendar days are
+  counted in the intl time zone), and the new `formatTimestamp` and `formatDayLabel` cover comment timestamps
   and day headers. Their messages ship as `utils.date.*` in the utils catalogs, with `INTL_DATE_FORMAT`
   and `INTL_TIME_FORMAT` for the absolute parts. `@baseapp-frontend/i18n`'s `formatRelativeTimeI18n`
   and `formatDateWithDiffNowI18n` delegate to them (the `DATE_MESSAGES` re-export and

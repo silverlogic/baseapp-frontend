@@ -1,4 +1,4 @@
-import { defineMessages } from 'react-intl'
+import { defineMessages } from '@formatjs/intl'
 
 export const DATE_FORMAT = {
   0: 'MM/dd/yy',

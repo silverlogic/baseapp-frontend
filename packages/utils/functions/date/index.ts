@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { IntlShape, MessageDescriptor } from 'react-intl'
+import type { IntlShape, MessageDescriptor } from 'react-intl'
 
 import {
   DATE_FORMAT,
@@ -8,7 +8,7 @@ import {
   INTL_TIME_FORMAT,
   TIME_FORMAT,
 } from '../../constants/date'
-import {
+import type {
   DateFormat,
   FormatDateFromApiOptions,
   FormatDateOptions,
@@ -45,8 +45,16 @@ const parseIso = (date?: string | null) => {
   return dateTime.isValid ? dateTime : null
 }
 
-const calendarDaysBefore = (date: DateTime, reference: DateTime) =>
-  Math.round(reference.startOf('day').diff(date.startOf('day'), 'days').days)
+// Calendar days are counted in the zone the intl formatters display, not the runtime zone.
+const inDisplayZone = (date: DateTime, intl?: IntlShape) =>
+  intl?.timeZone ? date.setZone(intl.timeZone) : date
+
+const calendarDaysBefore = (date: DateTime, reference: DateTime, intl?: IntlShape) =>
+  Math.round(
+    inDisplayZone(reference, intl)
+      .startOf('day')
+      .diff(inDisplayZone(date, intl).startOf('day'), 'days').days,
+  )
 
 const absoluteDate = (
   date: DateTime,
@@ -90,14 +98,20 @@ export const formatRelativeTime = (
   return agoLabel(DATE_MESSAGES.daysAgo, 'day', Math.max(1, Math.floor(daysDiff)), intl)
 }
 
-export const isToday = (date: string) => {
-  if (!date) return false
-  return DateTime.fromISO(date).hasSame(DateTime.now(), 'day')
+export const isToday = (
+  date: string,
+  { reference = DateTime.now(), intl }: RelativeDateOptions = {},
+) => {
+  const dateTime = parseIso(date)
+  return !!dateTime && calendarDaysBefore(dateTime, reference, intl) === 0
 }
 
-export const isYesterday = (date: string) => {
-  if (!date) return false
-  return DateTime.fromISO(date).hasSame(DateTime.now().minus({ days: 1 }), 'day')
+export const isYesterday = (
+  date: string,
+  { reference = DateTime.now(), intl }: RelativeDateOptions = {},
+) => {
+  const dateTime = parseIso(date)
+  return !!dateTime && calendarDaysBefore(dateTime, reference, intl) === 1
 }
 
 export const datesDontHaveSameDay = (date1: string, date2: string) => {
@@ -120,19 +134,18 @@ export const formatDateWithDiffNow = (
   if (!dateTime) return ''
   if (dateTime > reference) return absoluteDate(dateTime, intl)
 
-  const days = calendarDaysBefore(dateTime, reference)
+  const days = calendarDaysBefore(dateTime, reference, intl)
   if (days === 0) return timeOfDay(dateTime, intl)
   if (days === 1) return yesterdayLabel(intl)
 
-  const diff = reference.diff(dateTime, ['months', 'weeks', 'days'])
+  const diff = reference.diff(dateTime, ['months', 'weeks'])
   if (diff.months >= 1) {
     return agoLabel(DATE_MESSAGES.monthsAgo, 'month', Math.round(diff.months), intl)
   }
   if (diff.weeks >= 1) {
     return agoLabel(DATE_MESSAGES.weeksAgo, 'week', Math.round(diff.weeks), intl)
   }
-  if (diff.days >= 1) return agoLabel(DATE_MESSAGES.daysAgo, 'day', Math.round(diff.days), intl)
-  return absoluteDate(dateTime, intl)
+  return agoLabel(DATE_MESSAGES.daysAgo, 'day', days, intl)
 }
 
 /** Comment style: Today, Yesterday, days ago within a week, else the date. */
@@ -143,7 +156,7 @@ export const formatTimestamp = (
   const dateTime = parseIso(date)
   if (!dateTime) return ''
 
-  const days = calendarDaysBefore(dateTime, reference)
+  const days = calendarDaysBefore(dateTime, reference, intl)
   if (days === 0) return todayLabel(intl)
   if (days === 1) return yesterdayLabel(intl)
   if (days > 1 && days <= 7) return agoLabel(DATE_MESSAGES.daysAgo, 'day', days, intl)
@@ -158,7 +171,7 @@ export const formatDayLabel = (
   const dateTime = parseIso(date)
   if (!dateTime) return ''
 
-  const days = calendarDaysBefore(dateTime, reference)
+  const days = calendarDaysBefore(dateTime, reference, intl)
   if (days === 0) return todayLabel(intl)
   if (days === 1) return yesterdayLabel(intl)
   return absoluteDate(dateTime, intl)

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import { DATE_MESSAGES, INTL_DATE_FORMAT, INTL_TIME_FORMAT } from '@baseapp-frontend/utils'
+import { DATE_MESSAGES, INTL_DATE_FORMAT, INTL_TIME_FORMAT, isToday } from '@baseapp-frontend/utils'
 
 import { Typography } from '@mui/material'
 import { DateTime } from 'luxon'
@@ -13,11 +13,11 @@ const Timestamp: FC<TimestampProps> = ({ date }) => {
   const intl = useIntl()
   const dateTime = DateTime.fromISO(date)
   const jsDate = dateTime.toJSDate()
-  const isToday = dateTime.hasSame(DateTime.now(), 'day')
+  const today = isToday(date, { intl })
 
   return (
     <Typography variant="caption" color="text.secondary" display="flex" alignItems="center">
-      {isToday ? (
+      {today ? (
         <FormattedMessage {...DATE_MESSAGES.today} />
       ) : (
         intl.formatTime(jsDate, INTL_TIME_FORMAT.short)

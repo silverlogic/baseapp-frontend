@@ -1,5 +1,5 @@
-import { DateTime } from 'luxon'
-import { IntlShape } from 'react-intl'
+import type { DateTime } from 'luxon'
+import type { IntlShape } from 'react-intl'
 
 import { DATE_FORMAT, TIME_FORMAT } from '../constants/date'
 import { ValueOf } from './typescript'
