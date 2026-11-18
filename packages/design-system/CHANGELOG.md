@@ -1,5 +1,12 @@
 # @baseapp-frontend/design-system
 
+## 5.0.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.5.0
+
 ## 4.0.2
 
 ### Patch Changes

@@ -1,8 +1,9 @@
 import { FC } from 'react'
 
+import { formatRelativeTime } from '@baseapp-frontend/utils'
+
 import { useIntl } from 'react-intl'
 
-import { formatRelativeTime } from '../../../../../__shared__/common'
 import Notification from '../Notification'
 import { GenericItemProps } from '../types'
 
@@ -24,7 +25,7 @@ const CommentCreated: FC<GenericItemProps> = ({ notification }) => {
       <Notification.Content>
         <Notification.Content.Header
           message={message}
-          timestamp={formatRelativeTime(intl, notification.timestamp)}
+          timestamp={formatRelativeTime(notification.timestamp, { intl })}
           actorName={notification.actor?.name}
           unread={notification.unread}
         />

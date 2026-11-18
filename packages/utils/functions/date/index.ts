@@ -1,11 +1,21 @@
 import { DateTime } from 'luxon'
+import { IntlShape, MessageDescriptor } from 'react-intl'
 
-import { DATE_FORMAT, TIME_FORMAT } from '../../constants/date'
 import {
+  DATE_FORMAT,
+  DATE_MESSAGES,
+  INTL_DATE_FORMAT,
+  INTL_TIME_FORMAT,
+  TIME_FORMAT,
+} from '../../constants/date'
+import {
+  DateFormat,
   FormatDateFromApiOptions,
   FormatDateOptions,
   FormatDateToApiOptions,
   FormatRelativeTimeOptions,
+  RelativeDateOptions,
+  TimeFormat,
 } from '../../types/date'
 
 export const formatDate = (
@@ -30,33 +40,54 @@ export const formatDateToApi = (
   { fromFormat = DATE_FORMAT[0] }: FormatDateToApiOptions = {},
 ) => formatDate(date, { toFormat: DATE_FORMAT.api, fromFormat })
 
+const parseIso = (date?: string | null) => {
+  const dateTime = DateTime.fromISO(date ?? '')
+  return dateTime.isValid ? dateTime : null
+}
+
+const calendarDaysBefore = (date: DateTime, reference: DateTime) =>
+  Math.round(reference.startOf('day').diff(date.startOf('day'), 'days').days)
+
+const absoluteDate = (
+  date: DateTime,
+  intl?: IntlShape,
+  toFormat: DateFormat | TimeFormat = DATE_FORMAT[2],
+) => (intl ? intl.formatDate(date.toJSDate(), INTL_DATE_FORMAT.medium) : date.toFormat(toFormat))
+
+const timeOfDay = (date: DateTime, intl?: IntlShape) =>
+  intl ? intl.formatTime(date.toJSDate(), INTL_TIME_FORMAT.short) : date.toFormat(TIME_FORMAT[2])
+
+const todayLabel = (intl?: IntlShape) => (intl ? intl.formatMessage(DATE_MESSAGES.today) : 'Today')
+
+const yesterdayLabel = (intl?: IntlShape) =>
+  intl ? intl.formatMessage(DATE_MESSAGES.yesterday) : 'Yesterday'
+
+const agoLabel = (descriptor: MessageDescriptor, unit: string, count: number, intl?: IntlShape) =>
+  intl ? intl.formatMessage(descriptor, { count }) : `${count} ${unit}${count === 1 ? '' : 's'} ago`
+
+/** Minutes, hours or days ago; the date once it is a month old or in the future. */
 export const formatRelativeTime = (
   date?: string | null,
-  { reference = DateTime.now(), toFormat = DATE_FORMAT[2] }: FormatRelativeTimeOptions = {},
+  { reference = DateTime.now(), toFormat = DATE_FORMAT[2], intl }: FormatRelativeTimeOptions = {},
 ) => {
-  const dateFromApi = DateTime.fromISO(date ?? '')
-
-  if (!dateFromApi.isValid) return '-'
+  const dateFromApi = parseIso(date)
+  if (!dateFromApi) return '-'
+  if (dateFromApi > reference) return absoluteDate(dateFromApi, intl, toFormat)
 
   const diff = reference.diff(dateFromApi, ['minutes', 'hours', 'days', 'months']).toObject()
-
   const minutesDiff = diff.minutes ?? 0
   const hoursDiff = diff.hours ?? 0
   const daysDiff = diff.days ?? 0
   const monthsDiff = diff.months ?? 0
 
-  if (monthsDiff >= 1) {
-    return formatDate(dateFromApi, { toFormat })
-  }
-
+  if (monthsDiff >= 1) return absoluteDate(dateFromApi, intl, toFormat)
   if (daysDiff < 1) {
     if (hoursDiff >= 1) {
-      return hoursDiff >= 2 ? `${Math.floor(hoursDiff)} hours ago` : '1 hour ago'
+      return agoLabel(DATE_MESSAGES.hoursAgo, 'hour', Math.max(1, Math.floor(hoursDiff)), intl)
     }
-    return minutesDiff >= 2 ? `${Math.floor(minutesDiff)} minutes ago` : '1 minute ago'
+    return agoLabel(DATE_MESSAGES.minutesAgo, 'minute', Math.max(1, Math.floor(minutesDiff)), intl)
   }
-
-  return daysDiff >= 2 ? `${Math.floor(daysDiff)} days ago` : '1 day ago'
+  return agoLabel(DATE_MESSAGES.daysAgo, 'day', Math.max(1, Math.floor(daysDiff)), intl)
 }
 
 export const isToday = (date: string) => {
@@ -80,25 +111,55 @@ export const datesDontHaveSameDay = (date1: string, date2: string) => {
   return !dt1.hasSame(dt2, 'day')
 }
 
-export const formatDateWithDiffNow = (date?: string | null) => {
-  if (!date) return ''
-  const dateTime = DateTime.fromISO(date)
-  if (!dateTime.isValid) return ''
+/** Chat list style: the time today, Yesterday, then days, weeks or months ago, else the date. */
+export const formatDateWithDiffNow = (
+  date?: string | null,
+  { reference = DateTime.now(), intl }: RelativeDateOptions = {},
+) => {
+  const dateTime = parseIso(date)
+  if (!dateTime) return ''
+  if (dateTime > reference) return absoluteDate(dateTime, intl)
 
-  if (isToday(date)) return formatDateFromApi(date, { toFormat: TIME_FORMAT[2] })
-  if (isYesterday(date)) return 'Yesterday'
+  const days = calendarDaysBefore(dateTime, reference)
+  if (days === 0) return timeOfDay(dateTime, intl)
+  if (days === 1) return yesterdayLabel(intl)
 
-  const diff = dateTime.diffNow(['years', 'months', 'weeks', 'days']).toObject()
-
-  if (diff.months && Math.abs(diff.months) > 0) {
-    if (Math.abs(diff.months) > 1) return `${Math.abs(diff.months).toFixed(0)} months ago`
-    return '1 month ago'
+  const diff = reference.diff(dateTime, ['months', 'weeks', 'days'])
+  if (diff.months >= 1) {
+    return agoLabel(DATE_MESSAGES.monthsAgo, 'month', Math.round(diff.months), intl)
   }
-  if (diff.weeks && Math.abs(diff.weeks) > 0) {
-    if (Math.abs(diff.weeks) > 1) return `${Math.abs(diff.weeks).toFixed(0)} weeks ago`
-    return '1 week ago'
+  if (diff.weeks >= 1) {
+    return agoLabel(DATE_MESSAGES.weeksAgo, 'week', Math.round(diff.weeks), intl)
   }
-  if (diff.days && Math.abs(diff.days) > 0) return `${Math.abs(diff.days).toFixed(0)} days ago`
+  if (diff.days >= 1) return agoLabel(DATE_MESSAGES.daysAgo, 'day', Math.round(diff.days), intl)
+  return absoluteDate(dateTime, intl)
+}
 
-  return formatDateFromApi(date, { toFormat: DATE_FORMAT[2] })
+/** Comment style: Today, Yesterday, days ago within a week, else the date. */
+export const formatTimestamp = (
+  date?: string | null,
+  { reference = DateTime.now(), intl }: RelativeDateOptions = {},
+) => {
+  const dateTime = parseIso(date)
+  if (!dateTime) return ''
+
+  const days = calendarDaysBefore(dateTime, reference)
+  if (days === 0) return todayLabel(intl)
+  if (days === 1) return yesterdayLabel(intl)
+  if (days > 1 && days <= 7) return agoLabel(DATE_MESSAGES.daysAgo, 'day', days, intl)
+  return absoluteDate(dateTime, intl)
+}
+
+/** Day header style: Today, Yesterday, else the date. */
+export const formatDayLabel = (
+  date?: string | null,
+  { reference = DateTime.now(), intl }: RelativeDateOptions = {},
+) => {
+  const dateTime = parseIso(date)
+  if (!dateTime) return ''
+
+  const days = calendarDaysBefore(dateTime, reference)
+  if (days === 0) return todayLabel(intl)
+  if (days === 1) return yesterdayLabel(intl)
+  return absoluteDate(dateTime, intl)
 }

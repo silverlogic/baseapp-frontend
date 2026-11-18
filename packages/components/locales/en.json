@@ -467,13 +467,6 @@
   "shared.searchNotFound.title": "No results found",
   "shared.socialInput.placeholder": "Message...",
   "shared.socialInput.submit.ariaLabel": "submit actions",
-  "shared.timestamp.daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
-  "shared.timestamp.hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
-  "shared.timestamp.minutesAgo": "{count, plural, one {# minute ago} other {# minutes ago}}",
-  "shared.timestamp.monthsAgo": "{count, plural, one {# month ago} other {# months ago}}",
-  "shared.timestamp.today": "Today",
-  "shared.timestamp.weeksAgo": "{count, plural, one {# week ago} other {# weeks ago}}",
-  "shared.timestamp.yesterday": "Yesterday",
   "shared.updateSubmitActions.cancel.ariaLabel": "cancel comment edit",
   "shared.updateSubmitActions.save.ariaLabel": "save comment edit"
 }

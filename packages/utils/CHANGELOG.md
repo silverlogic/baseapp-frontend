@@ -1,5 +1,18 @@
 # @baseapp-frontend/utils
 
+## 4.5.0
+
+### Minor Changes
+
+- The date helpers in `@baseapp-frontend/utils` take an optional `intl` (and `reference`) so they can
+  follow the active locale: `formatRelativeTime` and `formatDateWithDiffNow` keep their English output
+  when called without one, and the new `formatTimestamp` and `formatDayLabel` cover comment timestamps
+  and day headers. Their messages ship as `utils.date.*` in the utils catalogs, with `INTL_DATE_FORMAT`
+  and `INTL_TIME_FORMAT` for the absolute parts. `@baseapp-frontend/i18n`'s `formatRelativeTimeI18n`
+  and `formatDateWithDiffNowI18n` delegate to them (the `DATE_MESSAGES` re-export and
+  `formatRelativeTimeWithIntl` are gone), and `components` drops its `__shared__/common/dates`
+  copy and the `shared.timestamp.*` ids.
+
 ## 4.4.0
 
 ### Minor Changes

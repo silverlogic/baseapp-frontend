@@ -1,10 +1,28 @@
 # @baseapp-frontend/components
 
+## 7.0.0
+
+### Patch Changes
+
+- The date helpers in `@baseapp-frontend/utils` take an optional `intl` (and `reference`) so they can
+  follow the active locale: `formatRelativeTime` and `formatDateWithDiffNow` keep their English output
+  when called without one, and the new `formatTimestamp` and `formatDayLabel` cover comment timestamps
+  and day headers. Their messages ship as `utils.date.*` in the utils catalogs, with `INTL_DATE_FORMAT`
+  and `INTL_TIME_FORMAT` for the absolute parts. `@baseapp-frontend/i18n`'s `formatRelativeTimeI18n`
+  and `formatDateWithDiffNowI18n` delegate to them (the `DATE_MESSAGES` re-export and
+  `formatRelativeTimeWithIntl` are gone), and `components` drops its `__shared__/common/dates`
+  copy and the `shared.timestamp.*` ids.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.5.0
+  - @baseapp-frontend/authentication@10.0.0
+  - @baseapp-frontend/design-system@5.0.0
+  - @baseapp-frontend/graphql@6.0.0
+
 ## 6.0.2
 
 ### Patch Changes
 
-- acdc5dd: Format comment timestamps, chat dates, message day headers and notification ages through `react-intl` on native and web, so they follow the active locale. Native notifications also get their translated messages. The `messages.chatRoomItem.date.*`, `messages.messagesGroup.today` and `messages.shared.yesterday` ids are replaced by `shared.timestamp.*`.
+- acdc5dd: Format comment timestamps, chat dates, message day headers and notification ages through `react-intl` on native and web, so they follow the active locale. Native notifications also get their translated messages. The `messages.chatRoomItem.date.*`, `messages.messagesGroup.today` and `messages.shared.yesterday` ids are replaced by the `utils.date.*` messages from `@baseapp-frontend/utils`.
 - Updated dependencies [f8a2ed0]
   - @baseapp-frontend/design-system@4.0.2
 

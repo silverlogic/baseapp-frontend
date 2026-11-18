@@ -4,11 +4,10 @@ import { MESSAGE_TYPE } from '@baseapp-frontend/components/messages/common'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
-import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
+import { datesDontHaveSameDay, formatDayLabel } from '@baseapp-frontend/utils'
 
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import { formatDayLabel } from '../../../../../__shared__/common'
 import { SystemMessage as DefaultSystemMessage } from './SystemMessage'
 import { UserMessage as DefaultUserMessage } from './UserMessage'
 import { createStyles } from './styles'
@@ -43,7 +42,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       ) {
         return (
           <Text style={styles.dateGroup} variant="caption">
-            {formatDayLabel(intl, currentMessage?.created)}
+            {formatDayLabel(currentMessage?.created, { intl })}
           </Text>
         )
       }

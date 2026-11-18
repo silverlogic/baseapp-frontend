@@ -1,4 +1,5 @@
 import { DateTime } from 'luxon'
+import { IntlShape } from 'react-intl'
 
 import { DATE_FORMAT, TIME_FORMAT } from '../constants/date'
 import { ValueOf } from './typescript'
@@ -19,8 +20,13 @@ export type FormatDateToApiOptions = {
   fromFormat?: DateFormat | TimeFormat
 }
 
-export type FormatRelativeTimeOptions = {
+/** With `intl` the output follows its locale and `toFormat` gives way to `INTL_DATE_FORMAT`. */
+export type RelativeDateOptions = {
+  intl?: IntlShape
   reference?: DateTime
+}
+
+export type FormatRelativeTimeOptions = RelativeDateOptions & {
   toFormat?: DateFormat | TimeFormat
   lowerCaseTimeIndicator?: boolean
 }

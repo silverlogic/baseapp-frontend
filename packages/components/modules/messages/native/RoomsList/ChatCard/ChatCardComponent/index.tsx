@@ -11,6 +11,7 @@ import { Badge } from '@baseapp-frontend/design-system/components/native/badges'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
+import { formatDateWithDiffNow } from '@baseapp-frontend/utils'
 
 import { type BottomSheetModal } from '@gorhom/bottom-sheet'
 import { type Href, useRouter } from 'expo-router'
@@ -22,7 +23,7 @@ import { LastMessageFragment$key } from '../../../../../../__generated__/LastMes
 import { RoomTitleFragment$key } from '../../../../../../__generated__/RoomTitleFragment.graphql'
 import { TitleFragment$key } from '../../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../../__generated__/UnreadMessagesCountFragment.graphql'
-import { formatChatRoomDate, getProfilePath } from '../../../../../__shared__/common'
+import { getProfilePath } from '../../../../../__shared__/common'
 import { LastMessageFragment } from '../../../../common/graphql/fragments/LastMessage'
 import { RoomTitleFragment } from '../../../../common/graphql/fragments/RoomTitle'
 import { TitleFragment } from '../../../../common/graphql/fragments/Title'
@@ -150,7 +151,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >
-                {formatChatRoomDate(intl, lastMessageTime)} • {lastMessage}
+                {formatDateWithDiffNow(lastMessageTime, { intl })} • {lastMessage}
               </Text>
             </View>
           ) : null}

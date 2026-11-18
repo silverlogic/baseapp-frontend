@@ -1,6 +1,6 @@
-import { IntlShape } from 'react-intl'
+import { formatDateWithDiffNow } from '@baseapp-frontend/utils'
 
-import { formatChatRoomDate } from '../../../../__shared__/common/dates'
+import { IntlShape } from 'react-intl'
 
 // Bound every regex pass so adversarial input cannot cause super-linear runtime:
 // the input length is capped and every lazy-quantifier match is constrained to a
@@ -44,4 +44,5 @@ export const getLastMessagePreview = (content?: string | null) => {
   )
 }
 
-export const formatDate = (intl: IntlShape, date?: string | null) => formatChatRoomDate(intl, date)
+export const formatDate = (intl: IntlShape, date?: string | null) =>
+  formatDateWithDiffNow(date, { intl })

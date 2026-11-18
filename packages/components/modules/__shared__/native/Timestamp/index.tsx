@@ -1,10 +1,10 @@
 import { FC } from 'react'
 
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
+import { formatTimestamp } from '@baseapp-frontend/utils'
 
 import { useIntl } from 'react-intl'
 
-import { formatTimestamp } from '../../common'
 import { TimestampProps } from './types'
 
 const Timestamp: FC<TimestampProps> = ({ date }) => {
@@ -12,7 +12,7 @@ const Timestamp: FC<TimestampProps> = ({ date }) => {
 
   return (
     <Text variant="caption" color="low">
-      {formatTimestamp(intl, date)}
+      {formatTimestamp(date, { intl })}
     </Text>
   )
 }

@@ -467,13 +467,6 @@
   "shared.searchNotFound.title": "No se encontraron resultados",
   "shared.socialInput.placeholder": "Mensaje...",
   "shared.socialInput.submit.ariaLabel": "enviar",
-  "shared.timestamp.daysAgo": "{count, plural, one {hace # día} other {hace # días}}",
-  "shared.timestamp.hoursAgo": "{count, plural, one {hace # hora} other {hace # horas}}",
-  "shared.timestamp.minutesAgo": "{count, plural, one {hace # minuto} other {hace # minutos}}",
-  "shared.timestamp.monthsAgo": "{count, plural, one {hace # mes} other {hace # meses}}",
-  "shared.timestamp.today": "Hoy",
-  "shared.timestamp.weeksAgo": "{count, plural, one {hace # semana} other {hace # semanas}}",
-  "shared.timestamp.yesterday": "Ayer",
   "shared.updateSubmitActions.cancel.ariaLabel": "cancelar edición del comentario",
   "shared.updateSubmitActions.save.ariaLabel": "guardar edición del comentario"
 }
