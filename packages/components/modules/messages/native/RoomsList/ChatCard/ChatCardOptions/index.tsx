@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { createStyles } from './styles'
@@ -26,8 +27,6 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
   const styles = createStyles(theme)
   const snapPoints = useMemo(() => ['50%', '90%'], [])
 
-  const chatOrGroup = isGroup ? 'Group' : 'Chat'
-
   return (
     <BottomDrawer
       bottomDrawerRef={bottomDrawerRef}
@@ -41,24 +40,60 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
           disabled={isArchiveMutationInFlight}
         >
           <Text variant="body2" color="high">
-            {isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
+            {isArchived && isGroup && (
+              <FormattedMessage
+                id="messages.chatRoomOptions.unarchiveGroup"
+                defaultMessage="Unarchive Group"
+              />
+            )}
+            {isArchived && !isGroup && (
+              <FormattedMessage
+                id="messages.shared.unarchiveChat"
+                defaultMessage="Unarchive Chat"
+              />
+            )}
+            {!isArchived && isGroup && (
+              <FormattedMessage
+                id="messages.chatRoomOptions.archiveGroup"
+                defaultMessage="Archive Group"
+              />
+            )}
+            {!isArchived && !isGroup && (
+              <FormattedMessage id="messages.shared.archiveChat" defaultMessage="Archive Chat" />
+            )}
           </Text>
         </Pressable>
         {/* TODO Not implemented yet */}
         <Pressable onPress={handleMarkAsUnread} style={styles.modalItem}>
           <Text variant="body2" color="high">
-            Mark as Unread
+            <FormattedMessage
+              id="messages.chatRoomItem.markAsUnread"
+              defaultMessage="Mark as Unread"
+            />
           </Text>
         </Pressable>
         <Pressable onPress={handleChatDetails} style={styles.modalItem}>
           <Text variant="body2" color="high">
-            {chatOrGroup} Details
+            {isGroup ? (
+              <FormattedMessage
+                id="messages.chatRoom.options.groupDetails"
+                defaultMessage="Group Details"
+              />
+            ) : (
+              <FormattedMessage
+                id="messages.chatRoomOptions.chatDetails"
+                defaultMessage="Chat Details"
+              />
+            )}
           </Text>
         </Pressable>
         {!isGroup && (
           <Pressable onPress={handleGoToProfile} style={styles.modalItem}>
             <Text variant="body2" color="high">
-              Go to Profile
+              <FormattedMessage
+                id="messages.chatRoomOptions.goToProfile"
+                defaultMessage="Go to Profile"
+              />
             </Text>
           </Pressable>
         )}
@@ -66,7 +101,14 @@ const ChatCardOptions: FC<ChatCardOptionsProps> = ({
       <View style={[styles.modalContent, { borderBottomWidth: 0 }]}>
         <Pressable onPress={handleDeleteChat} style={styles.modalItem}>
           <Text variant="body2" style={{ color: theme.colors.error.main }}>
-            {isGroup ? 'Leave Group' : 'Delete Chat'}
+            {isGroup ? (
+              <FormattedMessage id="messages.shared.leaveGroup" defaultMessage="Leave Group" />
+            ) : (
+              <FormattedMessage
+                id="messages.chatRoomOptions.deleteChat"
+                defaultMessage="Delete Chat"
+              />
+            )}
           </Text>
         </Pressable>
       </View>
