@@ -28,6 +28,11 @@ export const NotificationItemFragment = graphql`
         id
         body
       }
+
+      ... on CardHold {
+        id
+        ...CardHoldStaffNotice_cardHold
+      }
     }
 
     actionObject {
