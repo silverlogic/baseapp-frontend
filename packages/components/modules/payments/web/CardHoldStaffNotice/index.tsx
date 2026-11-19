@@ -5,31 +5,33 @@ import { FC, useState } from 'react'
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { LoadingButton } from '@mui/lab'
-import { Button, Typography } from '@mui/material'
+import { Alert, AlertTitle, Button, Typography } from '@mui/material'
 import { useFragment } from 'react-relay'
 
 import {
   CARD_HOLD_STATUS,
-  CardHoldStaffActionsFragmentQuery,
+  CardHoldStaffNoticeFragmentQuery,
   useCardHoldCancelMutation,
   useCardHoldKeepMutation,
 } from '../../common'
-import { DEFAULT_CARD_HOLD_STAFF_ACTIONS_MESSAGES } from './constants'
-import { CardHoldStaffActionsButtons, CardHoldStaffActionsContainer } from './styled'
-import { CardHoldStaffActionsProps, CardHoldStaffDecision } from './types'
+import { DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES } from './constants'
+import { CardHoldStaffNoticeBody, CardHoldStaffNoticeButtons } from './styled'
+import { CardHoldStaffDecision, CardHoldStaffNoticeProps } from './types'
 
 /**
- * Staff view of a failed deferred hold: Stripe's failure code, and Keep / Cancel behind a
- * confirmation. Renders nothing for a hold that didn't fail; `status` is only `failed` for a
- * viewer granted `view_cardhold`, and the mutations need `change_cardhold`.
+ * Tells staff that a deferred hold failed, and offers what they can do about it: an error notice
+ * with Stripe's failure code and Keep / Cancel behind a confirmation, which turns into an info
+ * notice with no actions once kept. Renders nothing for a hold that didn't fail; `status` is only
+ * `failed` for a viewer granted `view_cardhold` (customers read it as `scheduled`), and the
+ * mutations need `change_cardhold`.
  */
-const CardHoldStaffActions: FC<CardHoldStaffActionsProps> = ({
+const CardHoldStaffNotice: FC<CardHoldStaffNoticeProps> = ({
   cardHold: cardHoldRef,
   onDecided,
   messages: customMessages,
 }) => {
-  const cardHold = useFragment(CardHoldStaffActionsFragmentQuery, cardHoldRef)
-  const messages = { ...DEFAULT_CARD_HOLD_STAFF_ACTIONS_MESSAGES, ...customMessages }
+  const cardHold = useFragment(CardHoldStaffNoticeFragmentQuery, cardHoldRef)
+  const messages = { ...DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES, ...customMessages }
   const [decision, setDecision] = useState<CardHoldStaffDecision | null>(null)
   const [commitKeep, isKeepInFlight] = useCardHoldKeepMutation()
   const [commitCancel, isCancelInFlight] = useCardHoldCancelMutation()
@@ -95,31 +97,33 @@ const CardHoldStaffActions: FC<CardHoldStaffActionsProps> = ({
           </LoadingButton>
         }
       />
-      <CardHoldStaffActionsContainer>
-        <Typography variant="subtitle2">{messages.failureTitle}</Typography>
-        <Typography variant="body2" color="text.secondary">
-          {cardHold.failureReason || messages.unknownReason}
-        </Typography>
-        {cardHold.kept ? (
-          <Typography variant="body2">{messages.keptNotice}</Typography>
-        ) : (
-          <CardHoldStaffActionsButtons>
-            <Button variant="outlined" onClick={() => setDecision('keep')} disabled={isInFlight}>
-              {messages.keepButton}
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={() => setDecision('cancel')}
-              disabled={isInFlight}
-            >
-              {messages.cancelButton}
-            </Button>
-          </CardHoldStaffActionsButtons>
-        )}
-      </CardHoldStaffActionsContainer>
+      <Alert severity={cardHold.kept ? 'info' : 'error'}>
+        <AlertTitle>{messages.failureTitle}</AlertTitle>
+        <CardHoldStaffNoticeBody>
+          <Typography variant="body2">
+            {cardHold.failureReason || messages.unknownReason}
+          </Typography>
+          {cardHold.kept ? (
+            <Typography variant="body2">{messages.keptNotice}</Typography>
+          ) : (
+            <CardHoldStaffNoticeButtons>
+              <Button variant="outlined" onClick={() => setDecision('keep')} disabled={isInFlight}>
+                {messages.keepButton}
+              </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={() => setDecision('cancel')}
+                disabled={isInFlight}
+              >
+                {messages.cancelButton}
+              </Button>
+            </CardHoldStaffNoticeButtons>
+          )}
+        </CardHoldStaffNoticeBody>
+      </Alert>
     </>
   )
 }
 
-export default CardHoldStaffActions
+export default CardHoldStaffNotice

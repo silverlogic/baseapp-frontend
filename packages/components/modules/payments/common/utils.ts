@@ -1,26 +1,18 @@
-import { DATE_FORMAT, formatDateFromApi } from '@baseapp-frontend/utils'
-
 import {
   CARD_HOLD_DEFAULT_RETRY,
   CARD_HOLD_INTENT_TYPE,
   CARD_HOLD_MAX_AUTHENTICATIONS,
   CARD_HOLD_PLACEMENT_STATUS,
-  CARD_HOLD_STATUS,
 } from './constants'
 import type { PlaceCardHoldOptions } from './hooks/useCardHoldPlacement/types'
 import type {
   CardHoldIntentType,
-  CardHoldNoticeMessageOptions,
-  CardHoldNoticeMessages,
-  CardHoldNoticeStatus,
   CardHoldOutcome,
   CardHoldOutcomePayload,
   CardHoldOutcomeStatus,
   CardHoldPaymentInput,
   CardHoldPlacementPayload,
   CardHoldPlacementStatus,
-  CardHoldStatusLabelDescriptor,
-  CardHoldStatusLabelView,
 } from './types'
 
 const PLACEMENT_STATUSES = new Set<string>(Object.values(CARD_HOLD_PLACEMENT_STATUS))
@@ -66,74 +58,6 @@ export const getCardHoldRetryDelay = (
     maxDelayMs = CARD_HOLD_DEFAULT_RETRY.maxDelayMs,
   }: { baseDelayMs?: number; maxDelayMs?: number } = {},
 ) => Math.min(baseDelayMs * 2 ** retry, maxDelayMs)
-
-/** Formats a `Date` scalar (`YYYY-MM-DD`) for card hold copy, e.g. `Nov 14, 2026`. */
-export const formatCardHoldDate = (date: string) =>
-  formatDateFromApi(date, { toFormat: DATE_FORMAT[2] })
-
-export const DEFAULT_CARD_HOLD_NOTICE_MESSAGES: CardHoldNoticeMessages = {
-  placed: () =>
-    'A hold has been placed on your card. You will be charged the final amount later, and any difference is released.',
-  scheduled: ({ holdOn, chargeOn }) => {
-    const when = holdOn
-      ? `Your card will be held on ${holdOn}.`
-      : 'Your card will be held closer to the date.'
-    const charge = chargeOn ? ` You will be charged on ${chargeOn}.` : ''
-    return `Your card has been saved. ${when}${charge}`
-  },
-  card_saved: ({ chargeOn }) =>
-    chargeOn
-      ? `Your card has been saved and will be charged on ${chargeOn}.`
-      : 'Your card has been saved and will be charged on the date.',
-  charge_now: () => 'Your card will be charged now.',
-}
-
-/** The customer-facing sentence for a placement that went through. Never mentions a failure. */
-export const getCardHoldNoticeMessage = (
-  status: CardHoldNoticeStatus,
-  {
-    holdOn,
-    chargeOn,
-    formatDate = formatCardHoldDate,
-    messages,
-  }: CardHoldNoticeMessageOptions & { messages?: Partial<CardHoldNoticeMessages> } = {},
-) => {
-  const message = messages?.[status] ?? DEFAULT_CARD_HOLD_NOTICE_MESSAGES[status]
-  return message({
-    holdOn: holdOn ? formatDate(holdOn) : undefined,
-    chargeOn: chargeOn ? formatDate(chargeOn) : undefined,
-  })
-}
-
-const CUSTOMER_LABELS: Record<string, CardHoldStatusLabelDescriptor> = {
-  [CARD_HOLD_STATUS.pending]: { label: 'Processing', color: 'default' },
-  [CARD_HOLD_STATUS.authorized]: { label: 'Card held', color: 'info' },
-  [CARD_HOLD_STATUS.released]: { label: 'Released', color: 'default' },
-  [CARD_HOLD_STATUS.captured]: { label: 'Charged', color: 'success' },
-  [CARD_HOLD_STATUS.scheduled]: { label: 'Hold scheduled', color: 'default' },
-  [CARD_HOLD_STATUS.saved]: { label: 'Card saved', color: 'default' },
-}
-
-/**
- * Label and chip color for `CardHold.status`. The customer view never says "failed": the
- * backend already reads a failed hold as `scheduled` for customers, and this maps it the same
- * way should a staff-only value ever reach a customer view.
- */
-export const getCardHoldStatusLabel = (
-  status: string,
-  {
-    kept = false,
-    view = 'customer',
-  }: { kept?: boolean | null; view?: CardHoldStatusLabelView } = {},
-): CardHoldStatusLabelDescriptor => {
-  if (status === CARD_HOLD_STATUS.failed) {
-    if (view === 'customer') return CUSTOMER_LABELS[CARD_HOLD_STATUS.scheduled]!
-    return kept
-      ? { label: 'Hold failed · kept', color: 'warning' }
-      : { label: 'Hold failed', color: 'error' }
-  }
-  return CUSTOMER_LABELS[status] ?? { label: status, color: 'default' }
-}
 
 /** `setTimeout` as a promise; resolves early, with the timer cleared, when `signal` aborts. */
 export const sleepUnlessAborted = (ms: number, signal?: AbortSignal) =>

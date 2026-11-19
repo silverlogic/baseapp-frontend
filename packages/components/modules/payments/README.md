@@ -22,10 +22,9 @@ contract). The backend ships no create mutation: your project's own checkout mut
 
 - `payments/common`: `useCardHoldPlacement` (platform-neutral; inject an `authenticate`),
   `placeCardHold` (the same flow without React), the `cardHoldKeep` / `cardHoldCancel` mutation
-  hooks, the `CardHold` fragments, and the copy/label helpers.
+  hooks, and the `CardHold` fragment.
 - `payments/web`: `useStripeCardHoldPlacement` (Stripe.js as the authenticator, inside
-  `<Elements>`), `createStripeJsCardHoldAuthenticator`, `CardHoldNotice`, `CardHoldStatusLabel`
-  and `CardHoldStaffActions`.
+  `<Elements>`), `createStripeJsCardHoldAuthenticator` and `CardHoldStaffNotice`.
 
 Your create mutation must return the card hold payload on **every** answer, errors included:
 on the backend, spread `card_hold_payload(result)` into the payload alongside `errors`. This
@@ -54,7 +53,9 @@ await place(paymentMethodId) // from Elements / a saved card
 
 `outcome.status` is one of:
 
-- `placed`, `scheduled` (with `holdOn`), `card_saved`, `charge_now`: done. Show `CardHoldNotice`.
+- `placed`, `scheduled` (with `holdOn`), `card_saved`, `charge_now`: done. The module ships no
+  customer-facing message about the hold; what to tell the customer (if anything) is the project's
+  call.
 - `declined`: ask for another card.
 - `changed`: the attempt id was already used with other parameters. The hook has already resent
   once under a new attempt id with the same card; this means the resend answered `changed`
@@ -77,5 +78,10 @@ is not called after unmount (navigating away is not a failure). Outside React, `
 takes an `AbortSignal` (`signal`) for the same, and `onAttemptIdChange` reports the new attempt
 id of a `changed` resend.
 
-On a target that implements `CardHoldsInterface`, spread `...CardHoldStatusLabel_cardHold` and,
-for staff, `...CardHoldStaffActions_cardHold` under `cardHold`.
+`CardHoldStaffNotice` tells staff that a deferred hold failed and offers what they can do about it:
+an error `Alert` with Stripe's failure code and Keep / Cancel behind a confirmation, which turns
+into an info `Alert` with no actions once kept. It renders nothing for a hold that didn't fail
+(customers read a failed hold as `scheduled`). Staff meet it in their notifications: the backend
+sends `PAYMENTS.CARD_HOLD_FAILED` with the hold as the target, and the notifications module's
+`CardHoldNotification` renders this notice inside it. Anywhere else staff look at the target,
+spread `...CardHoldStaffNotice_cardHold` under `cardHold` and render it.

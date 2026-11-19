@@ -1,99 +1,11 @@
 import {
   generateCardHoldAttemptId,
   getCardHoldIntentType,
-  getCardHoldNoticeMessage,
   getCardHoldRetryDelay,
-  getCardHoldStatusLabel,
   placeCardHold,
   shouldRenewCardHoldAttempt,
   sleepUnlessAborted,
 } from '../utils'
-
-describe('getCardHoldNoticeMessage', () => {
-  it('says the card is held now when placed', () => {
-    expect(getCardHoldNoticeMessage('placed')).toMatch(/hold has been placed on your card/i)
-  })
-
-  it('names the day a scheduled hold is placed', () => {
-    expect(getCardHoldNoticeMessage('scheduled', { holdOn: '2026-11-14' })).toBe(
-      'Your card has been saved. Your card will be held on Nov 14, 2026.',
-    )
-  })
-
-  it('adds the charge day to a scheduled hold when given', () => {
-    expect(
-      getCardHoldNoticeMessage('scheduled', { holdOn: '2026-11-14', chargeOn: '2026-11-18' }),
-    ).toBe(
-      'Your card has been saved. Your card will be held on Nov 14, 2026. You will be charged on Nov 18, 2026.',
-    )
-  })
-
-  it('says a saved card is charged on the date', () => {
-    expect(getCardHoldNoticeMessage('card_saved', { chargeOn: '2026-12-01' })).toBe(
-      'Your card has been saved and will be charged on Dec 1, 2026.',
-    )
-    expect(getCardHoldNoticeMessage('card_saved')).toBe(
-      'Your card has been saved and will be charged on the date.',
-    )
-  })
-
-  it('says the card is charged now', () => {
-    expect(getCardHoldNoticeMessage('charge_now')).toBe('Your card will be charged now.')
-  })
-
-  it('takes custom copy and date formatting', () => {
-    expect(
-      getCardHoldNoticeMessage('scheduled', {
-        holdOn: '2026-11-14',
-        formatDate: (date) => `[${date}]`,
-        messages: { scheduled: ({ holdOn }) => `Retenido el ${holdOn}` },
-      }),
-    ).toBe('Retenido el [2026-11-14]')
-  })
-
-  it('never mentions a failure', () => {
-    const statuses = ['placed', 'scheduled', 'card_saved', 'charge_now'] as const
-    statuses.forEach((status) => {
-      expect(getCardHoldNoticeMessage(status, { holdOn: '2026-11-14' })).not.toMatch(/fail/i)
-    })
-  })
-})
-
-describe('getCardHoldStatusLabel', () => {
-  it.each([
-    ['pending', 'Processing'],
-    ['authorized', 'Card held'],
-    ['released', 'Released'],
-    ['captured', 'Charged'],
-    ['scheduled', 'Hold scheduled'],
-    ['saved', 'Card saved'],
-  ])('labels %s as %s', (status, label) => {
-    expect(getCardHoldStatusLabel(status).label).toBe(label)
-  })
-
-  it('shows a failed hold as scheduled to customers', () => {
-    expect(getCardHoldStatusLabel('failed')).toEqual({ label: 'Hold scheduled', color: 'default' })
-    expect(getCardHoldStatusLabel('failed', { kept: true }).label).not.toMatch(/fail/i)
-  })
-
-  it('shows a failed hold to staff, and whether it was kept', () => {
-    expect(getCardHoldStatusLabel('failed', { view: 'staff' })).toEqual({
-      label: 'Hold failed',
-      color: 'error',
-    })
-    expect(getCardHoldStatusLabel('failed', { view: 'staff', kept: true })).toEqual({
-      label: 'Hold failed · kept',
-      color: 'warning',
-    })
-  })
-
-  it('falls back to the raw status', () => {
-    expect(getCardHoldStatusLabel('something_new')).toEqual({
-      label: 'something_new',
-      color: 'default',
-    })
-  })
-})
 
 describe('getCardHoldIntentType', () => {
   it('reads intentType', () => {

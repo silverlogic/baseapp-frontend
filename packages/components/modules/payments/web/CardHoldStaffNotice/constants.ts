@@ -1,6 +1,6 @@
-import type { CardHoldStaffActionsMessages } from './types'
+import type { CardHoldStaffNoticeMessages } from './types'
 
-export const DEFAULT_CARD_HOLD_STAFF_ACTIONS_MESSAGES: CardHoldStaffActionsMessages = {
+export const DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES: CardHoldStaffNoticeMessages = {
   failureTitle: 'The card hold failed',
   unknownReason: 'No reason given',
   keptNotice: 'Kept: the card will be charged afresh when this closes.',

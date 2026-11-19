@@ -4,7 +4,7 @@ import { render as baseRender, screen, userEvent, waitFor, within } from '@basea
 
 import { ThemeProvider, createTheme } from '@mui/material'
 
-import CardHoldStaffActions from '../index'
+import CardHoldStaffNotice from '../index'
 
 // The shared wrapper's empty theme lacks what MUI's Alert, Chip and Dialog read.
 const theme = createTheme()
@@ -42,27 +42,27 @@ const failedHold = (overrides: Record<string, unknown> = {}) =>
     ...overrides,
   }) as any
 
-describe('CardHoldStaffActions', () => {
+describe('CardHoldStaffNotice', () => {
   beforeEach(() => {
     commitMock.mockReset()
     toastMock.mockReset()
   })
 
   it('renders nothing for a hold that did not fail', () => {
-    render(<CardHoldStaffActions cardHold={failedHold({ status: 'scheduled' })} />)
+    render(<CardHoldStaffNotice cardHold={failedHold({ status: 'scheduled' })} />)
     expect(screen.queryByRole('button')).not.toBeInTheDocument()
     expect(screen.queryByText(/failed/i)).not.toBeInTheDocument()
   })
 
   it('shows the failure reason and both actions', () => {
-    render(<CardHoldStaffActions cardHold={failedHold()} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} />)
     expect(screen.getByText('card_declined')).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Keep' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
   })
 
   it('falls back when there is no failure reason', () => {
-    render(<CardHoldStaffActions cardHold={failedHold({ failureReason: null })} />)
+    render(<CardHoldStaffNotice cardHold={failedHold({ failureReason: null })} />)
     expect(screen.getByText('No reason given')).toBeInTheDocument()
   })
 
@@ -71,7 +71,7 @@ describe('CardHoldStaffActions', () => {
     commitMock.mockImplementation((_kind, config) =>
       config.onCompleted({ cardHoldKeep: { errors: null, cardHold: { id: 'x' } } }),
     )
-    render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} onDecided={onDecided} />)
 
     await userEvent.click(screen.getByRole('button', { name: 'Keep' }))
     expect(commitMock).not.toHaveBeenCalled()
@@ -93,7 +93,7 @@ describe('CardHoldStaffActions', () => {
     commitMock.mockImplementation((_kind, config) =>
       config.onCompleted({ cardHoldCancel: { errors: null, cardHold: { id: 'x' } } }),
     )
-    render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} onDecided={onDecided} />)
 
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     await userEvent.click(screen.getByRole('button', { name: 'Cancel it' }))
@@ -109,7 +109,7 @@ describe('CardHoldStaffActions', () => {
     commitMock.mockImplementation((_kind, config) =>
       config.onCompleted({ cardHoldCancel: null }, [{ message: 'Hold already decided.' }]),
     )
-    render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} onDecided={onDecided} />)
     await userEvent.click(screen.getByRole('button', { name: 'Cancel' }))
     await userEvent.click(screen.getByRole('button', { name: 'Cancel it' }))
 
@@ -126,7 +126,7 @@ describe('CardHoldStaffActions', () => {
         cardHoldKeep: { errors: [{ field: 'id', messages: ['No'] }], cardHold: null },
       }),
     )
-    render(<CardHoldStaffActions cardHold={failedHold()} onDecided={onDecided} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} onDecided={onDecided} />)
     await userEvent.click(screen.getByRole('button', { name: 'Keep' }))
     await userEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Keep' }))
 
@@ -136,7 +136,7 @@ describe('CardHoldStaffActions', () => {
   })
 
   it('closes the dialog without deciding on Back', async () => {
-    render(<CardHoldStaffActions cardHold={failedHold()} />)
+    render(<CardHoldStaffNotice cardHold={failedHold()} />)
     await userEvent.click(screen.getByRole('button', { name: 'Keep' }))
     await userEvent.click(screen.getByRole('button', { name: 'Back' }))
     expect(commitMock).not.toHaveBeenCalled()
@@ -144,8 +144,19 @@ describe('CardHoldStaffActions', () => {
   })
 
   it('shows a kept hold without actions', () => {
-    render(<CardHoldStaffActions cardHold={failedHold({ kept: true })} />)
+    render(<CardHoldStaffNotice cardHold={failedHold({ kept: true })} />)
     expect(screen.getByText(/kept: the card will be charged afresh/i)).toBeInTheDocument()
     expect(screen.queryByRole('button', { name: 'Keep' })).not.toBeInTheDocument()
+  })
+
+  it.each([
+    ['a failed hold', failedHold(), 'Error'],
+    ['a kept failed hold', failedHold({ kept: true }), 'Info'],
+  ])('shows %s as an alert with its actions inside', (_, hold, severity) => {
+    render(<CardHoldStaffNotice cardHold={hold} />)
+    const notice = screen.getByRole('alert')
+    expect(notice).toHaveClass(`MuiAlert-standard${severity}`)
+    expect(within(notice).getByText('The card hold failed')).toBeInTheDocument()
+    expect(within(notice).queryAllByRole('button')).toHaveLength(hold.kept ? 0 : 2)
   })
 })
