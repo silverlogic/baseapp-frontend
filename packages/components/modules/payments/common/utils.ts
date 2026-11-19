@@ -184,6 +184,173 @@ const toOutcomePayload = <TPayload extends CardHoldPlacementPayload>(
 
 const CANCELLED = { status: 'cancelled' } as const
 
+/** What a placement run carries from one pass to the next. */
+interface PlacementState {
+  attemptId: string
+  input: CardHoldPaymentInput
+  retries: number
+  authentications: number
+  resentChanged: boolean
+}
+
+/** A run's fixed context: its options and derived settings. */
+interface PlacementRun<TPayload extends CardHoldPlacementPayload> {
+  options: PlaceCardHoldOptions<TPayload>
+  maxRetries: number
+  isCancelled: () => boolean
+}
+
+/** A pass either ends the run with an outcome, or resends with the next state. */
+type PassResult<TPayload extends CardHoldPlacementPayload> =
+  | { outcome: CardHoldOutcome<TPayload> }
+  | { state: PlacementState }
+
+const end = <TPayload extends CardHoldPlacementPayload>(
+  outcome: CardHoldOutcome<TPayload>,
+): PassResult<TPayload> => ({ outcome })
+
+/** Sends `state.input`; an answer with no payload, or a throw, ends the run as an error. */
+const submitPass = async <TPayload extends CardHoldPlacementPayload>(
+  run: PlacementRun<TPayload>,
+  state: PlacementState,
+): Promise<{ payload: TPayload } | { outcome: CardHoldOutcome<TPayload> }> => {
+  let payload: TPayload | null | undefined
+  try {
+    payload = await run.options.submit(state.input)
+  } catch (error) {
+    return { outcome: { status: 'error', error } }
+  }
+  if (!payload) {
+    return {
+      outcome: {
+        status: 'error',
+        error: toError('The mutation returned no card hold payload.'),
+        payload: null,
+      },
+    }
+  }
+  return { payload }
+}
+
+/** `requires_action`: authenticate (3D Secure), then resend with the intent's id. */
+const authenticatePass = async <TPayload extends CardHoldPlacementPayload>(
+  run: PlacementRun<TPayload>,
+  state: PlacementState,
+  payload: TPayload,
+): Promise<PassResult<TPayload>> => {
+  if (!payload.clientSecret || state.authentications >= CARD_HOLD_MAX_AUTHENTICATIONS) {
+    return end({
+      status: 'error',
+      error: toError('Card authentication could not be completed.'),
+      payload: toOutcomePayload(payload),
+    })
+  }
+  if (run.isCancelled()) return end(CANCELLED)
+  run.options.onPhaseChange?.('authenticating')
+  const intentType = getCardHoldIntentType(payload)
+  let intentId: string | undefined
+  try {
+    const result = await run.options.authenticate({
+      clientSecret: payload.clientSecret,
+      intentType,
+    })
+    if (run.isCancelled()) return end(CANCELLED)
+    if (result.error && !result.intentId) {
+      return end({ status: 'authentication_failed', message: result.error.message })
+    }
+    intentId = result.intentId
+  } catch (error) {
+    if (run.isCancelled()) return end(CANCELLED)
+    return end({
+      status: 'authentication_failed',
+      message: error instanceof Error ? error.message : undefined,
+    })
+  }
+  // Sent even when authentication failed on a finished intent: the backend settles the
+  // attempt (and releases what it holds) instead of waiting for its sweep.
+  const input =
+    intentType === CARD_HOLD_INTENT_TYPE.setupIntent
+      ? { attemptId: state.attemptId, setupIntentId: intentId }
+      : { attemptId: state.attemptId, paymentIntentId: intentId }
+  return {
+    state: { ...state, input, retries: 0, authentications: state.authentications + 1 },
+  }
+}
+
+/** `in_progress`: wait with exponential backoff and resend, until the retries run out. */
+const waitPass = async <TPayload extends CardHoldPlacementPayload>(
+  run: PlacementRun<TPayload>,
+  state: PlacementState,
+  payload: TPayload,
+): Promise<PassResult<TPayload>> => {
+  if (state.retries >= run.maxRetries) {
+    return end({ status: 'in_progress', payload: toOutcomePayload(payload) })
+  }
+  if (run.isCancelled()) return end(CANCELLED)
+  run.options.onPhaseChange?.('waiting')
+  const sleep = run.options.sleep ?? sleepUnlessAborted
+  await sleep(getCardHoldRetryDelay(state.retries, run.options.retry ?? {}), run.options.signal)
+  return { state: { ...state, retries: state.retries + 1 } }
+}
+
+/** The first `changed`: the backend saw this attempt id with other parameters, so the same
+ * card is resent under a new attempt id. */
+const renewAttemptPass = <TPayload extends CardHoldPlacementPayload>(
+  run: PlacementRun<TPayload>,
+  state: PlacementState,
+): PassResult<TPayload> => {
+  const attemptId = generateCardHoldAttemptId()
+  run.options.onAttemptIdChange?.(attemptId)
+  return {
+    state: {
+      ...state,
+      attemptId,
+      input: { attemptId, paymentMethodId: run.options.paymentMethodId },
+      retries: 0,
+      resentChanged: true,
+    },
+  }
+}
+
+/** Any other status ends the run: `scheduled` with its date, a known status as is. */
+const finalOutcome = <TPayload extends CardHoldPlacementPayload>(
+  payload: TPayload,
+): CardHoldOutcome<TPayload> => {
+  const status = payload.holdStatus
+  if (status === CARD_HOLD_PLACEMENT_STATUS.scheduled) {
+    return {
+      status: 'scheduled',
+      holdOn: payload.holdOn ?? null,
+      payload: toOutcomePayload(payload),
+    }
+  }
+  if (isCardHoldPlacementStatus(status)) {
+    return { status, payload: toOutcomePayload(payload) } as CardHoldOutcome<TPayload>
+  }
+  return {
+    status: 'error',
+    error: toError(`Unknown card hold status: ${String(status)}`),
+    payload: toOutcomePayload(payload),
+  }
+}
+
+const handlePayload = async <TPayload extends CardHoldPlacementPayload>(
+  run: PlacementRun<TPayload>,
+  state: PlacementState,
+  payload: TPayload,
+): Promise<PassResult<TPayload>> => {
+  switch (payload.holdStatus) {
+    case CARD_HOLD_PLACEMENT_STATUS.requiresAction:
+      return authenticatePass(run, state, payload)
+    case CARD_HOLD_PLACEMENT_STATUS.inProgress:
+      return waitPass(run, state, payload)
+    case CARD_HOLD_PLACEMENT_STATUS.changed:
+      return state.resentChanged ? end(finalOutcome(payload)) : renewAttemptPass(run, state)
+    default:
+      return end(finalOutcome(payload))
+  }
+}
+
 /**
  * Runs one placement end to end against the project's create mutation (`submit`):
  *
@@ -199,113 +366,36 @@ const CANCELLED = { status: 'cancelled' } as const
  * or wait and resolves `cancelled`; an answer already received that ends the run is still
  * returned. `useCardHoldPlacement` wraps it with React state; call it directly outside React.
  */
-export const placeCardHold = async <TPayload extends CardHoldPlacementPayload>({
-  attemptId: initialAttemptId,
-  paymentMethodId,
-  submit,
-  authenticate,
-  retry = {},
-  sleep = sleepUnlessAborted,
-  onPhaseChange,
-  onAttemptIdChange,
-  signal,
-  isCancelled: isCancelledOption,
-}: PlaceCardHoldOptions<TPayload>): Promise<CardHoldOutcome<TPayload>> => {
-  const maxRetries = retry.maxRetries ?? CARD_HOLD_DEFAULT_RETRY.maxRetries
-  const isCancelled = () => Boolean(signal?.aborted || isCancelledOption?.())
-  let attemptId = initialAttemptId
-  let input: CardHoldPaymentInput = { attemptId, paymentMethodId }
-  let retries = 0
-  let authentications = 0
-  let resentChanged = false
+export const placeCardHold = async <TPayload extends CardHoldPlacementPayload>(
+  options: PlaceCardHoldOptions<TPayload>,
+): Promise<CardHoldOutcome<TPayload>> => {
+  const { attemptId, paymentMethodId, retry, signal, isCancelled } = options
+  const run: PlacementRun<TPayload> = {
+    options,
+    maxRetries: retry?.maxRetries ?? CARD_HOLD_DEFAULT_RETRY.maxRetries,
+    isCancelled: () => Boolean(signal?.aborted || isCancelled?.()),
+  }
+  let state: PlacementState = {
+    attemptId,
+    input: { attemptId, paymentMethodId },
+    retries: 0,
+    authentications: 0,
+    resentChanged: false,
+  }
 
-  // Each pass either returns or changes `input`/`retries`; every counter is bounded.
+  // Each pass either ends the run or moves `state` on; every counter in it is bounded.
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    if (isCancelled()) return CANCELLED
-    onPhaseChange?.('submitting')
-    let payload: TPayload | null | undefined
-    try {
-      // Each pass depends on the previous answer: sequential by design.
-      // eslint-disable-next-line no-await-in-loop
-      payload = await submit(input)
-    } catch (error) {
-      return { status: 'error', error }
-    }
-    if (!payload) {
-      return {
-        status: 'error',
-        error: toError('The mutation returned no card hold payload.'),
-        payload: null,
-      }
-    }
-
-    const status = payload.holdStatus
-    if (status === CARD_HOLD_PLACEMENT_STATUS.requiresAction) {
-      if (!payload.clientSecret || authentications >= CARD_HOLD_MAX_AUTHENTICATIONS) {
-        return {
-          status: 'error',
-          error: toError('Card authentication could not be completed.'),
-          payload: toOutcomePayload(payload),
-        }
-      }
-      if (isCancelled()) return CANCELLED
-      authentications += 1
-      onPhaseChange?.('authenticating')
-      const intentType = getCardHoldIntentType(payload)
-      let intentId: string | undefined
-      try {
-        // eslint-disable-next-line no-await-in-loop
-        const result = await authenticate({ clientSecret: payload.clientSecret, intentType })
-        if (isCancelled()) return CANCELLED
-        if (result.error && !result.intentId) {
-          return { status: 'authentication_failed', message: result.error.message }
-        }
-        intentId = result.intentId
-      } catch (error) {
-        if (isCancelled()) return CANCELLED
-        return {
-          status: 'authentication_failed',
-          message: error instanceof Error ? error.message : undefined,
-        }
-      }
-      // Sent even when authentication failed on a finished intent: the backend settles the
-      // attempt (and releases what it holds) instead of waiting for its sweep.
-      input =
-        intentType === CARD_HOLD_INTENT_TYPE.setupIntent
-          ? { attemptId, setupIntentId: intentId }
-          : { attemptId, paymentIntentId: intentId }
-      retries = 0
-    } else if (status === CARD_HOLD_PLACEMENT_STATUS.inProgress) {
-      if (retries >= maxRetries)
-        return { status: 'in_progress', payload: toOutcomePayload(payload) }
-      if (isCancelled()) return CANCELLED
-      onPhaseChange?.('waiting')
-      // eslint-disable-next-line no-await-in-loop
-      await sleep(getCardHoldRetryDelay(retries, retry), signal)
-      retries += 1
-    } else if (status === CARD_HOLD_PLACEMENT_STATUS.changed && !resentChanged) {
-      // The backend saw this attempt id with other parameters: same card, new attempt id.
-      resentChanged = true
-      attemptId = generateCardHoldAttemptId()
-      onAttemptIdChange?.(attemptId)
-      input = { attemptId, paymentMethodId }
-      retries = 0
-    } else if (status === CARD_HOLD_PLACEMENT_STATUS.scheduled) {
-      return {
-        status: 'scheduled',
-        holdOn: payload.holdOn ?? null,
-        payload: toOutcomePayload(payload),
-      }
-    } else if (isCardHoldPlacementStatus(status)) {
-      return { status, payload: toOutcomePayload(payload) } as CardHoldOutcome<TPayload>
-    } else {
-      return {
-        status: 'error',
-        error: toError(`Unknown card hold status: ${String(status)}`),
-        payload: toOutcomePayload(payload),
-      }
-    }
+    if (run.isCancelled()) return CANCELLED
+    options.onPhaseChange?.('submitting')
+    // Each pass depends on the previous answer: sequential by design.
+    // eslint-disable-next-line no-await-in-loop
+    const answer = await submitPass(run, state)
+    if ('outcome' in answer) return answer.outcome
+    // eslint-disable-next-line no-await-in-loop
+    const result = await handlePayload(run, state, answer.payload)
+    if ('outcome' in result) return result.outcome
+    state = result.state
   }
 }
 
