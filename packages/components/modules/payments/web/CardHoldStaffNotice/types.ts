@@ -1,8 +1,8 @@
-import type { CardHoldStaffActions_cardHold$key } from '../../../../__generated__/CardHoldStaffActions_cardHold.graphql'
+import type { CardHoldStaffNotice_cardHold$key } from '../../../../__generated__/CardHoldStaffNotice_cardHold.graphql'
 
 export type CardHoldStaffDecision = 'keep' | 'cancel' | 'retry' | 'markPaid'
 
-export interface CardHoldStaffActionsMessages {
+export interface CardHoldStaffNoticeMessages {
   failureTitle: string
   /** Shown when Stripe gave no failure code. */
   unknownReason: string
@@ -32,8 +32,8 @@ export interface CardHoldStaffActionsMessages {
   dismiss: string
 }
 
-export interface CardHoldStaffActionsProps {
-  cardHold: CardHoldStaffActions_cardHold$key
+export interface CardHoldStaffNoticeProps {
+  cardHold: CardHoldStaffNotice_cardHold$key
   /**
    * Called after the backend accepted the decision. For `retry` that means the retry ran, not
    * that the card was held: the hold may come back `authorized` or `pending`, `scheduled` (the
@@ -42,5 +42,5 @@ export interface CardHoldStaffActionsProps {
    */
   onDecided?: (decision: CardHoldStaffDecision) => void
   /** Replaces the copy, e.g. with the project's translations. */
-  messages?: Partial<CardHoldStaffActionsMessages>
+  messages?: Partial<CardHoldStaffNoticeMessages>
 }

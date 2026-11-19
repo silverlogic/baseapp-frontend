@@ -3,6 +3,7 @@ import { type Locator, type Page, expect, test } from '@playwright/test'
 import {
   AUTHENTICATED_INTENT_ID,
   CLIENT_SECRET,
+  HOLD_ON,
   PAYMENT_METHOD_ID,
 } from './__mocks__/constants'
 import type {
@@ -11,11 +12,6 @@ import type {
 } from './__utils__/CardHoldPlacement.story'
 
 const STORY = 'payments/web/hooks/CardHoldPlacement'
-
-const PLACED_COPY =
-  'A hold has been placed on your card. You will be charged the final amount later, and any difference is released.'
-
-const SCHEDULED_COPY = 'Your card has been saved. Your card will be held on Nov 14, 2026.'
 
 const record = (page: Page) =>
   page.evaluate(() => window.__cardHoldPlacementControls.getRecord())
@@ -55,7 +51,7 @@ const INTENT_TYPES = [
 ] as const
 
 test.describe('Component: CardHoldPlacement', () => {
-  test('GIVEN a card that is held at once, WHEN Place is clicked, THEN the outcome is placed and the notice is shown', async ({
+  test('GIVEN a card that is held at once, WHEN Place is clicked, THEN the outcome is placed', async ({
     mount,
     page,
   }, testInfo) => {
@@ -65,9 +61,8 @@ test.describe('Component: CardHoldPlacement', () => {
 
     await test.step('WHEN Place is clicked', () => placeButton(component).click())
 
-    await test.step('THEN the outcome is placed, the notice is shown and submit ran once', async () => {
+    await test.step('THEN the outcome is placed and submit ran once', async () => {
       await expectDone(component, 'placed')
-      await expect(component.getByRole('status')).toHaveText(PLACED_COPY)
 
       const { submitCalls, authenticateCalls, onOutcomeCalls, placeResults } = await record(page)
       expect(submitCalls).toEqual([{ attemptId, paymentMethodId: PAYMENT_METHOD_ID }])
@@ -128,7 +123,7 @@ test.describe('Component: CardHoldPlacement', () => {
     })
   })
 
-  test('GIVEN a hold scheduled for later, WHEN Place is clicked, THEN the outcome is scheduled and the notice shows the date', async ({
+  test('GIVEN a hold scheduled for later, WHEN Place is clicked, THEN the outcome is scheduled with the hold date', async ({
     mount,
     page,
   }, testInfo) => {
@@ -137,10 +132,9 @@ test.describe('Component: CardHoldPlacement', () => {
 
     await test.step('WHEN Place is clicked', () => placeButton(component).click())
 
-    await test.step('THEN the outcome is scheduled and the notice shows the date', async () => {
+    await test.step('THEN the outcome is scheduled with the hold date', async () => {
       await expectDone(component, 'scheduled')
-      await expect(component.getByRole('status')).toHaveText(SCHEDULED_COPY)
-      await expect(component.getByRole('status')).not.toContainText(/fail/i)
+      await expect(field(component, 'hold-on')).toHaveText(HOLD_ON)
       expect((await record(page)).submitCalls).toHaveLength(1)
 
       await component
@@ -157,10 +151,9 @@ test.describe('Component: CardHoldPlacement', () => {
       mountScenario(mount, 'declined'))
     const firstAttemptId = await field(component, 'attempt-id').textContent()
 
-    await test.step('WHEN Place is clicked, THEN the outcome is declined, no notice is shown and the attempt id is renewed', async () => {
+    await test.step('WHEN Place is clicked, THEN the outcome is declined and the attempt id is renewed', async () => {
       await placeButton(component).click()
       await expectDone(component, 'declined')
-      await expect(component.getByRole('status')).not.toBeAttached()
       await expect(field(component, 'attempt-id')).not.toHaveText(firstAttemptId!)
     })
 
@@ -261,7 +254,6 @@ test.describe('Component: CardHoldPlacement', () => {
       await expect(field(component, 'outcome-message')).toHaveText(
         'Stripe has not loaded yet. Please try again.',
       )
-      await expect(component.getByRole('status')).not.toBeAttached()
       expect((await record(page)).submitCalls).toHaveLength(1)
     })
   })

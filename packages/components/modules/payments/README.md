@@ -22,11 +22,9 @@ contract). The backend ships no create mutation: your project's own checkout mut
 
 - `payments/common`: `useCardHoldPlacement` (platform-neutral; inject an `authenticate`),
   `placeCardHold` (the same flow without React), the `cardHoldKeep` / `cardHoldCancel` /
-  `cardHoldRetry` / `cardHoldMarkPaid` mutation hooks, the `CardHold` fragments, and the
-  copy/label helpers.
+  `cardHoldRetry` / `cardHoldMarkPaid` mutation hooks, and the `CardHold` fragment.
 - `payments/web`: `useStripeCardHoldPlacement` (Stripe.js as the authenticator, inside
-  `<Elements>`), `createStripeJsCardHoldAuthenticator`, `CardHoldNotice`, `CardHoldStatusLabel`
-  and `CardHoldStaffActions`.
+  `<Elements>`), `createStripeJsCardHoldAuthenticator` and `CardHoldStaffNotice`.
 
 Your create mutation must return the card hold payload on **every** answer, errors included:
 on the backend, spread `card_hold_payload(result)` into the payload alongside `errors`. This
@@ -55,7 +53,9 @@ await place(paymentMethodId) // from Elements / a saved card
 
 `outcome.status` is one of:
 
-- `placed`, `scheduled` (with `holdOn`), `card_saved`, `charge_now`: done. Show `CardHoldNotice`.
+- `placed`, `scheduled` (with `holdOn`), `card_saved`, `charge_now`: done. The module ships no
+  customer-facing message about the hold; what to tell the customer (if anything) is the project's
+  call.
 - `declined`: ask for another card.
 - `changed`: the attempt id was already used with other parameters. The hook has already resent
   once under a new attempt id with the same card; this means the resend answered `changed`
@@ -78,10 +78,11 @@ is not called after unmount (navigating away is not a failure). Outside React, `
 takes an `AbortSignal` (`signal`) for the same, and `onAttemptIdChange` reports the new attempt
 id of a `changed` resend.
 
-On a target that implements `CardHoldsInterface`, spread `...CardHoldStatusLabel_cardHold` and,
-for staff, `...CardHoldStaffActions_cardHold` under `cardHold`.
+On a target that implements `CardHoldsInterface`, spread `...CardHoldStaffNotice_cardHold` under
+`cardHold` wherever staff look at the target.
 
-`CardHoldStaffActions` renders only for a viewer who may decide (`canDecide`, which the backend
+`CardHoldStaffNotice` is a staff notice (an MUI `Alert`): it says what happened to the hold and
+puts the actions inside it. It renders only for a viewer who may decide (`canDecide`, which the backend
 sets only for a viewer granted `change_cardhold`: false for customers), and then for two kinds of
 hold and nothing otherwise:
 
@@ -102,11 +103,3 @@ Every action goes through a confirmation. `onDecided(decision)` (`keep`, `cancel
 and no GraphQL errors. For `retry` that means the retry ran, not that the card was held. Errors
 are toasted by the mutation hooks. All four mutations need `change_cardhold`. Replace the copy
 through `messages`; `retriesLeft` is a function of the count.
-
-`CardHoldStatusLabel` reads `paymentStatus` before `status`: `partially_paid` reads "Partially
-paid" (warning) in both views, and `paid` reads "Paid" (success) in both views on every status
-but `pending` and `authorized`. So a hold charged afresh after it was released no longer reads
-"Released", and a kept failed hold that was then charged (the backend leaves it `failed`, and
-shows it to customers as `scheduled`) reads "Paid". Every other combination keeps the status
-label, and customers still never see "failed". A custom `getLabel`
-receives `paymentStatus` too.

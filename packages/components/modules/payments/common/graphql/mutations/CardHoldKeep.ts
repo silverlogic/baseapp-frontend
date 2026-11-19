@@ -9,8 +9,7 @@ export const CardHoldKeepMutationQuery = graphql`
     cardHoldKeep(input: $input) {
       cardHold {
         id
-        ...CardHoldStatusLabel_cardHold
-        ...CardHoldStaffActions_cardHold
+        ...CardHoldStaffNotice_cardHold
       }
       errors {
         field

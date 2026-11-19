@@ -1,6 +1,6 @@
-import type { CardHoldStaffActionsMessages, CardHoldStaffDecision } from './types'
+import type { CardHoldStaffDecision, CardHoldStaffNoticeMessages } from './types'
 
-export const DEFAULT_CARD_HOLD_STAFF_ACTIONS_MESSAGES: CardHoldStaffActionsMessages = {
+export const DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES: CardHoldStaffNoticeMessages = {
   failureTitle: 'The card hold failed',
   unknownReason: 'No reason given',
   keptNotice: 'Kept: the card will be charged afresh when this closes.',
@@ -55,9 +55,9 @@ export const CARD_HOLD_STAFF_DECISION_DIALOGS = {
 } as const satisfies Record<
   CardHoldStaffDecision,
   {
-    title: keyof CardHoldStaffActionsMessages
-    content: keyof CardHoldStaffActionsMessages
-    confirm: keyof CardHoldStaffActionsMessages
+    title: keyof CardHoldStaffNoticeMessages
+    content: keyof CardHoldStaffNoticeMessages
+    confirm: keyof CardHoldStaffNoticeMessages
     color: 'primary' | 'error'
   }
 >

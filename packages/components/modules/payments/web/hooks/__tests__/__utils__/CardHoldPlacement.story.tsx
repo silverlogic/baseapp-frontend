@@ -7,7 +7,6 @@ import { Elements } from '@stripe/react-stripe-js'
 
 import {
   type CardHoldAuthenticator,
-  type CardHoldNoticeStatus,
   type CardHoldOutcome,
   type CardHoldPaymentInput,
   type CardHoldPlacementPayload,
@@ -15,7 +14,6 @@ import {
   type UseCardHoldPlacementReturn,
   useCardHoldPlacement,
 } from '../../../../common'
-import CardHoldNotice from '../../../CardHoldNotice'
 import useStripeCardHoldPlacement from '../../useStripeCardHoldPlacement'
 import {
   AUTHENTICATED_INTENT_ID,
@@ -83,8 +81,6 @@ declare global {
     __cardHoldPlacementControls: CardHoldPlacementControls
   }
 }
-
-const NOTICE_STATUSES = new Set<string>(['placed', 'scheduled', 'card_saved', 'charge_now'])
 
 const useFakes = (scenario: CardHoldPlacementScenario) =>
   useMemo(() => {
@@ -161,13 +157,9 @@ const HarnessView: FC<HarnessViewProps> = ({ placement, record }) => {
         <dd data-testid="attempt-id">{attemptId}</dd>
         <dt>message</dt>
         <dd data-testid="outcome-message">{outcomeMessage(outcome)}</dd>
+        <dt>holdOn</dt>
+        <dd data-testid="hold-on">{outcome?.status === 'scheduled' ? outcome.holdOn : ''}</dd>
       </dl>
-      {outcome && NOTICE_STATUSES.has(outcome.status) && (
-        <CardHoldNotice
-          status={outcome.status as CardHoldNoticeStatus}
-          holdOn={outcome.status === 'scheduled' ? outcome.holdOn : undefined}
-        />
-      )}
     </div>
   )
 }

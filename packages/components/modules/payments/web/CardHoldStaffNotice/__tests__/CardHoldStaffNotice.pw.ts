@@ -1,6 +1,6 @@
 import { type Locator, type Page, expect, test } from '@playwright/test'
 
-import { DEFAULT_CARD_HOLD_STAFF_ACTIONS_MESSAGES as MESSAGES } from '../constants'
+import { DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES as MESSAGES } from '../constants'
 import {
   CARD_HOLD_ID,
   FAILURE_REASON,
@@ -10,16 +10,16 @@ import {
   TRANSPORT_ERROR_MESSAGE,
 } from './__mocks__/requests'
 import type {
-  CardHoldStaffActionsControls,
+  CardHoldStaffNoticeControls,
   Default,
   PartiallyPaid,
-} from './__utils__/CardHoldStaffActions.story'
+} from './__utils__/CardHoldStaffNotice.story'
 
 /**
  * The confirmation dialog and the toast are portaled outside `#root`, so they are queried
  * through `page`; the failure panel lives inside the `mount()` locator.
  */
-const STORY = 'payments/web/CardHoldStaffActions/CardHoldStaffActions'
+const STORY = 'payments/web/CardHoldStaffNotice/CardHoldStaffNotice'
 
 const NON_FAILED_STATUSES = [
   'pending',
@@ -79,7 +79,7 @@ const DECISIONS = [
 
 const RETRY = DECISIONS[2]
 
-const resolve = (page: Page, key: keyof CardHoldStaffActionsControls) =>
+const resolve = (page: Page, key: keyof CardHoldStaffNoticeControls) =>
   page.evaluate((k) => (window.__cardHoldStaffActionsControls[k] as () => void)(), key)
 
 const lastOperation = (page: Page) =>
@@ -127,7 +127,7 @@ const confirmDecision = async (
   await expect.poll(() => pendingOperationCount(page)).toBe(1)
 }
 
-test.describe('Component: CardHoldStaffActions', () => {
+test.describe('Component: CardHoldStaffNotice', () => {
   for (const status of NON_FAILED_STATUSES) {
     test(`GIVEN a ${status} hold, THEN nothing is rendered`, async ({ mount }) => {
       const component = await mount<typeof Default>(`${STORY}/Default`, { status })
@@ -153,7 +153,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
     await component
       .locator('> div')
-      .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-failed.png') })
+      .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-failed.png') })
   })
 
   test('GIVEN a failed hold with no failure reason, THEN the fallback is shown', async ({
@@ -181,7 +181,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
         await expect(page.locator('.MuiDialog-container')).toHaveCSS('opacity', '1')
         await dialog(page).screenshot({
-          path: testInfo.outputPath(`card-hold-staff-actions-${scenario.decision}-dialog.png`),
+          path: testInfo.outputPath(`card-hold-staff-notice-${scenario.decision}-dialog.png`),
         })
       })
 
@@ -269,7 +269,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
       await component
         .locator('> div')
-        .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-kept-after-keep.png') })
+        .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-kept-after-keep.png') })
     })
   })
 
@@ -284,7 +284,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
     await component
       .locator('> div')
-      .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-kept.png') })
+      .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-kept.png') })
   })
   test('GIVEN a failed hold with no retries left, THEN there is no retry and the text says only Keep or Cancel remain', async ({
     mount,
@@ -298,7 +298,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
     await component
       .locator('> div')
-      .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-no-retries-left.png') })
+      .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-no-retries-left.png') })
   })
 
   test('GIVEN a kept failed hold with retries left, THEN there is no retry', async ({ mount }) => {
@@ -371,7 +371,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
       await component
         .locator('> div')
-        .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-retry-failed-again.png') })
+        .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-retry-failed-again.png') })
     })
   })
 
@@ -390,7 +390,7 @@ test.describe('Component: CardHoldStaffActions', () => {
 
       await component
         .locator('> div')
-        .screenshot({ path: testInfo.outputPath('card-hold-staff-actions-partially-paid.png') })
+        .screenshot({ path: testInfo.outputPath('card-hold-staff-notice-partially-paid.png') })
     })
 
     await test.step('WHEN Mark paid is confirmed and accepted, THEN the panel goes', async () => {

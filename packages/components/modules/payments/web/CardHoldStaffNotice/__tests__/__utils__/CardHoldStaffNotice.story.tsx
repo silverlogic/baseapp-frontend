@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 
 import { createTestEnvironment } from '@baseapp-frontend/graphql'
 
+import type { CardHoldStaffDecision } from '../../types'
 import {
   type CardHoldMock,
   TRANSPORT_ERROR_MESSAGE,
@@ -14,13 +15,12 @@ import {
   cardHoldQueryMockData,
   cardHoldRetryAuthorizedMockData,
   cardHoldRetryFailedAgainMockData,
-  cardHoldRetryScheduledMockData,
   cardHoldRetryGraphqlErrorMockData,
+  cardHoldRetryScheduledMockData,
   failedHoldMock,
   partiallyPaidHoldMock,
 } from '../__mocks__/requests'
-import type { CardHoldStaffDecision } from '../../types'
-import CardHoldStaffActionsForTesting from './CardHoldStaffActionsForTesting'
+import CardHoldStaffNoticeForTesting from './CardHoldStaffNoticeForTesting'
 
 /**
  * Stories for the Playwright component-testing gallery.
@@ -29,7 +29,7 @@ import CardHoldStaffActionsForTesting from './CardHoldStaffActionsForTesting'
  * browser; the mutation answers are driven through `window.__cardHoldStaffActionsControls`.
  * `onDecided` calls are recorded into a hidden form, as a count and the last decision.
  */
-export interface CardHoldStaffActionsControls {
+export interface CardHoldStaffNoticeControls {
   /** The operation Relay has in flight, or `null` before anything is committed. */
   getLastOperation: () => { name: string; variables: Record<string, any> } | null
   /** How many operations are still unresolved. */
@@ -52,7 +52,7 @@ export interface CardHoldStaffActionsControls {
 
 declare global {
   interface Window {
-    __cardHoldStaffActionsControls: CardHoldStaffActionsControls
+    __cardHoldStaffActionsControls: CardHoldStaffNoticeControls
   }
 }
 
@@ -62,7 +62,7 @@ const makeControls = ({
   environment,
   resolveMostRecentOperation,
   rejectMostRecentOperation,
-}: TestEnvironment): CardHoldStaffActionsControls => ({
+}: TestEnvironment): CardHoldStaffNoticeControls => ({
   getLastOperation: () => {
     try {
       const operation = environment.mock.getMostRecentOperation()
@@ -82,8 +82,7 @@ const makeControls = ({
   resolveCancelWithGraphqlError: () =>
     resolveMostRecentOperation({ data: cardHoldCancelGraphqlErrorMockData }),
   resolveRetry: () => resolveMostRecentOperation({ data: cardHoldRetryAuthorizedMockData }),
-  resolveRetryScheduled: () =>
-    resolveMostRecentOperation({ data: cardHoldRetryScheduledMockData }),
+  resolveRetryScheduled: () => resolveMostRecentOperation({ data: cardHoldRetryScheduledMockData }),
   resolveRetryFailedAgain: () =>
     resolveMostRecentOperation({ data: cardHoldRetryFailedAgainMockData }),
   resolveRetryWithGraphqlError: () =>
@@ -99,7 +98,7 @@ const useSeededEnvironment = (hold: CardHoldMock) =>
     const testEnvironment = createTestEnvironment()
 
     testEnvironment.queueOperationResolver({
-      queryName: 'CardHoldStaffActionsForTestingQuery',
+      queryName: 'CardHoldStaffNoticeForTestingQuery',
       data: cardHoldQueryMockData(hold),
     })
 
@@ -116,7 +115,7 @@ const StaffActions = (hold: CardHoldMock) => {
 
   return (
     <div style={{ padding: 16, maxWidth: 480 }}>
-      <CardHoldStaffActionsForTesting
+      <CardHoldStaffNoticeForTesting
         environment={environment}
         onDecided={(decision: CardHoldStaffDecision) => {
           setDecidedCount((count) => count + 1)
