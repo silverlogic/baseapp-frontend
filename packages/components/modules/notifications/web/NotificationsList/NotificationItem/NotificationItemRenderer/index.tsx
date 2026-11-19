@@ -26,6 +26,7 @@ const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({
     case NOTIFICATION_VERB.reactionCreated:
       return <ReactionCreated notification={notification} {...ReactionCreatedProps} />
     case NOTIFICATION_VERB.cardHoldFailed:
+    case NOTIFICATION_VERB.cardHoldPartiallyPaid:
       return <CardHoldNotification notification={notification} {...CardHoldNotificationProps} />
     default:
       return null
