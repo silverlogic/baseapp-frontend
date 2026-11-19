@@ -18,6 +18,9 @@ export { default as CommentReply } from './NotificationsList/NotificationItem/Co
 
 export { default as ReactionCreated } from './NotificationsList/NotificationItem/ReactionCreated'
 
+export { default as CardHoldNotification } from './NotificationsList/NotificationItem/CardHoldNotification'
+export type * from './NotificationsList/NotificationItem/CardHoldNotification/types'
+
 export { default as NotificationAvatar } from './NotificationsList/NotificationItem/Notification/NotificationAvatar'
 export type * from './NotificationsList/NotificationItem/Notification/NotificationAvatar/types'
 

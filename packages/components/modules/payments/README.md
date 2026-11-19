@@ -81,6 +81,11 @@ id of a `changed` resend.
 On a target that implements `CardHoldsInterface`, spread `...CardHoldStaffNotice_cardHold` under
 `cardHold` wherever staff look at the target.
 
+Staff meet it in their notifications: the backend sends `PAYMENTS.CARD_HOLD_FAILED` and
+`PAYMENTS.CARD_HOLD_PARTIALLY_PAID` with the hold as the target, and the notifications module's
+`CardHoldNotification` renders this notice inside each one. Use it directly anywhere else staff
+look at the target.
+
 `CardHoldStaffNotice` is a staff notice (an MUI `Alert`): it says what happened to the hold and
 puts the actions inside it. It renders only for a viewer who may decide (`canDecide`, which the backend
 sets only for a viewer granted `change_cardhold`: false for customers), and then for two kinds of
