@@ -12,7 +12,8 @@ import NavItem from './NavItem'
 const NavList: FC<NavListProps> = ({ data, depth, slotProps }) => {
   const pathname = usePathname()
 
-  const active = useActiveLink(data?.path, !!data.children)
+  const linkActive = useActiveLink(data?.path, !!data.children)
+  const active = data.active ?? linkActive
 
   const [openMenu, setOpenMenu] = useState(active)
 

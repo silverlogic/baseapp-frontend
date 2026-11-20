@@ -13,7 +13,8 @@ const NavList: FC<NavListProps> = ({ data, depth, slotProps, hasTabLayout }) => 
 
   const pathname = usePathname()
 
-  const active = useActiveLink(data?.path, !!data.children)
+  const linkActive = useActiveLink(data?.path, !!data.children)
+  const active = data.active ?? linkActive
 
   const [openMenu, setOpenMenu] = useState(false)
 
