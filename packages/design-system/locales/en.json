@@ -3,6 +3,7 @@
   "designSystem.avatar.deletedUser": "Deleted User Avatar",
   "designSystem.avatar.fallback": "Avatar Fallback",
   "designSystem.customLogoCondensed.alt": "Custom Project Logo Condensed",
+  "designSystem.dialog.closeButtonLabel": "Close dialog",
   "designSystem.dropzone.actionText": "Upload Image",
   "designSystem.dropzone.fileNotAccepted": "File not accepted, please choose the correct type",
   "designSystem.dropzone.fileTooLarge": "This file is too large (max {maxFileSize} MB).",

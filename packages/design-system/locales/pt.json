@@ -3,6 +3,7 @@
   "designSystem.avatar.deletedUser": "Avatar de usuário excluído",
   "designSystem.avatar.fallback": "Avatar padrão",
   "designSystem.customLogoCondensed.alt": "Logo condensado do projeto",
+  "designSystem.dialog.closeButtonLabel": "Fechar diálogo",
   "designSystem.dropzone.actionText": "Enviar imagem",
   "designSystem.dropzone.fileNotAccepted": "Arquivo não aceito, escolha o tipo correto",
   "designSystem.dropzone.fileTooLarge": "Este arquivo é muito grande (máx. {maxFileSize} MB).",

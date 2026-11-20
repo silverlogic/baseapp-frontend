@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { IntlProvider } from 'react-intl'
 
 import Dialog from '..'
 import ThemeTestProvider from '../../../../../tests/web/utils/ThemeTestProvider'
@@ -8,11 +9,13 @@ import { DialogProps } from '../types'
 
 const renderDialog = (props: Partial<DialogProps> = {}) =>
   render(
-    <ThemeTestProvider>
-      <Dialog open onClose={vi.fn()} {...props}>
-        <p>Dialog body</p>
-      </Dialog>
-    </ThemeTestProvider>,
+    <IntlProvider locale="en">
+      <ThemeTestProvider>
+        <Dialog open onClose={vi.fn()} {...props}>
+          <p>Dialog body</p>
+        </Dialog>
+      </ThemeTestProvider>
+    </IntlProvider>,
   )
 
 const consoleErrors = () => vi.mocked(console.error).mock.calls.flat().map(String).join(' ')

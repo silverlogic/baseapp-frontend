@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { IntlProvider } from 'react-intl'
 
 import ConfirmDialog from '..'
 import ThemeTestProvider from '../../../../../tests/web/utils/ThemeTestProvider'
@@ -8,16 +9,18 @@ import { ConfirmDialogProps } from '../types'
 
 const renderConfirmDialog = (props: Partial<ConfirmDialogProps> = {}) =>
   render(
-    <ThemeTestProvider>
-      <ConfirmDialog
-        open
-        title="Delete item?"
-        content="This cannot be undone."
-        action={<button type="button">Delete</button>}
-        onClose={vi.fn()}
-        {...props}
-      />
-    </ThemeTestProvider>,
+    <IntlProvider locale="en">
+      <ThemeTestProvider>
+        <ConfirmDialog
+          open
+          title="Delete item?"
+          content="This cannot be undone."
+          action={<button type="button">Delete</button>}
+          onClose={vi.fn()}
+          {...props}
+        />
+      </ThemeTestProvider>
+    </IntlProvider>,
   )
 
 describe('ConfirmDialog', () => {

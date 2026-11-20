@@ -5,8 +5,8 @@ import { IconButtonProps } from '../../buttons/IconButton/types'
 export interface DialogProps extends MUIDialogProps {
   customMaxWidth?: string | number
   /**
-   * Accessible name of the icon-only close button, rendered as its `aria-label`.
-   * Pass a translated string in localized apps. Defaults to `'Close dialog'`.
+   * Accessible name of the icon-only close button, rendered as its `aria-label`. Defaults to a
+   * translated "Close dialog" (`designSystem.dialog.closeButtonLabel`).
    */
   closeButtonLabel?: string
   /**
