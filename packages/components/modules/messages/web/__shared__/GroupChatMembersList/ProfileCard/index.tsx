@@ -5,11 +5,13 @@ import { FC } from 'react'
 import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/components/web/avatars'
 
 import { Box, Button, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../../__generated__/ProfileItemFragment.graphql'
 import { formatHandle } from '../../../../../__shared__/common/utils'
 import { ProfileItemFragment } from '../../../../../profiles/common'
+import { SHARED_MESSAGES } from '../../constants'
 import { MainContainer } from './styled'
 import { ProfileCardProps } from './types'
 
@@ -52,7 +54,11 @@ const ProfileCard: FC<ProfileCardProps> = ({
         sx={{ maxWidth: 'fit-content', justifySelf: 'end' }}
       >
         <Typography variant="button" color={isMember ? 'error.main' : 'text.primary'}>
-          {isMember ? 'Remove' : 'Add'}
+          {isMember ? (
+            <FormattedMessage {...SHARED_MESSAGES.remove} />
+          ) : (
+            <FormattedMessage id="messages.groupMembersList.profileCard.add" defaultMessage="Add" />
+          )}
         </Typography>
       </Button>
     </MainContainer>

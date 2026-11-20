@@ -9,7 +9,9 @@ import {
 } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
+import { HEADER_MESSAGES } from './constants'
 import { HeaderContainer } from './styled'
 import { HeaderProps } from './types'
 
@@ -19,20 +21,31 @@ const Header: FC<HeaderProps> = ({
   isDisabled,
   onBackButtonClicked,
   onCreateButtonClicked,
-  title = 'New Group',
+  title,
   titleProps = {},
-}) => (
-  <HeaderContainer>
-    <IconButton onClick={onBackButtonClicked} aria-label="cancel group creation">
-      <CloseIcon sx={{ fontSize: '24px' }} />
-    </IconButton>
-    <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
-      {title}
-    </Typography>
-    <IconButton aria-label="Create group" disabled={isDisabled} onClick={onCreateButtonClicked}>
-      <CreateIcon sx={{ fontSize: '24px' }} />
-    </IconButton>
-  </HeaderContainer>
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <HeaderContainer>
+      <IconButton
+        onClick={onBackButtonClicked}
+        aria-label={intl.formatMessage(HEADER_MESSAGES.cancelAriaLabel)}
+      >
+        <CloseIcon sx={{ fontSize: '24px' }} />
+      </IconButton>
+      <Typography component="span" variant="subtitle2" sx={{ textAlign: 'center' }} {...titleProps}>
+        {title ?? intl.formatMessage(HEADER_MESSAGES.title)}
+      </Typography>
+      <IconButton
+        aria-label={intl.formatMessage(HEADER_MESSAGES.createAriaLabel)}
+        disabled={isDisabled}
+        onClick={onCreateButtonClicked}
+      >
+        <CreateIcon sx={{ fontSize: '24px' }} />
+      </IconButton>
+    </HeaderContainer>
+  )
+}
 
 export default Header

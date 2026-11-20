@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { PinIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
 import { Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
 import { BadgeContainer } from './styled'
 import { CommentPinnedBadgeProps } from './types'
@@ -14,7 +15,7 @@ const CommentPinnedBadge: FC<CommentPinnedBadgeProps> = ({ isPinned }) => {
     <BadgeContainer>
       <PinIcon />
       <Typography variant="body2" color="text.secondary">
-        Pinned
+        <FormattedMessage id="comments.pinned.badge" defaultMessage="Pinned" />
       </Typography>
     </BadgeContainer>
   )

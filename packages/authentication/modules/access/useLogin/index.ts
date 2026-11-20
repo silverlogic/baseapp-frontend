@@ -22,6 +22,7 @@ import type {
   LoginJWTResponse,
   LoginMfaRequest,
 } from '../../../types/auth'
+import type { MfaRequest } from '../../../types/mfa'
 import { User } from '../../../types/user'
 import {
   isLoginChangeExpiredPasswordRedirectResponse,
@@ -36,6 +37,7 @@ import type { ApiClass, LoginParams, UseLoginOptions } from './types'
 
 const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
   loginFormOptions = {},
+  mfaFormOptions = {},
   loginOptions = {},
   mfaOptions = {},
   accessKeyName = ACCESS_KEY_NAME,
@@ -118,10 +120,11 @@ const useLogin = <TApiClass extends ApiClass = typeof AuthApi>({
     },
   })
 
-  const mfaForm = useForm({
+  const mfaForm = useForm<Pick<MfaRequest, 'code'>>({
     defaultValues: CODE_VALIDATION_INITIAL_VALUES,
     resolver: zodResolver(CODE_VALIDATION_SCHEMA),
     mode: 'onBlur',
+    ...mfaFormOptions,
   })
 
   const mfaMutation = useMutation({
