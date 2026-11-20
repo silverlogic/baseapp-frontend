@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { ProfileMemberReactivateMutation } from '../../../../../__generated__/ProfileMemberReactivateMutation.graphql'
@@ -26,6 +27,7 @@ export const useProfileMemberReactivateMutation = (): [
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<ProfileMemberReactivateMutation>(
     ProfileMemberReactivateMutationQuery,
   )
@@ -37,10 +39,21 @@ export const useProfileMemberReactivateMutation = (): [
         const errorMessage = sendMutationErrorToast(
           response?.profileMemberReactivate?.errors,
           errors,
-          { defaultMessage: 'Member could not be reactivated' },
+          {
+            defaultMessage: intl.formatMessage({
+              id: 'profiles.members.reactivate.failed',
+              defaultMessage: 'Member could not be reactivated',
+            }),
+          },
         )
         if (!errorMessage) {
-          sendToast('Member reactivated', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'profiles.members.reactivate.success',
+              defaultMessage: 'Member reactivated',
+            }),
+            { type: 'success' },
+          )
         }
         config?.onCompleted?.(response, errors)
       },

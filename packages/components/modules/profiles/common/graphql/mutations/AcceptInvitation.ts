@@ -1,5 +1,6 @@
 import { useNotification } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
 import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
 
 import { AcceptInvitationMutation } from '../../../../../__generated__/AcceptInvitationMutation.graphql'
@@ -29,6 +30,7 @@ export const useAcceptInvitationMutation = (): [
   boolean,
 ] => {
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const intl = useIntl()
   const [commitMutation, isMutationInFlight] = useMutation<AcceptInvitationMutation>(
     AcceptInvitationMutationQuery,
   )
@@ -38,7 +40,10 @@ export const useAcceptInvitationMutation = (): [
       ...config,
       onCompleted: (response, errors) => {
         sendMutationErrorToast(response?.profileAcceptInvitation?.errors, errors, {
-          defaultMessage: 'Invitation could not be accepted',
+          defaultMessage: intl.formatMessage({
+            id: 'profiles.invitations.acceptFailed',
+            defaultMessage: 'Invitation could not be accepted',
+          }),
         })
         config?.onCompleted?.(response, errors)
       },
