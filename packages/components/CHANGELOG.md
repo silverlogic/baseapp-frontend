@@ -1,5 +1,59 @@
 # @baseapp-frontend/components
 
+## 6.0.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Shared `common/` hooks keep their translated strings (comment action labels), so native
+    screens that use them need an `IntlProvider` ancestor too.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one). The provider ships only the `common.*` catalog: merge the
+    `locales` exports of `utils`, `design-system`, `components` (and `wagtail`) per locale with
+    the app's own and pass the `{ en, es, pt }` map through `additionalMessages`, otherwise
+    those strings fall back to English. Setup is documented in `packages/i18n/README.md`.
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/design-system@4.0.0
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/authentication@9.0.0
+  - @baseapp-frontend/graphql@5.0.0
+
+## 5.0.0
+
+### Major Changes
+
+- 7fef43d: Upgrade zod from 3.25.7 to 4.6.7 and `@hookform/resolvers` from 5.0.1 to 5.9.2. zod 3 is affected
+  by CVE-2023-54404 (HIGH), which is only fixed in zod 4.6.6.
+
+  **Breaking:** the exported validation schemas are now zod 4 schemas, and the `validationSchema`
+  option of `useChangePassword`, `useResetPassword`, `useRecoverPassword`, `useRequestEmailChange` and
+  `useMfaActivateConfirm` expects a zod 4 schema. Consumers that build custom schemas or extend ours
+  (including a `zodResolver` passed through `formOptions`) must install zod 4. The `ZodType`-typed options are now typed
+  `z.ZodType<Form, Form>`, because zod 4 defaults a schema's input type to `unknown`. See the
+  [zod 4 migration guide](https://zod.dev/v4/changelog); the APIs this package uses (`min`, `max`,
+  `regex`, `email`, `nonempty`, `refine`, `{ message }`) work unchanged.
+
+### Patch Changes
+
+- Updated dependencies [f9c934f]
+- Updated dependencies [7fef43d]
+- Updated dependencies [7fef43d]
+  - @baseapp-frontend/utils@4.3.1
+  - @baseapp-frontend/design-system@3.0.1
+  - @baseapp-frontend/authentication@8.0.0
+  - @baseapp-frontend/graphql@4.0.0
+
 ## 4.0.0
 
 ### Major Changes
@@ -16,7 +70,6 @@
   file instead.
 
   The upload pipeline is now shared across platforms instead of being web-only:
-
   - **`UploadSource`**: every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`)
     accepts a web `File` or an `UploadSource` (`name`, `size`, `type`, `readChunk(start, end)`,
     optional `dispose()`). Chunks are read lazily inside the concurrency slot, so a native upload holds
@@ -97,7 +150,6 @@
   they render links rather than buttons that push. Links prefetch on hover and give a
   client-side transition; every one of these destinations is known at render, so none of
   them needed a handler.
-
   - `SubscriptionCard`: `onManageClick` / `onSubscribeClick` → `manageHref` /
     `subscribeHref`
   - `ConfirmationSubscriptionModal`: `planDetails` → `planDetailsHref`. A project passing
@@ -235,7 +287,6 @@ field 'image' of type 'Profile'`), so `pnpm relay` locates every remaining site.
 ### Patch Changes
 
 - 007b2ae: Replace the per-module one-off Relay error handling in mutation hooks (messages, profiles, notifications, comments) and in `InviteMemberDialog`/`BlockButtonWithDialog` with the shared helpers from `@baseapp-frontend/utils` (`sendMutationErrorToast` / `getMutationErrorMessage`). Behavior notes:
-
   - Error toasts show the first error message instead of one toast per message.
   - Hooks whose GraphQL documents select `errors { field messages }` but previously ignored them now surface those payload errors: chat create (1:1 and group), chat delete/unread/archive message flows, `profileUserRoleUpdate`, and the leave-group flow. Hooks whose payload errors are already form-handled by their components (send/edit message, chat room update, organization create, comment create/update) stay transport-only to avoid double display.
   - `ReadMessages` stays transport-only on purpose: it fires passively from `useEffect`s, so payload validation errors would surface as unattributable toasts during navigation.

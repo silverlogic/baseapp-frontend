@@ -9,6 +9,7 @@ import { useResponsive } from '@baseapp-frontend/design-system/hooks/web'
 import { Badge as DefaultBadge, Drawer as DefaultDrawer, Typography } from '@mui/material'
 import IconButton from '@mui/material/IconButton'
 import { m } from 'framer-motion'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment, useLazyLoadQuery } from 'react-relay'
 
 import { NotificationUserMenuFragment$key } from '../../../../__generated__/NotificationUserMenuFragment.graphql'
@@ -20,6 +21,7 @@ import {
   NotificationsPopoverQuery,
 } from '../../common'
 import DefaultNotificationsList from '../NotificationsList'
+import { NOTIFICATIONS_POPOVER_MESSAGES } from './constants'
 import { NotificationsButton, NotificationsFallbackContainer } from './styled'
 import { NotificationsPopoverProps } from './types'
 
@@ -37,6 +39,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
   currentLayout,
   labelComponent,
 }) => {
+  const intl = useIntl()
   const [isDrawerOpened, setIsDrawerOpened] = useState<boolean>(false)
 
   const { me } = useLazyLoadQuery<NotificationsPopoverQueryType>(
@@ -78,7 +81,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
             }
           }}
           onClick={() => setIsDrawerOpened(true)}
-          aria-label="see notifications"
+          aria-label={intl.formatMessage(NOTIFICATIONS_POPOVER_MESSAGES.ariaLabel)}
         >
           <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
             <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
@@ -90,7 +93,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
               fontWeight={currentLayout === 'mini' ? 600 : 500}
               fontSize={currentLayout === 'mini' ? 10 : 14}
             >
-              Notifications
+              <FormattedMessage {...NOTIFICATIONS_POPOVER_MESSAGES.label} />
             </Typography>
           )}
         </NotificationsButton>
@@ -101,7 +104,7 @@ const NotificationsPopover: FC<NotificationsPopoverProps> = ({
           whileHover="hover"
           variants={varHover(1.05)}
           onClick={() => setIsDrawerOpened(true)}
-          aria-label="see notifications"
+          aria-label={intl.formatMessage(NOTIFICATIONS_POPOVER_MESSAGES.ariaLabel)}
         >
           <Badge badgeContent={user?.notificationsUnreadCount} color="error" {...BadgeProps}>
             <NotificationBellIcon color="secondary" {...NotificationBellIconProps} />
@@ -163,7 +166,7 @@ const NotificationsPopoverSuspended: FC<NotificationsPopoverProps> = (props) => 
                   fontWeight={currentLayout === 'mini' ? 600 : 500}
                   fontSize={currentLayout === 'mini' ? 10 : 14}
                 >
-                  Notifications
+                  <FormattedMessage {...NOTIFICATIONS_POPOVER_MESSAGES.label} />
                 </Typography>
               ))
             : null}

@@ -1,7 +1,7 @@
 import { UseFormReturn } from 'react-hook-form'
 
-import { SocialUpsertForm } from '../../../../__shared__/common'
 import type { FilesList_target$key } from '../../../../../__generated__/FilesList_target.graphql'
+import { SocialUpsertForm } from '../../../../__shared__/common'
 import type { UploadSource } from '../../../../files/common'
 
 export interface UseCommentComposerOptions {
