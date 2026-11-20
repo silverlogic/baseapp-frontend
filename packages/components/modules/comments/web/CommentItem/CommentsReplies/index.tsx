@@ -1,6 +1,7 @@
 import { FC, useTransition } from 'react'
 
 import { Box } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import {
@@ -64,7 +65,11 @@ const CommentsReplies: FC<CommentsRepliesProps> = ({
             })
           }}
         >
-          Show more replies ({commentsLeft})
+          <FormattedMessage
+            id="comments.replies.showMore"
+            defaultMessage="Show more replies ({count})"
+            values={{ count: commentsLeft }}
+          />
         </LoadMoreRepliesButton>
       </Box>
     )

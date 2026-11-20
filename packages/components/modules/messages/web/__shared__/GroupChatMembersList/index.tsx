@@ -6,8 +6,10 @@ import { Searchbar as DefaultSearchbar } from '@baseapp-frontend/design-system/c
 
 import { Box } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
+import { SHARED_MESSAGES } from '../constants'
 import { ProfileNode } from '../types'
 import DefaultProfileCard from './ProfileCard'
 import DefaultProfilesList from './ProfilesList'
@@ -41,6 +43,7 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
   MembersList = DefaultProfilesList,
   MembersListProps = {},
 }) => {
+  const intl = useIntl()
   const [isPending, startTransition] = useTransition()
   const {
     control: searchControl,
@@ -119,8 +122,11 @@ const GroupChatMembersList: FC<GroupChatMembersListProps> = ({
           loadNext={membersLoadNext}
           hasNext={membersHasNext}
           isLoadingNext={membersIsLoadingNext}
-          label="Selected group members"
-          title="Members"
+          label={intl.formatMessage({
+            id: 'messages.groupMembersList.selectedMembersLabel',
+            defaultMessage: 'Selected group members',
+          })}
+          title={intl.formatMessage(SHARED_MESSAGES.members)}
           {...MembersListProps}
         />
         {connections && (

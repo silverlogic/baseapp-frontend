@@ -23,9 +23,7 @@ const EditableFilesList: FC<EditableFilesListProps> = ({
   const target = useFragment(FilesListFragment, targetRef ?? null)
   const uploadingFiles = useScopedUploads(scope)
   const styles = createStyles()
-  const attached = (target?.files?.edges ?? []).flatMap((edge) =>
-    edge?.node ? [edge.node] : [],
-  )
+  const attached = (target?.files?.edges ?? []).flatMap((edge) => (edge?.node ? [edge.node] : []))
 
   if (!uploadingFiles.length && !attached.length) {
     return null

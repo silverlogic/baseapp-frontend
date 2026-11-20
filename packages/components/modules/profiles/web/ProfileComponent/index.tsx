@@ -14,6 +14,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Button, Divider, MenuItem, Typography } from '@mui/material'
 import { useRouter } from 'next/navigation'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileComponentFragment, formatFollowCount } from '../../common'
@@ -57,11 +58,18 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
     setAnchorEl(null)
   }
   const { sendToast } = useNotification()
+  const intl = useIntl()
 
   const handleShareClick = () => {
     const path = profile?.urlPath?.path ?? `/profile/${profile?.id}`
     navigator.clipboard.writeText(getProfileShareUrl(path))
-    sendToast('Profile URL copied to clipboard!', { type: 'success' })
+    sendToast(
+      intl.formatMessage({
+        id: 'profiles.profile.shareCopied',
+        defaultMessage: 'Profile URL copied to clipboard!',
+      }),
+      { type: 'success' },
+    )
     handleClose()
   }
 
@@ -76,7 +84,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
           sx={{ maxWidth: smDown ? '100%' : 'fit-content' }}
           onClick={() => router.push('/user/settings')}
         >
-          Edit Profile
+          <FormattedMessage id="profiles.profile.editProfile" defaultMessage="Edit Profile" />
         </Button>
       )
     }
@@ -102,7 +110,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
   const menuOptions = [
     <MenuItem key="share" onClick={handleShareClick} disableRipple>
       <ShareIcon />
-      Share profile
+      <FormattedMessage id="profiles.profile.shareProfile" defaultMessage="Share profile" />
     </MenuItem>,
     smDown && <Divider key="divider" />,
     profile && currentProfileId !== profile?.id && (
@@ -127,7 +135,10 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
         <Banner
           src={bannerSrc}
           fallbackSrc={bannerFallback}
-          alt="Home Banner"
+          alt={intl.formatMessage({
+            id: 'profiles.profile.bannerAlt',
+            defaultMessage: 'Home Banner',
+          })}
           width={868}
           height={
             290 /* Some css height: auto takes precedence,
@@ -158,7 +169,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
                     {formatFollowCount(profile?.followersCount)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Followers
+                    <FormattedMessage id="profiles.profile.followers" defaultMessage="Followers" />
                   </Typography>
                 </CountContainer>
                 <CountContainer>
@@ -166,7 +177,7 @@ const ProfileComponent: FC<ProfileComponentProps> = ({
                     {formatFollowCount(profile?.followingCount)}
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
-                    Following
+                    <FormattedMessage id="profiles.profile.following" defaultMessage="Following" />
                   </Typography>
                 </CountContainer>
               </FollowCountsContainer>
