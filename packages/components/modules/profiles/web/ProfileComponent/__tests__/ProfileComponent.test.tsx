@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import ProfileComponent from '../index'
@@ -35,7 +36,11 @@ const MessageButton = ({ profileId }: { profileId: string }) => (
 )
 
 const renderProfile = (props: Partial<Parameters<typeof ProfileComponent>[0]> = {}) =>
-  render(<ProfileComponent profile={{} as any} currentProfileId="me" {...props} />)
+  render(
+    <IntlProvider locale="en">
+      <ProfileComponent profile={{} as any} currentProfileId="me" {...props} />
+    </IntlProvider>,
+  )
 
 describe('ProfileComponent MessageButton slot', () => {
   beforeEach(() => {

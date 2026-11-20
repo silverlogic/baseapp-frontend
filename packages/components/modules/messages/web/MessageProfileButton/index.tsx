@@ -5,6 +5,7 @@ import { FC, useContext } from 'react'
 import { useCurrentProfile } from '@baseapp-frontend/authentication'
 
 import { LoadingButton } from '@mui/lab'
+import { FormattedMessage } from 'react-intl'
 import { ConnectionHandler } from 'react-relay'
 
 import { ChatRoomProvider, useCreateChatRoomMutation } from '../../common'
@@ -25,7 +26,7 @@ const MessageProfileButtonContent: FC<MessageProfileButtonProps> = ({
   profileId,
   actorProfileId,
   onRoomReady,
-  label = 'Message',
+  label = <FormattedMessage id="messages.profileButton.label" defaultMessage="Message" />,
   ButtonProps,
 }) => {
   const { currentProfile } = useCurrentProfile()

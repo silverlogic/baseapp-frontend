@@ -1,11 +1,17 @@
-import { FC, useContext } from 'react'
+import { FC, PropsWithChildren, ReactElement, useContext } from 'react'
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render as rtlRender, screen } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import type { ProfileComponentMessageButtonProps } from '../../../../profiles/web/ProfileComponent/types'
 import ChatRoomProvider, { ChatRoomContext } from '../../../common/context/ChatRoomProvider'
 import MessageProfileButton from '../index'
+
+const IntlWrapper = ({ children }: PropsWithChildren) => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+)
+const render = (ui: ReactElement) => rtlRender(ui, { wrapper: IntlWrapper })
 
 const { mockCommit, mockCurrentProfile, mockInFlight, usedStores } = vi.hoisted(() => ({
   mockCommit: vi.fn(),

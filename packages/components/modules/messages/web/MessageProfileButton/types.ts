@@ -12,6 +12,7 @@ export interface MessageProfileButtonProps {
   actorProfileId?: string
   /** Called with the room's relay id once it exists, whether it was created or already there. */
   onRoomReady?: (roomId: string) => void
+  /** The button's content. Defaults to a translated "Message". */
   label?: ReactNode
   ButtonProps?: Omit<LoadingButtonProps, 'onClick' | 'loading'>
 }

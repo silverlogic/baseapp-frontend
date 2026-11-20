@@ -178,6 +178,7 @@
   "messages.messagesGroup.newMessages": "New Messages",
   "messages.messagesGroup.today": "Today",
   "messages.messagesList.loadingMore": "loading more messages",
+  "messages.profileButton.label": "Message",
   "messages.profileSummary.about": "About",
   "messages.profileSummary.addToGroup": "Add contact to a group",
   "messages.profileSummary.addToGroupAriaLabel": "add contact to a group",
