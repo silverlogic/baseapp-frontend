@@ -1,5 +1,51 @@
 # @baseapp-frontend/authentication
 
+## 9.0.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Native code and shared `common/` code used by native are unchanged.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one). The provider ships only the `common.*` catalog: merge the
+    `locales` exports of `utils`, `design-system`, `components` (and `wagtail`) per locale with
+    the app's own and pass the `{ en, es, pt }` map through `additionalMessages`, otherwise
+    those strings fall back to English. Setup is documented in `packages/i18n/README.md`.
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/utils@4.4.0
+
+## 8.0.0
+
+### Major Changes
+
+- 7fef43d: Upgrade zod from 3.25.7 to 4.6.7 and `@hookform/resolvers` from 5.0.1 to 5.9.2. zod 3 is affected
+  by CVE-2023-54404 (HIGH), which is only fixed in zod 4.6.6.
+
+  **Breaking:** the exported validation schemas are now zod 4 schemas, and the `validationSchema`
+  option of `useChangePassword`, `useResetPassword`, `useRecoverPassword`, `useRequestEmailChange` and
+  `useMfaActivateConfirm` expects a zod 4 schema. Consumers that build custom schemas or extend ours
+  (including a `zodResolver` passed through `formOptions`) must install zod 4. The `ZodType`-typed options are now typed
+  `z.ZodType<Form, Form>`, because zod 4 defaults a schema's input type to `unknown`. See the
+  [zod 4 migration guide](https://zod.dev/v4/changelog); the APIs this package uses (`min`, `max`,
+  `regex`, `email`, `nonempty`, `refine`, `{ message }`) work unchanged.
+
+### Patch Changes
+
+- Updated dependencies [f9c934f]
+- Updated dependencies [7fef43d]
+  - @baseapp-frontend/utils@4.3.1
+
 ## 7.0.0
 
 ### Minor Changes

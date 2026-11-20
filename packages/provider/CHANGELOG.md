@@ -1,5 +1,22 @@
 # @baseapp-frontend/provider
 
+## 5.0.0
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/i18n@2.0.0
+
+## 4.0.1
+
+### Patch Changes
+
+- f9c934f: Bump `lodash` from 4.18.0 to 4.18.1 (CVE-2026-2950), so published installs pick up the patched version.
+- Updated dependencies [f9c934f]
+- Updated dependencies [7fef43d]
+  - @baseapp-frontend/utils@4.3.1
+
 ## 4.0.0
 
 ### Patch Changes

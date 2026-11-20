@@ -4,6 +4,15 @@
     "types": ["node", "vitest/globals"],
     "outDir": "./dist"
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.d.ts", ".eslintrc.js", "*.ts", "*.tsx", "index.d.ts"],
+  "include": [
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.d.ts",
+    "locales/*.json",
+    ".eslintrc.js",
+    "*.ts",
+    "*.tsx",
+    "index.d.ts"
+  ],
   "exclude": ["node_modules", "dist"]
 }
