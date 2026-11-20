@@ -3,10 +3,12 @@
 import { FC } from 'react'
 
 import Image from 'next/image'
+import { useIntl } from 'react-intl'
 
 import { useLogoOverrides } from '../../../../hooks/web'
 
 const CustomLogoCondensed: FC = () => {
+  const intl = useIntl()
   const { logos } = useLogoOverrides()
   if (!logos?.square) {
     return null
@@ -15,7 +17,10 @@ const CustomLogoCondensed: FC = () => {
     <Image
       key={logos.square}
       src={logos.square}
-      alt="Custom Project Logo Condensed"
+      alt={intl.formatMessage({
+        id: 'designSystem.customLogoCondensed.alt',
+        defaultMessage: 'Custom Project Logo Condensed',
+      })}
       height={34}
       width={38}
     />

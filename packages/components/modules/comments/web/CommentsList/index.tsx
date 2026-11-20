@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { Virtuoso } from 'react-virtuoso'
 
 import { CommentsSubscription, NUMBER_OF_COMMENTS_TO_LOAD_NEXT, useCommentList } from '../../common'
@@ -20,6 +21,7 @@ const CommentsList: FC<CommentsListProps> = ({
   CommentItemProps,
   VirtuosoProps,
 }) => {
+  const intl = useIntl()
   const { data: target, comments, loadNext, isLoadingNext, hasNext } = useCommentList(targetRef)
 
   if (comments.length === 0) {
@@ -56,7 +58,10 @@ const CommentsList: FC<CommentsListProps> = ({
       <LoadingState
         sx={{ paddingTop: 3, paddingBottom: 1 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more comments"
+        aria-label={intl.formatMessage({
+          id: 'comments.loading.more',
+          defaultMessage: 'loading more comments',
+        })}
       />
     )
   }

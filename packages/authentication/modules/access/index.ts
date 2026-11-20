@@ -18,3 +18,10 @@ export type * from './useSignUp/types'
 
 export { default as useChangePassword } from './useChangePassword'
 export type * from './useChangePassword/types'
+
+export { getLoginValidationSchema } from './useLogin/constants'
+export { getChangePasswordValidationSchema } from './useChangePassword/constants'
+export { getRecoverPasswordValidationSchema } from './useRecoverPassword/constants'
+export { getRequestEmailChangeValidationSchema } from './useRequestEmailChange/constants'
+export { getResetPasswordValidationSchema } from './useResetPassword/constants'
+export { getSignUpValidationSchema, getSignUpValidationSchemaWithName } from './useSignUp/constants'

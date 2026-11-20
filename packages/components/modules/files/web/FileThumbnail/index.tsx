@@ -9,6 +9,7 @@ import {
   Videocam as VideoIcon,
 } from '@mui/icons-material'
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { getFileType, isImageFile } from '../../common/utils/formatters'
 import type { FileThumbnailProps } from './types'
@@ -31,6 +32,7 @@ const getTypeIcon = (contentType?: string | null) => {
  * preview when available, otherwise a primary-colored tile with a type icon.
  */
 const FileThumbnail: FC<FileThumbnailProps> = ({ src, contentType, alt, size = 40 }) => {
+  const intl = useIntl()
   const showImage = Boolean(src) && isImageFile(contentType)
 
   if (showImage) {
@@ -38,7 +40,7 @@ const FileThumbnail: FC<FileThumbnailProps> = ({ src, contentType, alt, size = 4
       <Box
         component="img"
         src={src as string}
-        alt={alt ?? 'File preview'}
+        alt={alt ?? intl.formatMessage({ id: 'files.preview.alt', defaultMessage: 'File preview' })}
         sx={{
           width: size,
           height: size,

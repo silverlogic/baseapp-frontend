@@ -1,4 +1,8 @@
+'use client'
+
 import { FC } from 'react'
+
+import { useIntl } from 'react-intl'
 
 import { AvatarDeletedUserIcon } from '../../icons'
 import AvatarUploadFallbackIcon from '../../icons/AvatarUploadFallbackIcon'
@@ -14,22 +18,38 @@ const AvatarWithPlaceholder: FC<AvatarWithPlaceholderProps> = ({
   alt,
   showDeletedUser = false,
   ...props
-}) => (
-  <AvatarStyled
-    width={width}
-    height={height}
-    alt={alt}
-    borderStyle={borderStyle}
-    borderWidth={borderWidth}
-    {...props}
-  >
-    {children ||
-      (showDeletedUser ? (
-        <AvatarDeletedUserIcon sx={{ fontSize: width }} titleAccess="Deleted User Avatar" />
-      ) : (
-        <AvatarUploadFallbackIcon sx={{ fontSize: width }} titleAccess="Avatar Fallback" />
-      ))}
-  </AvatarStyled>
-)
+}) => {
+  const intl = useIntl()
+
+  return (
+    <AvatarStyled
+      width={width}
+      height={height}
+      alt={alt}
+      borderStyle={borderStyle}
+      borderWidth={borderWidth}
+      {...props}
+    >
+      {children ||
+        (showDeletedUser ? (
+          <AvatarDeletedUserIcon
+            sx={{ fontSize: width }}
+            titleAccess={intl.formatMessage({
+              id: 'designSystem.avatar.deletedUser',
+              defaultMessage: 'Deleted User Avatar',
+            })}
+          />
+        ) : (
+          <AvatarUploadFallbackIcon
+            sx={{ fontSize: width }}
+            titleAccess={intl.formatMessage({
+              id: 'designSystem.avatar.fallback',
+              defaultMessage: 'Avatar Fallback',
+            })}
+          />
+        ))}
+    </AvatarStyled>
+  )
+}
 
 export default AvatarWithPlaceholder

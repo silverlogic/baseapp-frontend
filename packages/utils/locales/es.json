@@ -1,0 +1,6 @@
+{
+  "utils.validation.emailFormat": "Ingresa una dirección de correo electrónico con un formato válido.",
+  "utils.validation.fieldRequired": "Este campo es obligatorio.",
+  "utils.validation.passwordRequirements": "La contraseña debe tener al menos 10 caracteres y contener al menos una letra mayúscula, una letra minúscula, un número y un carácter especial.",
+  "utils.validation.passwordsDoNotMatch": "Las contraseñas no coinciden."
+}
