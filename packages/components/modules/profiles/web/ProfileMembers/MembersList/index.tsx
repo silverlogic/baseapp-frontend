@@ -5,6 +5,7 @@ import { Searchbar } from '@baseapp-frontend/design-system/components/web/inputs
 
 import { Button, Typography } from '@mui/material'
 import { useForm } from 'react-hook-form'
+import { FormattedMessage } from 'react-intl'
 import { ConnectionHandler, useFragment, usePaginationFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
@@ -127,7 +128,11 @@ const MembersList: FC<MembersListProps> = ({
       />
       <CountRow>
         <Typography variant="subtitle2">
-          {resultsCount === 1 ? `${resultsCount} member` : `${resultsCount} members`}
+          <FormattedMessage
+            id="profiles.members.count"
+            defaultMessage="{count, plural, one {# member} other {# members}}"
+            values={{ count: resultsCount }}
+          />
         </Typography>
         {data?.canAddMember && (
           <Button
@@ -136,7 +141,7 @@ const MembersList: FC<MembersListProps> = ({
             onClick={() => setIsInviteOpen(true)}
             sx={{ maxWidth: 'fit-content', whiteSpace: 'nowrap' }}
           >
-            Add Member
+            <FormattedMessage id="profiles.members.addMember" defaultMessage="Add Member" />
           </Button>
         )}
       </CountRow>

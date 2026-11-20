@@ -22,7 +22,8 @@ mutations when a project opts in.
 - `ProfileMembers` and `MembersList` take `roleOptions`, `inactiveMemberOptions`, `roleLabels`,
   `statusLabels`, `MemberItem`, `MemberItemProps`, `InviteMemberDialog` and
   `InviteMemberDialogProps`. A custom `MemberItem` also receives the row's `memberRef`. Project role
-  labels also name the roles in the active member's menu.
+  labels also name the roles in the active member's menu. A menu option's `label` is a string or a
+  react-intl message descriptor; the default options use translated messages.
 - `ProfileMembers` takes `membersQuery`, `membersQueryVariables` and `membersListFragment` (also on
   `MembersList`), so a project can page through members with more arguments (`status`) and spread
   its own `ProfileUserRole` fragment for a custom `MemberItem`. The list now prepends invitations
@@ -33,7 +34,8 @@ mutations when a project opts in.
 - `InviteMemberDialog` takes `defaultRole`, a `roleOptions` picker, `collectInviteeNames`,
   `showMessageField`, `renderExtraFields` (values merged into the `profileSendInvitation` and
   `profileUserRoleCreate` inputs) with `extraFieldsDefaultValues` and `validateExtraFields`, and
-  `copy`. Without them it sends the same `emails` input as before.
+  `copy` (replaces any of its translated texts). Without them it sends the same `emails` input as
+  before.
 - New common hooks: `useProfileMemberDeactivateMutation`, `useProfileMemberReactivateMutation`,
   `useProfileInvitationPreviewQuery`, `useAcceptInvitationWithSignupMutation`,
   `useAcceptInvitationMutation` and `useDeclineInvitationMutation`.

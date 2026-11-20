@@ -5,6 +5,7 @@ import { AvatarWithPlaceholder } from '@baseapp-frontend/design-system/component
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Button, MenuItem, SelectChangeEvent, Typography, useTheme } from '@mui/material'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileRoles } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
@@ -21,12 +22,13 @@ import { useResendInvitationMutation } from '../../../common/graphql/mutations/R
 import {
   INVITATION_ACTIONS,
   MEMBER_ACTIONS,
+  MEMBER_MESSAGES,
   MEMBER_ROLES,
   MEMBER_STATUSES,
   roleOptions as defaultRoleOptions,
   invitationActionOptions,
 } from '../constants'
-import { getMemberLabel } from '../utils'
+import { formatMemberOptionLabel, getMemberLabel } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
 
@@ -49,6 +51,11 @@ const MemberItem: FC<MemberItemProps> = ({
   statusLabels,
 }) => {
   const theme = useTheme()
+  const intl = useIntl()
+  const backText = intl.formatMessage({
+    id: 'profiles.members.dialogs.back',
+    defaultMessage: 'Back',
+  })
 
   const memberProfile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, member)
 
@@ -99,9 +106,14 @@ const MemberItem: FC<MemberItemProps> = ({
   const shouldRenderInactiveMemberSelect =
     status === MEMBER_STATUSES.inactive && canChangeMember && inactiveMemberOptions.length > 0
 
-  const roleLabel = getMemberLabel(memberRole, roleLabels, roleOptions)
-  const statusLabel = getMemberLabel(status, statusLabels)
-  const expiredLabel = getMemberLabel(MEMBER_STATUSES.expired, statusLabels)
+  const roleLabel = getMemberLabel(memberRole, roleLabels, roleOptions, intl.formatMessage)
+  const statusLabel = getMemberLabel(status, statusLabels, undefined, intl.formatMessage)
+  const expiredLabel = getMemberLabel(
+    MEMBER_STATUSES.expired,
+    statusLabels,
+    undefined,
+    intl.formatMessage,
+  )
 
   const haveMemberRoleAndStatus = memberRole && status
 
@@ -235,7 +247,7 @@ const MemberItem: FC<MemberItemProps> = ({
                       value === INVITATION_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                   }}
                 >
-                  {label}
+                  <FormattedMessage {...label} />
                 </MenuItem>
               ))}
             </Select>
@@ -282,7 +294,7 @@ const MemberItem: FC<MemberItemProps> = ({
                 }}
               >
                 {/* A project role label wins here too, so a role reads the same in every row. */}
-                {roleLabels?.[value] ?? label}
+                {roleLabels?.[value] ?? formatMemberOptionLabel(label, intl.formatMessage)}
               </MenuItem>
             ))}
           </Select>
@@ -309,7 +321,7 @@ const MemberItem: FC<MemberItemProps> = ({
                   color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                 }}
               >
-                {label}
+                {formatMemberOptionLabel(label, intl.formatMessage)}
               </MenuItem>
             ))}
           </Select>
@@ -335,69 +347,90 @@ const MemberItem: FC<MemberItemProps> = ({
   return (
     <>
       <ConfirmDialog
-        title="Change user permissions?"
+        title={intl.formatMessage({
+          id: 'profiles.members.changeRoleDialog.title',
+          defaultMessage: 'Change user permissions?',
+        })}
         open={openConfirmChangeMember}
         action={
           <Button variant="contained" color="inherit" onClick={confirmChangeRole}>
-            Confirm
+            <FormattedMessage id="common.confirm" defaultMessage="Confirm" />
           </Button>
         }
         onClose={cancelChangeRole}
         content={
           <Typography variant="body1">
-            Are you sure you want to promote this member to an admin? They will have full
-            administrative rights, including the ability to manage members and settings.
+            <FormattedMessage
+              id="profiles.members.changeRoleDialog.content"
+              defaultMessage="Are you sure you want to promote this member to an admin? They will have full administrative rights, including the ability to manage members and settings."
+            />
           </Typography>
         }
-        cancelText="Back"
+        cancelText={backText}
       />
       <ConfirmDialog
-        title="Remove member"
+        title={intl.formatMessage({
+          id: 'profiles.members.removeMemberDialog.title',
+          defaultMessage: 'Remove member',
+        })}
         open={openConfirmRemoveMember}
         onClose={handleRemoveMemberDialog}
         content={
           <Typography variant="body1">
-            Are you sure you want to remove this member? This action will revoke their access to the
-            organization profile.
+            <FormattedMessage
+              id="profiles.members.removeMemberDialog.content"
+              defaultMessage="Are you sure you want to remove this member? This action will revoke their access to the organization profile."
+            />
           </Typography>
         }
-        cancelText="Back"
+        cancelText={backText}
         action={
           <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
-            Remove
+            <FormattedMessage {...MEMBER_MESSAGES.remove} />
           </Button>
         }
       />
       <ConfirmDialog
-        title="Deactivate member"
+        title={intl.formatMessage({
+          id: 'profiles.members.deactivateMemberDialog.title',
+          defaultMessage: 'Deactivate member',
+        })}
         open={openConfirmDeactivateMember}
         onClose={handleDeactivateMemberDialog}
         content={
           <Typography variant="body1">
-            Are you sure you want to deactivate this member? They will lose access to the
-            organization profile until they are reactivated.
+            <FormattedMessage
+              id="profiles.members.deactivateMemberDialog.content"
+              defaultMessage="Are you sure you want to deactivate this member? They will lose access to the organization profile until they are reactivated."
+            />
           </Typography>
         }
-        cancelText="Back"
+        cancelText={backText}
         action={
           <Button variant="contained" color="error" onClick={confirmDeactivateMember}>
-            Deactivate
+            <FormattedMessage {...MEMBER_MESSAGES.deactivate} />
           </Button>
         }
       />
       <ConfirmDialog
-        title="Remove invitation"
+        title={intl.formatMessage({
+          id: 'profiles.members.removeInvitationDialog.title',
+          defaultMessage: 'Remove invitation',
+        })}
         open={openConfirmCancelInvitation}
         onClose={handleCancelInvitationDialog}
         content={
           <Typography variant="body1">
-            Are you sure you want to remove this invitation? It will be deleted from the list.
+            <FormattedMessage
+              id="profiles.members.removeInvitationDialog.content"
+              defaultMessage="Are you sure you want to remove this invitation? It will be deleted from the list."
+            />
           </Typography>
         }
-        cancelText="Back"
+        cancelText={backText}
         action={
           <Button variant="contained" color="error" onClick={confirmCancelInvitation}>
-            Remove
+            <FormattedMessage {...MEMBER_MESSAGES.remove} />
           </Button>
         }
       />
@@ -407,7 +440,10 @@ const MemberItem: FC<MemberItemProps> = ({
             width={avatarWidth}
             height={avatarHeight}
             src={memberProfile?.image ?? ''}
-            alt="Profile avatar"
+            alt={intl.formatMessage({
+              id: 'profiles.members.avatarAlt',
+              defaultMessage: 'Profile avatar',
+            })}
             color="secondary"
             {...avatarProps}
           />

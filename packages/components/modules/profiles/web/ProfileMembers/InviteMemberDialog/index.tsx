@@ -9,14 +9,21 @@ import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/util
 
 import { LoadingButton } from '@mui/lab'
 import { Box, MenuItem, TextField, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { ProfileUserRoleCreateInput } from '../../../../../__generated__/ProfileUserRoleCreateMutation.graphql'
 import { ProfileSendInvitationInput } from '../../../../../__generated__/SendInvitationMutation.graphql'
 import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
+import { formatMemberOptionLabel } from '../utils'
 import MemberSearch from './MemberSearch'
-import { DEFAULT_INVITE_ROLE, INVITE_MEMBER_DIALOG_COPY } from './constants'
 import {
+  DEFAULT_INVITE_ROLE,
+  INVITE_MEMBER_DIALOG_COPY_KEYS,
+  INVITE_MEMBER_DIALOG_MESSAGES as MESSAGES,
+} from './constants'
+import {
+  InviteMemberDialogCopy,
   InviteMemberDialogProps,
   InviteMemberExtraValues,
   SelectedEmail,
@@ -47,9 +54,15 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   validateExtraFields,
   copy: copyOverrides,
 }) => {
-  const copy = { ...INVITE_MEMBER_DIALOG_COPY, ...copyOverrides }
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
+  const intl = useIntl()
+  const copy: InviteMemberDialogCopy = {
+    ...(Object.fromEntries(
+      INVITE_MEMBER_DIALOG_COPY_KEYS.map((key) => [key, intl.formatMessage(MESSAGES[key])]),
+    ) as InviteMemberDialogCopy),
+    ...copyOverrides,
+  }
   const [selected, setSelected] = useState<SelectedMember[]>([])
   // Follows `defaultRole` until a role is picked in the dialog.
   const [pickedRole, setRole] = useState<string | null>(null)
@@ -115,13 +128,18 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
           const errorMessage = getMutationErrorMessage(
             response?.profileUserRoleCreate?.errors,
             errors,
-            { defaultMessage: 'Failed to add members' },
+            { defaultMessage: intl.formatMessage(MESSAGES.addMembersFailed) },
           )
           if (errorMessage) reject(new BatchError(errorMessage, members))
           else resolve(members)
         },
         onError: (error) =>
-          reject(new BatchError(getGraphQLErrorMessage(error, 'Failed to add members'), members)),
+          reject(
+            new BatchError(
+              getGraphQLErrorMessage(error, intl.formatMessage(MESSAGES.addMembersFailed)),
+              members,
+            ),
+          ),
       })
     })
 
@@ -144,14 +162,17 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
           const errorMessage = getMutationErrorMessage(
             response?.profileSendInvitation?.errors,
             errors,
-            { defaultMessage: 'Failed to send invitations' },
+            { defaultMessage: intl.formatMessage(MESSAGES.sendInvitationsFailed) },
           )
           if (errorMessage) reject(new BatchError(errorMessage, members))
           else resolve(members)
         },
         onError: (error) =>
           reject(
-            new BatchError(getGraphQLErrorMessage(error, 'Failed to send invitations'), members),
+            new BatchError(
+              getGraphQLErrorMessage(error, intl.formatMessage(MESSAGES.sendInvitationsFailed)),
+              members,
+            ),
           ),
       })
     })
@@ -179,7 +200,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
     failed.forEach((error) => sendToast(error.message, { type: 'error' }))
 
     if (succeeded.length > 0) {
-      sendToast(succeeded.length === 1 ? 'Member added' : `${succeeded.length} members added`, {
+      sendToast(intl.formatMessage(MESSAGES.membersAdded, { count: succeeded.length }), {
         type: 'success',
       })
     }
@@ -270,7 +291,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
             >
               {roleOptions.map(({ value, label }) => (
                 <MenuItem key={value} value={value}>
-                  {label}
+                  {formatMemberOptionLabel(label, intl.formatMessage)}
                 </MenuItem>
               ))}
             </TextField>

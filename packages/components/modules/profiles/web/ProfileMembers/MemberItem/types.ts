@@ -1,4 +1,5 @@
 import type { AvatarProps, BoxProps } from '@mui/material'
+import type { MessageDescriptor } from 'react-intl'
 
 import type {
   MemberItemFragment$data,
@@ -11,13 +12,16 @@ export interface MemberPersonalInformationProps extends BoxProps {
   isActive: boolean
 }
 
+/** A menu label: plain text, or a react-intl message descriptor so it is translated. */
+export type MemberOptionLabel = string | MessageDescriptor
+
 /**
  * An entry of a member's menu: a role (`value` is a `ProfileRoles` value, including roles a
  * project declares) or an action (`value` is one of `MEMBER_ACTIONS`).
  */
 export interface MemberRoleOption {
   value: string
-  label: string
+  label: MemberOptionLabel
 }
 
 /** Display labels keyed by role (`ADMIN`, `OWNER`, ...) or status (`PENDING`, ...) value. */

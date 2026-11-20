@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 
 import type { MemberRoleOption } from '../MemberItem/types'
-import type { INVITE_MEMBER_DIALOG_COPY } from './constants'
+import type { INVITE_MEMBER_DIALOG_COPY_KEYS } from './constants'
 
-export type InviteMemberDialogCopy = { [Key in keyof typeof INVITE_MEMBER_DIALOG_COPY]: string }
+export type InviteMemberDialogCopy = Record<(typeof INVITE_MEMBER_DIALOG_COPY_KEYS)[number], string>
 
 /** Extra input values, by GraphQL input field name. */
 export type InviteMemberExtraValues = Record<string, unknown>
@@ -45,7 +45,7 @@ export interface InviteMemberDialogProps {
   extraFieldsDefaultValues?: InviteMemberExtraValues
   /** Return false to keep the submit button disabled until the extra fields are valid. */
   validateExtraFields?: (values: InviteMemberExtraValues) => boolean
-  /** Replaces any of the dialog's texts. */
+  /** Replaces any of the dialog's texts (`INVITE_MEMBER_DIALOG_COPY_KEYS`); the rest are translated. */
   copy?: Partial<InviteMemberDialogCopy>
 }
 
