@@ -73,3 +73,22 @@ export interface CompleteUploadPart {
   partNumber: number
   etag: string
 }
+
+/**
+ * A file the backend serves only through permission-checked downloads: the `ProtectedFile`
+ * GraphQL type, or `ProtectedFileSerializerField` from REST once its keys are camel-cased. The
+ * field holding it is null when the file is empty or the viewer may not download it.
+ */
+export interface ProtectedFile {
+  /** Registry key of the file field, e.g. `billing.invoice.pdf`. */
+  key: string
+  /** Id of the object holding the file. */
+  objectId: string
+  fileName?: string | null
+  contentType?: string | null
+  /** Size in bytes; null when unknown. */
+  size?: number | null
+}
+
+/** `attachment` saves the file; `inline` opens it in a new tab. */
+export type ProtectedFileDisposition = 'attachment' | 'inline'
