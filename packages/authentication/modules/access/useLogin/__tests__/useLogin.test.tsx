@@ -5,6 +5,10 @@ import {
   mockFetchError,
   renderHook,
 } from '@baseapp-frontend/test'
+import {
+  IMPERSONATOR_ACCESS_KEY_NAME,
+  IMPERSONATOR_REFRESH_KEY_NAME,
+} from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -18,6 +22,7 @@ describe('useLogin', () => {
   afterEach(() => {
     ;(global.fetch as Mock).mockClear()
     cookiesMock.set.mockClear()
+    cookiesMock.remove.mockClear()
   })
 
   test('should run onSuccess', async () => {
@@ -60,6 +65,29 @@ describe('useLogin', () => {
 
     expect(hasOnSuccessRan).toBe(true)
     expect(cookiesMock.set).toBeCalledTimes(2)
+  })
+
+  test("forgets an impersonator's tokens kept aside before the login", async () => {
+    mockFetch(loginUrl, {
+      method: 'POST',
+      status: 200,
+      response: { access: 'access', refresh: 'refresh' },
+    })
+
+    const { result } = renderHook(
+      () =>
+        useLogin({
+          loginFormOptions: { defaultValues: { email: 'test@tsl.io', password: '123456789' } },
+        }),
+      {
+        wrapper: withAuthenticationTestProviders(ComponentWithProviders),
+      },
+    )
+
+    await result.current.form.handleSubmit()
+
+    expect(cookiesMock.remove).toHaveBeenCalledWith(IMPERSONATOR_ACCESS_KEY_NAME)
+    expect(cookiesMock.remove).toHaveBeenCalledWith(IMPERSONATOR_REFRESH_KEY_NAME)
   })
 
   test('should run onError', async () => {
