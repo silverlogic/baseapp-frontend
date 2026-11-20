@@ -1,0 +1,16 @@
+{
+  "common.loading": "Carregando...",
+  "common.save": "Salvar",
+  "common.cancel": "Cancelar",
+  "common.delete": "Excluir",
+  "common.edit": "Editar",
+  "common.close": "Fechar",
+  "common.confirm": "Confirmar",
+  "common.yes": "Sim",
+  "common.no": "Não",
+  "common.ok": "OK",
+  "common.error": "Erro",
+  "common.success": "Sucesso",
+  "common.warning": "Aviso",
+  "common.info": "Informação"
+}

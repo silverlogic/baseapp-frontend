@@ -1,0 +1,6 @@
+{
+  "utils.validation.emailFormat": "Please provide a properly formatted email address.",
+  "utils.validation.fieldRequired": "This field is required.",
+  "utils.validation.passwordRequirements": "Password must be at least 10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
+  "utils.validation.passwordsDoNotMatch": "Passwords do not match."
+}
