@@ -17,7 +17,7 @@ existing list still sends the same query as before.
 - New `NotificationSettingsGroups` (web and native) and `useNotificationSettingsGroups`: one row per
   group the viewer can manage, one switch per channel, optimistic updates rolled back when the
   server rejects them, locked groups disabled with a hint, and every piece of copy replaceable
-  through props.
+  through props. The default copy is translated (en, es, pt).
 - `NotificationsList` (web and native) takes a `group` prop that lists only one group's
   notifications, through the new `useGroupNotificationsList`. "Mark all as read" then marks only
   the group's loaded unread notifications, and the list refetches when the user's unread count

@@ -5,17 +5,15 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useIntl } from 'react-intl'
 import { Switch } from 'react-native-paper'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { NotificationSettingsGroupsQuery as NotificationSettingsGroupsQueryType } from '../../../../__generated__/NotificationSettingsGroupsQuery.graphql'
 import {
-  DEFAULT_EMPTY_STATE_TEXT,
-  DEFAULT_GROUP_COLUMN_LABEL,
-  DEFAULT_LOCKED_HINT,
-  DEFAULT_NOTIFICATION_CHANNEL_LABELS,
+  NOTIFICATION_CHANNEL_MESSAGES as CHANNEL_MESSAGES,
+  NOTIFICATION_SETTINGS_GROUPS_MESSAGES as MESSAGES,
   NotificationSettingsGroupsQuery,
-  defaultGetSwitchLabel,
   useNotificationSettingsGroups,
 } from '../../common'
 import { createStyles } from './styles'
@@ -24,11 +22,12 @@ import { NotificationSettingsGroupsContentProps, NotificationSettingsGroupsProps
 const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentProps> = ({
   user,
   channelLabels = {},
-  groupColumnLabel = DEFAULT_GROUP_COLUMN_LABEL,
-  lockedHint = DEFAULT_LOCKED_HINT,
-  emptyStateText = DEFAULT_EMPTY_STATE_TEXT,
-  getSwitchLabel = defaultGetSwitchLabel,
+  groupColumnLabel,
+  lockedHint,
+  emptyStateText,
+  getSwitchLabel,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
   const { groups, setChannelActive } = useNotificationSettingsGroups({ user })
@@ -36,18 +35,22 @@ const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentPro
   if (groups.length === 0) {
     return (
       <Text variant="body2" color="low">
-        {emptyStateText}
+        {emptyStateText ?? intl.formatMessage(MESSAGES.emptyState)}
       </Text>
     )
   }
 
   const getChannelLabel = (channel: string) =>
-    channelLabels[channel] ?? DEFAULT_NOTIFICATION_CHANNEL_LABELS[channel] ?? channel
+    channelLabels[channel] ??
+    (CHANNEL_MESSAGES[channel] ? intl.formatMessage(CHANNEL_MESSAGES[channel]) : channel)
+  const switchLabel = (groupLabel: string, channelLabel: string) =>
+    getSwitchLabel?.(groupLabel, channelLabel) ??
+    intl.formatMessage(MESSAGES.switchLabel, { group: groupLabel, channel: channelLabel })
 
   return (
     <View style={styles.container}>
       <Text variant="overline" color="low">
-        {groupColumnLabel}
+        {groupColumnLabel ?? intl.formatMessage(MESSAGES.groupColumn)}
       </Text>
       {groups.map((group) => (
         <View key={group.key} style={styles.group}>
@@ -61,7 +64,7 @@ const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentPro
           )}
           {group.isLocked && (
             <Text variant="caption" color="disabled">
-              {lockedHint}
+              {lockedHint ?? intl.formatMessage(MESSAGES.lockedHint)}
             </Text>
           )}
           {group.channels.map(({ channel, isActive }) => {
@@ -76,7 +79,7 @@ const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentPro
                   value={isActive}
                   disabled={group.isLocked}
                   onValueChange={(value) => setChannelActive(group.key, channel, value)}
-                  accessibilityLabel={getSwitchLabel(group.label, channelLabel)}
+                  accessibilityLabel={switchLabel(group.label, channelLabel)}
                 />
               </View>
             )

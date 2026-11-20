@@ -1,4 +1,7 @@
-import { render, screen } from '@testing-library/react'
+import { PropsWithChildren, ReactElement } from 'react'
+
+import { render as rtlRender, screen } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import NotificationItemRenderer from '../index'
@@ -8,6 +11,11 @@ vi.mock('react-relay', async () => ({
   ...(await vi.importActual('react-relay')),
   graphql: () => ({}),
 }))
+
+const IntlWrapper = ({ children }: PropsWithChildren) => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+)
+const render = (ui: ReactElement) => rtlRender(ui, { wrapper: IntlWrapper })
 
 const buildNotification = (overrides = {}) =>
   ({

@@ -3,16 +3,14 @@ import { FC, Suspense } from 'react'
 import { LoadingState as DefaultLoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Switch, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { NotificationSettingsGroupsQuery as NotificationSettingsGroupsQueryType } from '../../../../__generated__/NotificationSettingsGroupsQuery.graphql'
 import { NotificationSettingsGroupsQuery, useNotificationSettingsGroups } from '../../common'
 import {
-  DEFAULT_EMPTY_STATE_TEXT,
-  DEFAULT_GROUP_COLUMN_LABEL,
-  DEFAULT_LOCKED_HINT,
-  DEFAULT_NOTIFICATION_CHANNEL_LABELS,
-  defaultGetSwitchLabel,
+  NOTIFICATION_CHANNEL_MESSAGES as CHANNEL_MESSAGES,
+  NOTIFICATION_SETTINGS_GROUPS_MESSAGES as MESSAGES,
 } from './constants'
 import { ChannelCell, SettingsContainer } from './styled'
 import { NotificationSettingsGroupsContentProps, NotificationSettingsGroupsProps } from './types'
@@ -20,31 +18,36 @@ import { NotificationSettingsGroupsContentProps, NotificationSettingsGroupsProps
 const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentProps> = ({
   user,
   channelLabels = {},
-  groupColumnLabel = DEFAULT_GROUP_COLUMN_LABEL,
-  lockedHint = DEFAULT_LOCKED_HINT,
-  emptyStateText = DEFAULT_EMPTY_STATE_TEXT,
-  getSwitchLabel = defaultGetSwitchLabel,
+  groupColumnLabel,
+  lockedHint,
+  emptyStateText,
+  getSwitchLabel,
   Container = SettingsContainer,
 }) => {
+  const intl = useIntl()
   const { groups, channels, setChannelActive } = useNotificationSettingsGroups({ user })
 
   if (groups.length === 0) {
     return (
       <Typography variant="body2" color="text.secondary">
-        {emptyStateText}
+        {emptyStateText ?? intl.formatMessage(MESSAGES.emptyState)}
       </Typography>
     )
   }
 
   const getChannelLabel = (channel: string) =>
-    channelLabels[channel] ?? DEFAULT_NOTIFICATION_CHANNEL_LABELS[channel] ?? channel
+    channelLabels[channel] ??
+    (CHANNEL_MESSAGES[channel] ? intl.formatMessage(CHANNEL_MESSAGES[channel]) : channel)
+  const switchLabel = (groupLabel: string, channelLabel: string) =>
+    getSwitchLabel?.(groupLabel, channelLabel) ??
+    intl.formatMessage(MESSAGES.switchLabel, { group: groupLabel, channel: channelLabel })
 
   return (
     <Container>
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>{groupColumnLabel}</TableCell>
+            <TableCell>{groupColumnLabel ?? intl.formatMessage(MESSAGES.groupColumn)}</TableCell>
             {channels.map((channel) => (
               <ChannelCell key={channel}>{getChannelLabel(channel)}</ChannelCell>
             ))}
@@ -62,7 +65,7 @@ const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentPro
                 )}
                 {group.isLocked && (
                   <Typography variant="caption" color="text.disabled">
-                    {lockedHint}
+                    {lockedHint ?? intl.formatMessage(MESSAGES.lockedHint)}
                   </Typography>
                 )}
               </TableCell>
@@ -79,7 +82,7 @@ const NotificationSettingsGroupsContent: FC<NotificationSettingsGroupsContentPro
                           setChannelActive(group.key, channel, event.target.checked)
                         }
                         inputProps={{
-                          'aria-label': getSwitchLabel(group.label, getChannelLabel(channel)),
+                          'aria-label': switchLabel(group.label, getChannelLabel(channel)),
                         }}
                       />
                     )}

@@ -1,6 +1,7 @@
-import { ReactNode } from 'react'
+import { PropsWithChildren, ReactElement, ReactNode } from 'react'
 
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render as rtlRender, screen } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import NotificationSettingsGroups from '../NotificationSettingsGroups'
@@ -105,6 +106,11 @@ vi.mock('../NotificationsList/MarkAllAsReadButton', () => ({
     return <span>Mark all as read</span>
   },
 }))
+
+const IntlWrapper = ({ children }: PropsWithChildren) => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+)
+const render = (ui: ReactElement) => rtlRender(ui, { wrapper: IntlWrapper })
 
 const buildNotification = (overrides = {}) =>
   ({

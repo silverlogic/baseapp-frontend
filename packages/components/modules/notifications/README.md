@@ -56,7 +56,8 @@ const NotificationPreferences = () => (
 )
 ```
 
-Every piece of copy above is optional and shown with its default. Without a `user` prop the
+Every piece of copy above is optional and shown with its English default; without the prop the text
+is translated (`notifications.settingsGroups.*` and `notifications.channels.*`, en, es and pt). Without a `user` prop the
 component runs `NotificationSettingsGroupsQuery` itself; when the page query already spreads
 `...NotificationSettingsGroups_user` on `me`, pass that fragment ref as `user` instead.
 
@@ -159,9 +160,10 @@ read; navigate from there, since the app owns its router:
 ```tsx
 import { getNotificationUrl } from '@baseapp-frontend/components/notifications/common'
 import { NotificationsList } from '@baseapp-frontend/components/notifications/native'
+
 import { router } from 'expo-router'
 
-<NotificationsList
+;<NotificationsList
   NotificationItemProps={{
     onPress: (notification) => {
       const url = getNotificationUrl(notification.data)
