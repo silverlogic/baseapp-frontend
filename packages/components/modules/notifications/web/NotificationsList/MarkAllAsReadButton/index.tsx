@@ -3,13 +3,22 @@ import { FC } from 'react'
 import LoadingButton from '@mui/lab/LoadingButton'
 import { FormattedMessage } from 'react-intl'
 
-import { useNotificationsMarkAllAsRead } from '../../../common'
+import { useNotificationsMarkAllAsRead, useNotificationsMarkAsRead } from '../../../common'
 import { MarkAllAsReadButtonProps } from './types'
 
-const MarkAllAsReadButton: FC<MarkAllAsReadButtonProps> = ({ refetch }) => {
-  const [commitMutation, isLoading] = useNotificationsMarkAllAsRead()
+const MarkAllAsReadButton: FC<MarkAllAsReadButtonProps> = ({ refetch, notificationIds }) => {
+  const [commitMarkAllAsRead, isMarkingAll] = useNotificationsMarkAllAsRead()
+  const [commitMarkAsRead, isMarkingSome] = useNotificationsMarkAsRead()
+
   const markAsRead = () => {
-    commitMutation({
+    if (notificationIds) {
+      commitMarkAsRead({
+        onCompleted: refetch,
+        variables: { input: { read: true, notificationIds: [...notificationIds] } },
+      })
+      return
+    }
+    commitMarkAllAsRead({
       onCompleted: refetch,
       variables: {
         input: {
@@ -20,7 +29,7 @@ const MarkAllAsReadButton: FC<MarkAllAsReadButtonProps> = ({ refetch }) => {
   }
 
   return (
-    <LoadingButton color="primary" onClick={markAsRead} loading={isLoading}>
+    <LoadingButton color="primary" onClick={markAsRead} loading={isMarkingAll || isMarkingSome}>
       <FormattedMessage id="notifications.list.markAllAsRead" defaultMessage="Mark all as read" />
     </LoadingButton>
   )

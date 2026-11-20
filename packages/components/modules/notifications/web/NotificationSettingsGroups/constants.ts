@@ -1,0 +1,4 @@
+export {
+  NOTIFICATION_CHANNEL_MESSAGES,
+  NOTIFICATION_SETTINGS_GROUPS_MESSAGES,
+} from '../../common/constants'

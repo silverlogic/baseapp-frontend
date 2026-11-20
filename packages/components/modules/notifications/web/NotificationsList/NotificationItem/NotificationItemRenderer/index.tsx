@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { NOTIFICATION_VERB } from '../../../../common'
 import DefaultCommentCreated from '../CommentCreated'
 import DefaultCommentReply from '../CommentReply'
+import DefaultGenericNotificationItem from '../GenericNotificationItem'
 import DefaultReactionCreated from '../ReactionCreated'
 import { NotificationItemRendererProps } from './types'
 
@@ -14,6 +15,8 @@ const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({
   CommentReplyProps = {},
   ReactionCreated = DefaultReactionCreated,
   ReactionCreatedProps = {},
+  GenericNotificationItem = DefaultGenericNotificationItem,
+  GenericNotificationItemProps = {},
 }) => {
   switch (notification.verb) {
     case NOTIFICATION_VERB.commentCreated:
@@ -23,7 +26,10 @@ const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({
     case NOTIFICATION_VERB.reactionCreated:
       return <ReactionCreated notification={notification} {...ReactionCreatedProps} />
     default:
-      return null
+      if (!GenericNotificationItem) return null
+      return (
+        <GenericNotificationItem notification={notification} {...GenericNotificationItemProps} />
+      )
   }
 }
 
