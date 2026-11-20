@@ -65,7 +65,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
   }
   const [selected, setSelected] = useState<SelectedMember[]>([])
   // Follows `defaultRole` until a role is picked in the dialog.
-  const [pickedRole, setRole] = useState<string | null>(null)
+  const [pickedRole, setPickedRole] = useState<string | null>(null)
   const role = pickedRole ?? defaultRole
   const [message, setMessage] = useState('')
   const [extraValues, setExtraValues] = useState<InviteMemberExtraValues>(
@@ -95,7 +95,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
 
   const resetState = () => {
     setSelected([])
-    setRole(null)
+    setPickedRole(null)
     setMessage('')
     setExtraValues(extraFieldsDefaultValues ?? {})
     setIsSubmitting(false)
@@ -286,7 +286,7 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
               size="small"
               label={copy.roleLabel}
               value={role}
-              onChange={(event) => setRole(event.target.value)}
+              onChange={(event) => setPickedRole(event.target.value)}
               disabled={isSubmitting}
             >
               {roleOptions.map(({ value, label }) => (

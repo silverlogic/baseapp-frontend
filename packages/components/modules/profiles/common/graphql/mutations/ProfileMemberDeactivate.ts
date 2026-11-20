@@ -1,9 +1,8 @@
-import { useNotification } from '@baseapp-frontend/utils'
-
-import { useIntl } from 'react-intl'
-import { Disposable, UseMutationConfig, graphql, useMutation } from 'react-relay'
+import { defineMessages } from 'react-intl'
+import { graphql } from 'react-relay'
 
 import { ProfileMemberDeactivateMutation } from '../../../../../__generated__/ProfileMemberDeactivateMutation.graphql'
+import { useMemberStatusMutation } from './useMemberStatusMutation'
 
 export const ProfileMemberDeactivateMutationQuery = graphql`
   mutation ProfileMemberDeactivateMutation($input: ProfileMemberDeactivateInput!) {
@@ -22,46 +21,17 @@ export const ProfileMemberDeactivateMutationQuery = graphql`
   }
 `
 
-export const useProfileMemberDeactivateMutation = (): [
-  (config: UseMutationConfig<ProfileMemberDeactivateMutation>) => Disposable,
-  boolean,
-] => {
-  const { sendMutationErrorToast, sendToast } = useNotification()
-  const intl = useIntl()
-  const [commitMutation, isMutationInFlight] = useMutation<ProfileMemberDeactivateMutation>(
+const MESSAGES = defineMessages({
+  failed: {
+    id: 'profiles.members.deactivate.failed',
+    defaultMessage: 'Member could not be deactivated',
+  },
+  success: { id: 'profiles.members.deactivate.success', defaultMessage: 'Member deactivated' },
+})
+
+export const useProfileMemberDeactivateMutation = () =>
+  useMemberStatusMutation<ProfileMemberDeactivateMutation>(
     ProfileMemberDeactivateMutationQuery,
+    (response) => response?.profileMemberDeactivate?.errors,
+    MESSAGES,
   )
-
-  const commit = (config: UseMutationConfig<ProfileMemberDeactivateMutation>) =>
-    commitMutation({
-      ...config,
-      onCompleted: (response, errors) => {
-        const errorMessage = sendMutationErrorToast(
-          response?.profileMemberDeactivate?.errors,
-          errors,
-          {
-            defaultMessage: intl.formatMessage({
-              id: 'profiles.members.deactivate.failed',
-              defaultMessage: 'Member could not be deactivated',
-            }),
-          },
-        )
-        if (!errorMessage) {
-          sendToast(
-            intl.formatMessage({
-              id: 'profiles.members.deactivate.success',
-              defaultMessage: 'Member deactivated',
-            }),
-            { type: 'success' },
-          )
-        }
-        config?.onCompleted?.(response, errors)
-      },
-      onError: (error) => {
-        sendToast(error.message, { type: 'error' })
-        config?.onError?.(error)
-      },
-    })
-
-  return [commit, isMutationInFlight]
-}
