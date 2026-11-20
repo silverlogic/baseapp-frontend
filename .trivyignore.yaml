@@ -2,52 +2,25 @@
 # and carries an expiry so it gets re-examined instead of living forever.
 # Consumed explicitly via `--ignorefile` in .github/workflows/main.yml.
 vulnerabilities:
-  # No patched release exists. Both advisories (GHSA-5p2g-fcmc-qvqq,
-  # GHSA-w3rx-r6r6-pgpr) list every published version as vulnerable, including
-  # the 2.x line, so there is no version to upgrade to. image-size reaches us
-  # only through metro, the React Native bundler: it runs on a developer machine
-  # or in CI to read asset dimensions while producing a bundle, and is not part
-  # of the shipped app. Triggering the DoS requires feeding the bundler a
-  # hostile image, which means committing one to our own assets.
-  - id: CVE-2025-71329
+  # Only the 3.x line is still held. 10.x moved to 11.0.4 with the
+  # `minimatch@^10.0.0` override, so this is scoped to the exact version that
+  # cannot move rather than to the package.
+  #
+  # eslint 8.57.1 and its plugins need minimatch 3's callable CommonJS default.
+  # minimatch 11 is ESM-first and drops it, so raising the eslint>minimatch pins
+  # fails every lint task with
+  #   TypeError: (0 , _minimatch2.default) is not a function
+  # Measured, not assumed: the pins were raised, lint broke, they were restored.
+  # The amplification needs optimizationLevel >= 2 with an attacker-supplied
+  # pattern, and minimatch 3.x has no optimizationLevel option at all. Every
+  # caller is the eslint 8 toolchain matching patterns from our own config, and
+  # none of it runs in a shipped bundle. Migrating to eslint 9 retires the whole
+  # chain and this entry with it.
+  - id: CVE-2026-118764
     purls:
-      - "pkg:npm/image-size"
-    expired_at: 2026-11-11
-    statement: >-
-      No patched version exists in any release line. Reached only through metro
-      (build-time bundler), not shipped in the app bundle.
-  - id: CVE-2025-71330
-    purls:
-      - "pkg:npm/image-size"
-    expired_at: 2026-11-11
-    statement: >-
-      No patched version exists in any release line. Reached only through metro
-      (build-time bundler), not shipped in the app bundle.
-  # No patched release exists. GHSA-86w9-cpqp-85rv lists node-forge <= 1.4.0 as
-  # vulnerable and 1.4.0 is the latest published version. node-forge reaches us
-  # only through dev tooling: @expo/cli (via @expo/code-signing-certificates, for
-  # dev-server manifest signing) and webpack-dev-server (via selfsigned, to
-  # generate a local HTTPS cert). Neither runs in a shipped bundle or verifies
-  # untrusted signatures in production.
-  - id: CVE-2026-85393
-    purls:
-      - "pkg:npm/node-forge"
+      - "pkg:npm/minimatch@3.1.5"
     expired_at: 2026-12-31
     statement: >-
-      No patched version exists. Reached only through dev tooling (@expo/cli,
-      webpack-dev-server), not shipped in any app bundle.
-  # No patched release exists. GHSA-vfj7-8cjw-p6xm lists braces <= 3.0.3 as
-  # vulnerable and 3.0.3 is the latest published version. braces reaches us only
-  # through micromatch and chokidar, which sit under build/dev tooling: metro's
-  # file map, jest, fast-glob, tailwindcss and webpack-dev-server. Those expand
-  # glob patterns taken from our own config files, so triggering the stack
-  # overflow means committing a deeply nested pattern ourselves; none of it runs
-  # in a shipped bundle.
-  - id: CVE-2026-93687
-    purls:
-      - "pkg:npm/braces"
-    expired_at: 2026-11-11
-    statement: >-
-      No patched version exists. Reached only through build/dev tooling
-      (micromatch, chokidar), which expands patterns from our own config and is
-      not shipped in any app bundle.
+      minimatch 3.1.5 only, held by eslint 8 which needs its CommonJS default;
+      minimatch 11 removes it. Needs optimizationLevel >= 2, which 3.x does not
+      have, and is reached only through lint tooling, not any shipped bundle.

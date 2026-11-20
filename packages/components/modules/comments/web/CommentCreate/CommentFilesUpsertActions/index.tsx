@@ -6,6 +6,8 @@ import { useFileSelect } from '@baseapp-frontend/components/files/common'
 import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
 import { AttachmentIcon, MentionIcon } from '@baseapp-frontend/design-system/components/web/icons'
 
+import { useIntl } from 'react-intl'
+
 import { ActionsContainer } from './styled'
 import type { CommentFilesUpsertActionsProps } from './types'
 
@@ -21,6 +23,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
   maxFileSize,
   acceptedFileTypes,
 }) => {
+  const intl = useIntl()
   const { open, getInputProps } = useFileSelect({
     onFilesSelected,
     maxFiles,
@@ -38,11 +41,20 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
         onClick={open}
         disabled={isUploading}
         isLoading={isUploading}
-        aria-label="Attach files"
+        aria-label={intl.formatMessage({
+          id: 'comments.upsertActions.attachFiles.ariaLabel',
+          defaultMessage: 'Attach files',
+        })}
       >
         <AttachmentIcon />
       </IconButton>
-      <IconButton disabled aria-label="mention">
+      <IconButton
+        disabled
+        aria-label={intl.formatMessage({
+          id: 'comments.upsertActions.mention.ariaLabel',
+          defaultMessage: 'mention',
+        })}
+      >
         <MentionIcon />
       </IconButton>
     </ActionsContainer>

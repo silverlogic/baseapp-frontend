@@ -1,5 +1,41 @@
 # @baseapp-frontend/design-system
 
+## 4.0.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Native code and shared `common/` code used by native are unchanged.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one). The provider ships only the `common.*` catalog: merge the
+    `locales` exports of `utils`, `design-system`, `components` (and `wagtail`) per locale with
+    the app's own and pass the `{ en, es, pt }` map through `additionalMessages`, otherwise
+    those strings fall back to English. Setup is documented in `packages/i18n/README.md`.
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/utils@4.4.0
+
+## 3.0.1
+
+### Patch Changes
+
+- f9c934f: Bump `lodash` from 4.18.0 to 4.18.1 (CVE-2026-2950), so published installs pick up the patched version.
+- 7fef43d: Bump `next` from 15.5.27 to 15.5.28 (GHSA-2464-fhr4-w9xw, CRITICAL) and, in `@baseapp-frontend/utils`,
+  `qs` from `^6.15.2` to `^6.16.1` (CVE-2026-110816), so published installs pick up the patched versions.
+- Updated dependencies [f9c934f]
+- Updated dependencies [7fef43d]
+  - @baseapp-frontend/utils@4.3.1
+
 ## 3.0.0
 
 ### Minor Changes
@@ -16,7 +52,6 @@
   file instead.
 
   The upload pipeline is now shared across platforms instead of being web-only:
-
   - **`UploadSource`**: every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`)
     accepts a web `File` or an `UploadSource` (`name`, `size`, `type`, `readChunk(start, end)`,
     optional `dispose()`). Chunks are read lazily inside the concurrency slot, so a native upload holds
@@ -60,7 +95,6 @@
 ### Minor Changes
 
 - Native social-input and comments primitives:
-
   - `SocialTextInput` (native): multiline social composer input with edit/reply banners, tool row, and controller-driven inline field errors — error border while focused plus a warning icon + caption rendered from the form field's error message (via `withNativeController`'s `error`/`helperText`).
   - `ConfirmDialog` (native): confirmation dialog mirroring the web `ConfirmDialog` API (`title`, `content`, `cancelText`, `action` slot) built on react-native-paper's `Portal` + `Dialog`, with a close (X) button in the title row and a built-in outlined Cancel button.
   - New native icons: `EmojiIcon`, `FavoriteIcon`, `FavoriteSelectedIcon`, `PinIcon`, `ReplyIcon`.
