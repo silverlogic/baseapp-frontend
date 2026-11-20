@@ -1,5 +1,5 @@
 ---
-'@baseapp-frontend/components': minor
+"@baseapp-frontend/components": minor
 ---
 
 New `impersonation` module (`@baseapp-frontend/components/impersonation/{common,web,native}`) for
@@ -9,6 +9,6 @@ tokens back, whatever the server answers, and only reloads when another tab alre
 session. `ImpersonationBanner` (web and native, fragment
 `ImpersonationBanner_user` on `User`) shows who is impersonated, by whom, the time left and an
 End session button, and ends the session when it expires; it says "read only" only when the
-session is. `CurrentUserImpersonationBanner` (web) queries `me` itself, and only while a session
-runs. `schema.graphql` gains the impersonation mutations, `ImpersonationSession` and
-`User.impersonation`.
+session is. Its text is translated (en, es, pt; `impersonation.banner.*`).
+`CurrentUserImpersonationBanner` (web) queries `me` itself, and only while a session runs.
+`schema.graphql` gains the impersonation mutations, `ImpersonationSession` and `User.impersonation`.

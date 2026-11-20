@@ -1,4 +1,7 @@
-import { fireEvent, render, screen } from '@testing-library/react'
+import { PropsWithChildren, ReactElement } from 'react'
+
+import { fireEvent, render as rtlRender, screen } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import ImpersonationBanner from '../index'
@@ -9,12 +12,24 @@ const { mockUseImpersonationBanner, mockEnd } = vi.hoisted(() => ({
 }))
 
 // the common barrel pulls in relay documents, which the transform can't compile here
-vi.mock('../../../common', async () => ({
-  formatRemainingTime: (
-    await vi.importActual<typeof import('../../../common/utils')>('../../../common/utils')
-  ).formatRemainingTime,
-  useImpersonationBanner: mockUseImpersonationBanner,
-}))
+vi.mock('../../../common', async () => {
+  const constants = await vi.importActual<typeof import('../../../common/constants')>(
+    '../../../common/constants',
+  )
+  return {
+    IMPERSONATION_BANNER_MESSAGES: constants.IMPERSONATION_BANNER_MESSAGES,
+    IMPERSONATION_BANNER_SEPARATOR: constants.IMPERSONATION_BANNER_SEPARATOR,
+    formatRemainingTime: (
+      await vi.importActual<typeof import('../../../common/utils')>('../../../common/utils')
+    ).formatRemainingTime,
+    useImpersonationBanner: mockUseImpersonationBanner,
+  }
+})
+
+const IntlWrapper = ({ children }: PropsWithChildren) => (
+  <IntlProvider locale="en">{children}</IntlProvider>
+)
+const render = (ui: ReactElement) => rtlRender(ui, { wrapper: IntlWrapper })
 
 const session = (overrides = {}) => ({
   id: 'session-1',

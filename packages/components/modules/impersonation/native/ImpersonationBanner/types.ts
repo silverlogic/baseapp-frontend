@@ -11,7 +11,7 @@ export interface ImpersonationBannerProps extends Omit<
    * can't reload, so this must recreate the Relay environment and navigate.
    */
   onEnded: (result: ImpersonationEndedResult) => void
-  /** Label of the button that ends the session. Default "End session". */
+  /** Label of the button that ends the session. Defaults to a translated "End session". */
   endButtonLabel?: string
   style?: StyleProp<ViewStyle>
 }

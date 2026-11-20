@@ -16,7 +16,7 @@ This structure ensures platform-specific code remains isolated, while shared cod
 
 ## What it does
 
-Lets an authorized user (the *impersonator*) act as another user (the *target*) for a limited
+Lets an authorized user (the _impersonator_) act as another user (the _target_) for a limited
 time, against the backend's `baseapp_auth.impersonation` app:
 
 1. `useStartImpersonation` calls `impersonationStart`, keeps the impersonator's tokens aside
@@ -32,7 +32,7 @@ time, against the backend's `baseapp_auth.impersonation` app:
    session, ending it in another (its button or its countdown) only reloads that tab, with no
    request and no logout.
 
-Whether the session may write (*act as*) or only read is decided by the backend
+Whether the session may write (_act as_) or only read is decided by the backend
 (`BASEAPP_AUTH_IMPERSONATION_READ_ONLY`). Nothing here assumes either: the banner reads
 `readOnly` from the session ("Acting as …" or "Viewing as … (read only)"), and a write the backend
 refuses comes back as an ordinary error with code `impersonation_read_only`.
@@ -46,28 +46,28 @@ that logs out.
 
 ## Exports
 
-| Path | Export | |
-|---|---|---|
-| `impersonation/common` | `useStartImpersonation(options)` | `{ startImpersonation(input, callbacks?), isStarting }` |
-| | `useEndImpersonation(options)` | `{ endImpersonation(), isEnding }` |
-| | `useImpersonationBanner(options)` | The banner's state and actions, for a custom banner |
-| | `useImpersonationCountdown(expiresAt, { onExpire })` | `{ remainingMs, isExpired }` |
-| | `ImpersonationBannerFragment` | `fragment ImpersonationBanner_user on User` |
-| | `ImpersonationBannerQuery` | `query ImpersonationBannerQuery { me { ...ImpersonationBanner_user } }` |
-| | `useImpersonationStartMutation`, `useImpersonationEndMutation` | The bare mutations |
-| | `formatRemainingTime`, `getRemainingTime` | Countdown helpers |
-| `impersonation/web` | `ImpersonationBanner` | Takes the `user` fragment ref |
-| | `CurrentUserImpersonationBanner` | Loads `me` itself, only while a session runs |
-| `impersonation/native` | `ImpersonationBanner` | Takes the `user` fragment ref and a required `onEnded` |
+| Path                   | Export                                                         |                                                                         |
+| ---------------------- | -------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `impersonation/common` | `useStartImpersonation(options)`                               | `{ startImpersonation(input, callbacks?), isStarting }`                 |
+|                        | `useEndImpersonation(options)`                                 | `{ endImpersonation(), isEnding }`                                      |
+|                        | `useImpersonationBanner(options)`                              | The banner's state and actions, for a custom banner                     |
+|                        | `useImpersonationCountdown(expiresAt, { onExpire })`           | `{ remainingMs, isExpired }`                                            |
+|                        | `ImpersonationBannerFragment`                                  | `fragment ImpersonationBanner_user on User`                             |
+|                        | `ImpersonationBannerQuery`                                     | `query ImpersonationBannerQuery { me { ...ImpersonationBanner_user } }` |
+|                        | `useImpersonationStartMutation`, `useImpersonationEndMutation` | The bare mutations                                                      |
+|                        | `formatRemainingTime`, `getRemainingTime`                      | Countdown helpers                                                       |
+| `impersonation/web`    | `ImpersonationBanner`                                          | Takes the `user` fragment ref                                           |
+|                        | `CurrentUserImpersonationBanner`                               | Loads `me` itself, only while a session runs                            |
+| `impersonation/native` | `ImpersonationBanner`                                          | Takes the `user` fragment ref and a required `onEnded`                  |
 
 ### `useStartImpersonation` / `useEndImpersonation` options
 
-| Option | Default | |
-|---|---|---|
-| `redirectTo` | `'/'` | Where the app is reloaded once the tokens are swapped. |
-| `onStarted(session)` / `onEnded({ restored })` | — | Called instead of the reload. The Relay store and any React Query cache still hold the previous user's data: recreate them. Required on native, where there is nothing to reload: without them the tokens are swapped and nothing else happens (a warning is logged in development). `restored` is also `true` when another tab had already ended the session. |
-| `onLogout()` | — | `useEndImpersonation` only: called when no tokens were kept aside (the session was started elsewhere), after the session's tokens were removed. `LOGOUT_EVENT` is broadcast as well. |
-| `accessKeyName`, `refreshKeyName`, `impersonatorAccessKeyName`, `impersonatorRefreshKeyName` | the `@baseapp-frontend/utils` names | Custom token names. |
+| Option                                                                                       | Default                             |                                                                                                                                                                                                                                                                                                                                                                |
+| -------------------------------------------------------------------------------------------- | ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `redirectTo`                                                                                 | `'/'`                               | Where the app is reloaded once the tokens are swapped.                                                                                                                                                                                                                                                                                                         |
+| `onStarted(session)` / `onEnded({ restored })`                                               | —                                   | Called instead of the reload. The Relay store and any React Query cache still hold the previous user's data: recreate them. Required on native, where there is nothing to reload: without them the tokens are swapped and nothing else happens (a warning is logged in development). `restored` is also `true` when another tab had already ended the session. |
+| `onLogout()`                                                                                 | —                                   | `useEndImpersonation` only: called when no tokens were kept aside (the session was started elsewhere), after the session's tokens were removed. `LOGOUT_EVENT` is broadcast as well.                                                                                                                                                                           |
+| `accessKeyName`, `refreshKeyName`, `impersonatorAccessKeyName`, `impersonatorRefreshKeyName` | the `@baseapp-frontend/utils` names | Custom token names.                                                                                                                                                                                                                                                                                                                                            |
 
 `startImpersonation({ targetUser, reason }, { onCompleted, onError })`: `targetUser` is the
 user's relay id. `onCompleted(response, errors)` receives the server's answer before anything is
@@ -80,12 +80,12 @@ network failures, also toasted.
 
 Both banners take the `useEndImpersonation` options plus:
 
-| Prop | Default | |
-|---|---|---|
-| `user` | — | `ImpersonationBanner_user$key` of `me`. Nothing renders for `null` or outside a session. Not on `CurrentUserImpersonationBanner`. |
-| `endOnExpiry` | `true` | End the session when the countdown reaches zero. |
-| `endButtonLabel` | `'End session'` | |
-| `ContainerProps` (web) / `style` (native) | — | The banner is `position: sticky; top: 0` on web. |
+| Prop                                      | Default                    |                                                                                                                                   |
+| ----------------------------------------- | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `user`                                    | —                          | `ImpersonationBanner_user$key` of `me`. Nothing renders for `null` or outside a session. Not on `CurrentUserImpersonationBanner`. |
+| `endOnExpiry`                             | `true`                     | End the session when the countdown reaches zero.                                                                                  |
+| `endButtonLabel`                          | translated `'End session'` |                                                                                                                                   |
+| `ContainerProps` (web) / `style` (native) | —                          | The banner is `position: sticky; top: 0` on web.                                                                                  |
 
 ## Usage
 
@@ -113,7 +113,7 @@ Show the banner once, in the root layout:
 ```tsx
 import { CurrentUserImpersonationBanner } from '@baseapp-frontend/components/impersonation/web'
 
-<CurrentUserImpersonationBanner redirectTo="/staff/users" />
+;<CurrentUserImpersonationBanner redirectTo="/staff/users" />
 ```
 
 or, when the layout already queries `me`, spread the fragment there and pass it:
