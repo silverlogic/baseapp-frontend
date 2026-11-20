@@ -1,4 +1,4 @@
-import _axios from 'axios'
+import _axios, { AxiosHeaders } from 'axios'
 import humps from 'humps'
 import { headers as incomingHeaders } from 'next/headers'
 import type { Mock } from 'vitest'
@@ -6,6 +6,7 @@ import type { Mock } from 'vitest'
 import { createAxiosInstance } from '..'
 import { broadcastEvent } from '../../../events'
 import { getExpoConstant } from '../../../expo'
+import { getToken } from '../../../token/getToken'
 import { getTokenSSR } from '../../../token/getTokenSSR'
 import { isUserTokenValid } from '../../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../../token/refreshAccessToken'
@@ -155,6 +156,28 @@ describe('createAxiosInstance', () => {
     }
     await interceptorFn(request)
     expect(request.headers.Authorization).toBeUndefined()
+  })
+
+  it.each([
+    ['/register', undefined],
+    ['/auth/login', undefined],
+    ['/auth', undefined],
+    ['/events/1/register', 'Bearer someAuthToken'],
+    ['/organizations/auth/login', 'Bearer someAuthToken'],
+  ])('sends %s with Authorization %s by default', async (url, authorization) => {
+    const {
+      axios: {
+        interceptors: {
+          request: { use },
+        },
+      },
+    } = createAxiosInstance()
+
+    const [[interceptorFn]] = (use as Mock).mock.calls as any
+    const request = { headers: { Authorization: undefined }, url }
+    await interceptorFn(request)
+
+    expect(request.headers.Authorization).toBe(authorization)
   })
 
   it('should be able to eject an interceptor', () => {
@@ -470,6 +493,117 @@ describe('createAxiosInstance', () => {
     })
   })
 
+  describe('withCurrentProfile', () => {
+    const profileCookie = JSON.stringify({
+      id: 'profile-123',
+      name: 'Acme',
+      image: null,
+      urlPath: null,
+    })
+    let originalWindow: any
+
+    const tokensByKey =
+      (profile: string | null | undefined) =>
+      (key: string): string | null | undefined =>
+        key === 'CurrentProfile' ? profile : 'someAuthToken'
+
+    const runRequestInterceptor = async (
+      options: Parameters<typeof createAxiosInstance>[0],
+      headers: Record<string, string | undefined> | AxiosHeaders = {},
+    ) => {
+      const {
+        axios: {
+          interceptors: {
+            request: { use },
+          },
+        },
+      } = createAxiosInstance(options)
+      const [[interceptorFn]] = (use as Mock).mock.calls as any
+      const request = { headers, url: '/users' }
+      await interceptorFn(request)
+      return request
+    }
+
+    beforeEach(() => {
+      originalWindow = global.window
+      ;(isUserTokenValid as Mock).mockReturnValue(true)
+    })
+
+    afterEach(() => {
+      global.window = originalWindow
+      ;(getToken as Mock).mockReturnValue('someAuthToken')
+      ;(getTokenSSR as Mock).mockResolvedValue('someAuthToken')
+    })
+
+    it('does not send Current-Profile by default', async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({})
+
+      expect(request.headers['Current-Profile']).toBeUndefined()
+      expect(getToken).not.toHaveBeenCalledWith('CurrentProfile')
+    })
+
+    it("sends the current profile's id from the cookie in the browser", async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(request.headers['Current-Profile']).toBe('profile-123')
+      expect(request.headers.Authorization).toBe('Bearer someAuthToken')
+    })
+
+    it("sends the current profile's id from the request cookies on the server", async () => {
+      delete (global as any).window
+      ;(getTokenSSR as Mock).mockImplementation(async (key: string) =>
+        tokensByKey(profileCookie)(key),
+      )
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(getTokenSSR).toHaveBeenCalledWith('CurrentProfile')
+      expect(request.headers['Current-Profile']).toBe('profile-123')
+    })
+
+    it.each([
+      ['no current profile', undefined],
+      ['an empty secure store entry', null],
+      ['a cookie without an id', JSON.stringify({ name: 'Acme' })],
+    ])('sends no Current-Profile with %s', async (_, profile) => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profile))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true })
+
+      expect(request.headers['Current-Profile']).toBeUndefined()
+    })
+
+    it('keeps a Current-Profile the caller set on the request', async () => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor(
+        { withCurrentProfile: true },
+        { 'Current-Profile': 'profile-456' },
+      )
+
+      expect(request.headers['Current-Profile']).toBe('profile-456')
+    })
+
+    it.each([
+      ['a plain headers object', () => ({ 'current-profile': 'profile-456' })],
+      ['AxiosHeaders', () => new AxiosHeaders({ 'current-profile': 'profile-456' })],
+    ])('keeps a caller-set header in any letter case (%s)', async (_, makeHeaders) => {
+      ;(getToken as Mock).mockImplementation(tokensByKey(profileCookie))
+
+      const request = await runRequestInterceptor({ withCurrentProfile: true }, makeHeaders())
+
+      const sent =
+        request.headers instanceof AxiosHeaders ? request.headers.toJSON() : request.headers
+      expect(
+        Object.entries(sent).filter(([name]) => name.toLowerCase() === 'current-profile'),
+      ).toEqual([['current-profile', 'profile-456']])
+    })
+  })
+
   describe('API address', () => {
     let originalWindow: any
 
@@ -547,6 +681,18 @@ describe('createAxiosInstance', () => {
 
       expect(request.baseURL).toBe('http://web:8000/v1')
       expect(request.headers['X-Forwarded-Host']).toBe('tenant.example.com')
+    })
+
+    it("forwards the visitor's trimmed X-Forwarded-For on the server when configured", async () => {
+      delete (global as any).window
+      vi.stubEnv('INTERNAL_API_FORWARDED_FOR_TRIM', '1')
+      ;(incomingHeaders as Mock).mockResolvedValue(
+        new Headers({ host: 'tenant.example.com', 'x-forwarded-for': '203.0.113.7, 172.18.0.5' }),
+      )
+
+      const request = await runRequestInterceptor('/v1')
+
+      expect(request.headers['X-Forwarded-For']).toBe('203.0.113.7')
     })
   })
 
