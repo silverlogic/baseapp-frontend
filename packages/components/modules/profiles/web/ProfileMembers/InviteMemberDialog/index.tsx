@@ -8,16 +8,32 @@ import { getGraphQLErrorMessage } from '@baseapp-frontend/graphql'
 import { getMutationErrorMessage, useNotification } from '@baseapp-frontend/utils'
 
 import { LoadingButton } from '@mui/lab'
-import { Box, TextField, Typography } from '@mui/material'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { Box, MenuItem, TextField, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
+import { ProfileUserRoleCreateInput } from '../../../../../__generated__/ProfileUserRoleCreateMutation.graphql'
+import { ProfileSendInvitationInput } from '../../../../../__generated__/SendInvitationMutation.graphql'
 import { useProfileUserRoleCreateMutation } from '../../../common/graphql/mutations/ProfileUserRoleCreate'
 import { useSendInvitationMutation } from '../../../common/graphql/mutations/SendInvitation'
+import { formatMemberOptionLabel } from '../utils'
 import MemberSearch from './MemberSearch'
-import { DEFAULT_INVITE_ROLE, INVITE_MEMBER_DIALOG_MESSAGES as MESSAGES } from './constants'
-import { InviteMemberDialogProps, SelectedEmail, SelectedMember, SelectedProfile } from './types'
+import {
+  DEFAULT_INVITE_ROLE,
+  INVITE_MEMBER_DIALOG_COPY_KEYS,
+  INVITE_MEMBER_DIALOG_MESSAGES as MESSAGES,
+} from './constants'
+import {
+  InviteMemberDialogCopy,
+  InviteMemberDialogProps,
+  InviteMemberExtraValues,
+  SelectedEmail,
+  SelectedMember,
+  SelectedProfile,
+} from './types'
 import {
   BatchError,
+  buildAddMembersInput,
+  buildSendInvitationInput,
   getMemberKey,
   isFulfilled,
   isRejected,
@@ -25,11 +41,36 @@ import {
   isSelectedProfile,
 } from './utils'
 
-const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connections }) => {
+const InviteMemberDialog: FC<InviteMemberDialogProps> = ({
+  open,
+  onClose,
+  connections,
+  defaultRole = DEFAULT_INVITE_ROLE,
+  roleOptions,
+  collectInviteeNames = false,
+  showMessageField = false,
+  renderExtraFields,
+  extraFieldsDefaultValues,
+  validateExtraFields,
+  copy: copyOverrides,
+}) => {
   const { currentProfile } = useCurrentProfile()
   const { sendToast } = useNotification()
   const intl = useIntl()
+  const copy: InviteMemberDialogCopy = {
+    ...(Object.fromEntries(
+      INVITE_MEMBER_DIALOG_COPY_KEYS.map((key) => [key, intl.formatMessage(MESSAGES[key])]),
+    ) as InviteMemberDialogCopy),
+    ...copyOverrides,
+  }
   const [selected, setSelected] = useState<SelectedMember[]>([])
+  // Follows `defaultRole` until a role is picked in the dialog.
+  const [pickedRole, setPickedRole] = useState<string | null>(null)
+  const role = pickedRole ?? defaultRole
+  const [message, setMessage] = useState('')
+  const [extraValues, setExtraValues] = useState<InviteMemberExtraValues>(
+    () => extraFieldsDefaultValues ?? {},
+  )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [createMembers] = useProfileUserRoleCreateMutation()
   const [sendInvitation] = useSendInvitationMutation()
@@ -42,8 +83,21 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
   const handleRemove = (memberKey: string) =>
     setSelected((prev) => prev.filter((item) => getMemberKey(item) !== memberKey))
 
+  const handleInviteeNameChange = (email: string, field: 'firstName' | 'lastName', value: string) =>
+    setSelected((prev) =>
+      prev.map((item) =>
+        isSelectedEmail(item) && item.email === email ? { ...item, [field]: value } : item,
+      ),
+    )
+
+  const setExtraValue = (name: string, value: unknown) =>
+    setExtraValues((prev) => ({ ...prev, [name]: value }))
+
   const resetState = () => {
     setSelected([])
+    setPickedRole(null)
+    setMessage('')
+    setExtraValues(extraFieldsDefaultValues ?? {})
     setIsSubmitting(false)
   }
 
@@ -59,14 +113,24 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
   // rejects with the same members (so they stay selected) and a message on failure.
   const addMembers = (profileId: string, members: SelectedProfile[]) =>
     new Promise<SelectedMember[]>((resolve, reject) => {
-      const usersIds = members.map((member) => member.userId)
       createMembers({
-        variables: { input: { profileId, usersIds, roleType: DEFAULT_INVITE_ROLE }, connections },
+        variables: {
+          // Extra fields and project roles are outside the generated input type.
+          input: buildAddMembersInput({
+            profileId,
+            role,
+            members,
+            extraValues,
+          }) as ProfileUserRoleCreateInput,
+          connections,
+        },
         onCompleted: (response, errors) => {
-          const message = getMutationErrorMessage(response?.profileUserRoleCreate?.errors, errors, {
-            defaultMessage: intl.formatMessage(MESSAGES.addMembersFailed),
-          })
-          if (message) reject(new BatchError(message, members))
+          const errorMessage = getMutationErrorMessage(
+            response?.profileUserRoleCreate?.errors,
+            errors,
+            { defaultMessage: intl.formatMessage(MESSAGES.addMembersFailed) },
+          )
+          if (errorMessage) reject(new BatchError(errorMessage, members))
           else resolve(members)
         },
         onError: (error) =>
@@ -85,18 +149,22 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
     new Promise<SelectedMember[]>((resolve, reject) => {
       sendInvitation({
         variables: {
-          input: {
+          input: buildSendInvitationInput({
             profileId,
-            emails: members.map((member) => member.email),
-            role: DEFAULT_INVITE_ROLE,
-          },
+            role,
+            members,
+            message: showMessageField ? message : undefined,
+            extraValues,
+          }) as ProfileSendInvitationInput,
           connections,
         },
         onCompleted: (response, errors) => {
-          const message = getMutationErrorMessage(response?.profileSendInvitation?.errors, errors, {
-            defaultMessage: intl.formatMessage(MESSAGES.sendInvitationsFailed),
-          })
-          if (message) reject(new BatchError(message, members))
+          const errorMessage = getMutationErrorMessage(
+            response?.profileSendInvitation?.errors,
+            errors,
+            { defaultMessage: intl.formatMessage(MESSAGES.sendInvitationsFailed) },
+          )
+          if (errorMessage) reject(new BatchError(errorMessage, members))
           else resolve(members)
         },
         onError: (error) =>
@@ -149,32 +217,103 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
     setIsSubmitting(false)
   }
 
+  const selectedEmails = selected.filter(isSelectedEmail)
+  const areExtraFieldsValid = validateExtraFields ? validateExtraFields(extraValues) : true
+
   return (
     <ConfirmDialog
-      title={intl.formatMessage(MESSAGES.title)}
+      title={copy.title}
       open={open}
       onClose={handleClose}
-      cancelText={intl.formatMessage(MESSAGES.cancel)}
+      cancelText={copy.cancel}
       customMaxWidth={400}
       content={
         <Box sx={{ display: 'grid', gap: 2 }}>
           <Typography variant="body2" color="text.secondary">
-            <FormattedMessage {...MESSAGES.description} />
+            {copy.description}
           </Typography>
           {open && (
             <Suspense
               fallback={
-                <TextField
-                  fullWidth
-                  size="small"
-                  disabled
-                  placeholder={intl.formatMessage(MESSAGES.searchPlaceholder)}
-                />
+                <TextField fullWidth size="small" disabled placeholder={copy.searchPlaceholder} />
               }
             >
-              <MemberSearch selected={selected} onAdd={handleAdd} onRemove={handleRemove} />
+              <MemberSearch
+                selected={selected}
+                onAdd={handleAdd}
+                onRemove={handleRemove}
+                placeholder={copy.searchPlaceholder}
+              />
             </Suspense>
           )}
+          {collectInviteeNames && selectedEmails.length > 0 && (
+            <Box sx={{ display: 'grid', gap: 1.5 }}>
+              <Typography variant="subtitle2">{copy.inviteeNamesTitle}</Typography>
+              {selectedEmails.map((invitee) => (
+                <Box key={invitee.email} sx={{ display: 'grid', gap: 1 }}>
+                  <Typography variant="caption" color="text.secondary" noWrap>
+                    {invitee.email}
+                  </Typography>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1 }}>
+                    <TextField
+                      size="small"
+                      label={copy.firstNameLabel}
+                      value={invitee.firstName ?? ''}
+                      onChange={(event) =>
+                        handleInviteeNameChange(invitee.email, 'firstName', event.target.value)
+                      }
+                      disabled={isSubmitting}
+                      inputProps={{ maxLength: 150 }}
+                    />
+                    <TextField
+                      size="small"
+                      label={copy.lastNameLabel}
+                      value={invitee.lastName ?? ''}
+                      onChange={(event) =>
+                        handleInviteeNameChange(invitee.email, 'lastName', event.target.value)
+                      }
+                      disabled={isSubmitting}
+                      inputProps={{ maxLength: 150 }}
+                    />
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+          )}
+          {roleOptions && roleOptions.length > 0 && (
+            <TextField
+              select
+              size="small"
+              label={copy.roleLabel}
+              value={role}
+              onChange={(event) => setPickedRole(event.target.value)}
+              disabled={isSubmitting}
+            >
+              {roleOptions.map(({ value, label }) => (
+                <MenuItem key={value} value={value}>
+                  {formatMemberOptionLabel(label, intl.formatMessage)}
+                </MenuItem>
+              ))}
+            </TextField>
+          )}
+          {showMessageField && (
+            <TextField
+              multiline
+              minRows={3}
+              size="small"
+              label={copy.messageLabel}
+              placeholder={copy.messagePlaceholder}
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              disabled={isSubmitting}
+            />
+          )}
+          {renderExtraFields?.({
+            values: extraValues,
+            setValue: setExtraValue,
+            disabled: isSubmitting,
+            selected,
+          })}
         </Box>
       }
       action={
@@ -183,9 +322,9 @@ const InviteMemberDialog: FC<InviteMemberDialogProps> = ({ open, onClose, connec
           color="inherit"
           onClick={handleSubmit}
           loading={isSubmitting}
-          disabled={isSubmitting || selected.length === 0}
+          disabled={isSubmitting || selected.length === 0 || !areExtraFieldsValid}
         >
-          <FormattedMessage {...MESSAGES.submit} />
+          {copy.submit}
         </LoadingButton>
       }
     />

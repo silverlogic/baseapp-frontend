@@ -9,6 +9,7 @@ export const MEMBER_STATUSES = {
   inactive: 'INACTIVE',
   declined: 'DECLINED',
   expired: 'EXPIRED',
+  cancelled: 'CANCELLED',
 } as const
 
 export const INVITATION_ACTIONS = {
@@ -57,6 +58,18 @@ export const MEMBER_MESSAGES = defineMessages({
     id: 'profiles.members.statuses.expired',
     defaultMessage: 'Expired',
   },
+  cancelled: {
+    id: 'profiles.members.statuses.cancelled',
+    defaultMessage: 'Cancelled',
+  },
+  deactivate: {
+    id: 'profiles.members.actions.deactivate',
+    defaultMessage: 'Deactivate',
+  },
+  reactivate: {
+    id: 'profiles.members.actions.reactivate',
+    defaultMessage: 'Reactivate',
+  },
 })
 
 export const invitationActionOptions = [
@@ -72,11 +85,32 @@ export const MEMBER_ROLES = {
 
 export const MEMBER_ACTIONS = {
   remove: 'REMOVE',
-}
+  deactivate: 'DEACTIVATE',
+  reactivate: 'REACTIVATE',
+} as const
 
 export const roleOptions = [
   { value: MEMBER_ROLES.admin, label: MEMBER_MESSAGES.admin },
   { value: MEMBER_ROLES.manager, label: MEMBER_MESSAGES.manager },
+  { value: MEMBER_ACTIONS.remove, label: MEMBER_MESSAGES.remove },
+]
+
+/**
+ * Add to `roleOptions` to let admins deactivate an active member from the role menu. Not in the
+ * default options: deactivation needs a backend with `profileMemberDeactivate`.
+ */
+export const DEACTIVATE_MEMBER_OPTION = {
+  value: MEMBER_ACTIONS.deactivate,
+  label: MEMBER_MESSAGES.deactivate,
+}
+
+/**
+ * Pass as `inactiveMemberOptions` to offer Reactivate and Remove on a deactivated (INACTIVE) member
+ * to those who can change members. Not the default: reactivation needs a backend with
+ * `profileMemberReactivate`, and without it an INACTIVE row shows its status read-only.
+ */
+export const inactiveMemberActionOptions = [
+  { value: MEMBER_ACTIONS.reactivate, label: MEMBER_MESSAGES.reactivate },
   { value: MEMBER_ACTIONS.remove, label: MEMBER_MESSAGES.remove },
 ]
 
@@ -89,4 +123,5 @@ export const MEMBER_ROLE_AND_STATUS_MESSAGES: Record<string, MessageDescriptor> 
   [MEMBER_STATUSES.inactive]: MEMBER_MESSAGES.inactive,
   [MEMBER_STATUSES.declined]: MEMBER_MESSAGES.declined,
   [MEMBER_STATUSES.expired]: MEMBER_MESSAGES.expired,
+  [MEMBER_STATUSES.cancelled]: MEMBER_MESSAGES.cancelled,
 }

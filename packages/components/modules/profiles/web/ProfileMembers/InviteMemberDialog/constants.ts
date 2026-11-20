@@ -37,7 +37,46 @@ export const INVITE_MEMBER_DIALOG_MESSAGES = defineMessages({
     id: 'profiles.inviteMemberDialog.removeMember',
     defaultMessage: 'Remove member',
   },
+  roleLabel: {
+    id: 'profiles.inviteMemberDialog.roleLabel',
+    defaultMessage: 'Role',
+  },
+  inviteeNamesTitle: {
+    id: 'profiles.inviteMemberDialog.inviteeNamesTitle',
+    defaultMessage: 'Invitee names',
+  },
+  firstNameLabel: {
+    id: 'profiles.inviteMemberDialog.firstNameLabel',
+    defaultMessage: 'First name',
+  },
+  lastNameLabel: {
+    id: 'profiles.inviteMemberDialog.lastNameLabel',
+    defaultMessage: 'Last name',
+  },
+  messageLabel: {
+    id: 'profiles.inviteMemberDialog.messageLabel',
+    defaultMessage: 'Message (optional)',
+  },
+  messagePlaceholder: {
+    id: 'profiles.inviteMemberDialog.messagePlaceholder',
+    defaultMessage: 'Add a personal note to the invitation email',
+  },
 })
+
+/** The dialog texts a project can replace through the `copy` prop. */
+export const INVITE_MEMBER_DIALOG_COPY_KEYS = [
+  'title',
+  'description',
+  'searchPlaceholder',
+  'cancel',
+  'submit',
+  'roleLabel',
+  'inviteeNamesTitle',
+  'firstNameLabel',
+  'lastNameLabel',
+  'messageLabel',
+  'messagePlaceholder',
+] as const
 
 /**
  * Role assigned to newly added members / invitations. The design has no role picker in

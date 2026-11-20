@@ -24,7 +24,7 @@ import { MemberSearchOption, MemberSearchProps, SelectedProfile } from '../types
 import { getMemberKey } from '../utils'
 import { ChipsList, MemberChip, OptionInfo } from './styled'
 
-const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
+const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove, placeholder }) => {
   const intl = useIntl()
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebouncedValue(query, { debounceTime: SEARCH_DEBOUNCE_MS })
@@ -108,7 +108,7 @@ const MemberSearch: FC<MemberSearchProps> = ({ selected, onAdd, onRemove }) => {
         value={null}
         inputValue={query}
         isPending={isPending}
-        placeholder={intl.formatMessage(MESSAGES.searchPlaceholder)}
+        placeholder={placeholder ?? intl.formatMessage(MESSAGES.searchPlaceholder)}
         freeSolo={false}
         autoComplete
         // Results are filtered server-side via refetch; keep MUI from re-filtering them.
