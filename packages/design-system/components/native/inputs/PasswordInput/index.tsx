@@ -1,5 +1,6 @@
 import { FC, useState } from 'react'
 
+import { useIntl } from 'react-intl'
 import { TextInput as PaperTextInput } from 'react-native-paper'
 
 import { withNativeController } from '../../../../utils/native'
@@ -7,6 +8,7 @@ import { PureTextInput } from '../TextInput'
 import type { TextInputProps } from '../TextInput/types'
 
 const PasswordInput: FC<TextInputProps> = (props) => {
+  const intl = useIntl()
   const [hidePassword, setHidePassword] = useState(true)
 
   const handlePasswordToggle = () => {
@@ -15,7 +17,10 @@ const PasswordInput: FC<TextInputProps> = (props) => {
 
   return (
     <PureTextInput
-      label="Password"
+      label={intl.formatMessage({
+        id: 'designSystem.passwordInput.label',
+        defaultMessage: 'Password',
+      })}
       secureTextEntry={hidePassword}
       right={
         <PaperTextInput.Icon

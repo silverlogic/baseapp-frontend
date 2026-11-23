@@ -15,6 +15,7 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { useAppStateSubscription } from '@baseapp-frontend/utils/hooks/useAppStateSubscription'
 
 import { useForm } from 'react-hook-form'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { useLazyLoadQuery, useRelayEnvironment } from 'react-relay'
 
 import { ChatRoomsQuery as ChatRoomsQueryType } from '../../../../__generated__/ChatRoomsQuery.graphql'
@@ -23,7 +24,7 @@ import { useRoomsList } from '../../common'
 import { ChatRoomsQuery } from '../../common/graphql/queries/ChatRoomsQuery'
 import { NewChatButton } from '../NewChatButton'
 import RoomsList from '../RoomsList'
-import { CHAT_TAB_LABEL, CHAT_TAB_VALUES } from '../RoomsList/RoomsListComponent/constants'
+import { CHAT_TAB_VALUES } from '../RoomsList/RoomsListComponent/constants'
 import { ChatTabValues } from '../RoomsList/RoomsListComponent/types'
 import { useRoomListSubscription } from '../graphql/subscriptions/useRoomListSubscription'
 import { createStyles } from './styles'
@@ -31,6 +32,7 @@ import { createStyles } from './styles'
 const ChatRooms: FC = () => {
   const theme = useTheme()
   const styles = createStyles(theme)
+  const intl = useIntl()
   const { control, watch, setValue, reset } = useForm<SearchInputFormValues>({
     defaultValues: DEFAULT_FORM_VALUES,
   })
@@ -78,9 +80,14 @@ const ChatRooms: FC = () => {
   return (
     <PageViewWithHeader>
       <View style={styles.container}>
-        <Text variant="h4">Messages</Text>
+        <Text variant="h4">
+          <FormattedMessage id="messages.chatRoomsList.title" defaultMessage="Messages" />
+        </Text>
         <SearchInput
-          placeholder="Search"
+          placeholder={intl.formatMessage({
+            id: 'messages.shared.searchPlaceholder',
+            defaultMessage: 'Search',
+          })}
           onChangeText={handleSearchChange}
           control={control}
           name={FORM_VALUES.search}
@@ -92,24 +99,48 @@ const ChatRooms: FC = () => {
 
         <Tabs value={selectedTab} onChange={handleChange} style={styles.tabs}>
           <Tab
-            label={CHAT_TAB_LABEL.active}
+            label={intl.formatMessage({
+              id: 'messages.chatRoomsList.tabs.active',
+              defaultMessage: 'Active',
+            })}
             value={CHAT_TAB_VALUES.active}
-            aria-label="Active messages tab"
+            aria-label={intl.formatMessage({
+              id: 'messages.chatRooms.tabs.activeAriaLabel',
+              defaultMessage: 'Active messages tab',
+            })}
           />
           <Tab
-            label={CHAT_TAB_LABEL.unread}
+            label={intl.formatMessage({
+              id: 'messages.chatRoomsList.tabs.unread',
+              defaultMessage: 'Unread',
+            })}
             value={CHAT_TAB_VALUES.unread}
-            aria-label="Unread messages tab"
+            aria-label={intl.formatMessage({
+              id: 'messages.chatRooms.tabs.unreadAriaLabel',
+              defaultMessage: 'Unread messages tab',
+            })}
           />
           <Tab
-            label={CHAT_TAB_LABEL.groups}
+            label={intl.formatMessage({
+              id: 'messages.chatRoomsList.tabs.groups',
+              defaultMessage: 'Groups',
+            })}
             value={CHAT_TAB_VALUES.groups}
-            aria-label="Groups messages tab"
+            aria-label={intl.formatMessage({
+              id: 'messages.chatRooms.tabs.groupsAriaLabel',
+              defaultMessage: 'Groups messages tab',
+            })}
           />
           <Tab
-            label={CHAT_TAB_LABEL.archived}
+            label={intl.formatMessage({
+              id: 'messages.chatRoomsList.tabs.archived',
+              defaultMessage: 'Archived',
+            })}
             value={CHAT_TAB_VALUES.archived}
-            aria-label="Archived messages tab"
+            aria-label={intl.formatMessage({
+              id: 'messages.chatRooms.tabs.archivedAriaLabel',
+              defaultMessage: 'Archived messages tab',
+            })}
           />
         </Tabs>
         <RoomsList

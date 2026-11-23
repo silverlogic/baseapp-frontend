@@ -6,6 +6,7 @@ import { CloseIcon, EditIcon } from '@baseapp-frontend/design-system/components/
 import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { useFocusEffect, useRouter } from 'expo-router'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 
 import { ChatRoomParticipantsPaginationQuery } from '../../../../__generated__/ChatRoomParticipantsPaginationQuery.graphql'
@@ -37,6 +38,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   OptionsProps = {},
 }) => {
   const router = useRouter()
+  const intl = useIntl()
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
   const { currentProfile } = useCurrentProfile()
   const [memberToRemoveId, setMemberToRemoveId] = useState<string | null>(null)
@@ -106,7 +108,10 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
   return (
     <View style={{ flexGrow: 1, flex: 1 }}>
       <AppBar
-        title="Group Details"
+        title={intl.formatMessage({
+          id: 'messages.chatRoom.options.groupDetails',
+          defaultMessage: 'Group Details',
+        })}
         onBack={() => router.back()}
         BackIcon={CloseIcon}
         CloseIcon={EditIcon}

@@ -1,4 +1,11 @@
 {
+  "utils.date.daysAgo": "{count, plural, one {# day ago} other {# days ago}}",
+  "utils.date.hoursAgo": "{count, plural, one {# hour ago} other {# hours ago}}",
+  "utils.date.minutesAgo": "{count, plural, one {# minute ago} other {# minutes ago}}",
+  "utils.date.monthsAgo": "{count, plural, one {# month ago} other {# months ago}}",
+  "utils.date.today": "Today",
+  "utils.date.weeksAgo": "{count, plural, one {# week ago} other {# weeks ago}}",
+  "utils.date.yesterday": "Yesterday",
   "utils.validation.emailFormat": "Please provide a properly formatted email address.",
   "utils.validation.fieldRequired": "This field is required.",
   "utils.validation.passwordRequirements": "Password must be at least 10 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character.",
