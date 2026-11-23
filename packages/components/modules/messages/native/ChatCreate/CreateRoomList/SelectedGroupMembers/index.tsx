@@ -4,6 +4,7 @@ import { CloseIcon } from '@baseapp-frontend/design-system/components/native/ico
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable, ScrollView, View } from 'react-native'
 
 import { ProfileItemFragment$data } from '../../../../../../__generated__/ProfileItemFragment.graphql'
@@ -28,7 +29,7 @@ const SelectedGroupMembers = () => {
       {(participants || []).length > 0 && (
         <View style={styles.titleContainer}>
           <Text variant="subtitle2" color="high">
-            Members{' '}
+            <FormattedMessage id="messages.shared.members" defaultMessage="Members" />{' '}
             <Text variant="body2" color="low">
               {participants?.length}
             </Text>
@@ -72,7 +73,10 @@ const SelectedGroupMembers = () => {
       ) : null}
       <View style={styles.titleContainer}>
         <Text variant="subtitle2" color="high">
-          Connections
+          <FormattedMessage
+            id="messages.groupMembersList.profilesList.title"
+            defaultMessage="Connections"
+          />
         </Text>
       </View>
     </View>
