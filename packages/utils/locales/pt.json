@@ -1,4 +1,11 @@
 {
+  "utils.date.daysAgo": "{count, plural, one {há # dia} other {há # dias}}",
+  "utils.date.hoursAgo": "{count, plural, one {há # hora} other {há # horas}}",
+  "utils.date.minutesAgo": "{count, plural, one {há # minuto} other {há # minutos}}",
+  "utils.date.monthsAgo": "{count, plural, one {há # mês} other {há # meses}}",
+  "utils.date.today": "Hoje",
+  "utils.date.weeksAgo": "{count, plural, one {há # semana} other {há # semanas}}",
+  "utils.date.yesterday": "Ontem",
   "utils.validation.emailFormat": "Informe um endereço de e-mail em um formato válido.",
   "utils.validation.fieldRequired": "Este campo é obrigatório.",
   "utils.validation.passwordRequirements": "A senha deve ter pelo menos 10 caracteres e conter pelo menos uma letra maiúscula, uma letra minúscula, um número e um caractere especial.",

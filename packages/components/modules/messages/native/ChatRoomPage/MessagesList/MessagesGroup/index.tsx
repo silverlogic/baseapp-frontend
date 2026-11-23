@@ -4,13 +4,14 @@ import { MESSAGE_TYPE } from '@baseapp-frontend/components/messages/common'
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
-import { datesDontHaveSameDay } from '@baseapp-frontend/utils'
+import { datesDontHaveSameDay, formatDayLabel } from '@baseapp-frontend/utils'
+
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { SystemMessage as DefaultSystemMessage } from './SystemMessage'
 import { UserMessage as DefaultUserMessage } from './UserMessage'
 import { createStyles } from './styles'
 import { MessagesGroupProps } from './types'
-import { displayFormattedDate } from './utils'
 
 const MessagesGroup: FC<MessagesGroupProps> = ({
   allMessages,
@@ -25,6 +26,7 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
   UserMessage = DefaultUserMessage,
   UserMessageProps = {},
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -40,14 +42,14 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
       ) {
         return (
           <Text style={styles.dateGroup} variant="caption">
-            {displayFormattedDate(currentMessage?.created)}
+            {formatDayLabel(currentMessage?.created, { intl })}
           </Text>
         )
       }
 
       return null
     },
-    [allMessages, allMessagesLastIndex, hasNext, styles.dateGroup],
+    [allMessages, allMessagesLastIndex, hasNext, intl, styles.dateGroup],
   )
 
   const renderUnreadMessagesDivider = useCallback(
@@ -60,7 +62,10 @@ const MessagesGroup: FC<MessagesGroupProps> = ({
             <View style={styles.unreadRedLine} />
             <View>
               <Text style={styles.newMessagesText} variant="caption">
-                New Messages
+                <FormattedMessage
+                  id="messages.messagesGroup.newMessages"
+                  defaultMessage="New Messages"
+                />
               </Text>
             </View>
             <View style={styles.unreadRedLine} />
