@@ -1,5 +1,73 @@
 # @baseapp-frontend/components
 
+## 7.0.0
+
+### Patch Changes
+
+- The date helpers in `@baseapp-frontend/utils` take an optional `intl` (and `reference`) so they can
+  follow the active locale: `formatRelativeTime` and `formatDateWithDiffNow` stay English when called
+  without one (a future timestamp now shows the date instead of "N days ago", and calendar days are
+  counted in the intl time zone), and the new `formatTimestamp` and `formatDayLabel` cover comment timestamps
+  and day headers. Their messages ship as `utils.date.*` in the utils catalogs, with `INTL_DATE_FORMAT`
+  and `INTL_TIME_FORMAT` for the absolute parts. `@baseapp-frontend/i18n`'s `formatRelativeTimeI18n`
+  and `formatDateWithDiffNowI18n` delegate to them (the `DATE_MESSAGES` re-export and
+  `formatRelativeTimeWithIntl` are gone), and `components` drops its `__shared__/common/dates`
+  copy and the `shared.timestamp.*` ids.
+- Updated dependencies
+  - @baseapp-frontend/utils@4.5.0
+  - @baseapp-frontend/authentication@10.0.0
+  - @baseapp-frontend/design-system@5.0.0
+  - @baseapp-frontend/graphql@6.0.0
+
+## 6.0.2
+
+### Patch Changes
+
+- acdc5dd: Format comment timestamps, chat dates, message day headers and notification ages through `react-intl` on native and web, so they follow the active locale. Native notifications also get their translated messages. The `messages.chatRoomItem.date.*`, `messages.messagesGroup.today` and `messages.shared.yesterday` ids are replaced by the `utils.date.*` messages from `@baseapp-frontend/utils`.
+- Updated dependencies [f8a2ed0]
+  - @baseapp-frontend/design-system@4.0.2
+
+## 6.0.1
+
+### Patch Changes
+
+- 9ae8537: Support React Native in `@baseapp-frontend/i18n`. `IntlProvider` takes a per-locale `additionalMessages` map, and on
+  native `useLocale().setLocale` switches the provider's locale in place instead of reloading. `getCurrentLocale`
+  falls back to the device locale when there is no `navigator.language`. Every native component in `components`
+  (comments, messages, files, notifications, profiles) and `design-system` (feedback screen, password and social
+  inputs, photo library hook) now renders its text through react-intl, with en, es and pt catalogs.
+- Updated dependencies [9ae8537]
+  - @baseapp-frontend/design-system@4.0.1
+
+## 6.0.0
+
+### Minor Changes
+
+- db2d24d: Translate every web string to English, Spanish and Portuguese through react-intl.
+  - `components` and `design-system` web UI render all text via `formatMessage` with ids
+    namespaced per module; catalogs ship in `@baseapp-frontend/{components,design-system}/locales`.
+    Shared `common/` hooks keep their translated strings (comment action labels), so native
+    screens that use them need an `IntlProvider` ancestor too.
+  - Default prop strings (e.g. `cancelText`, `placeholder`, `title`) are now translated fallbacks;
+    passing the prop still overrides them.
+  - `utils`: `getZodMessages(intl)`, `ZOD_MESSAGE_DESCRIPTORS` and the `IntlFormatter` type.
+  - `authentication`: intl factories next to every validation schema
+    (`getLoginValidationSchema`, `getSignUpValidationSchema`, `getCodeValidationSchema`, …) and a
+    new `mfaFormOptions` option on `useLogin`. Existing schema constants are unchanged.
+  - Web components that render text now require an `IntlProvider` ancestor (the package test
+    providers include one). The provider ships only the `common.*` catalog: merge the
+    `locales` exports of `utils`, `design-system`, `components` (and `wagtail`) per locale with
+    the app's own and pass the `{ en, es, pt }` map through `additionalMessages`, otherwise
+    those strings fall back to English. Setup is documented in `packages/i18n/README.md`.
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/design-system@4.0.0
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/authentication@9.0.0
+  - @baseapp-frontend/graphql@5.0.0
+
 ## 5.0.0
 
 ### Major Changes
@@ -41,7 +109,6 @@
   file instead.
 
   The upload pipeline is now shared across platforms instead of being web-only:
-
   - **`UploadSource`**: every upload entry point (`uploadFile`, `addFile`, `handleFilesSelected`)
     accepts a web `File` or an `UploadSource` (`name`, `size`, `type`, `readChunk(start, end)`,
     optional `dispose()`). Chunks are read lazily inside the concurrency slot, so a native upload holds
@@ -122,7 +189,6 @@
   they render links rather than buttons that push. Links prefetch on hover and give a
   client-side transition; every one of these destinations is known at render, so none of
   them needed a handler.
-
   - `SubscriptionCard`: `onManageClick` / `onSubscribeClick` → `manageHref` /
     `subscribeHref`
   - `ConfirmationSubscriptionModal`: `planDetails` → `planDetailsHref`. A project passing
@@ -260,7 +326,6 @@ field 'image' of type 'Profile'`), so `pnpm relay` locates every remaining site.
 ### Patch Changes
 
 - 007b2ae: Replace the per-module one-off Relay error handling in mutation hooks (messages, profiles, notifications, comments) and in `InviteMemberDialog`/`BlockButtonWithDialog` with the shared helpers from `@baseapp-frontend/utils` (`sendMutationErrorToast` / `getMutationErrorMessage`). Behavior notes:
-
   - Error toasts show the first error message instead of one toast per message.
   - Hooks whose GraphQL documents select `errors { field messages }` but previously ignored them now surface those payload errors: chat create (1:1 and group), chat delete/unread/archive message flows, `profileUserRoleUpdate`, and the leave-group flow. Hooks whose payload errors are already form-handled by their components (send/edit message, chat room update, organization create, comment create/update) stay transport-only to avoid double display.
   - `ReadMessages` stays transport-only on purpose: it fires passively from `useEffect`s, so payload validation errors would surface as unattributable toasts during navigation.

@@ -4,6 +4,7 @@ import { FC } from 'react'
 
 import { MoreVert as MoreVertIcon } from '@mui/icons-material'
 import { Avatar, IconButton, Stack, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { ProfileItemFragment$key } from '../../../../__generated__/ProfileItemFragment.graphql'
@@ -11,6 +12,7 @@ import { ProfileItemFragment } from '../../../profiles/common'
 import { PostHeaderProps } from './types'
 
 const PostHeader: FC<PostHeaderProps> = ({ post }) => {
+  const intl = useIntl()
   const profile = useFragment<ProfileItemFragment$key>(ProfileItemFragment, post?.profile)
 
   if (!profile) return null
@@ -27,7 +29,13 @@ const PostHeader: FC<PostHeaderProps> = ({ post }) => {
           </Typography>
         </Stack>
       </Stack>
-      <IconButton aria-label="Post Options" sx={{ transform: `translateX(16px)` }}>
+      <IconButton
+        aria-label={intl.formatMessage({
+          id: 'contentFeed.postHeader.options.ariaLabel',
+          defaultMessage: 'Post Options',
+        })}
+        sx={{ transform: `translateX(16px)` }}
+      >
         <MoreVertIcon />
       </IconButton>
     </Stack>

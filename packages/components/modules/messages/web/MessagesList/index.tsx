@@ -4,6 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { LoadingState } from '@baseapp-frontend/design-system/components/web/displays'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { usePaginationFragment } from 'react-relay'
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso'
 
@@ -29,6 +30,7 @@ const MessagesList: FC<MessagesListProps> = ({
   MessagesGroup = DefaultMessagesGroup,
   MessagesGroupProps = {},
 }) => {
+  const intl = useIntl()
   const {
     data: room,
     loadNext,
@@ -92,7 +94,10 @@ const MessagesList: FC<MessagesListProps> = ({
       <LoadingState
         sx={{ height: 50 }}
         CircularProgressProps={{ size: 15 }}
-        aria-label="loading more messages"
+        aria-label={intl.formatMessage({
+          id: 'messages.messagesList.loadingMore',
+          defaultMessage: 'loading more messages',
+        })}
       />
     )
   }

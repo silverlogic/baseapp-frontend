@@ -1,9 +1,17 @@
+import { type ReactNode, createElement } from 'react'
+
 import { act, renderHook } from '@testing-library/react'
+import { IntlProvider } from 'react-intl'
 import { vi } from 'vitest'
 
 import { FileUploadStatus } from '../../../constants'
 import { useFileUploadStore } from '../../../context/FileUploadProvider'
 import { useFileUploadLogic } from '../index'
+
+const IntlWrapper = ({ children }: { children: ReactNode }) =>
+  createElement(IntlProvider, { locale: 'en' }, children)
+const renderWithIntl = <Result>(callback: () => Result) =>
+  renderHook(callback, { wrapper: IntlWrapper })
 
 const mockAttachFiles = vi.fn()
 const mockUploadFile = vi.fn()
@@ -59,7 +67,7 @@ describe('useFileUploadLogic', () => {
   })
 
   it('attaches an upload that completes outside a batch (retry/resume)', () => {
-    renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+    renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
     completeUpload('File:1')
 
@@ -67,7 +75,7 @@ describe('useFileUploadLogic', () => {
   })
 
   it('removes the late upload from the store once attached', () => {
-    renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+    renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
     const id = completeUpload('File:1')
     act(() => {
@@ -78,8 +86,8 @@ describe('useFileUploadLogic', () => {
   })
 
   it('ignores other scopes and does nothing without autoAttach', () => {
-    renderHook(() => useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false }))
-    renderHook(() => useFileUploadLogic({ targetObjectId: 'Comment:2' }))
+    renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false }))
+    renderWithIntl(() => useFileUploadLogic({ targetObjectId: 'Comment:2' }))
 
     completeUpload('File:1')
 
@@ -87,7 +95,7 @@ describe('useFileUploadLogic', () => {
   })
 
   it('does not resend a failed attach on later renders', () => {
-    const { rerender } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+    const { rerender } = renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
     completeUpload('File:1')
     act(() => {
@@ -101,7 +109,9 @@ describe('useFileUploadLogic', () => {
 
   it('keeps a file the server rejected listed, and does not resend it', () => {
     const onError = vi.fn()
-    const { rerender } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET, onError }))
+    const { rerender } = renderWithIntl(() =>
+      useFileUploadLogic({ targetObjectId: TARGET, onError }),
+    )
 
     const id = completeUpload('File:1')
     act(() => {
@@ -118,7 +128,7 @@ describe('useFileUploadLogic', () => {
 
   it('treats an attach without a payload as failed', () => {
     const onError = vi.fn()
-    renderHook(() => useFileUploadLogic({ targetObjectId: TARGET, onError }))
+    renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET, onError }))
 
     const id = completeUpload('File:1')
     act(() => {
@@ -131,7 +141,7 @@ describe('useFileUploadLogic', () => {
 
   it('retries a failed attach with the next upload the user starts', async () => {
     mockUploadFile.mockResolvedValue('File:batch')
-    const { result } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+    const { result } = renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
     completeUpload('File:1')
     act(() => {
@@ -151,7 +161,7 @@ describe('useFileUploadLogic', () => {
         finishBatch = resolve
       }),
     )
-    const { result } = renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+    const { result } = renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
     let batch: Promise<void> = Promise.resolve()
     act(() => {
@@ -173,7 +183,7 @@ describe('useFileUploadLogic', () => {
     ['retried', FileUploadStatus.FAILED],
   ])('an upload %s from the list item', (_label, from) => {
     it('is attached when autoAttach is on', () => {
-      renderHook(() => useFileUploadLogic({ targetObjectId: TARGET }))
+      renderWithIntl(() => useFileUploadLogic({ targetObjectId: TARGET }))
 
       finishLater('File:1', from)
 
@@ -182,7 +192,7 @@ describe('useFileUploadLogic', () => {
 
     it('is reported with its upload token when the caller attaches files itself', () => {
       const onUploadComplete = vi.fn()
-      const { rerender } = renderHook(() =>
+      const { rerender } = renderWithIntl(() =>
         useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
       )
 
@@ -204,7 +214,7 @@ describe('useFileUploadLogic', () => {
       }),
     )
     const onUploadComplete = vi.fn()
-    const { result } = renderHook(() =>
+    const { result } = renderWithIntl(() =>
       useFileUploadLogic({ targetObjectId: TARGET, autoAttach: false, onUploadComplete }),
     )
 

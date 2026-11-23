@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import { useIntl } from 'react-intl'
 import { TouchableOpacity } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
@@ -16,9 +17,10 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
   onClose,
   title,
   content,
-  cancelText = 'Cancel',
+  cancelText,
   action,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -46,7 +48,8 @@ const ConfirmDialog: FC<ConfirmDialogProps> = ({
           <View style={styles.actionButtons}>
             <Button mode="outlined" size="medium" onPress={onClose}>
               <Text variant="buttonMedium" color="high">
-                {cancelText}
+                {cancelText ??
+                  intl.formatMessage({ id: 'common.cancel', defaultMessage: 'Cancel' })}
               </Text>
             </Button>
             {action}

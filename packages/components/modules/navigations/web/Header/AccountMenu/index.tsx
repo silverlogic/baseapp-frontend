@@ -8,6 +8,7 @@ import { JWTContent } from '@baseapp-frontend/utils'
 
 import { Button, Divider } from '@mui/material'
 import { Box } from '@mui/system'
+import { useIntl } from 'react-intl'
 
 import AccountPopover from './AccountPopover'
 import VerticalFooter from './VerticalFooter'
@@ -18,15 +19,22 @@ const AccountMenu: FC<AccountMenuProps> = ({
   AccountPopoverProps = {},
   additionalComponent,
   children,
-  loginButtonLabel = 'Login',
+  loginButtonLabel: loginButtonLabelProp,
   loginButtonProps,
   onLoginClick,
   onRegisterClick,
-  registerButtonLabel = 'Register',
+  registerButtonLabel: registerButtonLabelProp,
   registerButtonProps,
   vertical = false,
 }) => {
+  const intl = useIntl()
   const { user } = useJWTUser<BaseUser & JWTContent>()
+  const loginButtonLabel =
+    loginButtonLabelProp ??
+    intl.formatMessage({ id: 'navigations.accountMenu.login', defaultMessage: 'Login' })
+  const registerButtonLabel =
+    registerButtonLabelProp ??
+    intl.formatMessage({ id: 'navigations.accountMenu.register', defaultMessage: 'Register' })
   const { settings } = useUISettings()
   const isNavMini = useMemo(() => settings.themeLayout === 'mini', [settings.themeLayout])
 
