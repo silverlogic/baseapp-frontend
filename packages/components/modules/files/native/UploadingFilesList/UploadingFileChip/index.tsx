@@ -6,6 +6,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { useIntl } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { FileUploadStatus } from '../../../common/constants'
@@ -27,6 +28,7 @@ const UploadingFileChip: FC<UploadingFileChipProps> = ({
   allowRetry = true,
   shouldUseBottomSheetSafeComponents = false,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme, getUploadPercent(fileProgress))
   const removeFile = useFileUploadStore((state) => state.removeFile)
@@ -43,7 +45,12 @@ const UploadingFileChip: FC<UploadingFileChipProps> = ({
     if (fileProgress.error) {
       return (
         <Text variant="caption" style={styles.error} numberOfLines={1}>
-          {canRetry ? 'Failed. Tap to retry' : fileProgress.error}
+          {canRetry
+            ? intl.formatMessage({
+                id: 'files.uploadingFileChip.failedTapToRetry',
+                defaultMessage: 'Failed. Tap to retry',
+              })
+            : fileProgress.error}
         </Text>
       )
     }
@@ -73,7 +80,17 @@ const UploadingFileChip: FC<UploadingFileChipProps> = ({
           <Touchable
             onPress={() => removeFile(fileProgress.id)}
             accessibilityRole="button"
-            accessibilityLabel={isUploading ? 'Cancel upload' : 'Remove file'}
+            accessibilityLabel={
+              isUploading
+                ? intl.formatMessage({
+                    id: 'files.uploadingFileChip.cancelUpload',
+                    defaultMessage: 'Cancel upload',
+                  })
+                : intl.formatMessage({
+                    id: 'files.attachedFileChip.removeFile',
+                    defaultMessage: 'Remove file',
+                  })
+            }
             style={styles.action}
           >
             <CloseIcon width={18} height={18} color={theme.colors.object.low} />

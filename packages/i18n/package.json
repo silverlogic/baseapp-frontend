@@ -1,13 +1,14 @@
 {
   "name": "@baseapp-frontend/i18n",
   "description": "Internationalization utilities, scripts, and documentation for BaseApp",
-  "version": "2.0.0",
+  "version": "3.0.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
   "scripts": {
     "build": "rm -rf dist && tsc --build tsconfig.build.json",
     "dev": "rm -rf dist && tsc --watch",
+    "test:unit": "rm -rf dist && vitest run --config ./vitest.config.mts",
     "lint": "eslint . --ext .tsx --ext .ts && tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "check-translations": "node scripts/check-translations.js"
@@ -27,12 +28,21 @@
   "devDependencies": {
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/eslint-plugin": "workspace:*",
+    "@baseapp-frontend/test": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
     "@formatjs/cli": "catalog:",
+    "@testing-library/jest-dom": "catalog:test",
+    "@testing-library/react": "catalog:test",
+    "@testing-library/user-event": "catalog:test",
     "@types/luxon": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",
-    "typescript": "catalog:"
+    "@types/react-dom": "catalog:react19",
+    "typescript": "catalog:",
+    "vitest": "catalog:test",
+    "@vitejs/plugin-react": "catalog:test",
+    "@vitest/coverage-v8": "catalog:test",
+    "jsdom": "catalog:test"
   },
   "license": "MIT",
   "repository": {

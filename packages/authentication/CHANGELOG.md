@@ -1,5 +1,12 @@
 # @baseapp-frontend/authentication
 
+## 10.0.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.5.0
+
 ## 9.0.0
 
 ### Minor Changes
