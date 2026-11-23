@@ -6,6 +6,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { TouchableOpacity } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
@@ -25,14 +26,22 @@ export const RemoveAdminPermissionsDialog: FC<RemoveAdminPermissionsDialogProps>
     <Portal>
       <Dialog visible={open} onDismiss={onClose} style={styles.dialog}>
         <View style={styles.titleContainer}>
-          <Dialog.Title style={styles.title}>Remove admin permissions</Dialog.Title>
+          <Dialog.Title style={styles.title}>
+            <FormattedMessage
+              id="messages.groupChatDetails.removeAdminDialog.title"
+              defaultMessage="Remove admin permissions"
+            />
+          </Dialog.Title>
           <TouchableOpacity onPress={onClose}>
             <CloseIcon color={theme.colors.object.low} />
           </TouchableOpacity>
         </View>
         <Dialog.Content>
           <Text variant="body1" color="low">
-            This user will no longer be a group admin. You can always reassign them as admin later.
+            <FormattedMessage
+              id="messages.groupChatDetails.removeAdminDialog.content"
+              defaultMessage="This user will no longer be a group admin. You can always reassign them as admin later."
+            />
           </Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>
@@ -40,7 +49,7 @@ export const RemoveAdminPermissionsDialog: FC<RemoveAdminPermissionsDialogProps>
             <View style={styles.actionButtons}>
               <Button mode="text" size="medium" onPress={onClose}>
                 <Text variant="buttonMedium" color="high">
-                  Cancel
+                  <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
                 </Text>
               </Button>
               <Button
@@ -52,7 +61,10 @@ export const RemoveAdminPermissionsDialog: FC<RemoveAdminPermissionsDialogProps>
                 size="medium"
               >
                 <Text variant="buttonMedium" color="contrast">
-                  Remove permissions
+                  <FormattedMessage
+                    id="messages.groupChatDetails.removeAdminDialog.confirm"
+                    defaultMessage="Remove permissions"
+                  />
                 </Text>
               </Button>
             </View>

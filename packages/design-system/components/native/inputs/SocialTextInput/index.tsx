@@ -1,6 +1,7 @@
 import { forwardRef, useCallback, useState } from 'react'
 
 import { Ionicons } from '@expo/vector-icons'
+import { useIntl } from 'react-intl'
 import { LayoutChangeEvent, TextInput as NativeTextInput, Pressable } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
@@ -27,6 +28,7 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
     },
     ref,
   ) => {
+    const intl = useIntl()
     const [isFocused, setIsFocused] = useState<boolean>(false)
     const theme = useTheme()
     const styles = createStyles(theme, {
@@ -93,7 +95,10 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
         <NativeTextInput
           multiline
           onLayout={onLayout}
-          placeholder="Comment..."
+          placeholder={intl.formatMessage({
+            id: 'designSystem.socialTextInput.placeholder',
+            defaultMessage: 'Comment...',
+          })}
           placeholderTextColor={theme.colors.object.low}
           ref={ref}
           style={styles.input}

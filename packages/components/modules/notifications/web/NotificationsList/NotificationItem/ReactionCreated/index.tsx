@@ -42,7 +42,7 @@ const ReactionCreated: FC<ReactionCreatedProps> = ({
       <NotificationContent>
         <NotificationHeader
           message={message}
-          timestamp={formatRelativeTime(notification.timestamp)}
+          timestamp={formatRelativeTime(notification.timestamp, { intl })}
           actorName={notification.actor?.name}
           unread={notification.unread}
           {...NotificationHeaderProps}
