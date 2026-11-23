@@ -5,6 +5,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { useIntl } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { useNativeFilePicker } from '../../../files/native'
@@ -22,6 +23,7 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
   disabled = false,
   shouldUseBottomSheetSafeComponents = false,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles()
   const { pickImages, pickDocuments, isPreparing } = useNativeFilePicker({
@@ -39,7 +41,10 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
         onPress={pickImages}
         disabled={isDisabled}
         accessibilityRole="button"
-        accessibilityLabel="Attach photos"
+        accessibilityLabel={intl.formatMessage({
+          id: 'comments.upsertActions.attachPhotos.ariaLabel',
+          defaultMessage: 'Attach photos',
+        })}
         style={styles.button}
       >
         <ImageIcon width={20} height={20} color={color} />
@@ -48,7 +53,10 @@ const CommentFilesUpsertActions: FC<CommentFilesUpsertActionsProps> = ({
         onPress={pickDocuments}
         disabled={isDisabled}
         accessibilityRole="button"
-        accessibilityLabel="Attach files"
+        accessibilityLabel={intl.formatMessage({
+          id: 'comments.upsertActions.attachFiles.ariaLabel',
+          defaultMessage: 'Attach files',
+        })}
         style={styles.button}
       >
         <AttachmentIcon width={20} height={20} color={color} />

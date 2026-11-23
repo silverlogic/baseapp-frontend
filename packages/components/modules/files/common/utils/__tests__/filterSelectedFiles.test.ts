@@ -1,8 +1,12 @@
+import { createIntl } from 'react-intl'
+
 import {
   describeRejectedFiles,
   filterSelectedFiles,
   isAcceptedFileType,
 } from '../filterSelectedFiles'
+
+const intl = createIntl({ locale: 'en' })
 
 const file = (name: string, type = '', size = 10) => ({ name, type, size })
 
@@ -61,7 +65,14 @@ describe('filterSelectedFiles', () => {
 
 describe('describeRejectedFiles', () => {
   it('returns null when nothing was rejected', () => {
+    expect(describeRejectedFiles(intl, [])).toBeNull()
+  })
+
+  it('keeps the English two-argument form for existing callers', () => {
     expect(describeRejectedFiles([])).toBeNull()
+    expect(
+      describeRejectedFiles([{ file: file('a.pdf'), reason: 'too-many' }], { maxFiles: 5 }),
+    ).toBe('1 file was not added (more than 5 at once).')
   })
 
   it('summarises every distinct reason once', () => {
@@ -71,14 +82,14 @@ describe('describeRejectedFiles', () => {
       { file: file('c.exe'), reason: 'invalid-type' as const },
     ]
 
-    expect(describeRejectedFiles(rejected, { maxFileSize: 1024 * 1024 })).toBe(
+    expect(describeRejectedFiles(intl, rejected, { maxFileSize: 1024 * 1024 })).toBe(
       '3 files were not added (over 1.00 MB, unsupported type).',
     )
   })
 
   it('names the count limit', () => {
     expect(
-      describeRejectedFiles([{ file: file('a.pdf'), reason: 'too-many' }], { maxFiles: 5 }),
+      describeRejectedFiles(intl, [{ file: file('a.pdf'), reason: 'too-many' }], { maxFiles: 5 }),
     ).toBe('1 file was not added (more than 5 at once).')
   })
 })

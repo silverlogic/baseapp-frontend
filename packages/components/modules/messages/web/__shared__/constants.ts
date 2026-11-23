@@ -19,10 +19,6 @@ export const SHARED_MESSAGES = defineMessages({
     id: 'messages.shared.deletedUser',
     defaultMessage: 'Deleted User',
   },
-  yesterday: {
-    id: 'messages.shared.yesterday',
-    defaultMessage: 'Yesterday',
-  },
   archiveChat: {
     id: 'messages.shared.archiveChat',
     defaultMessage: 'Archive Chat',

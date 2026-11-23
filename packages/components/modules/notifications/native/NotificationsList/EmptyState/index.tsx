@@ -5,6 +5,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
+
 import { createStyles } from './styles'
 
 const EmptyState: FC = () => {
@@ -15,9 +17,17 @@ const EmptyState: FC = () => {
     <View style={styles.container}>
       <BellIcon isActive width={32} height={32} />
       <View style={styles.text}>
-        <Text variant="subtitle2">You don’t have notifications.</Text>
+        <Text variant="subtitle2">
+          <FormattedMessage
+            id="notifications.emptyState.title"
+            defaultMessage="You don’t have notifications."
+          />
+        </Text>
         <Text style={styles.subText} variant="caption">
-          Your future notifications will be shown here.
+          <FormattedMessage
+            id="notifications.emptyState.description"
+            defaultMessage="Your future notifications will be shown here."
+          />
         </Text>
       </View>
     </View>

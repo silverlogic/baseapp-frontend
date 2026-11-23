@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { InfiniteScrollerView, View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { useLazyLoadQuery, usePaginationFragment } from 'react-relay'
 
 import { NotificationsListFragment$key } from '../../../../__generated__/NotificationsListFragment.graphql'
@@ -91,7 +92,9 @@ const NotificationsListContent: FC<NotificationsListContentProps> = ({
   return (
     <View style={styles.container}>
       <View style={styles.headerContainer}>
-        <Text variant="h6">Notifications</Text>
+        <Text variant="h6">
+          <FormattedMessage id="notifications.list.title" defaultMessage="Notifications" />
+        </Text>
         <MarkAllAsReadButton
           refetch={refetchNotifications}
           disabled={!hasUnread}
@@ -153,7 +156,9 @@ const SuspendedNotificationsList = ({ group, ...props }: NotificationsListProps)
       fallback={
         <View style={styles.container}>
           <View style={styles.headerContainer}>
-            <Text variant="h6">Notifications</Text>
+            <Text variant="h6">
+              <FormattedMessage id="notifications.list.title" defaultMessage="Notifications" />
+            </Text>
           </View>
           <LoadingScreen />
         </View>

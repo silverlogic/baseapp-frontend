@@ -7,10 +7,17 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { TouchableOpacity } from 'react-native'
 import { Dialog, Portal } from 'react-native-paper'
 
-import { LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS, useLeaveGroup } from '../../../common'
+import {
+  LEAVE_GROUP_DIALOG_COPY_MESSAGES,
+  LEAVE_GROUP_DIALOG_MESSAGES,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS,
+  LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS,
+  useLeaveGroup,
+} from '../../../common'
 import { createStyles } from './styles'
 import { LeaveGroupDialogProps } from './types'
 
@@ -22,6 +29,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
   removingParticipantId,
   isSoleAdmin = false,
 }) => {
+  const intl = useIntl()
   const router = useRouter()
   const theme = useTheme()
 
@@ -34,20 +42,27 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
     }
   }
 
-  const { getLeaveGroupDialogTextCopy, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
+  const { getLeaveGroupDialogTextCopyKeys, onRemoveConfirmed, isMutationInFlight } = useLeaveGroup({
     profileId,
     removingParticipantId,
     roomId,
     isSoleAdmin,
     onClose: handleLeaveGroupSuccess,
+    removeSuccessMessage: intl.formatMessage(LEAVE_GROUP_DIALOG_MESSAGES.removeSuccess),
   })
+
+  const { action, role } = getLeaveGroupDialogTextCopyKeys()
+  const copyMessages =
+    action === LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING
+      ? LEAVE_GROUP_DIALOG_COPY_MESSAGES[action][role]
+      : LEAVE_GROUP_DIALOG_COPY_MESSAGES[action][LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN]
 
   return (
     <Portal>
       <Dialog visible={open} onDismiss={onClose} style={styles.dialog}>
         <View style={styles.titleContainer}>
           <Dialog.Title style={styles.title}>
-            {getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.TITLE)}
+            <FormattedMessage {...copyMessages.title} />
           </Dialog.Title>
           <TouchableOpacity onPress={onClose}>
             <CloseIcon color={theme.colors.object.low} />
@@ -55,7 +70,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
         </View>
         <Dialog.Content>
           <Text variant="body1" color="low">
-            {getLeaveGroupDialogTextCopy(LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS.CONTENT)}
+            <FormattedMessage {...copyMessages.content} />
           </Text>
         </Dialog.Content>
         <Dialog.Actions style={styles.dialogActions}>
@@ -63,7 +78,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
             <View style={styles.actionButtons}>
               <Button mode="text" size="medium" onPress={onClose}>
                 <Text variant="buttonMedium" color="high">
-                  Cancel
+                  <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
                 </Text>
               </Button>
               <Button
@@ -75,7 +90,17 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
                 size="medium"
               >
                 <Text variant="buttonMedium" color="contrast">
-                  {profileId === removingParticipantId ? 'Leave Group' : 'Remove Member'}
+                  {profileId === removingParticipantId ? (
+                    <FormattedMessage
+                      id="messages.shared.leaveGroup"
+                      defaultMessage="Leave Group"
+                    />
+                  ) : (
+                    <FormattedMessage
+                      id="messages.leaveGroupDialog.removeMember"
+                      defaultMessage="Remove Member"
+                    />
+                  )}
                 </Text>
               </Button>
             </View>

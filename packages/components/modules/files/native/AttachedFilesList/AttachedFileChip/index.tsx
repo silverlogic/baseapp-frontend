@@ -6,6 +6,7 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { useNotification } from '@baseapp-frontend/utils'
 
 import { TouchableOpacity } from '@gorhom/bottom-sheet'
+import { useIntl } from 'react-intl'
 import { Linking, Pressable } from 'react-native'
 import { useFragment } from 'react-relay'
 
@@ -27,6 +28,7 @@ const AttachedFileChip: FC<AttachedFileChipProps> = ({
   shouldUseBottomSheetSafeComponents = false,
 }) => {
   const file = useFragment(FileItemFragment, fileRef)
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles()
   const { sendToast } = useNotification()
@@ -34,12 +36,22 @@ const AttachedFileChip: FC<AttachedFileChipProps> = ({
 
   const { handleDownload } = useFileDownloadLogic({
     downloadHandler: (url) => Linking.openURL(url),
-    onError: () => sendToast('Could not open the file.', { type: 'error' }),
+    onError: () =>
+      sendToast(
+        intl.formatMessage({
+          id: 'files.attachedFileChip.openError',
+          defaultMessage: 'Could not open the file.',
+        }),
+        { type: 'error' },
+      ),
   })
 
   return (
     <FileChip
-      name={file.fileName ?? 'File'}
+      name={
+        file.fileName ??
+        intl.formatMessage({ id: 'files.toast.fallbackFileName', defaultMessage: 'File' })
+      }
       contentType={file.fileContentType}
       thumbnailUrl={file.thumbnail}
       // Private files have no url for viewers without access.
@@ -50,7 +62,10 @@ const AttachedFileChip: FC<AttachedFileChipProps> = ({
           <Touchable
             onPress={() => onRemove(file.id)}
             accessibilityRole="button"
-            accessibilityLabel="Remove file"
+            accessibilityLabel={intl.formatMessage({
+              id: 'files.attachedFileChip.removeFile',
+              defaultMessage: 'Remove file',
+            })}
             style={styles.action}
           >
             <CloseIcon width={18} height={18} color={theme.colors.object.low} />

@@ -11,6 +11,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { CreateRoomPageQuery } from '../../../../__generated__/CreateRoomPageQuery.graphql'
@@ -21,6 +22,7 @@ import { createStyles } from './styles'
 const CreateRoomPage = ({ isGroup }: { isGroup?: boolean }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
+  const intl = useIntl()
   const { control, watch, setValue, reset } = useForm<SearchInputFormValues>({
     defaultValues: DEFAULT_FORM_VALUES,
   })
@@ -46,7 +48,10 @@ const CreateRoomPage = ({ isGroup }: { isGroup?: boolean }) => {
   return (
     <View style={styles.container}>
       <SearchInput
-        placeholder="Search"
+        placeholder={intl.formatMessage({
+          id: 'messages.shared.searchPlaceholder',
+          defaultMessage: 'Search',
+        })}
         onChangeText={handleSearchChange}
         control={control}
         name={FORM_VALUES.search}

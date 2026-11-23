@@ -4,6 +4,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
+
 import { createStyles } from './styles'
 import { AboutProps } from './type'
 
@@ -15,7 +17,7 @@ const About: FC<AboutProps> = ({ biography }) => {
     <View style={styles.aboutContainer}>
       <View style={styles.aboutTextContainer}>
         <Text variant="subtitle2" color="high">
-          About
+          <FormattedMessage id="messages.profileSummary.about" defaultMessage="About" />
         </Text>
       </View>
       <View style={styles.bioContainer}>

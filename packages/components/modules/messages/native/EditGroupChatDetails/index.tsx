@@ -9,6 +9,7 @@ import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import * as ImagePicker from 'expo-image-picker'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Image, Platform } from 'react-native'
 import { useLazyLoadQuery } from 'react-relay'
 
@@ -32,6 +33,7 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
   const { image: existingImage, title: existingTitle } = useTitleAndImage(group)
   const theme = useTheme()
   const styles = createStyles(theme)
+  const intl = useIntl()
   const bottomDrawerRef = useRef<BottomSheetModal | undefined>(undefined)
 
   const groups = useGroupChatCreate()
@@ -96,11 +98,21 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
       </View>
       <View>
         <Button mode="outlined" color="inherit" onPress={handlePresentModalPress}>
-          {groups.image || existingImage ? 'Change Avatar' : 'Upload Avatar'}
+          {groups.image || existingImage ? (
+            <FormattedMessage
+              id="messages.editGroupTitleAndImage.changeAvatar"
+              defaultMessage="Change Avatar"
+            />
+          ) : (
+            <FormattedMessage
+              id="messages.editGroupTitleAndImage.uploadAvatar"
+              defaultMessage="Upload Avatar"
+            />
+          )}
         </Button>
         {(groups.image || existingImage) && (
           <Button mode="text" color="error" onPress={() => handleRemoveImage()}>
-            Remove
+            <FormattedMessage id="messages.shared.remove" defaultMessage="Remove" />
           </Button>
         )}
       </View>
@@ -109,8 +121,14 @@ const EditGroupChatDetails: FC<EditGroupChatDetailsProps> = ({ roomId }) => {
           maxLength={20}
           mode="outlined"
           contentStyle={styles.input}
-          label="Group Name"
-          placeholder="Group Name"
+          label={intl.formatMessage({
+            id: 'messages.editGroupTitleAndImage.groupName',
+            defaultMessage: 'Group Name',
+          })}
+          placeholder={intl.formatMessage({
+            id: 'messages.editGroupTitleAndImage.groupName',
+            defaultMessage: 'Group Name',
+          })}
           onChangeText={(text) => groups.setGroupChat({ ...groups, title: text })}
           value={groups.title ? groups.title : (existingTitle ?? '')}
         />
