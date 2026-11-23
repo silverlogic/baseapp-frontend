@@ -6,6 +6,7 @@ import { setFormRelayErrors } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import {
   SOCIAL_UPSERT_FORM,
@@ -83,6 +84,7 @@ const MessageUpdate: FC<MessageUpdateProps> = ({
   SocialInputProps = {},
   disableMentions = true,
 }) => {
+  const intl = useIntl()
   const inputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<SocialUpsertForm>({
@@ -158,8 +160,14 @@ const MessageUpdate: FC<MessageUpdateProps> = ({
         handleEditCancel,
         formId: 'message-update',
         disabled: isMutationInFlight,
-        ariaLabel: 'save message edit',
-        cancelAriaLabel: 'cancel message edit',
+        ariaLabel: intl.formatMessage({
+          id: 'messages.messageUpdate.saveAriaLabel',
+          defaultMessage: 'save message edit',
+        }),
+        cancelAriaLabel: intl.formatMessage({
+          id: 'messages.messageUpdate.cancelAriaLabel',
+          defaultMessage: 'cancel message edit',
+        }),
       }}
       {...mergedSocialInputProps}
     />

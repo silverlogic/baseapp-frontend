@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/i18n",
   "description": "Internationalization utilities, scripts, and documentation for BaseApp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -28,7 +28,7 @@
     "@baseapp-frontend/config": "workspace:*",
     "@baseapp-frontend/eslint-plugin": "workspace:*",
     "@baseapp-frontend/tsconfig": "workspace:*",
-    "@formatjs/cli": "^6.7.4",
+    "@formatjs/cli": "catalog:",
     "@types/luxon": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:react19",

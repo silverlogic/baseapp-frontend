@@ -38,7 +38,7 @@ intl.formatMessage({ id: 'comments.replies.showMore', defaultMessage: 'Show more
 - One sentence is one message. Use ICU `{count, plural, one {…} other {…}}` for counts and rich-text tags (`<b>…</b>`, `<link>…</link>`) for inline formatting, never concatenated fragments.
 - Format numbers, currency and dates with `intl.formatNumber` / `intl.formatDate` or the helpers above, not hand-built strings.
 - Zod schemas with user-facing messages are built by a factory that takes `intl` (`getXValidationSchema(intl)`).
-- Code under a `common/` folder that native also runs must not call `useIntl` (native has no `IntlProvider` yet); translate in the web component instead.
+- Shared `common/` code may call `useIntl` (toasts, action labels); it runs on native too, so native apps must mount the `IntlProvider` wrapper with the package catalogs, the same as web.
 
 ## Updating catalogs
 
