@@ -3,13 +3,17 @@ import type { PropsWithChildren, ReactElement } from 'react'
 import { render as baseRender, screen, userEvent, waitFor, within } from '@baseapp-frontend/test'
 
 import { ThemeProvider, createTheme } from '@mui/material'
+import { IntlProvider } from 'react-intl'
 
 import CardHoldStaffNotice from '../index'
 
-// The shared wrapper's empty theme lacks what MUI's Alert, Chip and Dialog read.
+// The shared wrapper's empty theme lacks what MUI's Alert, Chip and Dialog read, and the
+// design-system's dialogs read their labels from react-intl.
 const theme = createTheme()
 const Providers = ({ children }: PropsWithChildren) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  <IntlProvider locale="en">
+    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  </IntlProvider>
 )
 const render = (ui: ReactElement) => baseRender(ui, { wrapper: Providers })
 
