@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { createStyles } from './styles'
@@ -33,13 +34,23 @@ const MemberOptions: FC<MemberOptionsProps> = ({
       <View style={styles.modalContent}>
         <Pressable onPress={handleGoToProfile} style={styles.modalItem}>
           <Text variant="body2" color="high">
-            See Profile
+            <FormattedMessage id="messages.shared.seeProfile" defaultMessage="See Profile" />
           </Text>
         </Pressable>
         {currentProfileIsAdmin && !isMe && (
           <Pressable onPress={handleAdminToggle} style={styles.modalItem}>
             <Text variant="body2" color="high">
-              {memberIsAdmin ? 'Remove admin permissions' : 'Promote to admin'}
+              {memberIsAdmin ? (
+                <FormattedMessage
+                  id="messages.groupChatDetails.adminOptions.removeAdmin"
+                  defaultMessage="Remove admin permissions"
+                />
+              ) : (
+                <FormattedMessage
+                  id="messages.groupChatDetails.adminOptions.promoteToAdmin"
+                  defaultMessage="Promote to admin"
+                />
+              )}
             </Text>
           </Pressable>
         )}
@@ -48,7 +59,14 @@ const MemberOptions: FC<MemberOptionsProps> = ({
         <View style={[styles.modalContent, { borderBottomWidth: 0 }]}>
           <Pressable onPress={handleRemoveMember} style={styles.modalItem}>
             <Text variant="body2" style={{ color: theme.colors.error.main }}>
-              {isMe ? 'Leave Group' : 'Remove from group'}
+              {isMe ? (
+                <FormattedMessage id="messages.shared.leaveGroup" defaultMessage="Leave Group" />
+              ) : (
+                <FormattedMessage
+                  id="messages.groupChatDetails.adminOptions.removeFromGroup"
+                  defaultMessage="Remove from group"
+                />
+              )}
             </Text>
           </Pressable>
         </View>
