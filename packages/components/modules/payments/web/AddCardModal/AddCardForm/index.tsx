@@ -7,6 +7,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 import { Box, Button, Divider, LinearProgress, Typography } from '@mui/material'
 import { AddressElement, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { STRIPE_API_KEY } from '../../services/stripe'
 import { AddCardFormProps } from './types'
@@ -18,6 +19,7 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
   const elements = useElements()
   const queryClient = useQueryClient()
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const [isAddingCardPaymentProcessing, setIsAddingCardPaymentProcessing] = useState(false)
   // Set synchronously on the first click: the state above only lands on the next render, so
   // a second click while getValue() is pending would otherwise reach confirmSetup() twice.
@@ -39,12 +41,24 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
     try {
       const addressElement = elements.getElement(AddressElement)
       if (!addressElement) {
-        sendToast('Address element is missing. Please try again.', { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.addCard.addressMissing',
+            defaultMessage: 'Address element is missing. Please try again.',
+          }),
+          { type: 'error' },
+        )
         return
       }
       const addressValue = await addressElement.getValue()
       if (!addressValue.complete) {
-        sendToast('Error confirming card: Incomplete address', { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.addCard.incompleteAddress',
+            defaultMessage: 'Error confirming card: Incomplete address',
+          }),
+          { type: 'error' },
+        )
         return
       }
       const { setupIntent, error } = await stripe.confirmSetup({
@@ -55,15 +69,34 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
         redirect: 'if_required',
       })
       if (error) {
-        sendToast(`Error confirming card: ${error.message || 'Unknown error'}`, {
-          type: 'error',
-        })
+        sendToast(
+          intl.formatMessage(
+            {
+              id: 'payments.addCard.confirmError',
+              defaultMessage: 'Error confirming card: {message}',
+            },
+            {
+              message:
+                error.message ||
+                intl.formatMessage({
+                  id: 'payments.addCard.unknownError',
+                  defaultMessage: 'Unknown error',
+                }),
+            },
+          ),
+          { type: 'error' },
+        )
         return
       }
       await queryClient.invalidateQueries({
         queryKey: [STRIPE_API_KEY.listPaymentMethods()],
       })
-      sendToast('Card added successfully')
+      sendToast(
+        intl.formatMessage({
+          id: 'payments.addCard.success',
+          defaultMessage: 'Card added successfully',
+        }),
+      )
       // Closed meanwhile: the card is saved and the list refreshed, but the session that
       // asked for it is gone, so it neither selects the card nor closes anything.
       if (!isMountedRef.current) return
@@ -74,7 +107,13 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
       onClose()
     } catch (error: any) {
       console.error('Error confirming card:', error)
-      sendToast('Error confirming card:', { type: 'error' })
+      sendToast(
+        intl.formatMessage({
+          id: 'payments.addCard.genericError',
+          defaultMessage: 'Error confirming card:',
+        }),
+        { type: 'error' },
+      )
     } finally {
       isSubmittingRef.current = false
       if (isMountedRef.current) setIsAddingCardPaymentProcessing(false)
@@ -92,7 +131,9 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
   return (
     <>
       <PaymentElement />
-      <Typography variant="subtitle2">Billing Address</Typography>
+      <Typography variant="subtitle2">
+        <FormattedMessage id="payments.addCard.billingAddress" defaultMessage="Billing Address" />
+      </Typography>
       <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
       <AddressElement options={{ mode: 'billing' }} />
       <Box
@@ -109,7 +150,7 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
           sx={{ width: 'auto' }}
           disabled={isAddingCardPaymentProcessing}
         >
-          Cancel
+          <FormattedMessage id="common.cancel" defaultMessage="Cancel" />
         </Button>
         <Button
           variant="contained"
@@ -118,7 +159,7 @@ const AddCardForm: FC<AddCardFormProps> = ({ entityId, onClose, handleSetupSucce
           onClick={handleConfirmSetup}
           disabled={!entityId || isAddingCardPaymentProcessing}
         >
-          Confirm
+          <FormattedMessage id="common.confirm" defaultMessage="Confirm" />
         </Button>
       </Box>
     </>

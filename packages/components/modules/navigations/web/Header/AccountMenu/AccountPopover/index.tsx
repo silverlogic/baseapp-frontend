@@ -7,6 +7,8 @@ import { ClickableAvatar } from '@baseapp-frontend/design-system/components/web/
 import { Popover } from '@baseapp-frontend/design-system/components/web/popovers'
 import { usePopover } from '@baseapp-frontend/design-system/hooks/common'
 
+import { useIntl } from 'react-intl'
+
 // TODO: review importing components directly from another module
 import {
   AddProfileMenuItem as DefaultAddProfileMenuItem,
@@ -34,6 +36,7 @@ const AccountPopover: FC<AccountPopoverProps> = ({
   AddProfileMenuItemProps = {},
   LogoutItemProps = {},
 }) => {
+  const intl = useIntl()
   const { currentProfile: profile } = useCurrentProfile()
 
   const popover = usePopover()
@@ -66,7 +69,10 @@ const AccountPopover: FC<AccountPopoverProps> = ({
       <ClickableAvatar
         color="secondary"
         src={profile?.image ?? ''}
-        alt="User avatar"
+        alt={intl.formatMessage({
+          id: 'navigations.accountPopover.avatarAlt',
+          defaultMessage: 'User avatar',
+        })}
         onClick={popover.onOpen}
         isOpen={!!popover.open}
       />

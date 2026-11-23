@@ -6,7 +6,9 @@ import { Dialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { Box, Divider, LinearProgress, Typography } from '@mui/material'
 import { Elements } from '@stripe/react-stripe-js'
+import { FormattedMessage } from 'react-intl'
 
+import { PAYMENTS_MESSAGES } from '../constants'
 import AddCardForm from './AddCardForm'
 import { AddCardModalProps } from './types'
 
@@ -28,9 +30,16 @@ const AddCardModal: FC<AddCardModalProps> = ({
             alignItems: 'center',
           }}
         >
-          <Typography variant="h6">Add payment method</Typography>
+          <Typography variant="h6">
+            <FormattedMessage {...PAYMENTS_MESSAGES.addPaymentMethod} />
+          </Typography>
         </Box>
-        <Typography variant="subtitle2">Card Information</Typography>
+        <Typography variant="subtitle2">
+          <FormattedMessage
+            id="payments.addCard.cardInformation"
+            defaultMessage="Card Information"
+          />
+        </Typography>
         <Divider variant="fullWidth" sx={{ backgroundColor: 'divider', color: 'divider' }} />
         {clientSecret ? (
           // Stripe.js only takes a SetupIntent's secret when Elements is created: changing it

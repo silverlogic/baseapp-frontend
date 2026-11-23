@@ -6,6 +6,7 @@ import { Dropzone } from '@baseapp-frontend/design-system/components/web/dropzon
 
 import { Box, Typography } from '@mui/material'
 import Image from 'next/image'
+import { FormattedMessage } from 'react-intl'
 
 import { PostImageDropzoneProps } from './types'
 
@@ -57,7 +58,10 @@ const PostImageDropzone: FC<PostImageDropzoneProps> = ({ form }) => {
         accept={{ 'image/png': ['.png'], 'image/gif': ['.gif'], 'image/jpeg': ['.jpg', '.jpeg'] }}
         title={
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            Click to browse or drag and drop images and videos.
+            <FormattedMessage
+              id="contentFeed.postImageDropzone.title"
+              defaultMessage="Click to browse or drag and drop images and videos."
+            />
           </Typography>
         }
         onFileClick={(selectedFile, index) => {

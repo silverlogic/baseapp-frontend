@@ -1,5 +1,21 @@
 # @baseapp-frontend/graphql
 
+## 6.0.0
+
+### Patch Changes
+
+- Updated dependencies
+  - @baseapp-frontend/utils@4.5.0
+  - @baseapp-frontend/authentication@10.0.0
+
+## 5.0.0
+
+### Patch Changes
+
+- Updated dependencies [db2d24d]
+  - @baseapp-frontend/utils@4.4.0
+  - @baseapp-frontend/authentication@9.0.0
+
 ## 4.0.0
 
 ### Patch Changes

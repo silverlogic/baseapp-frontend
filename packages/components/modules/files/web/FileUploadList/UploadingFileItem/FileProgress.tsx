@@ -3,6 +3,7 @@
 import type { FC } from 'react'
 
 import { Box, LinearProgress, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import { FileUploadStatus } from '../../../common/constants'
 
@@ -12,6 +13,7 @@ interface FileProgressProps {
 }
 
 const FileProgress: FC<FileProgressProps> = ({ progress, status }) => {
+  const intl = useIntl()
   const getColor = () => {
     switch (status) {
       case FileUploadStatus.UPLOADING:
@@ -30,17 +32,20 @@ const FileProgress: FC<FileProgressProps> = ({ progress, status }) => {
   const getStatusText = () => {
     switch (status) {
       case FileUploadStatus.PENDING:
-        return 'Pending...'
+        return intl.formatMessage({ id: 'files.progress.pending', defaultMessage: 'Pending...' })
       case FileUploadStatus.UPLOADING:
-        return `Uploading ${Math.round(progress)}%`
+        return intl.formatMessage(
+          { id: 'files.progress.uploading', defaultMessage: 'Uploading {progress}%' },
+          { progress: Math.round(progress) },
+        )
       case FileUploadStatus.PAUSED:
-        return 'Paused'
+        return intl.formatMessage({ id: 'files.progress.paused', defaultMessage: 'Paused' })
       case FileUploadStatus.COMPLETED:
-        return 'Completed'
+        return intl.formatMessage({ id: 'files.progress.completed', defaultMessage: 'Completed' })
       case FileUploadStatus.FAILED:
-        return 'Failed'
+        return intl.formatMessage({ id: 'files.progress.failed', defaultMessage: 'Failed' })
       case FileUploadStatus.ABORTED:
-        return 'Aborted'
+        return intl.formatMessage({ id: 'files.progress.aborted', defaultMessage: 'Aborted' })
       default:
         return ''
     }
