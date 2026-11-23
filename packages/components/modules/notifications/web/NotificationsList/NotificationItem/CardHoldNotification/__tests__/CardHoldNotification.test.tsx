@@ -3,6 +3,7 @@ import { type PropsWithChildren, type ReactElement } from 'react'
 import { render as baseRender, screen } from '@baseapp-frontend/test'
 
 import { ThemeProvider, createTheme } from '@mui/material'
+import { IntlProvider } from 'react-intl'
 
 import NotificationItemRenderer from '../../NotificationItemRenderer'
 
@@ -22,10 +23,13 @@ vi.hoisted(() => {
   }
 })
 
-// The shared wrapper's empty theme lacks what MUI's Alert reads.
+// The shared wrapper's empty theme lacks what MUI's Alert reads, and the notification
+// renderers read their copy from react-intl.
 const theme = createTheme()
 const Providers = ({ children }: PropsWithChildren) => (
-  <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  <IntlProvider locale="en">
+    <ThemeProvider theme={theme}>{children}</ThemeProvider>
+  </IntlProvider>
 )
 const render = (ui: ReactElement) => baseRender(ui, { wrapper: Providers })
 

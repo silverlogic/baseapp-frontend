@@ -1,7 +1,7 @@
+import { INVOICE_STATUS_MESSAGES } from '../InvoiceListTable/constants'
 import {
   formatInvoiceDescription,
   formatInvoiceLine,
-  getInvoiceStatusLabel,
   truncateText,
 } from '../InvoiceListTable/utils'
 
@@ -64,13 +64,13 @@ describe('truncateText', () => {
   })
 })
 
-describe('getInvoiceStatusLabel', () => {
+describe('INVOICE_STATUS_MESSAGES', () => {
   it('shows a void invoice as canceled', () => {
-    expect(getInvoiceStatusLabel('void')).toBe('canceled')
+    expect(INVOICE_STATUS_MESSAGES.void?.defaultMessage).toBe('canceled')
   })
 
   it("keeps Stripe's other statuses", () => {
-    expect(getInvoiceStatusLabel('paid')).toBe('paid')
-    expect(getInvoiceStatusLabel('open')).toBe('open')
+    expect(INVOICE_STATUS_MESSAGES.paid?.defaultMessage).toBe('paid')
+    expect(INVOICE_STATUS_MESSAGES.open?.defaultMessage).toBe('open')
   })
 })

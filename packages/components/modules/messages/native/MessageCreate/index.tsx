@@ -6,6 +6,7 @@ import { setFormRelayErrors, useNotification } from '@baseapp-frontend/utils'
 
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { TextInput as NativeTextInput } from 'react-native'
 import { ConnectionHandler } from 'react-relay'
 
@@ -33,6 +34,7 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
   ) => {
     const { currentProfile } = useCurrentProfile()
     const { sendToast } = useNotification()
+    const intl = useIntl()
 
     const form = useForm<SocialUpsertForm>({
       defaultValues: DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -101,7 +103,13 @@ const MessageCreate = forwardRef<NativeTextInput, CommentCreateProps>(
           setFormRelayErrors(form, response?.chatRoomSendMessage?.errors)
         },
         onError: () => {
-          sendToast('Your last message could not be sent. Please try again.', { type: 'error' })
+          sendToast(
+            intl.formatMessage({
+              id: 'messages.sendMessage.errorToast',
+              defaultMessage: 'Your last message could not be sent. Please try again.',
+            }),
+            { type: 'error' },
+          )
         },
       })
       form.reset()

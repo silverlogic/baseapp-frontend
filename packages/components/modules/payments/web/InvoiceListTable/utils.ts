@@ -1,5 +1,5 @@
 import { InvoiceLines } from '../types'
-import { INVOICE_DESCRIPTION_MAX_LENGTH, INVOICE_STATUS_LABELS } from './constants'
+import { INVOICE_DESCRIPTION_MAX_LENGTH } from './constants'
 
 /**
  * One line's text with its quantity: `2 × Coffee mug`. Stripe writes a subscription line's
@@ -21,7 +21,3 @@ export const truncateText = (
   text: string,
   maxLength: number = INVOICE_DESCRIPTION_MAX_LENGTH,
 ): string => (text.length > maxLength ? `${text.slice(0, maxLength).trimEnd()}…` : text)
-
-/** The status shown on an invoice's chip: Stripe's own, except where it reads poorly. */
-export const getInvoiceStatusLabel = (status: string): string =>
-  INVOICE_STATUS_LABELS[status] ?? status

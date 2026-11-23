@@ -3,7 +3,7 @@ import { ChevronIcon } from '@baseapp-frontend/design-system/components/web/icon
 import { Box, Chip, IconButton, TableCell, TableRow, Typography } from '@mui/material'
 
 import { InvoiceItemTableRowProps } from '../types'
-import { formatInvoiceDescription, getInvoiceStatusLabel, truncateText } from '../utils'
+import { formatInvoiceDescription, truncateText } from '../utils'
 
 const MobileInvoiceItemTableRow = ({
   row,
@@ -11,6 +11,7 @@ const MobileInvoiceItemTableRow = ({
   cellProps,
   formattedDate,
   amountDue,
+  statusLabel,
   color,
 }: InvoiceItemTableRowProps) => {
   // The full text stays available on hover when the list cuts it.
@@ -37,13 +38,8 @@ const MobileInvoiceItemTableRow = ({
             alignItems: 'flex-end',
           }}
         >
-          <Chip
-            label={getInvoiceStatusLabel(row.status)}
-            color={color}
-            variant="soft"
-            size="small"
-          />
-          <Typography variant="body2">{amountDue ? `$${amountDue}` : '-'}</Typography>
+          <Chip label={statusLabel} color={color} variant="soft" size="small" />
+          <Typography variant="body2">{amountDue || '-'}</Typography>
         </Box>
       </TableCell>
       <TableCell {...cellProps}>

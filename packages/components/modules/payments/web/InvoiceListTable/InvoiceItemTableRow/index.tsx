@@ -1,7 +1,9 @@
 import { Button, Chip, TableCell, TableRow, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 
+import { INVOICE_TABLE_MESSAGES } from '../constants'
 import { InvoiceItemTableRowProps } from '../types'
-import { formatInvoiceDescription, getInvoiceStatusLabel, truncateText } from '../utils'
+import { formatInvoiceDescription, truncateText } from '../utils'
 
 const InvoiceItemTableRow = ({
   row,
@@ -9,6 +11,7 @@ const InvoiceItemTableRow = ({
   cellProps,
   formattedDate,
   amountDue,
+  statusLabel,
   color,
 }: InvoiceItemTableRowProps) => {
   // The full text stays available on hover when the list cuts it.
@@ -23,9 +26,9 @@ const InvoiceItemTableRow = ({
       </TableCell>
       <TableCell {...cellProps}>{formattedDate}</TableCell>
       <TableCell {...cellProps}>
-        <Chip label={getInvoiceStatusLabel(row.status)} color={color} variant="soft" size="small" />
+        <Chip label={statusLabel} color={color} variant="soft" size="small" />
       </TableCell>
-      <TableCell {...cellProps}>{amountDue ? `$${amountDue}` : '-'}</TableCell>
+      <TableCell {...cellProps}>{amountDue || '-'}</TableCell>
       <TableCell {...cellProps}>
         <Button
           variant="soft"
@@ -36,7 +39,7 @@ const InvoiceItemTableRow = ({
           }}
           disabled={!row.hostedInvoiceUrl}
         >
-          Receipt
+          <FormattedMessage {...INVOICE_TABLE_MESSAGES.receipt} />
         </Button>
       </TableCell>
     </TableRow>

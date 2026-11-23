@@ -3,6 +3,8 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
+
 import { createStyles } from './styles'
 
 const CommentPinBadge = () => {
@@ -12,7 +14,9 @@ const CommentPinBadge = () => {
   return (
     <View style={styles.pinContainer}>
       <PinIcon style={styles.pinIcon} />
-      <Text style={styles.pinText}>Pinned</Text>
+      <Text style={styles.pinText}>
+        <FormattedMessage id="comments.pinned.badge" defaultMessage="Pinned" />
+      </Text>
     </View>
   )
 }

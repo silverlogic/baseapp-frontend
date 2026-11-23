@@ -4,6 +4,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useIntl } from 'react-intl'
 
 import { PURCHASE_POLL_INTERVAL_MS } from '../constants'
 import { STRIPE_API_KEY, StripeApi } from '../services/stripe'
@@ -17,6 +18,7 @@ import {
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const queryClient = useQueryClient()
 
   const useGetCustomer = (entityId?: string, options: { enabled?: boolean } = {}) =>
@@ -122,12 +124,27 @@ const useStripeHook = () => {
           payment_method: paymentMethodId,
         })
         if (result.error) {
-          throw new Error(result.error.message || 'Failed to confirm card payment.')
+          throw new Error(
+            result.error.message ||
+              intl.formatMessage({
+                id: 'payments.stripe.confirmCardPaymentFailedFallback',
+                defaultMessage: 'Failed to confirm card payment.',
+              }),
+          )
         }
         return result.paymentIntent
       },
       onError: (error) => {
-        sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
+        sendToast(
+          intl.formatMessage(
+            {
+              id: 'payments.stripe.confirmCardPaymentFailed',
+              defaultMessage: 'Failed to confirm card payment: {message}',
+            },
+            { message: error.message },
+          ),
+          { type: 'error' },
+        )
       },
       mutationKey: [STRIPE_API_KEY.confirmCardPayment()],
     })
@@ -188,11 +205,23 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: () => StripeApi.cancelSubscription(subscriptionId),
       onSuccess: () => {
-        sendToast('Subscription cancelled successfully.', { type: 'success' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.stripe.cancelSubscriptionSuccess',
+            defaultMessage: 'Subscription cancelled successfully.',
+          }),
+          { type: 'success' },
+        )
         refetch()
       },
       onError: () => {
-        sendToast(`Failed to cancel subscription`, { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.stripe.cancelSubscriptionFailed',
+            defaultMessage: 'Failed to cancel subscription',
+          }),
+          { type: 'error' },
+        )
       },
       mutationKey: [STRIPE_API_KEY.cancelSubscription(subscriptionId)],
     })

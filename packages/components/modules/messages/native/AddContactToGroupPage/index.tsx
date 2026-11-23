@@ -16,6 +16,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { useRouter } from 'expo-router'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { useLazyLoadQuery } from 'react-relay'
 
 import { AddContactToGroupsQuery as AddContactToGroupsQueryType } from '../../../../__generated__/AddContactToGroupsQuery.graphql'
@@ -35,6 +36,7 @@ const AddContactToGroupPage: FC<AddContactToGroupPageProps> = ({ contactProfileI
   const { currentProfile } = useCurrentProfile()
   const profileId = currentProfile?.id ?? ''
   const { sendToast } = useNotification()
+  const intl = useIntl()
 
   const [selectedIds, setSelectedIds] = useState<ReadonlySet<string>>(new Set())
   const [, startTransition] = useTransition()
@@ -85,7 +87,13 @@ const AddContactToGroupPage: FC<AddContactToGroupPageProps> = ({ contactProfileI
       onCompleted: (response) => {
         const errors = response?.chatRoomsAddParticipant?.errors
         if (errors?.length) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(
+            intl.formatMessage({
+              id: 'messages.shared.somethingWentWrong',
+              defaultMessage: 'Something went wrong',
+            }),
+            { type: 'error' },
+          )
         } else {
           router.back()
         }
@@ -96,7 +104,10 @@ const AddContactToGroupPage: FC<AddContactToGroupPageProps> = ({ contactProfileI
   return (
     <View style={styles.container}>
       <AppBar
-        title="Add to Group"
+        title={intl.formatMessage({
+          id: 'messages.addContactToGroup.submit',
+          defaultMessage: 'Add to Group',
+        })}
         onBack={() => router.back()}
         BackIcon={CloseIcon}
         onClose={handleConfirm}
@@ -108,7 +119,10 @@ const AddContactToGroupPage: FC<AddContactToGroupPageProps> = ({ contactProfileI
       />
       <View style={styles.content}>
         <SearchInput
-          placeholder="Search"
+          placeholder={intl.formatMessage({
+            id: 'messages.shared.searchPlaceholder',
+            defaultMessage: 'Search',
+          })}
           onChangeText={handleSearchChange}
           control={control}
           name={FORM_VALUES.search}

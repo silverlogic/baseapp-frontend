@@ -6,6 +6,7 @@ import { CloseIcon } from '@baseapp-frontend/design-system/components/native/ico
 import { ScrollView, View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { type Href, useRouter } from 'expo-router'
+import { useIntl } from 'react-intl'
 import { useFragment, useLazyLoadQuery } from 'react-relay'
 
 import { ChatRoomQuery as ChatRoomQueryType } from '../../../../__generated__/ChatRoomQuery.graphql'
@@ -20,6 +21,7 @@ import { SingleChatDetailsPageProps } from './type'
 
 const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
   const router = useRouter()
+  const intl = useIntl()
   const { currentProfile } = useCurrentProfile()
 
   const [commitArchiveRoom, isMutationInFlight] = useArchiveChatRoomMutation()
@@ -67,7 +69,14 @@ const SingleChatDetailsPage: FC<SingleChatDetailsPageProps> = ({ roomId }) => {
 
   return (
     <View style={{ flexGrow: 1, flex: 1 }}>
-      <AppBar title="Chat Details" onBack={() => router.back()} BackIcon={CloseIcon} />
+      <AppBar
+        title={intl.formatMessage({
+          id: 'messages.chatRoomOptions.chatDetails',
+          defaultMessage: 'Chat Details',
+        })}
+        onBack={() => router.back()}
+        BackIcon={CloseIcon}
+      />
       <ScrollView>
         <ProfileSummary
           name={profile?.name}
