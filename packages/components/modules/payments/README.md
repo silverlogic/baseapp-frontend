@@ -1,4 +1,4 @@
-# Module: `profiles`
+# Module: `payments`
 
 This module is divided into three primary folders:
 
@@ -13,3 +13,75 @@ This module is divided into three primary folders:
   - Must not import from `web/`.
 
 This structure ensures platform-specific code remains isolated, while shared code lives in one place.
+
+## Card holds
+
+Client half of `baseapp_payments` card holds (the backend README's "Card holds" section is the
+contract). The backend ships no create mutation: your project's own checkout mutation mixes in
+`CardHoldPaymentInputMixin` and `CardHoldPayloadMixin`, and this module drives it.
+
+- `payments/common`: `useCardHoldPlacement` (platform-neutral; inject an `authenticate`),
+  `placeCardHold` (the same flow without React), the `cardHoldKeep` / `cardHoldCancel` mutation
+  hooks, and the `CardHold` fragment.
+- `payments/web`: `useStripeCardHoldPlacement` (Stripe.js as the authenticator, inside
+  `<Elements>`), `createStripeJsCardHoldAuthenticator` and `CardHoldStaffNotice`.
+
+Your create mutation must return the card hold payload on **every** answer, errors included:
+on the backend, spread `card_hold_payload(result)` into the payload alongside `errors`. This
+module decides what to do next from `holdStatus` alone; without it on an error answer it can't
+retry `in_progress` or tell when to renew the attempt id.
+
+Wiring a checkout (web):
+
+```tsx
+const [commitOrderCreate] = useOrderCreateMutation() // your mutation; select holdStatus,
+// requiresAction, clientSecret, intentType, holdOn and errors on its payload
+
+const { place, isPending, outcome } = useStripeCardHoldPlacement({
+  submit: (cardHoldInput) =>
+    new Promise((resolve, reject) => {
+      commitOrderCreate({
+        variables: { input: { ...orderInput, ...cardHoldInput } },
+        onCompleted: (response) => resolve(response.orderCreate),
+        onError: reject,
+      })
+    }),
+})
+
+await place(paymentMethodId) // from Elements / a saved card
+```
+
+`outcome.status` is one of:
+
+- `placed`, `scheduled` (with `holdOn`), `card_saved`, `charge_now`: done. The module ships no
+  customer-facing message about the hold; what to tell the customer (if anything) is the project's
+  call.
+- `declined`: ask for another card.
+- `changed`: the attempt id was already used with other parameters. The hook has already resent
+  once under a new attempt id with the same card; this means the resend answered `changed`
+  again.
+- `amount_changed`: the price changed; show the new one.
+- `refused`: the project or the target refused the hold.
+- `in_progress`: still pending after the retries; the same attempt can be retried later.
+- `authentication_failed`: Stripe couldn't run 3D Secure; the same attempt can be retried.
+- `error`: the mutation failed, returned no payload, or an unknown `holdStatus`.
+- `cancelled`: only what `place()` resolves after the component unmounted.
+
+The attempt id is kept across `in_progress` retries and the 3D Secure second pass. It is renewed
+after `declined`, `changed` and `refused` (each means the next try is a new order), and never
+otherwise, so a retry can't place twice. `reset()` starts a new checkout. Outcome payloads never
+carry `clientSecret`.
+
+Calling `place()` while a placement runs returns that placement's promise; it never submits
+twice. Unmounting stops the placement: no further 3D Secure, resend or backoff, and `onOutcome`
+is not called after unmount (navigating away is not a failure). Outside React, `placeCardHold`
+takes an `AbortSignal` (`signal`) for the same, and `onAttemptIdChange` reports the new attempt
+id of a `changed` resend.
+
+`CardHoldStaffNotice` tells staff that a deferred hold failed and offers what they can do about it:
+an error `Alert` with Stripe's failure code and Keep / Cancel behind a confirmation, which turns
+into an info `Alert` with no actions once kept. It renders nothing for a hold that didn't fail
+(customers read a failed hold as `scheduled`). Staff meet it in their notifications: the backend
+sends `PAYMENTS.CARD_HOLD_FAILED` with the hold as the target, and the notifications module's
+`CardHoldNotification` renders this notice inside it. Anywhere else staff look at the target,
+spread `...CardHoldStaffNotice_cardHold` under `cardHold` and render it.

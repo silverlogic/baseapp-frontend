@@ -107,6 +107,77 @@ type BlockTogglePayload {
   clientMutationId: String
 }
 
+"""A card authorization backing a target, captured or released later."""
+type CardHold implements Node {
+  """The ID of the object"""
+  id: ID!
+
+  """pending, authorized, released, captured, scheduled, failed or saved."""
+  status: String!
+
+  """The amount authorized, in cents."""
+  amountCents: Int!
+
+  """The target's estimated price, before the buffer, in cents."""
+  estimatedAmountCents: Int!
+
+  """When Stripe stops honouring the hold."""
+  expiresAt: DateTime
+
+  """The card brand, e.g. visa."""
+  brand: String
+
+  """The card's last four digits."""
+  last4: String
+
+  """
+  For a hold scheduled for later: the day it will be placed. Null otherwise, or when the target has no date.
+  """
+  holdOn: Date
+
+  """Staff only: whether staff kept the target despite a failed hold."""
+  kept: Boolean!
+
+  """Staff only: Stripe's code for why a deferred hold failed."""
+  failureReason: String
+}
+
+input CardHoldCancelInput {
+  """The failed card hold."""
+  id: ID!
+  clientMutationId: String
+}
+
+"""
+Cancel the target of a failed deferred hold (through its adapter's ``cancel``);
+nothing is charged.
+"""
+type CardHoldCancelPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  cardHold: CardHold
+  clientMutationId: String
+}
+
+input CardHoldKeepInput {
+  """The failed card hold."""
+  id: ID!
+  clientMutationId: String
+}
+
+"""
+Keep the target of a failed deferred hold: it closes later by a fresh charge
+of the card, like a target with no hold. Final.
+"""
+type CardHoldKeepPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  cardHold: CardHold
+  clientMutationId: String
+}
+
 type ChatRoom implements Node {
   """The ID of the object"""
   id: ID!
@@ -1128,6 +1199,18 @@ type Mutation {
   profileDeclineInvitation(input: ProfileDeclineInvitationInput!): ProfileDeclineInvitationPayload
   profileCancelInvitation(input: ProfileCancelInvitationInput!): ProfileCancelInvitationPayload
   profileResendInvitation(input: ProfileResendInvitationInput!): ProfileResendInvitationPayload
+
+  """
+  Keep the target of a failed deferred hold: it closes later by a fresh charge
+  of the card, like a target with no hold. Final.
+  """
+  cardHoldKeep(input: CardHoldKeepInput!): CardHoldKeepPayload
+
+  """
+  Cancel the target of a failed deferred hold (through its adapter's ``cancel``);
+  nothing is charged.
+  """
+  cardHoldCancel(input: CardHoldCancelInput!): CardHoldCancelPayload
   pageCreate(input: PageCreateInput!): PageCreatePayload
   pageEdit(input: PageEditInput!): PageEditPayload
   pageDelete(input: DeleteNodeInput!): DeleteNodePayload

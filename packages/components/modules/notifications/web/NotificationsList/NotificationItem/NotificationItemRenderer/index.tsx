@@ -1,6 +1,7 @@
 import { FC } from 'react'
 
 import { NOTIFICATION_VERB } from '../../../../common'
+import DefaultCardHoldNotification from '../CardHoldNotification'
 import DefaultCommentCreated from '../CommentCreated'
 import DefaultCommentReply from '../CommentReply'
 import DefaultReactionCreated from '../ReactionCreated'
@@ -14,6 +15,8 @@ const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({
   CommentReplyProps = {},
   ReactionCreated = DefaultReactionCreated,
   ReactionCreatedProps = {},
+  CardHoldNotification = DefaultCardHoldNotification,
+  CardHoldNotificationProps = {},
 }) => {
   switch (notification.verb) {
     case NOTIFICATION_VERB.commentCreated:
@@ -22,6 +25,8 @@ const NotificationItemRenderer: FC<NotificationItemRendererProps> = ({
       return <CommentReply notification={notification} {...CommentReplyProps} />
     case NOTIFICATION_VERB.reactionCreated:
       return <ReactionCreated notification={notification} {...ReactionCreatedProps} />
+    case NOTIFICATION_VERB.cardHoldFailed:
+      return <CardHoldNotification notification={notification} {...CardHoldNotificationProps} />
     default:
       return null
   }
