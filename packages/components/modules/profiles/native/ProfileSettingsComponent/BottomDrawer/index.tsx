@@ -10,6 +10,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { createStyles } from './styles'
@@ -31,19 +32,29 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
       <View style={styles.modalContent}>
         <View style={styles.modalItem}>
           <Text variant="body2" color="low">
-            Upload a new {type}
+            <FormattedMessage
+              id="profiles.settingsDrawer.uploadNew"
+              defaultMessage="Upload a new {type, select, image {image} other {banner}}"
+              values={{ type }}
+            />
           </Text>
         </View>
         <Pressable onPress={handleViewPhotoLibrary} style={styles.modalItem}>
           <FlowerIcon width={20} height={20} color={theme.colors.object.high} />
           <Text variant="body2" color="high">
-            View photo library
+            <FormattedMessage
+              id="profiles.settingsDrawer.viewPhotoLibrary"
+              defaultMessage="View photo library"
+            />
           </Text>
         </Pressable>
         <Pressable onPress={handleTakePhoto} style={styles.modalItem}>
           <CameraOutlinedIcon width={20} height={20} color={theme.colors.object.high} />
           <Text variant="body2" color="high">
-            Take a photo
+            <FormattedMessage
+              id="profiles.settingsDrawer.takePhoto"
+              defaultMessage="Take a photo"
+            />
           </Text>
         </Pressable>
       </View>
@@ -51,7 +62,11 @@ const BottomDrawer: FC<BottomDrawerProps> = ({
         <Pressable onPress={() => handleRemoveImage(type)} style={styles.modalItem}>
           <TrashIcon width={20} height={20} color={theme.colors.error.main} />
           <Text variant="body2" style={{ color: theme.colors.error.main }}>
-            Remove {type === 'image' ? 'image' : 'banner'}
+            <FormattedMessage
+              id="profiles.settingsDrawer.remove"
+              defaultMessage="Remove {type, select, image {image} other {banner}}"
+              values={{ type }}
+            />
           </Text>
         </Pressable>
       </View>

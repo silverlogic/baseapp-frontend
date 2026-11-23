@@ -5,11 +5,11 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 import { Checkbox } from 'react-native-paper'
 import { useFragment } from 'react-relay'
 
-import { getParticipantCountString } from '../../../../common'
 import { AddContactToGroupItemFragment } from '../../../../common/graphql/fragments/AddContactToGroupItem'
 import { createStyles } from './styles'
 import { GroupListItemProps } from './types'
@@ -38,12 +38,22 @@ const GroupListItem: FC<GroupListItemProps> = ({ roomRef, selected, onToggle }) 
             {node.title}
           </Text>
           <View style={styles.subtitleRow}>
-            <Text variant="caption" color="low">
-              {getParticipantCountString(node.participantsCount)}
-            </Text>
+            {node.participantsCount != null && (
+              <Text variant="caption" color="low">
+                <FormattedMessage
+                  id="messages.shared.memberCount"
+                  defaultMessage="{count, plural, one {# member} other {# members}}"
+                  values={{ count: node.participantsCount }}
+                />
+              </Text>
+            )}
             {isAlreadyMember && (
               <Text variant="caption" color="disabled">
-                {' • Already added'}
+                {' '}
+                <FormattedMessage
+                  id="messages.addContactToGroup.groupItem.alreadyAdded"
+                  defaultMessage="• Already added"
+                />
               </Text>
             )}
           </View>

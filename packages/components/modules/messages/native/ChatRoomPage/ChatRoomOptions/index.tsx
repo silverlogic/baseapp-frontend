@@ -2,6 +2,7 @@ import React, { FC } from 'react'
 
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
+import { useIntl } from 'react-intl'
 import { View } from 'react-native'
 import { IconButton, Menu } from 'react-native-paper'
 
@@ -23,8 +24,35 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
   const closeMenu = () => setVisible(false)
   const theme = useTheme()
   const styles = createStyles(theme)
+  const intl = useIntl()
 
-  const chatOrGroup = isGroup ? 'Group' : 'Chat'
+  const archiveTitle = isGroup
+    ? intl.formatMessage({
+        id: 'messages.chatRoomOptions.archiveGroup',
+        defaultMessage: 'Archive Group',
+      })
+    : intl.formatMessage({ id: 'messages.shared.archiveChat', defaultMessage: 'Archive Chat' })
+  const unarchiveTitle = isGroup
+    ? intl.formatMessage({
+        id: 'messages.chatRoomOptions.unarchiveGroup',
+        defaultMessage: 'Unarchive Group',
+      })
+    : intl.formatMessage({ id: 'messages.shared.unarchiveChat', defaultMessage: 'Unarchive Chat' })
+  const detailsTitle = isGroup
+    ? intl.formatMessage({
+        id: 'messages.chatRoom.options.groupDetails',
+        defaultMessage: 'Group Details',
+      })
+    : intl.formatMessage({
+        id: 'messages.chatRoomOptions.chatDetails',
+        defaultMessage: 'Chat Details',
+      })
+  const deleteTitle = isGroup
+    ? intl.formatMessage({ id: 'messages.shared.leaveGroup', defaultMessage: 'Leave Group' })
+    : intl.formatMessage({
+        id: 'messages.chatRoomOptions.deleteChat',
+        defaultMessage: 'Delete Chat',
+      })
 
   return (
     <View>
@@ -46,7 +74,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             handleArchiveChat()
           }}
           disabled={isArchiveMutationInFlight}
-          title={isArchived ? `Unarchive ${chatOrGroup}` : `Archive ${chatOrGroup}`}
+          title={isArchived ? unarchiveTitle : archiveTitle}
         />
         {/* TODO: Not implemented yet */}
         <Menu.Item
@@ -54,7 +82,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             closeMenu()
             handleChatDetails()
           }}
-          title={`${chatOrGroup} Details`}
+          title={detailsTitle}
         />
         {!isGroup && (
           <Menu.Item
@@ -62,7 +90,10 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
               closeMenu()
               handleGoToProfile()
             }}
-            title="Go to Profile"
+            title={intl.formatMessage({
+              id: 'messages.chatRoomOptions.goToProfile',
+              defaultMessage: 'Go to Profile',
+            })}
           />
         )}
         <Menu.Item
@@ -70,7 +101,7 @@ const ChatRoomOptions: FC<ChatRoomOptionsProps> = ({
             closeMenu()
             handleDeleteChat()
           }}
-          title={isGroup ? 'Leave Group' : 'Delete Chat'}
+          title={deleteTitle}
           titleStyle={styles.deleteTitleStyle}
         />
       </Menu>

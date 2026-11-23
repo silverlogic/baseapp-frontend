@@ -41,7 +41,7 @@ catalog:
   js-cookie: 3.0.7
   lodash: 4.18.1
   luxon: 3.7.2
-  next: 15.5.28
+  next: 15.5.29
   react-hook-form: 7.56.4
   react-intl: 7.1.14
   react-international-phone: 4.5.0

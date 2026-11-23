@@ -4,6 +4,7 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { File } from 'expo-file-system'
 import * as ImagePicker from 'expo-image-picker'
+import { useIntl } from 'react-intl'
 
 import type { Accept } from '../../../common/types'
 import {
@@ -39,6 +40,7 @@ export const useNativeFilePicker = ({
   acceptedFileTypes,
   disabled = false,
 }: UseNativeFilePickerParams): UseNativeFilePickerReturn => {
+  const intl = useIntl()
   const { sendToast } = useNotification()
   const [isPreparing, setIsPreparing] = useState(false)
 
@@ -53,7 +55,7 @@ export const useNativeFilePicker = ({
       }))
       const { accepted, rejected } = filterSelectedFiles(candidates, limits)
 
-      const message = describeRejectedFiles(rejected, limits)
+      const message = describeRejectedFiles(intl, rejected, limits)
       if (message) sendToast(message, { type: 'warning' })
       if (!accepted.length) return
 
@@ -71,8 +73,14 @@ export const useNativeFilePicker = ({
         if (readable.length < accepted.length) {
           sendToast(
             accepted.length === 1
-              ? 'Could not read the selected file.'
-              : 'Some files could not be read.',
+              ? intl.formatMessage({
+                  id: 'files.nativePicker.readError',
+                  defaultMessage: 'Could not read the selected file.',
+                })
+              : intl.formatMessage({
+                  id: 'files.nativePicker.readErrorSome',
+                  defaultMessage: 'Some files could not be read.',
+                }),
             { type: 'error' },
           )
         }
@@ -81,7 +89,7 @@ export const useNativeFilePicker = ({
         setIsPreparing(false)
       }
     },
-    [acceptedFileTypes, maxFileSize, maxFiles, onFilesSelected, sendToast],
+    [acceptedFileTypes, intl, maxFileSize, maxFiles, onFilesSelected, sendToast],
   )
 
   const pickImages = useCallback(async () => {
@@ -99,7 +107,13 @@ export const useNativeFilePicker = ({
           ImagePicker.UIImagePickerPreferredAssetRepresentationMode.Compatible,
       })
     } catch {
-      sendToast('Could not open the photo library.', { type: 'error' })
+      sendToast(
+        intl.formatMessage({
+          id: 'files.nativePicker.photoLibraryError',
+          defaultMessage: 'Could not open the photo library.',
+        }),
+        { type: 'error' },
+      )
       return
     }
     if (result.canceled) return
@@ -112,7 +126,7 @@ export const useNativeFilePicker = ({
         size: asset.fileSize,
       })),
     )
-  }, [deliver, disabled, maxFiles, sendToast])
+  }, [deliver, disabled, intl, maxFiles, sendToast])
 
   const pickDocuments = useCallback(async () => {
     if (disabled) return
@@ -124,10 +138,16 @@ export const useNativeFilePicker = ({
       )
     } catch (error) {
       if (!isPickerCancel(error)) {
-        sendToast('Could not open the file picker.', { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'files.nativePicker.filePickerError',
+            defaultMessage: 'Could not open the file picker.',
+          }),
+          { type: 'error' },
+        )
       }
     }
-  }, [acceptedFileTypes, deliver, disabled, sendToast])
+  }, [acceptedFileTypes, deliver, disabled, intl, sendToast])
 
   return { pickImages, pickDocuments, isPreparing }
 }

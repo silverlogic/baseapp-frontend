@@ -2,12 +2,17 @@ import { FC } from 'react'
 
 import { formatRelativeTime } from '@baseapp-frontend/utils'
 
+import { useIntl } from 'react-intl'
+
 import Notification from '../Notification'
 import { GenericItemProps } from '../types'
 
 const CommentReply: FC<GenericItemProps> = ({ notification }) => {
-  // eslint-disable-next-line no-underscore-dangle
-  const message = `added a comment to your ${notification.target?.__typename.toLowerCase()}`
+  const intl = useIntl()
+  const message = intl.formatMessage({
+    id: 'notifications.commentReply.message',
+    defaultMessage: 'replied to your comment',
+  })
 
   return (
     <Notification.Root>
@@ -15,7 +20,7 @@ const CommentReply: FC<GenericItemProps> = ({ notification }) => {
       <Notification.Content>
         <Notification.Content.Header
           message={message}
-          timestamp={formatRelativeTime(notification.timestamp)}
+          timestamp={formatRelativeTime(notification.timestamp, { intl })}
           actorName={notification.actor?.name}
           unread={notification.unread}
         />
