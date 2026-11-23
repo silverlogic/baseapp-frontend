@@ -6,9 +6,14 @@ import { TrashCanIcon } from '@baseapp-frontend/design-system/components/web/ico
 
 import { Box, IconButton, TextField, Typography } from '@mui/material'
 import Image from 'next/image'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { formatPrice } from '../../utils'
-import { LINE_THUMBNAIL_SIZE, MAX_LINE_QUANTITY } from '../constants'
+import {
+  LINE_THUMBNAIL_SIZE,
+  MAX_LINE_QUANTITY,
+  ONE_TIME_CHECKOUT_MESSAGES as MESSAGES,
+} from '../constants'
 import { clampQuantity } from '../utils'
 import { OrderLineRowProps } from './types'
 
@@ -19,6 +24,7 @@ const OrderLineRow: FC<OrderLineRowProps> = ({
   onQuantityChange,
   onRemove,
 }) => {
+  const intl = useIntl()
   const { product, quantity, unitAmount, amount } = line
   // The field keeps what is being typed (an empty box included) and commits a valid quantity
   // on blur, so clearing it to type a new number does not snap back to 1 mid-edit.
@@ -51,7 +57,10 @@ const OrderLineRow: FC<OrderLineRowProps> = ({
           {product.name}
         </Typography>
         <Typography variant="caption" color="text.secondary">
-          {formatPrice(unitAmount, undefined, currency)} each
+          <FormattedMessage
+            {...MESSAGES.unitPrice}
+            values={{ price: formatPrice(unitAmount, undefined, currency) }}
+          />
         </Typography>
       </Box>
       <TextField
@@ -68,7 +77,7 @@ const OrderLineRow: FC<OrderLineRowProps> = ({
           min: 1,
           max: MAX_LINE_QUANTITY,
           step: 1,
-          'aria-label': `Quantity of ${product.name}`,
+          'aria-label': intl.formatMessage(MESSAGES.quantityLabel, { name: product.name }),
         }}
         sx={{ width: 88 }}
       />
@@ -77,7 +86,7 @@ const OrderLineRow: FC<OrderLineRowProps> = ({
       </Typography>
       <IconButton
         size="small"
-        aria-label={`Remove ${product.name}`}
+        aria-label={intl.formatMessage(MESSAGES.removeLabel, { name: product.name })}
         onClick={onRemove}
         disabled={disabled}
       >

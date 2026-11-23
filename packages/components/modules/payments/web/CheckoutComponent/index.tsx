@@ -417,7 +417,7 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
   if (isErrorProduct && !product) {
     return (
       <Typography variant="body1" color="error">
-        We could not load this plan. Please try again later.
+        <FormattedMessage {...CHECKOUT_MESSAGES.planLoadFailed} />
       </Typography>
     )
   }

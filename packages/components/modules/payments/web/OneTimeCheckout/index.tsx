@@ -8,14 +8,18 @@ import { Alert, Box, Button, Divider, Grid, Typography } from '@mui/material'
 import { Elements, useStripe } from '@stripe/react-stripe-js'
 import { useQueryClient } from '@tanstack/react-query'
 import Link from 'next/link'
+import { FormattedMessage, useIntl } from 'react-intl'
 
+import { CHECKOUT_MESSAGES } from '../CheckoutComponent/constants'
 import PaymentDropdown from '../PaymentDropDown'
+import { PAYMENTS_MESSAGES } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
 import { extractErrorMessage, getCheckoutElementsOptions } from '../utils/checkout'
 import { getStripePromise } from '../utils/stripe'
 import OrderLineRow from './OrderLine'
+import { ONE_TIME_CHECKOUT_MESSAGES as MESSAGES } from './constants'
 import { StyledLoadingButton, SummaryContainer, TotalRow } from './styled'
 import { OneTimeCheckoutProps, OneTimeCheckoutWithElementsProps } from './types'
 import { buildOrderSummary } from './utils'
@@ -34,6 +38,7 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
   const [paymentError, setPaymentError] = useState<string | null>(null)
 
   const stripe = useStripe()
+  const intl = useIntl()
   const queryClient = useQueryClient()
   const {
     useListPaymentMethods,
@@ -77,7 +82,7 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
       queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listInvoices()] })
       onSuccess?.(purchase)
     } else if (purchase.status === 'failed') {
-      setPaymentError('The payment failed and nothing was charged. Please try another card.')
+      setPaymentError(intl.formatMessage(MESSAGES.paymentFailed))
       setPurchaseId(null)
     }
     // onSuccess runs once per status change, not on every new callback identity.
@@ -113,7 +118,9 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
         // ones. Refetched on any failure: the shared axios error keeps the body but drops the
         // HTTP status, so a 400 cannot be told apart here.
         queryClient.invalidateQueries({ queryKey: [STRIPE_API_KEY.listProducts()] })
-        setPaymentError(extractErrorMessage(error))
+        setPaymentError(
+          extractErrorMessage(error, intl.formatMessage(CHECKOUT_MESSAGES.unexpectedError)),
+        )
         return
       }
       try {
@@ -123,7 +130,9 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
           paymentMethodId: selectedPaymentMethodId,
         })
       } catch (error) {
-        setPaymentError(extractErrorMessage(error))
+        setPaymentError(
+          extractErrorMessage(error, intl.formatMessage(CHECKOUT_MESSAGES.unexpectedError)),
+        )
         return
       }
       // Paid in the browser; the purchase turns `paid` once Stripe's webhook reaches the backend.
@@ -139,9 +148,17 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
   if (isPaid && purchase) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" gap={2} padding={4}>
-        <Typography variant="h5">Thank you for your order!</Typography>
+        <Typography variant="h5">
+          <FormattedMessage {...MESSAGES.thankYou} />
+        </Typography>
         <Typography variant="body1" color="text.secondary">
-          Order #{purchase.id} - {formatPrice(purchase.total, undefined, purchase.currency)} paid.
+          <FormattedMessage
+            {...MESSAGES.orderPaid}
+            values={{
+              id: purchase.id,
+              total: formatPrice(purchase.total, undefined, purchase.currency),
+            }}
+          />
         </Typography>
         {continueShoppingUrl && (
           <Button
@@ -150,7 +167,7 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
             variant="contained"
             sx={{ width: 'auto' }}
           >
-            Continue shopping
+            <FormattedMessage {...MESSAGES.continueShopping} />
           </Button>
         )}
       </Box>
@@ -162,7 +179,9 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
       <Grid container spacing={{ xs: 3, md: 8 }} justifyContent="center">
         <Grid item xs={12} md={6}>
           <Box display="flex" flexDirection="column" gap={2}>
-            <Typography variant="subtitle2">Payment</Typography>
+            <Typography variant="subtitle2">
+              <FormattedMessage {...PAYMENTS_MESSAGES.payment} />
+            </Typography>
             <Divider variant="fullWidth" sx={{ backgroundColor: 'divider' }} />
             {stripe && (
               <PaymentDropdown
@@ -180,17 +199,20 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
         </Grid>
         <Grid item xs={12} md={6}>
           <SummaryContainer>
-            <Typography variant="subtitle2">Order summary</Typography>
+            <Typography variant="subtitle2">
+              <FormattedMessage {...MESSAGES.orderSummary} />
+            </Typography>
             {unavailableProductIds.length > 0 && (
               <Alert severity="warning">
-                {unavailableProductIds.length === 1
-                  ? 'One item is no longer available and was left out.'
-                  : `${unavailableProductIds.length} items are no longer available and were left out.`}
+                <FormattedMessage
+                  {...MESSAGES.unavailableItems}
+                  values={{ count: unavailableProductIds.length }}
+                />
               </Alert>
             )}
             {lines.length === 0 ? (
               <Typography variant="body2" color="text.secondary">
-                Your cart is empty.
+                <FormattedMessage {...MESSAGES.emptyCart} />
               </Typography>
             ) : (
               lines.map((line) => (
@@ -206,23 +228,25 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
             )}
             {hasMixedCurrencies && (
               <Alert severity="error">
-                These products are priced in different currencies and cannot be bought together.
+                <FormattedMessage {...MESSAGES.mixedCurrencies} />
               </Alert>
             )}
             <Divider />
             <TotalRow>
-              <Typography variant="body2">Subtotal</Typography>
+              <Typography variant="body2">
+                <FormattedMessage {...MESSAGES.subtotal} />
+              </Typography>
               <Typography variant="subtitle1" fontWeight={700}>
                 {formatPrice(subtotal, undefined, currency)}
               </Typography>
             </TotalRow>
             <Typography variant="caption" color="text.secondary">
-              Any applicable taxes are added to the invoice when the order is placed.
+              <FormattedMessage {...MESSAGES.taxesNotice} />
             </Typography>
             {paymentError && <Alert severity="error">{paymentError}</Alert>}
             {isAwaitingConfirmation && (
               <Alert severity="info">
-                Payment received. Waiting for confirmation from the payment provider...
+                <FormattedMessage {...MESSAGES.awaitingConfirmation} />
               </Alert>
             )}
             <StyledLoadingButton
@@ -232,11 +256,15 @@ const OneTimeCheckout: FC<OneTimeCheckoutProps> = ({
               disabled={!canPlaceOrder}
               onClick={handlePlaceOrder}
             >
-              {paymentError ? 'Try again' : 'Place Order'}
+              {paymentError ? (
+                <FormattedMessage {...MESSAGES.tryAgain} />
+              ) : (
+                <FormattedMessage id="payments.checkout.placeOrder" defaultMessage="Place Order" />
+              )}
             </StyledLoadingButton>
             {continueShoppingUrl && !isLocked && (
               <Button component={Link} href={continueShoppingUrl} variant="text">
-                Continue shopping
+                <FormattedMessage {...MESSAGES.continueShopping} />
               </Button>
             )}
           </SummaryContainer>
@@ -264,7 +292,7 @@ const OneTimeCheckoutWithElements: FC<OneTimeCheckoutWithElementsProps> = ({
   if (isError && !products) {
     return (
       <Typography variant="body1" color="error">
-        We could not load the products. Please try again later.
+        <FormattedMessage {...MESSAGES.loadFailed} />
       </Typography>
     )
   }
