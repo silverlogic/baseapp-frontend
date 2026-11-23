@@ -5,6 +5,7 @@ import { Text } from '@baseapp-frontend/design-system/components/native/typograp
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
 import { type Href, useRouter } from 'expo-router'
+import { FormattedMessage } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { Timestamp as DefaultTimestamp } from '../../../__shared__/native'
@@ -111,7 +112,7 @@ const CommentItem: FC<CommentItemProps> = ({
               {comment.isEdited ? (
                 <Text variant="body2" color="disabled" style={{ fontSize: 12 }}>
                   {' '}
-                  (edited)
+                  <FormattedMessage id="comments.item.edited" defaultMessage="(edited)" />
                 </Text>
               ) : (
                 ''

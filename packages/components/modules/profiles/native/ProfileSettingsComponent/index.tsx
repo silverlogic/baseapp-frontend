@@ -19,6 +19,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import * as FileSystem from 'expo-file-system/legacy'
 import * as ImagePicker from 'expo-image-picker'
 import { FieldValues, useForm } from 'react-hook-form'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Image, Platform, Pressable } from 'react-native'
 import { ScrollView } from 'react-native-gesture-handler'
 import { useFragment } from 'react-relay'
@@ -37,6 +38,7 @@ import { createStyles } from './styles'
 import { ProfileSettingsComponentProps } from './types'
 
 const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: profileRef }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
   const profile = useFragment(ProfileComponentFragment, profileRef)
@@ -53,12 +55,23 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
     mode: 'onBlur',
   })
 
+  const uploadFailedMessage = intl.formatMessage({
+    id: 'profiles.settings.uploadFailed',
+    defaultMessage: 'Failed to upload file',
+  })
+
   const uploadFile = async (fileUri: string, fieldName: 'image' | 'bannerImage') => {
     try {
       const authToken = getToken(ACCESS_KEY_NAME)
       const fileInfo = await FileSystem.getInfoAsync(fileUri)
       if (!fileInfo.exists) {
-        sendToast('File does not exist', { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'profiles.settings.fileNotFound',
+            defaultMessage: 'File does not exist',
+          }),
+          { type: 'error' },
+        )
       }
 
       bottomDrawerRef.current?.close()
@@ -98,10 +111,10 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         },
       )
       if (response.status !== 200) {
-        formReturn.setError(fieldName, { message: 'Failed to upload file' })
+        formReturn.setError(fieldName, { message: uploadFailedMessage })
       }
     } catch (error) {
-      formReturn.setError(fieldName, { message: 'Failed to upload file' })
+      formReturn.setError(fieldName, { message: uploadFailedMessage })
     }
   }
 
@@ -141,11 +154,23 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
       onCompleted: (response: any) => {
         const errors = response?.profileUpdate?.errors
         if (errors) {
-          sendToast('Something went wrong', { type: 'error' })
+          sendToast(
+            intl.formatMessage({
+              id: 'profiles.settings.updateError',
+              defaultMessage: 'Something went wrong',
+            }),
+            { type: 'error' },
+          )
           // @ts-ignore TODO: check typing issue with zodResolver
           setFormRelayErrors(formReturn, errors)
         } else {
-          sendToast('Profile updated', { type: 'success' })
+          sendToast(
+            intl.formatMessage({
+              id: 'profiles.settings.updateSuccess',
+              defaultMessage: 'Profile updated',
+            }),
+            { type: 'success' },
+          )
         }
       },
     })
@@ -251,14 +276,17 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
         <View style={styles.formContainer}>
           <View style={styles.formGroup}>
             <TextInput
-              label="Name"
+              label={intl.formatMessage({ id: 'profiles.settings.name', defaultMessage: 'Name' })}
               name={PROFILE_FORM_VALUE.name}
               control={control}
               mode="outlined"
               outlineStyle={styles.input}
             />
             <TextInput
-              label="Username"
+              label={intl.formatMessage({
+                id: 'profiles.settings.username',
+                defaultMessage: 'Username',
+              })}
               name={PROFILE_FORM_VALUE.urlPath}
               control={control}
               mode="outlined"
@@ -266,7 +294,10 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
             />
             {/* TODO: Add a formattable TextInput for phone numbers */}
             <TextInput
-              label="Phone Number"
+              label={intl.formatMessage({
+                id: 'profiles.settings.phoneNumber',
+                defaultMessage: 'Phone number',
+              })}
               name={PROFILE_FORM_VALUE.phoneNumber}
               control={control}
               mode="outlined"
@@ -275,7 +306,7 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
           </View>
           <View style={styles.formGroup}>
             <TextInput
-              label="Bio"
+              label={intl.formatMessage({ id: 'profiles.settings.bio', defaultMessage: 'Bio' })}
               name={PROFILE_FORM_VALUE.biography}
               control={control}
               mode="outlined"
@@ -293,7 +324,14 @@ const ProfileSettingsComponent: FC<ProfileSettingsComponentProps> = ({ profile: 
                 labelStyle={styles.saveButtonLabel}
                 disabled={isMutationInFlight || !hasChanged}
               >
-                {isMutationInFlight ? '' : 'Save Changes'}
+                {isMutationInFlight ? (
+                  ''
+                ) : (
+                  <FormattedMessage
+                    id="profiles.settings.saveChanges"
+                    defaultMessage="Save Changes"
+                  />
+                )}
               </Button>
             </View>
           </View>
