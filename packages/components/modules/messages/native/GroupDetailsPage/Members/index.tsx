@@ -10,6 +10,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
+import { FormattedMessage } from 'react-intl'
 
 import { CHAT_ROOM_PARTICIPANT_ROLES } from '../../../common'
 import DefaultMemberItem from './MemberItem'
@@ -39,7 +40,7 @@ const Members: FC<MembersProps> = ({
     <View style={styles.membersContainer}>
       <View style={styles.membersTextContainer}>
         <Text variant="subtitle2" color="high">
-          Members
+          <FormattedMessage id="messages.shared.members" defaultMessage="Members" />
         </Text>
         <Text variant="body2" color="low">
           {participantsCount ?? 0}
@@ -63,7 +64,7 @@ const Members: FC<MembersProps> = ({
             router.push(`/edit-group-details/${groupId}/add-members`)
           }}
         >
-          Add Member
+          <FormattedMessage id="messages.shared.addMember" defaultMessage="Add Member" />
         </Text>
       </View>
       <View>
@@ -87,7 +88,10 @@ const Members: FC<MembersProps> = ({
         ) : (
           hasNext && (
             <Button mode="text" size="medium" onPress={loadNext}>
-              Load More
+              <FormattedMessage
+                id="messages.groupDetails.members.loadMore"
+                defaultMessage="Load More"
+              />
             </Button>
           )
         )}

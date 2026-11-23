@@ -7,6 +7,7 @@ import { ScrollView, View } from '@baseapp-frontend/design-system/components/nat
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 
 import { useRouter } from 'expo-router'
+import { FormattedMessage } from 'react-intl'
 import { Image } from 'react-native'
 import { useFragment } from 'react-relay'
 
@@ -49,7 +50,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
               {profile?.followersCount}
             </Text>
             <Text variant="body2" color="low">
-              Followers
+              <FormattedMessage id="profiles.profile.followers" defaultMessage="Followers" />
             </Text>
           </View>
           <View style={[styles.statContainer, styles.leftBorder]}>
@@ -57,7 +58,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
               {profile?.followingCount}
             </Text>
             <Text variant="body2" color="low">
-              Following
+              <FormattedMessage id="profiles.profile.following" defaultMessage="Following" />
             </Text>
           </View>
         </View>
@@ -77,7 +78,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
               router.push('/profile-settings')
             }}
           >
-            Edit Profile
+            <FormattedMessage id="profiles.profile.editProfile" defaultMessage="Edit Profile" />
           </Button>
           <Button
             size="medium"
@@ -87,7 +88,7 @@ const ProfileComponent = ({ profile: profileRef }: ProfileComponentProps) => {
             style={styles.button}
             contentStyle={styles.buttonContent}
           >
-            Share profile
+            <FormattedMessage id="profiles.profile.shareProfile" defaultMessage="Share profile" />
           </Button>
         </View>
       </View>

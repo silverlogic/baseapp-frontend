@@ -3,7 +3,6 @@ export * from './types'
 
 // Utilities
 export * from './utils'
-export * from './utilsMessages'
 
 // Functions
 export { getCurrentLocale } from './functions/getCurrentLocale'

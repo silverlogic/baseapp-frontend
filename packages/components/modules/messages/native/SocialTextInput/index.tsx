@@ -4,6 +4,7 @@ import { View } from '@baseapp-frontend/design-system/components/native/views'
 import { useTheme } from '@baseapp-frontend/design-system/providers/native'
 import { withNativeController } from '@baseapp-frontend/design-system/utils/native'
 
+import { useIntl } from 'react-intl'
 import {
   type BlurEvent,
   type FocusEvent,
@@ -22,12 +23,13 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
       lineHeight = 22,
       maxLines = 3,
       toolStyle = {},
-      placeholder = 'Message...',
+      placeholder,
       ...props
     },
     ref,
   ) => {
     const [isFocused, setIsFocused] = useState<boolean>(false)
+    const intl = useIntl()
     const theme = useTheme()
     const styles = createStyles(theme, {
       isFocused: !!isFocused,
@@ -67,7 +69,13 @@ const SocialTextInput = forwardRef<NativeTextInput, SocialTextInputProps>(
         <NativeTextInput
           multiline
           onLayout={onLayout}
-          placeholder={placeholder}
+          placeholder={
+            placeholder ??
+            intl.formatMessage({
+              id: 'shared.socialInput.placeholder',
+              defaultMessage: 'Message...',
+            })
+          }
           placeholderTextColor={theme.colors.object.low}
           ref={ref}
           style={styles.input}
