@@ -1,5 +1,8 @@
 import { MessageDescriptor, defineMessages } from 'react-intl'
 
+/** Characters of an invoice's description shown in the list before it is cut with "…". */
+export const INVOICE_DESCRIPTION_MAX_LENGTH = 60
+
 export const INVOICE_STATUS_MESSAGES: Record<string, MessageDescriptor> = defineMessages({
   draft: {
     id: 'payments.invoices.status.draft',
@@ -17,9 +20,11 @@ export const INVOICE_STATUS_MESSAGES: Record<string, MessageDescriptor> = define
     id: 'payments.invoices.status.uncollectible',
     defaultMessage: 'uncollectible',
   },
+  // A `void` invoice was cancelled and never charged - e.g. a one-time purchase whose card
+  // was declined - so it reads "canceled" to the customer rather than Stripe's own name.
   void: {
     id: 'payments.invoices.status.void',
-    defaultMessage: 'void',
+    defaultMessage: 'canceled',
   },
   failed: {
     id: 'payments.invoices.status.failed',

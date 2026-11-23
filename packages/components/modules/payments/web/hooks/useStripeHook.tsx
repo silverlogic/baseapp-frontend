@@ -6,8 +6,15 @@ import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useIntl } from 'react-intl'
 
+import { PURCHASE_POLL_INTERVAL_MS } from '../constants'
 import { STRIPE_API_KEY, StripeApi } from '../services/stripe'
-import { CreateSubscriptionOptions, SetupIntent, UpdateSubscriptionOptions } from '../types'
+import {
+  CreatePurchaseOptions,
+  CreateSubscriptionOptions,
+  Purchase,
+  SetupIntent,
+  UpdateSubscriptionOptions,
+} from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
@@ -225,6 +232,30 @@ const useStripeHook = () => {
       queryFn: () => StripeApi.listInvoices(page, entityId),
     })
 
+  const useCreatePurchase = () =>
+    useMutation({
+      mutationFn: (options: CreatePurchaseOptions) => StripeApi.createPurchase(options),
+      mutationKey: [STRIPE_API_KEY.createPurchase()],
+    })
+
+  /**
+   * A purchase, polled while it is `pending`: the payment is confirmed in the browser, but the
+   * status only changes when Stripe's webhook reaches the backend.
+   */
+  const useGetPurchase = (
+    purchaseId?: number | string,
+    options: { enabled?: boolean; pollIntervalMs?: number } = {},
+  ) =>
+    useQuery({
+      queryKey: [STRIPE_API_KEY.getPurchase(purchaseId?.toString() ?? '')],
+      queryFn: () => StripeApi.getPurchase(purchaseId as number | string),
+      enabled: !!purchaseId && (options.enabled ?? true),
+      refetchInterval: (query) =>
+        (query.state.data as Purchase | undefined)?.status === 'pending'
+          ? (options.pollIntervalMs ?? PURCHASE_POLL_INTERVAL_MS)
+          : false,
+    })
+
   return {
     useGetCustomer,
     useCreateCustomer,
@@ -240,6 +271,8 @@ const useStripeHook = () => {
     useCancelSubscription,
     useUpdateSubscription,
     useListInvoices,
+    useCreatePurchase,
+    useGetPurchase,
   }
 }
 

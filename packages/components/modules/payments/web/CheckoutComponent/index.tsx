@@ -17,12 +17,13 @@ import { PAYMENTS_MESSAGES } from '../constants'
 import useStripeHook from '../hooks/useStripeHook'
 import { STRIPE_API_KEY } from '../services/stripe'
 import { formatPrice } from '../utils'
+import { extractErrorMessage, getCheckoutElementsOptions } from '../utils/checkout'
 import { getStripePromise } from '../utils/stripe'
 import DefaultConfirmationSubscriptionModal from './ConfirmationSubscriptionModal'
 import { CHECKOUT_MESSAGES, PRODUCT_THUMBNAIL_SIZE } from './constants'
 import { ProductContainer, StyledLoadingButton } from './styled'
 import { CheckoutComponentProps, CheckoutComponentWithElementProps } from './types'
-import { buildAddressOptions, extractErrorMessage, getCheckoutElementsOptions } from './utils'
+import { buildAddressOptions } from './utils'
 
 const CheckoutComponent: FC<CheckoutComponentProps> = ({
   entityId,
@@ -416,7 +417,7 @@ const CheckoutComponentWithElements: FC<CheckoutComponentWithElementProps> = ({
   if (isErrorProduct && !product) {
     return (
       <Typography variant="body1" color="error">
-        We could not load this plan. Please try again later.
+        <FormattedMessage {...CHECKOUT_MESSAGES.planLoadFailed} />
       </Typography>
     )
   }

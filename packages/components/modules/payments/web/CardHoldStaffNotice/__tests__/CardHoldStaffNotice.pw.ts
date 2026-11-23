@@ -1,6 +1,6 @@
 import { type Locator, type Page, expect, test } from '@playwright/test'
 
-import { DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES as MESSAGES } from '../constants'
+import { CARD_HOLD_STAFF_NOTICE_MESSAGES } from '../constants'
 import {
   CARD_HOLD_ID,
   FAILURE_REASON,
@@ -8,6 +8,14 @@ import {
   TRANSPORT_ERROR_MESSAGE,
 } from './__mocks__/requests'
 import type { CardHoldStaffNoticeControls, Default } from './__utils__/CardHoldStaffNotice.story'
+
+// The stories render in English, so each message reads as its default text.
+const MESSAGES = Object.fromEntries(
+  Object.entries(CARD_HOLD_STAFF_NOTICE_MESSAGES).map(([key, descriptor]) => [
+    key,
+    String(descriptor.defaultMessage),
+  ]),
+) as Record<keyof typeof CARD_HOLD_STAFF_NOTICE_MESSAGES, string>
 
 /**
  * The confirmation dialog and the toast are portaled outside `#root`, so they are queried

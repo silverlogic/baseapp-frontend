@@ -22,6 +22,6 @@ export interface CardHoldStaffNoticeProps {
   cardHold: CardHoldStaffNotice_cardHold$key
   /** Called after the backend accepted the decision. */
   onDecided?: (decision: CardHoldStaffDecision) => void
-  /** Replaces the copy, e.g. with the project's translations. */
+  /** Replaces any of the copy; the rest comes from react-intl (`payments.cardHold.staffNotice.*`). */
   messages?: Partial<CardHoldStaffNoticeMessages>
 }

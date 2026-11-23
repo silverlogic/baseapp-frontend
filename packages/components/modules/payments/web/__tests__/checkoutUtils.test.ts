@@ -1,5 +1,6 @@
-import { buildAddressOptions, extractErrorMessage, maskEmail } from '../CheckoutComponent/utils'
+import { buildAddressOptions, maskEmail } from '../CheckoutComponent/utils'
 import { PaymentMethod } from '../types'
+import { extractErrorMessage } from '../utils/checkout'
 
 const paymentMethod = (billingDetails: any): PaymentMethod =>
   ({ id: 'pm_1', billingDetails }) as unknown as PaymentMethod

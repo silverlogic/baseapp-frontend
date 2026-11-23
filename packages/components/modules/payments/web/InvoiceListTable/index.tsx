@@ -53,7 +53,7 @@ const InvoiceListTable = ({
         {title ??
           intl.formatMessage({
             id: 'payments.invoices.title',
-            defaultMessage: 'Subscription Receipts',
+            defaultMessage: 'Billing History',
           })}
       </Typography>
       {isLoading ? (

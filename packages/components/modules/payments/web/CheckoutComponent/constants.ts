@@ -21,6 +21,10 @@ export const CHECKOUT_MESSAGES = defineMessages({
     id: 'payments.checkout.createFailed',
     defaultMessage: 'Failed to create subscription: {message}',
   },
+  planLoadFailed: {
+    id: 'payments.checkout.planLoadFailed',
+    defaultMessage: 'We could not load this plan. Please try again later.',
+  },
   unexpectedError: {
     id: 'payments.checkout.unexpectedError',
     defaultMessage: 'An unexpected error occurred. Please try again.',
