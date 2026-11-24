@@ -1,0 +1,25 @@
+id: next-image-static-public-src
+valid:
+  - |
+    <Image src={projectLogo} alt="Project Logo" width={144} height={32} />
+  - |
+    <ProjectLogo src={projectLogo.src} alt="Project Logo" width={144} height={32} />
+  - |
+    <Image src="https://cdn.example.com/a.jpg" alt="Image" width={800} height={600} />
+  - |
+    <Image src="//cdn.example.com/a.jpg" alt="Image" width={800} height={600} />
+  - |
+    <ImageWithFallback src="/webp/banner.webp" fallbackSrc="/png/banner.png" alt="Banner" width={500} height={363} />
+invalid:
+  - |
+    <Image src="/svg/project-logo.svg" alt="Project Logo" width={144} height={32} />
+  - |
+    <ProjectLogo
+      src="/svg/project-logo.svg"
+      alt="Project Logo"
+      width={144}
+      height={32}
+      priority
+    />
+  - |
+    <Image src='/png/banner.png' alt="Banner" width={500} height={363}></Image>
