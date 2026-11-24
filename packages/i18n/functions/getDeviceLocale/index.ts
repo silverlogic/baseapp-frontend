@@ -9,7 +9,8 @@ const getPreferredLanguages = (): (string | null | undefined)[] => {
   if (isMobilePlatform()) {
     return getLocales().map((locale) => locale.languageCode)
   }
-  if (typeof navigator === 'undefined') return []
+  // Node 22 also has a `navigator`, so only a browser may report its languages.
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') return []
   return navigator.languages?.length ? [...navigator.languages] : [navigator.language]
 }
 

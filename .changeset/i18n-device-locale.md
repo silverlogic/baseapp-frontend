@@ -12,7 +12,8 @@ than only the first entry.
 
 `IntlProvider` no longer flashes the default language on native: the new synchronous
 `getInitialLocale` (secure store, then device) seeds the first render, so the mobile root layout
-no longer needs to pass the stored language as `initialCookies`. Apps consuming `@baseapp-frontend/i18n`
+no longer needs to pass the stored language as `initialCookies`. With no stored language the
+provider also follows the OS (per-app) language when it changes while the app runs. Apps consuming `@baseapp-frontend/i18n`
 on the web should alias `expo-localization` to `false` in their webpack config next to
 `expo-secure-store`. `@baseapp-frontend/test` ships an `expo-localization` mock and aliases it in the
 shared Vitest and Jest presets.

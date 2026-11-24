@@ -44,7 +44,7 @@ intl.formatMessage({ id: 'comments.replies.showMore', defaultMessage: 'Show more
 
 ## React Native
 
-The native app wraps its root in the same `IntlProvider`, passing every locale's catalog through `additionalMessages` so `setLocale` can switch languages without a reload. The provider reads the stored language from SecureStore and, without one, the device's preferred languages synchronously, so the first frame is already in the right language and no `initialCookies` is needed. Add `expo-localization` to the app's config plugins with `supportedLocales` so the OS lists the app's languages and its per-app language setting works. Hermes lacks `Intl.PluralRules` and `Intl.Locale`, so the app must load the `@formatjs/intl-getcanonicallocales`, `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` polyfills before rendering ICU plurals.
+The native app wraps its root in the same `IntlProvider`, passing every locale's catalog through `additionalMessages` so `setLocale` can switch languages without a reload. The provider reads the stored language from SecureStore and, without one, the device's preferred languages synchronously, so the first frame is already in the right language and no `initialCookies` is needed; with no stored language it also follows the OS language when it changes while the app runs. Add `expo-localization` to the app's config plugins with `supportedLocales` so the OS lists the app's languages and its per-app language setting works. Hermes lacks `Intl.PluralRules` and `Intl.Locale`, so the app must load the `@formatjs/intl-getcanonicallocales`, `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` polyfills before rendering ICU plurals.
 
 ## Updating catalogs
 

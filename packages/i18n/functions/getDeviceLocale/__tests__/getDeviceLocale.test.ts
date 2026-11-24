@@ -40,10 +40,23 @@ describe('getDeviceLocale', () => {
     expect(getDeviceLocale()).toBeUndefined()
   })
 
+  it('returns undefined on a server that has a navigator, like Node 22', () => {
+    setNavigatorLanguages(['en-US'])
+    vi.stubGlobal('window', undefined)
+
+    expect(getDeviceLocale()).toBeUndefined()
+
+    vi.unstubAllGlobals()
+  })
+
   it('walks the device locales on native and skips entries without a language code', () => {
     isMobilePlatform.mockReturnValue(true)
     setNavigatorLanguages(['en-US'])
-    getLocales.mockReturnValue([{ languageCode: null }, { languageCode: 'fr' }, { languageCode: 'pt' }])
+    getLocales.mockReturnValue([
+      { languageCode: null },
+      { languageCode: 'fr' },
+      { languageCode: 'pt' },
+    ])
 
     expect(getDeviceLocale()).toBe('pt')
   })

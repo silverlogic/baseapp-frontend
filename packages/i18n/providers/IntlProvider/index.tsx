@@ -1,9 +1,10 @@
 'use client'
 
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { isMobilePlatform } from '@baseapp-frontend/utils'
 
+import { useLocales } from 'expo-localization'
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import { getCurrentLocale } from '../../functions/getCurrentLocale'
@@ -12,6 +13,15 @@ import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, isSupportedLocale } from 
 import { getMessages } from '../../utils'
 import { LocaleUpdateContext } from './context'
 import { IntlProviderWrapperProps } from './types'
+
+// Rendered on native only: `useLocales` re-renders when the OS (per-app) language changes.
+const DeviceLocaleWatcher: FC<{ onChange: () => void }> = ({ onChange }) => {
+  const locales = useLocales()
+  useEffect(() => {
+    onChange()
+  }, [locales, onChange])
+  return null
+}
 
 const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   children,
@@ -28,6 +38,13 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   // Native reads the stored and device language synchronously, so the first render already uses it.
   const [locale, setLocale] = useState<Locale>(
     () => initialLocale ?? cookieLocale ?? getInitialLocale(defaultLocale),
+  )
+  const followsDevice = !initialLocale && !cookieLocale && isMobilePlatform()
+
+  // A stored language still wins: `getInitialLocale` reads it before the device.
+  const syncWithDevice = useCallback(
+    () => setLocale(getInitialLocale(defaultLocale)),
+    [defaultLocale],
   )
 
   const messages = useMemo(
@@ -62,6 +79,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   return (
     <LocaleUpdateContext.Provider value={setLocale}>
       <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
+        {followsDevice && <DeviceLocaleWatcher onChange={syncWithDevice} />}
         {children}
       </ReactIntlProvider>
     </LocaleUpdateContext.Provider>
