@@ -3,16 +3,19 @@
 import { FC, MouseEventHandler } from 'react'
 
 import { Box } from '@mui/material'
+import { useIntl } from 'react-intl'
 
 import IconButton from '../../buttons/IconButton'
 import CloseIcon from '../../icons/CloseIcon'
 import { StyledDialog } from './styled'
 import { DialogProps } from './types'
 
-const Dialog: FC<DialogProps> = ({ children, ...props }) => {
+const Dialog: FC<DialogProps> = ({ children, closeButtonLabel, CloseButtonProps, ...props }) => {
+  const intl = useIntl()
   const { onClose } = props
 
   const handleClose: MouseEventHandler<HTMLButtonElement> = (e) => {
+    CloseButtonProps?.onClick?.(e)
     onClose?.(e, 'backdropClick')
   }
 
@@ -20,7 +23,17 @@ const Dialog: FC<DialogProps> = ({ children, ...props }) => {
     <StyledDialog {...props}>
       {!!onClose && (
         <Box position="absolute" top={16} right={16} zIndex={1}>
-          <IconButton onClick={handleClose}>
+          <IconButton
+            aria-label={
+              closeButtonLabel ??
+              intl.formatMessage({
+                id: 'designSystem.dialog.closeButtonLabel',
+                defaultMessage: 'Close dialog',
+              })
+            }
+            {...CloseButtonProps}
+            onClick={handleClose}
+          >
             <CloseIcon />
           </IconButton>
         </Box>
