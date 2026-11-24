@@ -213,6 +213,7 @@
   "messages.messageUpdate.saveAriaLabel": "save message edit",
   "messages.messagesGroup.newMessages": "New Messages",
   "messages.messagesList.loadingMore": "loading more messages",
+  "messages.profileButton.label": "Message",
   "messages.profileSummary.about": "About",
   "messages.profileSummary.addToGroup": "Add contact to a group",
   "messages.profileSummary.addToGroupAriaLabel": "add contact to a group",
