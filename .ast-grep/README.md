@@ -124,7 +124,10 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 
 Text that must stay literal (a brand name, language endonyms) takes a
 `// ast-grep-ignore: <rule-id>` comment on the line above the match. For
-`intl-no-text-constants` that is the line above the `const`.
+`intl-no-text-constants` that is the line above the `const`. Inside JSX children a
+`//` line is rendered as text, and a `{/* ast-grep-ignore */}` on its own line above
+does not suppress, so put it on the same line, directly before the text:
+`<span>{/* ast-grep-ignore: intl-no-hardcoded-text */}SilverLogic</span>`.
 
 ### Severity policy
 
