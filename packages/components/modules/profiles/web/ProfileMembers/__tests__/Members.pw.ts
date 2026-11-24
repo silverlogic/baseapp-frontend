@@ -1,4 +1,5 @@
 import { type Locator, type Page, expect, test } from '@playwright/test'
+import { ConnectionHandler } from 'relay-runtime'
 
 import { fullMembersListMockData } from './__mocks__/requests'
 import type { MembersControls } from './__utils__/Members.story'
@@ -87,6 +88,18 @@ test.describe('Component: ProfileMembers', () => {
     })
   })
 
+  test('GIVEN an INACTIVE member and an admin, THEN the row shows its status read-only unless the project opts into its menu', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/AllRoles`)
+    const inactiveRow = rowFor(component, 'Inactive Profile').locator('..')
+
+    await expect(inactiveRow.getByRole('button', { name: 'Inactive', exact: true })).toBeAttached()
+    await expect(inactiveRow.getByRole('combobox')).toHaveCount(0)
+    await expect(page.getByRole('option', { name: 'Reactivate' })).not.toBeAttached()
+  })
+
   test('GIVEN a member whose role can be changed, WHEN a new role is chosen, THEN it is applied only after confirmation', async ({
     mount,
     page,
@@ -171,6 +184,101 @@ test.describe('Component: ProfileMembers', () => {
         await scrollTo(member(index))
       }
     })
+  })
+
+  test('GIVEN an ownerless profile, THEN it lists its members without an owner row', async ({
+    mount,
+  }) => {
+    const component = await mount(`${STORY}/Ownerless`)
+
+    await expect(component.getByText('Admin Profile', { exact: true })).toBeAttached()
+    await expect(component.getByText('1 member', { exact: true })).toBeAttached()
+    await expect(component.getByText('Owner', { exact: true })).not.toBeAttached()
+    // Nothing to separate: no owner row and no pending or inactive rows above the admin.
+    await expect(component.locator('hr')).toHaveCount(0)
+  })
+
+  test('GIVEN project labels and the Deactivate entry, WHEN a member is deactivated and reactivated, THEN the row follows', async ({
+    mount,
+    page,
+  }) => {
+    const component = await test.step('GIVEN project labels', async () => {
+      const mounted = await mount(`${STORY}/DeactivationWithLabels`)
+
+      await expect(mounted.getByText('Proprietor', { exact: true })).toBeAttached()
+      await expect(mounted.getByText('Owner', { exact: true })).not.toBeAttached()
+
+      return mounted
+    })
+
+    await test.step('WHEN Deactivate is chosen, THEN it is applied only after confirmation', async () => {
+      // The project role label also names the role in the active member's menu.
+      await expect(component.getByText('Manager', { exact: true })).not.toBeAttached()
+      await component.getByText('Member', { exact: true }).click()
+      await expect(page.getByRole('option', { name: 'Member', exact: true })).toBeAttached()
+      await expect(page.getByRole('option', { name: 'Remove' })).not.toBeAttached()
+      await page.getByRole('option', { name: 'Deactivate' }).click()
+
+      await expect(page.getByText('Deactivate member', { exact: true })).toBeAttached()
+      await page.getByRole('button', { name: 'Deactivate', exact: true }).click()
+      await resolve(page, 'resolveDeactivateMember')
+
+      await expect(component.getByText('Deactivated', { exact: true })).toBeAttached()
+    })
+
+    await test.step('WHEN the deactivated member is reactivated, THEN their role is shown again', async () => {
+      await component.getByText('Deactivated', { exact: true }).click()
+      await expect(page.getByRole('option', { name: 'Remove' })).toBeAttached()
+      await page.getByRole('option', { name: 'Reactivate' }).click()
+      await resolve(page, 'resolveReactivateMember')
+
+      await expect(component.getByText('Member', { exact: true })).toBeAttached()
+      await expect(component.getByText('Deactivated', { exact: true })).not.toBeAttached()
+    })
+  })
+
+  test('GIVEN an injected InviteMemberDialog, WHEN Add Member is clicked, THEN the project dialog opens with the list connection', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/CustomInviteDialog`)
+
+    await component.getByRole('button', { name: 'Add Member' }).click()
+
+    await expect(page.getByText('Project invite dialog for 1 list')).toBeAttached()
+    await expect(page.getByRole('dialog')).toHaveAttribute(
+      'data-connections',
+      ConnectionHandler.getConnectionID('UHJvZmlsZTox', 'UserMembersFragment_members', {
+        orderBy: 'status',
+        q: '',
+      }),
+    )
+  })
+
+  test('GIVEN a project members query, fragment and MemberItem, THEN rows read the project fields and the dialog gets that connection', async ({
+    mount,
+    page,
+  }) => {
+    const component = await mount(`${STORY}/ProjectFragment`)
+
+    await expect(component.getByText('Manager Profile', { exact: true })).toBeAttached()
+    await expect(component.getByText('Invited as Ada Lovelace', { exact: true })).toBeAttached()
+    expect(await page.evaluate(() => window.__membersQueryVariables)).toMatchObject({
+      profileId: 'UHJvZmlsZTox',
+      orderBy: 'status',
+      q: '',
+      status: 'ACTIVE',
+    })
+
+    await component.getByRole('button', { name: 'Add Member' }).click()
+    await expect(page.getByRole('dialog')).toHaveAttribute(
+      'data-connections',
+      ConnectionHandler.getConnectionID('UHJvZmlsZTox', 'MembersWithProjectFragment_members', {
+        orderBy: 'status',
+        q: '',
+        status: 'ACTIVE',
+      }),
+    )
   })
 
   test('GIVEN a searchable members list, WHEN a name is searched, THEN only that member remains, and WHEN the search is cleared, THEN all return', async ({

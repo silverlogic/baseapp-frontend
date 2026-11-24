@@ -10,7 +10,12 @@ import { useFragment } from 'react-relay'
 
 import { ProfileRoles } from '../../../../../__generated__/ChangeUserRoleMutation.graphql'
 import { ProfileItemFragment$key } from '../../../../../__generated__/ProfileItemFragment.graphql'
-import { ProfileItemFragment, useChangeUserRoleMutation } from '../../../common'
+import {
+  ProfileItemFragment,
+  useChangeUserRoleMutation,
+  useProfileMemberDeactivateMutation,
+  useProfileMemberReactivateMutation,
+} from '../../../common'
 import { useCancelInvitationMutation } from '../../../common/graphql/mutations/CancelInvitation'
 import { useRemoveMemberMutation } from '../../../common/graphql/mutations/RemoveMember'
 import { useResendInvitationMutation } from '../../../common/graphql/mutations/ResendInvitation'
@@ -19,12 +24,11 @@ import {
   MEMBER_ACTIONS,
   MEMBER_MESSAGES,
   MEMBER_ROLES,
-  MEMBER_ROLE_AND_STATUS_MESSAGES,
   MEMBER_STATUSES,
+  roleOptions as defaultRoleOptions,
   invitationActionOptions,
-  roleOptions,
 } from '../constants'
-import { capitalizeFirstLetter } from '../utils'
+import { formatMemberOptionLabel, getMemberLabel } from '../utils'
 import { MemberItemContainer, MemberPersonalInformation, Select } from './styled'
 import { MemberItemProps } from './types'
 
@@ -41,6 +45,10 @@ const MemberItem: FC<MemberItemProps> = ({
   invitedEmail,
   invitationExpiresAt,
   invitationId,
+  roleOptions = defaultRoleOptions,
+  inactiveMemberOptions = [],
+  roleLabels,
+  statusLabels,
 }) => {
   const theme = useTheme()
   const intl = useIntl()
@@ -57,8 +65,11 @@ const MemberItem: FC<MemberItemProps> = ({
   const [removeMember, isRemovingMember] = useRemoveMemberMutation()
   const [resendInvitation, isResendingInvitation] = useResendInvitationMutation()
   const [cancelInvitation, isCancellingInvitation] = useCancelInvitationMutation()
+  const [deactivateMember, isDeactivatingMember] = useProfileMemberDeactivateMutation()
+  const [reactivateMember, isReactivatingMember] = useProfileMemberReactivateMutation()
   const [openConfirmChangeMember, setOpenConfirmChangeMember] = useState(false)
   const [openConfirmRemoveMember, setOpenConfirmRemoveMember] = useState(false)
+  const [openConfirmDeactivateMember, setOpenConfirmDeactivateMember] = useState(false)
   const [openConfirmCancelInvitation, setOpenConfirmCancelInvitation] = useState(false)
 
   const [now, setNow] = useState(() => Date.now())
@@ -92,6 +103,18 @@ const MemberItem: FC<MemberItemProps> = ({
   const shouldRenderChangeRoleSelect =
     status === MEMBER_STATUSES.active && memberRole !== MEMBER_ROLES.owner && canChangeMember
 
+  const shouldRenderInactiveMemberSelect =
+    status === MEMBER_STATUSES.inactive && canChangeMember && inactiveMemberOptions.length > 0
+
+  const roleLabel = getMemberLabel(memberRole, roleLabels, roleOptions, intl.formatMessage)
+  const statusLabel = getMemberLabel(status, statusLabels, undefined, intl.formatMessage)
+  const expiredLabel = getMemberLabel(
+    MEMBER_STATUSES.expired,
+    statusLabels,
+    undefined,
+    intl.formatMessage,
+  )
+
   const haveMemberRoleAndStatus = memberRole && status
 
   const removeProfileMember = () => {
@@ -111,6 +134,32 @@ const MemberItem: FC<MemberItemProps> = ({
 
   const handleRemoveMemberDialog = () => {
     setOpenConfirmRemoveMember(!openConfirmRemoveMember)
+  }
+
+  const handleDeactivateMemberDialog = () => {
+    setOpenConfirmDeactivateMember(!openConfirmDeactivateMember)
+  }
+
+  const confirmDeactivateMember = () => {
+    if (currentProfile?.id && userId) {
+      deactivateMember({ variables: { input: { profileId: currentProfile.id, userId } } })
+    }
+    setOpenConfirmDeactivateMember(false)
+  }
+
+  const handleReactivateMember = () => {
+    if (currentProfile?.id && userId) {
+      reactivateMember({ variables: { input: { profileId: currentProfile.id, userId } } })
+    }
+  }
+
+  const handleInactiveMemberAction = (event: SelectChangeEvent<unknown>) => {
+    const { value } = event.target
+    if (value === MEMBER_ACTIONS.reactivate) {
+      handleReactivateMember()
+    } else if (value === MEMBER_ACTIONS.remove) {
+      handleRemoveMemberDialog()
+    }
   }
 
   const handleResendInvitation = () => {
@@ -184,7 +233,7 @@ const MemberItem: FC<MemberItemProps> = ({
               value=""
               onChange={handleInvitationAction}
               displayEmpty
-              renderValue={() => intl.formatMessage(MEMBER_MESSAGES.expired)}
+              renderValue={() => expiredLabel}
               variant="filled"
               size="small"
               disabled={isResendingInvitation || isCancellingInvitation}
@@ -211,7 +260,7 @@ const MemberItem: FC<MemberItemProps> = ({
               tree as an actionable control (vs. pointerEvents:none, which only blocks
               the mouse). Greyed-out also reads correctly for an expired invitation. */}
           <Button variant="outlined" color="inherit" disabled>
-            <FormattedMessage {...MEMBER_MESSAGES.expired} />
+            {expiredLabel}
           </Button>
         </Box>
       )
@@ -225,6 +274,8 @@ const MemberItem: FC<MemberItemProps> = ({
               const { value } = event.target
               if (value === MEMBER_ACTIONS.remove) {
                 handleRemoveMemberDialog()
+              } else if (value === MEMBER_ACTIONS.deactivate) {
+                handleDeactivateMemberDialog()
               } else {
                 handleRoleChange(event)
               }
@@ -232,7 +283,7 @@ const MemberItem: FC<MemberItemProps> = ({
             displayEmpty
             variant="filled"
             size="small"
-            disabled={isChangingUserRole || isRemovingMember}
+            disabled={isChangingUserRole || isRemovingMember || isDeactivatingMember}
           >
             {roleOptions.map(({ value, label }) => (
               <MenuItem
@@ -242,7 +293,35 @@ const MemberItem: FC<MemberItemProps> = ({
                   color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
                 }}
               >
-                <FormattedMessage {...label} />
+                {/* A project role label wins here too, so a role reads the same in every row. */}
+                {roleLabels?.[value] ?? formatMemberOptionLabel(label, intl.formatMessage)}
+              </MenuItem>
+            ))}
+          </Select>
+        </Box>
+      )
+    }
+    if (shouldRenderInactiveMemberSelect) {
+      return (
+        <Box>
+          <Select
+            value=""
+            onChange={handleInactiveMemberAction}
+            displayEmpty
+            renderValue={() => statusLabel}
+            variant="filled"
+            size="small"
+            disabled={isReactivatingMember || isRemovingMember}
+          >
+            {inactiveMemberOptions.map(({ value, label }) => (
+              <MenuItem
+                key={value}
+                value={value}
+                sx={{
+                  color: value === MEMBER_ACTIONS.remove ? theme.palette.error.main : 'inherit',
+                }}
+              >
+                {formatMemberOptionLabel(label, intl.formatMessage)}
               </MenuItem>
             ))}
           </Select>
@@ -250,14 +329,10 @@ const MemberItem: FC<MemberItemProps> = ({
       )
     }
     if (haveMemberRoleAndStatus) {
-      const roleOrStatus = status === MEMBER_STATUSES.active ? memberRole : status
-      const roleOrStatusMessage = MEMBER_ROLE_AND_STATUS_MESSAGES[roleOrStatus]
       return (
         <Box>
           <Button variant="outlined" color="inherit" sx={{ pointerEvents: 'none' }}>
-            {roleOrStatusMessage
-              ? intl.formatMessage(roleOrStatusMessage)
-              : capitalizeFirstLetter(roleOrStatus)}
+            {status === MEMBER_STATUSES.active ? roleLabel : statusLabel}
           </Button>
         </Box>
       )
@@ -312,6 +387,28 @@ const MemberItem: FC<MemberItemProps> = ({
         action={
           <Button variant="contained" color="error" onClick={confirmRemoveProfileMember}>
             <FormattedMessage {...MEMBER_MESSAGES.remove} />
+          </Button>
+        }
+      />
+      <ConfirmDialog
+        title={intl.formatMessage({
+          id: 'profiles.members.deactivateMemberDialog.title',
+          defaultMessage: 'Deactivate member',
+        })}
+        open={openConfirmDeactivateMember}
+        onClose={handleDeactivateMemberDialog}
+        content={
+          <Typography variant="body1">
+            <FormattedMessage
+              id="profiles.members.deactivateMemberDialog.content"
+              defaultMessage="Are you sure you want to deactivate this member? They will lose access to the organization profile until they are reactivated."
+            />
+          </Typography>
+        }
+        cancelText={backText}
+        action={
+          <Button variant="contained" color="error" onClick={confirmDeactivateMember}>
+            <FormattedMessage {...MEMBER_MESSAGES.deactivate} />
           </Button>
         }
       />
