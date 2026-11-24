@@ -6,6 +6,8 @@ export * from './utils'
 
 // Functions
 export { getCurrentLocale } from './functions/getCurrentLocale'
+export { getDeviceLocale } from './functions/getDeviceLocale'
+export { getInitialLocale } from './functions/getInitialLocale'
 export { getLanguage } from './functions/getLanguage'
 export { setLanguage } from './functions/setLanguage'
 export {
