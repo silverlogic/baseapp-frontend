@@ -40,6 +40,8 @@ intl.formatMessage({ id: 'comments.replies.showMore', defaultMessage: 'Show more
 - Zod schemas with user-facing messages are built by a factory that takes `intl` (`getXValidationSchema(intl)`).
 - Code under a `common/` folder runs on web and native, so both apps must render it inside `IntlProvider`.
 
+The ast-grep rules `intl-prefer-formatted-message`, `intl-no-hardcoded-text` and `intl-no-text-constants` (`.ast-grep/rules`) enforce these in CI; see `.ast-grep/README.md`.
+
 ## React Native
 
 The native app wraps its root in the same `IntlProvider`, passing every locale's catalog through `additionalMessages` so `setLocale` can switch languages without a reload. The stored language comes from SecureStore (pass it as `initialCookies[LANGUAGE_COOKIE_NAME]`); without one, the device locale is used. Hermes lacks `Intl.PluralRules` and `Intl.Locale`, so the app must load the `@formatjs/intl-getcanonicallocales`, `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` polyfills before rendering ICU plurals.

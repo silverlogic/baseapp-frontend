@@ -158,6 +158,8 @@
   "messages.chatRoomsList.tabs.groups": "Grupos",
   "messages.chatRoomsList.tabs.unread": "Não lidas",
   "messages.chatRoomsList.title": "Mensagens",
+  "messages.createGroupChat.fileNotFound": "O arquivo não existe",
+  "messages.createGroupChat.uploadFailed": "Falha ao enviar o arquivo",
   "messages.editGroupTitleAndImage.changeAvatar": "Alterar avatar",
   "messages.editGroupTitleAndImage.groupName": "Nome do grupo",
   "messages.editGroupTitleAndImage.uploadAvatar": "Enviar avatar",

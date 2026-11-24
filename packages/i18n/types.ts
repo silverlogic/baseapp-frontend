@@ -16,6 +16,8 @@ export const DEFAULT_LOCALE: Locale = 'en'
 /**
  * Human-readable labels for each locale
  */
+// Endonyms: each language is shown in its own language, so these are not translated.
+// ast-grep-ignore: intl-no-text-constants
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: 'English',
   es: 'Español',

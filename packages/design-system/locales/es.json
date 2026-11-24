@@ -1,4 +1,6 @@
 {
+  "designSystem.appBar.close": "Cerrar",
+  "designSystem.appBar.closeHint": "Cerrar la pantalla actual",
   "designSystem.autocompleteField.placeholder": "Buscar",
   "designSystem.avatar.deletedUser": "Avatar de usuario eliminado",
   "designSystem.avatar.fallback": "Avatar predeterminado",

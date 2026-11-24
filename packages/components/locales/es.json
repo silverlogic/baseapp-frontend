@@ -158,6 +158,8 @@
   "messages.chatRoomsList.tabs.groups": "Grupos",
   "messages.chatRoomsList.tabs.unread": "No leídos",
   "messages.chatRoomsList.title": "Mensajes",
+  "messages.createGroupChat.fileNotFound": "El archivo no existe",
+  "messages.createGroupChat.uploadFailed": "No se pudo subir el archivo",
   "messages.editGroupTitleAndImage.changeAvatar": "Cambiar avatar",
   "messages.editGroupTitleAndImage.groupName": "Nombre del grupo",
   "messages.editGroupTitleAndImage.uploadAvatar": "Subir avatar",
