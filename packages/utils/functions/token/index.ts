@@ -1,5 +1,6 @@
 export * from './decodeJWT'
 export * from './getAccessToken'
+export * from './getSessionIdentity'
 export * from './getToken'
 export * from './getTokenSSR'
 export * from './isUserTokenValid'
