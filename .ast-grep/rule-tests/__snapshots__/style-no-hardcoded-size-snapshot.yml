@@ -1,6 +1,144 @@
 id: style-no-hardcoded-size
 snapshots:
   ? |
+    <Box sx={{ borderBottomRightRadius: 8 }}>content</Box>
+  : labels:
+    - source: '8'
+      style: primary
+      start: 36
+      end: 37
+    - source: borderBottomRightRadius
+      style: secondary
+      start: 11
+      end: 34
+    - source: 'borderBottomRightRadius: 8'
+      style: secondary
+      start: 11
+      end: 37
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ borderBottomRightRadius: 8 }}'
+      style: secondary
+      start: 5
+      end: 40
+  ? |
+    <Box sx={{ borderBottomWidth: 2 }}>content</Box>
+  : labels:
+    - source: '2'
+      style: primary
+      start: 30
+      end: 31
+    - source: borderBottomWidth
+      style: secondary
+      start: 11
+      end: 28
+    - source: 'borderBottomWidth: 2'
+      style: secondary
+      start: 11
+      end: 31
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ borderBottomWidth: 2 }}'
+      style: secondary
+      start: 5
+      end: 34
+  ? |
+    <Box sx={{ height: { xs: 40, md: 56 } }}>content</Box>
+  : labels:
+    - source: '40'
+      style: primary
+      start: 25
+      end: 27
+    - source: height
+      style: secondary
+      start: 11
+      end: 17
+    - source: 'height: { xs: 40, md: 56 }'
+      style: secondary
+      start: 11
+      end: 37
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ height: { xs: 40, md: 56 } }}'
+      style: secondary
+      start: 5
+      end: 40
+  ? |
+    <Box sx={{ minHeight: [200, 320] }}>content</Box>
+  : labels:
+    - source: '200'
+      style: primary
+      start: 23
+      end: 26
+    - source: minHeight
+      style: secondary
+      start: 11
+      end: 20
+    - source: 'minHeight: [200, 320]'
+      style: secondary
+      start: 11
+      end: 32
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ minHeight: [200, 320] }}'
+      style: secondary
+      start: 5
+      end: 35
+  ? |
+    <Box sx={{ position: 'absolute', top: 16 }}>content</Box>
+  : labels:
+    - source: '16'
+      style: primary
+      start: 38
+      end: 40
+    - source: top
+      style: secondary
+      start: 33
+      end: 36
+    - source: 'top: 16'
+      style: secondary
+      start: 33
+      end: 40
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ position: ''absolute'', top: 16 }}'
+      style: secondary
+      start: 5
+      end: 43
+  ? |
+    <Box sx={{ width: 36 }}>content</Box>
+  : labels:
+    - source: '36'
+      style: primary
+      start: 18
+      end: 20
+    - source: width
+      style: secondary
+      start: 11
+      end: 16
+    - source: 'width: 36'
+      style: secondary
+      start: 11
+      end: 20
+    - source: sx
+      style: secondary
+      start: 5
+      end: 7
+    - source: 'sx={{ width: 36 }}'
+      style: secondary
+      start: 5
+      end: 23
+  ? |
     <InputAdornment position="end" sx={{ paddingRight: '20px' }}>icon</InputAdornment>
   : labels:
     - source: '''20px'''
@@ -84,6 +222,271 @@ snapshots:
       start: 5
       end: 33
   ? |
+    <div style={{ width: 40 }}>content</div>
+  : labels:
+    - source: '40'
+      style: primary
+      start: 21
+      end: 23
+    - source: width
+      style: secondary
+      start: 14
+      end: 19
+    - source: 'width: 40'
+      style: secondary
+      start: 14
+      end: 23
+    - source: style
+      style: secondary
+      start: 5
+      end: 10
+    - source: 'style={{ width: 40 }}'
+      style: secondary
+      start: 5
+      end: 26
+  ? |
+    export const Avatar = styled(Box)(() => ({
+      height: 40,
+    }))
+  : labels:
+    - source: '40'
+      style: primary
+      start: 53
+      end: 55
+    - source: height
+      style: secondary
+      start: 45
+      end: 51
+    - source: 'height: 40'
+      style: secondary
+      start: 45
+      end: 55
+    - source: styled(Box)
+      style: secondary
+      start: 22
+      end: 33
+    - source: |-
+        styled(Box)(() => ({
+          height: 40,
+        }))
+      style: secondary
+      start: 22
+      end: 60
+  ? |
+    export const Badge = styled(Box)(() => ({ marginTop: -8 }))
+  : labels:
+    - source: '8'
+      style: primary
+      start: 54
+      end: 55
+    - source: marginTop
+      style: secondary
+      start: 42
+      end: 51
+    - source: 'marginTop: -8'
+      style: secondary
+      start: 42
+      end: 55
+    - source: styled(Box)
+      style: secondary
+      start: 21
+      end: 32
+    - source: 'styled(Box)(() => ({ marginTop: -8 }))'
+      style: secondary
+      start: 21
+      end: 59
+  ? |
+    export const Card = styled(Box)(() => ({ borderRadius: 12 }))
+  : labels:
+    - source: '12'
+      style: primary
+      start: 55
+      end: 57
+    - source: borderRadius
+      style: secondary
+      start: 41
+      end: 53
+    - source: 'borderRadius: 12'
+      style: secondary
+      start: 41
+      end: 57
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: 'styled(Box)(() => ({ borderRadius: 12 }))'
+      style: secondary
+      start: 20
+      end: 61
+  ? |
+    export const Card = styled(Box)(() => ({ borderTopLeftRadius: 12 }))
+  : labels:
+    - source: '12'
+      style: primary
+      start: 62
+      end: 64
+    - source: borderTopLeftRadius
+      style: secondary
+      start: 41
+      end: 60
+    - source: 'borderTopLeftRadius: 12'
+      style: secondary
+      start: 41
+      end: 64
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: 'styled(Box)(() => ({ borderTopLeftRadius: 12 }))'
+      style: secondary
+      start: 20
+      end: 68
+  ? |
+    export const Card = styled(Box)(() => ({ padding: 8 }))
+  : labels:
+    - source: '8'
+      style: primary
+      start: 50
+      end: 51
+    - source: padding
+      style: secondary
+      start: 41
+      end: 48
+    - source: 'padding: 8'
+      style: secondary
+      start: 41
+      end: 51
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: 'styled(Box)(() => ({ padding: 8 }))'
+      style: secondary
+      start: 20
+      end: 55
+  ? |
+    export const Chip = styled(Box)<{ isMini?: boolean }>(({ isMini }) => ({ width: isMini && 40 }))
+  : labels:
+    - source: '40'
+      style: primary
+      start: 90
+      end: 92
+    - source: width
+      style: secondary
+      start: 73
+      end: 78
+    - source: 'width: isMini && 40'
+      style: secondary
+      start: 73
+      end: 92
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: 'styled(Box)<{ isMini?: boolean }>(({ isMini }) => ({ width: isMini && 40 }))'
+      style: secondary
+      start: 20
+      end: 96
+  ? |
+    export const Dialog = styled(Box)(({ theme }) => ({
+      minWidth: 640,
+      padding: theme.spacing(2),
+    }))
+  : labels:
+    - source: '640'
+      style: primary
+      start: 64
+      end: 67
+    - source: minWidth
+      style: secondary
+      start: 54
+      end: 62
+    - source: 'minWidth: 640'
+      style: secondary
+      start: 54
+      end: 67
+    - source: styled(Box)
+      style: secondary
+      start: 22
+      end: 33
+    - source: |-
+        styled(Box)(({ theme }) => ({
+          minWidth: 640,
+          padding: theme.spacing(2),
+        }))
+      style: secondary
+      start: 22
+      end: 101
+  ? |
+    export const Dot = styled('span')(() => ({ width: 12 }))
+  : labels:
+    - source: '12'
+      style: primary
+      start: 50
+      end: 52
+    - source: width
+      style: secondary
+      start: 43
+      end: 48
+    - source: 'width: 12'
+      style: secondary
+      start: 43
+      end: 52
+    - source: styled('span')
+      style: secondary
+      start: 19
+      end: 33
+    - source: 'styled(''span'')(() => ({ width: 12 }))'
+      style: secondary
+      start: 19
+      end: 56
+  ? |
+    export const Offset = styled(Box)<{ offset?: number }>(({ offset }) => ({ marginTop: offset || -8 }))
+  : labels:
+    - source: '8'
+      style: primary
+      start: 96
+      end: 97
+    - source: marginTop
+      style: secondary
+      start: 74
+      end: 83
+    - source: 'marginTop: offset || -8'
+      style: secondary
+      start: 74
+      end: 97
+    - source: styled(Box)
+      style: secondary
+      start: 22
+      end: 33
+    - source: 'styled(Box)<{ offset?: number }>(({ offset }) => ({ marginTop: offset || -8 }))'
+      style: secondary
+      start: 22
+      end: 101
+  ? |
+    export const Padded = styled(() => <Box sx={{ width: 1 }} />)({ padding: 8 })
+  : labels:
+    - source: '8'
+      style: primary
+      start: 73
+      end: 74
+    - source: padding
+      style: secondary
+      start: 64
+      end: 71
+    - source: 'padding: 8'
+      style: secondary
+      start: 64
+      end: 74
+    - source: 'styled(() => <Box sx={{ width: 1 }} />)'
+      style: secondary
+      start: 22
+      end: 61
+    - source: 'styled(() => <Box sx={{ width: 1 }} />)({ padding: 8 })'
+      style: secondary
+      start: 22
+      end: 77
+  ? |
     export const Panel = styled(Box)(() => ({
       height: `calc(100vh - 64px)`,
     }))
@@ -103,6 +506,136 @@ snapshots:
       style: secondary
       start: 21
       end: 77
+  ? |
+    export const Ring = styled(Box)(() => ({ borderWidth: 2 }))
+  : labels:
+    - source: '2'
+      style: primary
+      start: 54
+      end: 55
+    - source: borderWidth
+      style: secondary
+      start: 41
+      end: 52
+    - source: 'borderWidth: 2'
+      style: secondary
+      start: 41
+      end: 55
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: 'styled(Box)(() => ({ borderWidth: 2 }))'
+      style: secondary
+      start: 20
+      end: 59
+  ? |
+    export const Rule = styled('hr')(({ thick }) => ({ borderTopWidth: thick ? 3 : 1 }))
+  : labels:
+    - source: '3'
+      style: primary
+      start: 75
+      end: 76
+    - source: borderTopWidth
+      style: secondary
+      start: 51
+      end: 65
+    - source: 'borderTopWidth: thick ? 3 : 1'
+      style: secondary
+      start: 51
+      end: 80
+    - source: styled('hr')
+      style: secondary
+      start: 20
+      end: 32
+    - source: 'styled(''hr'')(({ thick }) => ({ borderTopWidth: thick ? 3 : 1 }))'
+      style: secondary
+      start: 20
+      end: 84
+  ? |
+    export const Tile = styled(Box)(({ theme }) => ({
+      [theme.breakpoints.up('md')]: { width: 240 },
+    }))
+  : labels:
+    - source: '240'
+      style: primary
+      start: 91
+      end: 94
+    - source: width
+      style: secondary
+      start: 84
+      end: 89
+    - source: 'width: 240'
+      style: secondary
+      start: 84
+      end: 94
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: |-
+        styled(Box)(({ theme }) => ({
+          [theme.breakpoints.up('md')]: { width: 240 },
+        }))
+      style: secondary
+      start: 20
+      end: 101
+  ? |
+    export const Tile = styled(Box)<{ isMini: boolean }>(({ isMini }) => ({
+      width: isMini ? 36 : '100%',
+    }))
+  : labels:
+    - source: '36'
+      style: primary
+      start: 90
+      end: 92
+    - source: width
+      style: secondary
+      start: 74
+      end: 79
+    - source: 'width: isMini ? 36 : ''100%'''
+      style: secondary
+      start: 74
+      end: 101
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: |-
+        styled(Box)<{ isMini: boolean }>(({ isMini }) => ({
+          width: isMini ? 36 : '100%',
+        }))
+      style: secondary
+      start: 20
+      end: 106
+  ? |
+    export const Tile = styled(Box)<{ size: string }>(({ size }) => ({
+      width: size === 'sm' ? 24 : size === 'md' ? 36 : '100%',
+    }))
+  : labels:
+    - source: '24'
+      style: primary
+      start: 92
+      end: 94
+    - source: width
+      style: secondary
+      start: 69
+      end: 74
+    - source: 'width: size === ''sm'' ? 24 : size === ''md'' ? 36 : ''100%'''
+      style: secondary
+      start: 69
+      end: 124
+    - source: styled(Box)
+      style: secondary
+      start: 20
+      end: 31
+    - source: |-
+        styled(Box)<{ size: string }>(({ size }) => ({
+          width: size === 'sm' ? 24 : size === 'md' ? 36 : '100%',
+        }))
+      style: secondary
+      start: 20
+      end: 129
   ? |
     export const Title = styled('h3')(() => ({
       fontSize: '1.875rem',

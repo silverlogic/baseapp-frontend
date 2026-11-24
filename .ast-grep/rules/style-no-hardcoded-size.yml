@@ -1,10 +1,14 @@
 id: style-no-hardcoded-size
 language: Tsx
 severity: error
-message: "Hard-coded px/rem size in a style block — use `theme.spacing()` / numeric spacing units for space, and the typography variants (`theme.typography.*`, `<Typography variant>`) for font sizes. See .claude/skills/frontend-conventions/references/styling.md"
-# Gating in apps/prototype only (Rock 1, story E2). Numeric width/height stay allowed
-# (styling.md's own `{ width: 40, height: 40 }`), and numeric spacing keys are theme
-# units (`p: 2` = theme.spacing(2)). A numeric `fontSize` is raw px, so it is flagged.
+message: "Hard-coded px/rem size in a style block — use `theme.spacing()` / numeric spacing units for space, and the typography variants (`theme.typography.*`, `<Typography variant>`) for font sizes. A plain number is px too (`height: 40` → `theme.spacing(5)`). See .claude/skills/frontend-conventions/references/styling.md"
+# Gating in apps/prototype only (Rock 1, story E2). A plain number on a size property
+# is raw px, so it is flagged the same as '40px' — except where MUI's `sx` turns the
+# number into a theme value: spacing keys (`p: 2`, `margin: 1`, `gap: 2` = theme.spacing),
+# `borderRadius` (× theme.shape.borderRadius), and width/height fractions up to 1
+# (`width: 0.5` = 50%). `0` is always fine, unitless properties (`flexGrow`,
+# `lineHeight`, `zIndex`, `opacity`) are never checked, and a border width of 1 or
+# less is a hairline, not a size (`borderWidth: 2` and up is flagged).
 files:
   - "apps/prototype/**"
 ignores:
@@ -15,36 +19,139 @@ ignores:
   - "apps/prototype/components/design-system/inputs/PhoneNumberField/CountrySelect/index.tsx"
   # `AuthTitle` mirrors the tailwind `responsive-h3` rem overrides.
   - "apps/prototype/app/(static-layout)/styled.tsx"
+  # Plain-number sizes (added when the rule started checking numbers): the error
+  # and not-found pages' `maxWidth: 600`, the loading bar's `maxWidth: 360`, the
+  # FeedbackScreen's `maxWidth: 535` and the Home banner's logo and image sizes.
+  - "apps/prototype/app/error.tsx"
+  - "apps/prototype/error.tsx"
+  - "apps/prototype/app/(dynamic-layout)/not-found.tsx"
+  - "apps/prototype/app/(static-layout)/not-found.tsx"
+  - "apps/prototype/app/(dynamic-layout)/(with-navigation)/styled.tsx"
+  - "apps/prototype/components/design-system/displays/FeedbackScreen/styled.tsx"
+  - "apps/prototype/components/design-system/displays/LinearLoadingScreen/index.tsx"
   # `fontSize: 24` sizes each SvgIcon at the kit's 24px icon grid.
   - "apps/prototype/components/design-system/icons/**"
+utils:
+  # The pair a number is the value of: directly, negated (`-8`), a branch of a ternary
+  # or `||`/`??`/`&&`, an item of a responsive array (`[40, 60]`) or of a breakpoint
+  # object (`{ xs: 40, md: 60 }`). Arithmetic and calls (`theme.spacing(5)`) end the
+  # walk, so their numbers are never the pair's value.
+  value-passthrough:
+    any:
+      - kind: unary_expression
+      - kind: parenthesized_expression
+      - kind: ternary_expression
+      - kind: binary_expression
+        has:
+          field: operator
+          regex: ^(\|\||\?\?|&&)$
+      - kind: array
+      - kind: object
+      - kind: pair
+        has:
+          field: key
+          regex: ^['"]?(xs|sm|md|lg|xl)['"]?$
+  # styled(), `style={...}` and `style:` (slotProps, MenuProps): plain CSS, every
+  # number on these keys is px.
+  css-size-key:
+    regex: ^['"]?(width|height|minWidth|maxWidth|minHeight|maxHeight|flexBasis|padding(Top|Right|Bottom|Left|Inline|InlineStart|InlineEnd|Block|BlockStart|BlockEnd)?|margin(Top|Right|Bottom|Left|Inline|InlineStart|InlineEnd|Block|BlockStart|BlockEnd)?|gap|rowGap|columnGap|inset(Inline|Block)?|top|right|bottom|left|borderRadius|border(TopLeft|TopRight|BottomLeft|BottomRight|StartStart|StartEnd|EndStart|EndEnd)Radius|fontSize)['"]?$
+  # A number in an `sx` (even one inside JSX nested in a styled() call) follows sx rules.
+  in-css-block:
+    not:
+      matches: in-sx-block
+    inside:
+      stopBy: end
+      any:
+        - kind: call_expression
+          has:
+            field: function
+            regex: ^styled
+        - kind: jsx_attribute
+          has:
+            kind: property_identifier
+            regex: ^style$
+        - kind: pair
+          has:
+            field: key
+            regex: ^['"]?style['"]?$
+  in-sx-block:
+    inside:
+      stopBy: end
+      any:
+        - kind: jsx_attribute
+          has:
+            kind: property_identifier
+            regex: ^sx$
+        - kind: pair
+          has:
+            field: key
+            regex: ^['"]?sx['"]?$
 rule:
-  all:
-    - any:
-        # '20px', '1.5rem', '0 8px', `calc(100% - 16px)`
+  any:
+    # '20px', '1.5rem', '0 8px', `calc(100% - 16px)` in any style block
+    - all:
         - any:
             - kind: string
             - kind: template_string
           regex: "(^|[^\\w$.-])-?(\\d+\\.?\\d*|\\.\\d+)(px|rem)\\b"
-        # fontSize: 24
+        - any:
+            - matches: in-css-block
+            - matches: in-sx-block
+    # styled() / style: height: 40, padding: 8, fontSize: 24
+    - all:
         - kind: number
-          inside:
+        - not:
+            regex: ^0*\.?0*$
+        - inside:
             kind: pair
+            stopBy:
+              not:
+                matches: value-passthrough
             has:
               field: key
-              regex: ^['"]?fontSize['"]?$
-    - inside:
-        stopBy: end
-        any:
-          - kind: call_expression
-            has:
-              field: function
-              regex: ^styled
-          - kind: jsx_attribute
-            has:
-              kind: property_identifier
-              regex: ^(sx|style)$
-          # slotProps={{ paper: { sx: { ... } } }}, MenuProps={{ style: { ... } }}
-          - kind: pair
+              matches: css-size-key
+        - matches: in-css-block
+    # sx: numbers MUI passes through as px (position, flexBasis, fontSize) ...
+    - all:
+        - kind: number
+        - not:
+            regex: ^0*\.?0*$
+        - inside:
+            kind: pair
+            stopBy:
+              not:
+                matches: value-passthrough
             has:
               field: key
-              regex: ^['"]?(sx|style)['"]?$
+              regex: ^['"]?(top|right|bottom|left|inset(Inline|Block)?|flexBasis|fontSize|border(TopLeft|TopRight|BottomLeft|BottomRight|StartStart|StartEnd|EndStart|EndEnd)Radius)['"]?$
+        - matches: in-sx-block
+    # ... and width/height above 1 (0 < n <= 1 is a percentage)
+    - all:
+        - kind: number
+        - not:
+            regex: ^(0*\.\d+|0+(\.\d*)?|1(\.0*)?)$
+        - inside:
+            kind: pair
+            stopBy:
+              not:
+                matches: value-passthrough
+            has:
+              field: key
+              regex: ^['"]?(width|height|minWidth|maxWidth|minHeight|maxHeight)['"]?$
+        - matches: in-sx-block
+    # border widths above 1, in any style block (MUI doesn't scale them in sx)
+    - all:
+        - kind: number
+        - not:
+            regex: ^(0*\.\d+|0+(\.\d*)?|1(\.0*)?)$
+        - inside:
+            kind: pair
+            stopBy:
+              not:
+                matches: value-passthrough
+            has:
+              field: key
+              regex: ^['"]?border(Top|Right|Bottom|Left|Inline|InlineStart|InlineEnd|Block|BlockStart|BlockEnd)?Width['"]?$
+        - any:
+            - matches: in-css-block
+            - matches: in-sx-block
