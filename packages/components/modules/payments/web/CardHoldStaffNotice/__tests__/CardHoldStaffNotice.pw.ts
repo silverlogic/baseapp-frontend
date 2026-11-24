@@ -1,6 +1,6 @@
 import { type Locator, type Page, expect, test } from '@playwright/test'
 
-import { DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES as MESSAGES } from '../constants'
+import { CARD_HOLD_STAFF_NOTICE_MESSAGES } from '../constants'
 import {
   CARD_HOLD_ID,
   FAILURE_REASON,
@@ -14,6 +14,19 @@ import type {
   Default,
   PartiallyPaid,
 } from './__utils__/CardHoldStaffNotice.story'
+
+// The stories render in English, so each message reads as its default text.
+const { retriesLeft: _retriesLeft, ...PLAIN_MESSAGES } = CARD_HOLD_STAFF_NOTICE_MESSAGES
+const MESSAGES = {
+  ...(Object.fromEntries(
+    Object.entries(PLAIN_MESSAGES).map(([key, descriptor]) => [
+      key,
+      String(descriptor.defaultMessage),
+    ]),
+  ) as Record<keyof typeof PLAIN_MESSAGES, string>),
+  // The English plural of `payments.cardHold.staffNotice.retriesLeft`.
+  retriesLeft: (count: number) => `${count} ${count === 1 ? 'retry' : 'retries'} left`,
+}
 
 /**
  * The confirmation dialog and the toast are portaled outside `#root`, so they are queried

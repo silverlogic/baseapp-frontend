@@ -3,6 +3,7 @@
 import type { FC, ReactNode } from 'react'
 
 import { Box, Stack, Typography } from '@mui/material'
+import { FormattedMessage } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { useScopedUploads } from '../../common/context/useScopedUploads'
@@ -94,7 +95,11 @@ const FileUploadList: FC<FileUploadListProps> = ({
       {showUploadProgress && hasUploadingFiles && (
         <Box sx={{ mb: 2 }}>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            Uploading ({uploadingFiles.length})
+            <FormattedMessage
+              id="files.uploadList.uploading"
+              defaultMessage="Uploading ({count})"
+              values={{ count: uploadingFiles.length }}
+            />
           </Typography>
           {uploadingFiles.map((file) => (
             <UploadingFileItem
@@ -111,7 +116,11 @@ const FileUploadList: FC<FileUploadListProps> = ({
       {hasAttachedFiles && target.files && (
         <Box>
           <Typography variant="subtitle2" sx={{ mb: 1 }}>
-            Attached Files ({target.files.edges.length})
+            <FormattedMessage
+              id="files.uploadList.attached"
+              defaultMessage="Attached Files ({count})"
+              values={{ count: target.files.edges.length }}
+            />
           </Typography>
           {target.files.edges.map((edge) => {
             if (!edge?.node) return null

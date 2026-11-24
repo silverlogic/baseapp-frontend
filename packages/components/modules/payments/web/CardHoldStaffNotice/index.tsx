@@ -1,11 +1,12 @@
 'use client'
 
-import { FC, useState } from 'react'
+import { FC, useMemo, useState } from 'react'
 
 import { ConfirmDialog } from '@baseapp-frontend/design-system/components/web/dialogs'
 
 import { LoadingButton } from '@mui/lab'
 import { Alert, AlertTitle, Button, Typography } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import {
@@ -17,12 +18,13 @@ import {
   useCardHoldMarkPaidMutation,
   useCardHoldRetryMutation,
 } from '../../common'
-import {
-  CARD_HOLD_STAFF_DECISION_DIALOGS,
-  DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES,
-} from './constants'
+import { CARD_HOLD_STAFF_DECISION_DIALOGS, CARD_HOLD_STAFF_NOTICE_MESSAGES } from './constants'
 import { CardHoldStaffNoticeBody, CardHoldStaffNoticeButtons } from './styled'
-import { CardHoldStaffDecision, CardHoldStaffNoticeProps } from './types'
+import {
+  CardHoldStaffDecision,
+  CardHoldStaffNoticeMessages,
+  CardHoldStaffNoticeProps,
+} from './types'
 
 /**
  * Tells staff that a hold needs them, and offers what they can do about it. The customer is never
@@ -42,7 +44,18 @@ const CardHoldStaffNotice: FC<CardHoldStaffNoticeProps> = ({
   messages: customMessages,
 }) => {
   const cardHold = useFragment(CardHoldStaffNoticeFragmentQuery, cardHoldRef)
-  const messages = { ...DEFAULT_CARD_HOLD_STAFF_NOTICE_MESSAGES, ...customMessages }
+  const intl = useIntl()
+  const messages = useMemo(() => {
+    const { retriesLeft, ...plain } = CARD_HOLD_STAFF_NOTICE_MESSAGES
+    const defaults = Object.fromEntries(
+      Object.entries(plain).map(([key, descriptor]) => [key, intl.formatMessage(descriptor)]),
+    ) as Omit<CardHoldStaffNoticeMessages, 'retriesLeft'>
+    return {
+      ...defaults,
+      retriesLeft: (count: number) => intl.formatMessage(retriesLeft, { count }),
+      ...customMessages,
+    } as CardHoldStaffNoticeMessages
+  }, [intl, customMessages])
   // Kept apart from `isDialogOpen` so the dialog keeps its copy while it animates closed.
   const [decision, setDecision] = useState<CardHoldStaffDecision>('keep')
   const [isDialogOpen, setIsDialogOpen] = useState(false)

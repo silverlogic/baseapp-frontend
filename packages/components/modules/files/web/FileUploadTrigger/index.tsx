@@ -6,6 +6,7 @@ import { IconButton } from '@baseapp-frontend/design-system/components/web/butto
 
 import { AttachFile as AttachFileIcon } from '@mui/icons-material'
 import { Tooltip } from '@mui/material'
+import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import { FilesListFragment } from '../../common/graphql/queries/FilesList'
@@ -23,7 +24,7 @@ const FileUploadTrigger: FC<FileUploadTriggerProps> = ({
   target: targetRef,
   as = 'dropzone',
   icon,
-  label = 'Attach files',
+  label: labelProp,
   maxFiles,
   maxFileSize,
   acceptedFileTypes,
@@ -33,7 +34,11 @@ const FileUploadTrigger: FC<FileUploadTriggerProps> = ({
   onAttachComplete,
   onError,
 }) => {
+  const intl = useIntl()
   const target = useFragment(FilesListFragment, targetRef)
+  const label =
+    labelProp ??
+    intl.formatMessage({ id: 'files.uploadTrigger.label', defaultMessage: 'Attach files' })
 
   const { handleFilesSelected, isAttaching, resetKey } = useFileUploadLogic({
     targetObjectId: target.id,

@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 
 import {
   DEFAULT_SOCIAL_UPSERT_FORM_VALUES,
@@ -33,6 +34,7 @@ const useCommentComposer = ({
   targetObjectId,
   onSubmitSuccess,
 }: UseCommentComposerOptions): UseCommentComposerReturn => {
+  const intl = useIntl()
   const { editingComment, resetCommentEdit } = useCommentReply()
   const {
     handleFilesSelected,
@@ -112,7 +114,10 @@ const useCommentComposer = ({
     isLoading: isEditMode ? isUpdating || hasPendingEditFiles : isCreating || hasPendingFiles,
     editVariables: {
       isEditMode,
-      label: 'Editing your comment',
+      label: intl.formatMessage({
+        id: 'comments.composer.editing',
+        defaultMessage: 'Editing your comment',
+      }),
       onEditCancel: cancelUpdate,
     },
     attachments: isEditMode
@@ -128,7 +133,8 @@ const useCommentComposer = ({
         },
     replyVariables: {
       isReplyMode: isReply,
-      label: 'Replying to ',
+      // SocialTextInput renders the target name right after this label.
+      label: `${intl.formatMessage({ id: 'comments.composer.replyingTo', defaultMessage: 'Replying to' })} `,
       onReplyCancel: cancelReply,
       targetName: replyTargetName ?? '',
     },

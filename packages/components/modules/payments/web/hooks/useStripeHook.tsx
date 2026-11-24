@@ -4,12 +4,21 @@ import { useNotification } from '@baseapp-frontend/utils'
 
 import { Stripe } from '@stripe/stripe-js'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useIntl } from 'react-intl'
 
+import { PURCHASE_POLL_INTERVAL_MS } from '../constants'
 import { STRIPE_API_KEY, StripeApi } from '../services/stripe'
-import { CreateSubscriptionOptions, SetupIntent, UpdateSubscriptionOptions } from '../types'
+import {
+  CreatePurchaseOptions,
+  CreateSubscriptionOptions,
+  Purchase,
+  SetupIntent,
+  UpdateSubscriptionOptions,
+} from '../types'
 
 const useStripeHook = () => {
   const { sendToast } = useNotification()
+  const intl = useIntl()
   const queryClient = useQueryClient()
 
   const useGetCustomer = (entityId?: string, options: { enabled?: boolean } = {}) =>
@@ -115,12 +124,27 @@ const useStripeHook = () => {
           payment_method: paymentMethodId,
         })
         if (result.error) {
-          throw new Error(result.error.message || 'Failed to confirm card payment.')
+          throw new Error(
+            result.error.message ||
+              intl.formatMessage({
+                id: 'payments.stripe.confirmCardPaymentFailedFallback',
+                defaultMessage: 'Failed to confirm card payment.',
+              }),
+          )
         }
         return result.paymentIntent
       },
       onError: (error) => {
-        sendToast(`Failed to confirm card payment: ${error.message}`, { type: 'error' })
+        sendToast(
+          intl.formatMessage(
+            {
+              id: 'payments.stripe.confirmCardPaymentFailed',
+              defaultMessage: 'Failed to confirm card payment: {message}',
+            },
+            { message: error.message },
+          ),
+          { type: 'error' },
+        )
       },
       mutationKey: [STRIPE_API_KEY.confirmCardPayment()],
     })
@@ -181,11 +205,23 @@ const useStripeHook = () => {
     useMutation({
       mutationFn: () => StripeApi.cancelSubscription(subscriptionId),
       onSuccess: () => {
-        sendToast('Subscription cancelled successfully.', { type: 'success' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.stripe.cancelSubscriptionSuccess',
+            defaultMessage: 'Subscription cancelled successfully.',
+          }),
+          { type: 'success' },
+        )
         refetch()
       },
       onError: () => {
-        sendToast(`Failed to cancel subscription`, { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'payments.stripe.cancelSubscriptionFailed',
+            defaultMessage: 'Failed to cancel subscription',
+          }),
+          { type: 'error' },
+        )
       },
       mutationKey: [STRIPE_API_KEY.cancelSubscription(subscriptionId)],
     })
@@ -194,6 +230,30 @@ const useStripeHook = () => {
     useQuery({
       queryKey: [STRIPE_API_KEY.listInvoices(page.toString(), entityId ?? 'me')],
       queryFn: () => StripeApi.listInvoices(page, entityId),
+    })
+
+  const useCreatePurchase = () =>
+    useMutation({
+      mutationFn: (options: CreatePurchaseOptions) => StripeApi.createPurchase(options),
+      mutationKey: [STRIPE_API_KEY.createPurchase()],
+    })
+
+  /**
+   * A purchase, polled while it is `pending`: the payment is confirmed in the browser, but the
+   * status only changes when Stripe's webhook reaches the backend.
+   */
+  const useGetPurchase = (
+    purchaseId?: number | string,
+    options: { enabled?: boolean; pollIntervalMs?: number } = {},
+  ) =>
+    useQuery({
+      queryKey: [STRIPE_API_KEY.getPurchase(purchaseId?.toString() ?? '')],
+      queryFn: () => StripeApi.getPurchase(purchaseId as number | string),
+      enabled: !!purchaseId && (options.enabled ?? true),
+      refetchInterval: (query) =>
+        (query.state.data as Purchase | undefined)?.status === 'pending'
+          ? (options.pollIntervalMs ?? PURCHASE_POLL_INTERVAL_MS)
+          : false,
     })
 
   return {
@@ -211,6 +271,8 @@ const useStripeHook = () => {
     useCancelSubscription,
     useUpdateSubscription,
     useListInvoices,
+    useCreatePurchase,
+    useGetPurchase,
   }
 }
 

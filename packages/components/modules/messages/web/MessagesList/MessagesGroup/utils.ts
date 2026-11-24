@@ -1,7 +1,6 @@
-import { DATE_FORMAT, formatDateFromApi, isToday, isYesterday } from '@baseapp-frontend/utils'
+import { formatDayLabel } from '@baseapp-frontend/utils'
 
-export const displayFormattedDate = (date: string) => {
-  if (isToday(date)) return 'Today'
-  if (isYesterday(date)) return 'Yesterday'
-  return formatDateFromApi(date, { toFormat: DATE_FORMAT[2] })
-}
+import { IntlShape } from 'react-intl'
+
+export const displayFormattedDate = (intl: IntlShape, date?: string | null) =>
+  formatDayLabel(date, { intl })

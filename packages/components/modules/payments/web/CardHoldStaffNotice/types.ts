@@ -41,6 +41,6 @@ export interface CardHoldStaffNoticeProps {
    * fewer.
    */
   onDecided?: (decision: CardHoldStaffDecision) => void
-  /** Replaces the copy, e.g. with the project's translations. */
+  /** Replaces any of the copy; the rest comes from react-intl (`payments.cardHold.staffNotice.*`). */
   messages?: Partial<CardHoldStaffNoticeMessages>
 }

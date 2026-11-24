@@ -3,11 +3,14 @@ import { DjangoPaginatedResponse, axios } from '@baseapp-frontend/utils'
 import { QueryKey } from '@tanstack/react-query'
 
 import {
+  CreatePurchaseOptions,
   CreateSubscriptionOptions,
+  CreatedPurchase,
   Customer,
   Invoice,
   PaymentMethod,
   Product,
+  Purchase,
   SetupIntent,
   Subscription,
   SubscriptionRequestBody,
@@ -47,6 +50,9 @@ export const STRIPE_API_KEY = {
     [...STRIPE_API_KEY.default, 'getInvoice', ...params] as QueryKey,
   listInvoices: (...params: string[]) =>
     [...STRIPE_API_KEY.default, 'listInvoices', ...params] as QueryKey,
+  createPurchase: () => [...STRIPE_API_KEY.default, 'createPurchase'] as QueryKey,
+  getPurchase: (...params: string[]) =>
+    [...STRIPE_API_KEY.default, 'getPurchase', ...params] as QueryKey,
 }
 
 export class StripeApi {
@@ -123,4 +129,18 @@ export class StripeApi {
     updateData: UpdateSubscriptionOptions,
   ): Promise<Subscription> =>
     axios.patch(`${baseUrl}/stripe/subscriptions/${subscriptionId}/`, updateData)
+
+  static readonly createPurchase = ({
+    entityId,
+    items,
+    paymentMethodId,
+  }: CreatePurchaseOptions): Promise<CreatedPurchase> =>
+    axios.post(`${baseUrl}/stripe/purchases/`, {
+      entityId,
+      items,
+      ...(paymentMethodId && { paymentMethodId }),
+    })
+
+  static readonly getPurchase = (purchaseId: number | string): Promise<Purchase> =>
+    axios.get(`${baseUrl}/stripe/purchases/${purchaseId}/`)
 }
