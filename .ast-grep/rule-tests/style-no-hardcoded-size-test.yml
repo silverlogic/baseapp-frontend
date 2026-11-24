@@ -6,14 +6,43 @@ valid:
       padding: theme.spacing(2, 0),
       ...theme.typography.h3,
     }))
+  # sx spacing keys and borderRadius are theme units; width/height up to 1 are fractions
   - |
-    <Box sx={{ p: 2, mt: 1, width: 40, height: 40 }}>content</Box>
+    <Box sx={{ p: 2, mt: 1, padding: 1, gap: 2, borderRadius: 1, width: 1, height: 0.5 }}>content</Box>
   - |
     <Box sx={{ width: `calc(100% - ${SIDEBAR_WIDTH}px)` }}>content</Box>
   - |
     <Typography variant="body2" sx={{ fontSize: 'inherit' }}>text</Typography>
   - |
     const cookieCss = 'height: 5px;'
+  # 0 and unitless properties are never sizes
+  - |
+    export const Row = styled(Box)(({ theme }) => ({
+      margin: 0,
+      top: 0,
+      flexGrow: 1,
+      lineHeight: 1.5,
+      zIndex: 10,
+      opacity: 0.6,
+      borderWidth: 1,
+      borderTopWidth: 0.5,
+      width: theme.spacing(5),
+      minWidth: `${theme.spacing(80)}`,
+    }))
+  - |
+    const SIZE = 40
+    export const Avatar = styled(Box)(({ theme }) => ({ width: theme.spacing(SIZE / 8) }))
+  # sx inside JSX that sits in a styled() call still follows sx rules
+  - |
+    export const Wrapped = styled(() => <Box sx={{ padding: 2, width: 1 }} />)({})
+  # a fallback that is arithmetic is not the property's value
+  - |
+    export const Gap = styled(Box)(({ theme }) => ({ width: theme.spacing(2) || theme.spacing(4 - 1) }))
+  - |
+    <Box sx={{ borderWidth: 1, borderBottomWidth: 0 }}>content</Box>
+  # numbers outside a style block are not styling
+  - |
+    const config = { width: 40, height: 40 }
 invalid:
   - |
     <InputAdornment position="end" sx={{ paddingRight: '20px' }}>icon</InputAdornment>
@@ -33,3 +62,63 @@ invalid:
     <Select MenuProps={{ style: { width: '360px' } }} />
   - |
     <Popover slotProps={{ paper: { sx: { maxWidth: '20rem' } } }} />
+  # plain numbers are px in styled() (E3's first designer screen)
+  - |
+    export const Avatar = styled(Box)(() => ({
+      height: 40,
+    }))
+  - |
+    export const Dialog = styled(Box)(({ theme }) => ({
+      minWidth: 640,
+      padding: theme.spacing(2),
+    }))
+  - |
+    export const Dot = styled('span')(() => ({ width: 12 }))
+  - |
+    export const Card = styled(Box)(() => ({ padding: 8 }))
+  - |
+    export const Card = styled(Box)(() => ({ borderRadius: 12 }))
+  - |
+    export const Badge = styled(Box)(() => ({ marginTop: -8 }))
+  - |
+    export const Tile = styled(Box)(({ theme }) => ({
+      [theme.breakpoints.up('md')]: { width: 240 },
+    }))
+  - |
+    export const Tile = styled(Box)<{ isMini: boolean }>(({ isMini }) => ({
+      width: isMini ? 36 : '100%',
+    }))
+  # in sx, width/height above 1 and positions are px
+  - |
+    <Box sx={{ width: 36 }}>content</Box>
+  - |
+    <Box sx={{ height: { xs: 40, md: 56 } }}>content</Box>
+  - |
+    <Box sx={{ minHeight: [200, 320] }}>content</Box>
+  - |
+    <Box sx={{ position: 'absolute', top: 16 }}>content</Box>
+  - |
+    <div style={{ width: 40 }}>content</div>
+  # negative fallbacks and nested ternaries still reach the property
+  - |
+    export const Offset = styled(Box)<{ offset?: number }>(({ offset }) => ({ marginTop: offset || -8 }))
+  - |
+    export const Chip = styled(Box)<{ isMini?: boolean }>(({ isMini }) => ({ width: isMini && 40 }))
+  - |
+    export const Tile = styled(Box)<{ size: string }>(({ size }) => ({
+      width: size === 'sm' ? 24 : size === 'md' ? 36 : '100%',
+    }))
+  - |
+    export const Padded = styled(() => <Box sx={{ width: 1 }} />)({ padding: 8 })
+  # per-corner radii are px in styled() and in sx (only borderRadius is theme-scaled)
+  - |
+    export const Card = styled(Box)(() => ({ borderTopLeftRadius: 12 }))
+  - |
+    <Box sx={{ borderBottomRightRadius: 8 }}>content</Box>
+  # border widths above 1 are sizes
+  - |
+    export const Ring = styled(Box)(() => ({ borderWidth: 2 }))
+  - |
+    export const Rule = styled('hr')(({ thick }) => ({ borderTopWidth: thick ? 3 : 1 }))
+  - |
+    <Box sx={{ borderBottomWidth: 2 }}>content</Box>

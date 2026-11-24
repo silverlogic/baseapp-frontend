@@ -102,7 +102,7 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 | `native-use-design-system-theme` | warning | Native `useTheme` comes from `design-system/providers/native` (styling.md) |
 | `style-no-inline-style-prop` | **error** | `apps/prototype/**` only — no inline `style={...}`; `styled()` or a small `sx` (styling.md) |
 | `style-no-raw-color` | **error** | `apps/prototype/**` only — no hex / rgb() / hsl() literal anywhere, JSX props included; use theme tokens (styling.md) |
-| `style-no-hardcoded-size` | **error** | `apps/prototype/**` only — no px/rem strings or numeric `fontSize` in `styled()` / `sx` / `style`; `theme.spacing()` and typography variants (styling.md) |
+| `style-no-hardcoded-size` | **error** | `apps/prototype/**` only — no px/rem strings in `styled()` / `sx` / `style`, and no plain-number sizes (`height: 40`, `minWidth: 640`, `fontSize: 24`), which MUI renders as px. Allowed: `0`, unitless properties (`flexGrow`, `lineHeight`), a border width of 1 (`borderWidth: 2` and up is flagged), and in `sx` the numbers MUI maps to the theme (spacing keys, `borderRadius`, width/height ≤ 1); `theme.spacing()` and typography variants (styling.md) |
 | `ds-no-foreign-ui-library` | **error** | `apps/prototype/**` only — no UI kit, headless primitives, icon set or CSS-in-JS engine outside BaseApp/MUI, and no shadcn `components/ui` (styling.md) |
 
 ### Data, forms, state
