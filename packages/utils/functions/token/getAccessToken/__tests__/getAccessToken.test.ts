@@ -167,6 +167,23 @@ describe('getAccessToken', () => {
       })
     })
 
+    it("forwards the middleware request's host and trimmed visitor chain", async () => {
+      delete (global as any).window
+      vi.stubEnv('INTERNAL_API_FORWARDED_FOR_TRIM', '1')
+      const incoming = new Headers({
+        host: 'tenant.example.com',
+        'x-forwarded-for': '203.0.113.7, 172.18.0.5',
+      })
+
+      await getAccessToken('test-refresh-token', { incomingHeaders: incoming })
+
+      expectRefreshCall('http://web:8000/v1/auth/refresh', {
+        'X-Forwarded-Host': 'tenant.example.com',
+        'X-Forwarded-For': '203.0.113.7',
+      })
+      expect(incomingHeaders).not.toHaveBeenCalled()
+    })
+
     it('rejects on the server without INTERNAL_API_ORIGIN', async () => {
       delete (global as any).window
       vi.stubEnv('INTERNAL_API_ORIGIN', '')

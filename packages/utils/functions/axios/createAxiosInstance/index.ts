@@ -6,14 +6,25 @@ import { LANGUAGE_COOKIE_NAME } from '../../../constants/cookie'
 import { LOGOUT_EVENT } from '../../../constants/events'
 import { SERVICES_WITHOUT_TOKEN } from '../../../constants/fetch'
 import { ACCESS_KEY_NAME, REFRESH_KEY_NAME } from '../../../constants/jwt'
+import { CURRENT_PROFILE_KEY_NAME } from '../../../constants/profile'
+import type { MinimalProfile } from '../../../types/profile'
 import { isRelativeUrl } from '../../api/isRelativeUrl'
 import { resolveApiUrl } from '../../api/resolveApiUrl'
 import { broadcastEvent } from '../../events'
 import { getExpoConstant } from '../../expo'
-import { buildQueryString } from '../../string'
+import { buildQueryString, parseString } from '../../string'
 import { decodeJWT } from '../../token/decodeJWT'
 import { isUserTokenValid } from '../../token/isUserTokenValid'
 import { refreshAccessToken } from '../../token/refreshAccessToken'
+
+// Header names are case-insensitive. AxiosHeaders looks them up that way; a plain headers object
+// (a custom adapter, a test) is searched by hand.
+const hasHeader = (headers: Record<string, unknown>, name: string) =>
+  typeof headers.has === 'function'
+    ? Boolean(headers.has(name))
+    : Object.entries(headers).some(
+        ([key, value]) => key.toLowerCase() === name.toLowerCase() && value !== undefined,
+      )
 
 export const createAxiosInstance = ({
   returnData = true,
@@ -31,6 +42,7 @@ export const createAxiosInstance = ({
   stringifyBody = true,
   setContentType = true,
   baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL,
+  withCurrentProfile = false,
 } = {}) => {
   const EXPO_PUBLIC_API_BASE_URL = getExpoConstant('EXPO_PUBLIC_API_BASE_URL')
 
@@ -61,15 +73,29 @@ export const createAxiosInstance = ({
     // token refresh logic
     let accessAuthToken
     let refreshAuthToken
+    let currentProfile
     // TODO: maybe find a better way to deal with RSC
     if (typeof window === typeof undefined) {
       const { getTokenSSR } = await import('../../token/getTokenSSR')
       accessAuthToken = await getTokenSSR(accessKeyName)
       refreshAuthToken = await getTokenSSR(refreshKeyName)
+      if (withCurrentProfile) {
+        currentProfile = await getTokenSSR(CURRENT_PROFILE_KEY_NAME)
+      }
     } else {
       const { getToken } = await import('../../token/getToken')
       accessAuthToken = getToken(accessKeyName)
       refreshAuthToken = getToken(refreshKeyName)
+      if (withCurrentProfile) {
+        currentProfile = getToken(CURRENT_PROFILE_KEY_NAME)
+      }
+    }
+
+    // Act as the profile the user switched to, like baseAppFetch and the GraphQL environment do.
+    // A header the caller set on the request wins.
+    const currentProfileId = parseString<MinimalProfile>(currentProfile ?? undefined)?.id
+    if (request.headers && currentProfileId && !hasHeader(request.headers, 'Current-Profile')) {
+      request.headers['Current-Profile'] = currentProfileId
     }
 
     if (accessAuthToken && isAuthTokenRequired && refreshToken) {
