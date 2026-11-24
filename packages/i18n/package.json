@@ -1,7 +1,7 @@
 {
   "name": "@baseapp-frontend/i18n",
   "description": "Internationalization utilities, scripts, and documentation for BaseApp",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "main": "./index.ts",
   "types": "dist/index.d.ts",
   "sideEffects": false,
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@formatjs/intl": "catalog:",
+    "expo-localization": "catalog:react-native",
     "expo-secure-store": "catalog:react-native",
     "js-cookie": "catalog:",
     "luxon": "catalog:",

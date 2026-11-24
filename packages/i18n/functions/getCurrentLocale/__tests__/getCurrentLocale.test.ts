@@ -4,8 +4,10 @@ const { getLanguage } = vi.hoisted(() => ({ getLanguage: vi.fn<() => Promise<str
 
 vi.mock('../../getLanguage', () => ({ getLanguage }))
 
-const setNavigatorLanguage = (language: string) =>
+const setNavigatorLanguage = (language: string) => {
+  Object.defineProperty(navigator, 'languages', { value: [language], configurable: true })
   Object.defineProperty(navigator, 'language', { value: language, configurable: true })
+}
 
 beforeEach(() => {
   getLanguage.mockReset().mockResolvedValue(null)

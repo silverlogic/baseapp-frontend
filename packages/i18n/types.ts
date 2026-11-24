@@ -30,3 +30,6 @@ export const LOCALE_LABELS: Record<Locale, string> = {
  * i18n -> utils dependency one-directional.
  */
 export { LANGUAGE_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
+
+export const isSupportedLocale = (value: unknown): value is Locale =>
+  typeof value === 'string' && (SUPPORTED_LOCALES as readonly string[]).includes(value)
