@@ -20,6 +20,12 @@ valid:
         return intl.formatMessage({ id: 'profile.count', defaultMessage: 'Posts' }, { count })
       },
     }
+  - |
+    export const PROFILE_TITLES = {
+      title() {
+        return intl.formatMessage({ id: 'profile.title', defaultMessage: 'Profile' })
+      },
+    }
 invalid:
   - |
     export const PROFILE_TEXTS = { title: 'Profile' }
@@ -42,3 +48,7 @@ invalid:
         return 'Nothing here yet'
       },
     }
+  - |
+    export const PROFILE_TEXTS = { title: function () { return 'Profile' } }
+  - |
+    export const PROFILE_TEXTS = { title() { return 'Profile' } }

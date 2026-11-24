@@ -5,7 +5,8 @@ message: "Copy constants are `defineMessages` maps (`X_MESSAGES`), not plain str
 note: |
   Catches copy kept in plain objects, e.g. `export const PROFILE_TEXTS = { title: 'Profile', count: (n) => `${n} posts` }`:
   any object assigned to a `*_TEXT(S)`, `*_COPY`, `*_STRINGS`, `*_LABEL(S)` or `*_TITLE(S)`
-  constant whose values are worded strings, template literals or functions returning them.
+  constant whose values are worded strings, template literals or functions (arrow, `function` or
+  method) returning them.
   Text that must stay literal (language endonyms) takes `// ast-grep-ignore: intl-no-text-constants`.
 files:
   - apps/**
@@ -36,30 +37,40 @@ utils:
         has:
           kind: string_fragment
           regex: "[A-Za-z]{2,}"
+  # A function body that yields text, but not one returning a translation call.
+  worded-body:
+    not:
+      kind: call_expression
+    any:
+      - matches: worded-literal
+      - has:
+          stopBy:
+            kind: call_expression
+          matches: worded-literal
+  worded-function:
+    any:
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: method_definition
+    has:
+      field: body
+      matches: worded-body
 rule:
   kind: variable_declarator
   all:
     - has:
         field: name
         regex: "_(TEXTS?|COPY|STRINGS|LABELS?|TITLES?)$"
-    # A worded pair anywhere in the value, but not inside a call (`defineMessages({...})`).
+    # A worded entry anywhere in the value, but not inside a call (`defineMessages({...})`).
     - has:
         stopBy:
           kind: call_expression
-        kind: pair
-        has:
-          field: value
-          any:
-            - matches: worded-literal
-            # A function returning text, but not one returning a translation call.
-            - kind: arrow_function
-              has:
-                field: body
-                not:
-                  kind: call_expression
-                any:
-                  - matches: worded-literal
-                  - has:
-                      stopBy:
-                        kind: call_expression
-                      matches: worded-literal
+        any:
+          - kind: pair
+            has:
+              field: value
+              any:
+                - matches: worded-literal
+                - matches: worded-function
+          - kind: method_definition
+            matches: worded-function
