@@ -12,6 +12,14 @@ valid:
     export const SORT_LABELS = { asc: 'asc', desc: 'desc' }
   - |
     export const ACTION_LABELS = { save: intl.formatMessage({ id: 'a.save', defaultMessage: 'Save changes' }) }
+  - |
+    export const PROFILE_LABELS = { title: () => intl.formatMessage({ id: 'profile.title', defaultMessage: 'Profile' }) }
+  - |
+    export const PROFILE_TITLES = {
+      count: (count: number) => {
+        return intl.formatMessage({ id: 'profile.count', defaultMessage: 'Posts' }, { count })
+      },
+    }
 invalid:
   - |
     export const PROFILE_TEXTS = { title: 'Profile' }
@@ -25,3 +33,12 @@ invalid:
     export const DIALOG_TEXT_COPY = { [KEYS.TITLE]: 'Leave group chat?' } as const
   - |
     export const FILTER_LABELS = [{ value: 'all', label: 'All posts' }]
+  - |
+    export const PROFILE_TEXTS = { count: (n: number) => `${n} posts` }
+  - |
+    export const EMPTY_TEXTS = {
+      posts: (isOwner: boolean) => {
+        if (isOwner) return 'Share your first post'
+        return 'Nothing here yet'
+      },
+    }

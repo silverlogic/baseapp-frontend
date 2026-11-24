@@ -8,6 +8,8 @@
   found: the native AppBar close label and hint, the group chat image upload toasts, the native group
   member count and the leave-group dialog copy returned by `useLeaveGroup`. `LEAVE_GROUP_DIALOG_TEXT_COPY`
   is deprecated in favour of `LEAVE_GROUP_DIALOG_COPY_MESSAGES`; the unused native `CHAT_TAB_LABEL` is removed.
+- The native `AppBar` now calls `useIntl`, so, like `PasswordInput` and `ConfirmDialog`, it must render inside an
+  `IntlProvider`.
 
 ## 5.0.1
 

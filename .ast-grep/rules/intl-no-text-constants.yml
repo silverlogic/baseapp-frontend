@@ -13,21 +13,29 @@ files:
 ignores:
   - "**/__tests__/**"
   - "**/*.test.*"
+  - "**/*.spec.*"
   - "**/__storybook__/**"
   - "**/*.stories.*"
+  - "**/*.story.*"
   - "**/__fixtures__/**"
+  - "**/__generated__/**"
   - "**/.cypress-legacy/**"
   - "**/.playwright/**"
+  - "**/.storybook/**"
   - "apps/web/app/(.baseapp)/examples/**"
 utils:
   worded-literal:
     any:
-      - kind: string
-      - kind: template_string
-    has:
-      kind: string_fragment
       # Prose: capitalised, or at least two words (not tokens like `asc`).
-      regex: "^[A-Z][a-z]|[A-Za-z]+ [A-Za-z]+"
+      - kind: string
+        has:
+          kind: string_fragment
+          regex: "^[A-Z][a-z]|[A-Za-z]+ [A-Za-z]+"
+      # Template text sits around `${}` parts (`${n} posts`), so any word counts.
+      - kind: template_string
+        has:
+          kind: string_fragment
+          regex: "[A-Za-z]{2,}"
 rule:
   kind: variable_declarator
   all:
@@ -43,8 +51,15 @@ rule:
           field: value
           any:
             - matches: worded-literal
+            # A function returning text, but not one returning a translation call.
             - kind: arrow_function
               has:
                 field: body
-                stopBy: end
-                matches: worded-literal
+                not:
+                  kind: call_expression
+                any:
+                  - matches: worded-literal
+                  - has:
+                      stopBy:
+                        kind: call_expression
+                      matches: worded-literal

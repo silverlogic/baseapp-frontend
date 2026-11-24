@@ -24,6 +24,60 @@ snapshots:
       start: 34
       end: 67
   ? |
+    export const EMPTY_TEXTS = {
+      posts: (isOwner: boolean) => {
+        if (isOwner) return 'Share your first post'
+        return 'Nothing here yet'
+      },
+    }
+  : labels:
+    - source: |-
+        EMPTY_TEXTS = {
+          posts: (isOwner: boolean) => {
+            if (isOwner) return 'Share your first post'
+            return 'Nothing here yet'
+          },
+        }
+      style: primary
+      start: 13
+      end: 146
+    - source: EMPTY_TEXTS
+      style: secondary
+      start: 13
+      end: 24
+    - source: Share your first post
+      style: secondary
+      start: 87
+      end: 108
+    - source: '''Share your first post'''
+      style: secondary
+      start: 86
+      end: 109
+    - source: |-
+        {
+            if (isOwner) return 'Share your first post'
+            return 'Nothing here yet'
+          }
+      style: secondary
+      start: 60
+      end: 143
+    - source: |-
+        (isOwner: boolean) => {
+            if (isOwner) return 'Share your first post'
+            return 'Nothing here yet'
+          }
+      style: secondary
+      start: 38
+      end: 143
+    - source: |-
+        posts: (isOwner: boolean) => {
+            if (isOwner) return 'Share your first post'
+            return 'Nothing here yet'
+          }
+      style: secondary
+      start: 31
+      end: 143
+  ? |
     export const FILTER_LABELS = [{ value: 'all', label: 'All posts' }]
   : labels:
     - source: 'FILTER_LABELS = [{ value: ''all'', label: ''All posts'' }]'
@@ -46,6 +100,33 @@ snapshots:
       style: secondary
       start: 46
       end: 64
+  ? |
+    export const PROFILE_TEXTS = { count: (n: number) => `${n} posts` }
+  : labels:
+    - source: 'PROFILE_TEXTS = { count: (n: number) => `${n} posts` }'
+      style: primary
+      start: 13
+      end: 67
+    - source: PROFILE_TEXTS
+      style: secondary
+      start: 13
+      end: 26
+    - source: ' posts'
+      style: secondary
+      start: 58
+      end: 64
+    - source: '`${n} posts`'
+      style: secondary
+      start: 53
+      end: 65
+    - source: '(n: number) => `${n} posts`'
+      style: secondary
+      start: 38
+      end: 65
+    - source: 'count: (n: number) => `${n} posts`'
+      style: secondary
+      start: 31
+      end: 65
   ? |
     export const PROFILE_TEXTS = { greeting: (name: string) => `Hello ${name}` }
   : labels:
