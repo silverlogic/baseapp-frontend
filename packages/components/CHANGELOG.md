@@ -1,5 +1,18 @@
 # @baseapp-frontend/components
 
+## 7.0.1
+
+### Patch Changes
+
+- 1986d29: Bump `next` from 15.5.28 to 15.5.29 (CVE-2026-119346, CVE-2026-119347, CVE-2026-119348), so
+  published installs pick up the patched version.
+- Updated dependencies [12067e6]
+- Updated dependencies [1986d29]
+  - @baseapp-frontend/utils@4.5.1
+  - @baseapp-frontend/design-system@5.0.1
+  - @baseapp-frontend/authentication@10.0.1
+  - @baseapp-frontend/graphql@6.0.1
+
 ## 7.0.0
 
 ### Patch Changes
