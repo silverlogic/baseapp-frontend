@@ -410,3 +410,79 @@ export const markNotificationAsReadMockData = {
     },
   },
 }
+
+const groupNotification = (id: string, unread: boolean, description: string) => ({
+  id,
+  unread,
+  timestamp: '2024-10-25T19:46:09.288290+00:00',
+  level: 'INFO',
+  verb: 'EVENTS.REMINDER',
+  description,
+  data: { url: '/events/12' },
+  actor: null,
+  target: null,
+  actionObject: null,
+  __typename: 'Notification',
+})
+
+/**
+ * One group's notifications. The user has 5 unread notifications in all, but only the first of
+ * these is unread.
+ */
+export const groupNotificationsListMockData = {
+  data: {
+    me: {
+      id: 'user-1',
+      notificationsUnreadCount: 5,
+      notifications: {
+        edges: [
+          {
+            cursor: 'group-cursor-1',
+            node: groupNotification('group-notification-1', true, 'Your event starts tomorrow.'),
+          },
+          {
+            cursor: 'group-cursor-2',
+            node: groupNotification(
+              'group-notification-2',
+              false,
+              'Your registration is confirmed.',
+            ),
+          },
+        ],
+        pageInfo: { hasNextPage: false, endCursor: 'group-cursor-2' },
+      },
+    },
+  },
+}
+
+/** The same group with nothing unread, while other groups still hold 5 unread notifications. */
+export const groupNotificationsListAllReadMockData = {
+  data: {
+    me: {
+      id: 'user-1',
+      notificationsUnreadCount: 5,
+      notifications: {
+        edges: [
+          {
+            cursor: 'group-cursor-2',
+            node: groupNotification(
+              'group-notification-2',
+              false,
+              'Your registration is confirmed.',
+            ),
+          },
+        ],
+        pageInfo: { hasNextPage: false, endCursor: 'group-cursor-2' },
+      },
+    },
+  },
+}
+
+export const groupMarkAsReadMockData = {
+  data: {
+    notificationsMarkAsRead: {
+      recipient: { __typename: 'User', id: 'user-1', notificationsUnreadCount: 4 },
+      notifications: [{ id: 'group-notification-1', unread: false }],
+    },
+  },
+}

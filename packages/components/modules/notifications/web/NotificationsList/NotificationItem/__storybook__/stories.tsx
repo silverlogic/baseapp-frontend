@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react'
 
 import NotificationItem from '..'
 import NotificationItemWithQuery from './NotificationItemWithQuery'
-import { mockResolvers } from './mockResolvers'
+import { genericNotificationMockResolvers, mockResolvers } from './mockResolvers'
 
 const meta: Meta<typeof NotificationItem> = {
   title: '@baseapp-frontend | components/Notifications/NotificationItem',
@@ -17,5 +17,12 @@ export const DefaultNotificationItem: Story = {
   name: 'Default NotificationItem',
   parameters: {
     mockResolvers,
+  },
+}
+
+export const GenericNotificationItem: Story = {
+  name: 'Generic NotificationItem (verb without a dedicated component)',
+  parameters: {
+    mockResolvers: genericNotificationMockResolvers,
   },
 }
