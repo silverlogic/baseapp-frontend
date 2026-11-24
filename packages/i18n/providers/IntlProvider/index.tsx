@@ -1,11 +1,14 @@
 'use client'
 
-import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { FC, useEffect, useMemo, useState } from 'react'
+
+import { isMobilePlatform } from '@baseapp-frontend/utils'
 
 import { IntlProvider as ReactIntlProvider } from 'react-intl'
 
 import { getCurrentLocale } from '../../functions/getCurrentLocale'
-import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, SUPPORTED_LOCALES } from '../../types'
+import { getInitialLocale } from '../../functions/getInitialLocale'
+import { DEFAULT_LOCALE, LANGUAGE_COOKIE_NAME, Locale, isSupportedLocale } from '../../types'
 import { getMessages } from '../../utils'
 import { LocaleUpdateContext } from './context'
 import { IntlProviderWrapperProps } from './types'
@@ -18,20 +21,14 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   initialCookies,
 }) => {
   const cookieLocale = useMemo(() => {
-    const value = initialCookies?.[LANGUAGE_COOKIE_NAME] as Locale | undefined
-    return value && SUPPORTED_LOCALES.includes(value) ? value : undefined
+    const value = initialCookies?.[LANGUAGE_COOKIE_NAME]
+    return isSupportedLocale(value) ? value : undefined
   }, [initialCookies])
 
-  const detectedLocale = initialLocale ?? cookieLocale ?? defaultLocale
-
-  const [locale, setLocale] = useState<Locale>(detectedLocale)
-  const cancelDetection = useRef<(() => void) | undefined>(undefined)
-
-  // An in-place switch must not be undone by a detection that was still pending.
-  const updateLocale = useCallback((next: Locale) => {
-    cancelDetection.current?.()
-    setLocale(next)
-  }, [])
+  // Native reads the stored and device language synchronously, so the first render already uses it.
+  const [locale, setLocale] = useState<Locale>(
+    () => initialLocale ?? cookieLocale ?? getInitialLocale(defaultLocale),
+  )
 
   const messages = useMemo(
     () => getMessages(locale, additionalMessages?.[locale]),
@@ -39,14 +36,10 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   )
 
   useEffect(() => {
-    // Load locale from storage if not provided via props or a supported cookie
-    if (initialLocale || cookieLocale) return undefined
+    // On web the stored language is read after mount when neither the prop nor a supported cookie set it.
+    if (initialLocale || cookieLocale || isMobilePlatform()) return undefined
 
     let isStale = false
-    const cancel = () => {
-      isStale = true
-    }
-    cancelDetection.current = cancel
     getCurrentLocale(defaultLocale)
       .then((stored) => {
         if (!isStale) setLocale(stored)
@@ -54,10 +47,8 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
       // Keep the default locale if the stored language can't be read.
       .catch(() => undefined)
 
-    // A detection still pending when the props change must not override the newer locale.
     return () => {
-      cancel()
-      if (cancelDetection.current === cancel) cancelDetection.current = undefined
+      isStale = true
     }
   }, [initialLocale, cookieLocale, defaultLocale])
 
@@ -69,7 +60,7 @@ const IntlProviderWrapper: FC<IntlProviderWrapperProps> = ({
   }, [initialLocale])
 
   return (
-    <LocaleUpdateContext.Provider value={updateLocale}>
+    <LocaleUpdateContext.Provider value={setLocale}>
       <ReactIntlProvider locale={locale} defaultLocale={defaultLocale} messages={messages}>
         {children}
       </ReactIntlProvider>

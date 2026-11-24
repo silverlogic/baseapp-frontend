@@ -14,6 +14,8 @@ Supported locales: `en` (source), `es`, `pt`.
 | `useLocale()` | Current locale plus `setLocale`, which persists the choice, then reloads the page (web) or switches the provider's locale in place (native) |
 | `getLanguage()` / `setLanguage()` | Read / write the stored language (cookie, server request cookie or SecureStore) |
 | `getCurrentLocale()` | Stored language, else the browser or device language, else `DEFAULT_LOCALE` |
+| `getDeviceLocale()` | First supported entry of the browser's `navigator.languages` or the device's preferred languages (expo-localization), synchronously |
+| `getInitialLocale()` | Synchronous `getCurrentLocale` for native's first render (secure store, then device); returns the fallback on web |
 | `getMessages(locale, extra?)` | This package's catalog for a locale |
 | `formatDateI18n`, `formatTimeI18n`, `formatRelativeTimeI18n`, `formatDateWithDiffNowI18n`, `useDateFormatter` | Locale-aware date formatting |
 
@@ -42,7 +44,7 @@ intl.formatMessage({ id: 'comments.replies.showMore', defaultMessage: 'Show more
 
 ## React Native
 
-The native app wraps its root in the same `IntlProvider`, passing every locale's catalog through `additionalMessages` so `setLocale` can switch languages without a reload. The stored language comes from SecureStore (pass it as `initialCookies[LANGUAGE_COOKIE_NAME]`); without one, the device locale is used. Hermes lacks `Intl.PluralRules` and `Intl.Locale`, so the app must load the `@formatjs/intl-getcanonicallocales`, `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` polyfills before rendering ICU plurals.
+The native app wraps its root in the same `IntlProvider`, passing every locale's catalog through `additionalMessages` so `setLocale` can switch languages without a reload. The provider reads the stored language from SecureStore and, without one, the device's preferred languages synchronously, so the first frame is already in the right language and no `initialCookies` is needed. Add `expo-localization` to the app's config plugins with `supportedLocales` so the OS lists the app's languages and its per-app language setting works. Hermes lacks `Intl.PluralRules` and `Intl.Locale`, so the app must load the `@formatjs/intl-getcanonicallocales`, `@formatjs/intl-locale` and `@formatjs/intl-pluralrules` polyfills before rendering ICU plurals.
 
 ## Updating catalogs
 

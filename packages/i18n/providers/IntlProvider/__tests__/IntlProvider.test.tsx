@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { FormattedMessage } from 'react-intl'
 
@@ -6,14 +6,18 @@ import IntlProvider from '..'
 import { LANGUAGE_COOKIE_NAME, Locale } from '../../../types'
 import { useLocale } from '../hooks'
 
-const { getLanguage, setLanguage, isMobilePlatform } = vi.hoisted(() => ({
+const { getLanguage, setLanguage, isMobilePlatform, getItem, getLocales } = vi.hoisted(() => ({
   getLanguage: vi.fn<() => Promise<string | null>>(),
   setLanguage: vi.fn<(locale: string) => Promise<void>>(),
   isMobilePlatform: vi.fn(() => false),
+  getItem: vi.fn<(key: string) => string | null>(() => null),
+  getLocales: vi.fn<() => { languageCode: string | null }[]>(() => []),
 }))
 
 vi.mock('../../../functions/getLanguage', () => ({ getLanguage }))
 vi.mock('../../../functions/setLanguage', () => ({ setLanguage }))
+vi.mock('expo-secure-store', () => ({ getItem }))
+vi.mock('expo-localization', () => ({ getLocales }))
 vi.mock('@baseapp-frontend/utils', async (importOriginal) => ({
   ...(await importOriginal<Record<string, unknown>>()),
   isMobilePlatform,
@@ -34,6 +38,8 @@ beforeEach(() => {
   getLanguage.mockReset().mockResolvedValue(null)
   setLanguage.mockReset().mockResolvedValue(undefined)
   isMobilePlatform.mockReset().mockReturnValue(false)
+  getItem.mockReset().mockReturnValue(null)
+  getLocales.mockReset().mockReturnValue([])
 })
 
 describe('IntlProvider', () => {
@@ -110,14 +116,35 @@ describe('IntlProvider', () => {
     expect(screen.getByText('Hola')).toBeTruthy()
   })
 
-  it('switches in place on native and is not undone by a detection still pending', async () => {
+  it('renders the stored language on native from the first frame', () => {
     isMobilePlatform.mockReturnValue(true)
-    let detect: (locale: string) => void = () => undefined
-    getLanguage.mockReturnValue(
-      new Promise((resolve) => {
-        detect = resolve
-      }),
+    getItem.mockReturnValue('pt')
+    getLocales.mockReturnValue([{ languageCode: 'es' }])
+    render(
+      <IntlProvider>
+        <Probe />
+      </IntlProvider>,
     )
+
+    expect(screen.getByRole('button').textContent).toBe('pt')
+    expect(getLanguage).not.toHaveBeenCalled()
+  })
+
+  it('renders the device language on native when nothing is stored', () => {
+    isMobilePlatform.mockReturnValue(true)
+    getLocales.mockReturnValue([{ languageCode: 'fr' }, { languageCode: 'es' }])
+    render(
+      <IntlProvider>
+        <Probe />
+      </IntlProvider>,
+    )
+
+    expect(screen.getByRole('button').textContent).toBe('es')
+    expect(getLanguage).not.toHaveBeenCalled()
+  })
+
+  it('switches in place on native', async () => {
+    isMobilePlatform.mockReturnValue(true)
     render(
       <IntlProvider>
         <Probe next="pt" />
@@ -129,11 +156,5 @@ describe('IntlProvider', () => {
 
     expect(setLanguage).toHaveBeenCalledWith('pt')
     await waitFor(() => expect(screen.getByRole('button').textContent).toBe('pt'))
-
-    await act(async () => {
-      detect('es')
-    })
-
-    expect(screen.getByRole('button').textContent).toBe('pt')
   })
 })

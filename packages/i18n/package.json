@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@formatjs/intl": "catalog:",
+    "expo-localization": "catalog:react-native",
     "expo-secure-store": "catalog:react-native",
     "js-cookie": "catalog:",
     "luxon": "catalog:",
