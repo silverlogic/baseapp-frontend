@@ -1,0 +1,27 @@
+id: intl-no-text-constants
+valid:
+  - |
+    export const PROFILE_MESSAGES = defineMessages({
+      title: { id: 'profile.header.title', defaultMessage: 'Profile' },
+    })
+  - |
+    export const TAB_LABELS = defineMessages({ posts: { id: 'profile.tabs.posts', defaultMessage: 'Posts' } })
+  - |
+    export const ROUTES = { home: '/home', posts: '/posts' }
+  - |
+    export const SORT_LABELS = { asc: 'asc', desc: 'desc' }
+  - |
+    export const ACTION_LABELS = { save: intl.formatMessage({ id: 'a.save', defaultMessage: 'Save changes' }) }
+invalid:
+  - |
+    export const PROFILE_TEXTS = { title: 'Profile' }
+  - |
+    export const PROFILE_TEXTS = { greeting: (name: string) => `Hello ${name}` }
+  - |
+    export const RISK_LABELS: Record<Risk, string> = { low: 'Low risk', high: 'High risk' }
+  - |
+    export const SHELL_TEXTS = { nav: { home: 'Home page' } } as const
+  - |
+    export const DIALOG_TEXT_COPY = { [KEYS.TITLE]: 'Leave group chat?' } as const
+  - |
+    export const FILTER_LABELS = [{ value: 'all', label: 'All posts' }]

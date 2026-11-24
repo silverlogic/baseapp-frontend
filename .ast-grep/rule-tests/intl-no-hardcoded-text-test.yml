@@ -1,0 +1,55 @@
+id: intl-no-hardcoded-text
+valid:
+  - |
+    <Typography>
+      <FormattedMessage id="profile.photos.title" defaultMessage="Photos" />
+    </Typography>
+  - |
+    <IconButton aria-label={intl.formatMessage(PROFILE_MESSAGES.close)} />
+  - |
+    <Box className="flex items-center" data-testid="profile-card" href="/profiles" />
+  - |
+    <span>{count} · {name}</span>
+  - |
+    <Chip label={profile.name} variant="outlined" />
+  - |
+    sendToast(intl.formatMessage(PROFILE_MESSAGES.saved), { type: 'success' })
+  - |
+    <Box sx={{ display: isOpen ? 'block' : 'none' }} />
+  - |
+    <p>{formatDate(date, 'MMM d')}</p>
+  - |
+    const id = cond ? 'posts' : 'comments'
+  - |
+    <TextField type="email" name="email" autoComplete="email" />
+  - |
+    <FormattedMessage id="settings.title" description="Title for settings section" defaultMessage="Settings" />
+  - |
+    <Card subtitle={`${address.city}, ${address.country}`} />
+  - |
+    <View>{view === 'home' && <Home />}{mode !== 'grid' ? <List /> : null}</View>
+invalid:
+  - |
+    <Typography>No photos yet.</Typography>
+  - |
+    <Text style={styles.title}>Pick a profile</Text>
+  - |
+    <IconButton aria-label="Close" />
+  - |
+    <img alt={isOwn ? 'Your photo' : 'Photo'} src={src} />
+  - |
+    <p>{isSaving ? 'Saving' : 'Saved'}</p>
+  - |
+    <p>{error || 'Something went wrong'}</p>
+  - |
+    <TextInput placeholder="Search members" />
+  - |
+    sendToast('Profile saved', { type: 'success' })
+  - |
+    Alert.alert('Delete this post?')
+  - |
+    if (!confirm('Delete this comment?')) return
+  - |
+    <>{`Added by ${name}`}</>
+  - |
+    <Pressable accessibilityLabel={closeLabel || 'Close'} />

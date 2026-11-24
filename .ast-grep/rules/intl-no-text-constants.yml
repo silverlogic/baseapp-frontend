@@ -1,0 +1,50 @@
+id: intl-no-text-constants
+language: Tsx
+severity: error
+message: "Copy constants are `defineMessages` maps (`X_MESSAGES`), not plain strings: plain strings skip translation. See .claude/skills/frontend-patterns/references/i18n.md"
+note: |
+  Catches copy kept in plain objects, e.g. `export const PROFILE_TEXTS = { title: 'Profile', count: (n) => `${n} posts` }`:
+  any object assigned to a `*_TEXT(S)`, `*_COPY`, `*_STRINGS`, `*_LABEL(S)` or `*_TITLE(S)`
+  constant whose values are worded strings, template literals or functions returning them.
+  Text that must stay literal (language endonyms) takes `// ast-grep-ignore: intl-no-text-constants`.
+files:
+  - apps/**
+  - packages/**
+ignores:
+  - "**/__tests__/**"
+  - "**/*.test.*"
+  - "**/__storybook__/**"
+  - "**/*.stories.*"
+  - "**/__fixtures__/**"
+  - "**/.cypress-legacy/**"
+  - "**/.playwright/**"
+  - "apps/web/app/(.baseapp)/examples/**"
+utils:
+  worded-literal:
+    any:
+      - kind: string
+      - kind: template_string
+    has:
+      kind: string_fragment
+      # Prose: capitalised, or at least two words (not tokens like `asc`).
+      regex: "^[A-Z][a-z]|[A-Za-z]+ [A-Za-z]+"
+rule:
+  kind: variable_declarator
+  all:
+    - has:
+        field: name
+        regex: "_(TEXTS?|COPY|STRINGS|LABELS?|TITLES?)$"
+    # A worded pair anywhere in the value, but not inside a call (`defineMessages({...})`).
+    - has:
+        stopBy:
+          kind: call_expression
+        kind: pair
+        has:
+          field: value
+          any:
+            - matches: worded-literal
+            - kind: arrow_function
+              has:
+                field: body
+                stopBy: end
+                matches: worded-literal
