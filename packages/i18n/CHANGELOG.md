@@ -1,5 +1,14 @@
 # @baseapp-frontend/i18n
 
+## 3.1.1
+
+### Patch Changes
+
+- e107fe1: Translate the strings the new `intl-no-hardcoded-text` / `intl-no-text-constants` ast-grep rules
+  found: the native AppBar close label and hint, the group chat image upload toasts, the native group
+  member count and the leave-group dialog copy returned by `useLeaveGroup`. `LEAVE_GROUP_DIALOG_TEXT_COPY`
+  is deprecated in favour of `LEAVE_GROUP_DIALOG_COPY_MESSAGES`; the unused native `CHAT_TAB_LABEL` is removed.
+
 ## 3.1.0
 
 ### Minor Changes

@@ -1,4 +1,6 @@
 {
+  "designSystem.appBar.close": "Fechar",
+  "designSystem.appBar.closeHint": "Fechar a tela atual",
   "designSystem.autocompleteField.placeholder": "Pesquisar",
   "designSystem.avatar.deletedUser": "Avatar de usuário excluído",
   "designSystem.avatar.fallback": "Avatar padrão",

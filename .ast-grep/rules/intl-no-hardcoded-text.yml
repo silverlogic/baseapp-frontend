@@ -1,0 +1,105 @@
+id: intl-no-hardcoded-text
+language: Tsx
+severity: error
+message: "User-facing text must go through react-intl: `<FormattedMessage>` for JSX children, `intl.formatMessage` for props, toasts and alerts. See .claude/skills/frontend-patterns/references/i18n.md"
+note: |
+  `intl-prefer-formatted-message` only checks *how* a message is rendered; this rule checks
+  that text is translated at all. It flags text a user sees that is written straight into
+  the code: JSX text, string literals rendered as JSX children (including through `?:`, `&&`,
+  `||` and `??`), text attributes (aria-label, alt, title, placeholder, label, helperText,
+  accessibilityLabel…) and the first argument of toasts, alerts and confirms.
+  Copy kept in constants objects is invisible here; `intl-no-text-constants` covers it.
+  Text that must stay literal (a brand mark, a symbol) takes `// ast-grep-ignore: intl-no-hardcoded-text`.
+files:
+  - apps/**
+  - packages/**
+ignores:
+  - "**/__tests__/**"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/__storybook__/**"
+  - "**/*.stories.*"
+  - "**/*.story.*"
+  - "**/__fixtures__/**"
+  - "**/__generated__/**"
+  - "**/.cypress-legacy/**"
+  - "**/.playwright/**"
+  - "**/.storybook/**"
+  - "apps/web/app/(.baseapp)/examples/**"
+  - "apps/web/app/**/sentry-example-page/**"
+utils:
+  has-words:
+    regex: "[A-Za-z]{2,}"
+  # A string or template literal whose own text (not its `${}` parts) has words.
+  worded-literal:
+    any:
+      - kind: string
+      - kind: template_string
+    has:
+      kind: string_fragment
+      regex: "[A-Za-z]{2,}"
+  # Walk up from a string through `?:` / `&&` / `||` / `??` / parentheses / template
+  # nesting to the JSX expression that renders it.
+  through-branches:
+    not:
+      any:
+        - kind: ternary_expression
+        # Only `&&` / `||` / `??`: a string compared with `===` is a value, not text.
+        - kind: binary_expression
+          has:
+            field: operator
+            regex: ^(&&|\|\||\?\?)$
+        - kind: parenthesized_expression
+        - kind: template_string
+        - kind: template_substitution
+        - kind: string
+  # A text prop. `description` on <FormattedMessage> is a note for translators, not UI.
+  text-attribute:
+    kind: jsx_attribute
+    not:
+      inside:
+        any:
+          - kind: jsx_opening_element
+          - kind: jsx_self_closing_element
+        has:
+          field: name
+          regex: ^(FormattedMessage|FormattedRelativeTime|FormattedDate)$
+    has:
+      kind: property_identifier
+      regex: ^(aria-label|aria-description|aria-placeholder|aria-roledescription|aria-valuetext|alt|title|placeholder|label|helperText|errorText|emptyText|emptyMessage|subtitle|description|tooltip|caption|accessibilityLabel|accessibilityHint|headerTitle|confirmText|cancelText|buttonText|submitText)$
+rule:
+  any:
+    # <Typography>Some text</Typography>
+    - kind: jsx_text
+      matches: has-words
+    # <p>{'Text'}</p>, <p>{done ? 'Saved' : 'Saving'}</p>
+    - matches: worded-literal
+      all:
+        - inside:
+            kind: jsx_expression
+            stopBy:
+              matches: through-branches
+            inside:
+              kind: jsx_element
+    # aria-label="Close", alt={x ? 'A' : 'B'}
+    - matches: worded-literal
+      all:
+        - any:
+            - inside:
+                matches: text-attribute
+            - inside:
+                kind: jsx_expression
+                stopBy:
+                  matches: through-branches
+                inside:
+                  matches: text-attribute
+    # sendToast('Saved'), Alert.alert('Delete?'), confirm('Sure?')
+    - matches: worded-literal
+      all:
+        - inside:
+            kind: arguments
+            inside:
+              kind: call_expression
+              has:
+                field: function
+                regex: ^(sendToast|toast|toast\.(success|error|info|warning)|Alert\.alert|alert|confirm|window\.confirm|window\.alert)$
