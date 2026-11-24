@@ -1055,6 +1055,87 @@ interface MentionsInterface {
   isMentioningProfile(profileId: ID!): Boolean
 }
 
+"""An enumeration."""
+enum ImpersonationEndReason {
+  ENDED
+  EXPIRED
+  REVOKED
+}
+
+input ImpersonationEndInput {
+  """The session to end. Defaults to the current request's session."""
+  session: ID
+  clientMutationId: String
+}
+
+"""
+End an impersonation session: the current request's, or — from the impersonator's own
+account — the one given by `session`.
+"""
+type ImpersonationEndPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  session: ImpersonationSession
+  clientMutationId: String
+}
+
+interface ImpersonationInterface {
+  """
+  The impersonation session of the current request, when this user is its target. Null otherwise, and on every other user.
+  """
+  impersonation: ImpersonationSession
+}
+
+type ImpersonationSession implements Node {
+  """The ID of the object"""
+  id: ID!
+
+  """Empty once the impersonator's account is deleted."""
+  impersonator: User
+  target: User!
+  reason: String!
+
+  """Whether writes were refused during this session."""
+  readOnly: Boolean!
+  startedAt: DateTime!
+  expiresAt: DateTime!
+  endedAt: DateTime
+
+  """Why the session ended. Null while it runs."""
+  endReason: ImpersonationEndReason
+
+  """Whether the session is still running."""
+  isActive: Boolean!
+}
+
+input ImpersonationStartInput {
+  """The user to act as."""
+  targetUser: ID!
+
+  """Why the session is needed."""
+  reason: String!
+  clientMutationId: String
+}
+
+"""
+Start acting as another user. Returns the session's tokens; the client swaps them in for
+its own and keeps its own to restore on `impersonationEnd`.
+"""
+type ImpersonationStartPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+
+  """Access token of the session."""
+  access: String
+
+  """Refresh token of the session."""
+  refresh: String
+  session: ImpersonationSession
+  clientMutationId: String
+}
+
 type Message implements Node & MentionsInterface {
   """The ID of the object"""
   id: ID!
@@ -1114,6 +1195,17 @@ type Metadata {
 }
 
 type Mutation {
+  """
+  Start acting as another user. Returns the session's tokens; the client swaps them in for
+  its own and keeps its own to restore on `impersonationEnd`.
+  """
+  impersonationStart(input: ImpersonationStartInput!): ImpersonationStartPayload
+
+  """
+  End an impersonation session: the current request's, or — from the impersonator's own
+  account — the one given by `session`.
+  """
+  impersonationEnd(input: ImpersonationEndInput!): ImpersonationEndPayload
   reportCreate(input: ReportCreateInput!): ReportCreatePayload
   reactionToggle(input: ReactionToggleInput!): ReactionTogglePayload
   rateCreate(input: RateCreateInput!): RateCreatePayload
@@ -2350,7 +2442,7 @@ type URLPath implements Node {
   pk: Int
 }
 
-type User implements Node & PermissionsInterface & RatingsInterface & UserActivityLogInterface & NotificationsInterface & ProfileInterface & ProfilesInterface & PageInterface {
+type User implements Node & PermissionsInterface & RatingsInterface & UserActivityLogInterface & NotificationsInterface & ProfileInterface & ProfilesInterface & PageInterface & ImpersonationInterface {
   lastLogin: DateTime
   isSuperuser: Boolean
   email: String
@@ -2419,6 +2511,11 @@ type User implements Node & PermissionsInterface & RatingsInterface & UserActivi
   fullName: String
   avatar(width: Int!, height: Int!): String
   pk: Int
+
+  """
+  The impersonation session of the current request, when this user is its target. Null otherwise, and on every other user.
+  """
+  impersonation: ImpersonationSession
 }
 
 interface UserActivityLogInterface {

@@ -1,4 +1,5 @@
 export * from './modules/access'
+export * from './modules/impersonation'
 export * from './modules/mfa'
 export * from './modules/profile'
 export * from './modules/user'

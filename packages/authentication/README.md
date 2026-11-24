@@ -242,7 +242,7 @@ return <form onSubmit={form.handleSubmit}>
 
 ### **useLogout**
 
-Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) data in cache, and removes the user's token cookie.
+Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) data in cache, and removes the user's token cookie. It also removes an impersonator's kept-aside tokens (see [Impersonation tokens](#impersonation-tokens)), so logging out during an impersonation session signs the impersonator out too. It does not end the session on the server, which stays active (and unaudited as ended) until it expires; to end it, call `useEndImpersonation` from `@baseapp-frontend/components` before logging out.
 
 #### **Returns**
 
@@ -257,6 +257,40 @@ Invalidates the authenticated user's data and Multi-Factor Authentication (MFA) 
 const logout = useLogout()
 
 return <button onClick={logout}>Logout</button>
+```
+
+### **Impersonation tokens**
+
+Plain functions that swap the stored JWT pair when an impersonation session starts and ends.
+`@baseapp-frontend/components`' `useStartImpersonation` and `useEndImpersonation` call them for
+you; use them directly only when you start or end sessions some other way (for example over REST).
+
+| Function | What it does |
+|---|---|
+| `swapInImpersonationTokens({ access, refresh })` | Keeps the current pair aside (under `ImpersonatorAuthorization` / `ImpersonatorRefresh`), stores the session's pair under the regular names and removes the current-profile cookie. A pair kept aside earlier (left by a session never ended in this browser) is replaced, unless the current pair is itself a session's. |
+| `restoreImpersonatorTokens()` | Puts the kept-aside pair back, removes the kept-aside copy and the current-profile cookie. Resolves `false`, leaving the session's pair in place, when no complete pair was kept aside. |
+| `clearImpersonatorTokens()` | Removes the kept-aside pair. |
+| `hasImpersonatorTokens()` | Whether a pair is kept aside, i.e. whether this client is in a session. |
+| `isImpersonationSessionToken(token)` | Whether a JWT was issued for an impersonation session (carries the backend's `imp_sid` claim). Only decodes it: a session's token stays one after the session ends. |
+
+Each but `isImpersonationSessionToken` takes optional key names: `accessKeyName`, `refreshKeyName`
+(as `useLogin`), `impersonatorAccessKeyName` and `impersonatorRefreshKeyName`. `useLogin` removes a
+kept-aside pair once a login succeeds, so tokens left by an earlier session never outlive the
+next sign-in.
+
+After a swap, everything cached for the previous user (React Query, the Relay store) is stale:
+reload the app or recreate those caches.
+
+```ts
+import { restoreImpersonatorTokens, swapInImpersonationTokens } from '@baseapp-frontend/authentication'
+
+await swapInImpersonationTokens({ access, refresh })
+window.location.assign('/')
+
+// later
+const restored = await restoreImpersonatorTokens()
+if (!restored) await logout()
+window.location.assign('/')
 ```
 
 ### **useMfaActivate**
