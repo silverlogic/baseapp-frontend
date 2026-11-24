@@ -1,6 +1,7 @@
 // Values mirror `baseapp_payments` on the backend: `holds.PlacementStatus` (the payload's
-// `holdStatus`), `models.AbstractCardHold.Status` (`CardHold.status`) and the payload's
-// `intentType`. The schema types all three as `String`, so they are typed here instead.
+// `holdStatus`), `models.AbstractCardHold.Status` (`CardHold.status`), `CardHold.paymentStatus`
+// and the payload's `intentType`. The schema types them all as `String`, so they are typed here
+// instead.
 
 export const CARD_HOLD_PLACEMENT_STATUS = {
   placed: 'placed',
@@ -23,6 +24,14 @@ export const CARD_HOLD_STATUS = {
   scheduled: 'scheduled',
   failed: 'failed',
   saved: 'saved',
+} as const
+
+/** `CardHold.paymentStatus`: how much of the final amount was taken. */
+export const CARD_HOLD_PAYMENT_STATUS = {
+  unpaid: 'unpaid',
+  paid: 'paid',
+  /** The hold was captured, but the charge for the difference above it was declined. */
+  partiallyPaid: 'partially_paid',
 } as const
 
 export const CARD_HOLD_INTENT_TYPE = {

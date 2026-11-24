@@ -10,12 +10,15 @@ import { useIntl } from 'react-intl'
 import { useFragment } from 'react-relay'
 
 import {
+  CARD_HOLD_PAYMENT_STATUS,
   CARD_HOLD_STATUS,
   CardHoldStaffNoticeFragmentQuery,
   useCardHoldCancelMutation,
   useCardHoldKeepMutation,
+  useCardHoldMarkPaidMutation,
+  useCardHoldRetryMutation,
 } from '../../common'
-import { CARD_HOLD_STAFF_NOTICE_MESSAGES } from './constants'
+import { CARD_HOLD_STAFF_DECISION_DIALOGS, CARD_HOLD_STAFF_NOTICE_MESSAGES } from './constants'
 import { CardHoldStaffNoticeBody, CardHoldStaffNoticeButtons } from './styled'
 import {
   CardHoldStaffDecision,
@@ -24,11 +27,16 @@ import {
 } from './types'
 
 /**
- * Tells staff that a deferred hold failed, and offers what they can do about it: an error notice
- * with Stripe's failure code and Keep / Cancel behind a confirmation, which turns into an info
- * notice with no actions once kept. Renders nothing for a hold that didn't fail; `status` is only
- * `failed` for a viewer granted `view_cardhold` (customers read it as `scheduled`), and the
- * mutations need `change_cardhold`.
+ * Tells staff that a hold needs them, and offers what they can do about it. The customer is never
+ * told: this renders nothing unless `canDecide` is true, which the backend sets only for a viewer
+ * granted `change_cardhold` (every one of these mutations needs it).
+ *
+ * - A failed hold: an error notice with Stripe's failure code and Keep / Cancel (plus Retry while
+ *   `retriesLeft` allows). Once kept it turns into an info notice with no actions, and it goes
+ *   once the hold is paid (a kept failed hold that was then charged stays `failed`).
+ * - A partially paid hold: a warning notice with Mark paid.
+ *
+ * Every action goes through a confirmation. Renders nothing for any other hold.
  */
 const CardHoldStaffNotice: FC<CardHoldStaffNoticeProps> = ({
   cardHold: cardHoldRef,
@@ -38,30 +46,49 @@ const CardHoldStaffNotice: FC<CardHoldStaffNoticeProps> = ({
   const cardHold = useFragment(CardHoldStaffNoticeFragmentQuery, cardHoldRef)
   const intl = useIntl()
   const messages = useMemo(() => {
+    const { retriesLeft, ...plain } = CARD_HOLD_STAFF_NOTICE_MESSAGES
     const defaults = Object.fromEntries(
-      Object.entries(CARD_HOLD_STAFF_NOTICE_MESSAGES).map(([key, descriptor]) => [
-        key,
-        intl.formatMessage(descriptor),
-      ]),
-    ) as unknown as CardHoldStaffNoticeMessages
-    return { ...defaults, ...customMessages }
+      Object.entries(plain).map(([key, descriptor]) => [key, intl.formatMessage(descriptor)]),
+    ) as Omit<CardHoldStaffNoticeMessages, 'retriesLeft'>
+    return {
+      ...defaults,
+      retriesLeft: (count: number) => intl.formatMessage(retriesLeft, { count }),
+      ...customMessages,
+    } as CardHoldStaffNoticeMessages
   }, [intl, customMessages])
-  const [decision, setDecision] = useState<CardHoldStaffDecision | null>(null)
+  // Kept apart from `isDialogOpen` so the dialog keeps its copy while it animates closed.
+  const [decision, setDecision] = useState<CardHoldStaffDecision>('keep')
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [commitKeep, isKeepInFlight] = useCardHoldKeepMutation()
   const [commitCancel, isCancelInFlight] = useCardHoldCancelMutation()
-  const isInFlight = isKeepInFlight || isCancelInFlight
+  const [commitRetry, isRetryInFlight] = useCardHoldRetryMutation()
+  const [commitMarkPaid, isMarkPaidInFlight] = useCardHoldMarkPaidMutation()
+  const isInFlight = isKeepInFlight || isCancelInFlight || isRetryInFlight || isMarkPaidInFlight
 
-  if (cardHold.status !== CARD_HOLD_STATUS.failed) return null
+  // A kept failed hold stays `failed` after it is charged: once paid, nothing is left to decide.
+  const isFailed =
+    cardHold.status === CARD_HOLD_STATUS.failed &&
+    cardHold.paymentStatus !== CARD_HOLD_PAYMENT_STATUS.paid
+  const isPartiallyPaid = cardHold.paymentStatus === CARD_HOLD_PAYMENT_STATUS.partiallyPaid
+  if (!cardHold.canDecide || (!isFailed && !isPartiallyPaid)) return null
+
+  const { retriesLeft } = cardHold
+  const canRetry = retriesLeft != null && retriesLeft > 0
+
+  const openDialog = (next: CardHoldStaffDecision) => {
+    setDecision(next)
+    setIsDialogOpen(true)
+  }
 
   const closeDialog = () => {
-    if (!isInFlight) setDecision(null)
+    if (!isInFlight) setIsDialogOpen(false)
   }
 
   const handleConfirm = () => {
-    if (!decision) return
+    if (!isDialogOpen) return
     const variables = { input: { id: cardHold.id } }
-    // A missing or forbidden id, an already-decided hold or one that isn't failed comes back
-    // as a GraphQL error (`errors`, with a null payload), not in the payload's `errors`.
+    // A missing or forbidden id, or a hold the action doesn't apply to, comes back as a
+    // GraphQL error (`errors`, with a null payload), not in the payload's `errors`.
     const onCompleted = (
       payload:
         | {
@@ -72,70 +99,130 @@ const CardHoldStaffNotice: FC<CardHoldStaffNoticeProps> = ({
         | undefined,
       errors: ReadonlyArray<unknown> | null | undefined,
     ) => {
-      setDecision(null)
+      setIsDialogOpen(false)
       if (payload?.cardHold && !payload.errors?.length && !errors?.length) onDecided?.(decision)
     }
-    if (decision === 'keep') {
-      commitKeep({
-        variables,
-        onCompleted: (response, errors) => onCompleted(response?.cardHoldKeep, errors),
-        onError: () => setDecision(null),
-      })
-    } else {
-      commitCancel({
-        variables,
-        onCompleted: (response, errors) => onCompleted(response?.cardHoldCancel, errors),
-        onError: () => setDecision(null),
-      })
+    const onError = () => setIsDialogOpen(false)
+
+    switch (decision) {
+      case 'keep':
+        commitKeep({
+          variables,
+          onCompleted: (response, errors) => onCompleted(response?.cardHoldKeep, errors),
+          onError,
+        })
+        break
+      case 'cancel':
+        commitCancel({
+          variables,
+          onCompleted: (response, errors) => onCompleted(response?.cardHoldCancel, errors),
+          onError,
+        })
+        break
+      case 'retry':
+        commitRetry({
+          variables,
+          onCompleted: (response, errors) => onCompleted(response?.cardHoldRetry, errors),
+          onError,
+        })
+        break
+      case 'markPaid':
+        commitMarkPaid({
+          variables,
+          onCompleted: (response, errors) => onCompleted(response?.cardHoldMarkPaid, errors),
+          onError,
+        })
+        break
+      default:
+        break
     }
   }
 
-  const isKeep = decision === 'keep'
+  const dialog = CARD_HOLD_STAFF_DECISION_DIALOGS[decision]
 
   return (
     <>
       <ConfirmDialog
-        open={decision !== null}
+        open={isDialogOpen}
         onClose={closeDialog}
-        title={isKeep ? messages.keepTitle : messages.cancelTitle}
-        content={isKeep ? messages.keepContent : messages.cancelContent}
+        title={messages[dialog.title]}
+        content={messages[dialog.content]}
         cancelText={messages.dismiss}
         action={
           <LoadingButton
-            color={isKeep ? 'primary' : 'error'}
+            color={dialog.color}
             onClick={handleConfirm}
             disabled={isInFlight}
             loading={isInFlight}
           >
-            {isKeep ? messages.keepConfirm : messages.cancelConfirm}
+            {messages[dialog.confirm]}
           </LoadingButton>
         }
       />
-      <Alert severity={cardHold.kept ? 'info' : 'error'}>
-        <AlertTitle>{messages.failureTitle}</AlertTitle>
-        <CardHoldStaffNoticeBody>
-          <Typography variant="body2">
-            {cardHold.failureReason || messages.unknownReason}
-          </Typography>
-          {cardHold.kept ? (
-            <Typography variant="body2">{messages.keptNotice}</Typography>
-          ) : (
+      {isFailed && (
+        <Alert severity={cardHold.kept ? 'info' : 'error'}>
+          <AlertTitle>{messages.failureTitle}</AlertTitle>
+          <CardHoldStaffNoticeBody>
+            <Typography variant="body2">
+              {cardHold.failureReason || messages.unknownReason}
+            </Typography>
+            {cardHold.kept ? (
+              <Typography variant="body2">{messages.keptNotice}</Typography>
+            ) : (
+              <>
+                <CardHoldStaffNoticeButtons>
+                  <Button
+                    variant="outlined"
+                    onClick={() => openDialog('keep')}
+                    disabled={isInFlight}
+                  >
+                    {messages.keepButton}
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => openDialog('cancel')}
+                    disabled={isInFlight}
+                  >
+                    {messages.cancelButton}
+                  </Button>
+                  {canRetry && (
+                    <Button
+                      variant="outlined"
+                      onClick={() => openDialog('retry')}
+                      disabled={isInFlight}
+                    >
+                      {messages.retryButton}
+                    </Button>
+                  )}
+                </CardHoldStaffNoticeButtons>
+                {retriesLeft != null && (
+                  <Typography variant="caption">
+                    {canRetry ? messages.retriesLeft(retriesLeft) : messages.noRetriesLeft}
+                  </Typography>
+                )}
+              </>
+            )}
+          </CardHoldStaffNoticeBody>
+        </Alert>
+      )}
+      {isPartiallyPaid && (
+        <Alert severity="warning">
+          <AlertTitle>{messages.partiallyPaidTitle}</AlertTitle>
+          <CardHoldStaffNoticeBody>
+            <Typography variant="body2">{messages.partiallyPaidNotice}</Typography>
             <CardHoldStaffNoticeButtons>
-              <Button variant="outlined" onClick={() => setDecision('keep')} disabled={isInFlight}>
-                {messages.keepButton}
-              </Button>
               <Button
                 variant="outlined"
-                color="error"
-                onClick={() => setDecision('cancel')}
+                onClick={() => openDialog('markPaid')}
                 disabled={isInFlight}
               >
-                {messages.cancelButton}
+                {messages.markPaidButton}
               </Button>
             </CardHoldStaffNoticeButtons>
-          )}
-        </CardHoldStaffNoticeBody>
-      </Alert>
+          </CardHoldStaffNoticeBody>
+        </Alert>
+      )}
     </>
   )
 }

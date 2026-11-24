@@ -51,6 +51,9 @@ const cardHold = (overrides: Record<string, unknown> = {}) => ({
   status: 'failed',
   kept: false,
   failureReason: 'card_declined',
+  retriesLeft: 2,
+  paymentStatus: 'unpaid',
+  canDecide: true,
   ...overrides,
 })
 
@@ -69,7 +72,7 @@ const notification = (verb: string, target: unknown, description: string) =>
   }) as any
 
 describe('CardHoldNotification', () => {
-  it('shows a failed hold with its staff notice and Keep / Cancel', () => {
+  it('shows a failed hold with its staff notice and actions', () => {
     render(
       <NotificationItemRenderer
         notification={notification(
@@ -86,6 +89,22 @@ describe('CardHoldNotification', () => {
     expect(notice).toHaveTextContent('card_declined')
     expect(screen.getByRole('button', { name: 'Keep' })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: 'Retry hold' })).toBeInTheDocument()
+  })
+
+  it('shows a partially paid hold with Mark paid', () => {
+    render(
+      <NotificationItemRenderer
+        notification={notification(
+          'PAYMENTS.CARD_HOLD_PARTIALLY_PAID',
+          cardHold({ status: 'captured', paymentStatus: 'partially_paid' }),
+          'Order 7 was only partly paid: the charge above the hold was declined.',
+        )}
+      />,
+    )
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Partially paid')
+    expect(screen.getByRole('button', { name: 'Mark paid' })).toBeInTheDocument()
   })
 
   it('keeps the sentence but drops the notice once the hold is settled', () => {
@@ -93,7 +112,7 @@ describe('CardHoldNotification', () => {
       <NotificationItemRenderer
         notification={notification(
           'PAYMENTS.CARD_HOLD_FAILED',
-          cardHold({ status: 'released' }),
+          cardHold({ paymentStatus: 'paid', kept: true }),
           'The card hold for Order 7 failed.',
         )}
       />,

@@ -11,3 +11,5 @@ export * from './graphql/fragments/CardHoldStaffNotice'
 
 export * from './graphql/mutations/CardHoldKeep'
 export * from './graphql/mutations/CardHoldCancel'
+export * from './graphql/mutations/CardHoldRetry'
+export * from './graphql/mutations/CardHoldMarkPaid'

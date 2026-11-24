@@ -1,4 +1,9 @@
-import { CARD_HOLD_INTENT_TYPE, CARD_HOLD_PLACEMENT_STATUS, CARD_HOLD_STATUS } from './constants'
+import {
+  CARD_HOLD_INTENT_TYPE,
+  CARD_HOLD_PAYMENT_STATUS,
+  CARD_HOLD_PLACEMENT_STATUS,
+  CARD_HOLD_STATUS,
+} from './constants'
 
 type ValueOf<T> = T[keyof T]
 
@@ -7,6 +12,9 @@ export type CardHoldPlacementStatus = ValueOf<typeof CARD_HOLD_PLACEMENT_STATUS>
 
 /** `CardHold.status`. Customers never receive `failed`: the backend reads it as `scheduled`. */
 export type CardHoldStatus = ValueOf<typeof CARD_HOLD_STATUS>
+
+/** `CardHold.paymentStatus`. */
+export type CardHoldPaymentStatus = ValueOf<typeof CARD_HOLD_PAYMENT_STATUS>
 
 /** The payload's `intentType`: which Stripe intent `clientSecret` belongs to. */
 export type CardHoldIntentType = ValueOf<typeof CARD_HOLD_INTENT_TYPE>

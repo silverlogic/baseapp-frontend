@@ -21,8 +21,8 @@ contract). The backend ships no create mutation: your project's own checkout mut
 `CardHoldPaymentInputMixin` and `CardHoldPayloadMixin`, and this module drives it.
 
 - `payments/common`: `useCardHoldPlacement` (platform-neutral; inject an `authenticate`),
-  `placeCardHold` (the same flow without React), the `cardHoldKeep` / `cardHoldCancel` mutation
-  hooks, and the `CardHold` fragment.
+  `placeCardHold` (the same flow without React), the `cardHoldKeep` / `cardHoldCancel` /
+  `cardHoldRetry` / `cardHoldMarkPaid` mutation hooks, and the `CardHold` fragment.
 - `payments/web`: `useStripeCardHoldPlacement` (Stripe.js as the authenticator, inside
   `<Elements>`), `createStripeJsCardHoldAuthenticator` and `CardHoldStaffNotice`.
 
@@ -78,10 +78,33 @@ is not called after unmount (navigating away is not a failure). Outside React, `
 takes an `AbortSignal` (`signal`) for the same, and `onAttemptIdChange` reports the new attempt
 id of a `changed` resend.
 
-`CardHoldStaffNotice` tells staff that a deferred hold failed and offers what they can do about it:
-an error `Alert` with Stripe's failure code and Keep / Cancel behind a confirmation, which turns
-into an info `Alert` with no actions once kept. It renders nothing for a hold that didn't fail
-(customers read a failed hold as `scheduled`). Staff meet it in their notifications: the backend
-sends `PAYMENTS.CARD_HOLD_FAILED` with the hold as the target, and the notifications module's
-`CardHoldNotification` renders this notice inside it. Anywhere else staff look at the target,
-spread `...CardHoldStaffNotice_cardHold` under `cardHold` and render it.
+On a target that implements `CardHoldsInterface`, spread `...CardHoldStaffNotice_cardHold` under
+`cardHold` wherever staff look at the target.
+
+Staff meet it in their notifications: the backend sends `PAYMENTS.CARD_HOLD_FAILED` and
+`PAYMENTS.CARD_HOLD_PARTIALLY_PAID` with the hold as the target, and the notifications module's
+`CardHoldNotification` renders this notice inside each one. Use it directly anywhere else staff
+look at the target.
+
+`CardHoldStaffNotice` is a staff notice (an MUI `Alert`): it says what happened to the hold and
+puts the actions inside it. It renders only for a viewer who may decide (`canDecide`, which the backend
+sets only for a viewer granted `change_cardhold`: false for customers), and then for two kinds of
+hold and nothing otherwise:
+
+- A **failed** hold (staff only see `failed`): Stripe's failure code, then Keep and Cancel, plus
+  "Retry hold" while the hold isn't kept and `retriesLeft > 0`. The retry runs immediately,
+  off-session, on the same saved card; below the buttons the component says how many retries
+  are left, or, at zero, that only Keep or Cancel remain. The retry answers with the hold as it
+  now is: `authorized` or `pending` and the panel goes; `scheduled` when the hold date has moved
+  into the future, so the hold is placed later and the panel goes too; or `failed` again with one
+  retry fewer and the new failure code. Once a failed hold is paid (kept, then charged: the backend
+  leaves it `failed`), the panel goes. The project sets the limit on the backend (3 by default).
+- A **partially paid** hold (`paymentStatus: partially_paid`: the hold was captured, but the
+  charge for the difference above it was declined): "Mark paid", which records the rest as paid
+  outside the app.
+
+Every action goes through a confirmation. `onDecided(decision)` (`keep`, `cancel`, `retry`,
+`markPaid`) fires only when the backend accepted it: a payload `cardHold`, no payload `errors`
+and no GraphQL errors. For `retry` that means the retry ran, not that the card was held. Errors
+are toasted by the mutation hooks. All four mutations need `change_cardhold`. Replace the copy
+through `messages`; `retriesLeft` is a function of the count.

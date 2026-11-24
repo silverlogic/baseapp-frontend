@@ -6,5 +6,8 @@ export const CardHoldStaffNoticeFragmentQuery = graphql`
     status
     kept
     failureReason
+    retriesLeft
+    paymentStatus
+    canDecide
   }
 `

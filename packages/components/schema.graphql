@@ -112,7 +112,9 @@ type CardHold implements Node {
   """The ID of the object"""
   id: ID!
 
-  """pending, authorized, released, captured, scheduled, failed or saved."""
+  """
+  pending, authorized, released, captured, scheduled, failed or saved. Staff see a failed hold whose retry is being placed as pending.
+  """
   status: String!
 
   """The amount authorized, in cents."""
@@ -140,6 +142,21 @@ type CardHold implements Node {
 
   """Staff only: Stripe's code for why a deferred hold failed."""
   failureReason: String
+
+  """
+  Staff only: how many more times a failed hold may be retried (0 once kept or out of retries). Null for a hold that isn't failed.
+  """
+  retriesLeft: Int
+
+  """
+  Whether the viewer may act on card holds as staff: retry, keep or cancel a failed hold, or mark a partially paid one paid (the model-level change_cardhold permission). False for the customer.
+  """
+  canDecide: Boolean!
+
+  """
+  How much of the final amount was taken: unpaid, paid, or partially_paid (the hold was captured and the difference above it was declined).
+  """
+  paymentStatus: String!
 }
 
 input CardHoldCancelInput {
@@ -171,6 +188,49 @@ Keep the target of a failed deferred hold: it closes later by a fresh charge
 of the card, like a target with no hold. Final.
 """
 type CardHoldKeepPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  cardHold: CardHold
+  clientMutationId: String
+}
+
+input CardHoldMarkPaidInput {
+  """The partially paid card hold."""
+  id: ID!
+  clientMutationId: String
+}
+
+"""
+Record the rest of a partially paid target (its hold captured, the difference
+above it declined) as paid outside the app: its payment status becomes paid, and
+the difference is never charged again.
+"""
+type CardHoldMarkPaidPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+  cardHold: CardHold
+  clientMutationId: String
+}
+
+input CardHoldRetryInput {
+  """The failed card hold."""
+  id: ID!
+  clientMutationId: String
+}
+
+"""
+Retry a failed deferred hold on the same saved card, as a new off-session
+attempt. The returned cardHold.status is the outcome: authorized; failed (staff
+are told again, one retry fewer is left); pending (no answer from Stripe yet,
+settled later); or scheduled (the target's date moved past the hold window, so it
+is placed on holdOn, like any scheduled hold). Refused with an invalid_action
+error whose extensions.reason says why (not_failed, no_retries_left, date_passed,
+not_holdable or unavailable): a hold that isn't failed, was kept or cancelled,
+has no retries left, or whose target can't take a hold. Needs change_cardhold.
+"""
+type CardHoldRetryPayload {
   """May contain more than one error for same field."""
   errors: [ErrorType]
   _debug: DjangoDebug
@@ -1211,6 +1271,25 @@ type Mutation {
   nothing is charged.
   """
   cardHoldCancel(input: CardHoldCancelInput!): CardHoldCancelPayload
+
+  """
+  Record the rest of a partially paid target (its hold captured, the difference
+  above it declined) as paid outside the app: its payment status becomes paid, and
+  the difference is never charged again.
+  """
+  cardHoldMarkPaid(input: CardHoldMarkPaidInput!): CardHoldMarkPaidPayload
+
+  """
+  Retry a failed deferred hold on the same saved card, as a new off-session
+  attempt. The returned cardHold.status is the outcome: authorized; failed (staff
+  are told again, one retry fewer is left); pending (no answer from Stripe yet,
+  settled later); or scheduled (the target's date moved past the hold window, so it
+  is placed on holdOn, like any scheduled hold). Refused with an invalid_action
+  error whose extensions.reason says why (not_failed, no_retries_left, date_passed,
+  not_holdable or unavailable): a hold that isn't failed, was kept or cancelled,
+  has no retries left, or whose target can't take a hold. Needs change_cardhold.
+  """
+  cardHoldRetry(input: CardHoldRetryInput!): CardHoldRetryPayload
   pageCreate(input: PageCreateInput!): PageCreatePayload
   pageEdit(input: PageEditInput!): PageEditPayload
   pageDelete(input: DeleteNodeInput!): DeleteNodePayload

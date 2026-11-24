@@ -12,8 +12,8 @@ import {
 import { CardHoldNotificationProps } from './types'
 
 /**
- * A card hold that needs staff (`PAYMENTS.CARD_HOLD_FAILED`): the backend's sentence, then the
- * hold's staff notice with whatever can still be done about it.
+ * A card hold that needs staff (`PAYMENTS.CARD_HOLD_FAILED`, `PAYMENTS.CARD_HOLD_PARTIALLY_PAID`):
+ * the backend's sentence, then the hold's staff notice with whatever can still be done about it.
  * Once the hold is settled the notice renders nothing and the sentence stays.
  */
 const CardHoldNotification: FC<CardHoldNotificationProps> = ({

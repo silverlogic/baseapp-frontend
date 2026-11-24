@@ -3,6 +3,7 @@ export const NOTIFICATION_VERB = {
   commentReplyCreated: 'COMMENTS.COMMENT_REPLY_CREATED',
   reactionCreated: 'REACTIONS.REACTION_CREATED',
   cardHoldFailed: 'PAYMENTS.CARD_HOLD_FAILED',
+  cardHoldPartiallyPaid: 'PAYMENTS.CARD_HOLD_PARTIALLY_PAID',
 }
 
 export const USER_NOTIFICATIONS_KEY = 'user_notifications'
