@@ -21,3 +21,8 @@ export type { FileChipProps } from './FileChip/types'
 
 export { default as FileThumbnail } from './FileThumbnail'
 export type { FileThumbnailProps } from './FileThumbnail/types'
+
+export {
+  default as useProtectedFileDownload,
+  createBrowserDownloadTarget,
+} from './hooks/useProtectedFileDownload'

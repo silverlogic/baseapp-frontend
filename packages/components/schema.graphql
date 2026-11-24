@@ -1163,6 +1163,13 @@ type Mutation {
   """
   fileAttachToTarget(input: FileAttachToTargetInput!): FileAttachToTargetPayload
   fileDelete(input: FileDeleteInput!): FileDeletePayload
+
+  """
+  Mint a short-lived download link for a protected file, bound to the caller (and the
+  profile they act as). Opening it re-checks access, so it opens natively in the browser
+  without headers.
+  """
+  protectedFileLink(input: ProtectedFileLinkInput!): ProtectedFileLinkPayload
   contentPostCreate(input: ContentPostCreateInput!): ContentPostCreatePayload
   commentCreate(input: CommentCreateInput!): CommentCreatePayload
   commentUpdate(input: CommentUpdateInput!): CommentUpdatePayload
@@ -1971,6 +1978,54 @@ type ProfileUserRoleUpdatePayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   profileUserRole: ProfileUserRole
+  clientMutationId: String
+}
+
+"""
+A file served only through permission-checked downloads; mint a link with ``protectedFileLink``.
+"""
+type ProtectedFile {
+  """Registry key of the file field."""
+  key: String!
+
+  """Id of the object holding the file."""
+  objectId: ID!
+
+  """Name the file downloads as."""
+  fileName: String
+
+  """Type the file is served with."""
+  contentType: String
+
+  """Size in bytes; null when unknown."""
+  size: BigInt
+}
+
+input ProtectedFileLinkInput {
+  """ProtectedFile.key"""
+  key: String!
+
+  """ProtectedFile.objectId, or the object's Relay id."""
+  objectId: ID!
+  clientMutationId: String
+}
+
+"""
+Mint a short-lived download link for a protected file, bound to the caller (and the
+profile they act as). Opening it re-checks access, so it opens natively in the browser
+without headers.
+"""
+type ProtectedFileLinkPayload {
+  """May contain more than one error for same field."""
+  errors: [ErrorType]
+  _debug: DjangoDebug
+
+  """Absolute download URL."""
+  url: String
+
+  """When the link stops working."""
+  expiresAt: DateTime
+  file: ProtectedFile
   clientMutationId: String
 }
 
