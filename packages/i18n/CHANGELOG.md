@@ -1,5 +1,17 @@
 # @baseapp-frontend/i18n
 
+## 3.0.1
+
+### Patch Changes
+
+- 12067e6: Bump `@formatjs/intl` from 2.10.10 to 3.1.8, the version `react-intl` 7.1.14 depends on, so installs
+  resolve a single copy and server-side `createIntl` formats with the same FormatJS code as the client.
+- 1986d29: Bump `next` from 15.5.28 to 15.5.29 (CVE-2026-119346, CVE-2026-119347, CVE-2026-119348), so
+  published installs pick up the patched version.
+- Updated dependencies [12067e6]
+- Updated dependencies [1986d29]
+  - @baseapp-frontend/utils@4.5.1
+
 ## 3.0.0
 
 ### Minor Changes

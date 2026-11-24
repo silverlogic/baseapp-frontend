@@ -1,5 +1,14 @@
 # @baseapp-frontend/provider
 
+## 6.0.1
+
+### Patch Changes
+
+- Updated dependencies [12067e6]
+- Updated dependencies [1986d29]
+  - @baseapp-frontend/i18n@3.0.1
+  - @baseapp-frontend/utils@4.5.1
+
 ## 6.0.0
 
 ### Patch Changes
