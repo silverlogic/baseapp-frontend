@@ -1,0 +1,76 @@
+id: intl-no-text-constants
+language: Tsx
+severity: error
+message: "Copy constants are `defineMessages` maps (`X_MESSAGES`), not plain strings: plain strings skip translation. See .claude/skills/frontend-patterns/references/i18n.md"
+note: |
+  Catches copy kept in plain objects, e.g. `export const PROFILE_TEXTS = { title: 'Profile', count: (n) => `${n} posts` }`:
+  any object assigned to a `*_TEXT(S)`, `*_COPY`, `*_STRINGS`, `*_LABEL(S)` or `*_TITLE(S)`
+  constant whose values are worded strings, template literals or functions (arrow, `function` or
+  method) returning them.
+  Text that must stay literal (language endonyms) takes `// ast-grep-ignore: intl-no-text-constants`.
+files:
+  - apps/**
+  - packages/**
+ignores:
+  - "**/__tests__/**"
+  - "**/*.test.*"
+  - "**/*.spec.*"
+  - "**/__storybook__/**"
+  - "**/*.stories.*"
+  - "**/*.story.*"
+  - "**/__fixtures__/**"
+  - "**/__generated__/**"
+  - "**/.cypress-legacy/**"
+  - "**/.playwright/**"
+  - "**/.storybook/**"
+  - "apps/web/app/(.baseapp)/examples/**"
+utils:
+  worded-literal:
+    any:
+      # Prose: capitalised, or at least two words (not tokens like `asc`).
+      - kind: string
+        has:
+          kind: string_fragment
+          regex: "^[A-Z][a-z]|[A-Za-z]+ [A-Za-z]+"
+      # Template text sits around `${}` parts (`${n} posts`), so any word counts.
+      - kind: template_string
+        has:
+          kind: string_fragment
+          regex: "[A-Za-z]{2,}"
+  # A function body that yields text, but not one returning a translation call.
+  worded-body:
+    not:
+      kind: call_expression
+    any:
+      - matches: worded-literal
+      - has:
+          stopBy:
+            kind: call_expression
+          matches: worded-literal
+  worded-function:
+    any:
+      - kind: arrow_function
+      - kind: function_expression
+      - kind: method_definition
+    has:
+      field: body
+      matches: worded-body
+rule:
+  kind: variable_declarator
+  all:
+    - has:
+        field: name
+        regex: "_(TEXTS?|COPY|STRINGS|LABELS?|TITLES?)$"
+    # A worded entry anywhere in the value, but not inside a call (`defineMessages({...})`).
+    - has:
+        stopBy:
+          kind: call_expression
+        any:
+          - kind: pair
+            has:
+              field: value
+              any:
+                - matches: worded-literal
+                - matches: worded-function
+          - kind: method_definition
+            matches: worded-function

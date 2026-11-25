@@ -15,6 +15,8 @@ export const LEAVE_GROUP_DIALOG_TEXT_COPY_TYPE_KEYS = {
   CONTENT: 'CONTENT',
 } as const
 
+/** @deprecated English-only; use `LEAVE_GROUP_DIALOG_COPY_MESSAGES`. */
+// ast-grep-ignore: intl-no-text-constants
 export const LEAVE_GROUP_DIALOG_TEXT_COPY = {
   [LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING]: {
     [LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN]: {

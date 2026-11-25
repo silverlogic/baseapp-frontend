@@ -24,7 +24,7 @@ settings:
 
 catalog:
   "@formatjs/cli": 6.16.33
-  "@formatjs/intl": 2.10.10
+  "@formatjs/intl": 3.1.8
   "@mdxeditor/editor": 3.54.0
   "@mdxeditor/gurx": 1.2.4
   "@types/mdast": 4.0.4
@@ -85,6 +85,7 @@ catalogs:
     expo-file-system: ~55.0.21
     expo-image-picker: ~55.0.18
     expo-router: ~55.0.15
+    expo-localization: ~55.0.13
     expo-secure-store: ~55.0.13
     react-native-gesture-handler: ~2.30.0
     react-native-paper: ^5.15.1

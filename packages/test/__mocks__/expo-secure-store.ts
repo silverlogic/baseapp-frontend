@@ -1,4 +1,5 @@
 const ExpoSecureStore = {
+  getItem: (key: string) => null,
   getItemAsync: async (key: string) => {
     return key === 'ACCESS_KEY_NAME' ? 'mocked_value' : null
   },

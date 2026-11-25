@@ -1,5 +1,6 @@
 import { FC } from 'react'
 
+import { useIntl } from 'react-intl'
 import { Pressable } from 'react-native'
 
 import { useTheme } from '../../../../providers/native'
@@ -22,6 +23,7 @@ const AppBar: FC<AppBarProps> = ({
   closeComponent,
   CloseIconProps,
 }) => {
+  const intl = useIntl()
   const theme = useTheme()
   const styles = createStyles(theme)
 
@@ -45,8 +47,14 @@ const AppBar: FC<AppBarProps> = ({
             <Pressable
               disabled={closeDisabled}
               accessibilityRole="button"
-              accessibilityLabel={closeLabel || 'Close'}
-              accessibilityHint="Close the current screen"
+              accessibilityLabel={
+                closeLabel ||
+                intl.formatMessage({ id: 'designSystem.appBar.close', defaultMessage: 'Close' })
+              }
+              accessibilityHint={intl.formatMessage({
+                id: 'designSystem.appBar.closeHint',
+                defaultMessage: 'Close the current screen',
+              })}
               onPress={onClose}
             >
               <View style={styles.closeButtonContent}>

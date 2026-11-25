@@ -16,6 +16,8 @@ export const DEFAULT_LOCALE: Locale = 'en'
 /**
  * Human-readable labels for each locale
  */
+// Endonyms: each language is shown in its own language, so these are not translated.
+// ast-grep-ignore: intl-no-text-constants
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: 'English',
   es: 'Español',
@@ -28,3 +30,6 @@ export const LOCALE_LABELS: Record<Locale, string> = {
  * i18n -> utils dependency one-directional.
  */
 export { LANGUAGE_COOKIE_NAME } from '@baseapp-frontend/utils/constants/cookie'
+
+export const isSupportedLocale = (value: unknown): value is Locale =>
+  typeof value === 'string' && (SUPPORTED_LOCALES as readonly string[]).includes(value)

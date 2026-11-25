@@ -118,6 +118,21 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 | `state-no-redux` | **error** | Zustand for client state, never Redux (state-management.md) |
 | `state-zustand-no-global-store` | warning | No module-level `create(...)` — it leaks across SSR requests (state-management.md) |
 
+### i18n
+
+| Rule | Severity | Convention |
+|---|---|---|
+| `intl-prefer-formatted-message` | **error** | `<FormattedMessage>` for JSX-child text, `intl.formatMessage` only where a string is needed (i18n.md) |
+| `intl-no-hardcoded-text` | **error** | No untranslated JSX text, rendered string literals (also through `?:` / `&&` / `\|\|` / `??`), text props (`aria-label`, `alt`, `title`, `placeholder`, `label`, `accessibilityLabel`…) or toast / alert / confirm messages (i18n.md) |
+| `intl-no-text-constants` | **error** | No prose in plain `*_TEXT(S)` / `*_LABEL(S)` / `*_COPY` / `*_STRINGS` / `*_TITLE(S)` objects — use `defineMessages` (i18n.md) |
+
+Text that must stay literal (a brand name, language endonyms) takes a
+`// ast-grep-ignore: <rule-id>` comment on the line above the match. For
+`intl-no-text-constants` that is the line above the `const`. Inside JSX children a
+`//` line is rendered as text, and a `{/* ast-grep-ignore */}` on its own line above
+does not suppress, so put it on the same line, directly before the text:
+`<span>{/* ast-grep-ignore: intl-no-hardcoded-text */}SilverLogic</span>`.
+
 ### Severity policy
 
 A rule is `error` (and therefore gating) only when **both repos are already clean**, so
@@ -188,6 +203,11 @@ Some guidelines can't be expressed as AST patterns and stay in code-review terri
   - **Shadowed names.** The declaration search is file-wide, so a nested component sharing
     a name with a queried one at another scope could produce a false positive. It needs
     two same-named components in one file, which no code here does.
+- **Untranslated text the intl rules can't see** — `intl-no-hardcoded-text` follows a
+  literal only up to the JSX child, text prop or call that renders it. Text that reaches the
+  UI through a variable, a default parameter (`label = 'Close'`), a prop outside its list or
+  a constants object with another name is invisible; `intl-no-text-constants` covers the
+  common `*_TEXTS` / `*_LABELS` naming only.
 - **File-structure completeness** — "extract constants to `constants.ts`", "extract
   helpers to `utils.ts`". `ts-types-not-in-index` and `mui-styled-not-in-index` cover
   the two mechanical cases; the rest needs judgement about what counts as a helper.

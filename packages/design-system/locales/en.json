@@ -1,4 +1,6 @@
 {
+  "designSystem.appBar.close": "Close",
+  "designSystem.appBar.closeHint": "Close the current screen",
   "designSystem.autocompleteField.placeholder": "Search",
   "designSystem.avatar.deletedUser": "Deleted User Avatar",
   "designSystem.avatar.fallback": "Avatar Fallback",

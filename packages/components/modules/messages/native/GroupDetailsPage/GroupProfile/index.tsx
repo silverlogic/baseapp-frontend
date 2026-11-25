@@ -5,6 +5,8 @@ import { CircledAvatar as DefaultCircledAvatar } from '@baseapp-frontend/design-
 import { Text } from '@baseapp-frontend/design-system/components/native/typographies'
 import { View } from '@baseapp-frontend/design-system/components/native/views'
 
+import { FormattedMessage } from 'react-intl'
+
 import { createStyles } from './styles'
 import { GroupProfileProps } from './types'
 
@@ -26,7 +28,11 @@ const GroupProfile: FC<GroupProfileProps> = ({
             {title}
           </Text>
           <Text variant="body2" color="low">
-            {participantsCount} {participantsCount === 1 ? 'member' : 'members'}
+            <FormattedMessage
+              id="messages.shared.memberCount"
+              defaultMessage="{count, plural, one {# member} other {# members}}"
+              values={{ count: participantsCount }}
+            />
           </Text>
         </View>
       </View>

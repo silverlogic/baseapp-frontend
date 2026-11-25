@@ -4,6 +4,7 @@ import { useCurrentProfile } from '@baseapp-frontend/authentication'
 import { ACCESS_KEY_NAME, getToken, useNotification } from '@baseapp-frontend/utils'
 
 import * as FileSystem from 'expo-file-system/legacy'
+import { useIntl } from 'react-intl'
 import { ConnectionHandler, UseMutationConfig, graphql, useMutation } from 'react-relay'
 import { PayloadError } from 'relay-runtime'
 
@@ -36,7 +37,16 @@ export const useCreateGroupChatMutation = (): [
   (config: UseMutationConfig<CreateGroupChatMutation>) => void,
   boolean,
 ] => {
+  const intl = useIntl()
   const { sendMutationErrorToast, sendToast } = useNotification()
+  const sendUploadFailedToast = () =>
+    sendToast(
+      intl.formatMessage({
+        id: 'messages.createGroupChat.uploadFailed',
+        defaultMessage: 'Failed to upload file',
+      }),
+      { type: 'error' },
+    )
   const [commitMutation, isMutationInFlight] = useMutation<CreateGroupChatMutation>(
     CreateGroupChatMutationQuery,
   )
@@ -49,7 +59,13 @@ export const useCreateGroupChatMutation = (): [
       const authToken = getToken(ACCESS_KEY_NAME)
       const fileInfo = await FileSystem.getInfoAsync(fileUri)
       if (!fileInfo.exists) {
-        sendToast('File does not exist', { type: 'error' })
+        sendToast(
+          intl.formatMessage({
+            id: 'messages.createGroupChat.fileNotFound',
+            defaultMessage: 'File does not exist',
+          }),
+          { type: 'error' },
+        )
         return
       }
 
@@ -92,11 +108,11 @@ export const useCreateGroupChatMutation = (): [
       )
       if (response.status !== 200) {
         console.error('File upload failed with status:', response.body)
-        sendToast('Failed to upload file', { type: 'error' })
+        sendUploadFailedToast()
       }
     } catch (error) {
       console.error('File upload error:', error)
-      sendToast('Failed to upload file', { type: 'error' })
+      sendUploadFailedToast()
     }
   }
 

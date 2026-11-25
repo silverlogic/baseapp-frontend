@@ -53,6 +53,7 @@ export function createVitestConfig(opts = {}) {
       alias: {
         'react-native': mock('react-native.ts'),
         'expo-constants': mock('expo-constants.ts'),
+        'expo-localization': mock('expo-localization.ts'),
         'expo-modules-core': mock('expo-modules-core.ts'),
         'expo-secure-store': mock('expo-secure-store.ts'),
         ...(aliasNextFont ? { 'next/font/google': mock('next-font.ts') } : {}),

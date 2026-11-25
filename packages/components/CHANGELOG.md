@@ -1,5 +1,29 @@
 # @baseapp-frontend/components
 
+## 7.0.2
+
+### Patch Changes
+
+- e107fe1: Translate the strings the new `intl-no-hardcoded-text` / `intl-no-text-constants` ast-grep rules
+  found: the native AppBar close label and hint, the group chat image upload toasts, the native group
+  member count and the leave-group dialog copy returned by `useLeaveGroup`. `LEAVE_GROUP_DIALOG_TEXT_COPY`
+  is deprecated in favour of `LEAVE_GROUP_DIALOG_COPY_MESSAGES`; the unused native `CHAT_TAB_LABEL` is removed.
+- Updated dependencies [e107fe1]
+  - @baseapp-frontend/design-system@5.0.2
+
+## 7.0.1
+
+### Patch Changes
+
+- 1986d29: Bump `next` from 15.5.28 to 15.5.29 (CVE-2026-119346, CVE-2026-119347, CVE-2026-119348), so
+  published installs pick up the patched version.
+- Updated dependencies [12067e6]
+- Updated dependencies [1986d29]
+  - @baseapp-frontend/utils@4.5.1
+  - @baseapp-frontend/design-system@5.0.1
+  - @baseapp-frontend/authentication@10.0.1
+  - @baseapp-frontend/graphql@6.0.1
+
 ## 7.0.0
 
 ### Patch Changes
