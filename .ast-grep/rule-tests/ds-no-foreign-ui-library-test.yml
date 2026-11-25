@@ -1,0 +1,29 @@
+id: ds-no-foreign-ui-library
+valid:
+  - |
+    import { Button, Stack } from '@mui/material'
+  - |
+    import { LoadingButton } from '@mui/lab'
+  - |
+    import { IconButton } from '@baseapp-frontend/design-system/components/web/buttons'
+  - |
+    import CloseIcon from '@mui/icons-material/Close'
+  - |
+    import { useQuery } from '@tanstack/react-query'
+  - |
+    import { UserCard } from 'components/user/UserCard'
+invalid:
+  - |
+    import { Button } from '@chakra-ui/react'
+  - |
+    import * as Dialog from '@radix-ui/react-dialog'
+  - |
+    import { Button } from '@/components/ui/button'
+  - |
+    import { Card } from 'components/ui/card'
+  - |
+    import styled from 'styled-components'
+  - |
+    import { Trash } from 'lucide-react'
+  - |
+    export { Button } from 'antd'

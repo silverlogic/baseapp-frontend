@@ -100,6 +100,10 @@ The `See ...` paths in rule messages point at the `frontend-conventions` /
 | `ds-prefer-baseapp-wrapper` | warning | `apps/**` only — BaseApp wrapper over the raw MUI primitive (styling.md, dialog.md) |
 | `native-styles-not-in-index` | warning | `StyleSheet.create` lives in `styles.ts` (styling.md) |
 | `native-use-design-system-theme` | warning | Native `useTheme` comes from `design-system/providers/native` (styling.md) |
+| `style-no-inline-style-prop` | **error** | `apps/prototype/**` only — no inline `style={...}`; `styled()` or a small `sx` (styling.md) |
+| `style-no-raw-color` | **error** | `apps/prototype/**` only — no hex / rgb() / hsl() literal anywhere, JSX props included; use theme tokens (styling.md) |
+| `style-no-hardcoded-size` | **error** | `apps/prototype/**` only — no px/rem strings or numeric `fontSize` in `styled()` / `sx` / `style`; `theme.spacing()` and typography variants (styling.md) |
+| `ds-no-foreign-ui-library` | **error** | `apps/prototype/**` only — no UI kit, headless primitives, icon set or CSS-in-JS engine outside BaseApp/MUI, and no shadcn `components/ui` (styling.md) |
 
 ### Data, forms, state
 
@@ -144,6 +148,21 @@ violations are fixed — that's the concrete follow-up:
 | `ts-no-enum` | `packages/utils/constants/languages.ts` (`LanguagesEnum` is a published export — breaking change), 1 in the template |
 | `next-page-no-use-client` | 7 template pages under `(static-layout)` |
 | `state-zustand-no-global-store` | 2 in the template's `(.baseapp)/examples/state-management` |
+
+### Prototype styling gate (`apps/prototype`)
+
+The four `style-*` / `ds-no-foreign-ui-library` rules above keep AI-built prototype
+screens on the BaseApp/MUI kit (Rock 1, story E2). They are `error` but scoped with
+`files: apps/prototype/**`, so they gate only the template's prototype app; the
+packages here and `apps/web` are untouched. Widening them to `apps/web` means
+baselining or fixing its violations first.
+
+Pre-existing violations (all files copied from `apps/web`) are **baselined** in each
+rule's `ignores:` list rather than with `ast-grep-ignore` comments, so the prototype
+copies stay byte-identical to `apps/web`. Remove an entry once its file is fixed. The
+theme sources (`apps/prototype/styles/**`) are a permanent exclusion of
+`style-no-raw-color`, and `components/design-system/icons/**` of
+`style-no-hardcoded-size` (each `SvgIcon` sets the kit's 24px icon size).
 
 ## Testing rules
 

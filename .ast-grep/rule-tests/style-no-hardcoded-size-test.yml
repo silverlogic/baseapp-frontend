@@ -1,0 +1,35 @@
+id: style-no-hardcoded-size
+valid:
+  - |
+    export const Header = styled('div')(({ theme }) => ({
+      gap: theme.spacing(0.5),
+      padding: theme.spacing(2, 0),
+      ...theme.typography.h3,
+    }))
+  - |
+    <Box sx={{ p: 2, mt: 1, width: 40, height: 40 }}>content</Box>
+  - |
+    <Box sx={{ width: `calc(100% - ${SIDEBAR_WIDTH}px)` }}>content</Box>
+  - |
+    <Typography variant="body2" sx={{ fontSize: 'inherit' }}>text</Typography>
+  - |
+    const cookieCss = 'height: 5px;'
+invalid:
+  - |
+    <InputAdornment position="end" sx={{ paddingRight: '20px' }}>icon</InputAdornment>
+  - |
+    export const Title = styled('h3')(() => ({
+      fontSize: '1.875rem',
+    }))
+  - |
+    <SvgIcon sx={{ fontSize: 24 }}>{path}</SvgIcon>
+  - |
+    <div style={{ margin: '14px 0' }}>content</div>
+  - |
+    export const Panel = styled(Box)(() => ({
+      height: `calc(100vh - 64px)`,
+    }))
+  - |
+    <Select MenuProps={{ style: { width: '360px' } }} />
+  - |
+    <Popover slotProps={{ paper: { sx: { maxWidth: '20rem' } } }} />

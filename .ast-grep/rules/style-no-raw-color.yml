@@ -1,0 +1,26 @@
+id: style-no-raw-color
+language: Tsx
+severity: error
+message: "Raw color literal (hex / rgb / hsl) — use a theme token (`theme.palette.*` in `styled()`, `'primary.main'`-style keys in `sx`, `color=\"primary\"` on components). See .claude/skills/frontend-conventions/references/styling.md"
+# Gating in apps/prototype only (Rock 1, story E2). Unlike `mui-no-hardcoded-color`,
+# this matches any string in app code, including JSX props like `fill="#637381"`,
+# and rgb()/hsl() as well as hex.
+files:
+  - "apps/prototype/**"
+ignores:
+  # The theme itself: palette/shadow tokens are defined here.
+  - "apps/prototype/styles/**"
+  # Baseline — pre-existing violations copied from apps/web. Kept here instead of
+  # `ast-grep-ignore` comments so the copies stay byte-identical to apps/web.
+  # Remove an entry once its file is fixed (in both apps).
+  - "apps/prototype/components/design-system/icons/AuthenticationIcon/index.tsx"
+  - "apps/prototype/components/design-system/icons/NotificationsIcon/index.tsx"
+  - "apps/prototype/components/design-system/icons/ProfileNoCircleIcon/index.tsx"
+  - "apps/prototype/components/design-system/icons/ReactionsIcon/index.tsx"
+  # CSS handed to vanilla-cookieconsent, a third-party widget outside the MUI theme.
+  - "apps/prototype/providers/CookieConsentProvider/constants.ts"
+rule:
+  any:
+    - kind: string
+    - kind: template_string
+  regex: "(^|[^\\w&])#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{3,4})\\b|\\b(rgba?|hsla?)\\("

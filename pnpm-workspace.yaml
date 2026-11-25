@@ -135,7 +135,7 @@ catalogs:
     "@vitest/coverage-v8": ^4.1.10
     "@vitejs/plugin-react": ^6.0.4
     jsdom: ^29.1.1
-    "@faker-js/faker": ^9.0.3
+    "@faker-js/faker": ^10.5.0
     "@testing-library/jest-dom": 6.4.6
     "@testing-library/react": 16.0.0
     "@testing-library/user-event": 14.5.2

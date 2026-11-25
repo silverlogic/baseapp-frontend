@@ -1,0 +1,50 @@
+id: style-no-hardcoded-size
+language: Tsx
+severity: error
+message: "Hard-coded px/rem size in a style block — use `theme.spacing()` / numeric spacing units for space, and the typography variants (`theme.typography.*`, `<Typography variant>`) for font sizes. See .claude/skills/frontend-conventions/references/styling.md"
+# Gating in apps/prototype only (Rock 1, story E2). Numeric width/height stay allowed
+# (styling.md's own `{ width: 40, height: 40 }`), and numeric spacing keys are theme
+# units (`p: 2` = theme.spacing(2)). A numeric `fontSize` is raw px, so it is flagged.
+files:
+  - "apps/prototype/**"
+ignores:
+  # Baseline — pre-existing violations copied from apps/web. Kept here instead of
+  # `ast-grep-ignore` comments so the copies stay byte-identical to apps/web.
+  # Remove an entry once its file is fixed (in both apps).
+  - "apps/prototype/components/design-system/inputs/PasswordField/index.tsx"
+  - "apps/prototype/components/design-system/inputs/PhoneNumberField/CountrySelect/index.tsx"
+  # `AuthTitle` mirrors the tailwind `responsive-h3` rem overrides.
+  - "apps/prototype/app/(static-layout)/styled.tsx"
+  # `fontSize: 24` sizes each SvgIcon at the kit's 24px icon grid.
+  - "apps/prototype/components/design-system/icons/**"
+rule:
+  all:
+    - any:
+        # '20px', '1.5rem', '0 8px', `calc(100% - 16px)`
+        - any:
+            - kind: string
+            - kind: template_string
+          regex: "(^|[^\\w$.-])-?(\\d+\\.?\\d*|\\.\\d+)(px|rem)\\b"
+        # fontSize: 24
+        - kind: number
+          inside:
+            kind: pair
+            has:
+              field: key
+              regex: ^['"]?fontSize['"]?$
+    - inside:
+        stopBy: end
+        any:
+          - kind: call_expression
+            has:
+              field: function
+              regex: ^styled
+          - kind: jsx_attribute
+            has:
+              kind: property_identifier
+              regex: ^(sx|style)$
+          # slotProps={{ paper: { sx: { ... } } }}, MenuProps={{ style: { ... } }}
+          - kind: pair
+            has:
+              field: key
+              regex: ^['"]?(sx|style)['"]?$

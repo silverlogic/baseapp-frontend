@@ -1,0 +1,125 @@
+id: style-no-hardcoded-size
+snapshots:
+  ? |
+    <InputAdornment position="end" sx={{ paddingRight: '20px' }}>icon</InputAdornment>
+  : labels:
+    - source: '''20px'''
+      style: primary
+      start: 51
+      end: 57
+    - source: sx
+      style: secondary
+      start: 31
+      end: 33
+    - source: 'sx={{ paddingRight: ''20px'' }}'
+      style: secondary
+      start: 31
+      end: 60
+  ? |
+    <Popover slotProps={{ paper: { sx: { maxWidth: '20rem' } } }} />
+  : labels:
+    - source: '''20rem'''
+      style: primary
+      start: 47
+      end: 54
+    - source: sx
+      style: secondary
+      start: 31
+      end: 33
+    - source: 'sx: { maxWidth: ''20rem'' }'
+      style: secondary
+      start: 31
+      end: 56
+  ? |
+    <Select MenuProps={{ style: { width: '360px' } }} />
+  : labels:
+    - source: '''360px'''
+      style: primary
+      start: 37
+      end: 44
+    - source: style
+      style: secondary
+      start: 21
+      end: 26
+    - source: 'style: { width: ''360px'' }'
+      style: secondary
+      start: 21
+      end: 46
+  ? |
+    <SvgIcon sx={{ fontSize: 24 }}>{path}</SvgIcon>
+  : labels:
+    - source: '24'
+      style: primary
+      start: 25
+      end: 27
+    - source: fontSize
+      style: secondary
+      start: 15
+      end: 23
+    - source: 'fontSize: 24'
+      style: secondary
+      start: 15
+      end: 27
+    - source: sx
+      style: secondary
+      start: 9
+      end: 11
+    - source: 'sx={{ fontSize: 24 }}'
+      style: secondary
+      start: 9
+      end: 30
+  ? |
+    <div style={{ margin: '14px 0' }}>content</div>
+  : labels:
+    - source: '''14px 0'''
+      style: primary
+      start: 22
+      end: 30
+    - source: style
+      style: secondary
+      start: 5
+      end: 10
+    - source: 'style={{ margin: ''14px 0'' }}'
+      style: secondary
+      start: 5
+      end: 33
+  ? |
+    export const Panel = styled(Box)(() => ({
+      height: `calc(100vh - 64px)`,
+    }))
+  : labels:
+    - source: '`calc(100vh - 64px)`'
+      style: primary
+      start: 52
+      end: 72
+    - source: styled(Box)
+      style: secondary
+      start: 21
+      end: 32
+    - source: |-
+        styled(Box)(() => ({
+          height: `calc(100vh - 64px)`,
+        }))
+      style: secondary
+      start: 21
+      end: 77
+  ? |
+    export const Title = styled('h3')(() => ({
+      fontSize: '1.875rem',
+    }))
+  : labels:
+    - source: '''1.875rem'''
+      style: primary
+      start: 55
+      end: 65
+    - source: styled('h3')
+      style: secondary
+      start: 21
+      end: 33
+    - source: |-
+        styled('h3')(() => ({
+          fontSize: '1.875rem',
+        }))
+      style: secondary
+      start: 21
+      end: 70

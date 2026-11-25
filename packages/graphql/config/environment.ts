@@ -30,6 +30,8 @@ import RelayDefaultHandlerProvider, {
   HandlerProvider,
 } from 'relay-runtime/lib/handlers/RelayDefaultHandlerProvider'
 
+import { getPrototypeNetwork } from './prototype'
+
 export const CACHE_TTL = 5 * 1000 // 5 seconds, to resolve preloaded results
 
 const MAX_WS_RETRY_ATTEMPTS = 10
@@ -80,6 +82,11 @@ export async function httpFetch(
   cacheConfig?: CacheConfig,
   uploadables?: UploadableMap | null,
 ): Promise<GraphQLResponse> {
+  const prototypeNetwork = getPrototypeNetwork()
+  if (prototypeNetwork) {
+    return prototypeNetwork.fetch(request, variables, cacheConfig, uploadables)
+  }
+
   const fetchOptions = getFetchOptions({ request, variables, uploadables })
   const EXPO_PUBLIC_RELAY_ENDPOINT = getExpoConstant('EXPO_PUBLIC_RELAY_ENDPOINT')
 
@@ -143,6 +150,11 @@ const wsClient = createClient({
 
 const websocketFetch = (request: RequestParameters, variables: Variables): Observable<any> =>
   Observable.create((sink) => {
+    const prototypeSubscribe = getPrototypeNetwork()?.subscribe
+    if (prototypeSubscribe) {
+      return prototypeSubscribe(request, variables).subscribe(sink)
+    }
+
     if (!request.text) {
       return sink.error(new Error('Operation text cannot be empty'))
     }

@@ -447,8 +447,8 @@ catalogs:
       version: 3.4.4
   test:
     '@faker-js/faker':
-      specifier: ^9.0.3
-      version: 9.9.0
+      specifier: ^10.5.0
+      version: 10.6.0
     '@testing-library/jest-dom':
       specifier: 6.4.6
       version: 6.4.6
@@ -625,7 +625,7 @@ importers:
         version: link:../tsconfig
       '@faker-js/faker':
         specifier: catalog:test
-        version: 9.9.0
+        version: 10.6.0
       '@testing-library/jest-dom':
         specifier: catalog:test
         version: 6.4.6(@jest/globals@29.7.0)(@types/jest@29.5.14)(jest@29.7.0(@types/node@22.7.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@types/node@22.7.2)(typescript@5.9.2)))(vitest@4.1.11)
@@ -839,7 +839,7 @@ importers:
         version: 3.2.3(react@19.2.0)(storybook@8.6.19(prettier@3.8.4))
       '@faker-js/faker':
         specifier: catalog:test
-        version: 9.9.0
+        version: 10.6.0
       '@formatjs/cli':
         specifier: 'catalog:'
         version: 6.16.33
@@ -1382,6 +1382,9 @@ importers:
       '@baseapp-frontend/eslint-plugin':
         specifier: workspace:*
         version: link:../eslint-plugin
+      '@baseapp-frontend/test':
+        specifier: workspace:*
+        version: link:../test
       '@baseapp-frontend/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -1403,12 +1406,18 @@ importers:
       '@types/relay-test-utils':
         specifier: catalog:graphql
         version: 19.0.0
+      jsdom:
+        specifier: catalog:test
+        version: 29.1.1
       relay-compiler:
         specifier: catalog:graphql
         version: 19.0.0
       typescript:
         specifier: 'catalog:'
         version: 5.9.2
+      vitest:
+        specifier: catalog:test
+        version: 4.1.11(@types/node@25.9.3)(@vitest/coverage-v8@4.1.11)(jsdom@29.1.1)(msw@2.6.6(@types/node@25.9.3)(typescript@5.9.2))(vite@8.3.2(@types/node@25.9.3)(esbuild@0.28.1)(jiti@1.21.7)(terser@5.48.0)(yaml@2.9.0))
 
   packages/i18n:
     dependencies:
@@ -3396,9 +3405,9 @@ packages:
     resolution: {integrity: sha512-4aQzz9vgxcNXFfo/iyNgDDYfsU5XGKKxWxZopw0cVotHiW+U8IJbIxMaxsINs6bHhtkG3StKNPcOrn3eBuxKPw==}
     hasBin: true
 
-  '@faker-js/faker@9.9.0':
-    resolution: {integrity: sha512-OEl393iCOoo/z8bMezRlJu+GlRGlsKbUAN7jKB6LhnKoqKve5DXRpalbItIIcwnCjs1k/FOPjFzcA6Qn+H+YbA==}
-    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
+  '@faker-js/faker@10.6.0':
+    resolution: {integrity: sha512-3RQHgEtvL1Frl/d1cSreo7qhJ3Gk1OdNUai/CtZ8G+wYeRQnJih3s9xJ9/kgYekPQRdwgh0HXRPqMlzWGwivIQ==}
+    engines: {node: ^20.19.0 || ^22.13.0 || ^23.5.0 || >=24.0.0, npm: '>=10'}
 
   '@floating-ui/core@1.7.5':
     resolution: {integrity: sha512-1Ih4WTWyw0+lKyFMcBHGbb5U5FtuHJuujoyyr5zTaWS5EYMeT6Jb2AuDeftsCsEuchO+mM2ij5+q9crhydzLhQ==}
@@ -14847,7 +14856,7 @@ snapshots:
       chalk: 4.1.2
       js-yaml: 4.3.2
 
-  '@faker-js/faker@9.9.0': {}
+  '@faker-js/faker@10.6.0': {}
 
   '@floating-ui/core@1.7.5':
     dependencies:
@@ -16758,9 +16767,7 @@ snapshots:
       metro-runtime: 0.84.5
     transitivePeerDependencies:
       - '@babel/core'
-      - bufferutil
       - supports-color
-      - utf-8-validate
 
   '@react-native/normalize-colors@0.83.6': {}
 

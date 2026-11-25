@@ -1,0 +1,17 @@
+id: ds-no-foreign-ui-library
+language: Tsx
+severity: error
+message: "UI from outside the BaseApp/MUI kit — use `@baseapp-frontend/design-system`, `@baseapp-frontend/components`, `@mui/material` / `@mui/lab` / `@mui/icons-material`. A second kit or styling engine drifts from the theme and from what production can build. See .claude/skills/frontend-conventions/references/styling.md"
+# Gating in apps/prototype only (Rock 1, story E2). A deny-list, not an allow-list:
+# apps import plenty of non-UI packages. Covers the component kits, headless
+# primitives, icon sets and CSS-in-JS engines an AI agent typically reaches for,
+# plus shadcn/ui, which copies its components into `components/ui/`.
+files:
+  - "apps/prototype/**"
+rule:
+  any:
+    - kind: import_statement
+    - kind: export_statement
+  has:
+    field: source
+    regex: "^['\"](antd|@ant-design/|@chakra-ui/|@mantine/|react-bootstrap|bootstrap|reactstrap|@headlessui/|@radix-ui/|radix-ui|@ark-ui/|react-aria-components|@nextui-org/|@heroui/|semantic-ui-react|@blueprintjs/|primereact|@fluentui/|rsuite|@arco-design/|flowbite-react|daisyui|@shadcn/|styled-components|@stitches/|@vanilla-extract/|@pandacss/|lucide-react|react-icons|@heroicons/|@phosphor-icons/|@tabler/icons|(@/|~/|\\.{1,2}/)*components/ui(/|['\"]))"
