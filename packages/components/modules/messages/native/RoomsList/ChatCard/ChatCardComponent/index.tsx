@@ -65,6 +65,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
 
   const roomTitleFragment = useFragment<RoomTitleFragment$key>(RoomTitleFragment, titleFragment)
   const isSoleAdmin = roomTitleFragment?.isSoleAdmin
+  const participantsCount = roomTitleFragment?.participantsCount
 
   const lastMessage = lastMessageFragment.lastMessage?.content
   const hasUnreadMessages =
@@ -182,6 +183,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
           roomId={roomId}
           removingParticipantId={currentProfile?.id}
           isSoleAdmin={isSoleAdmin ?? false}
+          participantsCount={participantsCount}
         />
       )}
     </Pressable>

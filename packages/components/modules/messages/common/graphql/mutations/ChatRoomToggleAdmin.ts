@@ -13,6 +13,12 @@ export const ChatRoomToggleAdminMutationQuery = graphql`
           role
         }
       }
+      room {
+        node {
+          id
+          isSoleAdmin
+        }
+      }
       errors {
         field
         messages

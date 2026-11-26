@@ -6,6 +6,7 @@ export interface LeaveGroupDialogProps {
   isSoleAdmin?: boolean
   onClose: VoidFunction
   open: boolean
+  participantsCount?: number | null
   profileId: string
   removingParticipantFragmentRef?: ProfileItemFragment$key | null
   roomId?: string

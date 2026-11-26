@@ -67,6 +67,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
   const roomHeader = useFragment(TitleFragment, data as TitleFragment$key)
   const roomTitle = useFragment<RoomTitleFragment$key>(RoomTitleFragment, roomHeader)
   const isSoleAdmin = roomTitle?.isSoleAdmin
+  const participantsCount = roomTitle?.participantsCount
 
   if (!data) {
     return null
@@ -124,6 +125,7 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId }) => {
           roomId={roomId}
           removingParticipantId={currentProfile?.id}
           isSoleAdmin={isSoleAdmin ?? false}
+          participantsCount={participantsCount}
         />
       )}
       <ChatRoomOptions

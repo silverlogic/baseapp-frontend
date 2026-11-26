@@ -5,6 +5,7 @@ export const GroupDetailsQuery = graphql`
     chatRoom(id: $roomId) {
       id
       participantsCount
+      isSoleAdmin
       isArchived
       participantIds
       ...RoomTitleFragment

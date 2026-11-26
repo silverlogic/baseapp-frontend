@@ -28,6 +28,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
   roomId,
   removingParticipantId,
   isSoleAdmin = false,
+  participantsCount,
 }) => {
   const intl = useIntl()
   const router = useRouter()
@@ -47,6 +48,7 @@ export const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
     removingParticipantId,
     roomId,
     isSoleAdmin,
+    participantsCount,
     onClose: handleLeaveGroupSuccess,
     removeSuccessMessage: intl.formatMessage(LEAVE_GROUP_DIALOG_MESSAGES.removeSuccess),
   })

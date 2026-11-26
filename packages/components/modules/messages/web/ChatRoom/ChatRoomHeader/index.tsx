@@ -69,6 +69,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
         profileId={currentProfile?.id ?? ''}
         roomId={roomId}
         isSoleAdmin={isSoleAdmin ?? false}
+        participantsCount={participantsCount}
       />
       <ChatHeaderContainer>
         {isUpToMd ? (

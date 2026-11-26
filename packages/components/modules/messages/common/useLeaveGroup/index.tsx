@@ -18,6 +18,7 @@ const UseLeaveGroup = ({
   removingParticipantId,
   roomId,
   isSoleAdmin = false,
+  participantsCount,
   onClose,
   removeSuccessMessage,
 }: UseLeaveGroupProps) => {
@@ -25,11 +26,15 @@ const UseLeaveGroup = ({
   const [commit, isMutationInFlight] = useUpdateChatRoomMutation()
   const { sendMutationErrorToast, sendToast } = useNotification()
 
+  // A sole admin who is also the last participant has no one to hand the role to.
+  const hasOtherParticipants = participantsCount == null || participantsCount > 1
+  const isLeavingAsSoleAdmin = isSoleAdmin && hasOtherParticipants
+
   const getLeaveGroupDialogTextCopyKeys = () => {
     if (profileId === removingParticipantId) {
       return {
         action: LEAVE_GROUP_DIALOG_TEXT_COPY_ACTION_KEYS.IS_LEAVING,
-        role: isSoleAdmin
+        role: isLeavingAsSoleAdmin
           ? LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.ADMIN
           : LEAVE_GROUP_DIALOG_TEXT_COPY_ROLE_KEYS.MEMBER,
       } as const

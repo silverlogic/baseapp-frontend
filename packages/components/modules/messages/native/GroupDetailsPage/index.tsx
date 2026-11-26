@@ -81,7 +81,7 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const { isSoleAdmin, isAdmin: currentProfileIsAdmin } = useCheckIsAdmin(members)
+  const { isAdmin: currentProfileIsAdmin } = useCheckIsAdmin(members)
 
   const handleLoadMoreMembers = () => {
     if (hasNext && !isLoadingNext) {
@@ -129,7 +129,8 @@ const GroupDetailsPage: FC<GroupDetailsPageProps> = ({
           profileId={currentProfile?.id}
           roomId={roomId}
           removingParticipantId={memberToRemoveId ?? currentProfile?.id}
-          isSoleAdmin={isSoleAdmin}
+          isSoleAdmin={group?.isSoleAdmin ?? false}
+          participantsCount={group?.participantsCount}
           {...LeaveGroupDialogProps}
         />
       )}
