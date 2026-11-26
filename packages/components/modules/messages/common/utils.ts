@@ -96,6 +96,10 @@ export const useCheckIsAdmin = (participants: MembersListFragment$data['particip
   const { currentProfile } = useCurrentProfile()
   const me = participants?.edges?.find((edge) => edge?.node?.profile?.id === currentProfile?.id)
   const isAdmin = me?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin
+  // TODO: Remove `isSoleAdmin` in a future story. It only counts admins among the participants
+  // loaded so far (the members list is paginated), so in larger groups it can report a sole admin
+  // while another admin simply hasn't been fetched yet. Read `ChatRoom.isSoleAdmin` from the server
+  // instead; all messages components already do. Kept for now so external consumers don't break.
   const isSoleAdmin =
     isAdmin &&
     participants?.edges?.filter((edge) => edge?.node?.role === CHAT_ROOM_PARTICIPANT_ROLES.admin)

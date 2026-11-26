@@ -20,7 +20,6 @@ import { ProfileNode } from '../../../profiles/common'
 import {
   GroupDetailsQuery,
   MembersListFragment,
-  useCheckIsAdmin,
   useRoomListSubscription,
   useTitleAndImage,
   useUpdateChatRoomMutation,
@@ -78,7 +77,6 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
       ) as ProfileNode[],
     [membersList],
   )
-  const { isSoleAdmin } = useCheckIsAdmin(membersList?.participants)
   const formValidation = useMemo(() => getFormValidation(intl), [intl])
   const formReturn = useForm<CreateOrEditGroup>({
     defaultValues: getDefaultFormValues(title || '', chatImage),
@@ -163,7 +161,8 @@ const GroupChatEdit: FC<GroupChatEditProps & { profileId: string }> = ({
           profileId={profileId}
           removingParticipantFragmentRef={memberToRemove}
           roomId={roomId}
-          isSoleAdmin={isSoleAdmin}
+          isSoleAdmin={group?.isSoleAdmin ?? false}
+          participantsCount={group?.participantsCount}
         />
       )}
       <AddMembersDialog

@@ -357,6 +357,7 @@ type ChatRoomToggleAdminPayload {
   errors: [ErrorType]
   _debug: DjangoDebug
   participant: ChatRoomParticipantEdge
+  room: ChatRoomEdge
   clientMutationId: String
 }
 
@@ -1139,7 +1140,7 @@ type Mutation {
 
   """
   Attach one or more files to a target object.
-  
+
   Usage:
       mutation {
           fileAttachToTarget(input: {
@@ -1173,7 +1174,7 @@ type Mutation {
 
   """
   Add one profile as a MEMBER participant to multiple group chat rooms at once.
-  
+
   All-or-nothing: if the acting profile can't add participants to any of the
   requested rooms, nothing is written. Rooms where the profile is already a
   participant are silently skipped (idempotent).
@@ -2460,4 +2461,3 @@ enum VisibilityTypes {
   """internal"""
   INTERNAL
 }
-

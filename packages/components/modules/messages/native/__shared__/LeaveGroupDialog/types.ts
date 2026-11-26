@@ -5,4 +5,5 @@ export interface LeaveGroupDialogProps {
   removingParticipantId: string
   roomId?: string
   isSoleAdmin?: boolean
+  participantsCount?: number | null
 }

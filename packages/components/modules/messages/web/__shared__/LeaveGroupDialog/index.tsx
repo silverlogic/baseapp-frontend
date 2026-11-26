@@ -23,6 +23,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
   customContent,
   onClose,
   open,
+  participantsCount,
   profileId,
   removingParticipantFragmentRef,
   roomId,
@@ -39,6 +40,7 @@ const LeaveGroupDialog: FC<LeaveGroupDialogProps> = ({
     removingParticipantId: removingParticipantData?.id ?? profileId,
     roomId,
     isSoleAdmin,
+    participantsCount,
     onClose,
     removeSuccessMessage: intl.formatMessage(LEAVE_GROUP_DIALOG_MESSAGES.removeSuccess),
   })

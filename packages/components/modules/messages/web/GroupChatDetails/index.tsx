@@ -62,7 +62,7 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
     MembersListFragment$key
   >(MembersListFragment, group)
   const members = data?.participants
-  const { isAdmin, isSoleAdmin } = useCheckIsAdmin(members)
+  const { isAdmin } = useCheckIsAdmin(members)
   const renderLoadingState = () => {
     if (!isLoadingNext) return <Box sx={{ paddingTop: 3 }} />
 
@@ -121,14 +121,14 @@ const GroupChatDetails: FC<GroupChatDetailsProps> = ({
 
   return (
     <>
-      {/* TODO: Deal with sole admin removal (will be done in another story) */}
       <LeaveGroupDialog
         profileId={profileId}
         roomId={group?.id}
         open={!!removingParticipantFragmentRef}
         removingParticipantFragmentRef={removingParticipantFragmentRef}
         onClose={handleRemoveDialogClose}
-        isSoleAdmin={isSoleAdmin}
+        isSoleAdmin={group?.isSoleAdmin ?? false}
+        participantsCount={group?.participantsCount}
       />
       <Header
         onBackButtonClicked={onBackButtonClicked}
