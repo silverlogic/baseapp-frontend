@@ -2,10 +2,10 @@ import { FC } from 'react'
 
 import type { BadgeProps, BoxProps } from '@mui/material'
 
-import type { ChatRoomTitleAdornmentProps } from '../../ChatRoom/ChatRoomHeader/types'
 import { LastMessageFragment$key } from '../../../../../__generated__/LastMessageFragment.graphql'
 import { TitleFragment$key } from '../../../../../__generated__/TitleFragment.graphql'
 import { UnreadMessagesCountFragment$key } from '../../../../../__generated__/UnreadMessagesCountFragment.graphql'
+import type { ChatRoomTitleAdornmentProps } from '../../ChatRoom/ChatRoomHeader/types'
 
 export interface ChatRoomItemProps {
   roomRef: { readonly id: string } & LastMessageFragment$key &
