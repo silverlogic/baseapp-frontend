@@ -15,6 +15,8 @@ export interface ChatRoomItemProps {
   Badge?: FC<BadgeProps>
   BadgeProps?: Partial<BadgeProps>
   isInArchivedTab: boolean
+  /** Optional content rendered right after the room title (e.g. a label chip). Renders nothing by default. */
+  TitleAdornment?: FC<{ roomId: string }>
 }
 
 export interface StyledChatCardProps extends BoxProps {

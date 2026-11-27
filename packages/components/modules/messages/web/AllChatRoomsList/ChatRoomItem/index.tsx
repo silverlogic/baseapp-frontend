@@ -35,6 +35,7 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
   Badge = DefaultBadge,
   BadgeProps = {},
   isInArchivedTab = false,
+  TitleAdornment,
 }) => {
   const lastMessageFragment = useFragment<LastMessageFragment$key>(LastMessageFragment, roomRef)
   const headerFragment = useFragment<TitleFragment$key>(TitleFragment, roomRef)
@@ -125,7 +126,14 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
           src={image}
         />
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
-          <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
+          {TitleAdornment ? (
+            <Box display="flex" alignItems="center" gap={1} minWidth={0}>
+              <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
+              <TitleAdornment roomId={roomRef.id} />
+            </Box>
+          ) : (
+            <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
+          )}
           {lastMessage && lastMessageTime ? (
             <Box
               display="grid"

@@ -31,6 +31,7 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
   onDisplayProfileSummaryClicked,
   roomId,
   hiddenOptions,
+  TitleAdornment,
 }) => {
   const [open, setOpen] = useState(false)
   const { currentProfile } = useCurrentProfile()
@@ -109,6 +110,11 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({
             >
               {title}
             </TypographyWithEllipsis>
+            {TitleAdornment && (
+              <Box component="span" sx={{ float: 'left', marginLeft: 1 }}>
+                <TitleAdornment roomId={roomId} />
+              </Box>
+            )}
             {isGroup && (
               <Typography component="span" variant="caption" sx={{ float: 'left', clear: 'left' }}>
                 {members}
