@@ -20,7 +20,6 @@ const ChatRoomHeader: FC<ChatRoomHeaderProps> = ({ roomHeader, onChatDetailsClic
       onPress={onChatDetailsClicked}
       disabled={!onChatDetailsClicked}
       accessibilityRole={onChatDetailsClicked ? 'button' : undefined}
-      testID="chat-room-header"
     >
       <AvatarWithPlaceholder imgSource={image} size={32} />
       <View style={styles.profileInfo}>

@@ -137,6 +137,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
             roomId,
             isGroup,
             avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
+            onLongPress: onChatCardLongPress,
           })
         ) : (
           <AvatarWithPlaceholder imgSource={image} size={48} />
