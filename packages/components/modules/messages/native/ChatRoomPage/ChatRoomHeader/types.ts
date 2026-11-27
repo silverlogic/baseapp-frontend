@@ -2,5 +2,6 @@ import { TitleFragment$data } from '../../../../../__generated__/TitleFragment.g
 
 export interface ChatRoomHeaderProps {
   roomHeader: TitleFragment$data
-  onChatDetailsClicked: () => void
+  /** Omitted: the header renders as plain, non-tappable content. */
+  onChatDetailsClicked?: () => void
 }

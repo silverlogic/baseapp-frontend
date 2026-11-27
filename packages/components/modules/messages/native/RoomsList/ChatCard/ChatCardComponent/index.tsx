@@ -31,7 +31,7 @@ import ChatCardOptions from '../ChatCardOptions'
 import { createStyles } from './styles'
 import { ChatCardComponentProps } from './type'
 
-const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) => {
+const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, renderAvatar }) => {
   const theme = useTheme()
   const styles = createStyles(theme)
   const router = useRouter()
@@ -132,7 +132,15 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived }) 
       onLongPress={onChatCardLongPress}
     >
       <View style={styles.profileCard}>
-        <AvatarWithPlaceholder imgSource={image} size={48} />
+        {renderAvatar && roomId ? (
+          renderAvatar({
+            roomId,
+            isGroup,
+            avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
+          })
+        ) : (
+          <AvatarWithPlaceholder imgSource={image} size={48} />
+        )}
         <View style={styles.profileInfo}>
           <Text variant="subtitle1">{title}</Text>
           {lastMessage && lastMessageTime ? (

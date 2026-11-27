@@ -22,8 +22,13 @@ import ChatRoomHeader from '../ChatRoomHeader'
 import ChatRoomOptions from '../ChatRoomOptions'
 import MessagesList from '../MessagesList'
 import { ChatRoomPageComponentProps } from './type'
+import { resolveHeaderPress } from './utils'
 
-const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId, hiddenOptions }) => {
+const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({
+  roomId,
+  hiddenOptions,
+  onHeaderPress,
+}) => {
   const router = useRouter()
   const [visible, setVisible] = useState(false)
   const [openConfirmLeaveGroupDialog, setOpenConfirmLeaveGroupDialog] = useState(false)
@@ -73,7 +78,10 @@ const ChatRoomPageComponent: FC<ChatRoomPageComponentProps> = ({ roomId, hiddenO
   }
 
   const renderTitleComponent = () => (
-    <ChatRoomHeader roomHeader={roomHeader} onChatDetailsClicked={handleChatDetails} />
+    <ChatRoomHeader
+      roomHeader={roomHeader}
+      onChatDetailsClicked={resolveHeaderPress(onHeaderPress, handleChatDetails)}
+    />
   )
 
   const handleArchiveChat = () => {

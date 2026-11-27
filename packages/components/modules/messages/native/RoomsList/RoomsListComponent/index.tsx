@@ -13,7 +13,12 @@ import EmptyChatRoomsState from '../EmptyChatRoomsState'
 import { RoomsListProps } from '../types'
 import { CHAT_TAB_VALUES } from './constants'
 
-const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => {
+const RoomsListComponent: FC<RoomsListProps> = ({
+  targetRef,
+  searchParam,
+  selectedTab,
+  renderAvatar,
+}) => {
   const [, startTransition] = useTransition()
   const { data, loadNext, hasNext, isLoadingNext, refetch } = useRoomsList(
     targetRef?.profile as RoomsListFragment$key,
@@ -61,7 +66,13 @@ const RoomsListComponent: FC<RoomsListProps> = ({ targetRef, searchParam, select
       data={(data?.chatRooms?.edges ?? []).filter((e) => e?.node)}
       renderItem={({ item }) => {
         const node = item!.node!
-        return <ChatCard roomRef={node} isArchived={selectedTab === CHAT_TAB_VALUES.archived} />
+        return (
+          <ChatCard
+            roomRef={node}
+            isArchived={selectedTab === CHAT_TAB_VALUES.archived}
+            renderAvatar={renderAvatar}
+          />
+        )
       }}
       onContentSizeChange={(_width, height) => loadNextBasedOnHeight(height)}
       keyExtractor={(item, index) => item?.node?.id ?? `room-edge-${index}`}

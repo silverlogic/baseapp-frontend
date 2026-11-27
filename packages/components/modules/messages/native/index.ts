@@ -5,6 +5,7 @@ export * from './graphql/queries/CreateRoomPageQuery'
 
 export { default as ChatRooms } from './ChatRooms'
 export { default as RoomsList } from './RoomsList'
+export type { ChatCardAvatarRenderProps, RenderChatCardAvatar } from './RoomsList/types'
 export { default as CreateRoomList } from './ChatCreate/CreateRoomList'
 export { default as ChatCreate } from './ChatCreate'
 export { default as GroupChatDetails } from './GroupChatDetails'

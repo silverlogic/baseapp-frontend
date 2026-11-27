@@ -5,8 +5,13 @@ import { LoadingScreen } from '@baseapp-frontend/design-system/components/native
 import RoomsListComponent from './RoomsListComponent'
 import { RoomsListProps } from './types'
 
-const RoomsList: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab }) => (
-  <RoomsListComponent targetRef={targetRef} searchParam={searchParam} selectedTab={selectedTab} />
+const RoomsList: FC<RoomsListProps> = ({ targetRef, searchParam, selectedTab, renderAvatar }) => (
+  <RoomsListComponent
+    targetRef={targetRef}
+    searchParam={searchParam}
+    selectedTab={selectedTab}
+    renderAvatar={renderAvatar}
+  />
 )
 
 const SuspendedRoomsList = (props: RoomsListProps) => (
