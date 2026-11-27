@@ -12,6 +12,13 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 12,
       gap: 12,
     },
+    cardPressArea: {
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      gap: 12,
+    },
     profileInfo: {
       flexGrow: 1,
       flexShrink: 1,

@@ -8,9 +8,11 @@ export interface ChatCardAvatarRenderProps {
   isGroup: boolean
   /** The avatar the card renders by default; wrap it or replace it. */
   avatar: ReactNode
+  /** Opens the chat, as tapping the rest of the card does (for an avatar left plain). */
+  onPress: () => void
   /**
-   * The card's long-press handler (its options drawer). A tappable wrapper takes touches
-   * away from the card, so it should forward long-presses here.
+   * The card's long-press handler (its options drawer). The avatar sits outside the card's
+   * pressable area, so it should forward long-presses here.
    */
   onLongPress: () => void
 }

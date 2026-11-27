@@ -125,44 +125,33 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
     console.log('Not implemented yet.')
   }
 
-  return (
-    <Pressable
-      key={`chat-card-${roomId}`}
-      onPress={onChatCardPress}
-      onLongPress={onChatCardLongPress}
-    >
-      <View style={styles.profileCard}>
-        {renderAvatar && roomId ? (
-          renderAvatar({
-            roomId,
-            isGroup,
-            avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
-            onLongPress: onChatCardLongPress,
-          })
-        ) : (
-          <AvatarWithPlaceholder imgSource={image} size={48} />
-        )}
-        <View style={styles.profileInfo}>
-          <Text variant="subtitle1">{title}</Text>
-          {lastMessage && lastMessageTime ? (
-            <View style={styles.lastMessageContainer}>
-              <Text
-                variant="caption"
-                style={styles.lastMessageText}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
-                {formatRelativeTime(lastMessageTime)} • {lastMessage}
-              </Text>
-            </View>
-          ) : null}
-        </View>
-        <View style={styles.profileCounterContainer}>
-          {hasUnreadMessages && (
-            <Badge>{unreadMessagesCountFragment?.unreadMessages?.count || ''}</Badge>
-          )}
-        </View>
+  const cardContent = (
+    <>
+      <View style={styles.profileInfo}>
+        <Text variant="subtitle1">{title}</Text>
+        {lastMessage && lastMessageTime ? (
+          <View style={styles.lastMessageContainer}>
+            <Text
+              variant="caption"
+              style={styles.lastMessageText}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {formatRelativeTime(lastMessageTime)} • {lastMessage}
+            </Text>
+          </View>
+        ) : null}
       </View>
+      <View style={styles.profileCounterContainer}>
+        {hasUnreadMessages && (
+          <Badge>{unreadMessagesCountFragment?.unreadMessages?.count || ''}</Badge>
+        )}
+      </View>
+    </>
+  )
+
+  const cardExtras = (
+    <>
       <ChatCardOptions
         bottomDrawerRef={bottomDrawerRef}
         handleSheetChanges={() => {}}
@@ -185,6 +174,49 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
           isSoleAdmin={isSoleAdmin ?? false}
         />
       )}
+    </>
+  )
+
+  // With `renderAvatar`, the avatar and the rest of the row are sibling controls rather than
+  // one control nested in another, so screen readers reach both. Without it, the card renders
+  // exactly as before: one pressable row.
+  if (renderAvatar && roomId) {
+    return (
+      <View key={`chat-card-${roomId}`}>
+        <View style={styles.profileCard}>
+          {renderAvatar({
+            roomId,
+            isGroup,
+            avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
+            onPress: onChatCardPress,
+            onLongPress: onChatCardLongPress,
+          })}
+          <Pressable
+            style={styles.cardPressArea}
+            onPress={onChatCardPress}
+            onLongPress={onChatCardLongPress}
+            accessibilityRole="button"
+            accessibilityLabel={title ?? undefined}
+          >
+            {cardContent}
+          </Pressable>
+        </View>
+        {cardExtras}
+      </View>
+    )
+  }
+
+  return (
+    <Pressable
+      key={`chat-card-${roomId}`}
+      onPress={onChatCardPress}
+      onLongPress={onChatCardLongPress}
+    >
+      <View style={styles.profileCard}>
+        <AvatarWithPlaceholder imgSource={image} size={48} />
+        {cardContent}
+      </View>
+      {cardExtras}
     </Pressable>
   )
 }
