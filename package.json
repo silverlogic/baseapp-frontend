@@ -55,9 +55,6 @@
       "@xmldom/xmldom": ">=0.9.10",
       "postcss": ">=8.5.10",
       "uuid": ">=14.0.0"
-    },
-    "patchedDependencies": {
-      "@cypress/request@3.0.10": ".patches/@cypress+request@3.0.10.patch"
     }
   }
 }

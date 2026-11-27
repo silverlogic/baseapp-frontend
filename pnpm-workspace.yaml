@@ -122,7 +122,7 @@ catalogs:
     babel-jest: 29.7.0
     cypress-plugin-steps: 1.1.1
     cypress-wait-until: 3.0.2
-    cypress: 13.16.1
+    cypress: 15.16.0
     jest-environment-jsdom: 29.7.0
     jest: 29.7.0
     ts-jest: 29.1.4
