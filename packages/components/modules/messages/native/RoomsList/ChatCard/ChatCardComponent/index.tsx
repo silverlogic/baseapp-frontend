@@ -184,7 +184,16 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
     return (
       <View key={`chat-card-${roomId}`}>
         <View style={styles.splitCard}>
-          <View style={styles.avatarColumn}>
+          {/* The strips around the avatar still open the chat, as they did before; the
+              avatar control inside takes its own taps. This wrapper is not an accessible
+              element, so screen readers see only the avatar control and the row. */}
+          <Pressable
+            style={styles.avatarColumn}
+            onPress={onChatCardPress}
+            onLongPress={onChatCardLongPress}
+            accessible={false}
+            testID="chat-card-avatar-column"
+          >
             {renderAvatar({
               roomId,
               isGroup,
@@ -192,7 +201,7 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
               onPress: onChatCardPress,
               onLongPress: onChatCardLongPress,
             })}
-          </View>
+          </Pressable>
           {/* Everything beside the avatar opens the chat. Its accessible name comes from its
               text (title, latest message, unread count), as the single-row card's does. */}
           <Pressable
