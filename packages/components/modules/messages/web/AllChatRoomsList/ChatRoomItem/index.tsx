@@ -128,7 +128,9 @@ const ChatRoomItem: FC<ChatRoomItemProps> = ({
         <Box display="grid" gridTemplateRows="repeat(2, minmax(0, 1fr))">
           {TitleAdornment ? (
             <Box display="flex" alignItems="center" gap={1} minWidth={0}>
-              <TypographyWithEllipsis variant="subtitle2">{title}</TypographyWithEllipsis>
+              <TypographyWithEllipsis variant="subtitle2" sx={{ minWidth: 0, flex: 1 }}>
+                {title}
+              </TypographyWithEllipsis>
               <TitleAdornment roomId={roomRef.id} />
             </Box>
           ) : (
