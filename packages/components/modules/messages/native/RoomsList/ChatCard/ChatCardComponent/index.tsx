@@ -183,20 +183,23 @@ const ChatCardComponent: FC<ChatCardComponentProps> = ({ roomRef, isArchived, re
   if (renderAvatar && roomId) {
     return (
       <View key={`chat-card-${roomId}`}>
-        <View style={styles.profileCard}>
-          {renderAvatar({
-            roomId,
-            isGroup,
-            avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
-            onPress: onChatCardPress,
-            onLongPress: onChatCardLongPress,
-          })}
+        <View style={styles.splitCard}>
+          <View style={styles.avatarColumn}>
+            {renderAvatar({
+              roomId,
+              isGroup,
+              avatar: <AvatarWithPlaceholder imgSource={image} size={48} />,
+              onPress: onChatCardPress,
+              onLongPress: onChatCardLongPress,
+            })}
+          </View>
+          {/* Everything beside the avatar opens the chat. Its accessible name comes from its
+              text (title, latest message, unread count), as the single-row card's does. */}
           <Pressable
             style={styles.cardPressArea}
             onPress={onChatCardPress}
             onLongPress={onChatCardLongPress}
             accessibilityRole="button"
-            accessibilityLabel={title ?? undefined}
           >
             {cardContent}
           </Pressable>
